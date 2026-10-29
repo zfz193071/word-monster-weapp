@@ -2,7 +2,7 @@
 
 原生微信小程序 MVP，AppID 为 `wx4b19fe0c462a601b`。业务规则见 [architecture.md](architecture.md) 第 14 节。
 
-已完成工单 #3 的工程骨架、#5 的数据契约与首关配置，以及 #6 的纯逻辑状态机和答题结算。页面尚未接入关卡引擎，战斗区域暂为空；实际发音、选图交互、奖励演出或保存尚未实现，不代表可玩版本。
+已完成工程骨架、数据契约与首关配置、纯逻辑状态机、音频适配器，以及首页和内存会话交接。点击开始会生成 15 题并交给战斗页；战斗区域暂为空，尚未执行题目发音和选图交互，不代表可玩版本。
 
 ## 安装与检查
 
@@ -21,7 +21,7 @@ npm test
 1. 使用有本项目开发权限的微信扫码登录开发者工具。
 2. 导入本仓库根目录（不要只选 miniprogram 子目录），确认 AppID 与 project.config.json 一致，项目类型为小程序；无需云开发。
 3. 工具读取 miniprogramRoot 和 TypeScript 编译插件，编译到 `pages/home/home`。
-4. 点击“出发”进入 `pages/battle/battle`；点击“返回首页”回到首页。
+4. 点击“开始闯关”创建新会话并进入 `pages/battle/battle`；点击“返回首页”回到首页，再次开始会从第一题创建新局。直接打开缺少有效会话的战斗页会返回首页。
 5. 需要自动化验证时，在“设置 → 安全设置”开启服务端口，并在工具提示时授权 Codex 连接。
 
 基础库已固定为开发者工具实际加载的 `3.17.5`（工具版本 `2.02.2609240`）。这是当前模拟器验证版本，不代表已完成真机兼容验收。`project.private.config.json` 是个人配置，不提交；若工具行为与共享配置不符，检查该文件有无覆盖。
@@ -36,7 +36,7 @@ npm test
 | miniprogram/components | monster、weapon 视图组件（后续） |
 | miniprogram/game | 已确认规则、数据/事件契约、轮次生成、纯逻辑状态机与答题结算 |
 | miniprogram/content | 已确认词表、首关配置、资源清单与语义校验；素材仍待审校 |
-| miniprogram/services | 音频与本地进度适配器（后续） |
+| miniprogram/services | 音频适配器、内存会话交接；本地结果存储待实现 |
 | miniprogram/assets | 原创或授权清晰的图片、预制发音（后续） |
 
 尚未实现的模块使用 `.gitkeep` 保留目录，不提供伪实现。不要向仓库写入 AppSecret、登录信息或上传私钥。构建产物、二维码、截图放入已忽略的 `artifacts/`。
@@ -52,3 +52,5 @@ npm test
 ## 关卡引擎
 
 `createSession` 创建内存会话，`reduceGame` 处理带会话/轮次/操作序号的事件并输出新状态和呈现命令。调用方先提交新状态，再执行命令；动画不得自行加能量。引擎已覆盖同题重试、提示记录、升级/护盾、音频错误、暂停恢复和完成幂等。事件、效果、时钟注入及后续适配器责任见 [docs/game-engine.md](docs/game-engine.md)。
+
+首页通过 `sessionStore.start()` 创建并保留唯一会话，战斗页按 URL 中的 sessionId 领取一次；导航失败或退出后释放。会话只存在于内存，无持久化续局入口；后台切换不在首页重新建局。战斗页的 `session` 是后续执行引擎转换的页面内状态，存储器仅负责交接，不负责更新游戏状态。音频接入见 [docs/audio-adapter.md](docs/audio-adapter.md)。

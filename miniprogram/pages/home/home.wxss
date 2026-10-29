@@ -7,3 +7,4 @@
 .smile { width: 46rpx; height: 20rpx; border-bottom: 6rpx solid #25483d; border-radius: 50%; margin: 10rpx auto; }
 .ground { position: absolute; width: 300rpx; height: 46rpx; border-radius: 50%; background: #eadfbf; bottom: 43rpx; }
 .description { margin-bottom: 44rpx; }
+.restart-note { margin-top: 24rpx; color: #587166; font-size: 24rpx; line-height: 1.6; }
