@@ -69,9 +69,10 @@ export interface RoundEventContext {
 export type GameEvent =
   | { readonly type: 'start'; readonly sessionId: string }
   | ({ readonly type: 'choose'; readonly wordId: string } & RoundEventContext)
-  | ({ readonly type: 'audioReady' | 'audioFailed' | 'replay' | 'retryAudio'
-      | 'feedbackFinished' | 'upgradeFinished' } & RoundEventContext)
-  | { readonly type: 'pause' | 'resume'; readonly sessionId: string };
+  | ({ readonly type: 'audioReady' | 'audioFailed' | 'replay' | 'retryAudio' } & RoundEventContext)
+  | ({ readonly type: 'feedbackFinished' | 'upgradeFinished'; readonly at: number } & RoundEventContext)
+  | { readonly type: 'pause'; readonly sessionId: string }
+  | { readonly type: 'resume'; readonly sessionId: string };
 
 export type AssetKind = 'image' | 'audio';
 export type ReviewStatus = 'pending' | 'approved';
