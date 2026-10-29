@@ -1,0 +1,3 @@
+.battle { display: flex; flex-direction: column; text-align: center; }
+.description { margin: 24rpx 0; }
+.arena { flex: 1; min-height: 480rpx; border-radius: 48rpx; background: #edf3dd; margin: 16rpx 0 40rpx; }

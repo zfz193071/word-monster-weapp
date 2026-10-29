@@ -1,0 +1,10 @@
+<view class="page home">
+  <view class="island-badge">水果小岛</view>
+  <view class="title">听一听，<view>找到小怪物！</view></view>
+  <view class="hero" aria-hidden="true">
+    <view class="monster-shape"><view class="eyes"><view></view><view></view></view><view class="smile"></view></view>
+    <view class="ground"></view>
+  </view>
+  <view class="description"><view>听单词，点图片。</view><view>和小怪物一起出发吧。</view></view>
+  <button class="primary-button" bindtap="openBattle" disabled="{{opening}}" loading="{{opening}}">出发</button>
+</view>

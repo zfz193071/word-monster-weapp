@@ -1,0 +1,8 @@
+node_modules/
+project.private.config.json
+.DS_Store
+coverage/
+artifacts/
+*.log
+*.tsbuildinfo
+

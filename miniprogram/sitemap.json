@@ -1,0 +1,4 @@
+{
+  "desc": "MVP 开发阶段暂不开放页面索引",
+  "rules": [{ "action": "disallow", "page": "*" }]
+}

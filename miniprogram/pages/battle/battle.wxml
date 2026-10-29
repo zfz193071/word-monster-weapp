@@ -1,0 +1,6 @@
+<view class="page battle">
+  <view class="title">水果小岛</view>
+  <view class="description">听一听，找到它</view>
+  <view class="arena" aria-label="战斗区域"></view>
+  <button class="primary-button" bindtap="returnHome">返回首页</button>
+</view>

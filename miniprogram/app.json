@@ -1,0 +1,12 @@
+{
+  "pages": ["pages/home/home", "pages/battle/battle"],
+  "window": {
+    "navigationBarTitleText": "单词怪物",
+    "navigationBarBackgroundColor": "#fff8ec",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fff8ec"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}
