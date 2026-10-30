@@ -2,13 +2,11 @@
   <view class="hud" aria-label="基地剩余 {{hud.hp}} / {{hud.maxHp}} 血量">
     <text>堡垒基地</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text>{{hud.hp}} / {{hud.maxHp}}</text>
   </view>
-  <view class="canvas-wrap">
-    <canvas type="2d" id="battle-canvas" class="battle-canvas" />
-    <view wx:if="{{error}}" class="overlay"><text>战场暂时无法打开</text><text class="error-detail">{{error}}</text><button bindtap="retry">重试</button></view>
-    <view wx:elif="{{!ready}}" class="overlay">正在准备战场…</view>
-    <view wx:elif="{{paused}}" class="overlay">已暂停</view>
-    <view wx:elif="{{hud.status !== 'fighting'}}" class="overlay">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : '本波怪物已击败'}}</view>
-  </view>
+  <view wx:if="{{error}}" class="scene-status"><text>战场暂时无法打开</text><text class="error-detail">{{error}}</text><button bindtap="retry">重试</button></view>
+  <view wx:elif="{{!ready}}" class="scene-status">正在准备战场…</view>
+  <view wx:elif="{{hud.status !== 'fighting'}}" class="scene-status">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : '本波怪物已击败'}}</view>
+  <view wx:elif="{{paused}}" class="scene-status">已暂停</view>
+  <canvas type="2d" id="battle-canvas" class="battle-canvas" />
   <view class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
     <text>‹ 左右拖动守护者 ›</text>
