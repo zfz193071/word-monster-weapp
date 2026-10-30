@@ -1,10 +1,13 @@
 import { sessionStore } from '../../services/session';
+import { CONTENT_ASSETS } from '../../content/assets';
 
 Page({
-  data: { opening: false },
+  data: { opening: false, showCredits: false, credits: CONTENT_ASSETS },
   sessionId: '',
   enteredBattle: false,
   disposed: false,
+
+  toggleCredits() { this.setData({ showCredits: !this.data.showCredits }); },
 
   onShow() {
     if (this.enteredBattle) {

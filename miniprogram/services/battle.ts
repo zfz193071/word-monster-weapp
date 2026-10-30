@@ -91,7 +91,7 @@ export function createBattleController(initial: GameState, options: BattleOption
       })),
       canChoose: state.status === 'awaitingAnswer' && allImagesLoaded && !imageFailed,
       canReplay: state.status === 'presenting' || state.status === 'awaitingAnswer',
-      message: imageFailed ? '图片加载失败，请返回首页后重试' : revealFailed ? '读音没能播放，继续下一题' :
+      message: imageFailed ? '图片加载失败，请用左上角返回后重试' : revealFailed ? '读音没能播放，继续下一题' :
         state.status === 'awaitingAnswer' && !allImagesLoaded ? '图片加载中' : messages[state.status],
       revealedWord: correct ? word(round.targetWordId).text : '', imageFailed,
     }, state);

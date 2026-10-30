@@ -61,8 +61,4 @@ Page({
     if (this.session) sessionStore.release(this.session.sessionId);
     this.session = undefined;
   },
-
-  returnHome() {
-    wx.reLaunch({ url: '/pages/home/home' });
-  },
 });

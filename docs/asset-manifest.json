@@ -1,0 +1,192 @@
+[
+  {
+    "wordId": "apple",
+    "kind": "image",
+    "path": "miniprogram/assets/images/apple.png",
+    "bytes": 9919,
+    "sha256": "8534c1bec8bde9d9641656508ab9476ad46acac394bd2de25bc0e6eeca4f5a72",
+    "downloadedAt": "2026-10-30",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F34E.png",
+    "gitBlob": "6c5b0f6ea1ccebb6bfa47cd3158013626658cfcd",
+    "changes": "none",
+    "review": "visual inspection passed; no answer text"
+  },
+  {
+    "wordId": "apple",
+    "kind": "audio",
+    "path": "miniprogram/assets/audio/apple.mp3",
+    "bytes": 8194,
+    "sha256": "b0f36436da4e6198a590834595888efb3988c6beb529dc68ee7544c76ddbe842",
+    "downloadedAt": "2026-10-30",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/9/9a/En-us-apple.ogg",
+    "sourceSha256": "4b4e55408b35c8663c67b21f49a0b21016e0371fe7ba9b3e90648bfce7f5d8d0",
+    "changes": "OGG to MP3, mono, 44100 Hz, 96 kbps; no trimming",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1
+        }
+      ],
+      "format": {
+        "duration": "0.653061"
+      }
+    },
+    "review": "decode passed; human listening pending"
+  },
+  {
+    "wordId": "banana",
+    "kind": "image",
+    "path": "miniprogram/assets/images/banana.png",
+    "bytes": 10005,
+    "sha256": "27bd3c262ba8a9e2b7a96d7f43ef710c7309c3f2773a8c9001b5cafbdf47330b",
+    "downloadedAt": "2026-10-30",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F34C.png",
+    "gitBlob": "38578f5eff89ae6c1f451e4fec724f4cd3d80c17",
+    "changes": "none",
+    "review": "visual inspection passed; no answer text"
+  },
+  {
+    "wordId": "banana",
+    "kind": "audio",
+    "path": "miniprogram/assets/audio/banana.mp3",
+    "bytes": 7880,
+    "sha256": "368d8935b1c7340b8363628cb628a07762e933059fa3f72057a410b35b02b1d1",
+    "downloadedAt": "2026-10-30",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/6/61/En-us-banana.ogg",
+    "sourceSha256": "67b1b65f684488ec2fe1faabdc50f7f772c7aade9f5a19b467e29ad6c5a83826",
+    "changes": "OGG to MP3, mono, 44100 Hz, 96 kbps; no trimming",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1
+        }
+      ],
+      "format": {
+        "duration": "0.626939"
+      }
+    },
+    "review": "decode passed; human listening pending"
+  },
+  {
+    "wordId": "orange",
+    "kind": "image",
+    "path": "miniprogram/assets/images/orange.png",
+    "bytes": 9726,
+    "sha256": "76da2e1e6538a571c1a1d80e4a41b3afb7fc67d9d0f68a5d0ca2c8dca9690391",
+    "downloadedAt": "2026-10-30",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F34A.png",
+    "gitBlob": "a9e4547e28e813939370eeedbe63749c6025642b",
+    "changes": "none",
+    "review": "visual inspection passed; no answer text"
+  },
+  {
+    "wordId": "orange",
+    "kind": "audio",
+    "path": "miniprogram/assets/audio/orange.mp3",
+    "bytes": 18225,
+    "sha256": "1d019679affdf05b47a670be151715946e14bdab2091615024838f1dc4d89ed7",
+    "downloadedAt": "2026-10-30",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/3/30/En-uk-orange.ogg",
+    "sourceSha256": "c1fffa16b7395066e7bd1da896fadec16f415b7ba5f0b90d48566504766e5137",
+    "changes": "OGG to MP3, mono, 44100 Hz, 96 kbps; no trimming",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1
+        }
+      ],
+      "format": {
+        "duration": "1.488980"
+      }
+    },
+    "review": "decode passed; human listening pending"
+  },
+  {
+    "wordId": "grape",
+    "kind": "image",
+    "path": "miniprogram/assets/images/grape.png",
+    "bytes": 15017,
+    "sha256": "f61e4d0d30eac0383481c5e2b50f27c8ae4a66238d4ef82da459635420bd70e4",
+    "downloadedAt": "2026-10-30",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F347.png",
+    "gitBlob": "39d3548a68ab275904546f81c9023afa63b4c34b",
+    "changes": "none",
+    "review": "visual inspection passed; no answer text"
+  },
+  {
+    "wordId": "grape",
+    "kind": "audio",
+    "path": "miniprogram/assets/audio/grape.mp3",
+    "bytes": 12269,
+    "sha256": "605652109f84eb2219f8b5524f739b9a7c7cd39d944058d663cc14dbece7f345",
+    "downloadedAt": "2026-10-30",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/0/0f/En-us-grape.ogg",
+    "sourceSha256": "cfa0b7290fa2e0477b554f3e2b0751c6ca676d231497e78e98abe9be18f16673",
+    "changes": "OGG to MP3, mono, 44100 Hz, 96 kbps; no trimming",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1
+        }
+      ],
+      "format": {
+        "duration": "0.992653"
+      }
+    },
+    "review": "decode passed; human listening pending"
+  },
+  {
+    "wordId": "watermelon",
+    "kind": "image",
+    "path": "miniprogram/assets/images/watermelon.png",
+    "bytes": 10682,
+    "sha256": "93f95535b3fd36979137a4097be89436579097e1df49e671504381cbc2161bcf",
+    "downloadedAt": "2026-10-30",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F349.png",
+    "gitBlob": "69b7b3f4a730bc0a436ec3066d53870f01c252f8",
+    "changes": "none",
+    "review": "visual inspection passed; no answer text"
+  },
+  {
+    "wordId": "watermelon",
+    "kind": "audio",
+    "path": "miniprogram/assets/audio/watermelon.mp3",
+    "bytes": 9134,
+    "sha256": "ceb24fd53ae659bbd344584a2205eb5b663e587ad15636a9411369d184397ae7",
+    "downloadedAt": "2026-10-30",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/8/85/En-us-watermelon.ogg",
+    "sourceSha256": "6b67a784065a6e2dd502a3582ffc501ff9982ba798b0f02d85b3aad4f7a57177",
+    "changes": "OGG to MP3, mono, 44100 Hz, 96 kbps; no trimming",
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "mp3",
+          "sample_rate": "44100",
+          "channels": 1
+        }
+      ],
+      "format": {
+        "duration": "0.731429"
+      }
+    },
+    "review": "decode passed; human listening pending"
+  }
+]

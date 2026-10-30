@@ -8,3 +8,7 @@
 .ground { position: absolute; width: 300rpx; height: 46rpx; border-radius: 50%; background: #eadfbf; bottom: 43rpx; }
 .description { margin-bottom: 44rpx; }
 .restart-note { margin-top: 24rpx; color: #587166; font-size: 24rpx; line-height: 1.6; }
+.credits-toggle { margin-top: 12rpx; background: transparent; color: #587166; font-size: 24rpx; }
+.credits-toggle::after { border: none; }
+.credits { width: 100%; text-align: left; font-size: 22rpx; line-height: 1.6; color: #587166; word-break: break-all; }
+.credit { margin-top: 24rpx; }

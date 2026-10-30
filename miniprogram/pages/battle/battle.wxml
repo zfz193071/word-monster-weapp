@@ -33,5 +33,4 @@
   <button wx:elif="{{view.status !== 'completed'}}" class="primary-button" disabled="{{!view.canReplay}}" bindtap="replay"
     data-session-id="{{view.context.sessionId}}" data-round-id="{{view.context.roundId}}"
     data-revision="{{view.context.revision}}">再听一次</button>
-  <button class="exit-button" bindtap="returnHome">返回首页</button>
 </view>

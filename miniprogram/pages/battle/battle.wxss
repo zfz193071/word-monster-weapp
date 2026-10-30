@@ -22,6 +22,4 @@
 .hero { position: absolute; width: 110rpx; height: 100rpx; border-radius: 40rpx 40rpx 24rpx 24rpx; background: #91cfa3; border: 5rpx solid #246b51; bottom: 32rpx; left: calc(50% - 60rpx); }
 .eyes { font-size: 26rpx; padding-top: 24rpx; letter-spacing: 8rpx; }
 .weapon { position: absolute; width: 26rpx; height: 48rpx; background: #e3aa31; border: 4rpx solid #896727; border-radius: 14rpx; right: -20rpx; top: -14rpx; transform: rotate(20deg); }
-.exit-button { margin-top: 20rpx; background: transparent; color: #587166; font-size: 28rpx; }
-.exit-button::after { border: none; }
 @keyframes target-hit { 0% { transform: scale(1); } 35% { transform: scale(1.08) rotate(-5deg); } 65% { transform: scale(.9) rotate(5deg); } 100% { transform: scale(.65); opacity: 0; } }

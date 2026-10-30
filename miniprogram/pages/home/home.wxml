@@ -8,4 +8,12 @@
   <view class="description"><view>听英语单词，点对应的水果图片。</view><view>没听清可以再听，选错也能再试。</view></view>
   <button class="primary-button" bindtap="openBattle" disabled="{{opening}}" loading="{{opening}}">{{opening ? '准备出发…' : '开始闯关'}}</button>
   <view class="restart-note">退出后，下次从第一题重新开始。</view>
+  <button class="credits-toggle" bindtap="toggleCredits">{{showCredits ? '收起素材署名' : '素材署名'}}</button>
+  <view wx:if="{{showCredits}}" class="credits">
+    <view wx:for="{{credits}}" wx:key="path" class="credit">
+      <view>{{item.wordId}} · {{item.kind === 'image' ? '图片' : '发音'}}</view>
+      <view><text user-select="true">{{item.rights}}</text></view>
+      <view><text user-select="true">{{item.source}}</text></view>
+    </view>
+  </view>
 </view>
