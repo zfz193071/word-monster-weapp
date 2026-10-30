@@ -1,5 +1,13 @@
 .battle { display: flex; flex-direction: column; text-align: center; }
 .phase { font-size: 34rpx; font-weight: 700; }
+.phase-progress { font-size: 26rpx; color: #587166; margin-top: 8rpx; }
+.phase-instruction { font-size: 26rpx; line-height: 1.5; margin-top: 16rpx; color: #587166; }
+.shield-panel { margin-top: 20rpx; }
+.shield-row { display: flex; justify-content: center; gap: 18rpx; }
+.shield { box-sizing: border-box; width: 44rpx; height: 48rpx; border: 4rpx solid #246b51; border-radius: 12rpx 12rpx 24rpx 24rpx; }
+.shield.intact { background: #91cfa3; }
+.shield.removed { border-style: dashed; border-color: #a3b7a5; background: transparent; }
+.shield-caption { font-size: 24rpx; color: #587166; margin-top: 8rpx; }
 .status { margin: 20rpx 0; min-height: 80rpx; font-size: 30rpx; line-height: 1.4; }
 .arena { flex: 1; min-height: 520rpx; position: relative; border-radius: 48rpx; background: #edf3dd; margin: 12rpx 0 32rpx; padding: 28rpx 12rpx 180rpx; }
 .targets { display: flex; justify-content: center; gap: 12rpx; min-height: 200rpx; align-items: center; }

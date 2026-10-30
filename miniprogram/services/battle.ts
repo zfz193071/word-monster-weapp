@@ -1,7 +1,8 @@
 import { WORDS } from '../content/words';
 import { currentRound, eventContext, reduceGame } from '../game/engine';
 import type { GameEffect, GameState } from '../game/engine';
-import type { GameEvent, RoundEventContext } from '../game/types';
+import type { GameEvent, RoundEventContext, SessionResult } from '../game/types';
+import { MVP_RULES } from '../game/rules';
 import { createAudioAdapter } from './audio';
 import type { AudioOptions } from './audio';
 
@@ -11,11 +12,17 @@ export interface BattleOptions {
   readonly createAudio?: (options: AudioOptions) => Audio;
   readonly schedule?: (callback: () => void, delay: number) => () => void;
   readonly now?: () => number;
+  readonly onCompleted?: (result: SessionResult) => void;
 }
 export interface BattleView {
   readonly context: RoundEventContext;
   readonly status: GameState['status'];
   readonly phaseLabel: string;
+  readonly phaseInstruction: string;
+  readonly phaseProgress: string;
+  readonly teachingWord: string;
+  readonly shields: readonly { index: number; intact: boolean }[];
+  readonly shieldsRemaining: number;
   readonly cards: readonly {
     key: string; wordId: string; imagePath: string; label: string; hint: boolean; attacked: boolean;
   }[];
@@ -54,6 +61,8 @@ export function createBattleController(initial: GameState, options: BattleOption
   function render(): void {
     if (disposed) return;
     const round = currentRound(state);
+    const completed = state.status === 'completed';
+    const phaseRounds = state.rounds.filter((item) => item.phase === round.phase);
     const correct = state.status === 'feedback' && state.feedback?.correct === true;
     const allImagesLoaded = round.optionWordIds.every((id) => loadedImages.has(id));
     const messages: Record<GameState['status'], string> = {
@@ -64,8 +73,19 @@ export function createBattleController(initial: GameState, options: BattleOption
     };
     options.render({
       context: eventContext(state), status: state.status,
-      phaseLabel: { intro: '初遇水果', practice: '辨词战斗', boss: '守关挑战' }[round.phase],
-      cards: round.optionWordIds.map((id, index) => ({ key: `${round.id}-${id}`, wordId: id, imagePath: word(id).imagePath,
+      phaseLabel: completed ? '水果小岛 · 已完成' : { intro: '初遇水果', practice: '辨词战斗', boss: '守关挑战' }[round.phase],
+      phaseInstruction: completed ? '五层护盾已全部解除！' : {
+        intro: '看图片，听读音，点一下认识它',
+        practice: '听单词，从两张图片中找到它',
+        boss: '听单词，选对图片解除一层护盾',
+      }[round.phase],
+      phaseProgress: completed ? '' : `${phaseRounds.findIndex((item) => item.id === round.id) + 1} / ${phaseRounds.length}`,
+      teachingWord: round.phase === 'intro' && !completed ? word(round.targetWordId).text : '',
+      shields: round.phase === 'boss' ? Array.from({ length: MVP_RULES.bossShields }, (_, index) => ({
+        index, intact: index < state.shields,
+      })) : [],
+      shieldsRemaining: state.shields,
+      cards: completed ? [] : round.optionWordIds.map((id, index) => ({ key: `${round.id}-${id}`, wordId: id, imagePath: word(id).imagePath,
         label: `选项 ${index + 1}`, hint: state.hintUsed && id === round.targetWordId,
         attacked: correct && id === state.feedback?.selectedWordId,
       })),
@@ -122,6 +142,7 @@ export function createBattleController(initial: GameState, options: BattleOption
         break;
       case 'sessionCompleted':
         audio.stop();
+        options.onCompleted?.(effect.result);
         break;
     }
   }
@@ -148,7 +169,7 @@ export function createBattleController(initial: GameState, options: BattleOption
     replay: (context: RoundEventContext) => dispatch({ ...context, type: 'replay' }),
     retryAudio: (context: RoundEventContext) => dispatch({ ...context, type: 'retryAudio' }),
     imageResult: (context: RoundEventContext, wordId: string, success: boolean) => {
-      if (!matches(context, false) || !currentRound(state).optionWordIds.includes(wordId)) return;
+      if (state.status === 'completed' || !matches(context, false) || !currentRound(state).optionWordIds.includes(wordId)) return;
       if (success) loadedImages.add(wordId); else imageFailed = true;
       render();
     },
