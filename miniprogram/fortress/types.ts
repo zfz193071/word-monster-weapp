@@ -103,6 +103,8 @@ export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
   readonly id: string; readonly wordId: string; readonly position: Point;
+  // Logical coordinates relative to position, derived from approved sprite geometry.
+  readonly hitbox: Rect;
   readonly hp: number; readonly maxHp: number; readonly status: MonsterStatus;
   readonly attackRemainingMs: number;
   readonly attackSequence: number;

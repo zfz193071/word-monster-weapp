@@ -1,6 +1,6 @@
 # 单词怪物：动作玩法最小 MVP 架构（V2）
 
-规划日期：2026-10-30。本文是新版实施依据；规则已由用户确认，#19 数据契约与确定性计划已实现；尚未接入新版战斗页面。详细规则见 [已确认规则 A1—C8](docs/mvp-v2-rules-proposal.md)。
+规划日期：2026-10-30。本文是新版实施依据；规则已由用户确认，#19 数据契约与确定性计划、#20 独立战斗模拟已实现；尚未接入新版战斗页面。详细规则见 [已确认规则 A1—C8](docs/mvp-v2-rules-proposal.md)。
 
 当前页面仍运行 V1 听音选图与攻击反馈；V2 基础模块独立位于 `miniprogram/fortress/`。V1 资源基线为 `58dacde`。历史架构、原规则和验收记录完整保留于 [V1 归档](docs/archive/architecture-v1.md)，调整前工单正文保留于 [工单快照](docs/archive/issues-before-v2.json)。V1 的通过测试不得算作 V2 动作游戏验收。
 
@@ -72,7 +72,7 @@ flowchart TD
 | --- | --- | --- |
 | content | Word/MonsterVisual/WavePlan/SkillDefinition，完整引用与参数校验 | 运行中随机抓图或生成发音 |
 | session reducer | 接受带会话版本的选择/战斗/技能事件，输出状态与效果；决定开始下一波和完成 | 逐帧 setData、直接绘图或播放 |
-| combat simulation | createCombat、step(dt, input)、applySkill；位置/弹体/碰撞/怪物耐久/基地血量与受击/击败或失败事件；注入随机源 | 微信 API、音频、学习正确率、永久成长 |
+| combat simulation | createCombat、stepCombat(state, input)、getWeaponParameters；位置/弹体/碰撞/怪物耐久/基地血量与受击/击败或失败事件；注入随机源 | 微信 API、音频、学习正确率、永久成长 |
 | Canvas renderer | 预载图片、DPR/逻辑尺寸映射、根据快照画角色/子弹/残影，管理唯一帧循环 | 自行判命中、扣血、发技能或完成关卡 |
 | battle controller | 执行效果，将战斗、音频、视图与生命周期连接，管理资源所有权 | 绕过 reducer 结算或重抽技能 |
 | audio coordinator | 题目/退场发音优先、音效互斥、轮次与实体 token、超时/失败重试 | 用音频结束宣告怪物被击败 |
@@ -80,7 +80,7 @@ flowchart TD
 
 渲染选择：Canvas 2D 用于真正连续运动的实体；WXML/WXSS 用于静态操作界面。不要用每帧 setData 驱动子弹，也不引入 WebGL、复杂场景树或通用物理引擎。
 
-帧循环使用 Canvas.requestAnimationFrame 驱动；模拟采用固定逻辑步长、累积时间与有限补帧，时钟/随机源可注入。恢复前台重置上一帧时间，不追赶后台经过的几十秒。高速子弹使用线段/扫掠碰撞或等价防穿透方法；同一颗普通子弹命中后消耗一次，本版不穿透。帧率目标和同屏实体上限在技术验证工单测量并记录，不假称真机已达标。
+帧循环使用 Canvas.requestAnimationFrame 驱动；模拟采用固定逻辑步长、累积时间与有限补帧，时钟/随机源可注入。#20 已实现 10ms 固定步长、每帧最多 10 步，丢弃额外积压；暂停恢复重置时钟，具体接口见 [战斗模拟接入说明](docs/fortress-combat.md)。恢复前台重置上一帧时间，不追赶后台经过的几十秒。高速子弹使用线段/扫掠碰撞或等价防穿透方法；同一颗普通子弹命中后消耗一次，本版不穿透。帧率目标和同屏实体上限在技术验证工单测量并记录，不假称真机已达标。
 
 ## 5. 状态与幂等规则
 

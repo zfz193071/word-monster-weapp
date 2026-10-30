@@ -16,6 +16,8 @@
 
 V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` 和 `word-monster:fortress:progress:v2`；#12 实现时只解码此版本，V1 结果不迁移、不混算、不用于恢复战斗。`validateFortressContent` 是编译期类型约束下的配置语义校验，不是本地存储 `unknown` 解码器。
 
+#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。当前页面仍未改接 Canvas。
+
 ## 安装与检查
 
 使用 Node.js 22 或以上版本，在仓库根目录执行：
