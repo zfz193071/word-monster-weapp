@@ -4,6 +4,9 @@ import type { RoundEventContext } from '../../game/types';
 import { createBattleController } from '../../services/battle';
 import type { BattleView } from '../../services/battle';
 import { FORTRESS_WORDS } from '../../fortress/content';
+import { createSeededRandom, createSessionPlan } from '../../fortress/plans';
+import type { SessionPlan } from '../../fortress/types';
+import type { ListeningResult } from '../../fortress/listening';
 
 function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventContext; wordId: string } | undefined {
   const data = event.currentTarget.dataset;
@@ -15,11 +18,15 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS },
+  data: { view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+    choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
 
   onLoad(query: Record<string, string | undefined>) {
+    if (query.preview === 'fortress-choice' && wx.getAccountInfoSync().miniProgram.envVersion === 'develop') {
+      this.setData({ preview: true, choicePreview: true }); this.resetChoicePreview(); return;
+    }
     if (query.preview === 'fortress' && wx.getAccountInfoSync().miniProgram.envVersion === 'develop') {
       this.setData({ preview: true }); return;
     }
@@ -64,7 +71,18 @@ Page({
     const wordId = event.currentTarget.dataset.wordId;
     if (this.data.preview && FORTRESS_WORDS.some(word => word.id === wordId)) this.setData({ previewPaused: true, previewWord: wordId });
   },
-  restartPreview() { if (this.data.preview) { this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
+  resetChoicePreview() {
+    const generation = (this.data.choiceRequest?.generation ?? 0) + 1;
+    const plan = createSessionPlan(`choice-preview-${Date.now()}-${generation}`, createSeededRandom(Date.now() >>> 0));
+    this.setData({ choiceStarted: false, previewPaused: false, choiceRequest: { plan, waveIndex: 0, generation } });
+  },
+  startChoiceCombat(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
+    const request = this.data.choiceRequest;
+    const result = event.detail;
+    if (!request || this.data.choiceStarted || result.context.sessionId !== request.plan.sessionId || result.context.waveId !== request.plan.waves[0].waveId || result.context.generation !== request.generation) return;
+    this.setData({ choiceStarted: true, previewWord: request.plan.waves[0].targetWordId, previewPaused: false });
+  },
+  restartPreview() { if (this.data.preview) { if (this.data.choicePreview) { this.resetChoicePreview(); return; } this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
 
   onUnload() {
     this.controller?.dispose();

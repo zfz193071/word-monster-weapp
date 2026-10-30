@@ -1,0 +1,11 @@
+:host { display: block; }
+.listening { display: flex; align-items: center; gap: 24rpx; padding: 28rpx 20rpx; min-height: 530rpx; border-radius: 24rpx; background: #20434a; color: #f2f4df; }
+.waiting-base { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 28rpx; text-align: center; font-size: 28rpx; }
+.title { font-size: 34rpx; font-weight: bold; }
+.note { font-size: 24rpx; opacity: .8; }
+.waiting-base button { font-size: 28rpx; background: #eaf3d5; color: #20434a; }
+.choices { flex: 0 0 190rpx; width: 190rpx; display: flex; flex-direction: column; gap: 32rpx; }
+.choices .choice { box-sizing: border-box; width: 100%; min-width: 0; padding: 16rpx; margin: 0; border: 6rpx solid transparent; border-radius: 28rpx; background: #fff9e9; }
+.choice image { display: block; width: 100%; height: 146rpx; }
+.choice.hinted { border-color: #ffc651; box-shadow: 0 0 24rpx #ffc651; }
+.error { padding: 24rpx; color: #75382c; }

@@ -1,12 +1,12 @@
 import { CanvasScene } from '../../fortress/canvas-scene';
 import type { SceneArt } from '../../fortress/canvas-scene';
-import { createPreviewCombat, createPreviewPlan } from '../../fortress/preview';
+import { createPreviewCombat, createPreviewPlan, createPreviewPlanCombat } from '../../fortress/preview';
 import { createSeededRandom } from '../../fortress/plans';
 import { createSkillSession, skillCards } from '../../fortress/skills';
 import type { SkillSession } from '../../fortress/skills';
 import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortress/content';
 import type { RetirementView } from '../../fortress/retirement';
-import type { CombatState, SkillId, SkillOfferState } from '../../fortress/types';
+import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
 interface InstanceState { scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
@@ -18,6 +18,7 @@ function previewCombat(wordId: string): CombatState {
 Component({
   properties: {
     preview: { type: Boolean, value: false },
+    previewRequest: { type: Object, value: null },
     previewWord: { type: String, value: 'apple', observer() { if (instances.get(this)?.scene && this.properties.preview) this.mount(true); } },
     initialState: { type: Object, value: null },
     art: { type: Object, value: null },
@@ -52,9 +53,10 @@ Component({
         try {
           if (!result?.node || !result.width || !result.height) throw new Error('Canvas 节点尚未就绪');
           if (this.properties.preview && wx.getAccountInfoSync().miniProgram.envVersion !== 'develop') throw new Error('开发预览仅在开发版可用');
-          const initial = this.properties.preview ? previewCombat(this.properties.previewWord) : retained ?? this.properties.initialState as CombatState | null;
+          const request = this.properties.previewRequest as { plan: SessionPlan; generation: number } | null;
+          const initial = this.properties.preview ? (request ? createPreviewPlanCombat(request.plan, request.generation) : previewCombat(this.properties.previewWord)) : retained ?? this.properties.initialState as CombatState | null;
           if (!initial) throw new Error('战斗尚未开始');
-          if (this.properties.preview) instance.skills = createSkillSession(createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
+          if (this.properties.preview) instance.skills = createSkillSession(request?.plan ?? createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {

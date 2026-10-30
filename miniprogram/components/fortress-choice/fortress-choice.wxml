@@ -1,0 +1,17 @@
+<view wx:if="{{error}}" class="error">{{error}}</view>
+<view wx:if="{{view}}" class="listening">
+  <view class="waiting-base">
+    <text class="title">堡垒准备好了</text><text>{{view.message}}</text>
+    <text wx:if="{{view.phase === 'playing' && !view.paused}}">正在读词…</text>
+    <button wx:if="{{view.phase === 'audioError'}}" disabled="{{view.paused}}" data-token="{{view.token}}" bindtap="retryAudio">重试声音</button>
+    <button wx:else disabled="{{view.paused || view.phase === 'started'}}" data-token="{{view.token}}" bindtap="replay">再听一次</button>
+    <button wx:if="{{view.imageFailed}}" disabled="{{view.paused}}" data-token="{{view.imageToken}}" bindtap="retryImages">重试头像</button>
+    <text class="note">选好怪物后再开始守护基地</text>
+  </view>
+  <view class="choices">
+    <button wx:for="{{view.cards}}" wx:key="key" class="choice {{item.hinted ? 'hinted' : ''}}" aria-label="{{item.label}}" disabled="{{!view.canChoose}}"
+      data-token="{{view.token}}" data-word-id="{{item.id}}" bindtap="choose">
+      <image src="{{item.portraitPath}}" mode="aspectFit" aria-hidden="true" data-token="{{view.imageToken}}" data-word-id="{{item.id}}" bindload="imageLoaded" binderror="imageFailed" />
+    </button>
+  </view>
+</view>

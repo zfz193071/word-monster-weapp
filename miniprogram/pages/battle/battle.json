@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "水果小岛",
   "usingComponents": {
-    "fortress-scene": "/components/fortress-scene/fortress-scene"
+    "fortress-scene": "/components/fortress-scene/fortress-scene",
+    "fortress-choice": "/components/fortress-choice/fortress-choice"
   }
 }

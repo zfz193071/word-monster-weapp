@@ -1,9 +1,10 @@
 <view wx:if="{{preview}}" class="preview-page">
-  <view class="preview-kicker">开发预览 · 水果角色已接入</view>
+  <view class="preview-kicker">开发预览 · {{choicePreview ? '听词选怪与一波战斗' : '水果角色已接入'}}</view>
   <view class="preview-title">堡垒守卫</view>
-  <view class="preview-note">五种水果角色素材检查；基地、主角与武器仍为开发占位。</view>
-  <view class="preview-monsters"><button wx:for="{{previewWords}}" wx:key="id" data-word-id="{{item.id}}" bindtap="selectPreviewMonster" class="{{previewWord === item.id ? 'selected' : ''}}">{{item.meaningZh}}</button></view>
-  <fortress-scene class="fortress-preview" preview="{{true}}" preview-word="{{previewWord}}" paused="{{previewPaused}}" />
+  <view class="preview-note">{{choicePreview ? '先听单词、选怪物，再左右移动打怪。' : '五种水果角色素材检查；'}}基地、主角与武器仍为开发占位。</view>
+  <view wx:if="{{!choicePreview}}" class="preview-monsters"><button wx:for="{{previewWords}}" wx:key="id" data-word-id="{{item.id}}" bindtap="selectPreviewMonster" class="{{previewWord === item.id ? 'selected' : ''}}">{{item.meaningZh}}</button></view>
+  <fortress-choice wx:if="{{choicePreview && !choiceStarted}}" class="fortress-choice-preview" request="{{choiceRequest}}" paused="{{previewPaused}}" bindstartcombat="startChoiceCombat" />
+  <fortress-scene wx:else class="fortress-preview" preview="{{true}}" preview-word="{{previewWord}}" preview-request="{{choicePreview ? choiceRequest : null}}" paused="{{previewPaused}}" />
   <view class="preview-actions"><button bindtap="togglePreviewPause">{{previewPaused ? '开始 / 继续预览' : '暂停'}}</button><button bindtap="restartPreview">重新预览</button></view>
 </view>
 <view class="page battle" wx:if="{{view}}">

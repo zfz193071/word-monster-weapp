@@ -23,7 +23,7 @@
 | [#6](https://github.com/zfz193071/word-monster-weapp/issues/6) | [MVP] 实现纯逻辑关卡状态机与幂等答题判定 | 保留已关闭（V1 历史完成） | — |
 | [#7](https://github.com/zfz193071/word-monster-weapp/issues/7) | [MVP] 实现发音与音效适配器及音频失败重试 | 保留已关闭（V1 历史完成） | — |
 | [#8](https://github.com/zfz193071/word-monster-weapp/issues/8) | [MVP V2] 调整首页说明、守堡新局入口与会话交接 | 待开发 | #19、#10 |
-| [#9](https://github.com/zfz193071/word-monster-weapp/issues/9) | [MVP V2] 实现右侧听词选怪与战斗启动门控 | 待开发 | #18、#19、#4、#22 |
+| [#9](https://github.com/zfz193071/word-monster-weapp/issues/9) | [MVP V2] 实现右侧听词选怪与战斗启动门控 | 进行中：听词门控与一波开发预览已接入 | #18、#19、#4、#22 |
 | [#10](https://github.com/zfz193071/word-monster-weapp/issues/10) | [MVP V2] 编排守堡波次、技能选择与胜败终局 | 待开发 | #18、#9、#20、#21、#22、#11 |
 | [#11](https://github.com/zfz193071/word-monster-weapp/issues/11) | [MVP V2] 实现波间随机技能二选一与局内效果 | 进行中：单次领取与开发预览已接入，完整波次待联调 | #18、#19、#20 |
 | [#12](https://github.com/zfz193071/word-monster-weapp/issues/12) | [MVP V2] 实现波次结果本地存储、版本隔离与损坏回退 | 待开发 | #18、#19 |
@@ -63,3 +63,5 @@
 金币成长、其他主题关卡和复杂装备不进入该验收。正式素材许可、人工听审、真机帧时间与真实儿童试玩分别记录，不能用任一层通过替代另一层。
 
 #11 已实现会话内单次技能领取、候选保留与开发预览二选一，见 [技能接入说明](fortress-skills.md)。完整五波技能效果与真机性能仍需后续集成验收。
+
+#9 已实现听词与头像双门控、错误提示/重播和单次开战，见 [听词接入说明](fortress-listening.md)。一波联调入口为 `preview=fortress-choice`；首次教学、完整五波与正式首页切换仍由 #8/#10 推进。
