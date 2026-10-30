@@ -1,11 +1,14 @@
 import { CanvasScene } from '../../fortress/canvas-scene';
 import type { SceneArt } from '../../fortress/canvas-scene';
-import { createPreviewCombat } from '../../fortress/preview';
+import { createPreviewCombat, createPreviewPlan } from '../../fortress/preview';
+import { createSeededRandom } from '../../fortress/plans';
+import { createSkillSession, skillCards } from '../../fortress/skills';
+import type { SkillSession } from '../../fortress/skills';
 import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortress/content';
 import type { RetirementView } from '../../fortress/retirement';
-import type { CombatState } from '../../fortress/types';
+import type { CombatState, SkillId, SkillOfferState } from '../../fortress/types';
 
-interface InstanceState { scene?: CanvasScene; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -23,11 +26,12 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null },
+  data: { ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+    skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
     ready() { this.mount(); },
-    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); } instances.delete(this); },
+    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.skills?.dispose(); } instances.delete(this); },
   },
   pageLifetimes: {
     hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
@@ -39,8 +43,9 @@ Component({
       const instance = instances.get(this); if (!instance?.alive) return;
       const retained = replace ? null : instance.scene?.snapshot;
       instance.scene?.dispose(); instance.scene = undefined;
+      instance.skills?.dispose(); instance.skills = undefined;
       const epoch = ++instance.epoch;
-      this.setData({ ready: false, error: '', retirement: null });
+      this.setData({ ready: false, error: '', retirement: null, skillOffer: null, skillCards: [], skillSummary: '' });
       const valid = () => instance.alive && instance.epoch === epoch;
       this.createSelectorQuery().select('#battle-canvas').fields({ node: true, size: true, rect: true }, result => {
         if (!valid()) return;
@@ -49,6 +54,7 @@ Component({
           if (this.properties.preview && wx.getAccountInfoSync().miniProgram.envVersion !== 'develop') throw new Error('开发预览仅在开发版可用');
           const initial = this.properties.preview ? previewCombat(this.properties.previewWord) : retained ?? this.properties.initialState as CombatState | null;
           if (!initial) throw new Error('战斗尚未开始');
+          if (this.properties.preview) instance.skills = createSkillSession(createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
@@ -58,7 +64,13 @@ Component({
               monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,
             retirement: {
               onChange: retirement => { if (valid()) this.setData({ retirement }); },
-              onComplete: result => { if (valid()) this.triggerEvent('retirementcomplete', result); },
+              onComplete: result => {
+                if (!valid()) return;
+                const snapshot = scene.snapshot;
+                const offer = snapshot && instance.skills?.open(snapshot);
+                if (offer && instance.skills) this.setData({ skillOffer: offer, skillCards: skillCards(offer, instance.skills.levels) });
+                this.triggerEvent('retirementcomplete', result);
+              },
             },
             onHud: hud => { if (valid()) this.setData({ hud, hpPercent: hud.hp / hud.maxHp * 100 }); },
             onEvents: events => { if (valid()) this.triggerEvent('combatevents', { events, state: scene.snapshot }); },
@@ -69,7 +81,14 @@ Component({
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
-    applyPause() { const state = instances.get(this); state?.scene?.setPaused(this.properties.paused || !state.visible); },
+    applyPause() { const state = instances.get(this); if (!state) return; const paused = this.properties.paused || !state.visible; state.scene?.setPaused(paused); state.skills?.setPaused(paused); },
+    choosePreviewSkill(event: WechatMiniprogram.TouchEvent) {
+      const skills = instances.get(this)?.skills;
+      const selected = skills?.select(event.currentTarget.dataset.offerId, event.currentTarget.dataset.skillId as SkillId);
+      if (!selected || selected.status !== 'selected' || !skills) return;
+      const card = skillCards(selected, skills.levels).find(card => card.id === selected.selection.skillId)!;
+      this.setData({ skillOffer: selected, skillSummary: `${card.label}：${card.description}（仅本局）` });
+    },
     retry() { this.mount(); },
     retryRetirement() { instances.get(this)?.scene?.retryRetirement(); },
     continueRetirement() { instances.get(this)?.scene?.continueRetirement(); },

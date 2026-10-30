@@ -12,3 +12,7 @@
 .retirement-word { display: flex; align-items: center; gap: 20rpx; }
 .retirement-word image { width: 56rpx; height: 56rpx; }
 .retirement-actions { display: flex; gap: 20rpx; }
+.skill-panel { padding: 24rpx; background: #eaf3d5; color: #20434a; display: flex; flex-direction: column; gap: 16rpx; text-align: center; }
+.skill-cards { display: flex; gap: 16rpx; }
+.skill-cards button { flex: 1; padding: 20rpx 8rpx; margin: 0; background: #fff; color: #20434a; font-size: 28rpx; }
+.skill-detail { display: block; font-size: 22rpx; line-height: 1.6; }

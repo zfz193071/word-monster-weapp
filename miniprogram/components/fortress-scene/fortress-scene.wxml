@@ -12,6 +12,14 @@
   </view>
   <view wx:elif="{{hud.status !== 'fighting'}}" class="scene-status">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : '本波怪物已击败'}}</view>
   <view wx:elif="{{paused}}" class="scene-status">已暂停</view>
+  <view wx:if="{{skillOffer}}" class="skill-panel">
+    <block wx:if="{{skillOffer.status === 'offered'}}">
+      <text>选一个技能，强化守护者</text>
+      <view class="skill-cards"><button wx:for="{{skillCards}}" wx:key="id" disabled="{{paused}}" data-offer-id="{{skillOffer.offer.offerId}}" data-skill-id="{{item.id}}" bindtap="choosePreviewSkill"><text>{{item.label}}</text><text class="skill-detail">{{item.description}}</text></button></view>
+      <text class="skill-detail">仅本局有效</text>
+    </block>
+    <block wx:else><text>技能已获得</text><text>{{skillSummary}}</text><text class="skill-detail">开发预览：下一波听词流程待接入</text></block>
+  </view>
   <canvas type="2d" id="battle-canvas" class="battle-canvas" />
   <view class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
