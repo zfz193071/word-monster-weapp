@@ -1,6 +1,29 @@
-<view class="page battle">
-  <view class="title">水果小岛</view>
-  <view class="description">听一听，找到它</view>
-  <view class="arena" aria-label="战斗区域"></view>
-  <button class="primary-button" bindtap="returnHome">返回首页</button>
+<view class="page battle" wx:if="{{view}}">
+  <view class="phase">{{view.phaseLabel}}</view>
+  <view class="status" aria-live="polite">{{view.message}}</view>
+  <view class="arena">
+    <view class="targets" wx:if="{{view.status !== 'completed'}}">
+      <button wx:for="{{view.cards}}" wx:key="key"
+        class="target {{item.hint ? 'hinted' : ''}} {{item.attacked ? 'attacked' : ''}}"
+        disabled="{{!view.canChoose}}" aria-label="{{item.label}}"
+        data-session-id="{{view.context.sessionId}}" data-round-id="{{view.context.roundId}}"
+        data-revision="{{view.context.revision}}" data-word-id="{{item.wordId}}"
+        bindtap="choose" bindanimationend="attackFinished">
+        <image src="{{item.imagePath}}" mode="aspectFit" aria-hidden="true"
+          data-session-id="{{view.context.sessionId}}" data-round-id="{{view.context.roundId}}"
+          data-revision="{{view.context.revision}}" data-word-id="{{item.wordId}}"
+          bindload="imageLoaded" binderror="imageFailed" />
+        <view wx:if="{{item.attacked}}" class="impact" aria-hidden="true">✦</view>
+      </button>
+    </view>
+    <view class="reveal">{{view.revealedWord}}</view>
+    <view class="hero" aria-label="小岛守护者"><view class="eyes">● ●</view><view class="weapon"></view></view>
+  </view>
+  <button wx:if="{{view.status === 'audioError'}}" class="primary-button" bindtap="retryAudio"
+    data-session-id="{{view.context.sessionId}}" data-round-id="{{view.context.roundId}}"
+    data-revision="{{view.context.revision}}">重新播放</button>
+  <button wx:elif="{{view.status !== 'completed'}}" class="primary-button" disabled="{{!view.canReplay}}" bindtap="replay"
+    data-session-id="{{view.context.sessionId}}" data-round-id="{{view.context.roundId}}"
+    data-revision="{{view.context.revision}}">再听一次</button>
+  <button class="exit-button" bindtap="returnHome">返回首页</button>
 </view>

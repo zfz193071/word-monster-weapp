@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
 import { createSessionStore } from '../miniprogram/services/session';
+import { createBattleController } from '../miniprogram/services/battle';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
 function homeHarness() {
@@ -121,8 +122,11 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
     runInNewContext(ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
     }).outputText, {
-      exports: {}, require: () => ({ sessionStore }),
-      Page: (definition: any) => { page = definition; },
+      exports: {}, require: (name: string) => name === '../../services/session' ? { sessionStore } : { createBattleController },
+      Page: (definition: any) => {
+        page = definition;
+        page.setData = (patch: Record<string, unknown>) => Object.assign(page.data, patch);
+      },
       wx: { reLaunch: ({ url }: { url: string }) => {
         assert.equal(url, '/pages/home/home'); redirects++;
       } },
