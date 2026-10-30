@@ -8,6 +8,14 @@
 
 项目已重新规划为“听词选怪 → 左右移动、自动射击 → 怪物残影与读词 → 波间技能选择”。怪物抵达后攻击底部堡垒，基地血条归零失败。新版尚未实现；金币和装备成长后置。可爱水果怪需联网下载并完成授权/视觉审校，现有普通水果图不代表怪物素材已交付。工单和规则确认项见 [V2 工单规划](docs/mvp-v2-work-items.md)。
 
+规则 A1—C8 已获用户完整确认，详见 [规则表](docs/mvp-v2-rules-proposal.md)。#19 已实现 `miniprogram/fortress/`：独立 V2 类型与版本、已确认参数、固定种子波次/技能候选和配置/资源引用校验。V1 页面暂未改接，新契约不等于战斗、技能应用或存储已实现。
+
+- `npm run check:fortress`：校验已确认规则与计划，单独提示资源未就绪。
+- `npm run check:fortress:assets`：严格资源交付检查；目前预期失败，缺五种怪物和五段发音听审。
+- [美术候选](docs/assets/candidates/README.md)：已下载并登记 Kenney 图集，未放入运行包；水果怪仍需继续准备。
+
+V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` 和 `word-monster:fortress:progress:v2`；#12 实现时只解码此版本，V1 结果不迁移、不混算、不用于恢复战斗。`validateFortressContent` 是编译期类型约束下的配置语义校验，不是本地存储 `unknown` 解码器。
+
 ## 安装与检查
 
 使用 Node.js 22 或以上版本，在仓库根目录执行：

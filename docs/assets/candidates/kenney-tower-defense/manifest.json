@@ -1,0 +1,40 @@
+{
+  "status": "candidate-not-runtime",
+  "downloadedAt": "2026-10-30",
+  "author": "Kenney Vleugels (Kenney.nl)",
+  "source": "https://opengameart.org/content/tower-defense-top-down",
+  "upstream": "https://kenney.nl/assets/tower-defense-top-down",
+  "downloadUrl": "https://opengameart.org/sites/default/files/Tower%20Defense%20%28top-down%29.zip",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "archiveSha256": "08fb8d73af19062d56dd00e91935cfd1638229723deaa32e6c1800e1ba6d442d",
+  "modifications": "None; selected original files extracted without modification.",
+  "files": [
+    {
+      "path": "docs/assets/candidates/kenney-tower-defense/preview.png",
+      "archiveEntry": "Preview.png",
+      "bytes": 187444,
+      "sha256": "49ee6e2cbe2bbe01358b4e07de1e57a0a8d0bcbf5ce3e575d1ef272d6c221ce5",
+      "dimensions": [
+        918,
+        515
+      ]
+    },
+    {
+      "path": "docs/assets/candidates/kenney-tower-defense/tilesheet.png",
+      "archiveEntry": "Tilesheet/towerDefense_tilesheet.png",
+      "bytes": 234657,
+      "sha256": "226df4f6fbc58960839dac7718c4384c7d679b79953b829ad519269e4d26498b",
+      "dimensions": [
+        1472,
+        832
+      ]
+    },
+    {
+      "path": "docs/assets/candidates/kenney-tower-defense/LICENSE.txt",
+      "archiveEntry": "License.txt",
+      "bytes": 498,
+      "sha256": "8ef6d013cca76e9bba95c2a508df31001b51c0e4116d7ffeb7b02bf7b36d4bf5"
+    }
+  ]
+}
