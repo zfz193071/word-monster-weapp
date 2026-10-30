@@ -30,3 +30,6 @@
 .preview-note { color: #647974; font-size: 24rpx; margin-bottom: 20rpx; line-height: 1.5; }
 .preview-actions { display: flex; gap: 16rpx; margin-top: 20rpx; }
 .preview-actions button { flex: 1; background: #246858; color: #fff; font-size: 26rpx; }
+.preview-monsters { display: flex; gap: 8rpx; margin-bottom: 16rpx; }
+.preview-monsters button { padding: 0 10rpx; font-size: 24rpx; color: #20434a; }
+.preview-monsters .selected { background: #b8e5c2; }

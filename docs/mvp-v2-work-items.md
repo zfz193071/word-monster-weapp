@@ -18,7 +18,7 @@
 | [#1](https://github.com/zfz193071/word-monster-weapp/issues/1) | [MVP] 确认首关玩法、奖励与学习记录口径 | 保留已关闭（V1 历史完成） | — |
 | [#2](https://github.com/zfz193071/word-monster-weapp/issues/2) | [MVP] 确认微信发布形态、AppID 与调试接入条件 | 保留已关闭（沿用基础设施） | — |
 | [#3](https://github.com/zfz193071/word-monster-weapp/issues/3) | [MVP] 初始化原生微信小程序 TypeScript 工程 | 保留已关闭（沿用基础设施） | — |
-| [#4](https://github.com/zfz193071/word-monster-weapp/issues/4) | [MVP V2] 联网下载可爱水果怪、堡垒与武器素材并审校 | 进行中，候选已下载、五怪未齐 | #18 |
+| [#4](https://github.com/zfz193071/word-monster-weapp/issues/4) | [MVP V2] 联网下载可爱水果怪、堡垒与武器素材并审校 | 进行中，五种角色已接入，基地/词音听审待完成 | #18 |
 | [#5](https://github.com/zfz193071/word-monster-weapp/issues/5) | [MVP] 实现数据契约、版本化内容配置与配置校验 | 保留已关闭（V1 历史完成） | — |
 | [#6](https://github.com/zfz193071/word-monster-weapp/issues/6) | [MVP] 实现纯逻辑关卡状态机与幂等答题判定 | 保留已关闭（V1 历史完成） | — |
 | [#7](https://github.com/zfz193071/word-monster-weapp/issues/7) | [MVP] 实现发音与音效适配器及音频失败重试 | 保留已关闭（V1 历史完成） | — |
@@ -36,7 +36,7 @@
 | [#19](https://github.com/zfz193071/word-monster-weapp/issues/19) | [MVP V2] 定义波次、堡垒战斗、技能与结果契约 | 已完成（59 项测试通过） | #18 |
 | [#20](https://github.com/zfz193071/word-monster-weapp/issues/20) | [MVP V2] 实现移动射击、真实碰撞与基地攻防模拟 | 已完成（73 项测试通过） | #18、#19 |
 | [#21](https://github.com/zfz193071/word-monster-weapp/issues/21) | [MVP V2] 实现 Canvas 战场、堡垒血条与触摸控制 | 进行中：技术组件已实现，素材/真机待验收 | #19、#20、#4 |
-| [#22](https://github.com/zfz193071/word-monster-weapp/issues/22) | [MVP V2] 实现怪物残影、退场读词与音效协调 | 待开发 | #18、#19、#4、#7 |
+| [#22](https://github.com/zfz193071/word-monster-weapp/issues/22) | [MVP V2] 实现怪物残影、退场读词与音效协调 | 进行中：组件与开发预览已接入 | #18、#19、#4、#7 |
 | [#23](https://github.com/zfz193071/word-monster-weapp/issues/23) | [后续·非 MVP] 金币掉落与武器装备长期成长设计 | 后续，不排入 MVP | #16 |
 
 ## 实施顺序
@@ -54,7 +54,7 @@
 
 用户于 2026-10-30 明确答复：“接受整份提案，继续实现”。[A1—C8 已确认规则与十个验收例](mvp-v2-rules-proposal.md) 是实现依据，包含波次/教学、堡垒操作、攻防、同一步结算、技能叠加、退场故障和失败结果保存，原待确认项已解决。
 
-#19 采用 mode=fortress、schemaVersion=2、contentVersion=2；V1 记录不得恢复新局或混入 V2 学习统计。五种水果怪尚未齐备，#4 保持打开；纯模拟 #20 已完成，接口与验证见 [接入说明](fortress-combat.md)。 #21 已提供明确标注占位的 Canvas 开发预览，见 [接入说明](fortress-canvas.md)；正式开战须等待资源与后续集成验收。
+#19 采用 mode=fortress、schemaVersion=2、contentVersion=2；V1 记录不得恢复新局或混入 V2 学习统计。五种拟人水果已下载接入，基地/主角等仍待完成，#4 保持打开；纯模拟 #20 已完成，接口与验证见 [接入说明](fortress-combat.md)。 #21 已提供明确标注占位的 Canvas 开发预览，见 [接入说明](fortress-canvas.md)；正式开战须等待资源与后续集成验收。
 
 ## 验收边界
 

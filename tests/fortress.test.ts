@@ -1,3 +1,4 @@
+import { CONTENT_ASSETS } from '../miniprogram/content/assets';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { FORTRESS_ASSETS, FORTRESS_MONSTERS, FORTRESS_WORDS } from '../miniprogram/fortress/content';
@@ -11,7 +12,7 @@ const monsters: readonly MonsterVisual[] = FORTRESS_WORDS.map(word => ({
   wordId: word.id, portraitPath: `/assets/images/monsters/${word.id}.png`, spritePath: `/assets/images/monsters/${word.id}.png`,
   sourceSize: { width: 256, height: 256 }, anchor: { x: 128, y: 128 }, hitbox: { x: 32, y: 32, width: 192, height: 192 },
 }));
-const assets: readonly VisualAsset[] = [...FORTRESS_ASSETS, ...monsters.map(monster => ({
+const assets: readonly VisualAsset[] = [...CONTENT_ASSETS, ...monsters.map(monster => ({
   path: monster.spritePath, wordId: monster.wordId, kind: 'image' as const,
   source: 'https://example.invalid/test-fixture', rights: 'test fixture, not production artwork', reviewStatus: 'pending' as const,
 }))];
@@ -112,8 +113,9 @@ test('末波不提供技能，非法等级和与波次不符的已选次数被�
 });
 
 test('配置校验拒绝缺少怪物，不拿旧水果图片冒充已完成怪物素材', () => {
-  const missing = validateFortressContent(FORTRESS_WORDS, FORTRESS_MONSTERS, FORTRESS_ASSETS);
+  const missing = validateFortressContent(FORTRESS_WORDS, [], FORTRESS_ASSETS);
   assert.equal(missing.length, 5);
+  assert.deepEqual(validateFortressContent(FORTRESS_WORDS, FORTRESS_MONSTERS, FORTRESS_ASSETS), []);
   assert.ok(missing.every(issue => issue.path.startsWith('monsters.')));
   assert.deepEqual(validateFortressContent(FORTRESS_WORDS, monsters, assets), []);
   const ordinary = monsters.map((monster, i) => i ? monster : { ...monster, spritePath: FORTRESS_WORDS[0].fruitImagePath });

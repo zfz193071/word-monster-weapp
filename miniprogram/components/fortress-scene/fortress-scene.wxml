@@ -4,6 +4,12 @@
   </view>
   <view wx:if="{{error}}" class="scene-status"><text>战场暂时无法打开</text><text class="error-detail">{{error}}</text><button bindtap="retry">重试</button></view>
   <view wx:elif="{{!ready}}" class="scene-status">正在准备战场…</view>
+  <view wx:elif="{{retirement}}" class="scene-status retirement">
+    <view class="retirement-word"><image src="{{retirement.fruitImagePath}}" mode="aspectFit" /><text>{{retirement.word}}</text></view>
+    <text wx:if="{{paused}}">已暂停</text>
+    <block wx:elif="{{retirement.phase === 'audioError'}}"><text>读词暂时失败</text><view class="retirement-actions"><button bindtap="retryRetirement">再听一次</button><button bindtap="continueRetirement">继续</button></view></block>
+    <text wx:elif="{{retirement.phase === 'done'}}">本波怪物已击败</text>
+  </view>
   <view wx:elif="{{hud.status !== 'fighting'}}" class="scene-status">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : '本波怪物已击败'}}</view>
   <view wx:elif="{{paused}}" class="scene-status">已暂停</view>
   <canvas type="2d" id="battle-canvas" class="battle-canvas" />

@@ -3,6 +3,7 @@ import type { GameState } from '../../game/engine';
 import type { RoundEventContext } from '../../game/types';
 import { createBattleController } from '../../services/battle';
 import type { BattleView } from '../../services/battle';
+import { FORTRESS_WORDS } from '../../fortress/content';
 
 function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventContext; wordId: string } | undefined {
   const data = event.currentTarget.dataset;
@@ -14,7 +15,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { view: null as BattleView | null, preview: false, previewPaused: true },
+  data: { view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
 
@@ -59,6 +60,10 @@ Page({
   },
 
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
+  selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {
+    const wordId = event.currentTarget.dataset.wordId;
+    if (this.data.preview && FORTRESS_WORDS.some(word => word.id === wordId)) this.setData({ previewPaused: true, previewWord: wordId });
+  },
   restartPreview() { if (this.data.preview) { this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
 
   onUnload() {

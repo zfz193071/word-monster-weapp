@@ -2,15 +2,19 @@ import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
 import type { Finger, Viewport } from './viewport';
 import type { CombatEvent, CombatState, MonsterVisual } from './types';
+import { createRetirement } from './retirement';
+import type { RetirementOptions } from './retirement';
 
 type Canvas = WechatMiniprogram.Canvas;
 type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
-export interface SceneArt {
+export interface MonsterArt {
   readonly monster: SpriteAsset;
   readonly monsterVisual: MonsterVisual;
   readonly monsterWidth: number;
+}
+export interface SceneArt extends MonsterArt {
   readonly base: SpriteAsset;
   readonly destroyedBase: SpriteAsset;
   readonly hero: SpriteAsset;
@@ -23,6 +27,8 @@ export interface SceneOptions {
   readonly width: number; readonly height: number; readonly dpr: number; readonly clientLeft: number;
   readonly preview: boolean; // only enabled by a develop-environment gate in the host page
   readonly art?: SceneArt;
+  readonly previewMonster?: MonsterArt;
+  readonly retirement?: RetirementOptions;
   readonly onHud: (hud: SceneHud) => void;
   readonly onEvents: (events: readonly CombatEvent[]) => void;
   readonly onError: (message: string) => void;
@@ -54,6 +60,7 @@ export class CanvasScene {
   private lastMonsterHp: number;
   private baseFlashUntil = 0;
   private monsterFlashUntil = 0;
+  private retirement: ReturnType<typeof createRetirement> | undefined;
   constructor(private readonly canvas: Canvas, private readonly options: SceneOptions) {
     this.context = canvas.getContext('2d');
     if (!this.context) throw new Error('Canvas 2D 初始化失败');
@@ -64,6 +71,8 @@ export class CanvasScene {
     this.resize(options.width, options.height, options.dpr, options.clientLeft);
   }
   get snapshot(): CombatState | null { return this.runner.snapshot; }
+  retryRetirement(): void { this.retirement?.retry(); }
+  continueRetirement(): void { this.retirement?.continueAfterFailure(); }
   get diagnostics(): FrameDiagnostics {
     return { frames: this.frames, maxFrameGapMs: this.maxFrameGap, recentFrameGapsMs: [...this.frameGaps],
       droppedSimulationMs: this.droppedMs, peakProjectiles: this.peakProjectiles };
@@ -75,17 +84,27 @@ export class CanvasScene {
     this.canvas.width = Math.round(width * dpr); this.canvas.height = Math.round(height * dpr);
     if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot);
   }
-  private validateArt(): SpriteAsset[] {
-    const art = this.options.art;
-    if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet];
+  private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
       || !/^\/assets\/images\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path))) throw new Error('战场素材尚未通过审校');
+  }
+  private validateMonster(art: MonsterArt): void {
+    this.validateSprites([art.monster]);
     if (art.monster.path !== art.monsterVisual.spritePath || art.monsterVisual.wordId !== this.options.initial.monsters[0].wordId) throw new Error('怪物图片与当前目标不匹配');
     const expected = logicalHitbox(art.monsterVisual, art.monsterWidth);
     const actual = this.options.initial.monsters[0].hitbox;
     if ((['x', 'y', 'width', 'height'] as const).some(key => !Number.isFinite(expected[key]) || Math.abs(expected[key] - actual[key]) > 1e-6)) throw new Error('怪物绘制与碰撞区域不一致');
-    return assets;
+  }
+  private get monsterArt(): MonsterArt | undefined { return this.options.preview ? this.options.previewMonster : this.options.art; }
+  private validateArt(): SpriteAsset[] {
+    if (this.options.preview) {
+      if (!this.options.previewMonster) return [];
+      this.validateMonster(this.options.previewMonster); return [this.options.previewMonster.monster];
+    }
+    const art = this.options.art;
+    if (!art) throw new Error('战场素材尚未准备完成');
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet];
+    this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
     if (this.disposed) return false;
@@ -93,13 +112,13 @@ export class CanvasScene {
     this.cancelPendingLoads();
     const version = ++this.loadVersion;
     try {
-      if (!this.options.preview) {
-        const assets = this.validateArt();
+      const assets = this.validateArt();
+      if (assets.length) {
         const unique = [...new Set(assets.map(asset => asset.path))];
         const loaded = await Promise.all(unique.map(path => this.loadImage(path)));
         if (this.disposed || version !== this.loadVersion) return false;
         this.images = new Map(loaded.map((image, index) => [unique[index], image]));
-        const visual = this.options.art!.monsterVisual;
+        const visual = this.monsterArt!.monsterVisual;
         const monsterImage = this.images.get(visual.spritePath)!;
         if (monsterImage.width !== visual.sourceSize.width || monsterImage.height !== visual.sourceSize.height) throw new Error('怪物原图尺寸与清单不符');
       }
@@ -138,12 +157,19 @@ export class CanvasScene {
     if (key !== this.lastHud) { this.lastHud = key; this.options.onHud(hud); }
   }
   private schedule(): void {
-    if (!this.ready || this.disposed || this.paused || this.frameId !== undefined || this.runner.snapshot?.status !== 'fighting') return;
+    if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
+      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active)) return;
     const version = this.frameVersion;
     this.frameId = this.canvas.requestAnimationFrame((now: number) => {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
       this.frameId = undefined;
       try {
+        if (this.retirement) {
+          const elapsed = this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime));
+          this.lastFrameTime = now; this.retirement.advance(elapsed);
+          if (!this.disposed && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
+          return;
+        }
         if (this.needsResume) {
           this.runner.resume(now, this.runner.snapshot!.context.generation + 1); this.needsResume = false;
         }
@@ -157,6 +183,10 @@ export class CanvasScene {
         this.lastFrameTime = now; this.droppedMs += result.droppedMs;
         this.peakProjectiles = Math.max(this.peakProjectiles, result.state.projectiles.length);
         this.draw(result.state); this.publishHud(result.state);
+        if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {
+          this.retirement = createRetirement(result.state, this.options.retirement);
+          this.retirement.start();
+        }
         if (result.events.length) this.options.onEvents(result.events);
         this.schedule();
       } catch (error) {
@@ -168,6 +198,7 @@ export class CanvasScene {
   setPaused(paused: boolean): void {
     if (this.disposed || paused === this.paused) return;
     this.paused = paused; this.control.clear(); this.lastFrameTime = undefined;
+    this.retirement?.setPaused(paused);
     if (paused) {
       this.frameVersion++;
       if (this.frameId !== undefined) this.canvas.cancelAnimationFrame(this.frameId);
@@ -182,7 +213,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.cancelPendingLoads(); this.images.clear(); this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.runner.dispose(); this.frameGaps = [];
   }
   private draw(state: CombatState): void {
     const c = this.context; const v = this.viewport;
@@ -206,16 +237,19 @@ export class CanvasScene {
       this.sprite(art.weapon, state.player.x - 8, state.player.y - 34, 16, 28);
     }
     for (const monster of state.monsters) {
-      c.globalAlpha = monster.hp <= 0 ? 0.3 : 1;
-      if (this.options.preview) {
+      c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? 0.35 : 1;
+      const monsterArt = this.monsterArt;
+      if (!monsterArt && this.options.preview) {
         c.fillStyle = state.tick < this.monsterFlashUntil ? '#ffffff' : '#c2a0f0';
         c.beginPath(); c.arc(monster.position.x, monster.position.y, 32, 0, Math.PI * 2); c.fill();
         c.fillStyle = '#21313e'; c.fillRect(monster.position.x - 14, monster.position.y - 6, 8, 10); c.fillRect(monster.position.x + 6, monster.position.y - 6, 8, 10);
-      } else if (art) {
-        const scale = art.monsterWidth / art.monsterVisual.sourceSize.width;
-        if (state.tick < this.monsterFlashUntil) c.globalAlpha *= 0.55;
-        this.sprite(art.monster, monster.position.x - art.monsterVisual.anchor.x * scale,
-          monster.position.y - art.monsterVisual.anchor.y * scale, art.monsterWidth, art.monsterVisual.sourceSize.height * scale);
+      } else if (monsterArt) {
+        const scale = monsterArt.monsterWidth / monsterArt.monsterVisual.sourceSize.width;
+        if (monster.hp > 0 && state.tick < this.monsterFlashUntil) c.globalAlpha *= 0.55;
+        c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
+        this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
+          monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
+        c.imageSmoothingEnabled = true;
       }
       c.globalAlpha = 1;
     }

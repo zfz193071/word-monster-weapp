@@ -1,8 +1,8 @@
 import { sessionStore } from '../../services/session';
-import { CONTENT_ASSETS } from '../../content/assets';
+import { FORTRESS_ASSETS } from '../../fortress/content';
 
 Page({
-  data: { opening: false, showCredits: false, credits: CONTENT_ASSETS },
+  data: { opening: false, showCredits: false, credits: FORTRESS_ASSETS },
   sessionId: '',
   enteredBattle: false,
   disposed: false,

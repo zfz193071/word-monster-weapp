@@ -1,8 +1,9 @@
 <view wx:if="{{preview}}" class="preview-page">
-  <view class="preview-kicker">开发预览 · 临时几何占位</view>
+  <view class="preview-kicker">开发预览 · 水果角色已接入</view>
   <view class="preview-title">堡垒守卫</view>
-  <view class="preview-note">本页只验证移动、射击与基地攻防，正式水果怪素材尚未接入。</view>
-  <fortress-scene class="fortress-preview" preview="{{true}}" paused="{{previewPaused}}" />
+  <view class="preview-note">五种水果角色素材检查；基地、主角与武器仍为开发占位。</view>
+  <view class="preview-monsters"><button wx:for="{{previewWords}}" wx:key="id" data-word-id="{{item.id}}" bindtap="selectPreviewMonster" class="{{previewWord === item.id ? 'selected' : ''}}">{{item.meaningZh}}</button></view>
+  <fortress-scene class="fortress-preview" preview="{{true}}" preview-word="{{previewWord}}" paused="{{previewPaused}}" />
   <view class="preview-actions"><button bindtap="togglePreviewPause">{{previewPaused ? '开始 / 继续预览' : '暂停'}}</button><button bindtap="restartPreview">重新预览</button></view>
 </view>
 <view class="page battle" wx:if="{{view}}">

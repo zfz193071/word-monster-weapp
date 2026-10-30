@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { CanvasScene } from '../miniprogram/fortress/canvas-scene';
-import type { SceneArt } from '../miniprogram/fortress/canvas-scene';
+import type { SceneArt, SceneOptions } from '../miniprogram/fortress/canvas-scene';
 import { createCombat } from '../miniprogram/fortress/combat';
 import { createSessionPlan } from '../miniprogram/fortress/plans';
 import { createViewport, HorizontalControl, logicalHitbox } from '../miniprogram/fortress/viewport';
@@ -22,10 +22,10 @@ function fakeCanvas() {
   const frame = (time: number) => { const entries = [...callbacks]; callbacks.clear(); for (const [, callback] of entries) callback(time); };
   return { canvas, callbacks, commands, images, frame };
 }
-function harness(preview = true, art?: SceneArt) {
+function harness(preview = true, art?: SceneArt, extra: Partial<SceneOptions> = {}) {
   const fake = fakeCanvas(); const hud: unknown[] = []; const errors: string[] = []; const events: unknown[] = [];
   const scene = new CanvasScene(fake.canvas as unknown as WechatMiniprogram.Canvas, { initial: initial(), width: 360, height: 560, dpr: 2, clientLeft: 20,
-    preview, art, onHud: value => hud.push(value), onError: value => errors.push(value), onEvents: value => events.push(value) });
+    preview, art, onHud: value => hud.push(value), onError: value => errors.push(value), onEvents: value => events.push(value), ...extra });
   return { ...fake, scene, hud, errors, events };
 }
 function artFixture(): SceneArt {
@@ -116,4 +116,31 @@ test('HUD 读真实基地血量；失败停止循环；诊断样本有界且不�
   assert.deepEqual(h.hud.at(-1), { hp: 0, maxHp: 5, status: 'baseDestroyed' });
   assert.equal(h.scene.diagnostics.recentFrameGapsMs.length, 120); assert.ok(h.scene.diagnostics.peakProjectiles > 0);
   h.scene.touchStart([{ identifier: 1, clientX: 200 }]); h.frame(30000); assert.equal(h.scene.snapshot!.player.x, 24); h.scene.dispose();
+});
+
+
+test('开发预览也预载真实怪物图片，缺图不能退回几何占位', async () => {
+  const art = artFixture();
+  const h = harness(true, undefined, { previewMonster: art });
+  const loading = h.scene.load(); assert.equal(h.images.length, 1); assert.equal(h.callbacks.size, 0);
+  h.images[0].onerror(); assert.equal(await loading, false); assert.equal(h.callbacks.size, 0);
+  const retry = h.scene.load(); h.images[1].onload(); assert.equal(await retry, true);
+  assert.ok(h.commands.some(c => c.method === 'drawImage')); h.scene.dispose();
+});
+
+test('真实击败接入读词与淡出时仍只有一个帧循环，完成后停止且战斗 tick 不变', async () => {
+  let ended = () => {}; let complete = 0; let plays = 0;
+  const state = { ...initial(), player: { x: 180, y: 510 } };
+  const h = harness(true, undefined, { initial: state, retirement: { onChange: () => {}, onComplete: () => { complete++; },
+    audio: { schedule: () => () => {}, createContext: () => ({ src: '', autoplay: false, loop: false,
+      onEnded: cb => { ended = cb; }, offEnded: () => {}, onError: () => {}, offError: () => {}, onStop: () => {}, offStop: () => {}, onPause: () => {}, offPause: () => {},
+      play: () => { plays++; }, stop: () => {}, destroy: () => {},
+    }) } } });
+  await h.scene.load(); let now = 0; h.frame(now);
+  while (h.scene.snapshot!.status === 'fighting' && now < 10000) { now += 10; h.frame(now); assert.equal(h.callbacks.size, 1); }
+  assert.equal(h.scene.snapshot!.status, 'cleared'); const tick = h.scene.snapshot!.tick; assert.equal(plays, 1);
+  ended(); const until = now + 1050;
+  while (now < until) { now += 10; h.frame(now); }
+  assert.equal(h.scene.snapshot!.tick, tick); assert.equal(complete, 1); assert.equal(h.callbacks.size, 0);
+  ended(); h.frame(now + 5000); assert.equal(complete, 1); h.scene.dispose();
 });

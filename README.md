@@ -11,12 +11,12 @@
 规则 A1—C8 已获用户完整确认，详见 [规则表](docs/mvp-v2-rules-proposal.md)。#19 已实现 `miniprogram/fortress/`：独立 V2 类型与版本、已确认参数、固定种子波次/技能候选和配置/资源引用校验。V1 页面暂未改接，新契约不等于战斗、技能应用或存储已实现。
 
 - `npm run check:fortress`：校验已确认规则与计划，单独提示资源未就绪。
-- `npm run check:fortress:assets`：严格资源交付检查；目前预期失败，缺五种怪物和五段发音听审。
+- `npm run check:fortress:assets`：严格资源交付检查；目前预期失败，缺五段发音听审。
 - [美术候选](docs/assets/candidates/README.md)：已下载并登记 Kenney 图集，未放入运行包；水果怪仍需继续准备。
 
 V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` 和 `word-monster:fortress:progress:v2`；#12 实现时只解码此版本，V1 结果不迁移、不混算、不用于恢复战斗。`validateFortressContent` 是编译期类型约束下的配置语义校验，不是本地存储 `unknown` 解码器。
 
-#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。正常入口仍为 V1；#21 已增加 Canvas 开发预览（页面 `pages/battle/battle`，参数 `preview=fortress`），可验证拖动、射击、基地血条与暂停。当前使用明确标注的临时几何占位，正式素材和真机尚待验收。详见 [Canvas 接入说明](docs/fortress-canvas.md)。
+#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。正常入口仍为 V1；#21 已增加 Canvas 开发预览（页面 `pages/battle/battle`，参数 `preview=fortress`），可验证拖动、射击、基地血条与暂停。五种拟人水果已下载接入，可切换检查；基地/主角/武器仍为开发占位，真机尚待验收。详见 [Canvas 接入说明](docs/fortress-canvas.md)。
 
 ## 安装与检查
 
@@ -74,3 +74,5 @@ npm test
 #9/#10 已接入包内图音文件，仍待音频听审与模拟器/真机验收。三阶段均已接线：初遇展示图片、英文和发音，辨词/守关作答前隐藏答案文字；每阶段显示题目进度，守关显示引擎结算后的五层护盾。15 题完成后清空答题目标并输出一次完成结果。整关联动测试验证教学、首次独立选择、错后重试、提示后完成可从记录区分，动画不自动作答。
 
 #11 继续完善奖励演出，#12/#14 负责结果保存与面板。当前升级仅显示文字过渡，完成仅显示结束提示，不宣称这些后续工单已完成。控制器提供 onCompleted(result) 接口供后续保存接入，当前页面尚未保存结果。
+
+本轮素材来源与改动见 [五种水果角色](docs/monster-assets.md)。#22 已接入击败后的残影、词音、普通水果对照及失败重试，接口与边界见 [退场接入说明](docs/fortress-retirement.md)。

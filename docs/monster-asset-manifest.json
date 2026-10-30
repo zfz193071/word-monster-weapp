@@ -1,0 +1,92 @@
+{
+  "downloadedAt": "2026-10-30",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "files": [
+    {
+      "wordId": "apple",
+      "path": "/assets/images/monsters/apple.png",
+      "bytes": 386,
+      "sha256": "da673631ff67c36cc8f3df80cb89f949fd81167af98d67b0d946db3b129358e4",
+      "width": 32,
+      "height": 32,
+      "author": "CazBee",
+      "license": "CC0-1.0",
+      "source": "https://caz-bee.itch.io/cute-fruit-characters",
+      "modifications": "Unmodified PNG, renamed"
+    },
+    {
+      "wordId": "banana",
+      "path": "/assets/images/monsters/banana.png",
+      "bytes": 12168,
+      "sha256": "2a5b18358dce6918908cfad744c1cc87fc09fc71675cc40bec880e080d3cc326",
+      "width": 256,
+      "height": 256,
+      "author": "gem",
+      "license": "CC0-1.0",
+      "source": "https://openclipart.org/detail/183203/happy-fruits",
+      "modifications": "Isolated original vector elements, transparent square viewBox, rasterized with resvg-js to PNG; no face redraw"
+    },
+    {
+      "wordId": "orange",
+      "path": "/assets/images/monsters/orange.png",
+      "bytes": 364,
+      "sha256": "3722fa15bb1f47e60ea89ebd494723a01345334656841025497e57d05b5573f5",
+      "width": 32,
+      "height": 32,
+      "author": "CazBee",
+      "license": "CC0-1.0",
+      "source": "https://caz-bee.itch.io/cute-fruit-characters",
+      "modifications": "Unmodified PNG, renamed"
+    },
+    {
+      "wordId": "grape",
+      "path": "/assets/images/monsters/grape.png",
+      "bytes": 34435,
+      "sha256": "d6b3efb91a36c0c89851144325287798f195e93655f10cc6d33343d0ba38db7d",
+      "width": 256,
+      "height": 256,
+      "author": "gem",
+      "license": "CC0-1.0",
+      "source": "https://openclipart.org/detail/183203/happy-fruits",
+      "modifications": "Isolated original vector elements, transparent square viewBox, rasterized with resvg-js to PNG; no face redraw"
+    },
+    {
+      "wordId": "watermelon",
+      "path": "/assets/images/monsters/watermelon.png",
+      "bytes": 437,
+      "sha256": "f50d9137ad7d2d9a4eba01e2b3a701d45405d26f42ce0cbfed389842e49223a4",
+      "width": 32,
+      "height": 32,
+      "author": "CazBee",
+      "license": "CC0-1.0",
+      "source": "https://caz-bee.itch.io/cute-fruit-characters",
+      "modifications": "Unmodified PNG, renamed"
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/assets/candidates/cazbee-fruits/cute_apple_still.png",
+      "sha256": "da673631ff67c36cc8f3df80cb89f949fd81167af98d67b0d946db3b129358e4"
+    },
+    {
+      "path": "docs/assets/candidates/cazbee-fruits/cute_orange_still.png",
+      "sha256": "3722fa15bb1f47e60ea89ebd494723a01345334656841025497e57d05b5573f5"
+    },
+    {
+      "path": "docs/assets/candidates/cazbee-fruits/cute_watermelon_still.png",
+      "sha256": "f50d9137ad7d2d9a4eba01e2b3a701d45405d26f42ce0cbfed389842e49223a4"
+    },
+    {
+      "path": "docs/assets/candidates/gem-happy-fruits/banana.svg",
+      "sha256": "e217642942e6ae0c1e36ecad0c902a01508ff432a98e6e0573f63c8b65c592c2"
+    },
+    {
+      "path": "docs/assets/candidates/gem-happy-fruits/grape.svg",
+      "sha256": "245d6658c849cb34bd1910a86fa74123472f5869787b63b08509f54b02255d3c"
+    },
+    {
+      "path": "docs/assets/candidates/gem-happy-fruits/original.svg",
+      "sha256": "2a682c159c11cab4399f0d31224b762f86cb8b78371545e4c65475e102cbc56c"
+    }
+  ]
+}

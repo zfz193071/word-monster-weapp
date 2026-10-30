@@ -1,21 +1,21 @@
 import { CanvasScene } from '../../fortress/canvas-scene';
 import type { SceneArt } from '../../fortress/canvas-scene';
-import { createCombat } from '../../fortress/combat';
-import { createSessionPlan } from '../../fortress/plans';
+import { createPreviewCombat } from '../../fortress/preview';
+import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortress/content';
+import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState } from '../../fortress/types';
 
 interface InstanceState { scene?: CanvasScene; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
-function previewCombat(): CombatState {
+function previewCombat(wordId: string): CombatState {
   const id = `preview-${++previewSequence}`;
-  return createCombat({ plan: createSessionPlan(id, () => 0.5), waveIndex: 0, combatId: id, generation: 0,
-    baseHp: 5, playerX: 180, skills: { doubleShot: 0, fireRate: 0, bulletWidth: 0 },
-    monsterHitbox: { x: -32, y: -32, width: 64, height: 64 } });
+  return createPreviewCombat(wordId, id);
 }
 Component({
   properties: {
     preview: { type: Boolean, value: false },
+    previewWord: { type: String, value: 'apple', observer() { if (instances.get(this)?.scene && this.properties.preview) this.mount(true); } },
     initialState: { type: Object, value: null },
     art: { type: Object, value: null },
     paused: { type: Boolean, value: false, observer() { this.applyPause(); } },
@@ -23,7 +23,7 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100 },
+  data: { ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
     ready() { this.mount(); },
@@ -40,18 +40,26 @@ Component({
       const retained = replace ? null : instance.scene?.snapshot;
       instance.scene?.dispose(); instance.scene = undefined;
       const epoch = ++instance.epoch;
-      this.setData({ ready: false, error: '' });
+      this.setData({ ready: false, error: '', retirement: null });
       const valid = () => instance.alive && instance.epoch === epoch;
       this.createSelectorQuery().select('#battle-canvas').fields({ node: true, size: true, rect: true }, result => {
         if (!valid()) return;
         try {
           if (!result?.node || !result.width || !result.height) throw new Error('Canvas 节点尚未就绪');
           if (this.properties.preview && wx.getAccountInfoSync().miniProgram.envVersion !== 'develop') throw new Error('开发预览仅在开发版可用');
-          const initial = this.properties.preview ? previewCombat() : retained ?? this.properties.initialState as CombatState | null;
+          const initial = this.properties.preview ? previewCombat(this.properties.previewWord) : retained ?? this.properties.initialState as CombatState | null;
           if (!initial) throw new Error('战斗尚未开始');
+          const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
+          const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
             initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
             preview: this.properties.preview, art: this.properties.art as SceneArt | undefined,
+            previewMonster: this.properties.preview && visual && asset ? { monsterVisual: visual, monsterWidth: monsterDrawWidth(visual),
+              monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,
+            retirement: {
+              onChange: retirement => { if (valid()) this.setData({ retirement }); },
+              onComplete: result => { if (valid()) this.triggerEvent('retirementcomplete', result); },
+            },
             onHud: hud => { if (valid()) this.setData({ hud, hpPercent: hud.hp / hud.maxHp * 100 }); },
             onEvents: events => { if (valid()) this.triggerEvent('combatevents', { events, state: scene.snapshot }); },
             onError: message => { if (valid()) this.setData({ error: message, ready: false }); },
@@ -63,6 +71,8 @@ Component({
     },
     applyPause() { const state = instances.get(this); state?.scene?.setPaused(this.properties.paused || !state.visible); },
     retry() { this.mount(); },
+    retryRetirement() { instances.get(this)?.scene?.retryRetirement(); },
+    continueRetirement() { instances.get(this)?.scene?.continueRetirement(); },
     restartPreview() { if (this.properties.preview) this.mount(); },
     getDiagnostics() { return instances.get(this)?.scene?.diagnostics; },
     getSnapshot() { return instances.get(this)?.scene?.snapshot; },

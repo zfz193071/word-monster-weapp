@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns2="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" id="svg2" viewBox="368.037353515625 144.53801727294922 287.77496337890625 287.77496337890625" width="256" height="256" version="1.0">
+  <defs id="defs4">
+    <radialGradient id="radialGradient3212" gradientUnits="userSpaceOnUse" cy="155.3" cx="222.49" gradientTransform="matrix(1 0 0 1.0129 0 -2.0038)" r="39.143">
+      <stop id="stop4711" stop-color="#ffaf25" offset="0" />
+      <stop id="stop4947" stop-color="#ff8f25" stop-opacity="0" offset="1" />
+    </radialGradient>
+    <linearGradient id="linearGradient3286" y2="218.88" gradientUnits="userSpaceOnUse" x2="230.02" gradientTransform="matrix(1.7335 0 0 1.7335 20.562 -450.82)" y1="228.98" x1="211.44">
+      <stop id="stop4751" stop-color="#773f00" offset="0" />
+      <stop id="stop4753" stop-color="#a0a0a0" stop-opacity="0" offset="1" />
+    </linearGradient>
+    <linearGradient id="linearGradient3289" y2="129.44" gradientUnits="userSpaceOnUse" x2="345.81" gradientTransform="matrix(1.7335 0 0 1.7335 20.562 -450.82)" y1="89.898" x1="360.46">
+      <stop id="stop4737" stop-color="#734800" offset="0" />
+      <stop id="stop4739" stop-color="#a0a0a0" stop-opacity="0" offset="1" />
+    </linearGradient>
+    <linearGradient id="linearGradient3317" y2="522.23" gradientUnits="userSpaceOnUse" x2="205.06" gradientTransform="matrix(1.8378 0 0 1.7335 2.7238 -450.82)" y1="169.19" x1="206.07">
+      <stop id="stop4905" stop-color="#d45050" offset="0" />
+      <stop id="stop4911" stop-color="#d45050" offset=".23881" />
+      <stop id="stop4907" stop-color="#fff" offset="1" />
+    </linearGradient>
+    <radialGradient id="radialGradient3321" gradientUnits="userSpaceOnUse" cy="290.15" cx="198.49" gradientTransform="matrix(1.833 -1.5342e-7 1.9897e-7 2.1856 4.7112 -785.56)" r="210.11">
+      <stop id="stop4917" stop-color="#fff" offset="0" />
+      <stop id="stop4919" stop-color="#50d2d4" offset="1" />
+    </radialGradient>
+    <linearGradient id="linearGradient5388-5" y2="135.61" gradientUnits="userSpaceOnUse" y1="193.14" gradientTransform="translate(-168.25 -137.67)" x2="208.59" x1="206.07">
+      <stop id="stop5384-1" stop-color="#ff3d00" offset="0" />
+      <stop id="stop5386-8" stop-color="#1c0600" offset="1" />
+    </linearGradient>
+  </defs>
+  <g id="layer1" transform="translate(0 460.41)">
+    <path id="path4723" d="m376.88-58.46 13.642 10.388c23.645-0.01993 309.59-36.835 247.7-195.87 8.4068-24.598 9.8189-34.318 6.6231-51.955h-18.514c-0.38722 19.742-1.7716 38.487-13.642 46.746-19.676 34.043-192.4 149.92-235.81 190.69z" fill-rule="evenodd" stroke="#000" stroke-width="1.6835px" fill="#fbff32" />
+    <path id="path4733" fill="url(#linearGradient3289)" d="m385.01-53.736c-3.1724-2.4224-5.7819-4.616-5.7989-4.8748-0.0392-0.59682 15.221-13.405 26.673-22.388 4.8154-3.7771 36.532-27.773 70.481-53.325 98.868-74.413 116.09-88.661 138.53-114.64 8.1009-9.3776 11.95-20.628 12.033-35.172 0.0173-2.9495 0.27675-6.5939 0.57775-8.0987l0.54722-2.736h7.6755c8.7649 0 8.1404-0.65468 9.1873 9.6309 0.7758 7.6215-0.77529 18.133-4.4312 30.029-1.6578 5.3945-3.0155 10.633-3.0169 11.641-0.001 1.0081 0.80506 4.16 1.7924 7.0043 5.3027 15.276 7.5342 36.351 5.2655 49.727-9.004 53.087-64.693 94.781-161.43 120.86-28.966 7.8096-62.826 14.264-84.321 16.073l-7.9908 0.67243-5.768-4.4043z" />
+    <g id="g4887" transform="matrix(3.3566 1.4631 -1.4631 3.3566 444.95 -737.62)" stroke="#000" stroke-linecap="round" stroke-width=".45515" fill="none">
+      <path id="path4889" d="m99.337 119.8c-0.0054-3.4731 4.9584-5.2944 5.0575 0.22989" />
+      <path id="path4891" d="m95.199 119.6c0.0054-3.4732-4.9584-5.2944-5.0575 0.22988" />
+    </g>
+    <path id="path4747" fill="url(#linearGradient3286)" d="m385.01-53.736c-3.1724-2.4224-5.7819-4.616-5.7989-4.8748-0.0456-0.69181 16.108-14.114 30.175-25.072 6.7416-5.2518 37.659-28.633 68.706-51.959 76.302-57.326 101.49-77.317 120.57-95.699 4.4237-4.261 8.569-7.6152 9.2118-7.4536 0.64277 0.16156 8.6838 3.0512 17.869 6.4215l16.7 6.1277 1.0914 4.8165c1.6527 7.2934 2.2219 27.202 0.98619 34.488-9.004 53.087-64.693 94.781-161.43 120.86-28.966 7.8096-62.826 14.264-84.321 16.073l-7.9908 0.67243-5.768-4.4043z" />
+    <g id="g3530" transform="matrix(.76201 .46002 -.46002 .76201 565.84 -209.79)">
+      <path id="path3532" d="m4.4832 15.348c24.686 7.5563 45.977 4.9287 66.67 0.50508-7.3379 50.807-60.509 52.336-66.67-0.50508z" fill-rule="evenodd" stroke="#000" stroke-width="2" fill="url(#linearGradient5388-5)" />
+    </g>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <ns2:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <ns2:license rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <ns2:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </ns2:Agent>
+        </dc:publisher>
+        <dc:title>happy fruits</dc:title>
+        <dc:date>2013-09-07T23:10:04</dc:date>
+        <dc:description>Just an apple, a banana and a bunch of grapes looking really happy :D</dc:description>
+        <dc:source>https://openclipart.org/detail/183203/happy-fruits-by-gem-183203</dc:source>
+        <dc:creator>
+          <ns2:Agent>
+            <dc:title>gem</dc:title>
+          </ns2:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>:D</rdf:li>
+            <rdf:li>apple</rdf:li>
+            <rdf:li>banana</rdf:li>
+            <rdf:li>emoticon</rdf:li>
+            <rdf:li>fruit</rdf:li>
+            <rdf:li>good mood</rdf:li>
+            <rdf:li>grapes</rdf:li>
+            <rdf:li>happy</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </ns2:Work>
+      <ns2:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <ns2:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <ns2:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <ns2:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </ns2:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
