@@ -16,7 +16,7 @@
 
 V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` 和 `word-monster:fortress:progress:v2`；#12 实现时只解码此版本，V1 结果不迁移、不混算、不用于恢复战斗。`validateFortressContent` 是编译期类型约束下的配置语义校验，不是本地存储 `unknown` 解码器。
 
-#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。当前页面仍未改接 Canvas。
+#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。正常入口仍为 V1；#21 已增加 Canvas 开发预览（页面 `pages/battle/battle`，参数 `preview=fortress`），可验证拖动、射击、基地血条与暂停。当前使用明确标注的临时几何占位，正式素材和真机尚待验收。详见 [Canvas 接入说明](docs/fortress-canvas.md)。
 
 ## 安装与检查
 
@@ -47,7 +47,7 @@ npm test
 | 目录 | 用途 |
 | --- | --- |
 | miniprogram/pages | home、battle 两页与完成面板（后续） |
-| miniprogram/components | monster、weapon 视图组件（后续） |
+| miniprogram/components | fortress-scene 原生 Canvas 战场与控制区 |
 | miniprogram/game | 已确认规则、数据/事件契约、轮次生成、纯逻辑状态机与答题结算 |
 | miniprogram/content | 已确认词表、首关配置、资源清单与语义校验；素材仍待审校 |
 | miniprogram/services | 音频适配器、内存会话交接；本地结果存储待实现 |

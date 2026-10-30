@@ -14,11 +14,14 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { view: null as BattleView | null },
+  data: { view: null as BattleView | null, preview: false, previewPaused: true },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
 
   onLoad(query: Record<string, string | undefined>) {
+    if (query.preview === 'fortress' && wx.getAccountInfoSync().miniProgram.envVersion === 'develop') {
+      this.setData({ preview: true }); return;
+    }
     this.session = sessionStore.claim(query.sessionId ?? '');
     if (!this.session) { wx.reLaunch({ url: '/pages/home/home' }); return; }
     this.controller = createBattleController(this.session, {
@@ -54,6 +57,9 @@ Page({
     const target = eventTarget(event);
     if (target) this.controller?.visualFinished(target.context, target.wordId);
   },
+
+  togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
+  restartPreview() { if (this.data.preview) { this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
 
   onUnload() {
     this.controller?.dispose();

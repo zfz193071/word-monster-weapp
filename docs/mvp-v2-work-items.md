@@ -1,6 +1,6 @@
 # MVP V2 工单规划与迁移映射
 
-规划及规则确认日期：2026-10-30。当前页面仍是 V1，V2 契约与纯战斗模拟已在 `miniprogram/fortress/` 实现。本文与 [architecture.md](../architecture.md) 描述待实现的堡垒守卫版本。修改前工单快照见 [归档](archive/issues-before-v2.json)。
+规划及规则确认日期：2026-10-30。正常入口仍是 V1，V2 契约、纯战斗模拟与 Canvas 开发预览已在 `miniprogram/fortress/` 实现。本文与 [architecture.md](../architecture.md) 描述待实现的堡垒守卫版本。修改前工单快照见 [归档](archive/issues-before-v2.json)。
 
 ## 本轮确认
 
@@ -35,7 +35,7 @@
 | [#18](https://github.com/zfz193071/word-monster-weapp/issues/18) | [MVP V2] 冻结堡垒守卫玩法、数值与技能规则 | 已完成（A1—C8 已确认） | — |
 | [#19](https://github.com/zfz193071/word-monster-weapp/issues/19) | [MVP V2] 定义波次、堡垒战斗、技能与结果契约 | 已完成（59 项测试通过） | #18 |
 | [#20](https://github.com/zfz193071/word-monster-weapp/issues/20) | [MVP V2] 实现移动射击、真实碰撞与基地攻防模拟 | 已完成（73 项测试通过） | #18、#19 |
-| [#21](https://github.com/zfz193071/word-monster-weapp/issues/21) | [MVP V2] 实现 Canvas 战场、堡垒血条与触摸控制 | 待开发 | #19、#20、#4 |
+| [#21](https://github.com/zfz193071/word-monster-weapp/issues/21) | [MVP V2] 实现 Canvas 战场、堡垒血条与触摸控制 | 进行中：技术组件已实现，素材/真机待验收 | #19、#20、#4 |
 | [#22](https://github.com/zfz193071/word-monster-weapp/issues/22) | [MVP V2] 实现怪物残影、退场读词与音效协调 | 待开发 | #18、#19、#4、#7 |
 | [#23](https://github.com/zfz193071/word-monster-weapp/issues/23) | [后续·非 MVP] 金币掉落与武器装备长期成长设计 | 后续，不排入 MVP | #16 |
 
@@ -54,7 +54,7 @@
 
 用户于 2026-10-30 明确答复：“接受整份提案，继续实现”。[A1—C8 已确认规则与十个验收例](mvp-v2-rules-proposal.md) 是实现依据，包含波次/教学、堡垒操作、攻防、同一步结算、技能叠加、退场故障和失败结果保存，原待确认项已解决。
 
-#19 采用 mode=fortress、schemaVersion=2、contentVersion=2；V1 记录不得恢复新局或混入 V2 学习统计。五种水果怪尚未齐备，#4 保持打开；纯模拟 #20 已完成，接口与验证见 [接入说明](fortress-combat.md)。接下来推进 #21 Canvas；实际页面开战须等待资源与后续集成验收。
+#19 采用 mode=fortress、schemaVersion=2、contentVersion=2；V1 记录不得恢复新局或混入 V2 学习统计。五种水果怪尚未齐备，#4 保持打开；纯模拟 #20 已完成，接口与验证见 [接入说明](fortress-combat.md)。 #21 已提供明确标注占位的 Canvas 开发预览，见 [接入说明](fortress-canvas.md)；正式开战须等待资源与后续集成验收。
 
 ## 验收边界
 

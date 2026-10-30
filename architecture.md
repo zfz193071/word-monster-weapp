@@ -163,3 +163,5 @@ V2 使用 mode=fortress、schemaVersion=2、contentVersion=2 和独立存储键 
 新版工单范围、状态及依赖见 [MVP V2 工单规划](docs/mvp-v2-work-items.md)。A1—C8 已确认，后续如变更业务规则仍需明确答复；资源未就绪不得宣称已通过新版可玩验收。
 
 2026-10-30 已读取微信官方文档与项目锁定的类型定义：[Canvas 组件](https://developers.weixin.qq.com/miniprogram/dev/component/canvas.html)、[Canvas.requestAnimationFrame](https://developers.weixin.qq.com/miniprogram/dev/api/canvas/Canvas.requestAnimationFrame.html)、[Canvas.cancelAnimationFrame](https://developers.weixin.qq.com/miniprogram/dev/api/canvas/Canvas.cancelAnimationFrame.html)。保留当前小程序形态，不据此宣称已实现动作渲染或完成真机验证。
+
+#21 已实现 Canvas 技术组件和仅开发版可用的占位预览，接线与验收边界见 [Canvas 接入说明](docs/fortress-canvas.md)。这不代表正式怪物素材、完整 V2 游戏或真机性能已交付。

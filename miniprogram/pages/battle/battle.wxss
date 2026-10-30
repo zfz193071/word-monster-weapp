@@ -23,3 +23,10 @@
 .eyes { font-size: 26rpx; padding-top: 24rpx; letter-spacing: 8rpx; }
 .weapon { position: absolute; width: 26rpx; height: 48rpx; background: #e3aa31; border: 4rpx solid #896727; border-radius: 14rpx; right: -20rpx; top: -14rpx; transform: rotate(20deg); }
 @keyframes target-hit { 0% { transform: scale(1); } 35% { transform: scale(1.08) rotate(-5deg); } 65% { transform: scale(.9) rotate(5deg); } 100% { transform: scale(.65); opacity: 0; } }
+
+.preview-page { padding: 24rpx 28rpx 40rpx; background: #f5f0df; }
+.preview-kicker { color: #8c6124; font-size: 23rpx; letter-spacing: 2rpx; }
+.preview-title { color: #183f42; font-size: 42rpx; font-weight: 700; margin: 8rpx 0; }
+.preview-note { color: #647974; font-size: 24rpx; margin-bottom: 20rpx; line-height: 1.5; }
+.preview-actions { display: flex; gap: 16rpx; margin-top: 20rpx; }
+.preview-actions button { flex: 1; background: #246858; color: #fff; font-size: 26rpx; }
