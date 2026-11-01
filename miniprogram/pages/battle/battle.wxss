@@ -33,3 +33,9 @@
 .preview-monsters { display: flex; gap: 8rpx; margin-bottom: 16rpx; }
 .preview-monsters button { padding: 0 10rpx; font-size: 24rpx; color: #20434a; }
 .preview-monsters .selected { background: #b8e5c2; }
+
+.opening-page { padding: 0 0 env(safe-area-inset-bottom); background: #334b40; min-height: 100vh; }.battle-toolbar { display: flex; justify-content: space-between; padding: 0 16rpx; background: #334b40; }.battle-toolbar button { margin: 0; width: 64rpx; height: 54rpx; padding: 0; line-height: 50rpx; background: transparent; color: #f6edc7; font-size: 36rpx; }.battle-toolbar button::after { border: 0; }
+
+.battle-toolbar button { min-width: 0; max-width: 64rpx; }
+
+.battle-volume { margin-left: auto; display: flex; align-items: center; color: #f6edc7; font-size: 22rpx; }.battle-volume slider { width: 160rpx; margin: 0 12rpx; }.battle-volume text:last-child { width: 64rpx; text-align: right; }

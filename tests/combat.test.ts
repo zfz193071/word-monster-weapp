@@ -80,12 +80,12 @@ test('同一步先处理命中：最后一击能阻止到期攻击且不会同�
   };
   const win = stepCombat(due);
   assert.equal(win.state.status, 'cleared'); assert.equal(win.state.base.hp, 1);
-  assert.deepEqual(win.events.map(e => e.type), ['monsterDefeated']);
+  assert.deepEqual(win.events.map(e => e.type), ['monsterDamaged', 'monsterDefeated']);
   assert.equal(win.state.monsters[0].status, 'defeated'); assert.equal(win.state.projectiles.length, 0);
   const surviveHit = stepCombat({ ...due, monsters: [{ ...due.monsters[0], hp: 2 }] });
   assert.equal(surviveHit.state.monsters[0].hp, 1);
   assert.equal(surviveHit.state.status, 'baseDestroyed');
-  assert.deepEqual(surviveHit.events.map(e => e.type), ['baseDamaged', 'baseDestroyed']);
+  assert.deepEqual(surviveHit.events.map(e => e.type), ['monsterDamaged', 'baseDamaged', 'baseDestroyed']);
 });
 
 test('一颗弹体只命中一次；同一帧多弹击败后不重复发击败事件', () => {

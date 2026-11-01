@@ -1,0 +1,52 @@
+import { createSeededRandom } from './plans';
+import { logicalHitbox } from './viewport';
+import { createEncounterCombat } from './combat';
+import { FORTRESS_WORDS } from './content';
+import type { SpriteAsset, SceneArt } from './canvas-scene';
+import type { SkillLevels } from './types';
+import { FORTRESS_RULES } from './rules';
+import type { ExperienceRules } from './experience';
+import type { UpgradeOffer } from './upgrade-choice';
+import { FORTRESS_SKILLS } from './rules';
+
+export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: 10,
+  // Three waves: incremental costs 30, 50, 70.
+  levelThresholds: Object.freeze([30, 80, 150]) });
+export const OPENING_MONSTER_COUNT = 3;
+export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0 });
+export const HERO_PATH = '/assets/images/fortress/hero.png';
+const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortress/${name}.png`,
+  source: `docs/assets/original/${name}.svg`, rights: '本项目原创矢量美术，2026-11-01', approved: true });
+
+export function openingArt(wordId: string): SceneArt {
+  const word = FORTRESS_WORDS.find(item => item.id === wordId);
+  if (!word) throw new Error('未知水果');
+  return { monster: original('zombie'), monsterWidth: 48,
+    monsterVisual: { wordId, portraitPath: '/assets/images/fortress/zombie.png', spritePath: '/assets/images/fortress/zombie.png',
+      sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: { x: 25, y: 16, width: 78, height: 135 } },
+    fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记水果图授权', approved: true },
+    hero: original('hero-back'), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
+}
+export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp = FORTRESS_RULES.base.maxHp) {
+  if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex > 2) throw new Error('无效波次');
+  const count = [3, 5, 7][waveIndex];
+  let seed = 2166136261;
+  for (const char of `${sessionId}:${waveIndex}`) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
+  const random = createSeededRandom(seed >>> 0);
+  const spawns = []; let spawnAtMs = 0;
+  while (spawns.length < count) {
+    const size = Math.min(count - spawns.length, 1 + Math.floor(random() * 3));
+    const lanes = [56, 118, 180, 242, 304];
+    for (let i = lanes.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [lanes[i], lanes[j]] = [lanes[j], lanes[i]]; }
+    for (let member = 0; member < size; member++) spawns.push({ monsterId: `${sessionId}:wave:${waveIndex + 1}:zombie:${spawns.length + 1}`, wordId, spawnAtMs,
+      position: { x: lanes[member] + random() * 12 - 6, y: FORTRESS_RULES.monster.startY } });
+    spawnAtMs += 800 + Math.floor(random() * 701);
+  }
+  return createEncounterCombat({ automatic: true, monsterSpeed: 20, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
+    playerX: 180, skills, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
+    spawns });
+}
+export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS): UpgradeOffer {
+  return { id: `${sessionId}:level:${level}`, level, cards: FORTRESS_SKILLS.map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,
+    description: `${skill.id === 'doubleShot' ? '齐射数量' : skill.id === 'fireRate' ? '射击间隔（毫秒）' : '子弹宽度'} ${skill.values[levels[skill.id]]} → ${skill.values[levels[skill.id] + 1]}` })) };
+}

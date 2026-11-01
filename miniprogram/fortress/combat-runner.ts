@@ -1,6 +1,6 @@
-import { COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
+import { applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
-import type { CombatEvent, CombatState } from './types';
+import type { CombatEvent, CombatState, SkillLevels } from './types';
 
 // Up to 100ms of simulation per frame. Extra elapsed time is dropped, not queued.
 export const MAX_STEPS_PER_FRAME = 10;
@@ -45,6 +45,9 @@ export class CombatRunner {
     }
     if (this.current.status !== 'fighting') this.remainderMs = 0;
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
+  }
+  applySkills(skills: SkillLevels): void {
+    if (this.current) this.current = applyCombatSkills(this.current, skills);
   }
   pause(): void {
     this.paused = true; this.previousTime = undefined; this.remainderMs = 0;

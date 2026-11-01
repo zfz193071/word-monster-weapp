@@ -1,11 +1,20 @@
 :host { display: block; }
-.listening { display: flex; align-items: center; gap: 24rpx; padding: 28rpx 20rpx; min-height: 530rpx; border-radius: 24rpx; background: #20434a; color: #f2f4df; }
-.waiting-base { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 28rpx; text-align: center; font-size: 28rpx; }
-.title { font-size: 34rpx; font-weight: bold; }
-.note { font-size: 24rpx; opacity: .8; }
-.waiting-base button { font-size: 28rpx; background: #eaf3d5; color: #20434a; }
-.choices { flex: 0 0 190rpx; width: 190rpx; display: flex; flex-direction: column; gap: 32rpx; }
-.choices .choice { box-sizing: border-box; width: 100%; min-width: 0; padding: 16rpx; margin: 0; border: 6rpx solid transparent; border-radius: 28rpx; background: #fff9e9; }
+.listening { padding: 32rpx 16rpx 20rpx; color: #334c45; text-align: center; }
+.sound-halo { display: flex; align-items: center; justify-content: center; gap: 6rpx; width: 112rpx; height: 112rpx; border-radius: 50%; margin: 0 auto 30rpx; background: #d8efcf; box-shadow: 0 0 0 16rpx #edf5e6; }
+.speaker { width: 20rpx; height: 30rpx; background: #477449; border-radius: 4rpx; position: relative; }
+.speaker::after { content: ''; position: absolute; top: -10rpx; right: -12rpx; border-top: 25rpx solid transparent; border-bottom: 25rpx solid transparent; border-right: 25rpx solid #477449; }
+.sound-wave { width: 20rpx; height: 42rpx; margin-left: 16rpx; border-right: 5rpx solid #477449; border-radius: 50%; }
+.speaking { animation: speak 1s ease-in-out infinite; }
+@keyframes speak { 50% { box-shadow: 0 0 0 24rpx #edf5e6; } }
+.prompt { font-size: 30rpx; font-weight: 600; min-height: 70rpx; }
+.choices { display: flex; justify-content: center; gap: 16rpx; margin: 16rpx 0 32rpx; }
+.choices .choice { flex: 1; min-width: 0; max-width: 184rpx; padding: 20rpx 8rpx; margin: 0; border: 5rpx solid #dfd5b7; border-radius: 24rpx; background: #fffef4; box-shadow: 0 8rpx 0 #e4d9bb; }
+.choice::after { border: 0; }
+.choice[disabled] { opacity: .72; }
 .choice image { display: block; width: 100%; height: 146rpx; }
-.choice.hinted { border-color: #ffc651; box-shadow: 0 0 24rpx #ffc651; }
-.error { padding: 24rpx; color: #75382c; }
+.choice.hinted { border-color: #84b948; box-shadow: 0 0 0 6rpx #d2e7ac; }
+.replay { width: 220rpx; margin-top: 16rpx; border-radius: 40rpx; font-size: 26rpx; color: #49654a; background: #e7efda; }
+.replay::after { border: 0; }
+.error { padding: 32rpx; color: #75382c; text-align: center; }
+
+.replay { min-width: 0; max-width: 220rpx; }

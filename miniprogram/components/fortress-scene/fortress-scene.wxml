@@ -1,4 +1,9 @@
-<view class="scene">
+<view class="scene {{opening ? 'opening-scene' : ''}}">
+  <view wx:if="{{opening}}" class="experience-hud"><text>{{waveNumber}} / 3 波 · Lv. {{level}}</text><view class="experience-track"><view style="width: {{xpPercent}}%"></view></view><text>{{xpRequired ? xpCurrent + ' / ' + xpRequired : '已满级'}}</text></view>
+  <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>
+  <view wx:if="{{completed}}" class="settlement"><text>守护成功！</text><text>3 波完成 · 击败 15 只僵尸 · 150 经验</text></view>
+  <skill-choice class="upgrade-choice" offer="{{upgradeOffer}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
+  <view wx:if="{{voiceError && !upgradeOffer}}" class="voice-status"><button bindtap="retryVoice">重试发音</button></view>
   <view class="hud" aria-label="基地剩余 {{hud.hp}} / {{hud.maxHp}} 血量">
     <text>堡垒基地</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text>{{hud.hp}} / {{hud.maxHp}}</text>
   </view>
@@ -10,7 +15,7 @@
     <block wx:elif="{{retirement.phase === 'audioError'}}"><text>读词暂时失败</text><view class="retirement-actions"><button bindtap="retryRetirement">再听一次</button><button bindtap="continueRetirement">继续</button></view></block>
     <text wx:elif="{{retirement.phase === 'done'}}">本波怪物已击败</text>
   </view>
-  <view wx:elif="{{hud.status !== 'fighting'}}" class="scene-status">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : '本波怪物已击败'}}</view>
+  <view wx:elif="{{hud.status !== 'fighting'}}" class="scene-status">{{hud.status === 'baseDestroyed' ? '基地被摧毁' : (opening ? '本批僵尸已击败' : '本波怪物已击败')}}</view>
   <view wx:elif="{{paused}}" class="scene-status">已暂停</view>
   <view wx:if="{{skillOffer}}" class="skill-panel">
     <block wx:if="{{skillOffer.status === 'offered'}}">
@@ -20,9 +25,11 @@
     </block>
     <block wx:else><text>技能已获得</text><text>{{skillSummary}}</text><text class="skill-detail">开发预览：下一波听词流程待接入</text></block>
   </view>
-  <canvas type="2d" id="battle-canvas" class="battle-canvas" />
-  <view class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
+  <view wx:if="{{opening && upgradeSummary}}" class="upgrade-summary">{{upgradeSummary}}</view>
+  <button wx:if="{{opening && (completed || hud.status === 'baseDestroyed') && !upgradeOffer}}" class="return-home" bindtap="returnHome">返回小屋</button>
+  <view class="canvas-stage"><image wx:if="{{(upgradeOffer || waveRequest || completed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{!!upgradeOffer || completed}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
+  <view wx:if="{{!opening}}" class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
-    <text>‹ 左右拖动守护者 ›</text>
+    <text>‹ 左右拖动 ›</text>
   </view>
 </view>

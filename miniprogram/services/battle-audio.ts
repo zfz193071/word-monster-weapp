@@ -1,0 +1,80 @@
+import { createAudioAdapter } from './audio';
+import type { AudioOptions } from './audio';
+import { createLoopMusic } from './home-music';
+import type { HomeMusicChannel } from './home-music';
+import { FORTRESS_WORDS } from '../fortress/content';
+import type { CombatEvent } from '../fortress/types';
+
+type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
+type Defeat = Extract<CombatEvent, { type: 'monsterDefeated' }>;
+export interface BattleAudioView { readonly retiringIds: readonly string[]; readonly speakingWord: string; readonly error: boolean }
+export function createBattleAudio(options: {
+  sessionId: string;
+  onChange: (view: BattleAudioView) => void;
+  onDrained: () => void;
+  audio?: Pick<AudioOptions, 'createContext' | 'schedule' | 'timeoutMs'>;
+  createMusicContext?: () => HomeMusicChannel;
+  createHitContext?: () => HitChannel;
+}) {
+  let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
+  let hit: HitChannel | undefined; let lastHit = -Infinity;
+  const queue: Defeat[] = []; const seen = new Set<string>();
+  const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
+  const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
+  const view = (): BattleAudioView => ({ retiringIds: queue.map(event => event.monsterId),
+    speakingWord: FORTRESS_WORDS.find(word => word.id === queue[0]?.wordId)?.text ?? '', error });
+  const publish = () => { if (!disposed) options.onChange(view()); };
+  function mix() { music.setVolume(queue.length ? volume * .2 : volume); }
+  function speak() {
+    if (disposed || !active || playing || error || !queue.length) return;
+    const entry = queue[0]; const word = FORTRESS_WORDS.find(word => word.id === entry.wordId);
+    if (!word) { error = true; publish(); return; }
+    playing = true; const token = ++revision; mix(); publish();
+    voice.playReveal(`/assets/audio/zombie-${word.id}.mp3`, { sessionId: options.sessionId, roundId: entry.monsterId, revision: token }, success => {
+      if (disposed || !active || token !== revision) return;
+      playing = false;
+      if (!success) { error = true; publish(); return; }
+      queue.shift(); mix(); publish();
+      if (queue.length) speak(); else options.onDrained();
+    });
+  }
+  function impact() {
+    const now = Date.now();
+    if (!active || now - lastHit < 70) return;
+    lastHit = now;
+    try {
+      if (!hit) {
+        hit = (options.createHitContext ?? (() => wx.createInnerAudioContext()))();
+        hit.autoplay = false; hit.loop = false; hit.obeyMuteSwitch = true; hit.src = '/assets/audio/battle-hit.mp3';
+        hit.onError(() => undefined);
+      }
+      hit.volume = queue.length ? .10 : .35;
+      hit.stop(); hit.play();
+    } catch { /* A missing effect must not stop combat or word playback. */ }
+  }
+  return {
+    get view() { return view(); },
+    get busy() { return queue.length > 0; },
+    handle(events: readonly CombatEvent[]) {
+      if (disposed) return;
+      const local = events.filter(event => event.context.sessionId === options.sessionId);
+      for (const event of local) if (event.type === 'monsterDefeated') {
+        const key = `${event.context.combatId}:${event.monsterId}`;
+        if (!seen.has(key)) { seen.add(key); queue.push(event); }
+      }
+      if (local.some(event => event.type === 'monsterDamaged')) impact();
+      mix(); publish(); speak();
+    },
+    setActive(value: boolean) {
+      if (disposed || value === active) return;
+      active = value; music.setActive(value);
+      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); } catch {} }
+      else speak();
+    },
+    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
+    retry() { if (!disposed && active && error) { error = false; speak(); } },
+    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); queue.length = 0;
+      try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
+    } },
+  };
+}

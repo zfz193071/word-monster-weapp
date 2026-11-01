@@ -3,7 +3,7 @@
 .hud { display: flex; align-items: center; gap: 16rpx; padding: 16rpx 20rpx; background: #20434a; border-radius: 20rpx 20rpx 0 0; font-size: 24rpx; }
 .health-track { flex: 1; height: 16rpx; border-radius: 12rpx; overflow: hidden; background: #102c34; }
 .health-fill { height: 100%; background: #7ee0ab; transition: width 120ms; }
-.battle-canvas { display: block; width: 100%; height: 800rpx; }
+.canvas-stage { position: relative; height: 800rpx; }.battle-canvas { display: block; width: 100%; height: 100%; }.frozen-frame { position: absolute; inset: 0; width: 100%; height: 100%; }
 .scene-status { display: flex; flex-direction: column; align-items: center; gap: 12rpx; background: #20434a; font-size: 28rpx; padding: 12rpx 24rpx; text-align: center; }
 .error-detail { font-size: 24rpx; color: #f8d7ad; overflow-wrap: anywhere; }
 .scene-status button { background: #e1efbc; color: #20434a; font-size: 28rpx; }
@@ -16,3 +16,12 @@
 .skill-cards { display: flex; gap: 16rpx; }
 .skill-cards button { flex: 1; padding: 20rpx 8rpx; margin: 0; background: #fff; color: #20434a; font-size: 28rpx; }
 .skill-detail { display: block; font-size: 22rpx; line-height: 1.6; }
+
+.experience-hud { display: flex; align-items: center; gap: 16rpx; padding: 16rpx 20rpx; background: #334b40; color: #eaf2d0; font-size: 24rpx; }
+.experience-track { flex: 1; height: 12rpx; border-radius: 10rpx; overflow: hidden; background: #20352b; }.experience-track view { height: 100%; background: #e3cd7c; }
+.opening-scene .hud { background: #52684e; border-radius: 0; }.opening-scene .canvas-stage { height: 66vh; min-height: 680rpx; }.opening-scene .control { background: #52684e; border-radius: 0; padding: 18rpx; font-size: 24rpx; }
+.upgrade-summary { background: #e6efcf; color: #3b553d; text-align: center; padding: 16rpx; font-size: 25rpx; }.return-home { margin: 20rpx auto; width: 270rpx; border-radius: 36rpx; background: #dce9be; color: #3c573d; font-size: 28rpx; }
+
+.wave-modal { position: fixed; inset: 0; z-index: 100; background: rgba(22,42,33,.55); display: flex; align-items: center; justify-content: center; }.wave-dialog { width: 660rpx; padding: 44rpx 10rpx; box-sizing: border-box; border-radius: 40rpx; background: #fff8e5; }.settlement { padding: 28rpx; display: flex; flex-direction: column; gap: 16rpx; align-items: center; background: #e6efcf; color: #3b553d; }
+
+.voice-status { display: flex; justify-content: center; align-items: center; gap: 20rpx; min-height: 44rpx; background: #e6efcf; color: #3b553d; font-size: 28rpx; }.voice-status button { margin: 0; font-size: 24rpx; }

@@ -13,7 +13,8 @@ export const MONSTER_ASSETS: readonly VisualAsset[] = Object.freeze(FORTRESS_WOR
     rights: `${vector ? 'gem；原 SVG 分离角色并转 PNG' : 'CazBee；原始 PNG 未修改'}；CC0 1.0；https://creativecommons.org/publicdomain/zero/1.0/`,
     reviewStatus: 'approved' as const });
 }));
-export const FORTRESS_ASSETS: readonly VisualAsset[] = Object.freeze([...CONTENT_ASSETS, ...MONSTER_ASSETS].map(asset => Object.freeze({ ...asset })));
+export const ZOMBIE_VOICE_ASSETS: readonly VisualAsset[] = Object.freeze(CONTENT_ASSETS.filter(asset => asset.kind === 'audio').map(asset => Object.freeze({ ...asset, path: `/assets/audio/zombie-${asset.wordId}.mp3`, rights: `${asset.rights}；派生僵尸声线：降低音高、轻微放慢、喉音颤动、软饱和及短混响，沿用原许可`, reviewStatus: 'pending' as const })));
+export const FORTRESS_ASSETS: readonly VisualAsset[] = Object.freeze([...CONTENT_ASSETS, ...MONSTER_ASSETS, ...ZOMBIE_VOICE_ASSETS].map(asset => Object.freeze({ ...asset })));
 export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRESS_WORDS.map(word => {
   const vector = word.id === 'banana' || word.id === 'grape';
   const size = vector ? 256 : 32;

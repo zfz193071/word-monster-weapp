@@ -12,10 +12,10 @@ class Voice {
   play() {} stop() { this.handlers.get('stop')?.(); } destroy() { this.destroyed = true; }
   end() { this.handlers.get('end')?.(); }
 }
-function setup(id = 'listening', generation = 0) {
+function setup(id = 'listening', generation = 0, variant?: 'fruit') {
   const plan = createSessionPlan(id, createSeededRandom(42));
   const voices: Voice[] = []; const timers = new Set<() => void>(); const results: any[] = [];
-  const controller = createListening({ plan, waveIndex: 0, generation, onChange() {}, onStartCombat: r => results.push(r),
+  const controller = createListening({ plan, variant, random: createSeededRandom(7), waveIndex: 0, generation, onChange() {}, onStartCombat: r => results.push(r),
     audio: { createContext: () => { const v = new Voice(); voices.push(v); return v; }, schedule: cb => { timers.add(cb); return () => { timers.delete(cb); }; } } });
   const target = plan.waves[0].targetWordId;
   const wrong = plan.waves[0].optionWordIds.find(id => id !== target)!;
@@ -87,4 +87,32 @@ test('后台停止声音并冻结选择，恢复重播未结束词音，旧代�
   const callback = h.voices[1].handlers.get('end'); c.dispose(); callback?.();
   c.choose(c.view.token,h.target); c.start(); assert.equal(h.results.length,0); assert.equal(h.timers.size,0);
   other.controller.dispose(); next.controller.dispose();
+});
+
+
+test('水果入口每次三选一：答错保持目标、替换两个干扰项且等待新图片及同词音频', () => {
+  const h = setup('fruit', 0, 'fruit'); const c = h.controller;
+  c.start(); h.load(); h.voices[0].end();
+  for (let retry = 0; retry < 4; retry++) {
+    const oldCards = c.view.cards;
+    assert.equal(oldCards.length, 3);
+    assert.equal(new Set(oldCards.map(card => card.id)).size, 3);
+    assert.ok(oldCards.every(card => !card.portraitPath.includes('/monsters/')));
+    const wrong = oldCards.find(card => card.id !== h.target)!.id;
+    const oldToken = c.view.token; const oldImageToken = c.view.imageToken;
+    c.choose(oldToken, wrong); c.choose(oldToken, wrong);
+    assert.equal(c.attempts.length, retry + 1);
+    assert.equal(h.results.length, 0);
+    assert.deepEqual(c.view.cards.filter(card => oldCards.some(old => old.id === card.id)).map(card => card.id), [h.target]);
+    assert.notEqual(c.view.imageToken, oldImageToken);
+    for (const card of c.view.cards) c.imageResult(oldImageToken, card.id, true);
+    h.voices[retry + 1].end();
+    assert.equal(c.view.canChoose, false);
+    h.load(); assert.equal(c.view.canChoose, true);
+    assert.equal(h.voices[retry + 1].src, h.voices[0].src);
+  }
+  c.choose(c.view.token, h.target);
+  assert.equal(h.results.length, 1);
+  assert.equal(c.attempts[4].correct, true);
+  assert.equal(c.attempts[4].attemptIndex, 5);
 });

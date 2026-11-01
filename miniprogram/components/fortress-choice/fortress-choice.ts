@@ -28,7 +28,7 @@ Component({
       this.setData({ view: null, error: '' });
       if (!this.properties.request) return;
       try {
-        const request = this.properties.request as { plan: SessionPlan; waveIndex: number; generation: number };
+        const request = this.properties.request as { plan: SessionPlan; waveIndex: number; generation: number; variant?: 'fruit' };
         state.controller = createListening({ ...request,
           onChange: view => { if (valid()) this.setData({ view }); },
           onStartCombat: result => { if (valid()) this.triggerEvent('startcombat', result); },

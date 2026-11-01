@@ -1,1 +1,1 @@
-{ "component": true }
+{"component": true, "usingComponents": {"skill-choice": "/components/skill-choice/skill-choice", "fortress-choice": "/components/fortress-choice/fortress-choice"}}

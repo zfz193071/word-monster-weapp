@@ -45,3 +45,11 @@ All emojis designed by OpenMoji – the open-source emoji and icon project. Lice
 npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 项音频“尚未审校”，不再报告文件缺失或来源权限缺失。
 
 主角、怪物、武器三个视觉阶段及音效仍待 #4/#11 完成；当前 CSS 角色是本项目代码图形。#4 继续保持进行中，不将词汇文件下载完成当作全部角色素材或儿童适龄验收完成。
+
+## 战斗音频追加（2026-11-01）
+
+`battle-loop.mp3`（17.78秒循环）与 `battle-hit.mp3`（0.14秒）由本项目合成，无外部采样；可用 `scripts/create-battle-audio.py` 重建。
+
+`zombie-apple.mp3`、`zombie-banana.mp3`、`zombie-orange.mp3`、`zombie-grape.mp3`、`zombie-watermelon.mp3` 是上述原始水果录音的变声衍生物，非游戏音频采样。处理包括降低音高、轻微减速、喉音颤动、软饱和、短混响与响度调整；原始教学录音未修改。由 `scripts/create-zombie-voices.py` 重建。
+
+四段 Dvortygirl 录音衍生物继续使用 CC BY-SA 3.0；orange 衍生物继续使用 Association Shtooka / Judith Franck 的 CC BY 3.0 US。来源网址沿用上方各词链接，包内署名清单已登记处理方式与原许可。五段衍生发音保持 pending，需真人确认词音清晰度和音色。

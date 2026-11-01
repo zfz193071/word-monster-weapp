@@ -1,5 +1,7 @@
 # 单词怪物
 
+> 2026-11-01 改版开发：当前首页已接入三维小屋与场景音乐、每波听词三选一、3→5→7 水果帽僵尸及三波结算；规则与交付边界见 [本轮需求](docs/requirements-2026-11-01.md)。下文保留历史 V1/V2 实现记录。
+
 原生微信小程序 MVP，AppID 为 `wx4b19fe0c462a601b`。新版规划见 [architecture.md](architecture.md)；当前运行代码仍为 V1，历史规则见 [V1 归档](docs/archive/architecture-v1.md)。
 
 已完成工程骨架、数据契约与首关配置、纯逻辑状态机、音频适配器，以及首页和内存会话交接。战斗页已接入听音选图、重播、错误反馈和正确攻击/揭示流程。5 张水果图片与 5 段英文录音已下载并打包，来源与许可已记录；音频仍待人工试听及真机播放验收。
@@ -16,7 +18,7 @@
 
 V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` 和 `word-monster:fortress:progress:v2`；#12 实现时只解码此版本，V1 结果不迁移、不混算、不用于恢复战斗。`validateFortressContent` 是编译期类型约束下的配置语义校验，不是本地存储 `unknown` 解码器。
 
-#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。正常入口仍为 V1；#21 已增加 Canvas 开发预览（页面 `pages/battle/battle`，参数 `preview=fortress`），可验证拖动、射击、基地血条与暂停。五种拟人水果已下载接入，可切换检查；基地/主角/武器仍为开发占位，真机尚待验收。详见 [Canvas 接入说明](docs/fortress-canvas.md)。
+#20 已实现独立战斗模拟与固定步长帧适配层，覆盖真实命中、基地攻防、技能参数、暂停恢复与弹体回收；73 项自动测试通过。API、坐标和集成边界见 [战斗模拟接入说明](docs/fortress-combat.md)。首页「开始闯关」现进入新版堡垒战斗预览（`mode=fortress`），进入后点击「开始 / 继续预览」；#21 已增加 Canvas 开发预览（页面 `pages/battle/battle`，参数 `preview=fortress`），可验证拖动、射击、基地血条与暂停。五种拟人水果已下载接入，可切换检查；基地/主角/武器仍为开发占位，真机尚待验收。详见 [Canvas 接入说明](docs/fortress-canvas.md)。
 
 ## 安装与检查
 
@@ -35,7 +37,7 @@ npm test
 1. 使用有本项目开发权限的微信扫码登录开发者工具。
 2. 导入本仓库根目录（不要只选 miniprogram 子目录），确认 AppID 与 project.config.json 一致，项目类型为小程序；无需云开发。
 3. 工具读取 miniprogramRoot 和 TypeScript 编译插件，编译到 `pages/home/home`。
-4. 点击“开始闯关”创建新会话并进入 `pages/battle/battle`；使用微信左上角原生返回回到首页，再次开始会从第一题创建新局。直接打开缺少有效会话的战斗页会返回首页。
+4. 点击“开始闯关”进入 `pages/battle/battle?mode=fortress`，点击「开始 / 继续预览」体验新版战斗；使用微信左上角原生返回回到首页。该入口目前为单波开发预览，尚未接入完整闯关流程。
 5. 需要自动化验证时，在“设置 → 安全设置”开启服务端口，并在工具提示时授权 Codex 连接。
 
 基础库已固定为开发者工具实际加载的 `3.17.5`（工具版本 `2.02.2609240`）。这是当前模拟器验证版本，不代表已完成真机兼容验收。`project.private.config.json` 是个人配置，不提交；若工具行为与共享配置不符，检查该文件有无覆盖。

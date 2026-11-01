@@ -1,14 +1,24 @@
-.home { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.island-badge { padding: 12rpx 28rpx; border-radius: 40rpx; background: #f5e4ae; font-size: 26rpx; margin-bottom: 28rpx; }
-.hero { height: 330rpx; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
-.monster-shape { position: relative; z-index: 1; width: 210rpx; height: 200rpx; border-radius: 85rpx 85rpx 66rpx 66rpx; background: #a2d69a; transform: rotate(-6deg); border: 6rpx solid #6ead75; }
-.eyes { display: flex; justify-content: center; gap: 36rpx; padding-top: 54rpx; }
-.eyes view { width: 28rpx; height: 38rpx; border-radius: 50%; background: #25483d; border: 10rpx solid #fff; }
-.smile { width: 46rpx; height: 20rpx; border-bottom: 6rpx solid #25483d; border-radius: 50%; margin: 10rpx auto; }
-.ground { position: absolute; width: 300rpx; height: 46rpx; border-radius: 50%; background: #eadfbf; bottom: 43rpx; }
-.description { margin-bottom: 44rpx; }
-.restart-note { margin-top: 24rpx; color: #587166; font-size: 24rpx; line-height: 1.6; }
-.credits-toggle { margin-top: 12rpx; background: transparent; color: #587166; font-size: 24rpx; }
-.credits-toggle::after { border: none; }
-.credits { width: 100%; text-align: left; font-size: 22rpx; line-height: 1.6; color: #587166; word-break: break-all; }
-.credit { margin-top: 24rpx; }
+page { background: #bcd9e8; }
+.home { height: 100vh; min-height: 900rpx; overflow: hidden; position: relative; background: linear-gradient(165deg,#bcd9e8 0%,#d8e8da 58%,#eaf0cf 100%); }
+button::after { border: 0; }
+.sky-streak { position: absolute; width: 420rpx; height: 3rpx; border-radius: 50%; background: #fff6; transform: rotate(30deg); }
+.streak-one { top: 12%; left: -90rpx; }.streak-two { top: 64%; right: -130rpx; }
+.cloud { position: absolute; width: 150rpx; height: 25rpx; border-radius: 100%; background: #ffffff50; }
+.cloud-one { top: 14%; right: 30rpx; }.cloud-two { top: 26%; left: -30rpx; width: 240rpx; }
+.info-button { position: absolute; top: 32rpx; left: 32rpx; width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; font: italic 600 36rpx/60rpx Georgia,serif; z-index: 2; }
+.island { position: absolute; width: 750rpx; height: 800rpx; left: 50%; top: 40%; transform: translate(-50%,-50%); }
+.home-room { width: 100%; height: 100%; }
+.music-button { position: absolute; top: 32rpx; left: 116rpx; width: 64rpx; min-width: 0; max-width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; line-height: 60rpx; z-index: 2; }
+.music-note { font-size: 38rpx; }.mute-slash { position: absolute; top: 29rpx; left: 10rpx; width: 42rpx; height: 3rpx; border-radius: 3rpx; background: #55786e; transform: rotate(-45deg); }
+.start-dock { position: absolute; bottom: max(100rpx,12vh); width: 100%; text-align: center; }
+.start-button { display: flex; align-items: center; justify-content: center; width: 264rpx; height: 116rpx; border: 6rpx solid #fff9d9; border-radius: 40rpx; background: linear-gradient(#b1d866,#83b749); box-shadow: 0 10rpx 0 #58783d,0 19rpx 0 #ffffff60, inset 0 5rpx 0 #d8ed9e; }
+.start-button[disabled] { background: #a8c78b; }
+.play-icon { width: 0; height: 0; margin-left: 12rpx; border-top: 26rpx solid transparent; border-bottom: 26rpx solid transparent; border-left: 40rpx solid #fffce6; filter: drop-shadow(0 3rpx 0 #668b44); }
+.dock-dot { width: 44rpx; height: 6rpx; border-radius: 6rpx; margin: 42rpx auto 0; background: #84a77466; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 32rpx; background: #203b3a99; }
+.choice-modal,.credits-modal { position: relative; width: 100%; max-width: 680rpx; padding: 64rpx 16rpx 24rpx; box-sizing: border-box; border: 6rpx solid #fff9e4; border-radius: 44rpx; background: #fff8e7; box-shadow: 0 16rpx 0 #243d3d33; }
+.close-button { position: absolute; right: 16rpx; top: 12rpx; width: 64rpx; height: 64rpx; padding: 0; line-height: 58rpx; border-radius: 50%; font-size: 48rpx; background: transparent; color: #7c826c; z-index: 1; }
+.entry-status { padding: 30rpx 0 60rpx; text-align: center; font-size: 28rpx; color: #49654a; }.success-mark { font-size: 90rpx; color: #83b749; margin-bottom: 24rpx; }.retry-entry { margin-top: 30rpx; width: 240rpx; background: #d8efcf; color: #49654a; }
+.credits-scroll { height: 65vh; }.credits-title { font-weight: 600; font-size: 32rpx; padding: 0 20rpx; }.credit { padding: 24rpx 20rpx; font-size: 22rpx; line-height: 1.6; color: #587166; word-break: break-all; }
+
+.info-button,.close-button { min-width: 0; max-width: 64rpx; }.start-button { min-width: 0; max-width: 264rpx; }.retry-entry { min-width: 0; max-width: 240rpx; }

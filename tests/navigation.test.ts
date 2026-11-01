@@ -5,11 +5,13 @@ import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
 import { createSessionStore } from '../miniprogram/services/session';
 import { createBattleController } from '../miniprogram/services/battle';
+import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
 import { FORTRESS_ASSETS } from '../miniprogram/fortress/content';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
 function homeHarness() {
   const sessionStore = createSessionStore();
+  const fortressEntryStore = createFortressEntryStore();
   let page: any;
   let navigation: any;
   let navigationCount = 0;
@@ -21,7 +23,9 @@ function homeHarness() {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/home-music') return { createHomeMusic: () => ({ setActive() {}, setEnabled() {}, retry() {}, dispose() {} }) };
       if (name === '../../fortress/content') return { FORTRESS_ASSETS };
+      if (name === '../../services/fortress-entry') return { fortressEntryStore };
       assert.equal(name, '../../services/session');
       return { sessionStore };
     },
@@ -38,64 +42,45 @@ function homeHarness() {
     get navigationCount() { return navigationCount; }, get toastCount() { return toastCount; } };
 }
 
-test('连续点击只导航一次，从战斗返回后允许再次出发', () => {
-  const h = homeHarness();
-  h.page.onShow();
-  h.page.openBattle();
-  h.page.openBattle();
+function correct(page: any) {
+  const request = page.data.request;
+  const wave = request.plan.waves[0];
+  page.choiceSucceeded({ detail: {
+    context: { sessionId: request.plan.sessionId, waveId: wave.waveId, generation: request.generation },
+    attempts: [{ sessionId: request.plan.sessionId, waveId: wave.waveId, targetWordId: wave.targetWordId,
+      selectedWordId: wave.targetWordId, correct: true, taskKind: 'listeningChoice', attemptIndex: 1, replayCount: 0, hintUsed: false }],
+  } });
+}
+test('首页点击仅开三选一弹窗，选对后导航一次，返回后重新听词', () => {
+  const h = homeHarness(); h.page.onShow();
+  h.page.openBattle(); const first = h.page.data.request;
+  h.page.openBattle(); assert.equal(h.navigationCount, 0); assert.equal(h.page.data.request, first);
+  assert.equal(first.variant, 'fruit');
+  correct(h.page); correct(h.page);
   assert.equal(h.navigationCount, 1);
-  assert.equal(h.navigation.url, `/pages/battle/battle?sessionId=${h.page.sessionId}`);
-  const firstId = h.page.sessionId;
-  const session = h.sessionStore.claim(firstId)!;
-  assert.equal(session.rounds.length, 15);
-  assert.equal(session.status, 'ready');
-  assert.equal(h.sessionStore.claim(firstId), undefined);
-  h.navigation.success();
-  h.page.onShow();
-  h.page.openBattle();
-  assert.equal(h.navigationCount, 2);
-  assert.notEqual(h.page.sessionId, firstId);
-});
-
-test('导航失败时解除锁定并提示，下一次点击可以重试', () => {
-  const h = homeHarness();
-  h.page.openBattle();
-  const failedId = h.page.sessionId;
-  h.navigation.fail();
-  assert.equal(h.sessionStore.claim(failedId), undefined);
-  assert.equal(h.page.data.opening, false);
-  assert.equal(h.toastCount, 1);
-  h.page.openBattle();
-  assert.equal(h.navigationCount, 2);
-});
-
-test('导航未完成时首页再次显示不解除锁定，旧失败回调不清理新会话', () => {
-  const h = homeHarness();
-  h.page.openBattle();
-  h.page.onShow();
-  h.page.openBattle();
+  assert.equal(h.navigation.url, `/pages/battle/battle?mode=fortress&entry=${first.plan.sessionId}`);
+  h.navigation.success(); h.page.onShow();
+  assert.equal(h.page.data.request, null);
+  h.page.openBattle(); assert.notEqual(h.page.data.request.plan.sessionId, first.plan.sessionId);
   assert.equal(h.navigationCount, 1);
-  const oldFail = h.navigation.fail;
-  oldFail();
-  h.page.openBattle();
-  const id = h.page.sessionId;
-  oldFail();
-  assert.equal(h.page.data.opening, true);
-  assert.equal(h.page.sessionId, id);
-  assert.ok(h.sessionStore.claim(id));
 });
-
-test('首页卸载清理未交接会话，异步回调不再操作页面', () => {
-  const h = homeHarness();
-  h.page.openBattle();
-  const id = h.page.sessionId;
-  h.page.onUnload();
-  h.navigation.fail();
-  h.navigation.success();
-  h.page.openBattle();
-  assert.equal(h.toastCount, 0);
-  assert.equal(h.navigationCount, 1);
-  assert.equal(h.sessionStore.claim(id), undefined);
+test('导航失败可重试，旧失败回调不能解除新导航锁', () => {
+  const h = homeHarness(); h.page.openBattle(); correct(h.page);
+  const oldFail = h.navigation.fail; oldFail();
+  assert.equal(h.page.data.navigationError, true);
+  h.page.enterBattle(); oldFail();
+  assert.equal(h.page.data.opening, true); assert.equal(h.navigationCount, 2);
+  h.page.closeChallenge(); assert.ok(h.page.data.request);
+});
+test('取消重开丢弃旧听词结果，卸载后回调不得导航或更新页面', () => {
+  const h = homeHarness(); h.page.openBattle();
+  const oldRequest = h.page.data.request;
+  h.page.closeChallenge(); h.page.openBattle(); const current = h.page.data.request;
+  h.page.data.request = oldRequest; correct(h.page); h.page.data.request = current;
+  assert.equal(h.navigationCount, 0);
+  correct(h.page); h.page.onUnload();
+  h.navigation.fail(); h.navigation.success(); h.page.openBattle();
+  assert.equal(h.navigationCount, 1); assert.equal(h.toastCount, 0);
 });
 
 test('会话仅在内存中保存，释放后新局重置，旧释放不能影响新局', () => {
@@ -124,7 +109,7 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
     runInNewContext(ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
     }).outputText, {
-      exports: {}, require: (name: string) => name === '../../services/session' ? { sessionStore } : { createBattleController },
+      exports: {}, require: (name: string) => name === '../../services/fortress-entry' ? { fortressEntryStore: createFortressEntryStore() } : name === '../../services/session' ? { sessionStore } : { createBattleController },
       Page: (definition: any) => {
         page = definition;
         page.setData = (patch: Record<string, unknown>) => Object.assign(page.data, patch);
@@ -135,15 +120,20 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
     });
     return page;
   }
+  const fortress = loadPage();
+  fortress.onLoad({ mode: 'fortress' });
+  assert.equal(fortress.data.preview, false);
+  assert.equal(fortress.session, undefined);
+  assert.equal(redirects, 1);
   const session = sessionStore.start();
   const battle = loadPage();
   battle.onLoad({ sessionId: session.sessionId });
   assert.equal(battle.session, session);
   loadPage().onLoad({ sessionId: session.sessionId });
-  assert.equal(redirects, 1);
+  assert.equal(redirects, 2);
   battle.onUnload();
   assert.equal(battle.session, undefined);
   assert.equal(sessionStore.claim(session.sessionId), undefined);
   loadPage().onLoad({});
-  assert.equal(redirects, 2);
+  assert.equal(redirects, 3);
 });

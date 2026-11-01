@@ -1,7 +1,7 @@
 import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
 import type { Finger, Viewport } from './viewport';
-import type { CombatEvent, CombatState, MonsterVisual } from './types';
+import type { CombatEvent, CombatState, MonsterVisual, SkillLevels } from './types';
 import { createRetirement } from './retirement';
 import type { RetirementOptions } from './retirement';
 
@@ -10,6 +10,7 @@ type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
 export interface MonsterArt {
+  readonly fruitHat?: SpriteAsset;
   readonly monster: SpriteAsset;
   readonly monsterVisual: MonsterVisual;
   readonly monsterWidth: number;
@@ -40,6 +41,8 @@ export class CanvasScene {
   private readonly runner: CombatRunner;
   private viewport: Viewport;
   private readonly control: HorizontalControl;
+  private retiringIds = new Set<string>();
+  setRetiringIds(ids: readonly string[]): void { this.retiringIds = new Set(ids); if (!this.disposed && this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   private images = new Map<string, Image>();
   private cancelLoads: (() => void)[] = [];
   private loadVersion = 0;
@@ -57,20 +60,25 @@ export class CanvasScene {
   private droppedMs = 0;
   private peakProjectiles = 0;
   private lastHp: number;
-  private lastMonsterHp: number;
+  private lastMonsterHp = new Map<string, number>();
+  private monsterFlashes = new Map<string, number>();
   private baseFlashUntil = 0;
-  private monsterFlashUntil = 0;
   private retirement: ReturnType<typeof createRetirement> | undefined;
   constructor(private readonly canvas: Canvas, private readonly options: SceneOptions) {
     this.context = canvas.getContext('2d');
     if (!this.context) throw new Error('Canvas 2D 初始化失败');
     this.runner = new CombatRunner(options.initial);
-    this.lastHp = options.initial.base.hp; this.lastMonsterHp = options.initial.monsters[0].hp;
+    this.lastHp = options.initial.base.hp;
+    for (const monster of options.initial.monsters) this.lastMonsterHp.set(monster.id, monster.hp);
     this.viewport = createViewport(options.width, options.height, options.dpr);
     this.control = new HorizontalControl(this.viewport, options.clientLeft);
     this.resize(options.width, options.height, options.dpr, options.clientLeft);
   }
   get snapshot(): CombatState | null { return this.runner.snapshot; }
+  captureFrame(): string {
+    try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
+  }
+  applySkills(skills: SkillLevels): void { this.runner.applySkills(skills); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   retryRetirement(): void { this.retirement?.retry(); }
   continueRetirement(): void { this.retirement?.continueAfterFailure(); }
   get diagnostics(): FrameDiagnostics {
@@ -103,7 +111,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet];
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : [])];
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -209,7 +217,7 @@ export class CanvasScene {
   touchMove(touches: readonly Finger[]): void { if (this.acceptsInput()) this.control.move(touches); }
   touchEnd(changed: readonly Finger[]): void { this.control.end(changed); }
   touchCancel(): void { this.control.clear(); }
-  private acceptsInput(): boolean { return this.ready && !this.paused && !this.disposed && this.runner.snapshot?.status === 'fighting'; }
+  private acceptsInput(): boolean { return this.ready && !this.paused && !this.disposed && !this.runner.snapshot?.automatic && this.runner.snapshot?.status === 'fighting'; }
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
@@ -219,12 +227,31 @@ export class CanvasScene {
     const c = this.context; const v = this.viewport;
     c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.canvas.width, this.canvas.height);
     c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
-    c.fillStyle = '#112c36'; c.fillRect(0, 0, 360, 560);
-    c.fillStyle = '#21434a';
-    for (let y = 32; y < 480; y += 64) for (let x = 24; x < 360; x += 48) c.fillRect(x, y, 2, 2);
+    if (this.options.art?.fruitHat) {
+      c.fillStyle = '#a1b777'; c.fillRect(0, 0, 360, 560);
+      c.fillStyle = '#c6c397'; c.beginPath(); c.moveTo(65, 0); c.lineTo(300, 0); c.lineTo(326, 480); c.lineTo(30, 480); c.closePath(); c.fill();
+      c.strokeStyle = '#ded8b3'; c.lineWidth = 2;
+      for (let row = 0; row < 8; row++) for (let col = 0; col < 4; col++) {
+        const x = 53 + col * 66 + (row % 2) * 12; const y = row * 64 - 12;
+        c.fillStyle = (row + col) % 3 ? '#cbc79e' : '#babd91';
+        c.beginPath(); c.moveTo(x + 12, y); c.lineTo(x + 60, y + 8); c.lineTo(x + 64, y + 47); c.lineTo(x + 35, y + 60); c.lineTo(x, y + 45); c.lineTo(x - 3, y + 15); c.closePath(); c.fill(); c.stroke();
+      }
+      for (let side = 0; side < 2; side++) for (let i = 0; i < 8; i++) {
+        const x = side ? 345 : 10; const y = 22 + i * 64;
+        c.fillStyle = i % 2 ? '#789858' : '#8ea767'; c.beginPath(); c.arc(x, y, 19, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#9bb773'; c.beginPath(); c.arc(x + 7, y - 7, 11, 0, Math.PI * 2); c.fill();
+      }
+    } else {
+      c.fillStyle = '#112c36'; c.fillRect(0, 0, 360, 560);
+      c.fillStyle = '#21434a';
+      for (let y = 32; y < 480; y += 64) for (let x = 24; x < 360; x += 48) c.fillRect(x, y, 2, 2);
+    }
     if (state.base.hp < this.lastHp) this.baseFlashUntil = state.tick + 16;
-    if (state.monsters[0].hp < this.lastMonsterHp) this.monsterFlashUntil = state.tick + 12;
-    this.lastHp = state.base.hp; this.lastMonsterHp = state.monsters[0].hp;
+    this.lastHp = state.base.hp;
+    for (const monster of state.monsters) {
+      if (monster.hp < (this.lastMonsterHp.get(monster.id) ?? monster.hp)) this.monsterFlashes.set(monster.id, state.tick + 12);
+      this.lastMonsterHp.set(monster.id, monster.hp);
+    }
     const art = this.options.art;
     if (this.options.preview) {
       c.fillStyle = state.base.hp === 0 ? '#55636a' : '#789697'; c.fillRect(0, 480, 360, 80);
@@ -233,29 +260,49 @@ export class CanvasScene {
       c.fillStyle = '#fbd777'; c.fillRect(state.player.x - 5, state.player.y - 30, 10, 22);
     } else if (art) {
       this.sprite(state.base.hp === 0 ? art.destroyedBase : art.base, 0, 480, 360, 80);
-      this.sprite(art.hero, state.player.x - 20, state.player.y - 20, 40, 40);
-      this.sprite(art.weapon, state.player.x - 8, state.player.y - 34, 16, 28);
+      if (art.fruitHat) {
+        c.save(); c.translate(state.player.x, state.player.y);
+        c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
+        this.sprite(art.hero, -24, -35, 48, 60); c.restore();
+      }
+      else {
+        this.sprite(art.hero, state.player.x - 20, state.player.y - 20, 40, 40);
+        this.sprite(art.weapon, state.player.x - 8, state.player.y - 34, 16, 28);
+      }
     }
     for (const monster of state.monsters) {
+      if (monster.status === 'waiting') continue;
+      if (this.options.art?.fruitHat && monster.hp <= 0 && !this.retiringIds.has(monster.id)) continue;
       c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? 0.35 : 1;
       const monsterArt = this.monsterArt;
       if (!monsterArt && this.options.preview) {
-        c.fillStyle = state.tick < this.monsterFlashUntil ? '#ffffff' : '#c2a0f0';
+        c.fillStyle = state.tick < (this.monsterFlashes.get(monster.id) ?? 0) ? '#ffffff' : '#c2a0f0';
         c.beginPath(); c.arc(monster.position.x, monster.position.y, 32, 0, Math.PI * 2); c.fill();
         c.fillStyle = '#21313e'; c.fillRect(monster.position.x - 14, monster.position.y - 6, 8, 10); c.fillRect(monster.position.x + 6, monster.position.y - 6, 8, 10);
       } else if (monsterArt) {
         const scale = monsterArt.monsterWidth / monsterArt.monsterVisual.sourceSize.width;
-        if (monster.hp > 0 && state.tick < this.monsterFlashUntil) c.globalAlpha *= 0.55;
+        if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) c.globalAlpha *= 0.55;
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
         this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
           monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
         c.imageSmoothingEnabled = true;
+        if (monsterArt.fruitHat) {
+          // White badge keeps each ordinary fruit legible at game scale.
+          c.fillStyle = '#fff7df'; c.beginPath(); c.arc(monster.position.x, monster.position.y - 44, 20, 0, Math.PI * 2); c.fill();
+          this.sprite(monsterArt.fruitHat, monster.position.x - 17, monster.position.y - 61, 34, 34);
+          c.fillStyle = '#4c5e43'; c.fillRect(monster.position.x - 18, monster.position.y + 41, 36, 4);
+          c.fillStyle = '#b2dc69'; c.fillRect(monster.position.x - 18, monster.position.y + 41, 36 * monster.hp / monster.maxHp, 4);
+        }
       }
       c.globalAlpha = 1;
     }
     for (const bullet of state.projectiles) {
       if (this.options.preview) { c.fillStyle = '#ffe68e'; c.fillRect(bullet.position.x - bullet.width / 2, bullet.position.y - bullet.height / 2, bullet.width, bullet.height); }
-      else if (art) this.sprite(art.bullet, bullet.position.x - bullet.width / 2, bullet.position.y - bullet.height / 2, bullet.width, bullet.height);
+      else if (art) {
+        c.save(); c.translate(bullet.position.x, bullet.position.y);
+        c.rotate(Math.atan2(bullet.direction?.x ?? 0, -(bullet.direction?.y ?? -1)));
+        this.sprite(art.bullet, -bullet.width / 2, -bullet.height / 2, bullet.width, bullet.height); c.restore();
+      }
     }
     if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
   }

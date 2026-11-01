@@ -1,1 +1,9 @@
-{ "navigationBarTitleText": "单词怪物" }
+{
+  "navigationBarTitleText": "",
+  "navigationBarBackgroundColor": "#bcd9e8",
+  "disableScroll": true,
+  "usingComponents": {
+    "fortress-choice": "/components/fortress-choice/fortress-choice",
+    "home-scene": "/components/home-scene/home-scene"
+  }
+}

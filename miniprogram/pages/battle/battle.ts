@@ -1,3 +1,4 @@
+import { fortressEntryStore } from '../../services/fortress-entry';
 import { sessionStore } from '../../services/session';
 import type { GameState } from '../../game/engine';
 import type { RoundEventContext } from '../../game/types';
@@ -18,7 +19,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { musicVolume: 22, fromHome: false, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
@@ -26,6 +27,13 @@ Page({
   onLoad(query: Record<string, string | undefined>) {
     if (query.preview === 'fortress-choice' && wx.getAccountInfoSync().miniProgram.envVersion === 'develop') {
       this.setData({ preview: true, choicePreview: true }); this.resetChoicePreview(); return;
+    }
+    if (query.mode === 'fortress') {
+      const entry = fortressEntryStore.claim(query.entry ?? '');
+      if (!entry) { wx.reLaunch({ url: '/pages/home/home' }); return; }
+      this.setData({ fromHome: true, preview: true, choiceStarted: true, previewPaused: false,
+        previewWord: entry.request.plan.waves[0].targetWordId, choiceRequest: entry.request });
+      return;
     }
     if (query.preview === 'fortress' && wx.getAccountInfoSync().miniProgram.envVersion === 'develop') {
       this.setData({ preview: true }); return;
@@ -66,6 +74,8 @@ Page({
     if (target) this.controller?.visualFinished(target.context, target.wordId);
   },
 
+  changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); },
+  returnHome() { wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {
     const wordId = event.currentTarget.dataset.wordId;
@@ -85,6 +95,7 @@ Page({
   restartPreview() { if (this.data.preview) { if (this.data.choicePreview) { this.resetChoicePreview(); return; } this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
 
   onUnload() {
+    if (this.data.fromHome && this.data.choiceRequest) fortressEntryStore.release(this.data.choiceRequest.plan.sessionId);
     this.controller?.dispose();
     this.controller = undefined;
     if (this.session) sessionStore.release(this.session.sessionId);

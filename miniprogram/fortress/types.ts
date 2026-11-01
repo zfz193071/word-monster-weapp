@@ -77,6 +77,7 @@ export interface FortressRules {
   readonly progress: { readonly recentResultLimit: number; readonly saveFailures: boolean };
 }
 export interface MonsterSpawn {
+  readonly spawnAtMs?: number;
   readonly monsterId: string;
   readonly wordId: string;
   readonly position: Point;
@@ -100,8 +101,9 @@ export interface WaveContext {
   readonly generation: number;
 }
 export interface CombatContext extends WaveContext { readonly combatId: string }
-export type MonsterStatus = 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
+export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly spawnAtMs?: number;
   readonly id: string; readonly wordId: string; readonly position: Point;
   // Logical coordinates relative to position, derived from approved sprite geometry.
   readonly hitbox: Rect;
@@ -110,10 +112,14 @@ export interface MonsterState {
   readonly attackSequence: number;
 }
 export interface ProjectileState {
+  readonly direction?: Point;
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
 export interface CombatState {
+  readonly monsterSpeed?: number;
+  readonly automatic?: boolean;
+  readonly aimDirection?: Point;
   readonly context: CombatContext;
   readonly tick: number; // high-frequency simulation step, never a generation/token
   readonly status: 'fighting' | 'cleared' | 'baseDestroyed';
@@ -128,6 +134,7 @@ export interface CombatState {
   readonly processedBaseAttackIds: readonly string[];
 }
 export type CombatEvent =
+  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
   | { readonly type: 'baseDestroyed'; readonly context: CombatContext; readonly tick: number };
