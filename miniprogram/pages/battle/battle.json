@@ -1,7 +1,8 @@
 {
-  "navigationBarTitleText": "水果小岛",
+  "navigationBarTitleText": "",
   "usingComponents": {
     "fortress-scene": "/components/fortress-scene/fortress-scene",
     "fortress-choice": "/components/fortress-choice/fortress-choice"
-  }
+  },
+  "disableScroll": true
 }

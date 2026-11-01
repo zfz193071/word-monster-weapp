@@ -1,12 +1,12 @@
 import { createHomeMusic } from '../../services/home-music';
 import type { HomeMusicStatus } from '../../services/home-music';
-import { FORTRESS_ASSETS } from '../../fortress/content';
+import { BATTLE_ASSETS } from '../../fortress/content';
 import type { ListeningResult } from '../../fortress/listening';
 import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, credits: FORTRESS_ASSETS,
+  data: { homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, credits: BATTLE_ASSETS,
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
   navigationId: 0,

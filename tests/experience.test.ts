@@ -40,9 +40,13 @@ test('三选一候选保持不变，每级只领取一次，旧卡片不能消�
   assert.equal(choices.select(offer.id, 'a'), null);
   choices.dispose(); assert.equal(choices.select('next', 'a'), null);
 });
-test('候选少于三项或重复技能均拒绝，不暗自补齐技能池', () => {
+test('候选允许一至三项，空候选或重复技能拒绝', () => {
   const choices = createUpgradeChoices();
-  assert.throws(() => choices.open({ ...offer, cards: offer.cards.slice(0, 2) }));
+  assert.throws(() => choices.open({ ...offer, cards: [] }));
   assert.throws(() => choices.open({ ...offer, cards: [offer.cards[0], offer.cards[0], offer.cards[1]] }));
   assert.equal(choices.current, null); assert.ok(choices.open(offer));
+});
+
+test('满级后剩余一项或两项技能可正常领取', () => {
+  for (const count of [1, 2]) { const choices = createUpgradeChoices(); const next = { ...offer, cards: offer.cards.slice(0, count) }; assert.ok(choices.open(next)); assert.equal(choices.select(next.id, next.cards[0].id)?.id, next.cards[0].id); }
 });

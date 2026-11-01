@@ -39,3 +39,5 @@
 .battle-toolbar button { min-width: 0; max-width: 64rpx; }
 
 .battle-volume { margin-left: auto; display: flex; align-items: center; color: #f6edc7; font-size: 22rpx; }.battle-volume slider { width: 160rpx; margin: 0 12rpx; }.battle-volume text:last-child { width: 64rpx; text-align: right; }
+
+.opening-page { height: 100vh; min-height: 0; overflow: hidden; box-sizing: border-box; padding-bottom: 0; }.battle-toolbar { height: 54rpx; box-sizing: border-box; }.speaker-icon { width: 14rpx; height: 18rpx; background: #f6edc7; position: relative; margin-right: 12rpx; }.speaker-icon::after { content: ''; position: absolute; left: 8rpx; top: -7rpx; border-top: 16rpx solid transparent; border-bottom: 16rpx solid transparent; border-right: 16rpx solid #f6edc7; }

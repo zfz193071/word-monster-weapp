@@ -2,7 +2,7 @@ import { createAudioAdapter } from './audio';
 import type { AudioOptions } from './audio';
 import { createLoopMusic } from './home-music';
 import type { HomeMusicChannel } from './home-music';
-import { FORTRESS_WORDS } from '../fortress/content';
+import { BATTLE_WORDS } from '../fortress/fruit-catalog';
 import type { CombatEvent } from '../fortress/types';
 
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
@@ -22,12 +22,12 @@ export function createBattleAudio(options: {
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
   const view = (): BattleAudioView => ({ retiringIds: queue.map(event => event.monsterId),
-    speakingWord: FORTRESS_WORDS.find(word => word.id === queue[0]?.wordId)?.text ?? '', error });
+    speakingWord: BATTLE_WORDS.find(word => word.id === queue[0]?.wordId)?.text ?? '', error });
   const publish = () => { if (!disposed) options.onChange(view()); };
   function mix() { music.setVolume(queue.length ? volume * .2 : volume); }
   function speak() {
     if (disposed || !active || playing || error || !queue.length) return;
-    const entry = queue[0]; const word = FORTRESS_WORDS.find(word => word.id === entry.wordId);
+    const entry = queue[0]; const word = BATTLE_WORDS.find(word => word.id === entry.wordId);
     if (!word) { error = true; publish(); return; }
     playing = true; const token = ++revision; mix(); publish();
     voice.playReveal(`/assets/audio/zombie-${word.id}.mp3`, { sessionId: options.sessionId, roundId: entry.monsterId, revision: token }, success => {

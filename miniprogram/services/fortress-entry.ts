@@ -1,4 +1,5 @@
-import { createSeededRandom, createSessionPlan } from '../fortress/plans';
+import { createSeededRandom } from '../fortress/plans';
+import { createOpeningPlan } from '../fortress/opening-plan';
 import type { ListeningResult } from '../fortress/listening';
 import type { SessionPlan } from '../fortress/types';
 
@@ -19,7 +20,7 @@ export function createFortressEntryStore() {
   return {
     start(now = Date.now()): FruitRequest {
       sequence++;
-      request = Object.freeze({ plan: createSessionPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0)),
+      request = Object.freeze({ plan: createOpeningPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0)),
         waveIndex: 0, generation: sequence, variant: 'fruit' });
       completed = undefined; claimed = false;
       return request;

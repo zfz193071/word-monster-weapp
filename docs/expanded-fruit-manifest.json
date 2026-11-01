@@ -1,0 +1,80 @@
+[
+  {
+    "wordId": "pear",
+    "sourceFile": "En-us-pear.ogg",
+    "sourceSha256": "52d74172324c91c009a1c7498c8ca7efde5434798361023dab89cb3aea5a68a8",
+    "audioSha256": "22e7e79fe395187ac53e77a1ad69a0950f1e0a3460d24340cdb779da38455c75",
+    "imageSha256": "af7cb6bc9c4b811eefb39ec1eb066a90537eb8d04021c43cdc7a34e50e2a1f71",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-pear.ogg",
+    "author": "Dvortygirl",
+    "audioLicense": "CC BY-SA 3.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "aee1ed4a9236e5de5b7bded0e44bfcc51d9e0c0e901dcf69d1c42aee3592bb1f",
+    "audioReview": "pending human listening"
+  },
+  {
+    "wordId": "strawberry",
+    "sourceFile": "En-us-strawberry.ogg",
+    "sourceSha256": "13f6c1338e84ea76e0452047669afb2ef8f740977d500b0f96e9b21ce3b070f0",
+    "audioSha256": "a0303c829299098ed30d6a1a7d16e6b212bbf5010d30d6141a1f46b33bf145ce",
+    "imageSha256": "9e80cb897208f4657c56a1ac1b90f1c17efa730233cbfebda77465bb1de56e0c",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-strawberry.ogg",
+    "author": "Dvortygirl",
+    "audioLicense": "CC BY-SA 3.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "d97b37dcaefa7c248e769a5cc0badeea28504fe1c67d384b3b928b888aa5d47b",
+    "audioReview": "pending human listening"
+  },
+  {
+    "wordId": "cherry",
+    "sourceFile": "En-us-cherry.ogg",
+    "sourceSha256": "90d0236d980d8bb5275df3334d51247a9cf1b5357a43bbb834fc615413abed5c",
+    "audioSha256": "e762306d43dcb3a4676fbf74774d997f3f014890957d0408e3a23ba70bf98918",
+    "imageSha256": "4883c87e1b94729d2de1a784237d7bc2fb9f686187032ac7ef6e33b985d68dc5",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-cherry.ogg",
+    "author": "Dvortygirl",
+    "audioLicense": "CC BY-SA 3.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "3a8c6b99abae9e811e95d5f49bfa720fa9bc0b7f4a9e365ef92838275e259c6f",
+    "audioReview": "pending human listening"
+  },
+  {
+    "wordId": "pineapple",
+    "sourceFile": "En-us-pineapple.ogg",
+    "sourceSha256": "aa5c2530a844438c7f37c6aeb4eca1ff78fd85618eba5a38be7f6212aa62a32c",
+    "audioSha256": "7d9a72e7ccd35a2e6a0f4e3726675fd39dc6206015653ce67e0da0759adf9a6a",
+    "imageSha256": "e5010a6dd9d95e6eb4ed90833f405a91556978580017b2998e8282528a90e8d9",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-pineapple.ogg",
+    "author": "Dvortygirl",
+    "audioLicense": "CC BY-SA 3.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "c32b998ea4b27c4d1d88a8cbe2962519bf6d0f3e7d878cf638f1b59a6fbac312",
+    "audioReview": "pending human listening"
+  },
+  {
+    "wordId": "kiwi",
+    "sourceFile": "En-au-kiwi.ogg",
+    "sourceSha256": "63cc3fe817d5bcff25d1528ede4aaa912b6889604d2cee2be986e3e52f1fd1f1",
+    "audioSha256": "721b2d5a2dd028bdb1de06aa86abee07dd8cb12f39f20045392e71f7a92009b0",
+    "imageSha256": "6e98bd0f674d1ae8e31f3ea6e3c03c8d4311e4bf1db5034f69b63ebcf2802475",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-au-kiwi.ogg",
+    "author": "Commander Keane",
+    "audioLicense": "CC BY-SA 4.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "78be14d45aa5175ad854a4c8adc5869622573e8090be3c51a4f777d45403ffd1",
+    "audioReview": "pending human listening"
+  },
+  {
+    "wordId": "peach",
+    "sourceFile": "En-us-peach.ogg",
+    "sourceSha256": "09707b351146e7add20ded01628899b9898df9dd805f6e032552d6f8a77b8b8f",
+    "audioSha256": "cac9c23bb19776e20a43ef20d685744a5d7eebf7b385a8ac5ee128cc5ce00fba",
+    "imageSha256": "0d0f6f6176cb09daa697550d6f2536b5749a417450d21157e0fa25eea463b872",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-peach.ogg",
+    "author": "Dvortygirl",
+    "audioLicense": "CC BY-SA 3.0",
+    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "zombieSha256": "98d3aecfb39ece13c3c1fac61891bd55363104c2d259bbe0ff42723fce4e3416",
+    "audioReview": "pending human listening"
+  }
+]

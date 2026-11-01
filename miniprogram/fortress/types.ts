@@ -90,6 +90,7 @@ export interface WavePlan {
   readonly spawnPlan: readonly MonsterSpawn[];
 }
 export interface SessionPlan {
+  readonly kind?: 'fruit-defense';
   readonly mode: 'fortress'; readonly schemaVersion: 2; readonly contentVersion: 2;
   readonly sessionId: string;
   readonly waves: readonly WavePlan[];

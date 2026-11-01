@@ -6,7 +6,7 @@ import ts from 'typescript';
 import { createSessionStore } from '../miniprogram/services/session';
 import { createBattleController } from '../miniprogram/services/battle';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
-import { FORTRESS_ASSETS } from '../miniprogram/fortress/content';
+import { BATTLE_ASSETS } from '../miniprogram/fortress/content';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
 function homeHarness() {
@@ -24,7 +24,7 @@ function homeHarness() {
     exports: {},
     require(name: string) {
       if (name === '../../services/home-music') return { createHomeMusic: () => ({ setActive() {}, setEnabled() {}, retry() {}, dispose() {} }) };
-      if (name === '../../fortress/content') return { FORTRESS_ASSETS };
+      if (name === '../../fortress/content') return { BATTLE_ASSETS };
       if (name === '../../services/fortress-entry') return { fortressEntryStore };
       assert.equal(name, '../../services/session');
       return { sessionStore };

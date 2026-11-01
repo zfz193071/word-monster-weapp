@@ -1,3 +1,5 @@
+import { BATTLE_WORDS } from './fruit-catalog';
+import { validateOpeningPlan } from './opening-plan';
 import { createAudioAdapter } from '../services/audio';
 import type { AudioOptions } from '../services/audio';
 import { FORTRESS_MONSTERS, FORTRESS_WORDS } from './content';
@@ -30,15 +32,17 @@ export interface ListeningOptions {
 
 // One instance per listening phase. Host disposes it on phase/wave/run changes.
 export function createListening(options: ListeningOptions) {
-  assertNoFortressIssues(validateSessionPlan(options.plan));
+  if (options.plan.kind === 'fruit-defense' && options.variant === 'fruit') validateOpeningPlan(options.plan);
+  else assertNoFortressIssues(validateSessionPlan(options.plan));
+  const words = options.plan.kind === 'fruit-defense' ? BATTLE_WORDS : FORTRESS_WORDS;
   const wave = options.plan.waves[options.waveIndex];
   if (!wave || !Number.isInteger(options.waveIndex) || !Number.isSafeInteger(options.generation) || options.generation < 0) throw new Error('听词波次或代次无效');
   const context: WaveContext = Object.freeze({ sessionId: options.plan.sessionId, waveId: wave.waveId, generation: options.generation });
-  const word = FORTRESS_WORDS.find(word => word.id === wave.targetWordId)!;
+  const word = words.find(word => word.id === wave.targetWordId)!;
   const random = options.random ?? Math.random;
-  let optionIds = options.variant === 'fruit' ? createFruitOptions(wave.targetWordId, [], random) : wave.optionWordIds;
+  let optionIds = options.variant === 'fruit' ? createFruitOptions(wave.targetWordId, [], random, words.map(word => word.id)) : wave.optionWordIds;
   function portrait(id: string): string {
-    const path = options.variant === 'fruit' ? FORTRESS_WORDS.find(item => item.id === id)?.fruitImagePath
+    const path = options.variant === 'fruit' ? words.find(item => item.id === id)?.fruitImagePath
       : FORTRESS_MONSTERS.find(item => item.wordId === id)?.portraitPath;
     if (!path) throw new Error('选项图片缺失');
     return path;
@@ -84,7 +88,7 @@ export function createListening(options: ListeningOptions) {
       } else {
         errors++; replays++;
         if (options.variant === 'fruit') {
-          optionIds = createFruitOptions(wave.targetWordId, optionIds, random);
+          optionIds = createFruitOptions(wave.targetWordId, optionIds, random, words.map(word => word.id));
           imageRevision++; images = optionIds.map(() => 'loading');
         }
         play();

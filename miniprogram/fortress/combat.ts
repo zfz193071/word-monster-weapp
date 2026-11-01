@@ -1,3 +1,4 @@
+import { BATTLE_WORDS } from './fruit-catalog';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
 import type { CombatContext, CombatEvent, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels } from './types';
@@ -77,16 +78,17 @@ export function createCombat(options: CreateCombatOptions): CombatState {
 
 export interface EncounterCombatOptions extends Omit<CreateCombatOptions, 'plan' | 'waveIndex'> {
   readonly sessionId: string;
+  readonly allowedWordIds?: readonly string[];
   readonly targetWordId: string;
   readonly spawns: readonly MonsterSpawn[];
 }
 export function createEncounterCombat(options: EncounterCombatOptions): CombatState {
-  if (!options.sessionId.trim() || !RULES.wordIds.includes(options.targetWordId) || !options.spawns.length
+  if (!options.sessionId.trim() || !BATTLE_WORDS.some(word => word.id === options.targetWordId) || !options.spawns.length
     || new Set(options.spawns.map(spawn => spawn.monsterId)).size !== options.spawns.length
-    || options.spawns.some(spawn => !spawn.monsterId.trim() || spawn.wordId !== options.targetWordId
+    || options.spawns.some(spawn => !spawn.monsterId.trim() || !(options.allowedWordIds ?? [options.targetWordId]).includes(spawn.wordId) || !BATTLE_WORDS.some(word => word.id === spawn.wordId)
       || !Number.isFinite(spawn.position.x) || spawn.position.x < RULES.monster.spawnMinX || spawn.position.x > RULES.monster.spawnMaxX
       || (spawn.spawnAtMs !== undefined && (!Number.isSafeInteger(spawn.spawnAtMs) || spawn.spawnAtMs < 0))
-      || spawn.position.y !== RULES.monster.startY)) throw new Error('僵尸批次必须包含唯一实体、相同目标水果和有效出生位置');
+      || spawn.position.y !== RULES.monster.startY)) throw new Error('僵尸批次必须包含唯一实体、已允许的水果和有效出生位置');
   return initializeCombat(options, { sessionId: options.sessionId, waveId: `${options.sessionId}:opening`, combatId: options.combatId, generation: options.generation }, options.spawns);
 }
 function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex'>, context: CombatContext, spawns: readonly MonsterSpawn[]): CombatState {

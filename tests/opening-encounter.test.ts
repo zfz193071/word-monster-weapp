@@ -62,7 +62,7 @@ test('自动瞄准：视野外不射击、固定位置、优先前排且同排�
 
 test('新版僵尸缩小且移动速度减半', () => {
   const state = createOpeningEncounter('pace', 'apple', 0);
-  assert.equal(openingArt('apple').monsterWidth, 48);
+  assert.equal(openingArt('apple').monsterWidth, 40);
   assert.ok(Math.abs(stepCombat(state).state.monsters[0].position.y - state.monsters[0].position.y - 0.2) < 1e-9);
 });
 

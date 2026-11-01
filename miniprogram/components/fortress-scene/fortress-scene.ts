@@ -1,6 +1,7 @@
+import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
 import { createBattleAudio } from '../../services/battle-audio';
 import type { ListeningResult } from '../../fortress/listening';
-import { createOpeningEncounter, openingArt, openingSkillOffer, OPENING_EXPERIENCE, ZERO_SKILLS } from '../../fortress/opening-encounter';
+import { createOpeningEncounter, openingArt, openingSkillOffer, OPENING_EXPERIENCE, OPENING_WAVE_COUNT, MAX_HERO_LEVEL, ZERO_SKILLS } from '../../fortress/opening-encounter';
 import { createExperience } from '../../fortress/experience';
 import { createUpgradeChoices } from '../../fortress/upgrade-choice';
 import type { UpgradeOffer } from '../../fortress/upgrade-choice';
@@ -15,7 +16,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
-interface InstanceState { audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -36,7 +37,7 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
@@ -83,7 +84,7 @@ Component({
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
             initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
-            preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId) : this.properties.art as SceneArt | undefined,
+            preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId, initial.monsters.map(monster => monster.wordId)) : this.properties.art as SceneArt | undefined,
             previewMonster: this.properties.preview && visual && asset ? { monsterVisual: visual, monsterWidth: monsterDrawWidth(visual),
               monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,
             retirement: this.properties.opening ? undefined : {
@@ -102,13 +103,15 @@ Component({
               instance.audio?.handle(events);
               if (instance.experience && instance.upgrades) {
                 const xp = instance.experience.record(events);
-                const thresholds = [0, 30, 80, 150];
-                const required = xp.level < 4 ? [30, 50, 70][xp.level - 1] : 0;
+                const thresholds = [0, ...OPENING_EXPERIENCE.levelThresholds];
+                const required = xp.level < MAX_HERO_LEVEL ? thresholds[xp.level] - thresholds[xp.level - 1] : 0;
                 const current = xp.total - thresholds[xp.level - 1];
                 this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
                 if (xp.upgrades.length > 0 && scene.snapshot?.status !== 'baseDestroyed') {
-                  const offer = instance.upgrades.open(openingSkillOffer(initial.context.sessionId, xp.level, instance.levels));
-                  if (offer) { instance.pendingOffer = offer; this.presentUpgrade(); }
+                  const candidate = openingSkillOffer(initial.context.sessionId, xp.level, instance.levels);
+                  instance.awaitingWaveEnd = true;
+                  if (candidate.cards.length) instance.pendingOffer = instance.upgrades.open(candidate) ?? undefined;
+                  this.presentUpgrade();
                 }
               }
               if (scene.snapshot?.status === 'baseDestroyed') instance.audio?.setActive(false);
@@ -124,7 +127,9 @@ Component({
     applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); const paused = unavailable || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
     presentUpgrade() {
       const state = instances.get(this);
-      if (!state?.pendingOffer || state.audio?.busy || !state.scene || !state.visible || this.properties.paused) return;
+      if (!state?.awaitingWaveEnd || state.audio?.busy || !state.scene || !state.visible || this.properties.paused) return;
+      state.awaitingWaveEnd = false;
+      if (!state.pendingOffer) { this.advanceWave(); return; }
       const offer = state.pendingOffer; state.pendingOffer = undefined;
       this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: offer }); this.applyPause();
     },
@@ -137,16 +142,22 @@ Component({
       const id = selected.id as SkillId;
       state.levels = Object.freeze({ ...state.levels, [id]: state.levels[id] + 1 });
       state.scene.applySkills(state.levels);
-      const snapshot = state.scene.snapshot;
-      if (!snapshot) return;
+      this.setData({ upgradeSummary: `${selected.label} · ${selected.description}` });
+      this.advanceWave();
+    },
+    advanceWave() {
+      const state = instances.get(this); const snapshot = state?.scene?.snapshot;
+      if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.completed) return;
       state.baseHp = snapshot.base.hp;
       const request = this.properties.previewRequest as { plan: SessionPlan; generation: number };
       const waveIndex = state.waveIndex ?? 0;
-      if (waveIndex === 2) {
-        this.setData({ upgradeOffer: null, completed: true, upgradeSummary: `${selected.label} · ${selected.description}` });
+      if (waveIndex === OPENING_WAVE_COUNT - 1) {
+        if (this.data.level < MAX_HERO_LEVEL) return;
+        this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: null, completed: true, upgradeSummary: this.data.upgradeSummary });
         this.applyPause(); return;
       }
-      state.scene.dispose(); state.scene = undefined; state.epoch++;
+      this.setData({ frozenFrame: state.scene.captureFrame() });
+      state.audio?.setActive(false); state.scene.dispose(); state.scene = undefined; state.epoch++;
       this.setData({ upgradeOffer: null, upgradeSummary: '', waveRequest: { ...request, waveIndex: waveIndex + 1, generation: request.generation + waveIndex + 1, variant: 'fruit' } });
     },
     nextWave(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
@@ -155,7 +166,7 @@ Component({
       const result = event.detail; const wave = request.plan.waves[request.waveIndex];
       if (result.context.sessionId !== request.plan.sessionId || result.context.waveId !== wave.waveId || result.context.generation !== request.generation || !result.attempts.length || !result.attempts[result.attempts.length - 1].correct) return;
       state.waveIndex = request.waveIndex;
-      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp);
+      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId));
       this.setData({ waveRequest: null, waveNumber: request.waveIndex + 1, frozenFrame: '', ready: false }, () => this.mount());
     },
     returnHome() { this.triggerEvent('returnhome'); },

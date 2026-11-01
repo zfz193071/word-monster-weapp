@@ -11,6 +11,8 @@ type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
 export interface MonsterArt {
   readonly fruitHat?: SpriteAsset;
+  readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
+  readonly walkParts?: { readonly body: SpriteAsset; readonly left: SpriteAsset; readonly right: SpriteAsset };
   readonly monster: SpriteAsset;
   readonly monsterVisual: MonsterVisual;
   readonly monsterWidth: number;
@@ -111,7 +113,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : [])];
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.fruitHats ?? {})];
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -283,15 +285,31 @@ export class CanvasScene {
         const scale = monsterArt.monsterWidth / monsterArt.monsterVisual.sourceSize.width;
         if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) c.globalAlpha *= 0.55;
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
-        this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
-          monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
+        if (monsterArt.walkParts) {
+          const walking = monster.hp > 0 && (monster.status === 'entering' || monster.status === 'alive');
+          const seed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+          const stride = walking ? Math.sin(state.tick * .07 + seed) : 0;
+          c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
+          c.fillStyle = 'rgba(37,62,56,.16)'; c.beginPath(); c.ellipse(0, 69, 40, 7, 0, 0, Math.PI * 2); c.fill();
+          for (const side of [-1, 1]) {
+            const hip = side < 0 ? 50 : 78;
+            c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
+            this.sprite(side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right, -hip, -110, 128, 160); c.restore();
+          }
+          this.sprite(monsterArt.walkParts.body, -64 + stride * 1.5, -80 - Math.abs(stride) * 2, 128, 160); c.restore();
+        } else {
+          this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
+            monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
+        }
         c.imageSmoothingEnabled = true;
         if (monsterArt.fruitHat) {
+          const hatScale = monsterArt.monsterWidth / 64;
+          c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
           // White badge keeps each ordinary fruit legible at game scale.
-          c.fillStyle = '#fff7df'; c.beginPath(); c.arc(monster.position.x, monster.position.y - 44, 20, 0, Math.PI * 2); c.fill();
-          this.sprite(monsterArt.fruitHat, monster.position.x - 17, monster.position.y - 61, 34, 34);
-          c.fillStyle = '#4c5e43'; c.fillRect(monster.position.x - 18, monster.position.y + 41, 36, 4);
-          c.fillStyle = '#b2dc69'; c.fillRect(monster.position.x - 18, monster.position.y + 41, 36 * monster.hp / monster.maxHp, 4);
+          c.fillStyle = '#fff7df'; c.beginPath(); c.arc(0, -44, 20, 0, Math.PI * 2); c.fill();
+          this.sprite(monsterArt.fruitHats?.[monster.wordId] ?? monsterArt.fruitHat, -17, -61, 34, 34);
+          c.fillStyle = '#4c5e43'; c.fillRect(-18, 41, 36, 4);
+          c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
       }
       c.globalAlpha = 1;

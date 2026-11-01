@@ -53,3 +53,11 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 `zombie-apple.mp3`、`zombie-banana.mp3`、`zombie-orange.mp3`、`zombie-grape.mp3`、`zombie-watermelon.mp3` 是上述原始水果录音的变声衍生物，非游戏音频采样。处理包括降低音高、轻微减速、喉音颤动、软饱和、短混响与响度调整；原始教学录音未修改。由 `scripts/create-zombie-voices.py` 重建。
 
 四段 Dvortygirl 录音衍生物继续使用 CC BY-SA 3.0；orange 衍生物继续使用 Association Shtooka / Judith Franck 的 CC BY 3.0 US。来源网址沿用上方各词链接，包内署名清单已登记处理方式与原许可。五段衍生发音保持 pending，需真人确认词音清晰度和音色。
+
+## 扩充至 11 种水果（2026-11-01）
+
+新增梨 pear、草莓 strawberry、樱桃 cherry、菠萝 pineapple、猕猴桃 kiwi、桃子 peach。图片分别为 OpenMoji 17.0.0 的 1F350、1F353、1F352、1F34D、1F95D、1F351，沿用 CC BY-SA 4.0；原始618×618 PNG未改图，已逐张查看。来源为 https://github.com/hfg-gmuend/openmoji/tree/17.0.0/color/618x618 。
+
+新增录音来自 Wikimedia Commons：pear、strawberry、cherry、pineapple、peach 为 `En-us-<word>.ogg`，作者 Dvortygirl，CC BY-SA 3.0；kiwi 为 `En-au-kiwi.ogg`，作者 Commander Keane，CC BY-SA 4.0。素材采用混合口音，不宣称统一美式。转换为44.1kHz单声道96kbps MP3，标准录音不变调；各有同许可的僵尸变声衍生物。原始词条、作者、许可、原录音/图片/衍生音频哈希详见 [扩充素材清单](expanded-fruit-manifest.json)。
+
+新增12段MP3完整解码通过；新词kiwi在模拟器实际听词后进入混合战斗。音色、单词清晰度和真机播放仍须真人听审。标准词音与变声词音均在首页署名入口登记。

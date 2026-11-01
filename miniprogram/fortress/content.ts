@@ -1,3 +1,4 @@
+import { EXTRA_IMAGE_ASSETS, EXTRA_AUDIO_ASSETS } from './fruit-catalog';
 import { CONTENT_ASSETS } from '../content/assets';
 import { WORDS } from '../content/words';
 import type { FortressWord, MonsterVisual, VisualAsset } from './types';
@@ -23,3 +24,5 @@ export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRES
     hitbox: Object.freeze(vector ? { x: 8, y: 8, width: 240, height: 240 } : { x: 5, y: 4, width: 22, height: 24 }) });
 }));
 export function monsterDrawWidth(visual: MonsterVisual): number { return visual.sourceSize.width === 32 ? 112 : 80; }
+
+export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS]);
