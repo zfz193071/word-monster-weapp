@@ -13,7 +13,7 @@ export interface FruitRequest {
 export interface FortressEntry { readonly request: FruitRequest; readonly result: ListeningResult }
 
 // An entry is handed to the battle page once, only after the current prompt succeeds.
-export function createFortressEntryStore(canEnter: (levelId: number) => boolean = levelId => levelId === 1) {
+export function createFortressEntryStore(canEnter: (levelId: number) => boolean = levelId => levelId === 1, equippedLevel: () => number = () => 1) {
   let sequence = 0;
   let request: FruitRequest | undefined;
   let completed: FortressEntry | undefined;
@@ -22,7 +22,7 @@ export function createFortressEntryStore(canEnter: (levelId: number) => boolean 
     start(now = Date.now(), levelId = 1): FruitRequest {
       if (!canEnter(levelId)) throw new Error('请先通关前面的关卡');
       sequence++;
-      request = Object.freeze({ plan: createOpeningPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0), levelId),
+      request = Object.freeze({ plan: createOpeningPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0), levelId, equippedLevel()),
         waveIndex: 0, generation: sequence, variant: 'fruit' });
       completed = undefined; claimed = false;
       return request;
@@ -48,4 +48,4 @@ export function createFortressEntryStore(canEnter: (levelId: number) => boolean 
     },
   };
 }
-export const fortressEntryStore = createFortressEntryStore(levelId => coinWallet.canEnter(levelId));
+export const fortressEntryStore = createFortressEntryStore(levelId => coinWallet.canEnter(levelId), () => coinWallet.equipment().level);

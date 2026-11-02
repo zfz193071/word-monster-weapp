@@ -92,6 +92,7 @@ export interface WavePlan {
   readonly spawnPlan: readonly MonsterSpawn[];
 }
 export interface SessionPlan {
+  readonly weaponLevel?: number;
   readonly kind?: 'fruit-defense';
   readonly levelId?: number;
   readonly mode: 'fortress'; readonly schemaVersion: 2; readonly contentVersion: 2;
@@ -126,6 +127,7 @@ export interface ProjectileState {
 }
 export interface ElementImpact { readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  readonly weaponLevel?: number;
   readonly elementReadyTick?: number;
   readonly elementImpacts?: readonly ElementImpact[];
   readonly monsterSpeed?: number;
@@ -145,7 +147,7 @@ export interface CombatState {
   readonly processedBaseAttackIds: readonly string[];
 }
 export type CombatEvent =
-  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number }
+  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
   | { readonly type: 'baseDestroyed'; readonly context: CombatContext; readonly tick: number };

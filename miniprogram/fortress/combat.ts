@@ -1,3 +1,4 @@
+import { weaponForLevel } from '../weapons/catalog';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
@@ -16,6 +17,7 @@ export interface CombatInput { readonly playerX?: number }
 export interface WeaponParameters { readonly count: number; readonly intervalMs: number; readonly width: number }
 export interface CombatStep { readonly state: CombatState; readonly events: readonly CombatEvent[] }
 export interface CreateCombatOptions {
+  readonly weaponLevel?: number;
   readonly automatic?: boolean;
   readonly monsterSpeed?: number;
   readonly monsterAttackIntervalMs?: number;
@@ -69,7 +71,7 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false): 
     const position = { x: state.player.x - direction.y * offset, y: state.player.y + direction.x * offset };
     return { id: `${state.context.sessionId}:${state.context.combatId}:bullet:${state.nextProjectileSequence + index}`,
       ...(charged && index === 0 ? { elements: { flame: state.skills.flame ?? 0, frost: state.skills.frost ?? 0, lightning: state.skills.lightning ?? 0 } } : {}),
-      position, previousPosition: position, ...(state.aimDirection ? { direction: state.aimDirection } : {}), width: weapon.width, height: RULES.projectile.height, damage: RULES.projectile.damage };
+      position, previousPosition: position, ...(state.aimDirection ? { direction: state.aimDirection } : {}), width: weapon.width, height: RULES.projectile.height, damage: weaponForLevel(state.weaponLevel ?? 1).damage };
   });
 }
 export function createCombat(options: CreateCombatOptions): CombatState {
@@ -111,8 +113,9 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     || Math.abs(box.x + box.width) > RULES.arena.width || Math.abs(box.y + box.height) > RULES.arena.height) {
     throw new RangeError('monsterHitbox 必须为正面积矩形，尺寸和相对坐标不可超出战场范围');
   }
+  const weaponLevel = weaponForLevel(options.weaponLevel ?? 1).level;
   const state: CombatState = {
-    context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
+    weaponLevel, context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
     tick: 0, status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
     base: { hp: options.baseHp, maxHp: RULES.base.maxHp }, skills: options.skills,
@@ -190,11 +193,11 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   });
   contacts.sort((a, b) => a.time - b.time || a.projectileIndex - b.projectileIndex || a.monsterIndex - b.monsterIndex);
   const impacts: ElementImpact[] = (previous.elementImpacts ?? []).filter(impact => impact.untilTick > tick);
-  const damageMonster = (index: number, damage: number) => {
+  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning') => {
     const monster = monsters[index]; if (monster.hp <= 0 || monster.status === 'waiting') return;
     const hp = Math.max(0, monster.hp - damage);
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
-    events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp });
+    events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, position: Object.freeze({ ...monster.position }) });
     if (hp === 0 && !defeated.has(monster.id)) { defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId }); }
   };
   const consumed = new Set<string>();
@@ -202,7 +205,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const projectile = moved[contact.projectileIndex]; const monster = monsters[contact.monsterIndex];
     if (consumed.has(projectile.id) || defeated.has(monster.id)) continue;
     consumed.add(projectile.id);
-    damageMonster(contact.monsterIndex, projectile.damage);
+    damageMonster(contact.monsterIndex, projectile.damage, 'projectile');
     const elements = projectile.elements;
     const position = { x: projectile.previousPosition.x + (projectile.position.x - projectile.previousPosition.x) * contact.time, y: projectile.previousPosition.y + (projectile.position.y - projectile.previousPosition.y) * contact.time };
     const nearby = (index: number, radius: number) => monsters[index].hp > 0 && monsters[index].status !== 'waiting' && monsters[index].status !== 'retiring' && Math.hypot(monsters[index].position.x - position.x, monsters[index].position.y - position.y) <= radius;
@@ -213,11 +216,11 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     if (elements?.lightning) {
       let target = -1; let nearest = Infinity;
       monsters.forEach((candidate, index) => { if (index === contact.monsterIndex || !nearby(index, 90)) return; const distance = Math.hypot(candidate.position.x - position.x, candidate.position.y - position.y); if (distance < nearest) { nearest = distance; target = index; } });
-      if (target >= 0) { impacts.push({ kind: 'lightning', position, target: monsters[target].position, untilTick: tick + 35 }); damageMonster(target, 1 + .5 * elements.lightning); }
+      if (target >= 0) { impacts.push({ kind: 'lightning', position, target: monsters[target].position, untilTick: tick + 35 }); damageMonster(target, 1 + .5 * elements.lightning, 'lightning'); }
     }
     if (elements?.flame) {
       impacts.push({ kind: 'flame', position, untilTick: tick + 35 });
-      monsters.forEach((_candidate, index) => { if (nearby(index, 45)) damageMonster(index, 1 + .5 * elements.flame!); });
+      monsters.forEach((_candidate, index) => { if (nearby(index, 45)) damageMonster(index, 1 + .5 * elements.flame!, 'flame'); });
     }
   }
   let baseHp = previous.base.hp;

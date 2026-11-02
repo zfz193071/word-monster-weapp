@@ -15,7 +15,7 @@ import { createSeededRandom } from '../miniprogram/fortress/plans';
 import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortress/types';
 
 for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})),{level:levels.LEVELS[0],repair:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}`, async () => {
-  const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id);let definition:any;let host:any;
+  const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id, 7);let definition:any;let host:any;
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
@@ -55,7 +55,7 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
   let picked=0;let repairs=0;
   for(let wave=0;wave<19;wave++){
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,3+wave*2);
-    const art=current!.options.art;assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
+    assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     current!.clear();assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);

@@ -161,3 +161,13 @@ test('最后一只退场时爆浆继续播放，暂停冻结，读音结束清�
   h.scene.setRetiringIds([]); h.commands.length = 0; h.frame(30016); assert.equal(h.callbacks.size, 0);
   assert.ok(!h.commands.some(command => command.method === 'ellipse')); assert.deepEqual(h.errors, []); h.scene.dispose();
 });
+
+test('最后一击飘字在清场后仍完成动画，暂停和销毁不推进或重放',async()=>{
+ const start=initial();const monster=start.monsters[0];
+ const state={...start,shotRemainingMs:1000,monsters:[{...monster,status:'alive' as const,hp:1,position:{x:180,y:200}}],projectiles:[{id:'final',position:{x:180,y:230},previousPosition:{x:180,y:230},width:8,height:18,damage:4}]};
+ const h=harness(true,undefined,{initial:state});await h.scene.load();h.frame(0);h.frame(10);
+ assert.equal(h.scene.snapshot!.status,'cleared');assert(h.commands.some(c=>c.method==='fillText'&&c.args[0]==='-4'));assert.equal(h.callbacks.size,1);
+ h.scene.setPaused(true);assert.equal(h.callbacks.size,0);const count=h.commands.length;h.frame(10000);assert.equal(h.commands.length,count);
+ h.scene.setPaused(false);h.frame(10000);for(let t=10100;t<=10900;t+=100)h.frame(t);
+ assert.equal(h.callbacks.size,0);assert.equal(h.errors.length,0);h.scene.dispose();assert.equal(h.callbacks.size,0);
+});

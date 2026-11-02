@@ -67,7 +67,7 @@ Component({
           if (!result?.node || !result.width || !result.height) throw new Error('Canvas 节点尚未就绪');
           if (this.properties.preview && wx.getAccountInfoSync().miniProgram.envVersion !== 'develop') throw new Error('开发预览仅在开发版可用');
           const request = this.properties.previewRequest as { plan: SessionPlan; generation: number; variant?: 'fruit' } | null;
-          const initial = this.properties.opening && request ? (retained ?? createOpeningEncounter(request.plan.sessionId, request.plan.waves[0].targetWordId, request.generation, 0, undefined, undefined, [], request.plan.levelId)) : this.properties.preview ? (request ? createPreviewPlanCombat(request.plan, request.generation) : previewCombat(this.properties.previewWord)) : retained ?? this.properties.initialState as CombatState | null;
+          const initial = this.properties.opening && request ? (retained ?? createOpeningEncounter(request.plan.sessionId, request.plan.waves[0].targetWordId, request.generation, 0, undefined, undefined, [], request.plan.levelId, request.plan.weaponLevel)) : this.properties.preview ? (request ? createPreviewPlanCombat(request.plan, request.generation) : previewCombat(this.properties.previewWord)) : retained ?? this.properties.initialState as CombatState | null;
           if (!initial) throw new Error('战斗尚未开始');
           if (this.properties.opening && !retained) {
             instance.experience?.dispose(); instance.upgrades?.dispose();
@@ -87,7 +87,7 @@ Component({
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
             initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
-            preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId, initial.monsters.map(monster => monster.wordId)) : this.properties.art as SceneArt | undefined,
+            preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId, initial.monsters.map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined,
             previewMonster: this.properties.preview && visual && asset ? { monsterVisual: visual, monsterWidth: monsterDrawWidth(visual),
               monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,
             retirement: this.properties.opening ? undefined : {
@@ -175,7 +175,7 @@ Component({
       const result = event.detail; const wave = request.plan.waves[request.waveIndex];
       if (result.context.sessionId !== request.plan.sessionId || result.context.waveId !== wave.waveId || result.context.generation !== request.generation || !result.attempts.length || !result.attempts[result.attempts.length - 1].correct) return;
       state.waveIndex = request.waveIndex;
-      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId), request.plan.levelId);
+      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId), request.plan.levelId, request.plan.weaponLevel);
       this.setData({ waveRequest: null, waveNumber: request.waveIndex + 1, frozenFrame: '', ready: false }, () => this.mount());
     },
     claimVictoryReward() {

@@ -1,3 +1,4 @@
+import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
@@ -52,6 +53,7 @@ export class CanvasScene {
     if (!this.disposed && this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
   }
   private effectTime = 0;
+  private readonly damageNumbers = new DamageNumbers();
   private deathStarted = new Map<string, number>();
   private images = new Map<string, Image>();
   private cancelLoads: (() => void)[] = [];
@@ -180,7 +182,7 @@ export class CanvasScene {
   }
   private schedule(): void {
     if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
-      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size)) return;
+      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size && !this.damageNumbers.active)) return;
     const version = this.frameVersion;
     this.frameId = this.canvas.requestAnimationFrame((now: number) => {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
@@ -205,6 +207,7 @@ export class CanvasScene {
         }
         this.lastFrameTime = now; this.droppedMs += result.droppedMs;
         this.peakProjectiles = Math.max(this.peakProjectiles, result.state.projectiles.length);
+        this.damageNumbers.add(result.events, this.effectTime);
         this.draw(result.state); this.publishHud(result.state);
         if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {
           this.retirement = createRetirement(result.state, this.options.retirement);
@@ -236,7 +239,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
   }
   private draw(state: CombatState): void {
     const c = this.context; const v = this.viewport;
@@ -385,6 +388,12 @@ export class CanvasScene {
         c.strokeStyle = '#e0d1ff'; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
       }
       c.restore();
+    }
+    for (const number of this.damageNumbers.sample(this.effectTime)) {
+      c.save(); c.translate(number.position.x, number.position.y); c.scale(number.scale, number.scale);
+      c.globalAlpha = number.opacity; c.font = 'bold 18px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = '#435343'; c.fillStyle = number.color;
+      c.strokeText(number.text, 0, 0); c.fillText(number.text, 0, 0); c.restore();
     }
     if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
   }

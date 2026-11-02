@@ -14,3 +14,5 @@ button::after { border:0; }
 .upgrade-label { position:relative; height:100%; display:flex; gap:16rpx; align-items:center; justify-content:center; font-size:34rpx; font-weight:700; }
 .weapon-hint { margin-top:24rpx; color:#77816c; font-size:24rpx; }
 .weapon-error { color:#9a5643; font-size:26rpx; }.weapon-retry { width:180rpx; min-width:0; font-size:26rpx; margin-top:12rpx; color:#49654a; background:#d8efcf; }
+
+.weapon-damage { margin-bottom:12rpx; color:#53664e; font-size:26rpx; }

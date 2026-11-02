@@ -4,6 +4,7 @@
     <view class="weapon-title">我的武器</view>
     <view class="weapon-level" style="border-color:{{weapon.color}}">Lv.{{weapon.level}} · {{weapon.name}}</view>
     <view class="weapon-stage" style="background:radial-gradient(ellipse, {{weapon.color}}88, transparent 70%)"><image class="weapon-image" src="{{weapon.image}}" mode="aspectFit" /></view>
+    <view class="weapon-damage">单发伤害 {{weapon.damage}}</view>
     <view class="weapon-balance"><text class="coin">●</text> {{balance}}</view>
     <view wx:if="{{error}}" class="weapon-error">{{error}}<button class="weapon-retry" bindtap="retry">重试</button></view>
     <button wx:else class="weapon-upgrade {{holding ? 'holding' : ''}}" disabled="{{!affordable}}" catchtouchstart="startHold" catchtouchend="endHold" catchtouchcancel="stopHold" aria-label="{{weapon.nextCost === null ? '已满级' : '长按升级，消耗' + weapon.nextCost + '金币'}}">
