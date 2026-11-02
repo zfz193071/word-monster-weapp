@@ -43,13 +43,14 @@
     "sourceFile": "En-us-pineapple.ogg",
     "sourceSha256": "aa5c2530a844438c7f37c6aeb4eca1ff78fd85618eba5a38be7f6212aa62a32c",
     "audioSha256": "7d9a72e7ccd35a2e6a0f4e3726675fd39dc6206015653ce67e0da0759adf9a6a",
-    "imageSha256": "e5010a6dd9d95e6eb4ed90833f405a91556978580017b2998e8282528a90e8d9",
+    "imageSha256": "0ab3f9ec9d114d0b6a6fcde2192f1b88bd15d22fc6d0bbab9b17d2c19fafcf1e",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-pineapple.ogg",
     "author": "Dvortygirl",
     "audioLicense": "CC BY-SA 3.0",
-    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "imageLicense": "Project-generated using built-in image_gen; see docs/assets/original/pineapple-imagegen.md",
     "zombieSha256": "c32b998ea4b27c4d1d88a8cbe2962519bf6d0f3e7d878cf638f1b59a6fbac312",
-    "audioReview": "pending human listening"
+    "audioReview": "pending human listening",
+    "imageSource": "docs/assets/original/pineapple-imagegen.md"
   },
   {
     "wordId": "kiwi",

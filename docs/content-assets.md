@@ -67,3 +67,5 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 听词使用 `learn-*.mp3`，由 Piper en_US-ljspeech-medium 单女声模型生成。模型仓库标注MIT，训练录音LJSpeech为公有领域；来源：[模型卡](https://huggingface.co/rhasspy/piper-voices/blob/main/en/en_US/ljspeech/medium/MODEL_CARD)、[仓库授权](https://huggingface.co/rhasspy/piper-voices/blob/main/README.md)、[训练录音](https://keithito.com/LJ-Speech-Dataset/)。使用独立临时环境生成，不在小程序中分发模型或Piper工具。响度归一化到-18 LUFS，44.1kHz单声道96kbps，清晰度待真人试听。每个文件哈希见 `learning-voice-manifest.json`。
 
 `zombie-body-{水果}.svg/png` 是本项目原始僵尸上身的11种衣服配色版本，脸、手、轮廓和几何不变，全部由 `scripts/create-fruit-outfits.cjs` 生成。
+
+2026-11-02：菠萝图片已替换为本项目通过内置 image_gen 生成的透明底插画（金黄色果身、绿色叶冠、清晰菱形纹理），当前文件不再使用上述 OpenMoji 菠萝。生成记录见 [菠萝素材记录](assets/original/pineapple-imagegen.md)。其他五种新增水果图片不变。

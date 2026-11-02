@@ -15,8 +15,8 @@ export const BATTLE_WORDS: readonly FortressWord[] = Object.freeze([
 ].map(word => Object.freeze({ ...word, audioPath: `/assets/audio/learn-${word.id}.mp3` })));
 export const EXTRA_IMAGE_ASSETS: readonly VisualAsset[] = EXTRA_FRUITS.map(word => ({
   path: `/assets/images/${word.id}.png`, wordId: word.id, kind: 'image',
-  source: `https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/${word.emoji}.png`,
-  rights: 'OpenMoji contributors；CC BY-SA 4.0；原图未修改；https://creativecommons.org/licenses/by-sa/4.0/', reviewStatus: 'approved',
+  source: word.id === 'pineapple' ? 'docs/assets/original/pineapple-imagegen.md' : `https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/${word.emoji}.png`,
+  rights: word.id === 'pineapple' ? '本项目使用内置 image_gen 生成的菠萝插画，2026-11-02；未使用第三方参考图，缩放至512px' : 'OpenMoji contributors；CC BY-SA 4.0；原图未修改；https://creativecommons.org/licenses/by-sa/4.0/', reviewStatus: 'approved',
 }));
 
 export const EXTRA_AUDIO_ASSETS: readonly VisualAsset[] = EXTRA_FRUITS.flatMap(word => {
