@@ -1,13 +1,14 @@
+import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
-interface State { scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number }
+interface State { orbit: RoomOrbit; width: number; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number }
 const states=new WeakMap<object,State>();
 Component({
   properties:{ paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
   data:{frozenFrame:'',error:false},
   lifetimes:{
-    attached(){states.set(this,{visible:true,alive:true,epoch:0});},
+    attached(){states.set(this,{orbit:new RoomOrbit(),width:0,visible:true,alive:true,epoch:0});},
     ready(){this.mount();},
-    detached(){const state=states.get(this);if(state){state.alive=false;state.epoch++;state.scene?.dispose();}states.delete(this);},
+    detached(){const state=states.get(this);if(state){state.orbit.cancel();state.alive=false;state.epoch++;state.scene?.dispose();}states.delete(this);},
   },
   pageLifetimes:{
     show(){const state=states.get(this);if(state){state.visible=true;this.synchronize();}},
@@ -16,19 +17,21 @@ Component({
   },
   methods:{
     mount(){
-      const state=states.get(this);if(!state?.alive||this.properties.covered)return;const epoch=++state.epoch;
+      const state=states.get(this);if(!state?.alive||this.properties.covered)return;state.orbit.cancel();const epoch=++state.epoch;
       state.scene?.dispose();state.scene=undefined;
       this.createSelectorQuery().select('#room-canvas').fields({node:true,size:true},result=>{
         if(!state.alive||epoch!==state.epoch)return;
         try{
           if(!result?.node||!result.width||!result.height)throw new Error('场景节点尚未就绪');
-          state.scene=new HomeRoomScene(result.node,result.width,result.height,wx.getWindowInfo().pixelRatio);
+          state.width=result.width;
+          state.scene=new HomeRoomScene(result.node,result.width,result.height,wx.getWindowInfo().pixelRatio,state.orbit.yaw);
           this.setData({error:false});this.synchronize();
         }catch{this.setData({error:true});}
       }).exec();
     },
     synchronize(){
       const state=states.get(this);if(!state?.alive)return;
+      if(this.properties.covered||this.properties.paused||!state.visible)state.orbit.cancel();
       if(this.properties.covered){
         if(state.scene)this.setData({frozenFrame:state.scene.capture()});
         state.epoch++;state.scene?.dispose();state.scene=undefined;
@@ -37,6 +40,19 @@ Component({
       if(!state.scene){wx.nextTick(()=>{if(state.alive&&!this.properties.covered&&!state.scene)this.mount();});return;}
       state.scene.setActive(state.visible&&!this.properties.paused);
     },
+    touchStart(event:WechatMiniprogram.TouchEvent){
+      const state=states.get(this);
+      if(!state?.scene||!state.visible||this.properties.paused||this.properties.covered)return;
+      state.orbit.start(event.touches);
+    },
+    touchMove(event:WechatMiniprogram.TouchEvent){
+      const state=states.get(this);
+      if(!state?.scene||!state.visible||this.properties.paused||this.properties.covered)return;
+      if(state.orbit.move(event.touches,state.width))state.scene.setYaw(state.orbit.yaw);
+    },
+    touchEnd(event:WechatMiniprogram.TouchEvent){states.get(this)?.orbit.end(event.changedTouches);},
+    touchCancel(){states.get(this)?.orbit.cancel();},
+    stopTap(){},
     retry(){this.mount();},
   },
 });

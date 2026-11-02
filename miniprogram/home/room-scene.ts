@@ -1,13 +1,38 @@
+import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
-interface Face { readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
+interface Face { readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
 interface ProjectedFace { readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
 const LIGHT: Point3 = [-.35, .85, .4];
 const dot = (a: Point3,b: Point3) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 const normalize = (a: Point3): Point3 => { const d=Math.hypot(...a); return [a[0]/d,a[1]/d,a[2]/d]; };
-export function projectRoomPoint(p: Point3) {
+function rotateRoomPoint(p: Point3, yaw: number): Point3 {
+  const cos=Math.cos(yaw),sin=Math.sin(yaw);
+  return [p[0]*cos+p[2]*sin,p[1],-p[0]*sin+p[2]*cos];
+}
+export function projectRoomPoint(point: Point3, yaw=0) {
+  const p=rotateRoomPoint(point,yaw);
   return { x: (p[0]-p[2]) * .7071, y: (p[0]+p[2]) * .35355-p[1]*.866, depth: dot(p,VIEW) };
+}
+// Project the slab and the two tall walls onto the ground along a fixed world light.
+export function roomShadowPolygon(yaw:number):readonly (readonly [number,number])[] {
+  const ground=-.48;
+  const corners:Point3[]=[[-3.2,0,-3.2],[-3.2,0,3.2],[3.2,0,-3.2],[3.2,0,3.2],
+    [-3.2,3.2,-3.2],[-3.2,3.2,3.2],[3.2,3.2,-3.2]];
+  const points=corners.map(([x,y,z])=>{
+    const distance=(y-ground)/LIGHT[1];
+    const projected=projectRoomPoint([x-LIGHT[0]*distance,ground,z-LIGHT[2]*distance],yaw);
+    return [projected.x,projected.y] as const;
+  }).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const cross=(a:readonly number[],b:readonly number[],c:readonly number[])=>
+    (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+  const half=(vertices:typeof points)=>{
+    const hull:typeof points=[];
+    for(const point of vertices){while(hull.length>=2&&cross(hull[hull.length-2],hull[hull.length-1],point)<=0)hull.pop();hull.push(point);}
+    hull.pop();return hull;
+  };
+  return [...half(points),...half([...points].reverse())];
 }
 export function homeHeroPose(seconds: number) {
   return { yaw: .18 + Math.sin(seconds * 1.25) * .13,
@@ -55,6 +80,9 @@ function room():Face[]{
   box(f,-3.1,3.13,0,.27,.10,6.4,'#fff2d0');box(f,0,3.13,-3.1,6.4,.10,.27,'#fff2d0');
   box(f,-2.97,.15,0,.06,.25,6.1,'#e9e3bd');box(f,0,.15,-2.97,6.1,.25,.06,'#f7edcb');
   const wallsEnd=f.length;
+  for(let i=floorEnd;i<wallsEnd;i++) {
+    f[i]={...f[i],wall:Math.floor((i-floorEnd)/5)%2===0 ? 'x' : 'z'};
+  }
   // Recessed window with bright sill and panes.
   box(f,1.1,2.03,-2.965,1.75,1.56,.05,'#91b8b9');
   for(const x of [.20,2.0])box(f,x,2.03,-2.87,.12,1.74,.18,'#fff7df');
@@ -114,16 +142,22 @@ function hero(seconds:number):Face[]{
   };
   return f.map(face=>({...face,points:face.points.map(transform),normal:normalize([face.normal[0]*cos+face.normal[2]*sin,face.normal[1],-face.normal[0]*sin+face.normal[2]*cos])}));
 }
-function projectFaces(faces:readonly Face[]):ProjectedFace[]{
-  return faces.filter(face=>dot(face.normal,VIEW)>0.001).map(face=>{
-    const p=face.points.map(projectRoomPoint);
-    return { layer:face.layer??3, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
+function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
+  const view=rotateRoomPoint(VIEW,-yaw);
+  return faces.filter(face=>dot(face.normal,view)>0.001).map(face=>{
+    const p=face.points.map(point=>projectRoomPoint(point,yaw));
+    // A near solid wall must occlude the room, rather than remain behind actors.
+    const layer=face.wall ? (view[face.wall==='x'?0:2]<0 ? 4 : 1) : face.layer??3;
+    return { layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
 }
 export class HomeRoomScene {
   private readonly context:Context;
-  private readonly staticFaces=projectFaces(room());
+  private readonly roomFaces=room();
+  private staticFaces:ProjectedFace[];
+  private yaw:number;
+  private shadow:readonly (readonly [number,number])[];
   private frame:number|undefined;
   private frameVersion=0;
   private active=false;
@@ -131,8 +165,17 @@ export class HomeRoomScene {
   private elapsed=0;
   private previous:number|undefined;
   private width=0;private height=0;private dpr=1;
-  constructor(private readonly canvas:WechatMiniprogram.Canvas,width:number,height:number,dpr:number){
+  constructor(private readonly canvas:WechatMiniprogram.Canvas,width:number,height:number,dpr:number,yaw=0){
+    this.yaw=normalizeRoomYaw(yaw);this.staticFaces=projectFaces(this.roomFaces,this.yaw);this.shadow=roomShadowPolygon(this.yaw);
     this.context=canvas.getContext('2d');this.resize(width,height,dpr);
+  }
+  get viewYaw():number{return this.yaw;}
+  setYaw(yaw:number){
+    if(this.disposed)return;
+    const next=normalizeRoomYaw(yaw);if(next===this.yaw)return;
+    this.yaw=next;this.staticFaces=projectFaces(this.roomFaces,this.yaw);this.shadow=roomShadowPolygon(this.yaw);
+    // The existing animation loop renders the latest angle; no extra frame loop.
+    if(!this.active)this.draw();
   }
   resize(width:number,height:number,dpr:number){
     if(this.disposed)return;
@@ -162,11 +205,19 @@ export class HomeRoomScene {
     });
   }
   private draw(){
-    const c=this.context;const scale=Math.min(this.width/9.6,this.height/8.0);
+    const c=this.context;const scale=Math.min(this.width/9.6,this.height/9.2);
     c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,this.width,this.height);
     c.save();c.translate(this.width/2,this.height*.56);
-    c.fillStyle='rgba(77,100,73,.12)';c.beginPath();c.ellipse(0,scale*2.35,scale*3.6,scale*.76,0,0,Math.PI*2);c.fill();
-    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed))].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
+    const shadowCenter=this.shadow.reduce((center,p)=>[center[0]+p[0]/this.shadow.length,center[1]+p[1]/this.shadow.length],[0,0]);
+    for(const [spread,opacity] of [[1.10,.025],[1.05,.035],[1,.065]]){
+      c.fillStyle=`rgba(77,100,73,${opacity})`;c.beginPath();
+      this.shadow.forEach(([x,y],i)=>{
+        const px=(shadowCenter[0]+(x-shadowCenter[0])*spread)*scale;
+        const py=(shadowCenter[1]+(y-shadowCenter[1])*spread)*scale;
+        if(i===0)c.moveTo(px,py);else c.lineTo(px,py);
+      });c.closePath();c.fill();
+    }
+    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed),this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
     for(const face of faces){
       c.globalAlpha=face.opacity;c.fillStyle=face.color;c.strokeStyle=face.color;c.lineWidth=.45;
       c.beginPath();face.points.forEach(([x,y],i)=>{if(i===0)c.moveTo(x*scale,y*scale);else c.lineTo(x*scale,y*scale);});c.closePath();c.fill();c.stroke();

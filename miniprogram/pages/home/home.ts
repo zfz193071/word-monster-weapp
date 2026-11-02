@@ -11,6 +11,7 @@ import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
   data: { collectionPlaying: '', collectionAudioError: '', preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
+    upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
   navigationId: 0,
@@ -67,6 +68,18 @@ Page({
       if (this.disposed || revision !== this.collectionAudioRevision) return;
       this.setData({ collectionPlaying: '', collectionAudioError: success ? '' : word.id }); this.synchronizeMusic();
     });
+  },
+  onLoad() {
+    this.setData({ upperClouds: Array.from({ length: 3 }, (_, id) => {
+      const duration = 70 + Math.random() * 20;
+      // Stagger starting positions while keeping both turnarounds outside the viewport.
+      const progress = .25 + id * .22 + Math.random() * .06;
+      return {
+        id,
+        style: `top:${5 + Math.random() * 6}%;animation-duration:${duration}s;animation-delay:-${duration * progress}s`,
+        scale: `transform:scale(${.55 + Math.random() * .4})`,
+      };
+    }) });
   },
   onShow() {
     try { this.setData({ coinBalance: coinWallet.balance(), coinError: false }); } catch { this.setData({ coinError: true }); }

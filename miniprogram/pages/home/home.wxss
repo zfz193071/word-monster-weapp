@@ -1,10 +1,16 @@
 page { background: #bcd9e8; }
 .home { height: 100vh; min-height: 900rpx; overflow: hidden; position: relative; background: linear-gradient(165deg,#bcd9e8 0%,#d8e8da 58%,#eaf0cf 100%); }
 button::after { border: 0; }
-.sky-streak { position: absolute; width: 420rpx; height: 3rpx; border-radius: 50%; background: #fff6; transform: rotate(30deg); }
-.streak-one { top: 12%; left: -90rpx; }.streak-two { top: 64%; right: -130rpx; }
-.cloud { position: absolute; width: 150rpx; height: 25rpx; border-radius: 100%; background: #ffffff50; }
-.cloud-one { top: 14%; right: 30rpx; }.cloud-two { top: 26%; left: -30rpx; width: 240rpx; }
+.cloud { position: absolute; left: 0; width: 150rpx; height: 32rpx; border-radius: 40rpx; background: #fff; opacity: .62; pointer-events: none; animation: cloud-drift 70s linear infinite alternate; }
+.cloud::before,.cloud::after { content: ''; position: absolute; background: #fff; border-radius: 50%; }
+.cloud::before { width: 66rpx; height: 58rpx; left: 24rpx; bottom: 8rpx; }
+.cloud::after { width: 48rpx; height: 44rpx; right: 20rpx; bottom: 5rpx; }
+.cloud-one { top: 15%; animation-delay: -31s; }.cloud-two { top: 23%; width: 200rpx; opacity: .45; animation-duration: 85s; animation-delay: -49s; animation-direction: alternate-reverse; }
+.sky-paused .cloud { animation-play-state: paused; }
+.upper-cloud { position: absolute; left: 0; width: 150rpx; height: 32rpx; pointer-events: none; animation: cloud-drift 80s linear infinite alternate; }
+.upper-cloud .cloud { animation: none; transform-origin: left center; opacity: .5; }
+.sky-paused .upper-cloud { animation-play-state: paused; }
+@keyframes cloud-drift { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 .info-button { position: absolute; top: 32rpx; left: 32rpx; width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; font: italic 600 36rpx/60rpx Georgia,serif; z-index: 2; }
 .island { position: absolute; width: 750rpx; height: 800rpx; left: 50%; top: 40%; transform: translate(-50%,-50%); }
 .home-room { width: 100%; height: 100%; }
