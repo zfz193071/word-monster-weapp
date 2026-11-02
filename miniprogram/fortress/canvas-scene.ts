@@ -1,3 +1,4 @@
+import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
 import type { Finger, Viewport } from './viewport';
@@ -88,6 +89,10 @@ export class CanvasScene {
     try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
   }
   applySkills(skills: SkillLevels): void { this.runner.applySkills(skills); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  restoreBase(): void {
+    this.runner.restoreBase();
+    if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.publishHud(this.runner.snapshot); }
+  }
   retryRetirement(): void { this.retirement?.retry(); }
   continueRetirement(): void { this.retirement?.continueAfterFailure(); }
   get diagnostics(): FrameDiagnostics {
@@ -293,6 +298,8 @@ export class CanvasScene {
       const deathAge = this.effectTime - (this.deathStarted.get(monster.id) ?? this.effectTime);
       if (art?.fruitHat && monster.hp <= 0 && deathAge >= 240) continue;
       c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? .7 * Math.max(0, 1 - deathAge / 240) : 1;
+      const attackPose = baseAttackPose(monster);
+      c.save(); c.translate(0, attackPose.lunge * 9);
       const monsterArt = this.monsterArt;
       if (!monsterArt && this.options.preview) {
         c.fillStyle = state.tick < (this.monsterFlashes.get(monster.id) ?? 0) ? '#ffffff' : '#c2a0f0';
@@ -315,6 +322,12 @@ export class CanvasScene {
             c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
             this.sprite(side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right, -hip, -110, 128, 160); c.restore();
           }
+          if (attackPose.lunge !== 0) {
+            c.strokeStyle = '#89996b'; c.lineWidth = 16; c.lineCap = 'round';
+            for (const side of [-1, 1]) {
+              c.beginPath(); c.moveTo(side * 32, -2); c.lineTo(side * 42, 15 + attackPose.lunge * 30); c.stroke();
+            }
+          }
           this.sprite(monsterArt.outfitBodies?.[monster.wordId] ?? monsterArt.walkParts.body, -64 + stride * 1.5, -80 - Math.abs(stride) * 2, 128, 160); c.restore();
         } else {
           this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
@@ -330,6 +343,16 @@ export class CanvasScene {
           c.fillStyle = '#4c5e43'; c.fillRect(-18, 41, 36, 4);
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
+      }
+      c.restore();
+      if (attackPose.impact > 0) {
+        c.save(); c.globalAlpha = attackPose.impact; c.strokeStyle = '#ffe9ad'; c.lineWidth = 3;
+        for (let ray = 0; ray < 5; ray++) {
+          const angle = Math.PI + ray * Math.PI / 4;
+          c.beginPath(); c.moveTo(monster.position.x + Math.cos(angle) * 5, 480 + Math.sin(angle) * 5);
+          c.lineTo(monster.position.x + Math.cos(angle) * 17, 480 + Math.sin(angle) * 17); c.stroke();
+        }
+        c.restore();
       }
       if (monster.hp > 0 && (monster.slowUntilTick ?? 0) > state.tick) {
         c.strokeStyle = '#b6f5fa'; c.lineWidth = 2; c.beginPath(); c.ellipse(monster.position.x, monster.position.y + 18, 20, 8, 0, 0, Math.PI * 2); c.stroke();

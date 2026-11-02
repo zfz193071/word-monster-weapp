@@ -33,3 +33,14 @@ test('只有当前听词的正确结果能交接，跨局/错误/重复领取均
   const next = store.start(10); assert.notEqual(next.plan.sessionId, request.plan.sessionId);
   store.release(request.plan.sessionId); assert.equal(store.complete(result), false);
 });
+
+test('首次及答错换图的正确答案均覆盖左中右位置，不固定中间', () => {
+ const first=[0,0,0], retry=[0,0,0];
+ for(let seed=0;seed<1000;seed++) {
+  const random=createSeededRandom(seed);
+  const initial=createFruitOptions('apple',[],random);
+  const next=createFruitOptions('apple',initial,random);
+  first[initial.indexOf('apple')]++;retry[next.indexOf('apple')]++;
+ }
+ for(const counts of [first,retry]) for(const count of counts) assert(count>200 && count<450,JSON.stringify(counts));
+});

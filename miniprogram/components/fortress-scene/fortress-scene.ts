@@ -111,7 +111,7 @@ Component({
                 const current = xp.total - thresholds[xp.level - 1];
                 this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
                 if (xp.upgrades.length > 0 && scene.snapshot?.status !== 'baseDestroyed') {
-                  const candidate = openingSkillOffer(initial.context.sessionId, xp.level, instance.levels);
+                  const candidate = openingSkillOffer(initial.context.sessionId, xp.level, instance.levels, scene.snapshot?.base);
                   instance.awaitingWaveEnd = true;
                   if (candidate.cards.length) instance.pendingOffer = instance.upgrades.open(candidate) ?? undefined;
                   this.presentUpgrade();
@@ -142,9 +142,12 @@ Component({
       if (!state?.levels || this.properties.paused || !state.visible || !state.scene || this.data.error) return;
       const selected = state.upgrades?.select(event.detail.offerId, event.detail.cardId);
       if (!selected) return;
-      const id = selected.id as BattleSkillId;
-      state.levels = Object.freeze({ ...state.levels, [id]: (state.levels[id] ?? 0) + 1 });
-      state.scene.applySkills(state.levels);
+      if (selected.id === 'repair') state.scene.restoreBase();
+      else {
+        const id = selected.id as BattleSkillId;
+        state.levels = Object.freeze({ ...state.levels, [id]: (state.levels[id] ?? 0) + 1 });
+        state.scene.applySkills(state.levels);
+      }
       this.setData({ upgradeSummary: `${selected.label} · ${selected.description}` });
       this.advanceWave();
     },

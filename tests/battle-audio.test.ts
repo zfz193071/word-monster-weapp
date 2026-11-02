@@ -56,3 +56,15 @@ test('合并组失败重试和暂停恢复仍保留全部怪物，跨波不合�
  h.voices[h.voices.length-1].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['c']);
  h.voices[h.voices.length-1].handlers.get('ended')!();assert.equal(h.drained,1);h.controller.dispose();
 });
+
+test('堡垒受击使用独立音效，重复攻击不重播，暂停不补播，销毁释放',()=>{
+ const base=new Channel(); const music=new Channel();
+ const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){},createMusicContext:()=>music,createBaseHitContext:()=>base});
+ const event:CombatEvent={type:'baseDamaged',context,tick:200,attackId:'a:1',monsterId:'a',hp:4};
+ controller.setActive(true);controller.handle([event,event]);
+ assert.equal(base.src,'/assets/audio/base-hit.mp3');assert.equal(base.plays,1);
+ controller.handle([event]);assert.equal(base.plays,1);
+ controller.setActive(false);controller.handle([{...event,attackId:'a:2'}]);controller.setActive(true);assert.equal(base.plays,1);
+ controller.handle([{...event,attackId:'a:3'}]);assert.equal(base.plays,2);
+ controller.dispose();assert.equal(base.destroyed,true);controller.handle([{...event,attackId:'a:4'}]);assert.equal(base.plays,2);
+});

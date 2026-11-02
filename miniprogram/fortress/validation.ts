@@ -91,7 +91,7 @@ export function validateFortressContent(
     paths.add(asset.path);
     if (!ids.has(asset.wordId)) add(`${path}.wordId`, '资源引用未知词条');
     if (!(asset.kind === 'image' ? IMAGE : AUDIO).test(asset.path)) add(`${path}.path`, '资源路径或类型无效');
-    if (!/^https:\/\//.test(asset.source) || !asset.rights.trim()) add(`${path}.source`, '必须登记来源 URL 与许可');
+    if (!(/^https:\/\//.test(asset.source) || /^docs\/assets\/original\/[a-z0-9-]+\.md$/.test(asset.source)) || !asset.rights.trim()) add(`${path}.source`, '必须登记来源 URL 或原创素材记录与许可');
     if (requireApproved && asset.reviewStatus !== 'approved') add(`${path}.reviewStatus`, '资源尚未通过审校');
   });
   return issues;

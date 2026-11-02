@@ -15,9 +15,12 @@ export function createBattleAudio(options: {
   audio?: Pick<AudioOptions, 'createContext' | 'schedule' | 'timeoutMs'>;
   createMusicContext?: () => HomeMusicChannel;
   createHitContext?: () => HitChannel;
+  createBaseHitContext?: () => HitChannel;
 }) {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
+  let baseHit: HitChannel | undefined;
+  const heardAttacks = new Set<string>();
   const queue: DefeatGroup[] = []; const seen = new Set<string>();
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
@@ -52,6 +55,18 @@ export function createBattleAudio(options: {
       hit.stop(); hit.play();
     } catch { /* A missing effect must not stop combat or word playback. */ }
   }
+  function baseImpact() {
+    if (!active) return;
+    try {
+      if (!baseHit) {
+        baseHit = (options.createBaseHitContext ?? (() => wx.createInnerAudioContext()))();
+        baseHit.autoplay = false; baseHit.loop = false; baseHit.obeyMuteSwitch = true;
+        baseHit.src = '/assets/audio/base-hit.mp3'; baseHit.onError(() => undefined);
+      }
+      baseHit.volume = queue.length ? .12 : .4;
+      baseHit.stop(); baseHit.play();
+    } catch { /* Cosmetic effects cannot interrupt combat. */ }
+  }
   return {
     get view() { return view(); },
     get busy() { return queue.length > 0; },
@@ -68,18 +83,25 @@ export function createBattleAudio(options: {
         }
       }
       if (local.some(event => event.type === 'monsterDamaged')) impact();
+      let damaged = false;
+      for (const event of local) if (event.type === 'baseDamaged') {
+        const key = `${event.context.combatId}:${event.attackId}`;
+        if (!heardAttacks.has(key)) { heardAttacks.add(key); damaged = true; }
+      }
+      if (damaged) baseImpact();
       mix(); publish(); speak();
     },
     setActive(value: boolean) {
       if (disposed || value === active) return;
       active = value; music.setActive(value);
-      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); } catch {} }
+      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); baseHit?.stop(); } catch {} }
       else speak();
     },
     setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
     retry() { if (!disposed && active && error) { error = false; speak(); } },
     dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); queue.length = 0;
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
+      try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
     } },
   };
 }

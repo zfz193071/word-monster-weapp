@@ -56,7 +56,7 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     playerX: 180, skills, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     allowedWordIds: [wordId, ...history], spawns });
 }
-export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS): UpgradeOffer {
+export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS, base = { hp: FORTRESS_RULES.base.maxHp, maxHp: FORTRESS_RULES.base.maxHp }): UpgradeOffer {
   const cards: UpgradeCard[] = FORTRESS_SKILLS.filter(skill => levels[skill.id] < skill.maxLevel).map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,
     description: `${skill.id === 'doubleShot' ? '齐射数量' : skill.id === 'fireRate' ? '射击间隔（毫秒）' : '子弹宽度'} ${skill.values[levels[skill.id]]} → ${skill.values[levels[skill.id] + 1]}` }));
   for (const id of ['flame', 'frost', 'lightning'] as const) {
@@ -64,6 +64,7 @@ export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLev
     cards.push({ id, icon: id, label: `${id === 'flame' ? '火花绽放' : id === 'frost' ? '冰晶缓行' : '跃动电弧'} Lv.${next}`,
       description: id === 'flame' ? `每5秒附加火焰，半径45内额外造成${1 + .5 * next}伤害` : id === 'frost' ? `每5秒附加冰霜，减速${Math.min(20 + 5 * next, 70)}%，持续2秒` : `每5秒附加雷电，连锁90范围内另一目标，造成${1 + .5 * next}伤害` });
   }
+  if (base.hp > 0 && base.hp < base.maxHp * .5) cards.push({ id: 'repair', icon: 'repair', label: '堡垒修复', description: '立即恢复堡垒全部生命值' });
   const seed = [...`${sessionId}:${level}`].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
   const random = createSeededRandom(seed >>> 0);
   for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }

@@ -49,6 +49,10 @@ export class CombatRunner {
   applySkills(skills: SkillLevels): void {
     if (this.current) this.current = applyCombatSkills(this.current, skills);
   }
+  restoreBase(): void {
+    if (!this.current || this.current.status !== 'cleared' || this.current.base.hp <= 0 || this.current.base.hp >= this.current.base.maxHp * .5) return;
+    this.current = Object.freeze({ ...this.current, base: Object.freeze({ ...this.current.base, hp: this.current.base.maxHp }) });
+  }
   pause(): void {
     this.paused = true; this.previousTime = undefined; this.remainderMs = 0;
   }

@@ -83,3 +83,5 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 - 新增164段音频：82段标准英语女声及82段低沉卡通退场声。复用已登记的Piper LJSpeech模型，清单/校验值见 `level-voice-manifest.json`。生成过程中ffmpeg逐项编码通过；真人听感仍待试听。
 - 新分类媒体位于 `miniprogram/learning-assets` 普通分包，通过 `require.async('../learning-assets/ready')` 加载成功后才展示选词面板。失败允许重试；主包保留首页封面、原水果资源和通用战场图。资源路径校验仅允许登记的主包/学习分包目录。
 - 生成脚本：`scripts/create-level-assets.cjs`（需要Resvg与OpenMoji SVG目录）、`scripts/create-level-voices.py`（需要Piper模型与ffmpeg），审校后运行 `scripts/sync-level-manifest.cjs` 同步首页署名清单。没有把模型文件放进小程序。
+
+`base-hit.mp3` 为本项目原创合成的0.24秒堡垒敲击声，无外部采样；生成脚本为 `scripts/create-base-hit-audio.py`。与子弹命中音使用独立通道，读词时降音，暂停和卸载时停止。

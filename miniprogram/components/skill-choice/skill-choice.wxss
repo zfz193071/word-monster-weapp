@@ -14,3 +14,9 @@
 .lightning { background: #a49bd1; }.lightning view { position: absolute; width: 20rpx; height: 38rpx; border: 0; border-radius: 2rpx; transform: skew(-22deg); background: #fff3b8; box-shadow: 0 0 12rpx #e2d8ff; }.lightning view:first-child { margin: -30rpx 0 0 12rpx; }.lightning view:nth-child(2) { width: 38rpx; height: 14rpx; }.lightning view:last-child { margin: 30rpx 12rpx 0 0; }
 @keyframes card-arrive { from { opacity: 0; transform: translateY(24rpx) scale(.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes flame-breathe { 50% { transform: rotate(-15deg) scale(.9,1.08); } }
+
+.card-repair { border-color: #96cda3; background: linear-gradient(155deg, #f1fff2, #c7e6c5); }
+.repair { position: relative; background: #91c59b; }
+.repair view { position: absolute; width: 22rpx; height: 68rpx; border: 0; border-radius: 5rpx; background: #f5fff0; }
+.repair view:nth-child(2) { transform: rotate(90deg); }
+.repair view:last-child { display: none; }
