@@ -1,4 +1,4 @@
-import { coinWallet, VICTORY_COINS } from '../../services/coin-wallet';
+import { coinWallet, victoryCoinsForLevel } from '../../services/coin-wallet';
 import { createAudioAdapter } from '../../services/audio';
 import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
 import { getLevel } from '../../fortress/levels';
@@ -40,7 +40,7 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { rewardCoins: VICTORY_COINS, rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
@@ -73,7 +73,7 @@ Component({
             instance.experience?.dispose(); instance.upgrades?.dispose();
             instance.experience = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
             instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0;
-            this.setData({ victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
+            this.setData({ rewardCoins: victoryCoinsForLevel(request?.plan.levelId ?? 1), rewardSaved: false, rewardError: false, victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
           }
           if (this.properties.opening && !instance.audio) {
             instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,

@@ -47,10 +47,10 @@ test('逐关解锁、重玩、全通默认第8关；金币与进度原子持久�
  fail=false;
  for(let level=1;level<=8;level++){
   assert.equal(wallet.defaultLevel(),level);wallet.rewardVictory(`win-${level}`,level);wallet.rewardVictory(`win-${level}`,level);
-  assert.equal(wallet.balance(),200+level*100);assert.equal(wallet.canEnter(Math.min(8,level+1)),true);
+  assert.equal(wallet.balance(),200+[100,220,370,540,730,940,1170,1420][level-1]);assert.equal(wallet.canEnter(Math.min(8,level+1)),true);
  }
  assert.equal(createCoinWallet(storage).defaultLevel(),8);assert.equal(wallet.canEnter(9),false);
- wallet.rewardVictory('replay',1);assert.equal(wallet.balance(),1100);assert.equal(wallet.completedLevels().length,8);
+ wallet.rewardVictory('replay',1);assert.equal(wallet.balance(),1720);assert.equal(wallet.completedLevels().length,8);
  raw={version:1,balance:100,rewardedSessions:[],completedLevels:[1,3]};assert.throws(()=>wallet.defaultLevel());assert.throws(()=>wallet.rewardVictory('corrupt',1));
 });
 

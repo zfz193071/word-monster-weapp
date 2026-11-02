@@ -1,3 +1,4 @@
+import { createCoinWallet, victoryCoinsForLevel } from '../miniprogram/services/coin-wallet';
 import * as levels from '../miniprogram/fortress/levels';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -15,6 +16,9 @@ import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortr
 
 for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})),{level:levels.LEVELS[0],repair:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}`, async () => {
   const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id);let definition:any;let host:any;
+  let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
+  const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
+  const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
   let rewards=0;let praises=0;let audioOptions:any;let busy=false;let current:FakeScene;
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false;
@@ -29,7 +33,7 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
-      if(name.endsWith('/coin-wallet'))return {VICTORY_COINS:100,coinWallet:{rewardVictory(_sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return{balance:100,added:100};}}};
+      if(name.endsWith('/coin-wallet'))return {victoryCoinsForLevel,coinWallet:{rewardVictory(sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return wallet.rewardVictory(sessionId,levelId);}}};
       if(name.endsWith('/audio'))return {createAudioAdapter(){return{playReveal(){praises++;},stop(){},dispose(){}};}};
       if(name.endsWith('/opening-encounter'))return opening;
       if(name.endsWith('/experience'))return experience;
@@ -64,5 +68,6 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
   if(repair)assert(repairs>0 && repairs<19);
+  assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins);assert.equal(wallet.balance(),expectedCoins);
   assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
 });

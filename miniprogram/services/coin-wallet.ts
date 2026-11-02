@@ -1,4 +1,8 @@
-export const VICTORY_COINS = 100;
+export const LEVEL_VICTORY_COINS: readonly number[] = Object.freeze([100, 120, 150, 170, 190, 210, 230, 250]);
+export function victoryCoinsForLevel(levelId: number): number {
+  if (!Number.isInteger(levelId) || levelId < 1 || levelId > LEVEL_VICTORY_COINS.length) throw new Error('无效奖励关卡');
+  return LEVEL_VICTORY_COINS[levelId - 1];
+}
 export const COIN_WALLET_KEY = 'word-monster:coin-wallet:v1';
 interface Wallet { version: 1; balance: number; rewardedSessions: string[]; completedLevels?: number[] }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
@@ -20,15 +24,16 @@ export function createCoinWallet(storage: Storage) {
     defaultLevel() { return Math.min(8, (read().completedLevels?.length ?? 0) + 1); },
     rewardVictory(sessionId: string, levelId?: number) {
       if (!sessionId.trim()) throw new Error('奖励缺少对局标识');
+      const coins = victoryCoinsForLevel(levelId ?? 1);
       const wallet = read();
       const completed = wallet.completedLevels ?? [];
       if (levelId !== undefined && (!Number.isInteger(levelId) || levelId < 1 || levelId > Math.min(8, completed.length + 1))) throw new Error('关卡尚未解锁');
       if (wallet.rewardedSessions.includes(sessionId)) return { balance: wallet.balance, added: 0 };
-      const balance = wallet.balance + VICTORY_COINS;
+      const balance = wallet.balance + coins;
       if (!Number.isSafeInteger(balance)) throw new Error('金币余额超出范围');
       // Balance and receipt are one synchronous storage write, so retries cannot double-credit.
       storage.setStorageSync(COIN_WALLET_KEY, { version: 1, balance, rewardedSessions: [...wallet.rewardedSessions, sessionId], ...(levelId !== undefined || completed.length ? { completedLevels: levelId === completed.length + 1 ? [...completed, levelId] : completed } : {}) });
-      return { balance, added: VICTORY_COINS };
+      return { balance, added: coins };
     },
   };
 }
