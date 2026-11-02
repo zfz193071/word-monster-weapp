@@ -62,3 +62,17 @@
 @media (max-height: 650px) { .victory-reward { margin-top: 12rpx; font-size: 28rpx; }.victory-collection { margin-top: 12rpx; }.victory-fruits { margin-top: 14rpx; } }
 
 .victory-fruit { width: 60rpx; height: 60rpx; border-radius: 16rpx; }.victory-fruit image { width: 52rpx; height: 52rpx; margin-top: 4rpx; }
+
+/* Freeze the complete celebration, including delayed effects, while hidden or paused. */
+.scene-paused .victory-overlay,
+.scene-paused .victory-glow,
+.scene-paused .victory-medal,
+.scene-paused .victory-title,
+.scene-paused .victory-subtitle,
+.scene-paused .victory-results,
+.scene-paused .collection-title,
+.scene-paused .victory-fruit,
+.scene-paused .victory-home,
+.scene-paused .victory-particle,
+.scene-paused .firework-spark,
+.scene-paused .victory-reward { animation-play-state: paused; }

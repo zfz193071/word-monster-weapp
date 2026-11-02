@@ -1,5 +1,5 @@
 import { coinWallet, victoryCoinsForLevel } from '../../services/coin-wallet';
-import { createAudioAdapter } from '../../services/audio';
+import { createVictoryAudio } from '../../services/victory-audio';
 import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
 import { getLevel } from '../../fortress/levels';
 import { createBattleAudio } from '../../services/battle-audio';
@@ -19,7 +19,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
-interface InstanceState { victoryAudio?: ReturnType<typeof createAudioAdapter>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -48,7 +48,7 @@ Component({
     detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.audio?.dispose(); state.victoryAudio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
   },
   pageLifetimes: {
-    hide() { const state = instances.get(this); if (state) { state.visible = false; state.victoryAudio?.stop(); this.applyPause(); } },
+    hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
     show() { const state = instances.get(this); if (state) { state.visible = true; this.applyPause(); this.presentUpgrade(); } },
     resize() { this.measureResize(); },
   },
@@ -127,7 +127,7 @@ Component({
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
-    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); const paused = unavailable || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
+    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); const paused = unavailable || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
     presentUpgrade() {
       const state = instances.get(this);
       if (!state?.awaitingWaveEnd || state.audio?.busy || !state.scene || !state.visible || this.properties.paused) return;
@@ -161,8 +161,9 @@ Component({
         if (this.data.level < MAX_HERO_LEVEL) return;
         this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: null, completed: true, upgradeSummary: this.data.upgradeSummary });
         this.applyPause(); this.claimVictoryReward();
-        state.victoryAudio = createAudioAdapter({ sessionId: request.plan.sessionId, emit() {} });
-        state.victoryAudio.playReveal('/assets/audio/victory-praise.mp3', { sessionId: request.plan.sessionId, roundId: 'victory', revision: 0 });
+        state.victoryAudio?.dispose();
+        state.victoryAudio = createVictoryAudio();
+        state.victoryAudio.setActive(state.visible && !this.properties.paused);
         return;
       }
       this.setData({ frozenFrame: state.scene.captureFrame() });

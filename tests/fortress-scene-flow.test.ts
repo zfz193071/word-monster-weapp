@@ -19,7 +19,7 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
-  let rewards=0;let praises=0;let audioOptions:any;let busy=false;let current:FakeScene;
+  let rewards=0;let praises=0;let praiseActive=false;let praiseDisposed=false;let audioOptions:any;let busy=false;let current:FakeScene;
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
@@ -34,7 +34,7 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
       if(name.endsWith('/coin-wallet'))return {victoryCoinsForLevel,coinWallet:{rewardVictory(sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return wallet.rewardVictory(sessionId,levelId);}}};
-      if(name.endsWith('/audio'))return {createAudioAdapter(){return{playReveal(){praises++;},stop(){},dispose(){}};}};
+      if(name.endsWith('/victory-audio'))return {createVictoryAudio(){let started=false;return{setActive(active:boolean){praiseActive=active;if(active&&!started){started=true;praises++;}},dispose(){praiseDisposed=true;}};}};
       if(name.endsWith('/opening-encounter'))return opening;
       if(name.endsWith('/experience'))return experience;
       if(name.endsWith('/upgrade-choice'))return upgrades;
@@ -69,5 +69,10 @@ for (const {level,repair} of [...levels.LEVELS.map(level=>({level,repair:false})
   }
   if(repair)assert(repairs>0 && repairs<19);
   assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins);assert.equal(wallet.balance(),expectedCoins);
-  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
+  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);
+  assert.equal(praiseActive,true);host.properties.paused=true;definition.properties.paused.observer.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
+  host.properties.paused=false;definition.properties.paused.observer.call(host);assert.equal(praiseActive,true);
+  definition.pageLifetimes.hide.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
+  definition.pageLifetimes.show.call(host);assert.equal(praiseActive,true);assert.equal(host.data.inputUnavailable,false);
+  assert.equal(rewards,1);assert.equal(praises,1);definition.lifetimes.detached.call(host);assert.equal(praiseDisposed,true);
 });
