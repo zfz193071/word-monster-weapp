@@ -23,6 +23,7 @@ function homeHarness() {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/coin-wallet') return { coinWallet: { balance: () => 300 } };
       if (name === '../../services/home-music') return { createHomeMusic: () => ({ setActive() {}, setEnabled() {}, retry() {}, dispose() {} }) };
       if (name === '../../fortress/content') return { BATTLE_ASSETS };
       if (name === '../../services/fortress-entry') return { fortressEntryStore };

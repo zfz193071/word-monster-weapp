@@ -69,3 +69,7 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 `zombie-body-{水果}.svg/png` 是本项目原始僵尸上身的11种衣服配色版本，脸、手、轮廓和几何不变，全部由 `scripts/create-fruit-outfits.cjs` 生成。
 
 2026-11-02：菠萝图片已替换为本项目通过内置 image_gen 生成的透明底插画（金黄色果身、绿色叶冠、清晰菱形纹理），当前文件不再使用上述 OpenMoji 菠萝。生成记录见 [菠萝素材记录](assets/original/pineapple-imagegen.md)。其他五种新增水果图片不变。
+
+## 成功鼓励语音
+
+`victory-praise.mp3` 为“你真棒！”中文合成语音，使用 [Kokoro-82M-v1.1-zh](https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh)（Apache-2.0）、女声zf_001和0.95语速生成，44.1kHz单声道96kbps。不分发模型及运行工具，只打包生成的音频。生成脚本 `scripts/create-victory-praise.py`，哈希及来源记录 `docs/victory-praise-manifest.json`；实际听感待真人试听。

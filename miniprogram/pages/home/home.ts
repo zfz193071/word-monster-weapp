@@ -1,3 +1,4 @@
+import { coinWallet } from '../../services/coin-wallet';
 import { createHomeMusic } from '../../services/home-music';
 import type { HomeMusicStatus } from '../../services/home-music';
 import { BATTLE_ASSETS } from '../../fortress/content';
@@ -6,7 +7,7 @@ import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, credits: BATTLE_ASSETS,
+  data: { coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, credits: BATTLE_ASSETS,
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
   navigationId: 0,
@@ -15,6 +16,7 @@ Page({
 
   toggleCredits() { this.setData({ showCredits: !this.data.showCredits }); },
   onShow() {
+    try { this.setData({ coinBalance: coinWallet.balance(), coinError: false }); } catch { this.setData({ coinError: true }); }
     if (!this.music) this.music = createHomeMusic({ onChange: view => {
       if (!this.disposed) this.setData({ musicEnabled: view.enabled, musicStatus: view.status });
     } });

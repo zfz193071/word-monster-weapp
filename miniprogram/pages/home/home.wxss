@@ -22,3 +22,5 @@ button::after { border: 0; }
 .credits-scroll { height: 65vh; }.credits-title { font-weight: 600; font-size: 32rpx; padding: 0 20rpx; }.credit { padding: 24rpx 20rpx; font-size: 22rpx; line-height: 1.6; color: #587166; word-break: break-all; }
 
 .info-button,.close-button { min-width: 0; max-width: 64rpx; }.start-button { min-width: 0; max-width: 264rpx; }.retry-entry { min-width: 0; max-width: 240rpx; }
+
+.coin-balance { position: absolute; right: 28rpx; top: 32rpx; z-index: 2; display: flex; align-items: center; gap: 12rpx; padding: 8rpx 20rpx 8rpx 10rpx; border-radius: 36rpx; background: #fff8dcdd; color: #7a5422; font-size: 28rpx; font-weight: bold; }.coin-symbol { width: 42rpx; height: 42rpx; border-radius: 50%; border: 4rpx solid #e5a83b; background: #ffe08a; color: #cb8e24; font-size: 20rpx; line-height: 42rpx; text-align: center; }

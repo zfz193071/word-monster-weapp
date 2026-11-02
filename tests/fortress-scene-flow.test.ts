@@ -14,7 +14,7 @@ import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortr
 
 test('组件19波：先等全部退场读词，再技能/下一题，每级三选一，20级选完结算', async () => {
   const plan=createOpeningPlan('component-run',createSeededRandom(12));let definition:any;let host:any;
-  let audioOptions:any;let busy=false;let current:FakeScene;
+  let rewards=0;let praises=0;let audioOptions:any;let busy=false;let current:FakeScene;
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
@@ -27,6 +27,8 @@ test('组件19波：先等全部退场读词，再技能/下一题，每级三�
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
+      if(name.endsWith('/coin-wallet'))return {VICTORY_COINS:100,coinWallet:{rewardVictory(){rewards++;return{balance:100,added:100};}}};
+      if(name.endsWith('/audio'))return {createAudioAdapter(){return{playReveal(){praises++;},stop(){},dispose(){}};}};
       if(name.endsWith('/opening-encounter'))return opening;
       if(name.endsWith('/experience'))return experience;
       if(name.endsWith('/upgrade-choice'))return upgrades;
@@ -55,5 +57,5 @@ test('组件19波：先等全部退场读词，再技能/下一题，每级三�
       const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,11);assert.equal(host.data.waveRequest,null);}
   }
-  assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
+  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
 });

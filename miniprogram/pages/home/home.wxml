@@ -3,6 +3,7 @@
   <view class="cloud cloud-one"></view><view class="cloud cloud-two"></view>
   <button class="info-button" bindtap="toggleCredits" aria-label="素材署名">i</button>
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
+  <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinBalance}}</text></view>
   <view class="island" aria-hidden="true">
     <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits}}" />
   </view>

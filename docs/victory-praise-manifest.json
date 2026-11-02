@@ -1,0 +1,12 @@
+{
+  "text": "你真棒！",
+  "voice": "zf_001",
+  "speed": 0.95,
+  "model": "Kokoro-82M-v1.1-zh",
+  "license": "Apache-2.0",
+  "source": "https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh",
+  "runtime": "kokoro-onnx",
+  "path": "miniprogram/assets/audio/victory-praise.mp3",
+  "sha256": "8916ccaeeb3024790dc09130a9fe6ca14fcbe19c9a97b9b64248b84149f6a68c",
+  "review": "pending human listening"
+}

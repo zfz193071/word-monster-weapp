@@ -1,3 +1,5 @@
+import { coinWallet, VICTORY_COINS } from '../../services/coin-wallet';
+import { createAudioAdapter } from '../../services/audio';
 import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
 import { createBattleAudio } from '../../services/battle-audio';
 import type { ListeningResult } from '../../fortress/listening';
@@ -16,7 +18,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
-interface InstanceState { audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { victoryAudio?: ReturnType<typeof createAudioAdapter>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -37,15 +39,15 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { rewardCoins: VICTORY_COINS, rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
     ready() { this.mount(); },
-    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.audio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
+    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.audio?.dispose(); state.victoryAudio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
   },
   pageLifetimes: {
-    hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
+    hide() { const state = instances.get(this); if (state) { state.visible = false; state.victoryAudio?.stop(); this.applyPause(); } },
     show() { const state = instances.get(this); if (state) { state.visible = true; this.applyPause(); this.presentUpgrade(); } },
     resize() { this.measureResize(); },
   },
@@ -154,7 +156,10 @@ Component({
       if (waveIndex === OPENING_WAVE_COUNT - 1) {
         if (this.data.level < MAX_HERO_LEVEL) return;
         this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: null, completed: true, upgradeSummary: this.data.upgradeSummary });
-        this.applyPause(); return;
+        this.applyPause(); this.claimVictoryReward();
+        state.victoryAudio = createAudioAdapter({ sessionId: request.plan.sessionId, emit() {} });
+        state.victoryAudio.playReveal('/assets/audio/victory-praise.mp3', { sessionId: request.plan.sessionId, roundId: 'victory', revision: 0 });
+        return;
       }
       this.setData({ frozenFrame: state.scene.captureFrame() });
       state.audio?.setActive(false); state.scene.dispose(); state.scene = undefined; state.epoch++;
@@ -168,6 +173,13 @@ Component({
       state.waveIndex = request.waveIndex;
       state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId));
       this.setData({ waveRequest: null, waveNumber: request.waveIndex + 1, frozenFrame: '', ready: false }, () => this.mount());
+    },
+    claimVictoryReward() {
+      const state = instances.get(this);
+      if (!this.data.completed || !state?.visible || this.data.rewardSaved) return;
+      const request = this.properties.previewRequest as { plan: SessionPlan };
+      try { const result = coinWallet.rewardVictory(request.plan.sessionId); this.setData({ rewardSaved: true, rewardError: false, coinBalance: result.balance }); }
+      catch { this.setData({ rewardError: true, rewardSaved: false }); }
     },
     returnHome() { this.triggerEvent('returnhome'); },
     choosePreviewSkill(event: WechatMiniprogram.TouchEvent) {
