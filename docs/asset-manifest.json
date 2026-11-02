@@ -41,13 +41,12 @@
     "wordId": "banana",
     "kind": "image",
     "path": "miniprogram/assets/images/banana.png",
-    "bytes": 10005,
-    "sha256": "27bd3c262ba8a9e2b7a96d7f43ef710c7309c3f2773a8c9001b5cafbdf47330b",
-    "downloadedAt": "2026-10-30",
-    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/1F34C.png",
-    "gitBlob": "38578f5eff89ae6c1f451e4fec724f4cd3d80c17",
-    "changes": "none",
-    "review": "visual inspection passed; no answer text"
+    "bytes": 82868,
+    "sha256": "b8f44891d539ba33db99e62d3c0de6b4f374708a56b299c118425047768e9b98",
+    "source": "docs/assets/original/fruit-clarity-imagegen.md",
+    "changes": "Built-in image_gen original, resized to 256px with transparent alpha",
+    "review": "Visual inspection passed; no answer text",
+    "generatedAt": "2026-11-02"
   },
   {
     "wordId": "banana",

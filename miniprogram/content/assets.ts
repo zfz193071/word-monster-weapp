@@ -8,8 +8,8 @@ const IMAGE_CODES: Record<string, string> = {
 // 图片已逐张检查；音频已解码验证，仍待真人逐条试听，不以文件存在替代听审。
 export const CONTENT_ASSETS: readonly ContentAsset[] = WORDS.flatMap((word) => [
   { path: word.imagePath, kind: 'image', wordId: word.id,
-    source: `https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/${IMAGE_CODES[word.id]}.png`,
-    rights: 'OpenMoji contributors；CC BY-SA 4.0；原图未修改；https://creativecommons.org/licenses/by-sa/4.0/',
+    source: word.id === 'banana' ? 'docs/assets/original/fruit-clarity-imagegen.md' : `https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/618x618/${IMAGE_CODES[word.id]}.png`,
+    rights: word.id === 'banana' ? '本项目内置 image_gen 原创生成，2026-11-02；未使用参考图，缩放至256px' : 'OpenMoji contributors；CC BY-SA 4.0；原图未修改；https://creativecommons.org/licenses/by-sa/4.0/',
     reviewStatus: 'approved' },
   { path: word.audioPath, kind: 'audio', wordId: word.id,
     source: `https://commons.wikimedia.org/wiki/File:En-${word.id === 'orange' ? 'uk' : 'us'}-${word.id}.ogg`,

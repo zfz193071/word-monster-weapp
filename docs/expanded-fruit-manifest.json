@@ -4,13 +4,14 @@
     "sourceFile": "En-us-pear.ogg",
     "sourceSha256": "52d74172324c91c009a1c7498c8ca7efde5434798361023dab89cb3aea5a68a8",
     "audioSha256": "22e7e79fe395187ac53e77a1ad69a0950f1e0a3460d24340cdb779da38455c75",
-    "imageSha256": "af7cb6bc9c4b811eefb39ec1eb066a90537eb8d04021c43cdc7a34e50e2a1f71",
+    "imageSha256": "679a4b4f0dd9907dfc98c37adfca8f84070248935e9f9ae266ca4d0dc0d79332",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-us-pear.ogg",
     "author": "Dvortygirl",
     "audioLicense": "CC BY-SA 3.0",
-    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "imageLicense": "本项目内置 image_gen 原创生成；未使用第三方参考图",
     "zombieSha256": "aee1ed4a9236e5de5b7bded0e44bfcc51d9e0c0e901dcf69d1c42aee3592bb1f",
-    "audioReview": "pending human listening"
+    "audioReview": "pending human listening",
+    "imageSource": "docs/assets/original/fruit-clarity-imagegen.md"
   },
   {
     "wordId": "strawberry",
@@ -57,13 +58,14 @@
     "sourceFile": "En-au-kiwi.ogg",
     "sourceSha256": "63cc3fe817d5bcff25d1528ede4aaa912b6889604d2cee2be986e3e52f1fd1f1",
     "audioSha256": "721b2d5a2dd028bdb1de06aa86abee07dd8cb12f39f20045392e71f7a92009b0",
-    "imageSha256": "6e98bd0f674d1ae8e31f3ea6e3c03c8d4311e4bf1db5034f69b63ebcf2802475",
+    "imageSha256": "0a9dbf602199d4d731c167d6419afda5aa22384b9294aaacb90d3aef83b3f264",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:En-au-kiwi.ogg",
     "author": "Commander Keane",
     "audioLicense": "CC BY-SA 4.0",
-    "imageLicense": "OpenMoji / CC BY-SA 4.0",
+    "imageLicense": "本项目内置 image_gen 原创生成；未使用第三方参考图",
     "zombieSha256": "78be14d45aa5175ad854a4c8adc5869622573e8090be3c51a4f777d45403ffd1",
-    "audioReview": "pending human listening"
+    "audioReview": "pending human listening",
+    "imageSource": "docs/assets/original/fruit-clarity-imagegen.md"
   },
   {
     "wordId": "peach",

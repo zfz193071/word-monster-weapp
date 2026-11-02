@@ -8,7 +8,7 @@ button::after { border: 0; }
 .info-button { position: absolute; top: 32rpx; left: 32rpx; width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; font: italic 600 36rpx/60rpx Georgia,serif; z-index: 2; }
 .island { position: absolute; width: 750rpx; height: 800rpx; left: 50%; top: 40%; transform: translate(-50%,-50%); }
 .home-room { width: 100%; height: 100%; }
-.music-button { position: absolute; top: 32rpx; left: 116rpx; width: 64rpx; min-width: 0; max-width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; line-height: 60rpx; z-index: 2; }
+.music-button { position: absolute; top: 116rpx; left: 32rpx; width: 64rpx; min-width: 0; max-width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; line-height: 60rpx; z-index: 2; }
 .music-note { font-size: 38rpx; }.mute-slash { position: absolute; top: 29rpx; left: 10rpx; width: 42rpx; height: 3rpx; border-radius: 3rpx; background: #55786e; transform: rotate(-45deg); }
 .start-dock { position: absolute; bottom: max(100rpx,12vh); width: 100%; text-align: center; }
 .start-button { display: flex; align-items: center; justify-content: center; width: 264rpx; height: 116rpx; border: 6rpx solid #fff9d9; border-radius: 40rpx; background: linear-gradient(#b1d866,#83b749); box-shadow: 0 10rpx 0 #58783d,0 19rpx 0 #ffffff60, inset 0 5rpx 0 #d8ed9e; }
@@ -24,7 +24,7 @@ button::after { border: 0; }
 
 .coin-balance { position: absolute; right: 28rpx; top: 32rpx; z-index: 2; display: flex; align-items: center; gap: 12rpx; padding: 8rpx 20rpx 8rpx 10rpx; border-radius: 36rpx; background: #fff8dcdd; color: #7a5422; font-size: 28rpx; font-weight: bold; }.coin-symbol { width: 42rpx; height: 42rpx; border-radius: 50%; border: 4rpx solid #e5a83b; background: #ffe08a; color: #cb8e24; font-size: 20rpx; line-height: 42rpx; text-align: center; }
 
-.levels-button { position: absolute; left: 32rpx; top: 124rpx; z-index: 2; display: grid; grid-template-columns: repeat(2, 20rpx); gap: 6rpx; align-content: center; justify-content: center; width: 76rpx; min-width: 0; max-width: 76rpx; height: 76rpx; padding: 0; border: 3rpx solid #fff9df; border-radius: 24rpx; background: #648a72; box-shadow: 0 5rpx 0 #3f675c; }
+.levels-button { position: absolute; left: 26rpx; top: 208rpx; z-index: 2; display: grid; grid-template-columns: repeat(2, 20rpx); gap: 6rpx; align-content: center; justify-content: center; width: 76rpx; min-width: 0; max-width: 76rpx; height: 76rpx; padding: 0; border: 3rpx solid #fff9df; border-radius: 24rpx; background: #648a72; box-shadow: 0 5rpx 0 #3f675c; }
 .map-tile { width: 20rpx; height: 20rpx; border-radius: 5rpx; background: #fff4c5; }
 .levels-modal { width: 100%; max-width: 680rpx; position: relative; padding: 28rpx 20rpx 20rpx; box-sizing: border-box; border: 6rpx solid #fff9e4; border-radius: 38rpx; background: #fff8e7; }
 .levels-title { font-size: 34rpx; font-weight: bold; color: #456452; margin: 0 0 24rpx 12rpx; }
