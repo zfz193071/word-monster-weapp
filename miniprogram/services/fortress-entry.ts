@@ -1,3 +1,4 @@
+import { coinWallet } from './coin-wallet';
 import { createSeededRandom } from '../fortress/plans';
 import { createOpeningPlan } from '../fortress/opening-plan';
 import type { ListeningResult } from '../fortress/listening';
@@ -12,15 +13,16 @@ export interface FruitRequest {
 export interface FortressEntry { readonly request: FruitRequest; readonly result: ListeningResult }
 
 // An entry is handed to the battle page once, only after the current prompt succeeds.
-export function createFortressEntryStore() {
+export function createFortressEntryStore(canEnter: (levelId: number) => boolean = levelId => levelId === 1) {
   let sequence = 0;
   let request: FruitRequest | undefined;
   let completed: FortressEntry | undefined;
   let claimed = false;
   return {
-    start(now = Date.now()): FruitRequest {
+    start(now = Date.now(), levelId = 1): FruitRequest {
+      if (!canEnter(levelId)) throw new Error('请先通关前面的关卡');
       sequence++;
-      request = Object.freeze({ plan: createOpeningPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0)),
+      request = Object.freeze({ plan: createOpeningPlan(`fruit-${now}-${sequence}`, createSeededRandom((now + sequence) >>> 0), levelId),
         waveIndex: 0, generation: sequence, variant: 'fruit' });
       completed = undefined; claimed = false;
       return request;
@@ -46,4 +48,4 @@ export function createFortressEntryStore() {
     },
   };
 }
-export const fortressEntryStore = createFortressEntryStore();
+export const fortressEntryStore = createFortressEntryStore(levelId => coinWallet.canEnter(levelId));

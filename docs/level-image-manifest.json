@@ -1,0 +1,722 @@
+[
+  {
+    "wordId": "black",
+    "path": "/learning-assets/images/black.png",
+    "kind": "image",
+    "source": "docs/assets/levels/black.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "blue",
+    "path": "/learning-assets/images/blue.png",
+    "kind": "image",
+    "source": "docs/assets/levels/blue.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "brown",
+    "path": "/learning-assets/images/brown.png",
+    "kind": "image",
+    "source": "docs/assets/levels/brown.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "green",
+    "path": "/learning-assets/images/green.png",
+    "kind": "image",
+    "source": "docs/assets/levels/green.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pink",
+    "path": "/learning-assets/images/pink.png",
+    "kind": "image",
+    "source": "docs/assets/levels/pink.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "red",
+    "path": "/learning-assets/images/red.png",
+    "kind": "image",
+    "source": "docs/assets/levels/red.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "white",
+    "path": "/learning-assets/images/white.png",
+    "kind": "image",
+    "source": "docs/assets/levels/white.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "yellow",
+    "path": "/learning-assets/images/yellow.png",
+    "kind": "image",
+    "source": "docs/assets/levels/yellow.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bear",
+    "path": "/learning-assets/images/bear.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43B.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bee",
+    "path": "/learning-assets/images/bee.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41D.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bird",
+    "path": "/learning-assets/images/bird.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F426.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cat",
+    "path": "/learning-assets/images/cat.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F408.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "chicken",
+    "path": "/learning-assets/images/chicken.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F414.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cow",
+    "path": "/learning-assets/images/cow.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F404.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "dog",
+    "path": "/learning-assets/images/dog.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F415.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "duck",
+    "path": "/learning-assets/images/duck.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F986.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "elephant",
+    "path": "/learning-assets/images/elephant.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F418.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "fish",
+    "path": "/learning-assets/images/fish.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "horse",
+    "path": "/learning-assets/images/horse.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F40E.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "lion",
+    "path": "/learning-assets/images/lion.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F981.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "panda",
+    "path": "/learning-assets/images/panda.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "rabbit",
+    "path": "/learning-assets/images/rabbit.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F407.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sheep",
+    "path": "/learning-assets/images/sheep.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F411.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "tiger",
+    "path": "/learning-assets/images/tiger.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F405.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "book",
+    "path": "/learning-assets/images/book.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4D6.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "clock",
+    "path": "/learning-assets/images/clock.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F552.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "computer",
+    "path": "/learning-assets/images/computer.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F5A5.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pen",
+    "path": "/learning-assets/images/pen.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F58A.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pencil",
+    "path": "/learning-assets/images/pencil.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/270F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "ruler",
+    "path": "/learning-assets/images/ruler.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4CF.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "blackboard",
+    "path": "/learning-assets/images/blackboard.png",
+    "kind": "image",
+    "source": "docs/assets/levels/blackboard.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "eraser",
+    "path": "/learning-assets/images/eraser.png",
+    "kind": "image",
+    "source": "docs/assets/levels/eraser.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "paper",
+    "path": "/learning-assets/images/paper.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4C4.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "scissors",
+    "path": "/learning-assets/images/scissors.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2702.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "notebook",
+    "path": "/learning-assets/images/notebook.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4D3.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "glue",
+    "path": "/learning-assets/images/glue.png",
+    "kind": "image",
+    "source": "docs/assets/levels/glue.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "tape",
+    "path": "/learning-assets/images/tape.png",
+    "kind": "image",
+    "source": "docs/assets/levels/tape.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sharpener",
+    "path": "/learning-assets/images/sharpener.png",
+    "kind": "image",
+    "source": "docs/assets/levels/sharpener.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bed",
+    "path": "/learning-assets/images/bed.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6CF.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "desk",
+    "path": "/learning-assets/images/desk.png",
+    "kind": "image",
+    "source": "docs/assets/levels/desk.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "door",
+    "path": "/learning-assets/images/door.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6AA.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "chair",
+    "path": "/learning-assets/images/chair.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA91.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "floor",
+    "path": "/learning-assets/images/floor.png",
+    "kind": "image",
+    "source": "docs/assets/levels/floor.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "wall",
+    "path": "/learning-assets/images/wall.png",
+    "kind": "image",
+    "source": "docs/assets/levels/wall.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "ceiling",
+    "path": "/learning-assets/images/ceiling.png",
+    "kind": "image",
+    "source": "docs/assets/levels/ceiling.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bag",
+    "path": "/learning-assets/images/bag.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F45C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bike",
+    "path": "/learning-assets/images/bike.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6B2.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bread",
+    "path": "/learning-assets/images/bread.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F35E.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cake",
+    "path": "/learning-assets/images/cake.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F370.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "candle",
+    "path": "/learning-assets/images/candle.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F56F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "candy",
+    "path": "/learning-assets/images/candy.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F36C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "clothes",
+    "path": "/learning-assets/images/clothes.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F455.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cup",
+    "path": "/learning-assets/images/cup.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2615.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "doll",
+    "path": "/learning-assets/images/doll.png",
+    "kind": "image",
+    "source": "docs/assets/levels/doll.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "home",
+    "path": "/learning-assets/images/home.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F3E0.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "boat",
+    "path": "/learning-assets/images/boat.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6F6.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "kite",
+    "path": "/learning-assets/images/kite.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA81.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "gift",
+    "path": "/learning-assets/images/gift.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F381.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "towel",
+    "path": "/learning-assets/images/towel.png",
+    "kind": "image",
+    "source": "docs/assets/levels/towel.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "window",
+    "path": "/learning-assets/images/window.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA9F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "glass",
+    "path": "/learning-assets/images/glass.png",
+    "kind": "image",
+    "source": "docs/assets/levels/glass.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "juice",
+    "path": "/learning-assets/images/juice.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9C3.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "toy",
+    "path": "/learning-assets/images/toy.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9F8.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "air",
+    "path": "/learning-assets/images/air.png",
+    "kind": "image",
+    "source": "docs/assets/levels/air.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "earth",
+    "path": "/learning-assets/images/earth.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F30D.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "fire",
+    "path": "/learning-assets/images/fire.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F525.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "moon",
+    "path": "/learning-assets/images/moon.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F319.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "rain",
+    "path": "/learning-assets/images/rain.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F327.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sea",
+    "path": "/learning-assets/images/sea.png",
+    "kind": "image",
+    "source": "docs/assets/levels/sea.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "season",
+    "path": "/learning-assets/images/season.png",
+    "kind": "image",
+    "source": "docs/assets/levels/season.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "snow",
+    "path": "/learning-assets/images/snow.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F328.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "star",
+    "path": "/learning-assets/images/star.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2B50.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sun",
+    "path": "/learning-assets/images/sun.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2600.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "weather",
+    "path": "/learning-assets/images/weather.png",
+    "kind": "image",
+    "source": "docs/assets/levels/weather.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "wind",
+    "path": "/learning-assets/images/wind.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F32C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "hand",
+    "path": "/learning-assets/images/hand.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/270B.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "head",
+    "path": "/learning-assets/images/head.png",
+    "kind": "image",
+    "source": "docs/assets/levels/head.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "leg",
+    "path": "/learning-assets/images/leg.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9B5.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "body",
+    "path": "/learning-assets/images/body.png",
+    "kind": "image",
+    "source": "docs/assets/levels/body.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "arm",
+    "path": "/learning-assets/images/arm.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4AA.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "palm",
+    "path": "/learning-assets/images/palm.png",
+    "kind": "image",
+    "source": "docs/assets/levels/palm.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "forehead",
+    "path": "/learning-assets/images/forehead.png",
+    "kind": "image",
+    "source": "docs/assets/levels/forehead.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-1",
+    "path": "/assets/images/levels/cover-1.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-2",
+    "path": "/assets/images/levels/cover-2.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-3",
+    "path": "/assets/images/levels/cover-3.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-4",
+    "path": "/assets/images/levels/cover-4.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-5",
+    "path": "/assets/images/levels/cover-5.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-6",
+    "path": "/assets/images/levels/cover-6.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-7",
+    "path": "/assets/images/levels/cover-7.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-8",
+    "path": "/assets/images/levels/cover-8.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  }
+]

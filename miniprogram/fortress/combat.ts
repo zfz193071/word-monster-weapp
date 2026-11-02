@@ -1,4 +1,4 @@
-import { BATTLE_WORDS } from './fruit-catalog';
+import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
 import type { CombatContext, CombatEvent, ElementImpact, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels } from './types';
@@ -18,6 +18,7 @@ export interface CombatStep { readonly state: CombatState; readonly events: read
 export interface CreateCombatOptions {
   readonly automatic?: boolean;
   readonly monsterSpeed?: number;
+  readonly monsterAttackIntervalMs?: number;
   readonly plan: SessionPlan;
   readonly waveIndex: number;
   readonly combatId: string;
@@ -101,6 +102,8 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   const weapon = getWeaponParameters(options.skills);
   const monsterSpeed = options.monsterSpeed ?? RULES.monster.speed;
   if (!Number.isFinite(monsterSpeed) || monsterSpeed <= 0) throw new RangeError('monsterSpeed 必须为正数');
+  const attackIntervalMs = options.monsterAttackIntervalMs ?? RULES.monster.attackIntervalMs;
+  if (!Number.isFinite(attackIntervalMs) || attackIntervalMs <= 0) throw new Error('攻击间隔无效');
   const box = options.monsterHitbox;
   for (const key of ['x', 'y', 'width', 'height'] as const) finite(box[key], `monsterHitbox.${key}`);
   if (box.width <= 0 || box.height <= 0 || box.width > RULES.arena.width || box.height > RULES.arena.height
@@ -116,7 +119,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     monsters: spawns.map(spawn => ({ id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
       hitbox: box, hp: RULES.monster.maxHp, maxHp: RULES.monster.maxHp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
-      attackRemainingMs: RULES.monster.attackIntervalMs, attackSequence: 0 })),
+      attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 })),
     projectiles: [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [],
   };
@@ -157,7 +160,7 @@ function advanceMonster(monster: MonsterState, speed: number, elapsedMs: number)
   const leftoverMs = arrived ? Math.max(0, COMBAT_STEP_MS - distance / speed * 1000) : 0;
   return { ...monster, position: { x: monster.position.x, y },
     status: arrived ? 'attackingBase' : y < 0 ? 'entering' : 'alive',
-    attackRemainingMs: arrived ? RULES.monster.attackIntervalMs - leftoverMs : monster.attackRemainingMs };
+    attackRemainingMs: arrived ? (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) - leftoverMs : monster.attackRemainingMs };
 }
 
 // One fixed logical step. Only pass snapshots from createCombat/stepCombat.
@@ -223,7 +226,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     if (baseHp <= 0 || monster.hp <= 0 || monster.status !== 'attackingBase' || monster.attackRemainingMs > EPSILON) return;
     const attackSequence = monster.attackSequence + 1;
     const attackId = `${previous.context.combatId}:${monster.id}:attack:${attackSequence}`;
-    monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + RULES.monster.attackIntervalMs };
+    monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) };
     if (attacks.has(attackId)) return;
     attacks.add(attackId);
     baseHp = Math.max(0, baseHp - RULES.monster.attackDamage);

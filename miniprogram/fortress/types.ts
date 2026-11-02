@@ -93,6 +93,7 @@ export interface WavePlan {
 }
 export interface SessionPlan {
   readonly kind?: 'fruit-defense';
+  readonly levelId?: number;
   readonly mode: 'fortress'; readonly schemaVersion: 2; readonly contentVersion: 2;
   readonly sessionId: string;
   readonly waves: readonly WavePlan[];
@@ -106,6 +107,7 @@ export interface WaveContext {
 export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly attackIntervalMs?: number;
   readonly slowUntilTick?: number;
   readonly slowRatio?: number;
   readonly spawnAtMs?: number;

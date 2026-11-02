@@ -1,6 +1,7 @@
 import { coinWallet, VICTORY_COINS } from '../../services/coin-wallet';
 import { createAudioAdapter } from '../../services/audio';
 import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
+import { getLevel } from '../../fortress/levels';
 import { createBattleAudio } from '../../services/battle-audio';
 import type { ListeningResult } from '../../fortress/listening';
 import { createOpeningEncounter, openingArt, openingSkillOffer, OPENING_EXPERIENCE, OPENING_WAVE_COUNT, MAX_HERO_LEVEL, ZERO_SKILLS } from '../../fortress/opening-encounter';
@@ -66,13 +67,13 @@ Component({
           if (!result?.node || !result.width || !result.height) throw new Error('Canvas 节点尚未就绪');
           if (this.properties.preview && wx.getAccountInfoSync().miniProgram.envVersion !== 'develop') throw new Error('开发预览仅在开发版可用');
           const request = this.properties.previewRequest as { plan: SessionPlan; generation: number; variant?: 'fruit' } | null;
-          const initial = this.properties.opening && request ? (retained ?? createOpeningEncounter(request.plan.sessionId, request.plan.waves[0].targetWordId, request.generation)) : this.properties.preview ? (request ? createPreviewPlanCombat(request.plan, request.generation) : previewCombat(this.properties.previewWord)) : retained ?? this.properties.initialState as CombatState | null;
+          const initial = this.properties.opening && request ? (retained ?? createOpeningEncounter(request.plan.sessionId, request.plan.waves[0].targetWordId, request.generation, 0, undefined, undefined, [], request.plan.levelId)) : this.properties.preview ? (request ? createPreviewPlanCombat(request.plan, request.generation) : previewCombat(this.properties.previewWord)) : retained ?? this.properties.initialState as CombatState | null;
           if (!initial) throw new Error('战斗尚未开始');
           if (this.properties.opening && !retained) {
             instance.experience?.dispose(); instance.upgrades?.dispose();
             instance.experience = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
             instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0;
-            this.setData({ frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
+            this.setData({ victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
           }
           if (this.properties.opening && !instance.audio) {
             instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
@@ -171,14 +172,14 @@ Component({
       const result = event.detail; const wave = request.plan.waves[request.waveIndex];
       if (result.context.sessionId !== request.plan.sessionId || result.context.waveId !== wave.waveId || result.context.generation !== request.generation || !result.attempts.length || !result.attempts[result.attempts.length - 1].correct) return;
       state.waveIndex = request.waveIndex;
-      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId));
+      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId), request.plan.levelId);
       this.setData({ waveRequest: null, waveNumber: request.waveIndex + 1, frozenFrame: '', ready: false }, () => this.mount());
     },
     claimVictoryReward() {
       const state = instances.get(this);
       if (!this.data.completed || !state?.visible || this.data.rewardSaved) return;
       const request = this.properties.previewRequest as { plan: SessionPlan };
-      try { const result = coinWallet.rewardVictory(request.plan.sessionId); this.setData({ rewardSaved: true, rewardError: false, coinBalance: result.balance }); }
+      try { const result = coinWallet.rewardVictory(request.plan.sessionId, request.plan.levelId ?? 1); this.setData({ rewardSaved: true, rewardError: false, coinBalance: result.balance }); }
       catch { this.setData({ rewardError: true, rewardSaved: false }); }
     },
     returnHome() { this.triggerEvent('returnhome'); },

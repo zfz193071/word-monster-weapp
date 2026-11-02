@@ -98,7 +98,7 @@ export function createAudioAdapter(options: AudioOptions) {
       finish(playback, { kind, context: playback.context, reason, message });
     }
     active = playback;
-    if (!/^\/assets\/audio\/[a-z0-9-]+\.(mp3|wav)$/.test(src)) {
+    if (!/^\/(?:assets|learning-assets)\/audio\/[a-z0-9-]+\.(mp3|wav)$/.test(src)) {
       fail('invalid-source', '需要包内音频资源路径');
       return 'failed';
     }

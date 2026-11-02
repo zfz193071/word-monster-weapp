@@ -1,5 +1,8 @@
 {
-  "pages": ["pages/home/home", "pages/battle/battle"],
+  "pages": [
+    "pages/home/home",
+    "pages/battle/battle"
+  ],
   "window": {
     "navigationBarTitleText": "单词怪物",
     "navigationBarBackgroundColor": "#fff8ec",
@@ -8,5 +11,14 @@
   },
   "style": "v2",
   "lazyCodeLoading": "requiredComponents",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "subPackages": [
+    {
+      "root": "learning-assets",
+      "name": "learning-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
+    }
+  ]
 }

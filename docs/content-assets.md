@@ -73,3 +73,13 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 ## 成功鼓励语音
 
 `victory-praise.mp3` 为“你真棒！”中文合成语音，使用 [Kokoro-82M-v1.1-zh](https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh)（Apache-2.0）、女声zf_001和0.95语速生成，44.1kHz单声道96kbps。不分发模型及运行工具，只打包生成的音频。生成脚本 `scripts/create-victory-praise.py`，哈希及来源记录 `docs/victory-praise-manifest.json`；实际听感待真人试听。
+
+## 八关分类资源（2026-11-02）
+
+- 分类和中英文词汇来源：本机 `english-kids-site/lib/data.ts`、`lib/words.ts`；选取清单见 `level-word-source.json`。保留11种水果，新增82个词，总计93词。
+- 新图片：OpenMoji 17.0.0 的54种图标（CC BY-SA 4.0）及本项目原创颜色/工具/家居/身体示意图，原SVG保存在 `docs/assets/levels/`。逐项来源见 `level-image-manifest.json`。已查看整张联系表确认图片内容；glass按原词库“玻璃”用玻璃板图，不画饮水杯。
+- 8张封面使用原创底景嵌入对应选词图；含OpenMoji图的合成图沿用CC BY-SA 4.0。水果沿用原CC0苹果，颜色封面原创。
+- 16种动物僵尸以Canvas原创几何绘制，不直接使用OpenMoji动物作战斗身体；包括耳朵、象鼻、鸟喙、翅膀、条纹等形态差异，四足交替行走，飞行/游动有对应运动。
+- 新增164段音频：82段标准英语女声及82段低沉卡通退场声。复用已登记的Piper LJSpeech模型，清单/校验值见 `level-voice-manifest.json`。生成过程中ffmpeg逐项编码通过；真人听感仍待试听。
+- 新分类媒体位于 `miniprogram/learning-assets` 普通分包，通过 `require.async('../learning-assets/ready')` 加载成功后才展示选词面板。失败允许重试；主包保留首页封面、原水果资源和通用战场图。资源路径校验仅允许登记的主包/学习分包目录。
+- 生成脚本：`scripts/create-level-assets.cjs`（需要Resvg与OpenMoji SVG目录）、`scripts/create-level-voices.py`（需要Piper模型与ffmpeg），审校后运行 `scripts/sync-level-manifest.cjs` 同步首页署名清单。没有把模型文件放进小程序。

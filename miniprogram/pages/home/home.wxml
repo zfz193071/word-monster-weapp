@@ -1,18 +1,21 @@
 <view class="home">
   <view class="sky-streak streak-one"></view><view class="sky-streak streak-two"></view>
   <view class="cloud cloud-one"></view><view class="cloud cloud-two"></view>
-  <button class="info-button" bindtap="toggleCredits" aria-label="素材署名">i</button>
+  <button class="info-button" bindtap="toggleCredits" aria-label="素材集合">i</button>
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
   <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinBalance}}</text></view>
+  <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
+  <view wx:if="{{preparingLevel && !showLevels}}" class="entry-error">正在出发…</view>
+  <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits}}" />
+    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels}}" />
   </view>
   <view class="start-dock">
-    <button class="start-button" bindtap="openBattle" disabled="{{!!request}}" aria-label="开始闯关"><view class="play-icon"></view></button>
+    <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>
   </view>
   <view wx:if="{{request}}" class="modal-backdrop" catchtouchmove="stopScroll">
-    <view class="choice-modal" role="dialog" aria-label="听音选水果">
+    <view class="choice-modal" role="dialog" aria-label="听音选图片">
       <button class="close-button" bindtap="closeChallenge" disabled="{{opening}}" aria-label="关闭">×</button>
       <fortress-choice class="fruit-dialog-choice" wx:if="{{!choiceComplete}}" request="{{request}}" bindstartcombat="choiceSucceeded" />
       <view wx:else class="entry-status">
@@ -23,11 +26,36 @@
       </view>
     </view>
   </view>
+  <view wx:if="{{showLevels}}" class="modal-backdrop" catchtouchmove="stopScroll">
+    <view class="levels-modal" role="dialog" aria-label="选择关卡">
+      <view class="levels-title">{{preparingLevel ? '正在出发…' : '冒险地图'}}</view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
+      <view wx:if="{{entryError}}" class="level-load-error">{{entryError}}</view>
+      <view wx:if="{{progressError}}" class="progress-error">进度暂时无法读取<button bindtap="refreshLevels">重试</button></view>
+      <scroll-view wx:else scroll-y class="levels-scroll"><view class="levels-grid">
+        <button wx:for="{{levels}}" wx:key="id" class="level-card {{item.locked ? 'locked' : ''}}" disabled="{{item.locked || preparingLevel}}" data-level-id="{{item.id}}" bindtap="selectLevel" aria-label="第{{item.id}}关 {{item.title}} {{item.locked ? '未解锁' : item.completed ? '已通关' : ''}}">
+          <image class="level-cover" src="{{item.cover}}" mode="aspectFill" />
+          <view class="level-caption"><text class="level-number">{{item.id}}</text><text>{{item.title}}</text><text wx:if="{{item.completed}}" class="level-check">✓</text></view>
+          <view wx:if="{{item.locked}}" class="level-lock"><view class="lock-icon"></view></view>
+        </button>
+      </view></scroll-view>
+    </view>
+  </view>
   <view wx:if="{{showCredits}}" class="modal-backdrop" catchtouchmove="stopScroll">
-    <view class="credits-modal"><button class="close-button" bindtap="toggleCredits" aria-label="关闭">×</button>
-      <scroll-view scroll-y class="credits-scroll"><view class="credits-title">素材署名</view><view class="credit">房间与守卫：本项目原创三维几何场景。
-场景音乐《小屋清晨》、战斗循环音乐与命中音效：本项目原创旋律与合成音色。</view>
-        <view wx:for="{{credits}}" wx:key="path" class="credit"><view>{{item.wordId}} · {{item.kind === 'image' ? '图片' : '发音'}}</view><text user-select="true">{{item.rights}}\n{{item.source}}</text></view>
+    <view class="collection-modal" role="dialog" aria-label="素材集合">
+      <view class="collection-title">素材集合</view><button class="close-button" bindtap="toggleCredits" aria-label="关闭">×</button>
+      <scroll-view scroll-x class="collection-tabs" show-scrollbar="{{false}}">
+        <view class="collection-tab-row"><button wx:for="{{collectionTabs}}" wx:key="id" class="collection-tab {{collectionLevel === item.id ? 'selected' : ''}}" data-level-id="{{item.id}}" bindtap="selectCollection" aria-label="{{item.title}} {{collectionLevel === item.id ? '已选择' : ''}}">{{item.title}}</button></view>
+      </scroll-view>
+      <scroll-view scroll-y class="collection-scroll" scroll-top="{{collectionScroll}}">
+        <view wx:if="{{collectionLoading}}" class="collection-status">正在准备图片…</view>
+        <view wx:elif="{{collectionError}}" class="collection-status">图片暂时无法加载<button bindtap="retryCollection">重试</button></view>
+        <view wx:else class="collection-grid"><view wx:for="{{collectionItems}}" wx:key="id" class="collection-card {{item.long ? 'long-word' : ''}}">
+          <button class="collection-play {{collectionPlaying === item.id ? 'playing' : ''}}" data-word-id="{{item.id}}" bindtap="playCollectionWord" aria-label="播放 {{item.text}} 的发音">{{collectionPlaying === item.id ? '♪' : '▷'}}</button>
+          <image src="{{item.fruitImagePath}}" mode="aspectFit" aria-label="{{item.meaningZh}}" />
+          <view class="collection-word-line"><text class="collection-english">{{item.text}}</text><text class="collection-phonetic">{{item.phonetic}}</text></view>
+          <text class="collection-chinese">{{item.meaningZh}}</text>
+        </view></view>
+        <view wx:if="{{collectionAudioError}}" class="collection-audio-error">播放失败，请点击播放按钮重试</view>
       </scroll-view>
     </view>
   </view>

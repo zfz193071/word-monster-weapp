@@ -1,3 +1,4 @@
+import { LEVEL_ASSETS } from './level-assets-manifest';
 import { EXTRA_IMAGE_ASSETS, EXTRA_AUDIO_ASSETS, LEARNING_VOICE_ASSETS } from './fruit-catalog';
 import { CONTENT_ASSETS } from '../content/assets';
 import { WORDS } from '../content/words';
@@ -25,4 +26,4 @@ export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRES
 }));
 export function monsterDrawWidth(visual: MonsterVisual): number { return visual.sourceSize.width === 32 ? 112 : 80; }
 
-export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS, ...LEARNING_VOICE_ASSETS, { path: '/assets/audio/victory-praise.mp3', wordId: 'victory', kind: 'audio', source: 'https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh', rights: 'Kokoro v1.1-zh（Apache-2.0）生成中文鼓励语音；音色zf_001；生成记录见 docs/victory-praise-manifest.json', reviewStatus: 'pending' }]);
+export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...LEVEL_ASSETS, ...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS, ...LEARNING_VOICE_ASSETS, { path: '/assets/audio/victory-praise.mp3', wordId: 'victory', kind: 'audio', source: 'https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh', rights: 'Kokoro v1.1-zh（Apache-2.0）生成中文鼓励语音；音色zf_001；生成记录见 docs/victory-praise-manifest.json', reviewStatus: 'pending' }]);

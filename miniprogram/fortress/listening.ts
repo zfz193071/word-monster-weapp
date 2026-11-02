@@ -1,4 +1,4 @@
-import { BATTLE_WORDS } from './fruit-catalog';
+import { getLevel } from './levels';
 import { validateOpeningPlan } from './opening-plan';
 import { createAudioAdapter } from '../services/audio';
 import type { AudioOptions } from '../services/audio';
@@ -17,7 +17,7 @@ export interface ListeningView {
   readonly canChoose: boolean;
   readonly message: string;
   readonly imageFailed: boolean;
-  readonly cards: readonly { id: string; key: string; portraitPath: string; meaningZh: string; label: string; hinted: boolean }[];
+  readonly cards: readonly { id: string; key: string; portraitPath: string; text: string; meaningZh: string; label: string; hinted: boolean }[];
 }
 export interface ListeningResult { readonly context: WaveContext; readonly attempts: readonly AttemptV2[] }
 export interface ListeningOptions {
@@ -35,7 +35,7 @@ export interface ListeningOptions {
 export function createListening(options: ListeningOptions) {
   if (options.plan.kind === 'fruit-defense' && options.variant === 'fruit') validateOpeningPlan(options.plan);
   else assertNoFortressIssues(validateSessionPlan(options.plan));
-  const words = options.plan.kind === 'fruit-defense' ? BATTLE_WORDS : FORTRESS_WORDS;
+  const words = options.plan.kind === 'fruit-defense' ? getLevel(options.plan.levelId).words : FORTRESS_WORDS;
   const wave = options.plan.waves[options.waveIndex];
   if (!wave || !Number.isInteger(options.waveIndex) || !Number.isSafeInteger(options.generation) || options.generation < 0) throw new Error('听词波次或代次无效');
   const context: WaveContext = Object.freeze({ sessionId: options.plan.sessionId, waveId: wave.waveId, generation: options.generation });
@@ -61,8 +61,8 @@ export function createListening(options: ListeningOptions) {
   function view(): ListeningView {
     return { playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
       message: paused ? '已暂停' : phase === 'audioError' ? '声音暂时无法播放，请重试' : images.includes('failed') ? '图片加载失败，请重试'
-        : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的水果' : errors ? '再听一次，选出水果' : '听一听，选水果',
-      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: errors >= FORTRESS_RULES.learning.hintAfterErrors && id === wave.targetWordId })) };
+        : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的图片' : errors ? '再听一次，选出图片' : '听一听，选图片',
+      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), text: words.find(word => word.id === id)!.text, meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: errors >= FORTRESS_RULES.learning.hintAfterErrors && id === wave.targetWordId })) };
   }
   const publish = () => { if (!disposed) options.onChange(view()); };
   const audio = createAudioAdapter({ ...options.audio, sessionId: context.sessionId, emit: event => {

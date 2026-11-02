@@ -1,0 +1,461 @@
+[
+  {
+    "id": 2,
+    "title": "颜色",
+    "category": "color-shape",
+    "words": [
+      {
+        "id": "black",
+        "text": "black",
+        "meaningZh": "黑色"
+      },
+      {
+        "id": "blue",
+        "text": "blue",
+        "meaningZh": "蓝色"
+      },
+      {
+        "id": "brown",
+        "text": "brown",
+        "meaningZh": "棕色"
+      },
+      {
+        "id": "green",
+        "text": "green",
+        "meaningZh": "绿色"
+      },
+      {
+        "id": "pink",
+        "text": "pink",
+        "meaningZh": "粉色"
+      },
+      {
+        "id": "red",
+        "text": "red",
+        "meaningZh": "红色"
+      },
+      {
+        "id": "white",
+        "text": "white",
+        "meaningZh": "白色"
+      },
+      {
+        "id": "yellow",
+        "text": "yellow",
+        "meaningZh": "黄色"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "动物",
+    "category": "animals-plants",
+    "words": [
+      {
+        "id": "bear",
+        "text": "bear",
+        "meaningZh": "熊"
+      },
+      {
+        "id": "bee",
+        "text": "bee",
+        "meaningZh": "蜜蜂"
+      },
+      {
+        "id": "bird",
+        "text": "bird",
+        "meaningZh": "鸟"
+      },
+      {
+        "id": "cat",
+        "text": "cat",
+        "meaningZh": "猫"
+      },
+      {
+        "id": "chicken",
+        "text": "chicken",
+        "meaningZh": "鸡"
+      },
+      {
+        "id": "cow",
+        "text": "cow",
+        "meaningZh": "牛"
+      },
+      {
+        "id": "dog",
+        "text": "dog",
+        "meaningZh": "狗"
+      },
+      {
+        "id": "duck",
+        "text": "duck",
+        "meaningZh": "鸭"
+      },
+      {
+        "id": "elephant",
+        "text": "elephant",
+        "meaningZh": "大象"
+      },
+      {
+        "id": "fish",
+        "text": "fish",
+        "meaningZh": "鱼"
+      },
+      {
+        "id": "horse",
+        "text": "horse",
+        "meaningZh": "马"
+      },
+      {
+        "id": "lion",
+        "text": "lion",
+        "meaningZh": "狮子"
+      },
+      {
+        "id": "panda",
+        "text": "panda",
+        "meaningZh": "熊猫"
+      },
+      {
+        "id": "rabbit",
+        "text": "rabbit",
+        "meaningZh": "兔子"
+      },
+      {
+        "id": "sheep",
+        "text": "sheep",
+        "meaningZh": "羊"
+      },
+      {
+        "id": "tiger",
+        "text": "tiger",
+        "meaningZh": "老虎"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "学习工具",
+    "category": "tools",
+    "words": [
+      {
+        "id": "book",
+        "text": "book",
+        "meaningZh": "书"
+      },
+      {
+        "id": "clock",
+        "text": "clock",
+        "meaningZh": "时钟"
+      },
+      {
+        "id": "computer",
+        "text": "computer",
+        "meaningZh": "电脑"
+      },
+      {
+        "id": "pen",
+        "text": "pen",
+        "meaningZh": "钢笔"
+      },
+      {
+        "id": "pencil",
+        "text": "pencil",
+        "meaningZh": "铅笔"
+      },
+      {
+        "id": "ruler",
+        "text": "ruler",
+        "meaningZh": "尺子"
+      },
+      {
+        "id": "blackboard",
+        "text": "blackboard",
+        "meaningZh": "黑板"
+      },
+      {
+        "id": "eraser",
+        "text": "eraser",
+        "meaningZh": "橡皮"
+      },
+      {
+        "id": "paper",
+        "text": "paper",
+        "meaningZh": "纸"
+      },
+      {
+        "id": "scissors",
+        "text": "scissors",
+        "meaningZh": "剪刀"
+      },
+      {
+        "id": "notebook",
+        "text": "notebook",
+        "meaningZh": "笔记本"
+      },
+      {
+        "id": "glue",
+        "text": "glue",
+        "meaningZh": "胶水"
+      },
+      {
+        "id": "tape",
+        "text": "tape",
+        "meaningZh": "胶带"
+      },
+      {
+        "id": "sharpener",
+        "text": "sharpener",
+        "meaningZh": "卷笔刀"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "家居物品",
+    "category": "home-items",
+    "words": [
+      {
+        "id": "bed",
+        "text": "bed",
+        "meaningZh": "床"
+      },
+      {
+        "id": "desk",
+        "text": "desk",
+        "meaningZh": "桌子"
+      },
+      {
+        "id": "door",
+        "text": "door",
+        "meaningZh": "门"
+      },
+      {
+        "id": "chair",
+        "text": "chair",
+        "meaningZh": "椅子"
+      },
+      {
+        "id": "floor",
+        "text": "floor",
+        "meaningZh": "地板"
+      },
+      {
+        "id": "wall",
+        "text": "wall",
+        "meaningZh": "墙"
+      },
+      {
+        "id": "ceiling",
+        "text": "ceiling",
+        "meaningZh": "天花板"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "日常物品",
+    "category": "daily-items",
+    "words": [
+      {
+        "id": "bag",
+        "text": "bag",
+        "meaningZh": "包"
+      },
+      {
+        "id": "bike",
+        "text": "bike",
+        "meaningZh": "自行车"
+      },
+      {
+        "id": "bread",
+        "text": "bread",
+        "meaningZh": "面包"
+      },
+      {
+        "id": "cake",
+        "text": "cake",
+        "meaningZh": "蛋糕"
+      },
+      {
+        "id": "candle",
+        "text": "candle",
+        "meaningZh": "蜡烛"
+      },
+      {
+        "id": "candy",
+        "text": "candy",
+        "meaningZh": "糖果"
+      },
+      {
+        "id": "clothes",
+        "text": "clothes",
+        "meaningZh": "衣服"
+      },
+      {
+        "id": "cup",
+        "text": "cup",
+        "meaningZh": "杯子"
+      },
+      {
+        "id": "doll",
+        "text": "doll",
+        "meaningZh": "玩偶"
+      },
+      {
+        "id": "home",
+        "text": "home",
+        "meaningZh": "家"
+      },
+      {
+        "id": "boat",
+        "text": "boat",
+        "meaningZh": "船"
+      },
+      {
+        "id": "kite",
+        "text": "kite",
+        "meaningZh": "风筝"
+      },
+      {
+        "id": "gift",
+        "text": "gift",
+        "meaningZh": "礼物"
+      },
+      {
+        "id": "towel",
+        "text": "towel",
+        "meaningZh": "毛巾"
+      },
+      {
+        "id": "window",
+        "text": "window",
+        "meaningZh": "窗户"
+      },
+      {
+        "id": "glass",
+        "text": "glass",
+        "meaningZh": "玻璃"
+      },
+      {
+        "id": "juice",
+        "text": "juice",
+        "meaningZh": "果汁"
+      },
+      {
+        "id": "toy",
+        "text": "toy",
+        "meaningZh": "玩具"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "自然现象",
+    "category": "nature",
+    "words": [
+      {
+        "id": "air",
+        "text": "air",
+        "meaningZh": "空气"
+      },
+      {
+        "id": "earth",
+        "text": "earth",
+        "meaningZh": "地球"
+      },
+      {
+        "id": "fire",
+        "text": "fire",
+        "meaningZh": "火"
+      },
+      {
+        "id": "moon",
+        "text": "moon",
+        "meaningZh": "月亮"
+      },
+      {
+        "id": "rain",
+        "text": "rain",
+        "meaningZh": "雨"
+      },
+      {
+        "id": "sea",
+        "text": "sea",
+        "meaningZh": "大海"
+      },
+      {
+        "id": "season",
+        "text": "season",
+        "meaningZh": "季节"
+      },
+      {
+        "id": "snow",
+        "text": "snow",
+        "meaningZh": "雪"
+      },
+      {
+        "id": "star",
+        "text": "star",
+        "meaningZh": "星星"
+      },
+      {
+        "id": "sun",
+        "text": "sun",
+        "meaningZh": "太阳"
+      },
+      {
+        "id": "weather",
+        "text": "weather",
+        "meaningZh": "天气"
+      },
+      {
+        "id": "wind",
+        "text": "wind",
+        "meaningZh": "风"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "身体部位",
+    "category": "body-parts",
+    "words": [
+      {
+        "id": "hand",
+        "text": "hand",
+        "meaningZh": "手"
+      },
+      {
+        "id": "head",
+        "text": "head",
+        "meaningZh": "头"
+      },
+      {
+        "id": "leg",
+        "text": "leg",
+        "meaningZh": "腿"
+      },
+      {
+        "id": "body",
+        "text": "body",
+        "meaningZh": "身体"
+      },
+      {
+        "id": "arm",
+        "text": "arm",
+        "meaningZh": "手臂"
+      },
+      {
+        "id": "palm",
+        "text": "palm",
+        "meaningZh": "手掌"
+      },
+      {
+        "id": "forehead",
+        "text": "forehead",
+        "meaningZh": "额头"
+      }
+    ]
+  }
+]

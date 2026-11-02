@@ -10,6 +10,7 @@ type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
 export interface MonsterArt {
+  readonly animalIds?: readonly string[];
   readonly fruitHat?: SpriteAsset;
   readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
@@ -102,7 +103,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !/^\/assets\/images\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path))) throw new Error('战场素材尚未通过审校');
+      || !/^\/(?:assets\/images|learning-assets\/images)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -301,7 +302,9 @@ export class CanvasScene {
         const scale = monsterArt.monsterWidth / monsterArt.monsterVisual.sourceSize.width;
         if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) c.globalAlpha *= 0.55;
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
-        if (monsterArt.walkParts) {
+        if (monsterArt.animalIds?.includes(monster.wordId)) {
+          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.status === 'alive' || monster.status === 'entering') ? state.tick : 0);
+        } else if (monsterArt.walkParts) {
           const walking = monster.hp > 0 && (monster.status === 'entering' || monster.status === 'alive');
           const seed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
           const stride = walking ? Math.sin(state.tick * .07 + seed) : 0;
@@ -318,7 +321,7 @@ export class CanvasScene {
             monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
         }
         c.imageSmoothingEnabled = true;
-        if (monsterArt.fruitHat) {
+        if (monsterArt.fruitHat && !monsterArt.animalIds?.includes(monster.wordId)) {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
           // White badge keeps each ordinary fruit legible at game scale.
@@ -361,6 +364,52 @@ export class CanvasScene {
       c.restore();
     }
     if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
+  }
+  // Original geometry: shared zombie eyes and stitches, species-specific silhouettes.
+  private drawAnimal(id: string, x: number, y: number, tick: number): void {
+    const c = this.context;
+    const stride = tick ? Math.sin(tick * .095) : 0;
+    const colors: Record<string, string> = { bear: '#9f8a65', bee: '#d5bc54', bird: '#7da9ab', cat: '#96a986', chicken: '#b8bea0', cow: '#d5d4b9', dog: '#a7a071', duck: '#9fb278', elephant: '#91a4a1', fish: '#83a6b4', horse: '#ac9273', lion: '#bca35d', panda: '#c4cdb6', rabbit: '#b4c6b2', sheep: '#cdd4bc', tiger: '#c6a355' };
+    c.save(); c.translate(x, y);
+    c.fillStyle = 'rgba(37,62,56,.18)'; c.beginPath(); c.ellipse(0, 22, 18, 4, 0, 0, Math.PI * 2); c.fill();
+    const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); };
+    const line = (points: number[], color: string, width = 2) => { c.strokeStyle = color; c.lineWidth = width; c.beginPath(); c.moveTo(points[0], points[1]); for (let i = 2; i < points.length; i += 2) c.lineTo(points[i], points[i + 1]); c.stroke(); };
+    const body = colors[id];
+    if (id === 'bee' || id === 'bird' || id === 'chicken' || id === 'duck') {
+      const lift = id === 'bee' || id === 'bird' ? stride * 3 : 0;
+      oval(-16, -2 + lift, 8, 4, '#d9e8cf', -.5); oval(16, -2 - lift, 8, 4, '#d9e8cf', .5);
+    } else if (id === 'fish') {
+      c.fillStyle = '#577f87'; c.beginPath(); c.moveTo(-13, 0); c.lineTo(-23, -10 + stride * 2); c.lineTo(-23, 10 + stride * 2); c.closePath(); c.fill();
+    } else {
+      // Four legs step in opposing diagonal pairs.
+      for (let leg = 0; leg < 4; leg++) oval((leg % 2 ? 1 : -1) * (leg < 2 ? 8 : 13), 13 + (leg % 2 ? 1 : -1) * stride * 3, 3.5, 8, leg < 2 ? '#647866' : '#849379');
+      line([13, 3, 22, -3, 20, -11 + stride * 2], body, 4);
+    }
+    if (id === 'lion') oval(0, -7, 19, 18, '#89794d');
+    if (id === 'sheep') for (let i = 0; i < 8; i++) oval(Math.cos(i * Math.PI / 4) * 10, Math.sin(i * Math.PI / 4) * 9, 7, 7, '#dde0c9');
+    oval(0, 4, id === 'fish' ? 19 : 14, id === 'fish' ? 12 : 13, body);
+    if (id === 'bee') { line([-9, 3, 9, 3], '#596357', 4); line([-8, 10, 8, 10], '#596357', 4); line([-5, -12, -10, -22], '#596357'); line([5, -12, 10, -22], '#596357'); }
+    if (id === 'tiger') for (const side of [-1, 1]) { line([side * 12, 1, side * 7, 4], '#5d6651', 3); line([side * 12, 8, side * 8, 10], '#5d6651', 3); }
+    if (id === 'cow') { oval(-7, 6, 5, 6, '#596b5d'); oval(7, -1, 4, 4, '#596b5d'); }
+    if (id !== 'fish' && id !== 'bee') {
+      if (id === 'elephant') { oval(-14, -9, 9, 13, body); oval(14, -9, 9, 13, body); }
+      else if (id === 'rabbit') { oval(-7, -20, 4, 12, body, -.18); oval(7, -20, 4, 12, body, .18); }
+      else if (['cat', 'tiger', 'horse'].includes(id)) {
+        c.fillStyle = body;
+        for (const side of [-1, 1]) { c.beginPath(); c.moveTo(side * 13, -10); c.lineTo(side * 12, -24); c.lineTo(side * 3, -14); c.closePath(); c.fill(); }
+      } else if (id === 'dog') { oval(-12, -8, 5, 10, '#7c8061', .25); oval(12, -8, 5, 10, '#7c8061', -.25); }
+      else if (['bear', 'panda', 'lion', 'sheep'].includes(id)) { oval(-10, -17, 5, 5, id === 'panda' ? '#53685e' : body); oval(10, -17, 5, 5, id === 'panda' ? '#53685e' : body); }
+      oval(0, -7, id === 'horse' ? 9 : 12, id === 'horse' ? 14 : 11, body);
+    }
+    if (id === 'panda') { oval(-6, -8, 5, 6, '#53685e', -.4); oval(6, -8, 5, 6, '#53685e', .4); }
+    if (id === 'cow') { line([-8, -15, -13, -23], '#e0d8a0', 3); line([8, -15, 13, -23], '#e0d8a0', 3); }
+    if (id === 'chicken') { oval(-3, -21, 3, 5, '#b96e5a'); oval(3, -21, 3, 5, '#b96e5a'); }
+    oval(-5, -8, 4, 4.5, '#edf0bf'); oval(5, -7, 4, 4.5, '#edf0bf'); oval(-4, -7, 1.5, 2, '#3e594d'); oval(6, -6, 1.5, 2, '#3e594d');
+    if (id === 'elephant') { line([0, -1, 0, 11, 5, 14], '#6c8983', 6); }
+    else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 8 : 5, 3, '#d5b461');
+    else { oval(0, -1, 3, 2, '#526b59'); line([-5, 4, 5, 5], '#526b59'); }
+    line([7, -16, 12, -12], '#4f6a58', 1); line([7, -13, 10, -16], '#4f6a58', 1);
+    c.restore();
   }
   private drawDeathSplash(x: number, y: number, id: string, age: number): void {
     const c = this.context;

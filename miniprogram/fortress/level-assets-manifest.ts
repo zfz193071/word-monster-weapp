@@ -1,0 +1,2199 @@
+import type { VisualAsset } from './types';
+export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })[] = [
+  {
+    "wordId": "black",
+    "path": "/learning-assets/images/black.png",
+    "kind": "image",
+    "source": "docs/assets/levels/black.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "blue",
+    "path": "/learning-assets/images/blue.png",
+    "kind": "image",
+    "source": "docs/assets/levels/blue.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "brown",
+    "path": "/learning-assets/images/brown.png",
+    "kind": "image",
+    "source": "docs/assets/levels/brown.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "green",
+    "path": "/learning-assets/images/green.png",
+    "kind": "image",
+    "source": "docs/assets/levels/green.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pink",
+    "path": "/learning-assets/images/pink.png",
+    "kind": "image",
+    "source": "docs/assets/levels/pink.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "red",
+    "path": "/learning-assets/images/red.png",
+    "kind": "image",
+    "source": "docs/assets/levels/red.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "white",
+    "path": "/learning-assets/images/white.png",
+    "kind": "image",
+    "source": "docs/assets/levels/white.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "yellow",
+    "path": "/learning-assets/images/yellow.png",
+    "kind": "image",
+    "source": "docs/assets/levels/yellow.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bear",
+    "path": "/learning-assets/images/bear.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43B.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bee",
+    "path": "/learning-assets/images/bee.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41D.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bird",
+    "path": "/learning-assets/images/bird.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F426.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cat",
+    "path": "/learning-assets/images/cat.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F408.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "chicken",
+    "path": "/learning-assets/images/chicken.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F414.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cow",
+    "path": "/learning-assets/images/cow.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F404.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "dog",
+    "path": "/learning-assets/images/dog.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F415.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "duck",
+    "path": "/learning-assets/images/duck.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F986.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "elephant",
+    "path": "/learning-assets/images/elephant.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F418.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "fish",
+    "path": "/learning-assets/images/fish.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "horse",
+    "path": "/learning-assets/images/horse.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F40E.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "lion",
+    "path": "/learning-assets/images/lion.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F981.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "panda",
+    "path": "/learning-assets/images/panda.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "rabbit",
+    "path": "/learning-assets/images/rabbit.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F407.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sheep",
+    "path": "/learning-assets/images/sheep.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F411.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "tiger",
+    "path": "/learning-assets/images/tiger.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F405.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "book",
+    "path": "/learning-assets/images/book.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4D6.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "clock",
+    "path": "/learning-assets/images/clock.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F552.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "computer",
+    "path": "/learning-assets/images/computer.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F5A5.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pen",
+    "path": "/learning-assets/images/pen.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F58A.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "pencil",
+    "path": "/learning-assets/images/pencil.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/270F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "ruler",
+    "path": "/learning-assets/images/ruler.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4CF.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "blackboard",
+    "path": "/learning-assets/images/blackboard.png",
+    "kind": "image",
+    "source": "docs/assets/levels/blackboard.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "eraser",
+    "path": "/learning-assets/images/eraser.png",
+    "kind": "image",
+    "source": "docs/assets/levels/eraser.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "paper",
+    "path": "/learning-assets/images/paper.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4C4.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "scissors",
+    "path": "/learning-assets/images/scissors.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2702.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "notebook",
+    "path": "/learning-assets/images/notebook.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4D3.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "glue",
+    "path": "/learning-assets/images/glue.png",
+    "kind": "image",
+    "source": "docs/assets/levels/glue.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "tape",
+    "path": "/learning-assets/images/tape.png",
+    "kind": "image",
+    "source": "docs/assets/levels/tape.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sharpener",
+    "path": "/learning-assets/images/sharpener.png",
+    "kind": "image",
+    "source": "docs/assets/levels/sharpener.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bed",
+    "path": "/learning-assets/images/bed.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6CF.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "desk",
+    "path": "/learning-assets/images/desk.png",
+    "kind": "image",
+    "source": "docs/assets/levels/desk.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "door",
+    "path": "/learning-assets/images/door.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6AA.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "chair",
+    "path": "/learning-assets/images/chair.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA91.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "floor",
+    "path": "/learning-assets/images/floor.png",
+    "kind": "image",
+    "source": "docs/assets/levels/floor.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "wall",
+    "path": "/learning-assets/images/wall.png",
+    "kind": "image",
+    "source": "docs/assets/levels/wall.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "ceiling",
+    "path": "/learning-assets/images/ceiling.png",
+    "kind": "image",
+    "source": "docs/assets/levels/ceiling.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bag",
+    "path": "/learning-assets/images/bag.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F45C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bike",
+    "path": "/learning-assets/images/bike.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6B2.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "bread",
+    "path": "/learning-assets/images/bread.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F35E.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cake",
+    "path": "/learning-assets/images/cake.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F370.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "candle",
+    "path": "/learning-assets/images/candle.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F56F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "candy",
+    "path": "/learning-assets/images/candy.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F36C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "clothes",
+    "path": "/learning-assets/images/clothes.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F455.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "cup",
+    "path": "/learning-assets/images/cup.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2615.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "doll",
+    "path": "/learning-assets/images/doll.png",
+    "kind": "image",
+    "source": "docs/assets/levels/doll.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "home",
+    "path": "/learning-assets/images/home.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F3E0.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "boat",
+    "path": "/learning-assets/images/boat.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F6F6.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "kite",
+    "path": "/learning-assets/images/kite.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA81.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "gift",
+    "path": "/learning-assets/images/gift.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F381.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "towel",
+    "path": "/learning-assets/images/towel.png",
+    "kind": "image",
+    "source": "docs/assets/levels/towel.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "window",
+    "path": "/learning-assets/images/window.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1FA9F.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "glass",
+    "path": "/learning-assets/images/glass.png",
+    "kind": "image",
+    "source": "docs/assets/levels/glass.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "juice",
+    "path": "/learning-assets/images/juice.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9C3.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "toy",
+    "path": "/learning-assets/images/toy.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9F8.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "air",
+    "path": "/learning-assets/images/air.png",
+    "kind": "image",
+    "source": "docs/assets/levels/air.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "earth",
+    "path": "/learning-assets/images/earth.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F30D.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "fire",
+    "path": "/learning-assets/images/fire.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F525.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "moon",
+    "path": "/learning-assets/images/moon.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F319.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "rain",
+    "path": "/learning-assets/images/rain.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F327.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sea",
+    "path": "/learning-assets/images/sea.png",
+    "kind": "image",
+    "source": "docs/assets/levels/sea.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "season",
+    "path": "/learning-assets/images/season.png",
+    "kind": "image",
+    "source": "docs/assets/levels/season.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "snow",
+    "path": "/learning-assets/images/snow.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F328.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "star",
+    "path": "/learning-assets/images/star.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2B50.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "sun",
+    "path": "/learning-assets/images/sun.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/2600.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "weather",
+    "path": "/learning-assets/images/weather.png",
+    "kind": "image",
+    "source": "docs/assets/levels/weather.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "wind",
+    "path": "/learning-assets/images/wind.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F32C.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "hand",
+    "path": "/learning-assets/images/hand.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/270B.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "head",
+    "path": "/learning-assets/images/head.png",
+    "kind": "image",
+    "source": "docs/assets/levels/head.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "leg",
+    "path": "/learning-assets/images/leg.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F9B5.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "body",
+    "path": "/learning-assets/images/body.png",
+    "kind": "image",
+    "source": "docs/assets/levels/body.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "arm",
+    "path": "/learning-assets/images/arm.png",
+    "kind": "image",
+    "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F4AA.svg",
+    "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "palm",
+    "path": "/learning-assets/images/palm.png",
+    "kind": "image",
+    "source": "docs/assets/levels/palm.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "forehead",
+    "path": "/learning-assets/images/forehead.png",
+    "kind": "image",
+    "source": "docs/assets/levels/forehead.svg",
+    "rights": "本项目原创矢量图",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-1",
+    "path": "/assets/images/levels/cover-1.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-2",
+    "path": "/assets/images/levels/cover-2.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-3",
+    "path": "/assets/images/levels/cover-3.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-4",
+    "path": "/assets/images/levels/cover-4.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-5",
+    "path": "/assets/images/levels/cover-5.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-6",
+    "path": "/assets/images/levels/cover-6.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-7",
+    "path": "/assets/images/levels/cover-7.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "level-8",
+    "path": "/assets/images/levels/cover-8.png",
+    "kind": "image",
+    "source": "scripts/create-level-assets.cjs",
+    "rights": "本项目原创构图；第1关沿用CC0苹果，第2关原创颜色图；第3至8关嵌入OpenMoji（CC BY-SA 4.0），合成图沿用CC BY-SA 4.0；https://creativecommons.org/licenses/by-sa/4.0/",
+    "reviewStatus": "approved"
+  },
+  {
+    "wordId": "air",
+    "path": "/learning-assets/audio/learn-air.mp3",
+    "kind": "audio",
+    "sha256": "01551f59f93f42b7e62fa787b85393e0202bd834d6dd8214e6728062d537b2fb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "air",
+    "path": "/learning-assets/audio/zombie-air.mp3",
+    "kind": "audio",
+    "sha256": "9b577d3b980b3a375e83d986122123d5f71b307a1a74c6c86283eee5a684b2f3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "arm",
+    "path": "/learning-assets/audio/learn-arm.mp3",
+    "kind": "audio",
+    "sha256": "8bda397d5b980a249beb5da654505430220ae2ac0b1de9c2d0227ed6b7cb15c8",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "arm",
+    "path": "/learning-assets/audio/zombie-arm.mp3",
+    "kind": "audio",
+    "sha256": "3ec9a9254d9fedc8a49b33b13ddbc9b00a3e1d9d7da88ebabaadd287e45cc3a3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bag",
+    "path": "/learning-assets/audio/learn-bag.mp3",
+    "kind": "audio",
+    "sha256": "03f521c15a94f5f221f1c8da8f6a7af71757a23ba5771f0bf6b93b2f989e33b6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bag",
+    "path": "/learning-assets/audio/zombie-bag.mp3",
+    "kind": "audio",
+    "sha256": "dc2bcb191c21fe766c19ac5a83d1cfca04ae2c83bb77b0807289d19f1abe782d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bear",
+    "path": "/learning-assets/audio/learn-bear.mp3",
+    "kind": "audio",
+    "sha256": "831013141346a650ed8f94a6fe6f8525ed141d07fe0367bdd20840e751733968",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bear",
+    "path": "/learning-assets/audio/zombie-bear.mp3",
+    "kind": "audio",
+    "sha256": "221f730cb57b6db205b273c07a09e53da63447e108ed6250ccebd4b4bc3b9e47",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bed",
+    "path": "/learning-assets/audio/learn-bed.mp3",
+    "kind": "audio",
+    "sha256": "30f7a325cd1f7385c1ed5d86e8d30cb96a51b90c9bb599f502a8e2f248624edd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bed",
+    "path": "/learning-assets/audio/zombie-bed.mp3",
+    "kind": "audio",
+    "sha256": "a4af2532640c31de1374c236f01ca9d5f1822e33e9ce691822c20f473eaba8a3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bee",
+    "path": "/learning-assets/audio/learn-bee.mp3",
+    "kind": "audio",
+    "sha256": "9221eec758d41ff0cba398a8f0971b7a265e63dbaf79cd7caa4a72ecb5679800",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bee",
+    "path": "/learning-assets/audio/zombie-bee.mp3",
+    "kind": "audio",
+    "sha256": "889ee4233305a8f0c2c47fa2c72b451caacf670e78348c7fc29c721a2ffacfca",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bike",
+    "path": "/learning-assets/audio/learn-bike.mp3",
+    "kind": "audio",
+    "sha256": "8128af1b8fe8f35d0d31bf68df648c086e15e63a7ac3dd12ea3588f9ac74e859",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bike",
+    "path": "/learning-assets/audio/zombie-bike.mp3",
+    "kind": "audio",
+    "sha256": "095ca21b63ac51a2cd5373b65a0e457efdcb38686a6ef41b159aa7caf6c37c67",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bird",
+    "path": "/learning-assets/audio/learn-bird.mp3",
+    "kind": "audio",
+    "sha256": "9ed8ff4d1ee16bddde92df80fbbcb82357faacd0b7cfc280373a435fd5df1204",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bird",
+    "path": "/learning-assets/audio/zombie-bird.mp3",
+    "kind": "audio",
+    "sha256": "1a85a3f2366ec6a6eb3c6b309dff14f7e3a8d69b922b48f00aa39b2f835a69e6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "black",
+    "path": "/learning-assets/audio/learn-black.mp3",
+    "kind": "audio",
+    "sha256": "9c77463553f5f104c4f040dc0d0ad4077ecbb073ed0165882166aab6edfd5269",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "black",
+    "path": "/learning-assets/audio/zombie-black.mp3",
+    "kind": "audio",
+    "sha256": "da325cce8708d68c24bd6748b7795ede71195ec302639765e3696ad3379e13b5",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blackboard",
+    "path": "/learning-assets/audio/learn-blackboard.mp3",
+    "kind": "audio",
+    "sha256": "9fa38fd524a3afd08cbe90104cc6f67cf6076b7459aef44ce395406e2b0006f3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blackboard",
+    "path": "/learning-assets/audio/zombie-blackboard.mp3",
+    "kind": "audio",
+    "sha256": "05d169a8d0f1abf31e40f42ebf86fc04f4b12ad749771be0a10971c83936bf55",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blue",
+    "path": "/learning-assets/audio/learn-blue.mp3",
+    "kind": "audio",
+    "sha256": "0f1740c4671215f4d9e70201ed1490eb70eb65b9979d507d418af82ba3045fff",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blue",
+    "path": "/learning-assets/audio/zombie-blue.mp3",
+    "kind": "audio",
+    "sha256": "8d7f599d78d03b712b756c93e7363f93f2759dfea567ac2a68f909c68a2a751e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "boat",
+    "path": "/learning-assets/audio/learn-boat.mp3",
+    "kind": "audio",
+    "sha256": "5cfcb9eaf6e49229947c9a7149a85d63d13ed9c8e3bfe9ddcb556f6bbbc347b0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "boat",
+    "path": "/learning-assets/audio/zombie-boat.mp3",
+    "kind": "audio",
+    "sha256": "10440cbfb5e8f06ff877ee78ddafb0545da6bfe86693fea2759161308e1427dd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "body",
+    "path": "/learning-assets/audio/learn-body.mp3",
+    "kind": "audio",
+    "sha256": "fcd12563d01c65717b503101112d5ec43e6b0a890e3c73d79abff25f645277ef",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "body",
+    "path": "/learning-assets/audio/zombie-body.mp3",
+    "kind": "audio",
+    "sha256": "a7e7a3de1d58a1403a5352687cc7b0a57ae4fe22ed2f3ea7a5fe7d77dbb9bce9",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "book",
+    "path": "/learning-assets/audio/learn-book.mp3",
+    "kind": "audio",
+    "sha256": "39154cff44851c44c930ce4dd198d9cb45e9b3a78b0128f2754ef31d3563498d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "book",
+    "path": "/learning-assets/audio/zombie-book.mp3",
+    "kind": "audio",
+    "sha256": "dbac2f07771ae3c8d3bc1ce0857376db46a64d3ebc0e9d3f8d99631ecc8914c6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bread",
+    "path": "/learning-assets/audio/learn-bread.mp3",
+    "kind": "audio",
+    "sha256": "4afe005f5727f18b7e0858d4595fab97198e74820769a122f29abcbd5acf5be0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bread",
+    "path": "/learning-assets/audio/zombie-bread.mp3",
+    "kind": "audio",
+    "sha256": "4e7b578876f21cd4dfd330d8975fb70de46559ad686c55e4e5ba139ee2c4aca5",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "brown",
+    "path": "/learning-assets/audio/learn-brown.mp3",
+    "kind": "audio",
+    "sha256": "6b2ad8fa92b387c3d4ad2c36ed807abb370995e5dc71493d2653b9bbf30a0364",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "brown",
+    "path": "/learning-assets/audio/zombie-brown.mp3",
+    "kind": "audio",
+    "sha256": "a536552fd397c34edcb9c3b1feac3cc25170859a892e30a91390a1d2ab150e07",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cake",
+    "path": "/learning-assets/audio/learn-cake.mp3",
+    "kind": "audio",
+    "sha256": "4331c5aa211d8428c995998f1b1c45687aadae55c3dfa2016721f482b14efabc",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cake",
+    "path": "/learning-assets/audio/zombie-cake.mp3",
+    "kind": "audio",
+    "sha256": "ccf9e0b03acd9a994aaf11bbc730ee86b5c39ae8150f68c5acfe2fc34069d319",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candle",
+    "path": "/learning-assets/audio/learn-candle.mp3",
+    "kind": "audio",
+    "sha256": "b128bca09cc3b217aa2c54f59a99de0d4aea8e698fcd65df9d595e23bd05cf93",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candle",
+    "path": "/learning-assets/audio/zombie-candle.mp3",
+    "kind": "audio",
+    "sha256": "df5af5ecff65b93ddef3e483df42601c5260708b1991f62f2fec7162cc1b6d5e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candy",
+    "path": "/learning-assets/audio/learn-candy.mp3",
+    "kind": "audio",
+    "sha256": "0a0950dfc1dec9ce373d7d5b90dcdf6ab143e539d2660875b969b72545cfb534",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candy",
+    "path": "/learning-assets/audio/zombie-candy.mp3",
+    "kind": "audio",
+    "sha256": "7bc9332db0a3615fd2ac8665334aebab437f9dbf7762e0cfac2584fdce9d23ba",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cat",
+    "path": "/learning-assets/audio/learn-cat.mp3",
+    "kind": "audio",
+    "sha256": "2e2596e38798f20ac0b1e88435e86bb1892004fe783088db479314116df593c9",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cat",
+    "path": "/learning-assets/audio/zombie-cat.mp3",
+    "kind": "audio",
+    "sha256": "7673b7f650e06ecdd82b327db7ba63d40a3edcaede50bb7aaeda716819ae3f81",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ceiling",
+    "path": "/learning-assets/audio/learn-ceiling.mp3",
+    "kind": "audio",
+    "sha256": "9c7d5c86140d5dec91d1dedef9b9ceefd88e850cabe8eeafc18a3dac8f2504e0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ceiling",
+    "path": "/learning-assets/audio/zombie-ceiling.mp3",
+    "kind": "audio",
+    "sha256": "3155e817095a97e1ffc832871dbdbe30ea3a38cf81b087011b61652e10c6ca7f",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chair",
+    "path": "/learning-assets/audio/learn-chair.mp3",
+    "kind": "audio",
+    "sha256": "4dd5f7790b5d91d59b33677d2da529e317fb61ef57fb2adba5ed2fbfc3859847",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chair",
+    "path": "/learning-assets/audio/zombie-chair.mp3",
+    "kind": "audio",
+    "sha256": "b10ec580b6cc992a1aa3558df6317eb5bc9265a9304650e4107be9e3d864da77",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chicken",
+    "path": "/learning-assets/audio/learn-chicken.mp3",
+    "kind": "audio",
+    "sha256": "afbfb2e7d5397c61818fd65515c5123fe95b13bb6d7f957d0bb790b4113332dd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chicken",
+    "path": "/learning-assets/audio/zombie-chicken.mp3",
+    "kind": "audio",
+    "sha256": "478dfb9b1ee20e14b8272c71c205b14284c0175915efd28461b22dc6b801dfd8",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clock",
+    "path": "/learning-assets/audio/learn-clock.mp3",
+    "kind": "audio",
+    "sha256": "35d4d72fad003c8e05c23a490fc991bc36863d5aa41509d19a2b4fe5967068cd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clock",
+    "path": "/learning-assets/audio/zombie-clock.mp3",
+    "kind": "audio",
+    "sha256": "d265392a8b41a441f45a64584c548469772edc35cb79fc79d767b04675715ca6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clothes",
+    "path": "/learning-assets/audio/learn-clothes.mp3",
+    "kind": "audio",
+    "sha256": "1753331582c17fffc747cfde5e1389b2410796f353e6625d5fd3a8b95781e359",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clothes",
+    "path": "/learning-assets/audio/zombie-clothes.mp3",
+    "kind": "audio",
+    "sha256": "1d60f137ce7ce29548e57c5d3a9d21cbca9945118a6fd47cd9403b98551c4f53",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "computer",
+    "path": "/learning-assets/audio/learn-computer.mp3",
+    "kind": "audio",
+    "sha256": "b1a8f48f8ea53a9ec4cfd62c21e9203005cb394d907aab473a4c1a2cf4f62711",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "computer",
+    "path": "/learning-assets/audio/zombie-computer.mp3",
+    "kind": "audio",
+    "sha256": "c09afee8250287fc380e84efc89e0d7569287de2b20840bba0b592f5b16669ba",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cow",
+    "path": "/learning-assets/audio/learn-cow.mp3",
+    "kind": "audio",
+    "sha256": "fc47a94f61ac84851616b64bef56e56f0b5eb3e97be72d98e98c544646dffc15",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cow",
+    "path": "/learning-assets/audio/zombie-cow.mp3",
+    "kind": "audio",
+    "sha256": "ffc31d6b3272de531aba56dd3c85b9418f277973e3f5e189a7626b89609bafeb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cup",
+    "path": "/learning-assets/audio/learn-cup.mp3",
+    "kind": "audio",
+    "sha256": "e256ae6d622a4b39a1862edc5621c1cd833db5b87913121bd1fe00779d56fe7c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cup",
+    "path": "/learning-assets/audio/zombie-cup.mp3",
+    "kind": "audio",
+    "sha256": "457296bffa5d6d11a1d22fda0fd1910be3a685ad15155416adf057ebecd2e3d1",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "desk",
+    "path": "/learning-assets/audio/learn-desk.mp3",
+    "kind": "audio",
+    "sha256": "cc4d34e32d79ca7df9c03bc3e5a2ae27d3eff03586a6063cbc06e0ace4f53493",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "desk",
+    "path": "/learning-assets/audio/zombie-desk.mp3",
+    "kind": "audio",
+    "sha256": "180ed036f720bf266551a19eb999738192325524fb46b03ef82ccdc68b45972d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "dog",
+    "path": "/learning-assets/audio/learn-dog.mp3",
+    "kind": "audio",
+    "sha256": "895e6d5bad8845f0dd7710be0052e8c5d0657e389f516f0bc8ef941018fe054c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "dog",
+    "path": "/learning-assets/audio/zombie-dog.mp3",
+    "kind": "audio",
+    "sha256": "cfc1c9509f1f839ac7b247bde073416e4efa7ca214da623aaf4f5e0b23712c5d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "doll",
+    "path": "/learning-assets/audio/learn-doll.mp3",
+    "kind": "audio",
+    "sha256": "cde37378f28629defab52e713db2782cb07907a7cfec2bd4f764f8e438b24a1b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "doll",
+    "path": "/learning-assets/audio/zombie-doll.mp3",
+    "kind": "audio",
+    "sha256": "1b67db16709bf002bd24c1fdd6fb58d779f3fe63bcacb00c4e9ad612b38221d8",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "door",
+    "path": "/learning-assets/audio/learn-door.mp3",
+    "kind": "audio",
+    "sha256": "e54dbda0fd376cb21afd5a4cd56e575c2ee56439aeccd83a879349639be09d53",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "door",
+    "path": "/learning-assets/audio/zombie-door.mp3",
+    "kind": "audio",
+    "sha256": "758f22f613bd4222587c30980639940e30fb798737dada2b0a031f393bb91c8b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "duck",
+    "path": "/learning-assets/audio/learn-duck.mp3",
+    "kind": "audio",
+    "sha256": "9b3d067b70ea5f3ffa906c575ac4f70f0b20f8ffcc7d466c3f5b4f8178d5333c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "duck",
+    "path": "/learning-assets/audio/zombie-duck.mp3",
+    "kind": "audio",
+    "sha256": "f2dc248caf2b447884fff7b9c956a3adf600cd09eaee5b5650ad646d329b0dbf",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "earth",
+    "path": "/learning-assets/audio/learn-earth.mp3",
+    "kind": "audio",
+    "sha256": "8124d914123338931e2888c013c6ee230378c9aa2d4dabf1545420866c0a32dd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "earth",
+    "path": "/learning-assets/audio/zombie-earth.mp3",
+    "kind": "audio",
+    "sha256": "df0e05d4201d7ad017517d04fefd5e5924c16583016c1bb59d4b22c7cb8bfd85",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "elephant",
+    "path": "/learning-assets/audio/learn-elephant.mp3",
+    "kind": "audio",
+    "sha256": "fa82b639ac9941520399f7331d50f5ce1b9034172454557b2937cb3abe1021e2",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "elephant",
+    "path": "/learning-assets/audio/zombie-elephant.mp3",
+    "kind": "audio",
+    "sha256": "28a977743f3a48a27cccc888125080246738e528b2b4be976a09ed32514521ba",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "eraser",
+    "path": "/learning-assets/audio/learn-eraser.mp3",
+    "kind": "audio",
+    "sha256": "3db4340195b6746d6dff3fe91d4f730de7519fcf596f7d0a1901d0b4714f397e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "eraser",
+    "path": "/learning-assets/audio/zombie-eraser.mp3",
+    "kind": "audio",
+    "sha256": "a61c20f10b2d339137cfc386ad89fbee5f171473c5fb2d7df64070c7cec56fb5",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fire",
+    "path": "/learning-assets/audio/learn-fire.mp3",
+    "kind": "audio",
+    "sha256": "dfc9f589151ba66ef45a94c1f26f419594f0570ad49465d371683ae6535d7127",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fire",
+    "path": "/learning-assets/audio/zombie-fire.mp3",
+    "kind": "audio",
+    "sha256": "9fa127bb675068d305a3dbefcfe5cc2c28342405cd5f85330069cc3ca22ac1e8",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fish",
+    "path": "/learning-assets/audio/learn-fish.mp3",
+    "kind": "audio",
+    "sha256": "32c9b41dc9163981ab7d0b508265575bf8120df806d1c3fe56d3d03191208766",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fish",
+    "path": "/learning-assets/audio/zombie-fish.mp3",
+    "kind": "audio",
+    "sha256": "80f5da183542a2f8b919d5fc89a97c5b9a9affe28a11a0ff2d193708f1c842c7",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "floor",
+    "path": "/learning-assets/audio/learn-floor.mp3",
+    "kind": "audio",
+    "sha256": "76a3c5867aaf94c182fb86a6557c934a64c983ee8929b63fd5caa6afd817385e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "floor",
+    "path": "/learning-assets/audio/zombie-floor.mp3",
+    "kind": "audio",
+    "sha256": "ce075cbb6c4f8956377ed761471d4fc48595e0ea2d57f5833f62161a7519efac",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "forehead",
+    "path": "/learning-assets/audio/learn-forehead.mp3",
+    "kind": "audio",
+    "sha256": "b16b26386bd3b6d109e6c464e19e3f338ec9a1ab3ab7f264b673e247b6605e38",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "forehead",
+    "path": "/learning-assets/audio/zombie-forehead.mp3",
+    "kind": "audio",
+    "sha256": "1f7e65885dac57244a93e464029489ec491f9c2f40fb5a5c16d6338b49139aeb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "gift",
+    "path": "/learning-assets/audio/learn-gift.mp3",
+    "kind": "audio",
+    "sha256": "e80d24400948c0ddf7ef027f0b1d4f306e906eed3983eb2fa6b86acd91da97bb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "gift",
+    "path": "/learning-assets/audio/zombie-gift.mp3",
+    "kind": "audio",
+    "sha256": "fd11e3e2cc8dd410d8956f4deda949d801f9afc665c65ed7ec2a802d61bcfe99",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glass",
+    "path": "/learning-assets/audio/learn-glass.mp3",
+    "kind": "audio",
+    "sha256": "ee8799462930068edfeadcdd601d947510ecf93229b34a17d21e5267655ee302",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glass",
+    "path": "/learning-assets/audio/zombie-glass.mp3",
+    "kind": "audio",
+    "sha256": "a59ae8f163487eb3f6816c4be5caf2e3a9b920cedf6c2b4a54af8167f2130f7d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glue",
+    "path": "/learning-assets/audio/learn-glue.mp3",
+    "kind": "audio",
+    "sha256": "2a01aa741f1108559be2f1060e2fde5bcd8d89bacba67aa37f89a1c38de546e6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glue",
+    "path": "/learning-assets/audio/zombie-glue.mp3",
+    "kind": "audio",
+    "sha256": "45dcf6537839e9f1378ea6d9766b063b8998479e9c124a25926c213620cfb24a",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "green",
+    "path": "/learning-assets/audio/learn-green.mp3",
+    "kind": "audio",
+    "sha256": "031c2ef56b4c76f44043b2b005c7a7afc62ede78bcfee73fb68b7eccc5c9bf61",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "green",
+    "path": "/learning-assets/audio/zombie-green.mp3",
+    "kind": "audio",
+    "sha256": "6587b5227f87a7fb773bb7a76b6dcbd3fdd441c0a669586c2d374059db69a370",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "hand",
+    "path": "/learning-assets/audio/learn-hand.mp3",
+    "kind": "audio",
+    "sha256": "f392adc6a2b170c0d3e4b0dfb66b0b75a9fd76a5880018065275c5cf99e8ef5d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "hand",
+    "path": "/learning-assets/audio/zombie-hand.mp3",
+    "kind": "audio",
+    "sha256": "98e0d8818737daf3e8af1af737769ee5b331054e87d157ec9513fae37519ed1e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "head",
+    "path": "/learning-assets/audio/learn-head.mp3",
+    "kind": "audio",
+    "sha256": "1ff57834e750404865b89aaa8790bcd5867c5bfeef0cb2651831d6be7ea9cbe0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "head",
+    "path": "/learning-assets/audio/zombie-head.mp3",
+    "kind": "audio",
+    "sha256": "0ba3df7f98157873b83cbe25f6a16fc6fe0d16c01d2aee41a01c55ef506d7fa3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "home",
+    "path": "/learning-assets/audio/learn-home.mp3",
+    "kind": "audio",
+    "sha256": "faf663e360456fc2977ad84f2b2f447968e004e82903930fe07358e232d0847b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "home",
+    "path": "/learning-assets/audio/zombie-home.mp3",
+    "kind": "audio",
+    "sha256": "b4edb69c4410f62f0c000477b54a3b9b210a459d24869bdd851a9d163de8820b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "horse",
+    "path": "/learning-assets/audio/learn-horse.mp3",
+    "kind": "audio",
+    "sha256": "911505b2cee45c6126a2a1512d2f89f3ef89ad6fbfcd8c680c71b4a17d4fd502",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "horse",
+    "path": "/learning-assets/audio/zombie-horse.mp3",
+    "kind": "audio",
+    "sha256": "9d6b82a804951f97b104be524cb6eaf2066679886f5ab44cc7bf7d72eee93fa6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "juice",
+    "path": "/learning-assets/audio/learn-juice.mp3",
+    "kind": "audio",
+    "sha256": "939591f3e94c9323a7ce069430cef7319bee41dad038e15275c2ea70b153fff6",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "juice",
+    "path": "/learning-assets/audio/zombie-juice.mp3",
+    "kind": "audio",
+    "sha256": "0c818b4eeb6b4aa04ebcf6fb90abd0fe19972bc70def1745fbd7c495dc29c6cc",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "kite",
+    "path": "/learning-assets/audio/learn-kite.mp3",
+    "kind": "audio",
+    "sha256": "9aaa367d448b93a4d21895e66dd70a4f0f1a6480dd6c88b8686bae8194b66ca9",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "kite",
+    "path": "/learning-assets/audio/zombie-kite.mp3",
+    "kind": "audio",
+    "sha256": "bf58046392af0f51bb9415e35e17caf1e7b0b9e13296b233d0ded677455ecdb9",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "leg",
+    "path": "/learning-assets/audio/learn-leg.mp3",
+    "kind": "audio",
+    "sha256": "725d06d94bff6584125c104cf5cb20e35c4835dc223cb32b57eca78080e5df67",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "leg",
+    "path": "/learning-assets/audio/zombie-leg.mp3",
+    "kind": "audio",
+    "sha256": "4e50fc42254eecdf813a2647b768286a53aefd4df2af93823d9b2d91a543219b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "lion",
+    "path": "/learning-assets/audio/learn-lion.mp3",
+    "kind": "audio",
+    "sha256": "d503583791196048c4ae437109a74711f079e9d214aeac3c1bb1477fc4354bcb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "lion",
+    "path": "/learning-assets/audio/zombie-lion.mp3",
+    "kind": "audio",
+    "sha256": "11e090878dee5edcc63c94c6cd02e9d98b962c5e535df4ab508b50f82ef8bdcf",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "moon",
+    "path": "/learning-assets/audio/learn-moon.mp3",
+    "kind": "audio",
+    "sha256": "8ee4e88d0efb90e2ea2e178578dcfb54877a63d75c21ab0badb57110b27389dd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "moon",
+    "path": "/learning-assets/audio/zombie-moon.mp3",
+    "kind": "audio",
+    "sha256": "f85f4da0d534eaa8faf7621a70eb3dbee0a4cc5c226f0dfe79407259662617e1",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "notebook",
+    "path": "/learning-assets/audio/learn-notebook.mp3",
+    "kind": "audio",
+    "sha256": "ed0fd46b5e98fc239ecd096e77f3c5da23011a4c252156bc3e255aeb9c55f09f",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "notebook",
+    "path": "/learning-assets/audio/zombie-notebook.mp3",
+    "kind": "audio",
+    "sha256": "f8240d1b1f024bbe8a0469573f47697c5f66994eb44350d1ba31578d51b1cc92",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "palm",
+    "path": "/learning-assets/audio/learn-palm.mp3",
+    "kind": "audio",
+    "sha256": "d039334cce3d067cf6c96a98bc0d3b3e4387a075bf6812cf73d107d9c98834fb",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "palm",
+    "path": "/learning-assets/audio/zombie-palm.mp3",
+    "kind": "audio",
+    "sha256": "7ae5ba6581fe5bb6c0898057571325c3e883efbb8354ada6f807f31b24ecc482",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "panda",
+    "path": "/learning-assets/audio/learn-panda.mp3",
+    "kind": "audio",
+    "sha256": "3b6570612cf0f9a2dcd404ee195426616bcbf894b5da624c5d449c52b5db2a4d",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "panda",
+    "path": "/learning-assets/audio/zombie-panda.mp3",
+    "kind": "audio",
+    "sha256": "43e1f8cfb8930640fa03f85e538f111dc01b5597a73c04e694848d940fbe5344",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "paper",
+    "path": "/learning-assets/audio/learn-paper.mp3",
+    "kind": "audio",
+    "sha256": "eaa4eef133ad06fbd475deb57ecaf3399316877b7af7eca3665c311360661e33",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "paper",
+    "path": "/learning-assets/audio/zombie-paper.mp3",
+    "kind": "audio",
+    "sha256": "e5573f65f318112b19c452fb44e40ea1bd8683b39097346a28195133f8c1cd4c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pen",
+    "path": "/learning-assets/audio/learn-pen.mp3",
+    "kind": "audio",
+    "sha256": "f200898d52df871ad4f6151c42470bf4ac815d9b560bb728d3595f969f0f0e0b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pen",
+    "path": "/learning-assets/audio/zombie-pen.mp3",
+    "kind": "audio",
+    "sha256": "c6d3806c22678f9ba6d50f7c5f46b1d517c130bb3a4fdb45d52a4cfe0e241662",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pencil",
+    "path": "/learning-assets/audio/learn-pencil.mp3",
+    "kind": "audio",
+    "sha256": "4c8772d144b43977be50361a5edc5b6a294b7f386e59b457eb7a91d9dd81db49",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pencil",
+    "path": "/learning-assets/audio/zombie-pencil.mp3",
+    "kind": "audio",
+    "sha256": "c2fc9615c52e10a24b80a38df07a110e5a77d01526abf000e21715b64ce02269",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pink",
+    "path": "/learning-assets/audio/learn-pink.mp3",
+    "kind": "audio",
+    "sha256": "65fd62556d29aec6044cc94b48b17b5c4077aa62116868262fc2ebbb9ade7928",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pink",
+    "path": "/learning-assets/audio/zombie-pink.mp3",
+    "kind": "audio",
+    "sha256": "a1c683e5782222ea253aebc79f2f9f5650cdf5567431ecf5dfc48030152df30b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rabbit",
+    "path": "/learning-assets/audio/learn-rabbit.mp3",
+    "kind": "audio",
+    "sha256": "39803ada26c67c1d8f8962411198cab29dd077e7f9d9cd6496e0a83a9cc4e738",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rabbit",
+    "path": "/learning-assets/audio/zombie-rabbit.mp3",
+    "kind": "audio",
+    "sha256": "c8025eb62263c9e2e10c48c5b5651b4595c265cdfe9b25da92389d8d7b956e3e",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rain",
+    "path": "/learning-assets/audio/learn-rain.mp3",
+    "kind": "audio",
+    "sha256": "3bde0aa16b65eb52ee9adf8d82765f19ee141bf92a2ae16111b0478176f7a735",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rain",
+    "path": "/learning-assets/audio/zombie-rain.mp3",
+    "kind": "audio",
+    "sha256": "a4b56a1b9325ad40be45b9befcb8c6eb1b9252228f9db75c139e352425b8a76c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "red",
+    "path": "/learning-assets/audio/learn-red.mp3",
+    "kind": "audio",
+    "sha256": "6c803fcd84a6335b913bf8df040c02ab44543bffcbb3c130b96a84b4796127df",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "red",
+    "path": "/learning-assets/audio/zombie-red.mp3",
+    "kind": "audio",
+    "sha256": "4bd86a615435e775a10a333204b1b222f63ad2c92c89deb567bdc18ed7ade003",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ruler",
+    "path": "/learning-assets/audio/learn-ruler.mp3",
+    "kind": "audio",
+    "sha256": "213e1a1c51abc31d58986925b56ef2e18beb16d9d4b00cfae85113362a02bfe3",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ruler",
+    "path": "/learning-assets/audio/zombie-ruler.mp3",
+    "kind": "audio",
+    "sha256": "f8919705c5a388ca202a849b40e4e4efe6c71184ba502aff24bd29df247a9e14",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "scissors",
+    "path": "/learning-assets/audio/learn-scissors.mp3",
+    "kind": "audio",
+    "sha256": "451cb2b13f6d4cfd246bf8a9ffc0ea4546cba0e706e1d653cd33bdcd05c6a870",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "scissors",
+    "path": "/learning-assets/audio/zombie-scissors.mp3",
+    "kind": "audio",
+    "sha256": "cc03e67d553ced93d7efddfe91ef5911f6a3b16ffdeb7f68e66ce4e75c81ca4a",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sea",
+    "path": "/learning-assets/audio/learn-sea.mp3",
+    "kind": "audio",
+    "sha256": "fa15fd98cbec5d72beec24417256c3a69186903b31e8a0217acbb6990a1d1b59",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sea",
+    "path": "/learning-assets/audio/zombie-sea.mp3",
+    "kind": "audio",
+    "sha256": "aeeb58afa45a16c3261bd9591524619e3fdcaa01ca7e9809bb65522e1428088c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "season",
+    "path": "/learning-assets/audio/learn-season.mp3",
+    "kind": "audio",
+    "sha256": "a8bbc440e7ff7518fe6273ce102e89eb1dfee578e2050e427a30d869aad700bc",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "season",
+    "path": "/learning-assets/audio/zombie-season.mp3",
+    "kind": "audio",
+    "sha256": "3d59c6cc90898399fcf7781a57b99a225b856086899350b5f5daedfe19be1562",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sharpener",
+    "path": "/learning-assets/audio/learn-sharpener.mp3",
+    "kind": "audio",
+    "sha256": "1d2acebd32f1b9fd99e29ac24ea5d9385fc8e404872b3ba1eb137dec872de210",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sharpener",
+    "path": "/learning-assets/audio/zombie-sharpener.mp3",
+    "kind": "audio",
+    "sha256": "5efdf5b3a51bf163939765d0d4b73ec9243c13796eee0fcecdd5296446052b8f",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sheep",
+    "path": "/learning-assets/audio/learn-sheep.mp3",
+    "kind": "audio",
+    "sha256": "6c2a1d0fcb65e844aece3ac270672e21e8fd213a0457a3628d4e9e90511b9a57",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sheep",
+    "path": "/learning-assets/audio/zombie-sheep.mp3",
+    "kind": "audio",
+    "sha256": "0a43c56144a12123f12abcb0631ffd9449cdd552856c9b51d6cf9e15fdea6032",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "snow",
+    "path": "/learning-assets/audio/learn-snow.mp3",
+    "kind": "audio",
+    "sha256": "4a5343ab000d747754efe3ed9a9d88b86503722362e8fe59aebdce5eedfee046",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "snow",
+    "path": "/learning-assets/audio/zombie-snow.mp3",
+    "kind": "audio",
+    "sha256": "f48c651b223d58b962dd9a04877c123aad9633640b74a2a7ee9ed7929b0c5479",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "star",
+    "path": "/learning-assets/audio/learn-star.mp3",
+    "kind": "audio",
+    "sha256": "8b88db7364a99935277d5aebee1459f0fc69515871f66f726187b78825da1e4b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "star",
+    "path": "/learning-assets/audio/zombie-star.mp3",
+    "kind": "audio",
+    "sha256": "e0a75f2730d79e47dc822b535dd1b0700d1473c809662ba77bcab6d3195b137c",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sun",
+    "path": "/learning-assets/audio/learn-sun.mp3",
+    "kind": "audio",
+    "sha256": "82bcf1523a40d3a10d85339cb76a62d26b890aa724b03d8fe286e3abbd2927a5",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sun",
+    "path": "/learning-assets/audio/zombie-sun.mp3",
+    "kind": "audio",
+    "sha256": "4e5ee9168046eb4f76b95726b43ff16ff15f28898ba3834214d04278880e2547",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tape",
+    "path": "/learning-assets/audio/learn-tape.mp3",
+    "kind": "audio",
+    "sha256": "424b905ef3e3039cbee435bacfe662cb7b8f09c07f51dd6be4432750172d94b1",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tape",
+    "path": "/learning-assets/audio/zombie-tape.mp3",
+    "kind": "audio",
+    "sha256": "99a80f766215950d09b9ded6efef51b7b8983a8975fbaef69314932afa762424",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tiger",
+    "path": "/learning-assets/audio/learn-tiger.mp3",
+    "kind": "audio",
+    "sha256": "a95de4656b93d15b289da12bb9cc6f5b38000bc1f430664e8e2eb12bf30b6fab",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tiger",
+    "path": "/learning-assets/audio/zombie-tiger.mp3",
+    "kind": "audio",
+    "sha256": "75b87c8ca649c678ff42cd5229547fb69efbe753cbd69c2eef3c0dae8884aa72",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "towel",
+    "path": "/learning-assets/audio/learn-towel.mp3",
+    "kind": "audio",
+    "sha256": "cab95f6ed097267be82d037920b5641d6b0fcb29677d3f38f06a1bbe91c025cd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "towel",
+    "path": "/learning-assets/audio/zombie-towel.mp3",
+    "kind": "audio",
+    "sha256": "66d56cb629037342eb69be7e9e98d20c1981b574b812a78da64159500ecc0efe",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "toy",
+    "path": "/learning-assets/audio/learn-toy.mp3",
+    "kind": "audio",
+    "sha256": "29fa9a914937ae2fe0244a1968600b02b1646a509758c1d56fe9e2888f51b9e9",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "toy",
+    "path": "/learning-assets/audio/zombie-toy.mp3",
+    "kind": "audio",
+    "sha256": "320ea21a505ecc185e733b69255d46496b3e5c7dbf105da7432449c9898e5679",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wall",
+    "path": "/learning-assets/audio/learn-wall.mp3",
+    "kind": "audio",
+    "sha256": "c5351b356b2cde8b79de8c3fb3446e79a851cd28759a618baaa937c2614d306b",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wall",
+    "path": "/learning-assets/audio/zombie-wall.mp3",
+    "kind": "audio",
+    "sha256": "8262ccc468792e961bbbf796aa0c9ab4c28bcad8310e4ee947192b7dd6ce99ba",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "weather",
+    "path": "/learning-assets/audio/learn-weather.mp3",
+    "kind": "audio",
+    "sha256": "63675ce68e9380f16fc6434e2b0c4868b279bd9f3e1e938d7752b80d439e5642",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "weather",
+    "path": "/learning-assets/audio/zombie-weather.mp3",
+    "kind": "audio",
+    "sha256": "e85b51fdc5966485cfed61687c0c1d1f9a626ad9ce4a71a6167cac67b3c77ddd",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "white",
+    "path": "/learning-assets/audio/learn-white.mp3",
+    "kind": "audio",
+    "sha256": "5c817c12954338ee1747c7f72e13cb9e6cd11336104b53c4891a520aeac72ae7",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "white",
+    "path": "/learning-assets/audio/zombie-white.mp3",
+    "kind": "audio",
+    "sha256": "489c4fbd4f3b673c1c4ed456e0ebc7e6c0184cae7ee68e8eb7b6de56290ca930",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wind",
+    "path": "/learning-assets/audio/learn-wind.mp3",
+    "kind": "audio",
+    "sha256": "73a4451f799617c8aa212dfcbbb0887ff85c8f0f6918ddb5aea32d32c1b965f1",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wind",
+    "path": "/learning-assets/audio/zombie-wind.mp3",
+    "kind": "audio",
+    "sha256": "ea03ed2097bca608705337e8b9196e381e9f4f97fcd59c96f6d536d4ce54ac70",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "window",
+    "path": "/learning-assets/audio/learn-window.mp3",
+    "kind": "audio",
+    "sha256": "6bcae5733b1e82c91993afe44bca04e457dc155a858e8f1dfce6beca0a1d30a0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "window",
+    "path": "/learning-assets/audio/zombie-window.mp3",
+    "kind": "audio",
+    "sha256": "2472265702a7eb5f2bd0b991f0f4965114740756bc584cd78dcdc608c76c7cca",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "yellow",
+    "path": "/learning-assets/audio/learn-yellow.mp3",
+    "kind": "audio",
+    "sha256": "47445b54837d1aaeee773b4a9a723e034d7a49d49d3eb3ec74887dea9d6a5ee0",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "yellow",
+    "path": "/learning-assets/audio/zombie-yellow.mp3",
+    "kind": "audio",
+    "sha256": "40d257d7d45bd73b2f45de97c5c2f667a76cedaf73bea55de78a5ae90a1bceee",
+    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "reviewStatus": "pending"
+  }
+];

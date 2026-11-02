@@ -1,7 +1,7 @@
 import { createSeededRandom } from './plans';
 import { logicalHitbox } from './viewport';
 import { createEncounterCombat } from './combat';
-import { BATTLE_WORDS } from './fruit-catalog';
+import { ALL_BATTLE_WORDS as BATTLE_WORDS, ANIMAL_IDS, getLevel } from './levels';
 import type { SpriteAsset, SceneArt } from './canvas-scene';
 import type { SkillLevels } from './types';
 import { FORTRESS_RULES } from './rules';
@@ -22,18 +22,20 @@ const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortres
 
 export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]): SceneArt {
   const word = BATTLE_WORDS.find(item => item.id === wordId);
-  if (!word) throw new Error('未知水果');
-  return { monster: original('zombie'), monsterWidth: 40,
-    outfitBodies: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知水果'); return [id, original(`zombie-body-${id}`)]; })),
+  if (!word) throw new Error('未知单词');
+  return { animalIds: wordIds.filter(id => ANIMAL_IDS.includes(id)), monster: original('zombie'), monsterWidth: 40,
+    outfitBodies: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知单词'); return [id, original(getLevel(1).words.some(word => word.id === id) ? `zombie-body-${id}` : getLevel(2).words.some(word => word.id === id) ? `zombie-body-${id}` : 'zombie-body')]; })),
     walkParts: { body: original('zombie-body'), left: original('zombie-leg-left'), right: original('zombie-leg-right') },
     monsterVisual: { wordId, portraitPath: '/assets/images/fortress/zombie.png', spritePath: '/assets/images/fortress/zombie.png',
-      sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: { x: 25, y: 16, width: 78, height: 135 } },
-    fruitHats: Object.fromEntries([...new Set(wordIds)].map(id => { const fruit = BATTLE_WORDS.find(word => word.id === id); if (!fruit) throw new Error('未知水果'); return [id, { path: fruit.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记水果图授权', approved: true }]; })),
-    fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记水果图授权', approved: true },
+      sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: ANIMAL_IDS.includes(wordId) ? { x: 10, y: 25, width: 108, height: 110 } : { x: 25, y: 16, width: 78, height: 135 } },
+    fruitHats: Object.fromEntries([...new Set(wordIds)].map(id => { const fruit = BATTLE_WORDS.find(word => word.id === id); if (!fruit) throw new Error('未知单词'); return [id, { path: fruit.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true }]; })),
+    fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true },
     hero: original('hero-back'), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
 }
-export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp = FORTRESS_RULES.base.maxHp, previousWordIds: readonly string[] = []) {
+export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp = FORTRESS_RULES.base.maxHp, previousWordIds: readonly string[] = [], levelId = 1) {
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
+  const words = getLevel(levelId).words;
+  if (!words.some(word => word.id === wordId) || previousWordIds.some(id => !words.some(word => word.id === id))) throw new Error('词汇不属于本关');
   const count = 3 + waveIndex * 2;
   let seed = 2166136261;
   for (const char of `${sessionId}:${waveIndex}`) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
@@ -50,7 +52,7 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
       position: { x: lanes[member] + random() * 12 - 6, y: FORTRESS_RULES.monster.startY } });
     spawnAtMs += 800 + Math.floor(random() * 701);
   }
-  return createEncounterCombat({ automatic: true, monsterSpeed: 20, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
+  return createEncounterCombat({ automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
     playerX: 180, skills, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     allowedWordIds: [wordId, ...history], spawns });
 }

@@ -1,3 +1,6 @@
+import { collectionWords } from '../miniprogram/fortress/collection';
+import { LEVELS } from '../miniprogram/fortress/levels';
+import { createCoinWallet } from '../miniprogram/services/coin-wallet';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
@@ -6,16 +9,18 @@ import ts from 'typescript';
 import { createSessionStore } from '../miniprogram/services/session';
 import { createBattleController } from '../miniprogram/services/battle';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
-import { BATTLE_ASSETS } from '../miniprogram/fortress/content';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
-function homeHarness() {
+function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
   const sessionStore = createSessionStore();
-  const fortressEntryStore = createFortressEntryStore();
+  let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
+  const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
+  const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id));
   let page: any;
   let navigation: any;
   let navigationCount = 0;
   let toastCount = 0;
+  const audioCalls: any[] = [];
   const source = readFileSync(new URL('../miniprogram/pages/home/home.ts', import.meta.url), 'utf8');
   const { outputText } = ts.transpileModule(source, {
     compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
@@ -23,9 +28,12 @@ function homeHarness() {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
-      if (name === '../../services/coin-wallet') return { coinWallet: { balance: () => 300 } };
+      if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
+      if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
+      if (name === '../../services/coin-wallet') return { coinWallet: wallet };
+      if (name === '../../fortress/collection') return { collectionWords };
+      if (name === '../../fortress/levels') return { LEVELS };
       if (name === '../../services/home-music') return { createHomeMusic: () => ({ setActive() {}, setEnabled() {}, retry() {}, dispose() {} }) };
-      if (name === '../../fortress/content') return { BATTLE_ASSETS };
       if (name === '../../services/fortress-entry') return { fortressEntryStore };
       assert.equal(name, '../../services/session');
       return { sessionStore };
@@ -39,7 +47,7 @@ function homeHarness() {
       showToast() { toastCount++; },
     },
   });
-  return { sessionStore, get page() { return page; }, get navigation() { return navigation; },
+  return { audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
     get navigationCount() { return navigationCount; }, get toastCount() { return toastCount; } };
 }
 
@@ -137,4 +145,36 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
   assert.equal(sessionStore.claim(session.sessionId), undefined);
   loadPage().onLoad({});
   assert.equal(redirects, 3);
+});
+
+test('首页关卡锁定、通关刷新和默认进入首个未完成关卡', async () => {
+ const h = homeHarness(); h.page.onShow(); h.page.toggleLevels();
+ assert.equal(h.page.data.levels.length, 8); assert.equal(h.page.data.levels.filter((l:any)=>!l.locked).length,1);
+ h.page.selectLevel({currentTarget:{dataset:{levelId:2}}}); assert.equal(h.page.data.request,null);
+ h.wallet.rewardVictory('first',1); h.page.onShow(); assert.equal(h.page.data.levels[1].locked,false);
+ await h.page.openBattle(); assert.equal(h.page.data.request.plan.levelId,2); h.page.closeChallenge();
+ h.page.selectLevel({currentTarget:{dataset:{levelId:1}}}); assert.equal(h.page.data.request.plan.levelId,1);
+});
+
+test('素材集合默认水果、全部分类可浏览，快速切换和关闭不接受旧加载结果', async () => {
+ const pending: (()=>void)[]=[];const h=homeHarness(()=>new Promise<void>(resolve=>pending.push(resolve)));
+ h.page.toggleCredits();assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
+ const colors=h.page.selectCollection({currentTarget:{dataset:{levelId:2}}});
+ const animals=h.page.selectCollection({currentTarget:{dataset:{levelId:3}}});
+ pending[1]();await animals;assert.equal(h.page.data.collectionItems.length,16);
+ pending[0]();await colors;assert.equal(h.page.data.collectionLevel,3);assert.equal(h.page.data.collectionItems.length,16);
+ const tools=h.page.selectCollection({currentTarget:{dataset:{levelId:4}}});h.page.toggleCredits();pending[2]();await tools;assert.equal(h.page.data.showCredits,false);
+ h.page.toggleCredits();assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
+ for(const level of LEVELS)assert.ok(collectionWords(level.id).every(word=>word.phonetic.startsWith('/')&&!word.phonetic.includes('undefined')));
+});
+
+test('集合播放对应标准音频，连续点击不重叠，旧回调与关闭/后台不残留声音', () => {
+ const h=homeHarness();h.page.onShow();h.page.toggleCredits();
+ const tap=(wordId:string)=>h.page.playCollectionWord({currentTarget:{dataset:{wordId}}});
+ tap('apple');assert.equal(h.audioCalls[0].path,'/assets/audio/learn-apple.mp3');assert.equal(h.page.data.collectionPlaying,'apple');
+ tap('banana');assert.equal(h.audioCalls[0].disposed,true);h.audioCalls[0].done(true);assert.equal(h.page.data.collectionPlaying,'banana');
+ h.audioCalls[1].done(false);assert.equal(h.page.data.collectionAudioError,'banana');tap('banana');assert.equal(h.page.data.collectionAudioError,'');
+ h.page.toggleCredits();assert.equal(h.audioCalls[2].disposed,true);assert.equal(h.page.data.collectionPlaying,'');
+ h.page.toggleCredits();tap('apple');h.page.onHide();assert.equal(h.audioCalls[3].disposed,true);tap('banana');assert.equal(h.audioCalls.length,4);
+ h.page.onUnload();h.audioCalls[3].done(false);assert.equal(h.page.data.collectionAudioError,'');
 });

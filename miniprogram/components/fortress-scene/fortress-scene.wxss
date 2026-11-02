@@ -60,3 +60,5 @@
 @keyframes firework-burst { 0% { opacity: 0; transform: translateY(0) scale(.2); } 8% { opacity: 1; } 65% { opacity: 1; transform: translateY(-130rpx) scale(1); } 100% { opacity: 0; transform: translateY(-175rpx) scale(.3); } }
 .victory-reward { display: flex; align-items: center; justify-content: center; gap: 16rpx; margin-top: 20rpx; color: #ffe49a; font-size: 34rpx; font-weight: bold; animation: victory-pop 500ms 650ms both; }.reward-coin { width: 48rpx; height: 48rpx; border-radius: 50%; border: 4rpx solid #e9ac3e; background: #ffe389; color: #c38b2e; font-size: 22rpx; line-height: 48rpx; }.victory-reward button { font-size: 22rpx; color: #614719; background: #ffe5a6; margin: 0; }.victory-collection { margin-top: 20rpx; }.victory-home { margin-top: 24rpx; }
 @media (max-height: 650px) { .victory-reward { margin-top: 12rpx; font-size: 28rpx; }.victory-collection { margin-top: 12rpx; }.victory-fruits { margin-top: 14rpx; } }
+
+.victory-fruit { width: 60rpx; height: 60rpx; border-radius: 16rpx; }.victory-fruit image { width: 52rpx; height: 52rpx; margin-top: 4rpx; }

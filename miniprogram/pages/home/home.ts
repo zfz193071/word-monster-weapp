@@ -1,20 +1,73 @@
+import { createAudioAdapter } from '../../services/audio';
+import { collectionWords } from '../../fortress/collection';
+import { loadLevelAssets } from '../../services/level-assets';
+import { LEVELS } from '../../fortress/levels';
 import { coinWallet } from '../../services/coin-wallet';
 import { createHomeMusic } from '../../services/home-music';
 import type { HomeMusicStatus } from '../../services/home-music';
-import { BATTLE_ASSETS } from '../../fortress/content';
 import type { ListeningResult } from '../../fortress/listening';
 import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, credits: BATTLE_ASSETS,
+  data: { collectionPlaying: '', collectionAudioError: '', preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
   navigationId: 0,
+  collectionRevision: 0,
+  collectionAudioRevision: 0,
+  collectionAudio: undefined as ReturnType<typeof createAudioAdapter> | undefined,
   enteredBattle: false,
   disposed: false,
 
-  toggleCredits() { this.setData({ showCredits: !this.data.showCredits }); },
+  refreshLevels() {
+    try {
+      const completed = coinWallet.completedLevels();
+      this.setData({ progressError: false, levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > completed.length + 1, completed: completed.includes(level.id) })) });
+    } catch { this.setData({ progressError: true }); }
+  },
+  toggleLevels() { if (this.data.request) return; this.stopCollectionAudio(); this.refreshLevels(); this.setData({ showLevels: !this.data.showLevels, showCredits: false }); },
+  selectLevel(event: WechatMiniprogram.BaseEvent) { return this.beginLevel(Number(event.currentTarget.dataset.levelId)); },
+  toggleCredits() {
+    this.stopCollectionAudio();
+    this.collectionRevision++;
+    if (this.data.showCredits) { this.setData({ showCredits: false }); return; }
+    this.setData({ showCredits: true, showLevels: false });
+    void this.loadCollection(1);
+  },
+  selectCollection(event: WechatMiniprogram.BaseEvent) { return this.loadCollection(Number(event.currentTarget.dataset.levelId)); },
+  retryCollection() { return this.loadCollection(this.data.collectionLevel); },
+  async loadCollection(levelId: number) {
+    const level = LEVELS.find(level => level.id === levelId);
+    if (!level || this.disposed || !this.data.showCredits) return;
+    this.stopCollectionAudio();
+    const revision = ++this.collectionRevision;
+    this.setData({ collectionLevel: levelId, collectionItems: [], collectionLoading: levelId > 1, collectionError: false, collectionScroll: this.data.collectionScroll === 0 ? 1 : 0 });
+    const valid = () => !this.disposed && this.data.showCredits && revision === this.collectionRevision;
+    try {
+      if (levelId > 1) await loadLevelAssets();
+      if (!valid()) return;
+      this.setData({ collectionItems: collectionWords(levelId), collectionLoading: false, collectionScroll: 0 });
+    } catch { if (valid()) this.setData({ collectionLoading: false, collectionError: true }); }
+  },
+  stopCollectionAudio() {
+    this.collectionAudioRevision++;
+    this.collectionAudio?.dispose(); this.collectionAudio = undefined;
+    if (!this.disposed) { this.setData({ collectionPlaying: '', collectionAudioError: '' }); this.synchronizeMusic(); }
+  },
+  playCollectionWord(event: WechatMiniprogram.BaseEvent) {
+    if (this.disposed || !this.data.homeVisible || !this.data.showCredits || this.data.collectionLoading) return;
+    const word = this.data.collectionItems.find(item => item.id === event.currentTarget.dataset.wordId);
+    if (!word) return;
+    this.stopCollectionAudio();
+    const revision = this.collectionAudioRevision;
+    this.setData({ collectionPlaying: word.id }); this.synchronizeMusic();
+    this.collectionAudio = createAudioAdapter({ sessionId: 'collection', emit() {} });
+    this.collectionAudio.playReveal(word.audioPath, { sessionId: 'collection', roundId: word.id, revision }, success => {
+      if (this.disposed || revision !== this.collectionAudioRevision) return;
+      this.setData({ collectionPlaying: '', collectionAudioError: success ? '' : word.id }); this.synchronizeMusic();
+    });
+  },
   onShow() {
     try { this.setData({ coinBalance: coinWallet.balance(), coinError: false }); } catch { this.setData({ coinError: true }); }
     if (!this.music) this.music = createHomeMusic({ onChange: view => {
@@ -25,11 +78,11 @@ Page({
       this.enteredBattle = false;
       this.clearChallenge();
     }
-    this.synchronizeMusic();
+    this.refreshLevels(); this.synchronizeMusic();
   },
-  onHide() { this.setData({ homeVisible: false }); this.synchronizeMusic(); },
-  onUnload() { this.disposed = true; this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
-  synchronizeMusic() { this.music?.setActive(this.data.homeVisible && !this.data.request); },
+  onHide() { this.setData({ homeVisible: false }); this.stopCollectionAudio(); this.synchronizeMusic(); },
+  onUnload() { this.disposed = true; this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
+  synchronizeMusic() { this.music?.setActive(this.data.homeVisible && !this.data.request && !this.data.collectionPlaying); },
   toggleMusic() {
     if (this.data.musicStatus === 'error') this.music?.retry();
     else this.music?.setEnabled(!this.data.musicEnabled);
@@ -44,10 +97,24 @@ Page({
   closeChallenge() { if (!this.data.opening && !this.disposed) this.clearChallenge(); },
   // Captures the modal background touchmove without blocking card taps.
   stopScroll() {},
-  openBattle() {
-    if (this.disposed || this.data.request) return;
-    this.music?.setActive(false);
-    this.setData({ request: fortressEntryStore.start(), showCredits: false, choiceComplete: false, navigationError: false });
+  async openBattle() {
+    try { await this.beginLevel(coinWallet.defaultLevel()); }
+    catch { this.setData({ entryError: '关卡记录暂时无法读取，请重试' }); }
+  },
+  async beginLevel(levelId: number) {
+    if (this.disposed || this.data.request || this.data.preparingLevel) return;
+    try {
+      if (!coinWallet.canEnter(levelId)) return;
+      if (levelId > 1) {
+        this.setData({ preparingLevel: true, entryError: '' });
+        await loadLevelAssets();
+        if (this.disposed) return;
+      }
+      const request = fortressEntryStore.start(Date.now(), levelId);
+      this.stopCollectionAudio(); this.music?.setActive(false);
+      this.setData({ request, showLevels: false, showCredits: false, entryError: '', choiceComplete: false, navigationError: false });
+    } catch { if (!this.disposed) this.setData({ entryError: '关卡暂时无法准备，请重试' }); }
+    finally { if (!this.disposed) this.setData({ preparingLevel: false }); }
   },
   choiceSucceeded(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
     if (this.disposed || this.data.choiceComplete || !fortressEntryStore.complete(event.detail)) return;

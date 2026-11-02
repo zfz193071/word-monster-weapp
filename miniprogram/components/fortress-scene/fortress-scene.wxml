@@ -10,7 +10,7 @@
       <text class="victory-subtitle">小屋守住了！</text>
       <view class="victory-results"><view><text class="result-number">{{waveCount}}</text><text>波全部完成</text></view><view><text class="result-number">{{experience}}</text><text>本局经验</text></view></view>
       <view class="victory-reward"><view class="reward-coin">●</view><text wx:if="{{rewardSaved}}">＋{{rewardCoins}} 金币</text><button wx:elif="{{rewardError}}" bindtap="claimVictoryReward">奖励暂未保存，点击重试</button><text wx:else>金币奖励到账中…</text></view>
-      <view class="victory-collection"><text class="collection-title">本局练习 · {{victoryFruits.length}} 种水果</text><view class="victory-fruits"><view wx:for="{{victoryFruits}}" wx:key="id" class="victory-fruit" style="animation-delay: {{item.delay}}ms"><image src="{{item.image}}" mode="aspectFit" /></view></view></view>
+      <view class="victory-collection"><text class="collection-title">本局练习 · {{victoryFruits.length}} 个单词</text><view class="victory-fruits"><view wx:for="{{victoryFruits}}" wx:key="id" class="victory-fruit" style="animation-delay: {{item.delay}}ms"><image src="{{item.image}}" mode="aspectFit" /></view></view></view>
       <button class="victory-home" bindtap="returnHome">返回小屋</button>
     </view>
   </view>

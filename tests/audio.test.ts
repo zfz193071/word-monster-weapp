@@ -177,3 +177,11 @@ test('engine integration: failure and retry preserve question and attempts; repl
   assert.equal(state.attempts.length, 0);
   adapter.dispose();
 });
+
+test('分类分包音频可正常解锁选词，仍拒绝包外路径及路径穿越', () => {
+ const h=harness();assert.equal(h.adapter.playPrompt('/learning-assets/audio/learn-blue.mp3',context()),'started');
+ h.channels[0].fire('ended');assert.equal(h.events.length,1);
+ assert.equal(h.adapter.playPrompt('/learning-assets/audio/../learn-blue.mp3',context(2)),'failed');
+ assert.equal(h.adapter.playPrompt('/other/audio/learn-blue.mp3',context(3)),'failed');
+ h.adapter.dispose();
+});

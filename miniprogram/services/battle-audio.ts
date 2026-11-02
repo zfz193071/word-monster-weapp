@@ -2,7 +2,7 @@ import { createAudioAdapter } from './audio';
 import type { AudioOptions } from './audio';
 import { createLoopMusic } from './home-music';
 import type { HomeMusicChannel } from './home-music';
-import { BATTLE_WORDS } from '../fortress/fruit-catalog';
+import { ALL_BATTLE_WORDS as BATTLE_WORDS, defeatAudioPath } from '../fortress/levels';
 import type { CombatEvent } from '../fortress/types';
 
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
@@ -30,7 +30,7 @@ export function createBattleAudio(options: {
     const entry = queue[0]; const word = BATTLE_WORDS.find(word => word.id === entry.wordId);
     if (!word) { error = true; publish(); return; }
     playing = true; const token = ++revision; mix(); publish();
-    voice.playReveal(`/assets/audio/zombie-${word.id}.mp3`, { sessionId: options.sessionId, roundId: entry.monsterIds[0], revision: token }, success => {
+    voice.playReveal(defeatAudioPath(word.id), { sessionId: options.sessionId, roundId: entry.monsterIds[0], revision: token }, success => {
       if (disposed || !active || token !== revision) return;
       playing = false;
       if (!success) { error = true; publish(); return; }
