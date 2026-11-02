@@ -86,7 +86,7 @@ Component({
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
-            initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
+            levelId: request?.plan.levelId ?? 1, initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
             preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId, initial.monsters.map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined,
             previewMonster: this.properties.preview && visual && asset ? { monsterVisual: visual, monsterWidth: monsterDrawWidth(visual),
               monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,

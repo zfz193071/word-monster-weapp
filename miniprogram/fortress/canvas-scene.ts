@@ -1,3 +1,4 @@
+import { drawBattleBackground } from './battle-background';
 import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
@@ -30,6 +31,7 @@ export interface SceneArt extends MonsterArt {
 }
 export interface SceneHud { readonly hp: number; readonly maxHp: number; readonly status: CombatState['status'] }
 export interface SceneOptions {
+  readonly levelId?: number;
   readonly initial: CombatState;
   readonly width: number; readonly height: number; readonly dpr: number; readonly clientLeft: number;
   readonly preview: boolean; // only enabled by a develop-environment gate in the host page
@@ -246,19 +248,7 @@ export class CanvasScene {
     c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.canvas.width, this.canvas.height);
     c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
     if (this.options.art?.fruitHat) {
-      c.fillStyle = '#a1b777'; c.fillRect(0, 0, 360, 560);
-      c.fillStyle = '#c6c397'; c.beginPath(); c.moveTo(65, 0); c.lineTo(300, 0); c.lineTo(326, 480); c.lineTo(30, 480); c.closePath(); c.fill();
-      c.strokeStyle = '#ded8b3'; c.lineWidth = 2;
-      for (let row = 0; row < 8; row++) for (let col = 0; col < 4; col++) {
-        const x = 53 + col * 66 + (row % 2) * 12; const y = row * 64 - 12;
-        c.fillStyle = (row + col) % 3 ? '#cbc79e' : '#babd91';
-        c.beginPath(); c.moveTo(x + 12, y); c.lineTo(x + 60, y + 8); c.lineTo(x + 64, y + 47); c.lineTo(x + 35, y + 60); c.lineTo(x, y + 45); c.lineTo(x - 3, y + 15); c.closePath(); c.fill(); c.stroke();
-      }
-      for (let side = 0; side < 2; side++) for (let i = 0; i < 8; i++) {
-        const x = side ? 345 : 10; const y = 22 + i * 64;
-        c.fillStyle = i % 2 ? '#789858' : '#8ea767'; c.beginPath(); c.arc(x, y, 19, 0, Math.PI * 2); c.fill();
-        c.fillStyle = '#9bb773'; c.beginPath(); c.arc(x + 7, y - 7, 11, 0, Math.PI * 2); c.fill();
-      }
+      drawBattleBackground(c, this.options.levelId);
     } else {
       c.fillStyle = '#112c36'; c.fillRect(0, 0, 360, 560);
       c.fillStyle = '#21434a';
