@@ -1,5 +1,7 @@
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
 export type SkillId = 'doubleShot' | 'fireRate' | 'bulletWidth';
+export type ElementId = 'flame' | 'frost' | 'lightning';
+export type BattleSkillId = SkillId | ElementId;
 export type RandomSource = () => number;
 export interface Point { readonly x: number; readonly y: number }
 export interface Rect extends Point { readonly width: number; readonly height: number }
@@ -35,7 +37,7 @@ export interface SkillDefinition {
   // Absolute values at level 0..maxLevel; no ambiguous percentage stacking.
   readonly values: readonly number[];
 }
-export type SkillLevels = Readonly<Record<SkillId, number>>;
+export type SkillLevels = Readonly<Record<SkillId, number> & Partial<Record<ElementId, number>>>;
 export interface FortressRules {
   readonly mode: 'fortress';
   readonly schemaVersion: 2;
@@ -104,6 +106,8 @@ export interface WaveContext {
 export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly slowUntilTick?: number;
+  readonly slowRatio?: number;
   readonly spawnAtMs?: number;
   readonly id: string; readonly wordId: string; readonly position: Point;
   // Logical coordinates relative to position, derived from approved sprite geometry.
@@ -113,11 +117,15 @@ export interface MonsterState {
   readonly attackSequence: number;
 }
 export interface ProjectileState {
+  readonly elements?: Readonly<Partial<Record<ElementId, number>>>;
   readonly direction?: Point;
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
+export interface ElementImpact { readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  readonly elementReadyTick?: number;
+  readonly elementImpacts?: readonly ElementImpact[];
   readonly monsterSpeed?: number;
   readonly automatic?: boolean;
   readonly aimDirection?: Point;

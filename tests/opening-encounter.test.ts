@@ -30,12 +30,13 @@ test('首批真实命中击杀三只→30经验升级一次→三选一强化真
     assert.deepEqual(upgrades, [2]); assert.equal(xp.view.total, 30);
     const offer = choices.open(openingSkillOffer(state.context.sessionId))!;
     assert.equal(offer.cards.length, 3);
-    const selected = choices.select(offer.id, preferred)!;
+    const chosen = offer.cards.find(card => card.id === preferred) ?? offer.cards[0];
+    const selected = choices.select(offer.id, chosen.id)!;
     state = applyCombatSkills(state, { ...state.skills, [selected.id]: 1 });
     const weapon = getWeaponParameters(state.skills);
-    assert.equal(weapon.count, preferred === 'doubleShot' ? 2 : 1);
-    assert.equal(weapon.intervalMs, preferred === 'fireRate' ? 400 : 500);
-    assert.equal(weapon.width, preferred === 'bulletWidth' ? 12 : 8);
+    assert.equal(weapon.count, selected.id === 'doubleShot' ? 2 : 1);
+    assert.equal(weapon.intervalMs, selected.id === 'fireRate' ? 400 : 500);
+    assert.equal(weapon.width, selected.id === 'bulletWidth' ? 12 : 8);
     assert.equal(choices.select(offer.id, preferred), null);
   }
 });

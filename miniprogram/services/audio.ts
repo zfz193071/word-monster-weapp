@@ -2,7 +2,7 @@ import type { RoundEventContext } from '../game/types';
 
 export type AudioChannel = Pick<WechatMiniprogram.InnerAudioContext,
   'src' | 'autoplay' | 'loop' | 'play' | 'stop' | 'destroy' |
-  'onEnded' | 'offEnded' | 'onError' | 'offError' | 'onStop' | 'offStop' | 'onPause' | 'offPause'>;
+  'onEnded' | 'offEnded' | 'onError' | 'offError' | 'onStop' | 'offStop' | 'onPause' | 'offPause'> & { playbackRate?: number };
 export type AudioKind = 'prompt' | 'reveal' | 'effect';
 export type AudioEvent = RoundEventContext & { readonly type: 'audioReady' | 'audioFailed' };
 export interface AudioFailure {
@@ -42,6 +42,7 @@ export function createAudioAdapter(options: AudioOptions) {
     const timer = setTimeout(callback, delay);
     return () => clearTimeout(timer);
   });
+  let playbackRate = 1;
   let active: Playback | undefined;
   let disposed = false;
   let latest: RoundEventContext | undefined;
@@ -110,6 +111,7 @@ export function createAudioAdapter(options: AudioOptions) {
       channel.onPause(playback.interrupted);
       channel.autoplay = false;
       channel.loop = false;
+      channel.playbackRate = playbackRate;
       channel.src = src;
       if (active !== playback) return 'failed';
       playback.cancelTimer = schedule(() => fail('timeout', '音频播放超时，请重试'), timeout);
@@ -125,6 +127,7 @@ export function createAudioAdapter(options: AudioOptions) {
     }
   }
   return {
+    setPlaybackRate(value: number) { if ([.8, 1, 1.2].includes(value)) playbackRate = value; },
     playPrompt: (src: string, context: RoundEventContext) => play('prompt', src, context),
     playReveal: (src: string, context: RoundEventContext, complete?: (success: boolean) => void) =>
       play('reveal', src, context, complete),

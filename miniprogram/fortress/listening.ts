@@ -9,6 +9,7 @@ import { assertNoFortressIssues, validateSessionPlan } from './validation';
 import type { AttemptV2, RandomSource, SessionPlan, WaveContext } from './types';
 
 export interface ListeningView {
+  readonly playbackRate: number;
   readonly token: string;
   readonly imageToken: string;
   readonly phase: 'idle' | 'playing' | 'ready' | 'audioError' | 'started';
@@ -16,7 +17,7 @@ export interface ListeningView {
   readonly canChoose: boolean;
   readonly message: string;
   readonly imageFailed: boolean;
-  readonly cards: readonly { id: string; key: string; portraitPath: string; label: string; hinted: boolean }[];
+  readonly cards: readonly { id: string; key: string; portraitPath: string; meaningZh: string; label: string; hinted: boolean }[];
 }
 export interface ListeningResult { readonly context: WaveContext; readonly attempts: readonly AttemptV2[] }
 export interface ListeningOptions {
@@ -47,6 +48,7 @@ export function createListening(options: ListeningOptions) {
     if (!path) throw new Error('选项图片缺失');
     return path;
   }
+  let playbackRate = .8;
   let phase: ListeningView['phase'] = 'idle';
   let revision = 0; let imageRevision = 0; let paused = false; let disposed = false;
   let errors = 0; let replays = 0;
@@ -57,10 +59,10 @@ export function createListening(options: ListeningOptions) {
   const imageToken = () => `${prefix}:image:${imageRevision}`;
   const available = () => !disposed && !paused && phase === 'ready' && images.every(status => status === 'loaded');
   function view(): ListeningView {
-    return { token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
+    return { playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
       message: paused ? '已暂停' : phase === 'audioError' ? '声音暂时无法播放，请重试' : images.includes('failed') ? '图片加载失败，请重试'
         : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的水果' : errors ? '再听一次，选出水果' : '听一听，选水果',
-      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), label: `选项 ${index + 1}`, hinted: errors >= FORTRESS_RULES.learning.hintAfterErrors && id === wave.targetWordId })) };
+      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: errors >= FORTRESS_RULES.learning.hintAfterErrors && id === wave.targetWordId })) };
   }
   const publish = () => { if (!disposed) options.onChange(view()); };
   const audio = createAudioAdapter({ ...options.audio, sessionId: context.sessionId, emit: event => {
@@ -69,11 +71,17 @@ export function createListening(options: ListeningOptions) {
   } });
   function play(): void {
     revision++; phase = 'playing'; publish();
+    audio.setPlaybackRate(playbackRate);
     audio.playPrompt(word.audioPath, { sessionId: context.sessionId, roundId: context.waveId, revision });
   }
   return {
     get view() { return view(); },
     get attempts() { return attempts; },
+    cyclePlaybackRate() {
+      if (disposed || paused || phase === 'started') return;
+      playbackRate = playbackRate === .8 ? 1 : playbackRate === 1 ? 1.2 : .8;
+      replays++; play();
+    },
     start() { if (!disposed && !paused && phase === 'idle') play(); },
     choose(eventToken: string, id: string) {
       if (eventToken !== token() || !available() || !optionIds.includes(id)) return;

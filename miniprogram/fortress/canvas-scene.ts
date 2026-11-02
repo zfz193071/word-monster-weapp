@@ -11,6 +11,7 @@ type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
 export interface MonsterArt {
   readonly fruitHat?: SpriteAsset;
+  readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
   readonly walkParts?: { readonly body: SpriteAsset; readonly left: SpriteAsset; readonly right: SpriteAsset };
   readonly monster: SpriteAsset;
@@ -44,7 +45,12 @@ export class CanvasScene {
   private viewport: Viewport;
   private readonly control: HorizontalControl;
   private retiringIds = new Set<string>();
-  setRetiringIds(ids: readonly string[]): void { this.retiringIds = new Set(ids); if (!this.disposed && this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  setRetiringIds(ids: readonly string[]): void {
+    this.retiringIds = new Set(ids);
+    if (!this.disposed && this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
+  }
+  private effectTime = 0;
+  private deathStarted = new Map<string, number>();
   private images = new Map<string, Image>();
   private cancelLoads: (() => void)[] = [];
   private loadVersion = 0;
@@ -113,7 +119,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.fruitHats ?? {})];
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {})];
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -168,12 +174,13 @@ export class CanvasScene {
   }
   private schedule(): void {
     if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
-      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active)) return;
+      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size)) return;
     const version = this.frameVersion;
     this.frameId = this.canvas.requestAnimationFrame((now: number) => {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
       this.frameId = undefined;
       try {
+        this.effectTime += this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime));
         if (this.retirement) {
           const elapsed = this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime));
           this.lastFrameTime = now; this.retirement.advance(elapsed);
@@ -223,7 +230,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
   }
   private draw(state: CombatState): void {
     const c = this.context; const v = this.viewport;
@@ -272,10 +279,19 @@ export class CanvasScene {
         this.sprite(art.weapon, state.player.x - 8, state.player.y - 34, 16, 28);
       }
     }
+    // Ground splashes are painted below living actors and kept until their word finishes.
+    if (art?.fruitHat) for (const monster of state.monsters) {
+      if (monster.hp > 0 || !this.retiringIds.has(monster.id)) continue;
+      if (!this.deathStarted.has(monster.id)) this.deathStarted.set(monster.id, this.effectTime);
+      const age = this.effectTime - this.deathStarted.get(monster.id)!;
+      this.drawDeathSplash(monster.position.x, monster.position.y + 21, monster.id, age);
+    }
     for (const monster of state.monsters) {
       if (monster.status === 'waiting') continue;
       if (this.options.art?.fruitHat && monster.hp <= 0 && !this.retiringIds.has(monster.id)) continue;
-      c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? 0.35 : 1;
+      const deathAge = this.effectTime - (this.deathStarted.get(monster.id) ?? this.effectTime);
+      if (art?.fruitHat && monster.hp <= 0 && deathAge >= 240) continue;
+      c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? .7 * Math.max(0, 1 - deathAge / 240) : 1;
       const monsterArt = this.monsterArt;
       if (!monsterArt && this.options.preview) {
         c.fillStyle = state.tick < (this.monsterFlashes.get(monster.id) ?? 0) ? '#ffffff' : '#c2a0f0';
@@ -296,7 +312,7 @@ export class CanvasScene {
             c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
             this.sprite(side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right, -hip, -110, 128, 160); c.restore();
           }
-          this.sprite(monsterArt.walkParts.body, -64 + stride * 1.5, -80 - Math.abs(stride) * 2, 128, 160); c.restore();
+          this.sprite(monsterArt.outfitBodies?.[monster.wordId] ?? monsterArt.walkParts.body, -64 + stride * 1.5, -80 - Math.abs(stride) * 2, 128, 160); c.restore();
         } else {
           this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
             monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
@@ -312,6 +328,9 @@ export class CanvasScene {
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
       }
+      if (monster.hp > 0 && (monster.slowUntilTick ?? 0) > state.tick) {
+        c.strokeStyle = '#b6f5fa'; c.lineWidth = 2; c.beginPath(); c.ellipse(monster.position.x, monster.position.y + 18, 20, 8, 0, 0, Math.PI * 2); c.stroke();
+      }
       c.globalAlpha = 1;
     }
     for (const bullet of state.projectiles) {
@@ -319,10 +338,56 @@ export class CanvasScene {
       else if (art) {
         c.save(); c.translate(bullet.position.x, bullet.position.y);
         c.rotate(Math.atan2(bullet.direction?.x ?? 0, -(bullet.direction?.y ?? -1)));
+        if (bullet.elements) {
+          const colors = [bullet.elements.flame ? '#ff9652' : '', bullet.elements.frost ? '#9ae7f2' : '', bullet.elements.lightning ? '#c7b0ff' : ''].filter(Boolean);
+          colors.forEach((color, index) => { c.fillStyle = color; c.globalAlpha = .8; c.beginPath(); c.ellipse((index - (colors.length - 1) / 2) * 5, 7, 4, 15, 0, 0, Math.PI * 2); c.fill(); }); c.globalAlpha = 1;
+        }
         this.sprite(art.bullet, -bullet.width / 2, -bullet.height / 2, bullet.width, bullet.height); c.restore();
       }
     }
+    for (const impact of state.elementImpacts ?? []) {
+      const progress = Math.min(1, Math.max(0, 1 - (impact.untilTick - state.tick) / 35));
+      c.save(); c.globalAlpha = (1 - progress) * .85; c.translate(impact.position.x, impact.position.y);
+      if (impact.kind === 'flame') {
+        c.fillStyle = '#ffbc58'; c.beginPath(); c.arc(0, 0, 45 * (.3 + .7 * progress), 0, Math.PI * 2); c.fill(); c.strokeStyle = '#ed763a'; c.lineWidth = 3; c.stroke();
+        c.fillStyle = '#fff3ab'; for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * 35 * progress, Math.sin(angle) * 35 * progress, 4, 0, Math.PI * 2); c.fill(); }
+      } else if (impact.kind === 'frost') {
+        c.strokeStyle = '#d4ffff'; c.lineWidth = 3;
+        for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }
+      } else if (impact.target) {
+        const dx = impact.target.x - impact.position.x; const dy = impact.target.y - impact.position.y;
+        c.strokeStyle = '#e0d1ff'; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
+      }
+      c.restore();
+    }
     if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
+  }
+  private drawDeathSplash(x: number, y: number, id: string, age: number): void {
+    const c = this.context;
+    const seed = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    const spread = Math.min(1, age / 230);
+    c.save(); c.translate(x, y); c.scale(.35 + spread * .65, .65);
+    c.globalAlpha = .86;
+    c.fillStyle = '#526a36'; c.beginPath();
+    for (let i = 0; i < 32; i++) {
+      const angle = i * Math.PI / 16;
+      const radius = i % 2 ? 12 + (seed + i * 7) % 8 : 22 + (seed + i * 13) % 13;
+      const px = Math.cos(angle) * radius; const py = Math.sin(angle) * radius;
+      if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
+    }
+    c.closePath(); c.fill();
+    c.fillStyle = '#778346'; c.beginPath(); c.ellipse(-3, -1, 15, 11, .2, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#384d30';
+    for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse((i * 11 + seed) % 22 - 11, (i * 7) % 14 - 7, 3 + i % 2, 2, i, 0, Math.PI * 2); c.fill(); }
+    // Droplets expand outwards, briefly lift, then settle onto the ground.
+    const flight = Math.min(1, age / 430);
+    c.fillStyle = '#5d753b';
+    for (let i = 0; i < 11; i++) {
+      const angle = i * Math.PI * 2 / 11 + seed * .13;
+      const distance = (30 + (seed + i * 7) % 17) * flight;
+      c.beginPath(); c.ellipse(Math.cos(angle) * distance, Math.sin(angle) * distance - Math.sin(flight * Math.PI) * 17, 2 + i % 3, 1.5 + i % 2, angle, 0, Math.PI * 2); c.fill();
+    }
+    c.restore();
   }
   private sprite(asset: SpriteAsset, x: number, y: number, width: number, height: number): void {
     const image = this.images.get(asset.path);

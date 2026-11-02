@@ -2,8 +2,8 @@
   <view class="upgrade-badge">LEVEL {{offer.level}}</view>
   <view class="skill-title">选择技能</view>
   <view class="skill-cards">
-    <button wx:for="{{offer.cards}}" wx:key="id" class="skill-card" disabled="{{disabled || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
-      <view class="card-top">{{item.label}}</view>
+    <button wx:for="{{offer.cards}}" wx:key="id" class="skill-card card-{{item.icon}}" disabled="{{disabled || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
+      <view class="card-kicker">{{item.icon === 'flame' || item.icon === 'frost' || item.icon === 'lightning' ? '元素强化' : '武器强化'}}</view><view class="card-top">{{item.label}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.description}}</view>
       <view class="card-select" aria-hidden="true">＋</view>

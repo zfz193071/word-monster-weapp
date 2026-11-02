@@ -2,7 +2,7 @@ export interface UpgradeCard {
   readonly id: string;
   readonly label: string;
   readonly description: string;
-  readonly icon: 'doubleShot' | 'fireRate' | 'bulletWidth';
+  readonly icon: 'doubleShot' | 'fireRate' | 'bulletWidth' | 'flame' | 'frost' | 'lightning';
 }
 export interface UpgradeOffer {
   readonly id: string;
@@ -14,7 +14,7 @@ export function validateUpgradeOffer(offer: UpgradeOffer): void {
   if (!offer.id.trim() || !Number.isSafeInteger(offer.level) || offer.level < 2 || (offer.cards.length < 1 || offer.cards.length > 3)
     || new Set(offer.cards.map(card => card.id)).size !== offer.cards.length
     || offer.cards.some(card => !card.id.trim() || !card.label.trim() || !card.description.trim()
-      || !['doubleShot', 'fireRate', 'bulletWidth'].includes(card.icon))) throw new Error('升级必须提供一至三个不同的有效技能候选');
+      || !['doubleShot', 'fireRate', 'bulletWidth', 'flame', 'frost', 'lightning'].includes(card.icon))) throw new Error('升级必须提供一至三个不同的有效技能候选');
 }
 
 // The coordinator supplies eligible cards after an actual level-up. No wave-based reward or implicit skill pool.

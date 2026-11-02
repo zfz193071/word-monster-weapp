@@ -61,3 +61,9 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 新增录音来自 Wikimedia Commons：pear、strawberry、cherry、pineapple、peach 为 `En-us-<word>.ogg`，作者 Dvortygirl，CC BY-SA 3.0；kiwi 为 `En-au-kiwi.ogg`，作者 Commander Keane，CC BY-SA 4.0。素材采用混合口音，不宣称统一美式。转换为44.1kHz单声道96kbps MP3，标准录音不变调；各有同许可的僵尸变声衍生物。原始词条、作者、许可、原录音/图片/衍生音频哈希详见 [扩充素材清单](expanded-fruit-manifest.json)。
 
 新增12段MP3完整解码通过；新词kiwi在模拟器实际听词后进入混合战斗。音色、单词清晰度和真机播放仍须真人听审。标准词音与变声词音均在首页署名入口登记。
+
+## 2026-11-02 学习女声与水果上衣
+
+听词使用 `learn-*.mp3`，由 Piper en_US-ljspeech-medium 单女声模型生成。模型仓库标注MIT，训练录音LJSpeech为公有领域；来源：[模型卡](https://huggingface.co/rhasspy/piper-voices/blob/main/en/en_US/ljspeech/medium/MODEL_CARD)、[仓库授权](https://huggingface.co/rhasspy/piper-voices/blob/main/README.md)、[训练录音](https://keithito.com/LJ-Speech-Dataset/)。使用独立临时环境生成，不在小程序中分发模型或Piper工具。响度归一化到-18 LUFS，44.1kHz单声道96kbps，清晰度待真人试听。每个文件哈希见 `learning-voice-manifest.json`。
+
+`zombie-body-{水果}.svg/png` 是本项目原始僵尸上身的11种衣服配色版本，脸、手、轮廓和几何不变，全部由 `scripts/create-fruit-outfits.cjs` 生成。

@@ -18,3 +18,9 @@
 .error { padding: 32rpx; color: #75382c; text-align: center; }
 
 .replay { min-width: 0; max-width: 220rpx; }
+
+.listening { position: relative; }
+.speed-control { position: absolute; top: 0; right: 10rpx; display: flex; align-items: center; justify-content: center; gap: 8rpx; width: 126rpx; height: 60rpx; padding: 0; margin: 0; border-radius: 30rpx; font-size: 24rpx; line-height: 1; color: #456346; background: #e7efda; }.speed-control::after { border: 0; }.speed-symbol { font-size: 32rpx; }
+
+.fruit-meaning { display: block; margin-top: 10rpx; font-size: 24rpx; line-height: 1.4; font-weight: normal; color: #64715d; }
+.speed-control { min-width: 0; max-width: 126rpx; }

@@ -41,3 +41,18 @@ test('发音失败保留怪物、重试后才允许升级，命中只触发效�
  assert.equal(h.controller.view.error,true);assert.equal(h.controller.busy,true);assert.equal(h.drained,0);
  h.controller.retry();assert.equal(h.voices.length,2);h.voices[1].handlers.get('ended')!();assert.equal(h.drained,1);assert.equal(h.music.volume,.22);h.controller.dispose();assert.equal(h.hit.destroyed,true);
 });
+
+test('同一更新同种水果合并读一次，一起退场；不同更新或水果独立排队',()=>{
+ const h=setup();h.controller.handle([defeat('a'),defeat('b'),defeat('c','banana'),{...defeat('d'),tick:2}]);
+ assert.deepEqual(h.controller.view.retiringIds,['a','b','c','d']);assert.equal(h.voices.length,1);
+ h.voices[0].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['c','d']);assert.equal(h.voices[1].src,'/assets/audio/zombie-banana.mp3');
+ h.voices[1].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['d']);assert.equal(h.voices[2].src,'/assets/audio/zombie-apple.mp3');
+ h.voices[2].handlers.get('ended')!();assert.equal(h.drained,1);assert.equal(h.controller.busy,false);h.controller.dispose();
+});
+test('合并组失败重试和暂停恢复仍保留全部怪物，跨波不合并',()=>{
+ const h=setup();h.controller.handle([defeat('a'),defeat('b'),{...defeat('c'),context:{...context,combatId:'wave2'}}]);
+ h.voices[0].handlers.get('error')!({errCode:1,errMsg:'error'});assert.deepEqual(h.controller.view.retiringIds,['a','b','c']);
+ h.controller.retry();h.controller.setActive(false);h.controller.setActive(true);
+ h.voices[h.voices.length-1].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['c']);
+ h.voices[h.voices.length-1].handlers.get('ended')!();assert.equal(h.drained,1);h.controller.dispose();
+});

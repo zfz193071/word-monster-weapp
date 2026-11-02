@@ -13,3 +13,5 @@ PNG 由 SVG 以原尺寸通过 `@resvg/resvg-js` 渲染，位于 `miniprogram/as
 本轮已查看守卫、僵尸单图及模拟器首页。已查看自动战斗与技能弹窗截图，路径见本轮需求文档；不代表真机验收。
 
 2026-11-01：新增 `zombie-body.svg`、`zombie-leg-left.svg`、`zombie-leg-right.svg`，从原创僵尸拆分并重画独立裤腿。三张同尺寸透明PNG在Canvas按髋关节变换组合；行进时左右腿反相摆动、脚部交替前后位移，暂停与退场时停止。怪物逻辑宽度40，水果帽与碰撞区域同比缩放。
+
+2026-11-02：新增11种 `zombie-body-{fruit}.svg` 原创上衣配色及对应PNG，使用 `scripts/create-fruit-outfits.cjs` 重新生成（需安装 `@resvg/resvg-js`，可用 `RESVG_MODULE` 指定模块路径）。

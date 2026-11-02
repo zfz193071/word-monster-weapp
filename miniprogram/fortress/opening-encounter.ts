@@ -6,7 +6,7 @@ import type { SpriteAsset, SceneArt } from './canvas-scene';
 import type { SkillLevels } from './types';
 import { FORTRESS_RULES } from './rules';
 import type { ExperienceRules } from './experience';
-import type { UpgradeOffer } from './upgrade-choice';
+import type { UpgradeCard, UpgradeOffer } from './upgrade-choice';
 import { FORTRESS_SKILLS } from './rules';
 
 export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: 10,
@@ -24,6 +24,7 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
   const word = BATTLE_WORDS.find(item => item.id === wordId);
   if (!word) throw new Error('未知水果');
   return { monster: original('zombie'), monsterWidth: 40,
+    outfitBodies: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知水果'); return [id, original(`zombie-body-${id}`)]; })),
     walkParts: { body: original('zombie-body'), left: original('zombie-leg-left'), right: original('zombie-leg-right') },
     monsterVisual: { wordId, portraitPath: '/assets/images/fortress/zombie.png', spritePath: '/assets/images/fortress/zombie.png',
       sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: { x: 25, y: 16, width: 78, height: 135 } },
@@ -54,6 +55,15 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     allowedWordIds: [wordId, ...history], spawns });
 }
 export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS): UpgradeOffer {
-  return { id: `${sessionId}:level:${level}`, level, cards: FORTRESS_SKILLS.filter(skill => levels[skill.id] < skill.maxLevel).map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,
-    description: `${skill.id === 'doubleShot' ? '齐射数量' : skill.id === 'fireRate' ? '射击间隔（毫秒）' : '子弹宽度'} ${skill.values[levels[skill.id]]} → ${skill.values[levels[skill.id] + 1]}` })) };
+  const cards: UpgradeCard[] = FORTRESS_SKILLS.filter(skill => levels[skill.id] < skill.maxLevel).map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,
+    description: `${skill.id === 'doubleShot' ? '齐射数量' : skill.id === 'fireRate' ? '射击间隔（毫秒）' : '子弹宽度'} ${skill.values[levels[skill.id]]} → ${skill.values[levels[skill.id] + 1]}` }));
+  for (const id of ['flame', 'frost', 'lightning'] as const) {
+    const next = (levels[id] ?? 0) + 1;
+    cards.push({ id, icon: id, label: `${id === 'flame' ? '火花绽放' : id === 'frost' ? '冰晶缓行' : '跃动电弧'} Lv.${next}`,
+      description: id === 'flame' ? `每5秒附加火焰，半径45内额外造成${1 + .5 * next}伤害` : id === 'frost' ? `每5秒附加冰霜，减速${Math.min(20 + 5 * next, 70)}%，持续2秒` : `每5秒附加雷电，连锁90范围内另一目标，造成${1 + .5 * next}伤害` });
+  }
+  const seed = [...`${sessionId}:${level}`].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
+  const random = createSeededRandom(seed >>> 0);
+  for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
+  return { id: `${sessionId}:level:${level}`, level, cards: cards.slice(0, 3) };
 }

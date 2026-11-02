@@ -144,3 +144,20 @@ test('真实击败接入读词与淡出时仍只有一个帧循环，完成后�
   assert.equal(h.scene.snapshot!.tick, tick); assert.equal(complete, 1); assert.equal(h.callbacks.size, 0);
   ended(); h.frame(now + 5000); assert.equal(complete, 1); h.scene.dispose();
 });
+
+test('最后一只退场时爆浆继续播放，暂停冻结，读音结束清除并停止帧循环', async () => {
+  const art = artFixture(); const state = initial();
+  const dead = { ...state, status: 'cleared' as const, monsters: state.monsters.map(monster => ({ ...monster, hp: 0, status: 'dead' as const })) };
+  const h = harness(false, { ...art, fruitHat: art.bullet }, { initial: dead });
+  const loading = h.scene.load(); for (const image of h.images) image.onload(); assert.equal(await loading, true);
+  assert.equal(h.callbacks.size, 0);
+  h.scene.setRetiringIds(dead.monsters.map(monster => monster.id)); assert.equal(h.callbacks.size, 1);
+  h.commands.length = 0; h.frame(0); h.frame(100); h.frame(200); h.frame(300);
+  assert.ok(h.commands.some(command => command.method === 'ellipse'));
+  const scales = h.commands.filter(command => command.method === 'scale').map(command => command.args[0]);
+  assert.ok(scales.includes(.35)); assert.ok(scales.includes(1));
+  h.scene.setPaused(true); assert.equal(h.callbacks.size, 0); const count = h.commands.length; h.frame(30000); assert.equal(h.commands.length, count);
+  h.scene.setPaused(false); h.frame(30000); assert.equal(h.callbacks.size, 1);
+  h.scene.setRetiringIds([]); h.commands.length = 0; h.frame(30016); assert.equal(h.callbacks.size, 0);
+  assert.ok(!h.commands.some(command => command.method === 'ellipse')); assert.deepEqual(h.errors, []); h.scene.dispose();
+});

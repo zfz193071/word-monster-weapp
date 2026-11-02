@@ -6,7 +6,7 @@ import { BATTLE_WORDS } from '../fortress/fruit-catalog';
 import type { CombatEvent } from '../fortress/types';
 
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
-type Defeat = Extract<CombatEvent, { type: 'monsterDefeated' }>;
+type DefeatGroup = { combatId: string; tick: number; wordId: string; monsterIds: string[] };
 export interface BattleAudioView { readonly retiringIds: readonly string[]; readonly speakingWord: string; readonly error: boolean }
 export function createBattleAudio(options: {
   sessionId: string;
@@ -18,10 +18,10 @@ export function createBattleAudio(options: {
 }) {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
-  const queue: Defeat[] = []; const seen = new Set<string>();
+  const queue: DefeatGroup[] = []; const seen = new Set<string>();
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
-  const view = (): BattleAudioView => ({ retiringIds: queue.map(event => event.monsterId),
+  const view = (): BattleAudioView => ({ retiringIds: queue.flatMap(group => group.monsterIds),
     speakingWord: BATTLE_WORDS.find(word => word.id === queue[0]?.wordId)?.text ?? '', error });
   const publish = () => { if (!disposed) options.onChange(view()); };
   function mix() { music.setVolume(queue.length ? volume * .2 : volume); }
@@ -30,7 +30,7 @@ export function createBattleAudio(options: {
     const entry = queue[0]; const word = BATTLE_WORDS.find(word => word.id === entry.wordId);
     if (!word) { error = true; publish(); return; }
     playing = true; const token = ++revision; mix(); publish();
-    voice.playReveal(`/assets/audio/zombie-${word.id}.mp3`, { sessionId: options.sessionId, roundId: entry.monsterId, revision: token }, success => {
+    voice.playReveal(`/assets/audio/zombie-${word.id}.mp3`, { sessionId: options.sessionId, roundId: entry.monsterIds[0], revision: token }, success => {
       if (disposed || !active || token !== revision) return;
       playing = false;
       if (!success) { error = true; publish(); return; }
@@ -60,7 +60,12 @@ export function createBattleAudio(options: {
       const local = events.filter(event => event.context.sessionId === options.sessionId);
       for (const event of local) if (event.type === 'monsterDefeated') {
         const key = `${event.context.combatId}:${event.monsterId}`;
-        if (!seen.has(key)) { seen.add(key); queue.push(event); }
+        if (!seen.has(key)) {
+          seen.add(key);
+          const group = queue.find(group => group.combatId === event.context.combatId && group.tick === event.tick && group.wordId === event.wordId);
+          if (group) group.monsterIds.push(event.monsterId);
+          else queue.push({ combatId: event.context.combatId, tick: event.tick, wordId: event.wordId, monsterIds: [event.monsterId] });
+        }
       }
       if (local.some(event => event.type === 'monsterDamaged')) impact();
       mix(); publish(); speak();

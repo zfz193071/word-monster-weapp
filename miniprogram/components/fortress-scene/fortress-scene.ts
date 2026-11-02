@@ -5,7 +5,7 @@ import { createOpeningEncounter, openingArt, openingSkillOffer, OPENING_EXPERIEN
 import { createExperience } from '../../fortress/experience';
 import { createUpgradeChoices } from '../../fortress/upgrade-choice';
 import type { UpgradeOffer } from '../../fortress/upgrade-choice';
-import type { SkillLevels } from '../../fortress/types';
+import type { BattleSkillId, SkillLevels } from '../../fortress/types';
 import { CanvasScene } from '../../fortress/canvas-scene';
 import type { SceneArt } from '../../fortress/canvas-scene';
 import { createPreviewCombat, createPreviewPlan, createPreviewPlanCombat } from '../../fortress/preview';
@@ -139,8 +139,8 @@ Component({
       if (!state?.levels || this.properties.paused || !state.visible || !state.scene || this.data.error) return;
       const selected = state.upgrades?.select(event.detail.offerId, event.detail.cardId);
       if (!selected) return;
-      const id = selected.id as SkillId;
-      state.levels = Object.freeze({ ...state.levels, [id]: state.levels[id] + 1 });
+      const id = selected.id as BattleSkillId;
+      state.levels = Object.freeze({ ...state.levels, [id]: (state.levels[id] ?? 0) + 1 });
       state.scene.applySkills(state.levels);
       this.setData({ upgradeSummary: `${selected.label} · ${selected.description}` });
       this.advanceWave();

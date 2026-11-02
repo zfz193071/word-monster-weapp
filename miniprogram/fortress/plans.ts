@@ -50,7 +50,8 @@ export function validateSkillLevels(levels: SkillLevels): void {
     const level = levels[definition.id];
     if (!Number.isInteger(level) || level < 0 || level > definition.maxLevel) throw new RangeError(`skills.${definition.id}: 等级必须在 0—${definition.maxLevel}`);
   }
-  if (Object.keys(levels).some(id => !FORTRESS_SKILLS.some(definition => definition.id === id))) throw new RangeError('未知技能');
+  for (const id of ['flame', 'frost', 'lightning'] as const) { const level = levels[id] ?? 0; if (!Number.isSafeInteger(level) || level < 0) throw new RangeError('元素等级必须为非负整数'); }
+  if (Object.keys(levels).some(id => !FORTRESS_SKILLS.some(definition => definition.id === id) && !['flame', 'frost', 'lightning'].includes(id))) throw new RangeError('未知技能');
 }
 // Only plans candidates. Applying effects/consuming an offer is owned by #11.
 export function createSkillOffer(plan: SessionPlan, afterWaveIndex: number, levels: SkillLevels, random: RandomSource): SkillOffer {

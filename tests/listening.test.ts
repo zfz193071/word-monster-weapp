@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { createListening } from '../miniprogram/fortress/listening';
 import { createSeededRandom, createSessionPlan } from '../miniprogram/fortress/plans';
 class Voice {
-  src = ''; autoplay = false; loop = false; destroyed = false;
+  playbackRate = 1; src = ''; autoplay = false; loop = false; destroyed = false;
   handlers = new Map<string, Function>();
   onEnded = (f: Function) => { this.handlers.set('end', f); }; offEnded = () => { this.handlers.delete('end'); };
   onError = (f: Function) => { this.handlers.set('error', f); }; offError = () => { this.handlers.delete('error'); };
@@ -115,4 +115,12 @@ test('水果入口每次三选一：答错保持目标、替换两个干扰项�
   assert.equal(h.results.length, 1);
   assert.equal(c.attempts[4].correct, true);
   assert.equal(c.attempts[4].attemptIndex, 5);
+});
+
+test('听词默认0.8倍，三档循环立即重播，旧回调不允许提前选择，显示中文名',()=>{
+ const h=setup('speed',0,'fruit');h.controller.start();h.load();assert.equal(h.voices[0].playbackRate,.8);
+ assert.ok(h.controller.view.cards.every(card=>card.meaningZh));
+ const stale=h.voices[0].handlers.get('end')!;
+ for(const rate of [1,1.2,.8]){h.controller.cyclePlaybackRate();assert.equal(h.controller.view.playbackRate,rate);assert.equal(h.voices.at(-1)!.playbackRate,rate);stale();assert.equal(h.controller.view.canChoose,false);}
+ h.voices.at(-1)!.end();assert.equal(h.controller.view.canChoose,true);h.controller.setPaused(true);const count=h.voices.length;h.controller.cyclePlaybackRate();assert.equal(h.voices.length,count);h.controller.dispose();
 });

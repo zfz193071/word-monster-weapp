@@ -7,7 +7,7 @@ import { createExperience } from '../miniprogram/fortress/experience';
 import { BATTLE_WORDS } from '../miniprogram/fortress/fruit-catalog';
 import { createFruitOptions } from '../miniprogram/fortress/fruit-options';
 import { stepCombat } from '../miniprogram/fortress/combat';
-import type { SkillId } from '../miniprogram/fortress/types';
+import type { BattleSkillId } from '../miniprogram/fortress/types';
 
 test('19波：前11词唯一，后8词不重复复习，边界不连续同词；每波半数新目标、其余均匀覆盖历史', () => {
   for (let seed = 0; seed < 50; seed++) {
@@ -26,16 +26,17 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
     }
   }
 });
-test('完整19波击杀升级至20封顶，满级技能移出，九次后无候选', () => {
+test('完整19波击杀升级至20封顶，满级旧技能移出，每次固定三选一', () => {
  const plan=createOpeningPlan('full-run',createSeededRandom(10));const xp=createExperience(plan.sessionId,OPENING_EXPERIENCE);
- let levels={...ZERO_SKILLS}; let hp=5;
+ let levels: import("../miniprogram/fortress/types").SkillLevels={...ZERO_SKILLS}; let hp=5;
  for(let index=0;index<19;index++){
   const wave=plan.waves[index];let state=createOpeningEncounter(plan.sessionId,wave.targetWordId,index,index,levels,hp,plan.waves.slice(0,index).map(w=>w.targetWordId));
   const upgrades:number[]=[];
   for(let tick=0;tick<20000&&state.status==='fighting';tick++){const next=stepCombat(state);state=next.state;upgrades.push(...xp.record(next.events).upgrades);}
   assert.equal(state.status,'cleared',`wave ${index+1}`);hp=state.base.hp;assert.deepEqual(upgrades,[index+2]);
-  const offer=openingSkillOffer(plan.sessionId,index+2,levels);assert.ok(offer.cards.every(c=>levels[c.id as SkillId]<3));
-  if(index<9){assert.ok(offer.cards.length);const chosen=(offer.cards.find(c=>c.id==='fireRate')??offer.cards[0]).id as SkillId;levels={...levels,[chosen]:levels[chosen]+1};}else assert.equal(offer.cards.length,0);
+  const offer=openingSkillOffer(plan.sessionId,index+2,levels);assert.equal(offer.cards.length,3);assert.equal(new Set(offer.cards.map(c=>c.id)).size,3);
+  assert.ok(offer.cards.every(c=>!['doubleShot','fireRate','bulletWidth'].includes(c.id)||(levels[c.id as BattleSkillId]??0)<3));
+  const chosen=(offer.cards.find(c=>c.id==='fireRate')??offer.cards.find(c=>c.id==='doubleShot')??offer.cards.find(c=>c.id==='bulletWidth')??offer.cards.find(c=>c.id==='flame')??offer.cards[0]).id as BattleSkillId;levels={...levels,[chosen]:(levels[chosen]??0)+1};
  }
- assert.equal(xp.view.total,3990);assert.equal(xp.view.level,20);assert.deepEqual(levels,{doubleShot:3,fireRate:3,bulletWidth:3});
+ assert.equal(xp.view.total,3990);assert.equal(xp.view.level,20);assert.equal(Object.values(levels).reduce((a,b)=>a+b,0),19);
 });

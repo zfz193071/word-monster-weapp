@@ -12,7 +12,7 @@ import { createOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortress/types';
 
-test('组件19波：先等全部退场读词，再技能/下一题，技能封顶后直接听词，20级只结算', async () => {
+test('组件19波：先等全部退场读词，再技能/下一题，每级三选一，20级选完结算', async () => {
   const plan=createOpeningPlan('component-run',createSeededRandom(12));let definition:any;let host:any;
   let audioOptions:any;let busy=false;let current:FakeScene;
   class FakeScene {
@@ -50,11 +50,10 @@ test('组件19波：先等全部退场读词，再技能/下一题，技能封�
     current!.clear();assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     busy=false;audioOptions.onDrained();
-    if(wave<9){const offer=host.data.upgradeOffer;assert.ok(offer);assert.equal(host.data.waveRequest,null);picked++;host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}
-    else assert.equal(host.data.upgradeOffer,null);
+    {const offer=host.data.upgradeOffer;assert.ok(offer);assert.equal(offer.cards.length,3);assert.equal(host.data.waveRequest,null);picked++;host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}
     if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
       const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,11);assert.equal(host.data.waveRequest,null);}
   }
-  assert.equal(picked,9);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
+  assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,3990);definition.lifetimes.detached.call(host);
 });

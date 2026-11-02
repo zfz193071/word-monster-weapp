@@ -1,11 +1,13 @@
 <view wx:if="{{error}}" class="error">{{error}}</view>
 <view wx:if="{{view}}" class="listening">
+  <button class="speed-control" bindtap="changeSpeed" disabled="{{view.paused || view.phase === 'started'}}" aria-label="播放速度 {{view.playbackRate}} 倍，点击切换"><view class="speed-symbol" aria-hidden="true">▷</view><text>{{view.playbackRate}}×</text></button>
   <view class="sound-halo {{view.phase === 'playing' && !view.paused ? 'speaking' : ''}}" aria-hidden="true"><view class="speaker"></view><view class="sound-wave"></view></view>
   <view class="prompt" aria-live="polite">{{view.message}}</view>
   <view class="choices">
     <button wx:for="{{view.cards}}" wx:key="key" class="choice {{item.hinted ? 'hinted' : ''}}" aria-label="{{item.label}}" disabled="{{!view.canChoose}}"
       data-token="{{view.token}}" data-word-id="{{item.id}}" bindtap="choose">
       <image src="{{item.portraitPath}}" mode="aspectFit" aria-hidden="true" data-token="{{view.imageToken}}" data-word-id="{{item.id}}" bindload="imageLoaded" binderror="imageFailed" />
+      <text class="fruit-meaning">{{item.meaningZh}}</text>
     </button>
   </view>
   <button wx:if="{{view.phase === 'audioError'}}" class="replay" disabled="{{view.paused}}" data-token="{{view.token}}" bindtap="retryAudio">重试声音</button>

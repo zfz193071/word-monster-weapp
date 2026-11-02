@@ -37,6 +37,7 @@ Component({
       } catch { this.setData({ error: '听词挑战暂时无法准备，请重新进入' }); }
     },
     applyPause() { const state = instances.get(this); state?.controller?.setPaused(this.properties.paused || !state.visible); },
+    changeSpeed() { instances.get(this)?.controller?.cyclePlaybackRate(); },
     choose(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; instances.get(this)?.controller?.choose(data.token, data.wordId); },
     replay(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.replay(event.currentTarget.dataset.token); },
     retryAudio(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.retryAudio(event.currentTarget.dataset.token); },

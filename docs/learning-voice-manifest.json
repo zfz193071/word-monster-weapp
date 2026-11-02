@@ -1,0 +1,68 @@
+{
+  "model": "en_US-ljspeech-medium",
+  "modelSource": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
+  "modelLicense": "MIT",
+  "dataset": "https://keithito.com/LJ-Speech-Dataset/",
+  "datasetLicense": "public domain",
+  "voice": "US English female, synthetic",
+  "lengthScale": 1.05,
+  "defaultPlaybackRate": 0.8,
+  "review": "pending human listening",
+  "files": [
+    {
+      "word": "apple",
+      "path": "miniprogram/assets/audio/learn-apple.mp3",
+      "sha256": "e07cb81b14aa427f4d769dcb8ef9b8df0743d540be6e4e3649f26a479213730d"
+    },
+    {
+      "word": "banana",
+      "path": "miniprogram/assets/audio/learn-banana.mp3",
+      "sha256": "231aea33531d83c74de1eeef9f5a9e315d290240a4070d3febd233eda59c055a"
+    },
+    {
+      "word": "orange",
+      "path": "miniprogram/assets/audio/learn-orange.mp3",
+      "sha256": "1e7050eef15f7932857fa10e4f0a523241113ff9c6b8087daacaf0d2bc16d5ef"
+    },
+    {
+      "word": "grape",
+      "path": "miniprogram/assets/audio/learn-grape.mp3",
+      "sha256": "f52851ce3229e90b609af47f922faac0ba1f486f1b4f6df8c1a556164826916c"
+    },
+    {
+      "word": "watermelon",
+      "path": "miniprogram/assets/audio/learn-watermelon.mp3",
+      "sha256": "4aea0e658bd16c56e3fb05349714bd4644225021396092e2d33addc169d1d334"
+    },
+    {
+      "word": "pear",
+      "path": "miniprogram/assets/audio/learn-pear.mp3",
+      "sha256": "6abb1a7a0ff15666605a1fcb11b6bc48676f5a1717642c983c41da58a640cfe6"
+    },
+    {
+      "word": "strawberry",
+      "path": "miniprogram/assets/audio/learn-strawberry.mp3",
+      "sha256": "cec0bd5d3ca917cee80486511cedc2af8987d9d5921da13e20ed6cb782c9b175"
+    },
+    {
+      "word": "cherry",
+      "path": "miniprogram/assets/audio/learn-cherry.mp3",
+      "sha256": "2e4e782ab395c5bb94f71d8b00ae37a8c4808687203764a17ca8e89a5a8d35b2"
+    },
+    {
+      "word": "pineapple",
+      "path": "miniprogram/assets/audio/learn-pineapple.mp3",
+      "sha256": "54f39a1418f09a1503a0dc246ca39ca2479f3ed5e8e81021756b806a4aed0042"
+    },
+    {
+      "word": "kiwi",
+      "path": "miniprogram/assets/audio/learn-kiwi.mp3",
+      "sha256": "61e0b5e6912777e55c9cabd6aed05abed9af6b3aa147c0bd21645e42dcd4d0bf"
+    },
+    {
+      "word": "peach",
+      "path": "miniprogram/assets/audio/learn-peach.mp3",
+      "sha256": "7f087afed79f7d07a53b9e89e74c4639e2645845b6d619c02b25304e9f76083a"
+    }
+  ]
+}
