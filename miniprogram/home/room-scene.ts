@@ -1,7 +1,8 @@
+import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
-interface Face { readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
-interface ProjectedFace { readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
+interface Face { readonly actor?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
+interface ProjectedFace { readonly actor?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
 const LIGHT: Point3 = [-.35, .85, .4];
@@ -115,7 +116,7 @@ function room():Face[]{
   floorEllipse(f,-.48,1.02,.62,.43,.085,'#7f8969',.25);
   return f.map((face,index)=>({...face,layer:index<floorEnd?0:index<wallsEnd?1:face.layer??3}));
 }
-function hero(seconds:number):Face[]{
+function hero(seconds:number,level=1):Face[]{
   const f:Face[]=[];const pose=homeHeroPose(seconds);
   const green='#9dab72',dark='#596750',skin='#e7bb8b';
   for(const x of [-.24,.24]){
@@ -133,14 +134,23 @@ function hero(seconds:number):Face[]{
   // Eyes face the open room; the entire model turns slightly in world space.
   for(const x of [-.14,.14])box(f,x,1.46,.315,.065,.055,.025,'#4b5a45');
   box(f,0,1.33,.314,.13,.025,.022,'#b68863');
-  box(f,.46,1.0,.42,.16,.35,.18,'#718477');box(f,.46,1.29,.42,.085,.35,.10,'#4e6659');
-  box(f,.46,1.08,.52,.17,.065,.05,'#dbc080');
+  // Original chunky shoulder-carried guardian rifle. Levels change only its appearance.
+  const weapon=weaponForLevel(level);
+  box(f,.50,1.20,.20,.23,.60,.26,weapon.color);
+  box(f,.50,1.70,.20,.12,.48+level*.025,.13,'#53685f');
+  box(f,.50,1.48,.20,.25,.10,.27,weapon.color);
+  box(f,.50,.82,.20,.25,.22,.28,'#687c68');
+  box(f,.50,1.12,.39,.15,.12,.18,'#53685f');
+  for(let i=0;i<level;i++)box(f,.625,1.02+i*.055,.20,.025,.025,.20,'#fff2ce');
+  if(level>=3)box(f,.50,1.36,.40,.13,.24,.12,weapon.color);
+  if(level>=5)box(f,.50,1.63,.20,.19,.12,.20,weapon.color);
+  ellipsoid(f,.48,1.0,.40,.14,.14,.14,skin);
   const sin=Math.sin(pose.yaw),cos=Math.cos(pose.yaw);
   const transform=(p:Point3):Point3=>{
     const x=p[0]+p[1]*pose.lean;
     return [x*cos+p[2]*sin-.5,p[1]+pose.lift,-x*sin+p[2]*cos+1.1];
   };
-  return f.map(face=>({...face,points:face.points.map(transform),normal:normalize([face.normal[0]*cos+face.normal[2]*sin,face.normal[1],-face.normal[0]*sin+face.normal[2]*cos])}));
+  return f.map(face=>({...face,actor:true,points:face.points.map(transform),normal:normalize([face.normal[0]*cos+face.normal[2]*sin,face.normal[1],-face.normal[0]*sin+face.normal[2]*cos])}));
 }
 function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
   const view=rotateRoomPoint(VIEW,-yaw);
@@ -148,12 +158,14 @@ function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
     const p=face.points.map(point=>projectRoomPoint(point,yaw));
     // A near solid wall must occlude the room, rather than remain behind actors.
     const layer=face.wall ? (view[face.wall==='x'?0:2]<0 ? 4 : 1) : face.layer??3;
-    return { layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
+    return { actor:face.actor, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
 }
 export class HomeRoomScene {
   private readonly context:Context;
+  private weaponLevel=1;
+  private drawnFaces:ProjectedFace[]=[];
   private readonly roomFaces=room();
   private staticFaces:ProjectedFace[];
   private yaw:number;
@@ -170,6 +182,24 @@ export class HomeRoomScene {
     this.context=canvas.getContext('2d');this.resize(width,height,dpr);
   }
   get viewYaw():number{return this.yaw;}
+  setWeaponLevel(level:number){
+    weaponForLevel(level);this.weaponLevel=level;if(!this.active&&!this.disposed)this.draw();
+  }
+  hitHero(x:number,y:number):boolean{
+    if(this.disposed||!Number.isFinite(x)||!Number.isFinite(y))return false;
+    const scale=Math.min(this.width/9.6,this.height/9.2);
+    const px=(x-this.width/2)/scale,py=(y-this.height*.56)/scale;
+    // Walk the rendered faces front-to-back: opaque furniture/walls block hidden targets.
+    for(let i=this.drawnFaces.length-1;i>=0;i--){
+      const face=this.drawnFaces[i];let inside=false;
+      for(let a=0,b=face.points.length-1;a<face.points.length;b=a++){
+        const [ax,ay]=face.points[a], [bx,by]=face.points[b];
+        if((ay>py)!==(by>py)&&px<(bx-ax)*(py-ay)/(by-ay)+ax)inside=!inside;
+      }
+      if(inside)return face.actor===true;
+    }
+    return false;
+  }
   setYaw(yaw:number){
     if(this.disposed)return;
     const next=normalizeRoomYaw(yaw);if(next===this.yaw)return;
@@ -217,7 +247,8 @@ export class HomeRoomScene {
         if(i===0)c.moveTo(px,py);else c.lineTo(px,py);
       });c.closePath();c.fill();
     }
-    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed),this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
+    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed,this.weaponLevel),this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
+    this.drawnFaces=faces;
     for(const face of faces){
       c.globalAlpha=face.opacity;c.fillStyle=face.color;c.strokeStyle=face.color;c.lineWidth=.45;
       c.beginPath();face.points.forEach(([x,y],i)=>{if(i===0)c.moveTo(x*scale,y*scale);else c.lineTo(x*scale,y*scale);});c.closePath();c.fill();c.stroke();

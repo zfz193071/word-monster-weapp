@@ -10,7 +10,7 @@ import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { collectionPlaying: '', collectionAudioError: '', preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -81,8 +81,17 @@ Page({
       };
     }) });
   },
+  openWeapon() {
+    if (!this.data.homeVisible || this.data.request || this.data.showCredits || this.data.showLevels || this.data.preparingLevel) return;
+    this.setData({ showWeapon: true });
+  },
+  closeWeapon() { this.setData({ showWeapon: false }); },
+  equipmentChanged(event: WechatMiniprogram.CustomEvent<{ level:number; balance:number; error:boolean }>) {
+    if (event.detail.error) { this.setData({ coinError:true }); return; }
+    this.setData({ weaponLevel:event.detail.level, coinBalance:event.detail.balance, coinError:false });
+  },
   onShow() {
-    try { this.setData({ coinBalance: coinWallet.balance(), coinError: false }); } catch { this.setData({ coinError: true }); }
+    try { const equipment=coinWallet.equipment();this.setData({ coinBalance: equipment.balance, weaponLevel:equipment.level, coinError: false }); } catch { this.setData({ coinError: true }); }
     if (!this.music) this.music = createHomeMusic({ onChange: view => {
       if (!this.disposed) this.setData({ musicEnabled: view.enabled, musicStatus: view.status });
     } });
@@ -115,7 +124,7 @@ Page({
     catch { this.setData({ entryError: '关卡记录暂时无法读取，请重试' }); }
   },
   async beginLevel(levelId: number) {
-    if (this.disposed || this.data.request || this.data.preparingLevel) return;
+    if (this.disposed || this.data.request || this.data.preparingLevel || this.data.showWeapon) return;
     try {
       if (!coinWallet.canEnter(levelId)) return;
       if (levelId > 1) {

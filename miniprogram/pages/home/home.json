@@ -4,6 +4,7 @@
   "disableScroll": true,
   "usingComponents": {
     "fortress-choice": "/components/fortress-choice/fortress-choice",
-    "home-scene": "/components/home-scene/home-scene"
+    "home-scene": "/components/home-scene/home-scene",
+    "weapon-panel": "/components/weapon-panel/weapon-panel"
   }
 }

@@ -18,3 +18,20 @@ test('场景单帧循环，覆盖/隐藏停止动画，迟到旧帧不能复活�
   const count=draws;stale(100);assert.equal(draws,count);scene.setActive(true);stale(200);assert.equal(frames.size,1);
   scene.dispose();assert.equal(frames.size,0);stale(300);assert.equal(draws,count);
 });
+
+test('角色和枪的命中跟随投影，墙壁遮挡后不能隔墙点击',()=>{
+ const context=new Proxy({}, {get(){return ()=>{};},set(){return true;}});
+ const canvas={getContext:()=>context};
+ const scene=new HomeRoomScene(canvas as unknown as WechatMiniprogram.Canvas,480,550,1);
+ const pixel=(point:readonly [number,number,number],yaw:number)=>{const p=projectRoomPoint(point,yaw);return [240+p.x*50,308+p.y*50] as const;};
+ // Front view: torso and the shoulder rifle are independently clickable.
+ const pose=homeHeroPose(0),cos=Math.cos(pose.yaw),sin=Math.sin(pose.yaw);
+ const world=(x:number,y:number,z:number):readonly [number,number,number]=>[x*cos+z*sin-.5,y,-x*sin+z*cos+1.1];
+ assert(scene.hitHero(...pixel(world(0,1,.30),0)));
+ assert(scene.hitHero(...pixel(world(.5,1.75,.2),0)));
+ assert.equal(scene.hitHero(20,20),false);
+ scene.setYaw(Math.PI);assert.equal(scene.hitHero(...pixel(world(0,1,.30),Math.PI)),false);
+ scene.setYaw(Math.PI*1.5);assert(scene.hitHero(...pixel(world(0,1,.30),Math.PI*1.5)));
+ scene.setWeaponLevel(7);scene.setYaw(0);assert(scene.hitHero(...pixel(world(.5,1.75,.2),0)));
+ scene.dispose();assert.equal(scene.hitHero(...pixel(world(0,1,.30),0)),false);
+});

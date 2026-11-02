@@ -8,12 +8,13 @@
   <view wx:if="{{preparingLevel && !showLevels}}" class="entry-error">正在出发…</view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels}}" />
+    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon}}" weapon-level="{{weaponLevel}}" bindherotap="openWeapon" />
   </view>
   <view class="start-dock">
     <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>
   </view>
+  <weapon-panel class="home-weapon-panel" wx:if="{{showWeapon}}" paused="{{!homeVisible}}" bindclose="closeWeapon" bindequipmentchange="equipmentChanged" />
   <view wx:if="{{request}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="choice-modal" role="dialog" aria-label="听音选图片">
       <button class="close-button" bindtap="closeChallenge" disabled="{{opening}}" aria-label="关闭">×</button>

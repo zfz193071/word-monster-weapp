@@ -1,10 +1,11 @@
+import { weaponForLevel } from '../weapons/catalog';
 export const LEVEL_VICTORY_COINS: readonly number[] = Object.freeze([100, 120, 150, 170, 190, 210, 230, 250]);
 export function victoryCoinsForLevel(levelId: number): number {
   if (!Number.isInteger(levelId) || levelId < 1 || levelId > LEVEL_VICTORY_COINS.length) throw new Error('无效奖励关卡');
   return LEVEL_VICTORY_COINS[levelId - 1];
 }
 export const COIN_WALLET_KEY = 'word-monster:coin-wallet:v1';
-interface Wallet { version: 1; balance: number; rewardedSessions: string[]; completedLevels?: number[] }
+interface Wallet { version: 1; balance: number; rewardedSessions: string[]; completedLevels?: number[]; weaponLevel?: number }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
 export function createCoinWallet(storage: Storage) {
   function read(): Wallet {
@@ -15,10 +16,26 @@ export function createCoinWallet(storage: Storage) {
       || value.rewardedSessions.some(id => typeof id !== 'string' || !id.trim()) || new Set(value.rewardedSessions).size !== value.rewardedSessions.length) throw new Error('金币记录暂时无法读取');
     const completedLevels = value.completedLevels ?? [];
     if (!Array.isArray(completedLevels) || completedLevels.some((id, index) => id !== index + 1) || completedLevels.length > 8) throw new Error('关卡记录暂时无法读取');
-    return { version: 1, balance: value.balance, rewardedSessions: [...value.rewardedSessions], completedLevels: [...completedLevels] };
+    const weaponLevel = value.weaponLevel === undefined ? 1 : value.weaponLevel;
+    weaponForLevel(weaponLevel);
+    return { version: 1, weaponLevel, balance: value.balance, rewardedSessions: [...value.rewardedSessions], completedLevels: [...completedLevels] };
   }
   return {
     balance() { return read().balance; },
+    equipment() { const wallet = read(); return { balance: wallet.balance, level: wallet.weaponLevel ?? 1 }; },
+    upgradeWeapon(expectedLevel: number) {
+      weaponForLevel(expectedLevel);
+      const wallet = read();
+      const level = wallet.weaponLevel ?? 1;
+      const current = weaponForLevel(level);
+      // Compare-and-upgrade makes duplicate / stale requests harmless.
+      if (expectedLevel !== level || current.nextCost === null || wallet.balance < current.nextCost) {
+        return { balance: wallet.balance, level, upgraded: false };
+      }
+      const balance = wallet.balance - current.nextCost;
+      storage.setStorageSync(COIN_WALLET_KEY, { ...wallet, balance, weaponLevel: level + 1 });
+      return { balance, level: level + 1, upgraded: true };
+    },
     completedLevels() { return read().completedLevels ?? []; },
     canEnter(levelId: number) { return Number.isInteger(levelId) && levelId >= 1 && levelId <= Math.min(8, (read().completedLevels?.length ?? 0) + 1); },
     defaultLevel() { return Math.min(8, (read().completedLevels?.length ?? 0) + 1); },
@@ -32,7 +49,7 @@ export function createCoinWallet(storage: Storage) {
       const balance = wallet.balance + coins;
       if (!Number.isSafeInteger(balance)) throw new Error('金币余额超出范围');
       // Balance and receipt are one synchronous storage write, so retries cannot double-credit.
-      storage.setStorageSync(COIN_WALLET_KEY, { version: 1, balance, rewardedSessions: [...wallet.rewardedSessions, sessionId], ...(levelId !== undefined || completed.length ? { completedLevels: levelId === completed.length + 1 ? [...completed, levelId] : completed } : {}) });
+      storage.setStorageSync(COIN_WALLET_KEY, { version: 1, ...(wallet.weaponLevel !== undefined ? { weaponLevel: wallet.weaponLevel } : {}), balance, rewardedSessions: [...wallet.rewardedSessions, sessionId], ...(levelId !== undefined || completed.length ? { completedLevels: levelId === completed.length + 1 ? [...completed, levelId] : completed } : {}) });
       return { balance, added: coins };
     },
   };

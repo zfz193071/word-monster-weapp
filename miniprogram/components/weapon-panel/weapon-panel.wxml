@@ -1,0 +1,15 @@
+<view class="weapon-backdrop" catchtouchmove="stopScroll">
+  <view class="weapon-panel" role="dialog" aria-label="武器升级">
+    <button class="weapon-close" bindtap="close" aria-label="关闭">×</button>
+    <view class="weapon-title">我的武器</view>
+    <view class="weapon-level" style="border-color:{{weapon.color}}">Lv.{{weapon.level}} · {{weapon.name}}</view>
+    <view class="weapon-stage" style="background:radial-gradient(ellipse, {{weapon.color}}88, transparent 70%)"><image class="weapon-image" src="{{weapon.image}}" mode="aspectFit" /></view>
+    <view class="weapon-balance"><text class="coin">●</text> {{balance}}</view>
+    <view wx:if="{{error}}" class="weapon-error">{{error}}<button class="weapon-retry" bindtap="retry">重试</button></view>
+    <button wx:else class="weapon-upgrade {{holding ? 'holding' : ''}}" disabled="{{!affordable}}" catchtouchstart="startHold" catchtouchend="endHold" catchtouchcancel="stopHold" aria-label="{{weapon.nextCost === null ? '已满级' : '长按升级，消耗' + weapon.nextCost + '金币'}}">
+      <view class="hold-progress" style="width:{{progress}}%"></view>
+      <view class="upgrade-label"><block wx:if="{{weapon.nextCost !== null}}"><text>{{weapon.nextCost}}</text><text class="coin">●</text></block><text wx:else>已满级</text></view>
+    </button>
+    <view class="weapon-hint">{{error ? '请确认记录后再升级' : weapon.nextCost === null ? '最高等级已达成' : !affordable ? '金币不足，闯关可获得金币' : '持续按住，每秒升一级'}}</view>
+  </view>
+</view>
