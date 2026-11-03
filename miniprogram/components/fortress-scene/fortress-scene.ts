@@ -44,19 +44,19 @@ Component({
   data: { rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 50, maxHp: 50, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
-    attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); this.setData({ coinBalance: coinWallet.balance() }); },
+    attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); },
     ready() { this.mount(); },
     detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.drops?.dispose(); state.audio?.dispose(); state.victoryAudio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
   },
   pageLifetimes: {
     hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
-    show() { const state = instances.get(this); if (state) { state.visible = true; this.setData({ coinBalance: coinWallet.balance() }); this.applyPause(); this.presentUpgrade(); } },
+    show() { const state = instances.get(this); if (state) { state.visible = true; const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.applyPause(); this.presentUpgrade(); } },
     resize() { this.measureResize(); },
   },
   methods: {
     mount(replace = false) {
       const instance = instances.get(this); if (!instance?.alive) return;
-      this.setData({ coinBalance: coinWallet.balance() });
+      const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance });
       const retained = instance.pending ?? (replace ? null : instance.scene?.snapshot); instance.pending = undefined;
       instance.scene?.dispose(); instance.scene = undefined;
       instance.skills?.dispose(); instance.skills = undefined;
@@ -76,7 +76,7 @@ Component({
             instance.drops?.dispose();
             this.setData({ dropCoins: 0, dropError: false });
             instance.drops = createBattleDrops({ sessionId: initial.context.sessionId, levelId: request?.plan.levelId ?? 1, wallet: coinWallet,
-              onChange: view => { if (instance.alive) this.setData({ dropCoins: view.total, dropError: view.error, coinBalance: coinWallet.balance() }); },
+              onChange: view => { if (instance.alive) { const balance = coinWallet.balance(); this.setData({ dropCoins: view.total, dropError: view.error, coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); } },
               onAward: (position, amount) => { if (instance.alive) { instance.scene?.showCoinDrop(position, amount); instance.audio?.playCoin(); } },
             });
             instance.experience = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
@@ -121,10 +121,9 @@ Component({
                 this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
                 if (xp.upgrades.length > 0 && scene.snapshot?.status !== 'baseDestroyed') {
                   const candidate = openingSkillOffer(initial.context.sessionId, xp.level, instance.levels, scene.snapshot?.base);
-                  instance.awaitingWaveEnd = true;
                   if (candidate.cards.length) instance.pendingOffer = instance.upgrades.open(candidate) ?? undefined;
-                  this.presentUpgrade();
                 }
+                if (scene.snapshot?.status === 'cleared') { instance.awaitingWaveEnd = true; this.presentUpgrade(); }
               }
               if (scene.snapshot?.status === 'baseDestroyed') instance.audio?.setActive(false);
               this.triggerEvent('combatevents', { events, state: scene.snapshot });
@@ -194,7 +193,7 @@ Component({
       const state = instances.get(this);
       if (!this.data.completed || !state?.visible || this.data.rewardSaved) return;
       const request = this.properties.previewRequest as { plan: SessionPlan };
-      try { const result = coinWallet.rewardVictory(request.plan.sessionId, request.plan.levelId ?? 1); this.setData({ rewardSaved: true, rewardError: false, coinBalance: result.balance }); }
+      try { const result = coinWallet.rewardVictory(request.plan.sessionId, request.plan.levelId ?? 1); this.setData({ rewardSaved: true, rewardError: false, coinBalance: result.balance }); this.triggerEvent('coinbalancechange', { balance: result.balance }); }
       catch { this.setData({ rewardError: true, rewardSaved: false }); }
     },
     returnHome() { this.triggerEvent('returnhome'); },

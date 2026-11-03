@@ -19,7 +19,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { musicVolume: 22, fromHome: false, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { musicVolume: 22, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
@@ -75,6 +75,7 @@ Page({
   },
 
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); },
+  updateCoinBalance(event: WechatMiniprogram.CustomEvent<{ balance: number }>) { const balance = event.detail.balance; if (Number.isSafeInteger(balance) && balance >= 0) this.setData({ coinBalance: balance }); },
   returnHome() { wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {

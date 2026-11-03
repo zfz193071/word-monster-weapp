@@ -11,12 +11,18 @@ import type { ExperienceRules } from './experience';
 import type { UpgradeCard, UpgradeOffer } from './upgrade-choice';
 import { FORTRESS_SKILLS } from './rules';
 
-export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: 10,
-  // Level 20 cap: incremental costs 30, 50, ... 390.
-  levelThresholds: Object.freeze(Array.from({ length: 19 }, (_, i) => (i + 1) * (i + 3) * 10)) });
 export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
-export const OPENING_MONSTER_COUNT = 3;
+export const OPENING_EXPERIENCE_PER_KILL = 8;
+export const OPENING_MONSTER_COUNTS: readonly number[] = Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, waveIndex) => 4 + waveIndex * 3));
+const totalOpeningMonsters = OPENING_MONSTER_COUNTS.reduce((sum, count) => sum + count, 0);
+export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: OPENING_EXPERIENCE_PER_KILL,
+  // Each of the first 18 clears grants one level; level 20 arrives before the final wave is cleared.
+  // Experience continues accumulating after the level cap.
+  levelThresholds: Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, index) => {
+    const defeated = OPENING_MONSTER_COUNTS.slice(0, index + 1).reduce((sum, count) => sum + count, 0);
+    return (index === OPENING_WAVE_COUNT - 1 ? totalOpeningMonsters - 2 : defeated) * OPENING_EXPERIENCE_PER_KILL;
+  })) });
 export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0, firepower: 0, homing: 0 });
 export const HERO_PATH = '/assets/images/fortress/hero.png';
 const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortress/${name}.png`,
@@ -39,7 +45,7 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
   const words = getLevel(levelId).words;
   if (!words.some(word => word.id === wordId) || previousWordIds.some(id => !words.some(word => word.id === id))) throw new Error('词汇不属于本关');
-  const count = 3 + waveIndex * 2;
+  const count = OPENING_MONSTER_COUNTS[waveIndex];
   let seed = 2166136261;
   for (const char of `${sessionId}:${waveIndex}`) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
   const random = createSeededRandom(seed >>> 0);

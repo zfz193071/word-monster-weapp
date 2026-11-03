@@ -1,6 +1,6 @@
 import { weaponForLevel } from '../weapons/catalog';
 import { getLevel } from './levels';
-import { createOpeningEncounter, OPENING_WAVE_COUNT } from './opening-encounter';
+import { createOpeningEncounter, OPENING_MONSTER_COUNTS, OPENING_WAVE_COUNT } from './opening-encounter';
 import type { RandomSource, SessionPlan } from './types';
 
 export function createOpeningPlan(sessionId: string, random: RandomSource, levelId = 1, weaponLevel = 1): SessionPlan {
@@ -36,7 +36,7 @@ export function validateOpeningPlan(plan: SessionPlan): void {
   const words = getLevel(plan.levelId).words;
   for (const [index, wave] of plan.waves.entries()) {
     if (wave.index !== index || wave.waveId !== `${plan.sessionId}:wave:${index + 1}` || !words.some(word => word.id === wave.targetWordId)
-      || wave.spawnPlan.length !== 3 + 2 * index || (index && wave.targetWordId === plan.waves[index - 1].targetWordId)) throw new Error('新版波次无效');
+      || wave.spawnPlan.length !== OPENING_MONSTER_COUNTS[index] || (index && wave.targetWordId === plan.waves[index - 1].targetWordId)) throw new Error('新版波次无效');
   }
   for (let start = 0; start < plan.waves.length; start += words.length) {
     const cycle = plan.waves.slice(start, start + words.length);

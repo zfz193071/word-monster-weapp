@@ -37,6 +37,7 @@
 .opening-page { padding: 0 0 env(safe-area-inset-bottom); background: #334b40; min-height: 100vh; }.battle-toolbar { display: flex; justify-content: space-between; padding: 0 16rpx; background: #334b40; }.battle-toolbar button { margin: 0; width: 64rpx; height: 54rpx; padding: 0; line-height: 50rpx; background: transparent; color: #f6edc7; font-size: 36rpx; }.battle-toolbar button::after { border: 0; }
 
 .battle-toolbar button { min-width: 0; max-width: 64rpx; }
+.toolbar-wallet { flex:none; display:flex; align-items:center; gap:8rpx; margin-left:14rpx; padding:0 10rpx; color:#fff0b1; font-size:25rpx; font-weight:700; white-space:nowrap; }.toolbar-wallet text { color:#ffd45a; text-shadow:0 0 8rpx #ffcb38; }
 
 .battle-volume { margin-left: auto; display: flex; align-items: center; color: #f6edc7; font-size: 22rpx; }.battle-volume slider { width: 160rpx; margin: 0 12rpx; }.battle-volume text:last-child { width: 64rpx; text-align: right; }
 

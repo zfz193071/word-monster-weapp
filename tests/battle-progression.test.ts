@@ -24,7 +24,7 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 39);
 });
 
-test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总399只', () => {
+test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总589只', () => {
   let bossRuns = 0; let emptyRuns = 0;
   for (let run = 0; run < 60; run++) {
     const id = `boss-plan-${run}`;
@@ -32,7 +32,7 @@ test('固定对局计划：10级前无Boss、全局至多一只、最后一怪�
     if (index < 0) emptyRuns++; else { bossRuns++; assert.ok(index >= 9 && index < 19); }
     const plan = createOpeningPlan(id, createSeededRandom(run));
     const monsters = plan.waves.flatMap(wave => wave.spawnPlan);
-    assert.equal(monsters.length, 399);
+    assert.equal(monsters.length, 589);
     assert.equal(monsters.filter(monster => monster.boss).length, index < 0 ? 0 : 1);
     if (index >= 0) {
       const wave = plan.waves[index]; const boss = wave.spawnPlan.at(-1)!;
@@ -104,7 +104,7 @@ test('Boss召唤援军，援军每2秒攻击并按普通僵尸规则结算击杀
   assert.ok(next.events.some(event => event.type === 'monsterDefeated' && event.monsterId === target.id));
   assert.ok(next.events.some(event => event.type === 'coinsDropped' && event.monsterId === target.id && event.amount === 1));
   const xp = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
-  xp.record(next.events); assert.equal(xp.view.total, 10);
+  xp.record(next.events); assert.equal(xp.view.total, 8);
 });
 
 test('僵尸优先攻击30点生命的小士兵；士兵被击败后后续攻击才扣堡垒血量', () => {
@@ -129,14 +129,14 @@ test('僵尸优先攻击30点生命的小士兵；士兵被击败后后续攻击
   assert.ok(hit.events.some(event => event.type === 'baseDamaged' && event.hp === 30));
 });
 
-test('Boss死亡仍只10经验和一次计划金币；有待出场Boss不能清场', () => {
+test('Boss死亡按普通规则给8经验和一次计划金币；有待出场Boss不能清场', () => {
   const initial = createOpeningEncounter('kill-boss', 'apple', 0);
   const monster = { ...initial.monsters[0], boss: true, dropCoins: 10, hp: 1, position: { x: 180, y: 100 }, status: 'alive' as const };
   const state: CombatState = { ...initial, monsters: [monster], projectiles: [{ id: 'hit', position: { x: 180, y: 120 }, previousPosition: { x: 180, y: 120 }, width: 50, height: 50, damage: 1 }] };
   const dead = stepCombat(state); assert.equal(dead.state.status, 'cleared');
   assert.equal(dead.events.filter(e => e.type === 'coinsDropped').length, 1);
   const xp = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
-  xp.record(dead.events); xp.record(dead.events); assert.equal(xp.view.total, 10);
+  xp.record(dead.events); xp.record(dead.events); assert.equal(xp.view.total, 8);
   assert.equal(stepCombat(dead.state).events.length, 0);
   const waiting: CombatState = { ...initial, monsters: [{ ...monster, status: 'waiting', spawnAtMs: 5000 }] };
   assert.equal(stepCombat(waiting).state.status, 'fighting');

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createOpeningPlan, validateOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
-import { createOpeningEncounter, OPENING_EXPERIENCE, openingSkillOffer, ZERO_SKILLS } from '../miniprogram/fortress/opening-encounter';
+import { createOpeningEncounter, OPENING_EXPERIENCE, OPENING_MONSTER_COUNTS, openingSkillOffer, ZERO_SKILLS } from '../miniprogram/fortress/opening-encounter';
 import { createExperience } from '../miniprogram/fortress/experience';
 import { BATTLE_WORDS } from '../miniprogram/fortress/fruit-catalog';
 import { createFruitOptions } from '../miniprogram/fortress/fruit-options';
@@ -16,7 +16,7 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
     assert.equal(new Set(plan.waves.slice(0,11).map(w=>w.targetWordId)).size,11);
     assert.equal(new Set(plan.waves.slice(11).map(w=>w.targetWordId)).size,8);
     for (const [index,wave] of plan.waves.entries()) {
-      const count=3+index*2;assert.equal(wave.spawnPlan.length,count);
+      const count=OPENING_MONSTER_COUNTS[index];assert.equal(wave.spawnPlan.length,count);
       const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
       assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(count/2):count);
       const oldCounts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);
@@ -38,5 +38,5 @@ test('完整19波击杀升级至20封顶，满级旧技能移出，每次固定�
   assert.ok(offer.cards.every(c=>!['doubleShot','fireRate','bulletWidth'].includes(c.id)||(levels[c.id as BattleSkillId]??0)<3));
   const chosen=(offer.cards.find(c=>c.id==='fireRate')??offer.cards.find(c=>c.id==='doubleShot')??offer.cards.find(c=>c.id==='bulletWidth')??offer.cards.find(c=>c.id==='flame')??offer.cards[0]).id as BattleSkillId;levels={...levels,[chosen]:(levels[chosen]??0)+1};
  }
- assert.equal(xp.view.total,3990);assert.equal(xp.view.level,20);assert.equal(Object.values(levels).reduce((a,b)=>a+b,0),19);
+ assert.equal(xp.view.total,4712);assert.equal(xp.view.level,20);assert.ok(xp.view.total>OPENING_EXPERIENCE.levelThresholds.at(-1)!,'20级后击杀仍累计经验');assert.equal(Object.values(levels).reduce((a,b)=>a+b,0),19);
 });
