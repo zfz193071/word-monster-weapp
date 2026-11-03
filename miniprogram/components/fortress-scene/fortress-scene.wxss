@@ -31,6 +31,9 @@
 .opening-scene .canvas-stage { position: absolute; top: 0; left: 0; right: 0; height: calc(100% - 80rpx - env(safe-area-inset-bottom)); min-height: 0; }
 .battle-footer { position: absolute; bottom: env(safe-area-inset-bottom); left: 0; right: 0; height: 80rpx; box-sizing: border-box; display: flex; gap: 20rpx; align-items: center; padding: 12rpx 24rpx; font-size: 24rpx; background: #334b40; }
 .battle-footer .experience-track { flex: 1; }
+.drop-coins { color: #ffe18c; min-width: 68rpx; text-align: right; }
+.drop-error { position: absolute; bottom: calc(90rpx + env(safe-area-inset-bottom)); left: 12%; right: 12%; z-index: 120; }
+.drop-error button { font-size: 24rpx; color: #594523; background: #ffebac; }
 .opening-scene .scene-status, .opening-scene .settlement { position: absolute; z-index: 20; top: 35%; left: 5%; width: 90%; box-sizing: border-box; border-radius: 28rpx; }
 .opening-scene .return-home { position: absolute; z-index: 21; bottom: 120rpx; left: 50%; transform: translateX(-50%); margin: 0; }
 .opening-scene .voice-status { position: absolute; z-index: 21; bottom: env(safe-area-inset-bottom); left: 0; right: 0; height: 80rpx; }

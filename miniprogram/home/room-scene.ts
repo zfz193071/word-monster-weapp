@@ -173,6 +173,7 @@ export class HomeRoomScene {
   private frame:number|undefined;
   private frameVersion=0;
   private active=false;
+  private afterDraw:(()=>void)|undefined;
   private disposed=false;
   private elapsed=0;
   private previous:number|undefined;
@@ -212,9 +213,9 @@ export class HomeRoomScene {
     this.width=width;this.height=height;this.dpr=Math.min(2,dpr);
     this.canvas.width=Math.round(width*this.dpr);this.canvas.height=Math.round(height*this.dpr);this.draw();
   }
-  setActive(active:boolean){
+  setActive(active:boolean,afterDraw?:()=>void){
     if(this.disposed||this.active===active)return;
-    this.active=active;this.previous=undefined;this.frameVersion++;
+    this.active=active;this.previous=undefined;this.frameVersion++;this.afterDraw=active?afterDraw:undefined;
     if(!active&&this.frame!==undefined){this.canvas.cancelAnimationFrame(this.frame);this.frame=undefined;}
     if(active)this.schedule();
   }
@@ -230,6 +231,7 @@ export class HomeRoomScene {
       if(this.previous===undefined||now-this.previous>=32){
         if(this.previous!==undefined)this.elapsed+=Math.min(60,now-this.previous)/1000;
         this.previous=now;this.draw();
+        const afterDraw=this.afterDraw;this.afterDraw=undefined;afterDraw?.();
       }
       this.schedule();
     });

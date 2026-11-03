@@ -35,3 +35,14 @@ test('角色和枪的命中跟随投影，墙壁遮挡后不能隔墙点击',()=
  scene.setWeaponLevel(7);scene.setYaw(0);assert(scene.hitHero(...pixel(world(.5,1.75,.2),0)));
  scene.dispose();assert.equal(scene.hitHero(...pixel(world(0,1,.30),0)),false);
 });
+
+test('恢复首帧绘制后才移除占位截图，暂停取消过期切换回调',()=>{
+ let frame:((time:number)=>void)|undefined;let draws=0;let switches=0;
+ const context=new Proxy({}, {get(_target,key){return key==='clearRect'?()=>draws++:()=>{};},set(){return true;}});
+ const canvas={getContext:()=>context,requestAnimationFrame(fn:(time:number)=>void){frame=fn;return 1;},cancelAnimationFrame(){frame=undefined;}};
+ const scene=new HomeRoomScene(canvas as unknown as WechatMiniprogram.Canvas,360,400,2);
+ const before=draws;scene.setActive(true,()=>{assert.ok(draws>before);switches++;});
+ assert.equal(switches,0);frame!(0);assert.equal(switches,1);frame!(40);assert.equal(switches,1);
+ scene.setActive(false);scene.setActive(true,()=>switches++);const stale=frame!;scene.setActive(false);stale(80);assert.equal(switches,1);
+ scene.dispose();
+});

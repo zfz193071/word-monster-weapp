@@ -1,4 +1,5 @@
 import { weaponForLevel } from '../weapons/catalog';
+import { bossWaveIndex, monsterDropCoins } from './battle-progression';
 import { createSeededRandom } from './plans';
 import { logicalHitbox } from './viewport';
 import { createEncounterCombat } from './combat';
@@ -54,9 +55,14 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
       position: { x: lanes[member] + random() * 12 - 6, y: FORTRESS_RULES.monster.startY } });
     spawnAtMs += 800 + Math.floor(random() * 701);
   }
-  return createEncounterCombat({ weaponLevel, automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
+  const bossWave = bossWaveIndex(sessionId);
+  const plannedSpawns = spawns.map((spawn, index) => {
+    const boss = waveIndex === bossWave && index === spawns.length - 1;
+    return { ...spawn, ...(boss ? { boss: true } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss) };
+  });
+  return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1 }, weaponLevel, automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
     playerX: 180, skills, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
-    allowedWordIds: [wordId, ...history], spawns });
+    allowedWordIds: [wordId, ...history], spawns: plannedSpawns });
 }
 export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS, base = { hp: FORTRESS_RULES.base.maxHp, maxHp: FORTRESS_RULES.base.maxHp }): UpgradeOffer {
   const cards: UpgradeCard[] = FORTRESS_SKILLS.filter(skill => levels[skill.id] < skill.maxLevel).map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,

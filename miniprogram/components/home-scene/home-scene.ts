@@ -1,12 +1,12 @@
 import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
-interface State { orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number }
+interface State { orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
 const states=new WeakMap<object,State>();
 Component({
   properties:{ weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
-  data:{frozenFrame:'',error:false},
+  data:{error:false,canvasCovered:false,frozenFrames:[] as {id:number;src:string}[]},
   lifetimes:{
-    attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0});},
+    attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0,covered:false,captureId:0});},
     ready(){this.mount();},
     detached(){const state=states.get(this);if(state){state.tap=undefined;state.orbit.cancel();state.alive=false;state.epoch++;state.scene?.dispose();}states.delete(this);},
   },
@@ -17,8 +17,8 @@ Component({
   },
   methods:{
     mount(){
-      const state=states.get(this);if(!state?.alive||this.properties.covered)return;state.tap=undefined;state.orbit.cancel();const epoch=++state.epoch;
-      state.scene?.dispose();state.scene=undefined;
+      const state=states.get(this);if(!state?.alive)return;state.tap=undefined;state.orbit.cancel();const epoch=++state.epoch;
+      state.scene?.dispose();state.scene=undefined;state.covered=false;
       this.createSelectorQuery().select('#room-canvas').fields({node:true,size:true,rect:true},result=>{
         if(!state.alive||epoch!==state.epoch)return;
         try{
@@ -33,13 +33,29 @@ Component({
     synchronize(){
       const state=states.get(this);if(!state?.alive)return;
       if(this.properties.covered||this.properties.paused||!state.visible){state.tap=undefined;state.orbit.cancel();}
-      if(this.properties.covered){
-        if(state.scene)this.setData({frozenFrame:state.scene.capture()});
-        state.epoch++;state.scene?.dispose();state.scene=undefined;
-        return;
+      if(!state.scene){wx.nextTick(()=>{if(state.alive&&!state.scene)this.mount();});return;}
+      const restore=()=>{
+        if(!state.alive)return;
+        state.scene?.setActive(state.visible&&!this.properties.paused&&!this.properties.covered,()=>{
+          if(state.alive&&!this.properties.covered&&this.data.frozenFrames.length)this.setData({frozenFrames:[]});
+        });
+      };
+      if(this.properties.covered&&!state.covered){
+        state.scene.setActive(false);
+        const src=state.scene.capture();
+        if(src)this.setData({frozenFrames:[{id:++state.captureId,src}]});
       }
-      if(!state.scene){wx.nextTick(()=>{if(state.alive&&!this.properties.covered&&!state.scene)this.mount();});return;}
-      state.scene.setActive(state.visible&&!this.properties.paused);
+      state.covered=this.properties.covered;
+      // Retain both the native drawing buffer and its last snapshot. Hide the
+      // native layer only after the image has loaded; reopening needs no mount.
+      if(!state.covered&&this.data.canvasCovered)this.setData({canvasCovered:false},restore);
+      else restore();
+    },
+    frozenReady(event:WechatMiniprogram.BaseEvent){
+      const state=states.get(this);
+      if(state?.alive&&this.properties.covered&&event.currentTarget.dataset.captureId===state.captureId){
+        this.setData({canvasCovered:true});
+      }
     },
     touchStart(event:WechatMiniprogram.TouchEvent){
       const state=states.get(this);

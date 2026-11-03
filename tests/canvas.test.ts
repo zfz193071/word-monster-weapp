@@ -36,6 +36,21 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('清场后金币演出继续绘制，暂停冻结、恢复连续、结束和销毁清理帧', async () => {
+  const h = harness(true, undefined, { initial: { ...initial(), status: 'cleared' } });
+  await h.scene.load(); assert.equal(h.callbacks.size, 0);
+  h.scene.showCoinDrop({ x: 100, y: 200 }, 10); assert.equal(h.callbacks.size, 1);
+  h.frame(0); h.frame(100);
+  assert.ok(h.commands.some(command => command.method === 'fillText' && command.args[0] === '+10'));
+  h.scene.setPaused(true); const count = h.commands.length;
+  h.frame(10000); assert.equal(h.commands.length, count); assert.equal(h.callbacks.size, 0);
+  h.scene.setPaused(false); h.frame(10000);
+  for (let time = 10100; time <= 10800; time += 100) h.frame(time);
+  assert.equal(h.callbacks.size, 0);
+  h.scene.showCoinDrop({ x: 100, y: 200 }, 1); assert.equal(h.callbacks.size, 1);
+  h.scene.dispose(); assert.equal(h.callbacks.size, 0); h.scene.showCoinDrop({ x: 0, y: 0 }, 1); assert.equal(h.callbacks.size, 0);
+});
+
 test('DPR 只影响物理像素，不改变逻辑位置；宽高适配与留白正确', () => {
   for (const dpr of [1, 2, 3]) {
     const v = createViewport(360, 560, dpr); const control = new HorizontalControl(v, 20);

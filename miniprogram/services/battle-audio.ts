@@ -16,10 +16,12 @@ export function createBattleAudio(options: {
   createMusicContext?: () => HomeMusicChannel;
   createHitContext?: () => HitChannel;
   createBaseHitContext?: () => HitChannel;
+  createCoinContext?: () => HitChannel;
 }) {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
   let baseHit: HitChannel | undefined;
+  let coin: HitChannel | undefined; let lastCoin = -Infinity;
   const heardAttacks = new Set<string>();
   const queue: DefeatGroup[] = []; const seen = new Set<string>();
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
@@ -68,6 +70,20 @@ export function createBattleAudio(options: {
     } catch { /* Cosmetic effects cannot interrupt combat. */ }
   }
   return {
+    playCoin() {
+      const now = Date.now();
+      if (disposed || !active || now - lastCoin < 100) return;
+      lastCoin = now;
+      try {
+        if (!coin) {
+          coin = (options.createCoinContext ?? (() => wx.createInnerAudioContext()))();
+          coin.autoplay = false; coin.loop = false; coin.obeyMuteSwitch = true;
+          coin.src = '/assets/audio/coin-collect.mp3'; coin.onError(() => undefined);
+        }
+        coin.volume = queue.length ? .08 : .25;
+        coin.stop(); coin.play();
+      } catch { /* Collection is already saved; cosmetic audio cannot undo it. */ }
+    },
     get view() { return view(); },
     get busy() { return queue.length > 0; },
     handle(events: readonly CombatEvent[]) {
@@ -94,7 +110,7 @@ export function createBattleAudio(options: {
     setActive(value: boolean) {
       if (disposed || value === active) return;
       active = value; music.setActive(value);
-      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); baseHit?.stop(); } catch {} }
+      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); baseHit?.stop(); coin?.stop(); } catch {} }
       else speak();
     },
     setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
@@ -102,6 +118,7 @@ export function createBattleAudio(options: {
     dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); queue.length = 0;
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
       try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
+      try { coin?.stop(); } catch {} try { coin?.destroy(); } catch {} coin = undefined;
     } },
   };
 }

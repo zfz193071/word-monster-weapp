@@ -68,3 +68,12 @@ test('堡垒受击使用独立音效，重复攻击不重播，暂停不补播�
  controller.handle([{...event,attackId:'a:3'}]);assert.equal(base.plays,2);
  controller.dispose();assert.equal(base.destroyed,true);controller.handle([{...event,attackId:'a:4'}]);assert.equal(base.plays,2);
 });
+
+test('金币短音效合并密集调用，暂停和销毁后不播放',()=>{
+ const coin=new Channel();const music=new Channel();
+ const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){},createMusicContext:()=>music,createCoinContext:()=>coin});
+ controller.playCoin();assert.equal(coin.plays,0);
+ controller.setActive(true);controller.playCoin();controller.playCoin();assert.equal(coin.plays,1);assert.equal(coin.src,'/assets/audio/coin-collect.mp3');
+ controller.setActive(false);controller.playCoin();assert.equal(coin.plays,1);
+ controller.dispose();assert.equal(coin.destroyed,true);controller.playCoin();assert.equal(coin.plays,1);
+});

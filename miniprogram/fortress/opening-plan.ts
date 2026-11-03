@@ -26,7 +26,7 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
       const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId);
       return Object.freeze({ waveId: `${sessionId}:wave:${index + 1}`, index, targetWordId,
         optionWordIds: Object.freeze(shuffle([targetWordId, ...shuffle(words.filter(id => id !== targetWordId)).slice(0, 2)])),
-        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs }))),
+        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true } : {}), dropCoins: monster.dropCoins }))),
       });
     })) });
 }

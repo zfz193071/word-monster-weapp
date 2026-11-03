@@ -1,4 +1,5 @@
 import { weaponForLevel } from '../weapons/catalog';
+import { bossChargePhase, monsterStats } from './battle-progression';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
@@ -17,6 +18,7 @@ export interface CombatInput { readonly playerX?: number }
 export interface WeaponParameters { readonly count: number; readonly intervalMs: number; readonly width: number }
 export interface CombatStep { readonly state: CombatState; readonly events: readonly CombatEvent[] }
 export interface CreateCombatOptions {
+  readonly difficulty?: { readonly levelId: number; readonly heroLevel: number };
   readonly weaponLevel?: number;
   readonly automatic?: boolean;
   readonly monsterSpeed?: number;
@@ -100,7 +102,7 @@ export function createEncounterCombat(options: EncounterCombatOptions): CombatSt
 function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex'>, context: CombatContext, spawns: readonly MonsterSpawn[]): CombatState {
   if (!options.combatId.trim()) throw new RangeError('combatId 不能为空');
   if (!Number.isSafeInteger(options.generation) || options.generation < 0) throw new RangeError('generation 必须为非负安全整数');
-  if (!Number.isInteger(options.baseHp) || options.baseHp <= 0 || options.baseHp > RULES.base.maxHp) throw new RangeError('baseHp 必须在 1—5；失败局不能进入下一波');
+  if (!Number.isFinite(options.baseHp) || options.baseHp <= 0 || options.baseHp > RULES.base.maxHp) throw new RangeError('baseHp 必须大于0且不超过5；失败局不能进入下一波');
   const weapon = getWeaponParameters(options.skills);
   const monsterSpeed = options.monsterSpeed ?? RULES.monster.speed;
   if (!Number.isFinite(monsterSpeed) || monsterSpeed <= 0) throw new RangeError('monsterSpeed 必须为正数');
@@ -119,10 +121,14 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
     tick: 0, status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
     base: { hp: options.baseHp, maxHp: RULES.base.maxHp }, skills: options.skills,
-    monsters: spawns.map(spawn => ({ id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
+    monsters: spawns.map(spawn => {
+      const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
+      const size = spawn.boss ? 1.5 : 1;
+      return { id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
+      ...(spawn.boss ? { boss: true } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), attackDamage: stats.attackDamage,
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
-      hitbox: box, hp: RULES.monster.maxHp, maxHp: RULES.monster.maxHp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
-      attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 })),
+      hitbox: { x: box.x * size, y: box.y * size, width: box.width * size, height: box.height * size }, hp: stats.hp, maxHp: stats.hp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
+      attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 }; }),
     projectiles: [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [],
   };
@@ -155,6 +161,7 @@ function advanceMonster(monster: MonsterState, speed: number, elapsedMs: number)
   if (elapsedMs < (monster.spawnAtMs ?? 0)) return monster;
   if (monster.hp === 0 || monster.status === 'retiring') return monster;
   if (monster.status === 'attackingBase') return { ...monster, attackRemainingMs: monster.attackRemainingMs - COMBAT_STEP_MS };
+  if (monster.boss) speed *= .7 * (bossChargePhase(elapsedMs - (monster.spawnAtMs ?? 0)) === 'charging' ? 1.5 : 1);
   if ((monster.slowUntilTick ?? 0) > elapsedMs / COMBAT_STEP_MS) speed *= 1 - (monster.slowRatio ?? 0);
   const distance = RULES.monster.attackY - monster.position.y;
   const travel = speed * COMBAT_STEP_MS / 1000;
@@ -198,7 +205,10 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const hp = Math.max(0, monster.hp - damage);
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
     events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, position: Object.freeze({ ...monster.position }) });
-    if (hp === 0 && !defeated.has(monster.id)) { defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId }); }
+    if (hp === 0 && !defeated.has(monster.id)) {
+      defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
+      if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
+    }
   };
   const consumed = new Set<string>();
   for (const contact of contacts) {
@@ -232,7 +242,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) };
     if (attacks.has(attackId)) return;
     attacks.add(attackId);
-    baseHp = Math.max(0, baseHp - RULES.monster.attackDamage);
+    baseHp = Math.max(0, Math.round((baseHp - (monster.attackDamage ?? RULES.monster.attackDamage)) * 100) / 100);
     events.push({ type: 'baseDamaged', context: previous.context, tick, attackId, monsterId: monster.id, hp: baseHp });
   });
   const status = baseHp === 0 ? 'baseDestroyed' : monsters.every(monster => defeated.has(monster.id)) ? 'cleared' : 'fighting';

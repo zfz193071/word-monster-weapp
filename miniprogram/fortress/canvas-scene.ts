@@ -1,10 +1,11 @@
 import { drawBattleBackground } from './battle-background';
+import { bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
 import type { Finger, Viewport } from './viewport';
-import type { CombatEvent, CombatState, MonsterVisual, SkillLevels } from './types';
+import type { CombatEvent, CombatState, MonsterVisual, Point, SkillLevels } from './types';
 import { createRetirement } from './retirement';
 import type { RetirementOptions } from './retirement';
 
@@ -55,6 +56,12 @@ export class CanvasScene {
     if (!this.disposed && this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
   }
   private effectTime = 0;
+  private coinEffects: { position: Point; amount: number; started: number }[] = [];
+  showCoinDrop(position: Point, amount: number): void {
+    if (this.disposed || amount <= 0) return;
+    this.coinEffects.push({ position: { ...position }, amount, started: this.effectTime });
+    if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
+  }
   private readonly damageNumbers = new DamageNumbers();
   private deathStarted = new Map<string, number>();
   private images = new Map<string, Image>();
@@ -184,7 +191,7 @@ export class CanvasScene {
   }
   private schedule(): void {
     if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
-      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size && !this.damageNumbers.active)) return;
+      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size && !this.damageNumbers.active && !this.coinEffects.length)) return;
     const version = this.frameVersion;
     this.frameId = this.canvas.requestAnimationFrame((now: number) => {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
@@ -241,7 +248,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
   }
   private draw(state: CombatState): void {
     const c = this.context; const v = this.viewport;
@@ -293,6 +300,9 @@ export class CanvasScene {
       c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? .7 * Math.max(0, 1 - deathAge / 240) : 1;
       const attackPose = baseAttackPose(monster);
       c.save(); c.translate(0, attackPose.lunge * 9);
+      if (monster.boss) {
+        c.translate(monster.position.x, monster.position.y); c.scale(1.5, 1.5); c.translate(-monster.position.x, -monster.position.y);
+      }
       const monsterArt = this.monsterArt;
       if (!monsterArt && this.options.preview) {
         c.fillStyle = state.tick < (this.monsterFlashes.get(monster.id) ?? 0) ? '#ffffff' : '#c2a0f0';
@@ -327,7 +337,7 @@ export class CanvasScene {
             monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
         }
         c.imageSmoothingEnabled = true;
-        if (monsterArt.fruitHat && !monsterArt.animalIds?.includes(monster.wordId)) {
+        if (monsterArt.fruitHat && !monster.boss && !monsterArt.animalIds?.includes(monster.wordId)) {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
           // White badge keeps each ordinary fruit legible at game scale.
@@ -336,6 +346,27 @@ export class CanvasScene {
           c.fillStyle = '#4c5e43'; c.fillRect(-18, 41, 36, 4);
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
+      }
+      if (monster.boss && monster.hp > 0) {
+        const phase = bossChargePhase(state.tick * 10 - (monster.spawnAtMs ?? 0));
+        const x = monster.position.x; const y = monster.position.y;
+        c.save(); c.translate(x, y);
+        c.fillStyle = phase === 'warning' && state.tick % 20 < 10 ? '#ffe48a' : '#a6bbc0';
+        c.strokeStyle = '#455f6a'; c.lineWidth = 2;
+        c.beginPath(); c.moveTo(-13, -20); c.lineTo(-11, -36); c.lineTo(11, -36); c.lineTo(13, -20); c.closePath(); c.fill(); c.stroke();
+        c.fillStyle = '#dbe7df'; c.fillRect(-9, -33, 3, 10);
+        c.fillStyle = '#879da3'; c.fillRect(-22, -5, 10, 8); c.fillRect(12, -5, 10, 8);
+        c.strokeStyle = '#f3c65b'; c.lineWidth = 2; c.strokeRect(-22, -5, 10, 8); c.strokeRect(12, -5, 10, 8);
+        // The word badge sits above the helmet, including for animal-category bosses.
+        const hat = monsterArt?.fruitHats?.[monster.wordId] ?? monsterArt?.fruitHat;
+        if (hat) { c.fillStyle = '#fff7df'; c.beginPath(); c.arc(0, -47, 11, 0, Math.PI * 2); c.fill(); this.sprite(hat, -9, -56, 18, 18); }
+        c.fillStyle = '#5e4634'; c.fillRect(-22, 30, 44, 4);
+        c.fillStyle = '#f0bb58'; c.fillRect(-22, 30, 44 * monster.hp / monster.maxHp, 4);
+        if (phase !== 'normal' && monster.status !== 'attackingBase') {
+          c.strokeStyle = phase === 'warning' ? '#ffcf69' : '#ffeaaa'; c.lineWidth = 2;
+          for (const side of [-1, 1]) { c.beginPath(); c.moveTo(side * 24, -18); c.lineTo(side * 27, 13); c.stroke(); }
+        }
+        c.restore();
       }
       c.restore();
       if (attackPose.impact > 0) {
@@ -386,6 +417,19 @@ export class CanvasScene {
       c.strokeText(number.text, 0, 0); c.fillText(number.text, 0, 0); c.restore();
     }
     if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
+    this.coinEffects = this.coinEffects.filter(effect => this.effectTime - effect.started < 750);
+    for (const effect of this.coinEffects) {
+      const progress = Math.min(1, (this.effectTime - effect.started) / 750);
+      const travel = Math.max(0, (progress - .25) / .75);
+      const x = effect.position.x + (330 - effect.position.x) * travel * travel;
+      const y = effect.position.y + (560 - effect.position.y) * travel * travel - Math.sin(progress * Math.PI) * 36;
+      c.save(); c.translate(x, y); c.globalAlpha = 1 - travel * .7;
+      c.fillStyle = '#ffe184'; c.strokeStyle = '#bc812d'; c.lineWidth = 2;
+      c.beginPath(); c.ellipse(0, 0, 7 + Math.abs(Math.cos(progress * Math.PI * 4)) * 4, 11, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+      c.fillStyle = '#825525'; c.font = 'bold 12px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('$', 0, 0);
+      if (progress < .55) { c.fillStyle = '#fff1ab'; c.font = 'bold 15px sans-serif'; c.strokeText(`+${effect.amount}`, 0, -20); c.fillText(`+${effect.amount}`, 0, -20); }
+      c.restore();
+    }
   }
   // Original geometry: shared zombie eyes and stitches, species-specific silhouettes.
   private drawAnimal(id: string, x: number, y: number, tick: number): void {

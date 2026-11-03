@@ -79,6 +79,8 @@ export interface FortressRules {
   readonly progress: { readonly recentResultLimit: number; readonly saveFailures: boolean };
 }
 export interface MonsterSpawn {
+  readonly boss?: boolean;
+  readonly dropCoins?: number;
   readonly spawnAtMs?: number;
   readonly monsterId: string;
   readonly wordId: string;
@@ -108,6 +110,9 @@ export interface WaveContext {
 export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly boss?: boolean;
+  readonly dropCoins?: number;
+  readonly attackDamage?: number;
   readonly attackIntervalMs?: number;
   readonly slowUntilTick?: number;
   readonly slowRatio?: number;
@@ -147,6 +152,7 @@ export interface CombatState {
   readonly processedBaseAttackIds: readonly string[];
 }
 export type CombatEvent =
+  | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
   | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
