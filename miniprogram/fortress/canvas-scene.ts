@@ -17,6 +17,7 @@ export interface MonsterArt {
   readonly animalIds?: readonly string[];
   readonly fruitHat?: SpriteAsset;
   readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
+  readonly outfitColors?: Readonly<Record<string, string>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
   readonly walkParts?: { readonly body: SpriteAsset; readonly left: SpriteAsset; readonly right: SpriteAsset };
   readonly monster: SpriteAsset;
@@ -307,7 +308,9 @@ export class CanvasScene {
           for (const side of [-1, 1]) {
             const hip = side < 0 ? 50 : 78;
             c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
-            this.sprite(side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right, -hip, -110, 128, 160); c.restore();
+            const leg = side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right;
+            const color = monsterArt.outfitColors?.[monster.wordId] ?? '#a28a6e';
+            this.spriteTinted(leg, -hip, -110, 128, 160, color); c.restore();
           }
           if (attackPose.lunge !== 0) {
             c.strokeStyle = '#89996b'; c.lineWidth = 16; c.lineCap = 'round';
@@ -482,5 +485,17 @@ export class CanvasScene {
     const image = this.images.get(asset.path);
     if (!image) throw new Error('已预载图片丢失');
     this.context.drawImage(image, x, y, width, height);
+  }
+  private spriteTinted(asset: SpriteAsset, x: number, y: number, width: number, height: number, color: string): void {
+    const context = this.context;
+    context.save();
+    this.sprite(asset, x, y, width, height);
+    context.globalCompositeOperation = 'source-atop';
+    context.fillStyle = color;
+    context.fillRect(x, y, width, height);
+    // Multiplying the source art back over the dye keeps its highlights, folds, and outline.
+    context.globalCompositeOperation = 'multiply';
+    this.sprite(asset, x, y, width, height);
+    context.restore();
   }
 }

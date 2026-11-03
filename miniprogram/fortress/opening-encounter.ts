@@ -27,6 +27,12 @@ export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate:
 export const HERO_PATH = '/assets/images/fortress/hero.png';
 const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortress/${name}.png`,
   source: `docs/assets/original/${name}.svg`, rights: '本项目原创矢量美术，2026-11-01', approved: true });
+const OUTFIT_COLORS: Readonly<Record<string, string>> = Object.freeze({
+  apple: '#c44c4d', banana: '#d5b43b', orange: '#da8136', pear: '#a4ae42', peach: '#db8f81',
+  grape: '#8260a5', kiwi: '#789747', cherry: '#9e3c50', pineapple: '#bb9439', watermelon: '#48865b', strawberry: '#ce4c62',
+  black: '#3b4145', blue: '#4b78b8', brown: '#805b3d', green: '#56854b', pink: '#d77fa0',
+  red: '#c44c4d', white: '#dedbcf', yellow: '#d5b43b',
+});
 
 export function openingArt(wordId: string, wordIds: readonly string[] = [wordId], weaponLevel = 1): SceneArt {
   weaponForLevel(weaponLevel);
@@ -34,6 +40,7 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
   if (!word) throw new Error('未知单词');
   return { animalIds: wordIds.filter(id => ANIMAL_IDS.includes(id)), monster: original('zombie'), monsterWidth: 40,
     outfitBodies: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知单词'); return [id, original(getLevel(1).words.some(word => word.id === id) ? `zombie-body-${id}` : getLevel(2).words.some(word => word.id === id) ? `zombie-body-${id}` : 'zombie-body')]; })),
+    outfitColors: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知单词'); return [id, OUTFIT_COLORS[id] ?? '#a28a6e']; })),
     walkParts: { body: original('zombie-body'), left: original('zombie-leg-left'), right: original('zombie-leg-right') },
     monsterVisual: { wordId, portraitPath: '/assets/images/fortress/zombie.png', spritePath: '/assets/images/fortress/zombie.png',
       sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: ANIMAL_IDS.includes(wordId) ? { x: 10, y: 25, width: 108, height: 110 } : { x: 25, y: 16, width: 78, height: 135 } },

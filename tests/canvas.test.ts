@@ -13,7 +13,8 @@ function fakeCanvas() {
   let id = 0; const callbacks = new Map<number, (time: number) => void>();
   const commands: { method: string; args: unknown[] }[] = [];
   const images: { width: number; height: number; onload: () => void; onerror: () => void; src: string }[] = [];
-  const context = new Proxy({}, { get: (_target, key) => (...args: unknown[]) => { commands.push({ method: String(key), args }); }, set: () => true });
+  const context = new Proxy({}, { get: (_target, key) => (...args: unknown[]) => { commands.push({ method: String(key), args }); },
+    set: (_target, key, value) => { if (key === 'globalCompositeOperation') commands.push({ method: 'setGlobalCompositeOperation', args: [value] }); return true; } });
   const canvas = { width: 0, height: 0, getContext: () => context,
     requestAnimationFrame: (callback: (time: number) => void) => { callbacks.set(++id, callback); return id; },
     cancelAnimationFrame: (key: number) => { callbacks.delete(key); },
@@ -114,6 +115,21 @@ test('全部图片加载成功才开战；失败后可重试，旧加载回调�
   const retry = h.scene.load(); stale(); assert.equal(h.callbacks.size, 0);
   for (const image of h.images.slice(6)) image.onload(); assert.equal(await retry, true); assert.equal(h.callbacks.size, 1);
   assert.ok(h.commands.some(command => command.method === 'drawImage')); h.scene.dispose();
+});
+
+test('步行僵尸的腿部素材使用衣服色调着色并保留原图明暗层', async () => {
+  const art = artFixture();
+  const leg = { ...art.monster, path: '/assets/images/test-leg.png' };
+  const shirt = { ...art.monster, path: '/assets/images/test-shirt.png' };
+  const walkArt: SceneArt = { ...art, walkParts: { body: shirt, left: leg, right: leg }, outfitBodies: { [initial().monsters[0].wordId]: shirt },
+    outfitColors: { [initial().monsters[0].wordId]: '#c44c4d' } };
+  const h = harness(false, walkArt);
+  const loading = h.scene.load(); for (const image of h.images) image.onload(); assert.equal(await loading, true);
+  h.frame(0);
+  const operations = h.commands.filter(command => command.method === 'setGlobalCompositeOperation').map(command => command.args[0]);
+  assert.ok(operations.includes('source-atop'));
+  assert.ok(operations.includes('multiply'));
+  h.scene.dispose();
 });
 
 test('加载期间销毁终结 Promise，原图尺寸不符不能进入战斗', async () => {

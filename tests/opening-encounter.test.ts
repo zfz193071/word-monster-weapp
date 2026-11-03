@@ -16,6 +16,15 @@ test('首批四只不同实体使用同一目标水果，战场素材碰撞区�
     assert.deepEqual(state.monsters[0].hitbox, logicalHitbox(art.monsterVisual, art.monsterWidth));
   }
 });
+test('裤子与鞋子沿用全部水果及颜色衣服的色调', () => {
+  const shades: Record<string, string> = {
+    apple: '#c44c4d', banana: '#d5b43b', orange: '#da8136', pear: '#a4ae42', peach: '#db8f81',
+    grape: '#8260a5', kiwi: '#789747', cherry: '#9e3c50', pineapple: '#bb9439', watermelon: '#48865b', strawberry: '#ce4c62',
+    black: '#3b4145', blue: '#4b78b8', brown: '#805b3d', green: '#56854b', pink: '#d77fa0',
+    red: '#c44c4d', white: '#dedbcf', yellow: '#d5b43b',
+  };
+  for (const [wordId, color] of Object.entries(shades)) assert.equal(openingArt(wordId).outfitColors?.[wordId], color);
+});
 test('首批真实命中击杀四只→32经验升级一次→三选一强化真实武器参数', () => {
   for (const preferred of ['doubleShot', 'fireRate', 'bulletWidth'] as SkillId[]) {
     let state = createOpeningEncounter(`run-${preferred}`, 'apple', 0);
