@@ -130,6 +130,8 @@ export interface SupportSoldierState {
   readonly id: string;
   readonly slot: number;
   readonly position: Point;
+  readonly hp: number;
+  readonly maxHp: number;
   readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
@@ -168,6 +170,8 @@ export type CombatEvent =
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
   | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
+  | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number }
+  | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
   | { readonly type: 'baseDestroyed'; readonly context: CombatContext; readonly tick: number };
 export interface SkillOffer {

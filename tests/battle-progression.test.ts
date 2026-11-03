@@ -107,6 +107,28 @@ test('Boss召唤援军，援军每2秒攻击并按普通僵尸规则结算击杀
   xp.record(next.events); assert.equal(xp.view.total, 10);
 });
 
+test('僵尸优先攻击30点生命的小士兵；士兵被击败后后续攻击才扣堡垒血量', () => {
+  const initial = createOpeningEncounter('soldier-shield', 'apple', 0);
+  const attacker = { ...initial.monsters[0], position: { x: 180, y: 480 }, status: 'attackingBase' as const,
+    attackDamage: 20, attackIntervalMs: 10, attackRemainingMs: 0 };
+  let state: CombatState = { ...initial, automatic: false, projectiles: [], monsters: [attacker], supportSoldiers: [
+    { id: 'shield-soldier-1', slot: 0, position: { x: 150, y: 530 }, hp: 30, maxHp: 30, attackRemainingMs: 1000 },
+  ] };
+  let hit = stepCombat(state); state = hit.state;
+  assert.equal(state.supportSoldiers?.[0].hp, 10);
+  assert.equal(state.base.hp, 50);
+  assert.ok(hit.events.some(event => event.type === 'supportSoldierDamaged' && event.hp === 10));
+  const nextWave = createOpeningEncounter('soldier-shield', 'banana', 1, 1, undefined, undefined, ['apple'], 1, 1, state.supportSoldiers);
+  assert.equal(nextWave.supportSoldiers?.[0].hp, 10, '受伤状态应跨波保留');
+  hit = stepCombat(state); state = hit.state;
+  assert.equal(state.supportSoldiers?.length, 0);
+  assert.equal(state.base.hp, 50);
+  assert.ok(hit.events.some(event => event.type === 'supportSoldierDefeated' && event.soldierId === 'shield-soldier-1'));
+  hit = stepCombat(state);
+  assert.equal(hit.state.base.hp, 30);
+  assert.ok(hit.events.some(event => event.type === 'baseDamaged' && event.hp === 30));
+});
+
 test('Boss死亡仍只10经验和一次计划金币；有待出场Boss不能清场', () => {
   const initial = createOpeningEncounter('kill-boss', 'apple', 0);
   const monster = { ...initial.monsters[0], boss: true, dropCoins: 10, hp: 1, position: { x: 180, y: 100 }, status: 'alive' as const };

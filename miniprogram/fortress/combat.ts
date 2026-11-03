@@ -11,6 +11,7 @@ export const COMBAT_STEP_MS = 10;
 const EPSILON = 1e-8;
 const AUTO_MUZZLE_LATERAL = 16.8;
 const AUTO_MUZZLE_FORWARD = 34.4;
+export const SUPPORT_SOLDIER_MAX_HP = 30;
 const MIN_INTERVAL = Math.min(...FORTRESS_SKILLS[1].values);
 const MAX_SHOTS = Math.max(...FORTRESS_SKILLS[0].values);
 export const MAX_PROJECTILES = (Math.ceil(
@@ -132,7 +133,9 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     throw new RangeError('monsterHitbox 必须为正面积矩形，尺寸和相对坐标不可超出战场范围');
   }
   const weaponLevel = weaponForLevel(options.weaponLevel ?? 1).level;
-  if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2 || !Number.isFinite(soldier.attackRemainingMs) || soldier.attackRemainingMs < 0)) throw new Error('援军状态无效');
+  if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2
+    || !Number.isInteger(soldier.maxHp) || soldier.maxHp !== SUPPORT_SOLDIER_MAX_HP || !Number.isInteger(soldier.hp) || soldier.hp <= 0 || soldier.hp > soldier.maxHp
+    || !Number.isFinite(soldier.attackRemainingMs) || soldier.attackRemainingMs < 0)) throw new Error('援军状态无效');
   const state: CombatState = {
     weaponLevel, context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
@@ -236,7 +239,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       if (monster.boss && (monster.soldierDropCount ?? 0) > 0) {
         const count = Math.min(3, supportSoldiers.length + (monster.soldierDropCount ?? 0));
         supportSoldiers = Array.from({ length: count }, (_, slot) => ({
-          id: `${monster.id}:soldier:${slot + 1}`, slot, position: supportPosition(player, slot, count), attackRemainingMs: 2000,
+          id: `${monster.id}:soldier:${slot + 1}`, slot, position: supportPosition(player, slot, count), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000,
         }));
       }
     }
@@ -293,6 +296,16 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) };
     if (attacks.has(attackId)) return;
     attacks.add(attackId);
+    const soldierIndex = supportSoldiers.findIndex(soldier => soldier.hp > 0);
+    if (soldierIndex >= 0) {
+      const soldier = supportSoldiers[soldierIndex];
+      const hp = Math.max(0, soldier.hp - (monster.attackDamage ?? RULES.monster.attackDamage));
+      if (hp === 0) supportSoldiers.splice(soldierIndex, 1);
+      else supportSoldiers[soldierIndex] = { ...soldier, hp };
+      events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
+      if (hp === 0) events.push({ type: 'supportSoldierDefeated', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id });
+      return;
+    }
     baseHp = Math.max(0, baseHp - (monster.attackDamage ?? RULES.monster.attackDamage));
     events.push({ type: 'baseDamaged', context: previous.context, tick, attackId, monsterId: monster.id, hp: baseHp });
   });

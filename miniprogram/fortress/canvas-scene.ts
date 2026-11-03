@@ -378,6 +378,10 @@ export class CanvasScene {
       c.fillStyle = '#a8d4e2'; c.fillRect(-5, -17, 10, 3); c.fillRect(-3, -19, 6, 2);
       c.fillStyle = '#3a4546'; c.fillRect(4, -6, 2, 8); c.fillRect(3, -8, 4, 2);
       c.fillStyle = '#243a35'; c.fillRect(-4, 6, 3, 4); c.fillRect(1, 6, 3, 4);
+      if (soldier.hp < soldier.maxHp) {
+        c.fillStyle = '#33423a'; c.fillRect(-8, -25, 16, 2);
+        c.fillStyle = '#84e3a5'; c.fillRect(-8, -25, 16 * soldier.hp / soldier.maxHp, 2);
+      }
       c.restore();
     }
     for (const bullet of state.projectiles) {
