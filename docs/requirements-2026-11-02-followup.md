@@ -12,7 +12,7 @@
 | [#36](https://github.com/zfz193071/word-monster-weapp/issues/36) | 1 | 清晰女声听词 | P1 |
 | [#37](https://github.com/zfz193071/word-monster-weapp/issues/37) | 2 | 技能弹窗背景与暂停 | P1／代码已完成、首关模拟器通过 |
 | [#38](https://github.com/zfz193071/word-monster-weapp/issues/38) | 3 | 弹窗开关时房屋短暂消失再出现 | P1／代码已修复、四类弹窗模拟器通过 |
-| [#39](https://github.com/zfz193071/word-monster-weapp/issues/39) | 4 | 技能短时增伤 | P2／规则待确认 |
+| [#39](https://github.com/zfz193071/word-monster-weapp/issues/39) | 4 | 技能短时增伤 | P2／用户确认当前实现并已提交 |
 | [#40](https://github.com/zfz193071/word-monster-weapp/issues/40) | 5 | 连续击杀读词与立即消痕 | P1／代码已实现、语音资源验证中 |
 | [#41](https://github.com/zfz193071/word-monster-weapp/issues/41) | 6、11 | 怪物难度增长 | P2／方案已确认、代码已实现 |
 | [#42](https://github.com/zfz193071/word-monster-weapp/issues/42) | 6 | 10级起Boss | P2／方案已确认、代码已实现 |
@@ -162,3 +162,10 @@
 - 自动战斗的弹体起点改为枪口局部坐标（素材绘制为48×60时，相对角色中心x=16.8、y=-34.4），按当前方向旋转枪口偏移并叠加多发散布。由于枪口偏在角色中心右侧，瞄准方向做几何补偿，让枪口射线仍穿过已选目标；选目标顺序和伤害不变。非自动旧战斗仍从旧位置发射。
 - 新测试覆盖向左和斜向右的枪口投影，并断言枪口射线穿过目标中心。补偿后相关回归通过；全量测试187/187、`npm run typecheck`及`npm run check`通过。`check:fortress`仍报告历史V2资源10项尚未就绪。
 - 微信开发者工具离屏渲染曾验证1～7级、向上/左/右共21张，已查看1级及7级的三方向截图，确认子弹从枪口位置开始。补偿更新后尝试重连模拟器自动化端口失败（9420无可用项目连接），因此未伪称重新渲染通过。早前截图位于 `/private/tmp/wm-issue45-level{1..7}-{up,left,right}.png`。真机连续射击和较小屏幕保留待验收。
+
+
+## 2026-11-03 #39 规则确认与状态
+
+用户确认按当前实现执行：新增独立技能「火力激发」；自动每20秒触发一次，持续5秒，普通子弹伤害提高50%；技能只获得一次、不叠层；火焰、雷电等元素额外伤害不受增伤影响。暂停期间计时冻结。整数伤害取整并与实际扣血及伤害显示保持一致。
+
+实现已随 `37b3eba feat: add firepower and homing skills (#39 #44)` 提交。验证：`npm test` 188/188通过，`npm run check`通过（检查提示历史V2资源10项尚未就绪，与本工单无关）。规则与实现均已确认；本工单可关闭。
