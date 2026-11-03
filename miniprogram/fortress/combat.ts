@@ -9,6 +9,8 @@ import { assertNoFortressIssues, validateSessionPlan } from './validation';
 // Technical simulation cadence, not a configurable gameplay/balance value.
 export const COMBAT_STEP_MS = 10;
 const EPSILON = 1e-8;
+const AUTO_MUZZLE_LATERAL = 16.8;
+const AUTO_MUZZLE_FORWARD = 34.4;
 const MIN_INTERVAL = Math.min(...FORTRESS_SKILLS[1].values);
 const MAX_SHOTS = Math.max(...FORTRESS_SKILLS[0].values);
 export const MAX_PROJECTILES = (Math.ceil(
@@ -67,10 +69,15 @@ function freezeState(state: CombatState): CombatState {
   });
 }
 function volley(state: CombatState, weapon: WeaponParameters, charged = false): readonly ProjectileState[] {
+  // Matches the muzzle in hero-back-weapon-{1..7}.svg when the 160x200 sprite
+  // is drawn at 48x60 with its center on player: x=+16.8, y=-34.4.
+  const muzzle = state.automatic ? { lateral: AUTO_MUZZLE_LATERAL, forward: AUTO_MUZZLE_FORWARD } : { lateral: 0, forward: 0 };
   return Array.from({ length: weapon.count }, (_, index) => {
     const offset = (index - (weapon.count - 1) / 2) * RULES.projectile.spread;
     const direction = state.aimDirection ?? { x: 0, y: -1 };
-    const position = { x: state.player.x - direction.y * offset, y: state.player.y + direction.x * offset };
+    const side = offset + muzzle.lateral;
+    const position = { x: state.player.x - direction.y * side + direction.x * muzzle.forward,
+      y: state.player.y + direction.x * side + direction.y * muzzle.forward };
     return { id: `${state.context.sessionId}:${state.context.combatId}:bullet:${state.nextProjectileSequence + index}`,
       ...(charged && index === 0 ? { elements: { flame: state.skills.flame ?? 0, frost: state.skills.frost ?? 0, lightning: state.skills.lightning ?? 0 } } : {}),
       position, previousPosition: position, ...(state.aimDirection ? { direction: state.aimDirection } : {}), width: weapon.width, height: RULES.projectile.height, damage: weaponForLevel(state.weaponLevel ?? 1).damage };
@@ -252,7 +259,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     && projectile.position.x + projectile.width / 2 >= 0
     && projectile.position.x - projectile.width / 2 <= RULES.arena.width) : [];
   const target = previous.automatic ? findAutomaticTarget(monsters) : undefined;
-  const aimDirection = target ? directionTo(player, target.position) : previous.aimDirection;
+  const aimDirection = target ? (previous.automatic
+    ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL)
+    : directionTo(player, target.position)) : previous.aimDirection;
   const weapon = getWeaponParameters(previous.skills);
   let shotRemainingMs = previous.shotRemainingMs - COMBAT_STEP_MS;
   let nextProjectileSequence = previous.nextProjectileSequence;
@@ -297,4 +306,15 @@ function directionTo(from: Point, to: Point): Point {
   const dx = to.x - from.x; const dy = to.y - from.y;
   const distance = Math.hypot(dx, dy);
   return distance > EPSILON ? { x: dx / distance, y: dy / distance } : { x: 0, y: -1 };
+}
+function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
+  const dx = to.x - from.x; const dy = to.y - from.y;
+  const distanceSquared = dx * dx + dy * dy;
+  if (distanceSquared <= EPSILON) return { x: 0, y: -1 };
+  // Compensate for the visible muzzle being to the right of the sprite center,
+  // so the barrel ray from that muzzle still passes through the selected target.
+  const forward = Math.sqrt(Math.max(0, distanceSquared - lateral * lateral));
+  if (distanceSquared < lateral * lateral) return directionTo(from, to);
+  return { x: (dx * forward + dy * lateral) / distanceSquared,
+    y: (dy * forward - dx * lateral) / distanceSquared };
 }

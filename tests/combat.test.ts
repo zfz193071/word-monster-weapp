@@ -4,6 +4,7 @@ import { COMBAT_STEP_MS, MAX_PROJECTILES, createCombat, getWeaponParameters, ste
 import type { CreateCombatOptions, CombatInput } from '../miniprogram/fortress/combat';
 import { CombatRunner, MAX_STEPS_PER_FRAME } from '../miniprogram/fortress/combat-runner';
 import { createSeededRandom, createSessionPlan } from '../miniprogram/fortress/plans';
+import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 import type { CombatEvent, CombatState } from '../miniprogram/fortress/types';
 
 // Deliberate test-only geometry. Production must supply the approved image's hitbox.
@@ -33,6 +34,27 @@ test('开战立即首发但不会直接杀怪；运动受限在堡垒水平范�
   assert.equal(stepCombat(next.state, { playerX: -99 }).state.player.x, 24);
   assert.throws(() => stepCombat(state, { playerX: NaN }), /playerX/);
   assert.equal(next.state.context.generation, 1); assert.equal(next.state.tick, 1);
+});
+
+test('固定主角的子弹从七级持枪图的枪口发出，偏移随瞄准方向旋转', () => {
+  const opening = createOpeningEncounter('muzzle', 'apple', 0);
+  const target = { ...opening.monsters[0], status: 'alive' as const, spawnAtMs: 0,
+    position: { x: 40, y: 280 }, hitbox: { x: -8, y: -8, width: 16, height: 16 } };
+  const fired = stepCombat({ ...opening, shotRemainingMs: 0, monsters: [target] }).state;
+  const bullet = fired.projectiles[0]; const direction = bullet.direction!;
+  const side = { x: -direction.y, y: direction.x };
+  assert.ok(Math.abs(bullet.position.x - (fired.player.x + side.x * 16.8 + direction.x * 34.4)) < 1e-9);
+  assert.ok(Math.abs(bullet.position.y - (fired.player.y + side.y * 16.8 + direction.y * 34.4)) < 1e-9);
+  assert.ok(bullet.position.x < fired.player.x, '向左瞄准时枪口同步转向左侧');
+  assert.ok(bullet.position.y < fired.player.y, '枪口位于角色上方');
+  const targetDelta = { x: fired.monsters[0].position.x - bullet.position.x, y: fired.monsters[0].position.y - bullet.position.y };
+  assert.ok(Math.abs(targetDelta.x * direction.y - targetDelta.y * direction.x) < 1e-9, '从枪口发出的弹道仍穿过目标中心');
+  assert.ok(targetDelta.x * direction.x + targetDelta.y * direction.y > 0, '目标位于枪口前方');
+  const changedAim = stepCombat({ ...opening, shotRemainingMs: 0, monsters: [{ ...target, position: { x: 280, y: 250 } }] }).state;
+  const angled = changedAim.projectiles[0]; const angledDirection = angled.direction!;
+  const angledSide = { x: -angledDirection.y, y: angledDirection.x };
+  assert.ok(Math.abs(angled.position.x - (changedAim.player.x + angledSide.x * 16.8 + angledDirection.x * 34.4)) < 1e-9);
+  assert.ok(Math.abs(angled.position.y - (changedAim.player.y + angledSide.y * 16.8 + angledDirection.y * 34.4)) < 1e-9);
 });
 
 test('后续弹道由主角位置决定，只有真实命中消耗怪物耐久', () => {
