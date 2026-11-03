@@ -25,7 +25,7 @@ export function createCoinWallet(storage: Storage) {
     if (drops !== undefined && (!Array.isArray(drops) || drops.some(entry => !entry || typeof entry.sessionId !== 'string' || !entry.sessionId.trim()
       || !Number.isInteger(entry.levelId) || entry.levelId < 1 || entry.levelId > 8 || !Array.isArray(entry.receipts)
       || entry.receipts.some(receipt => !receipt || typeof receipt.monsterId !== 'string' || !receipt.monsterId.startsWith(`${entry.sessionId}:wave:`)
-        || !Number.isInteger(receipt.amount) || receipt.amount < 1 || receipt.amount > 10)
+        || !Number.isInteger(receipt.amount) || receipt.amount < 1 || receipt.amount > 20)
       || new Set(entry.receipts.map(receipt => receipt.monsterId)).size !== entry.receipts.length
       || entry.receipts.reduce((sum, receipt) => sum + receipt.amount, 0) > DROP_LIMIT)
       || new Set(drops.map(entry => entry.sessionId)).size !== drops.length)) throw new Error('掉落金币记录暂时无法读取');
@@ -52,7 +52,8 @@ export function createCoinWallet(storage: Storage) {
     canEnter(levelId: number) { return Number.isInteger(levelId) && levelId >= 1 && levelId <= Math.min(8, (read().completedLevels?.length ?? 0) + 1); },
     defaultLevel() { return Math.min(8, (read().completedLevels?.length ?? 0) + 1); },
     rewardDrop(sessionId: string, levelId: number, monsterId: string, amount: number) {
-      if (!sessionId.trim() || !monsterId.startsWith(`${sessionId}:wave:`) || (amount !== 1 && amount !== 10)) throw new Error('掉落奖励无效');
+      if (!sessionId.trim() || !monsterId.startsWith(`${sessionId}:wave:`)
+        || !Number.isInteger(amount) || (amount !== 1 && (amount < 5 || amount > 20))) throw new Error('掉落奖励无效');
       const wallet = read();
       if (!Number.isInteger(levelId) || levelId < 1 || levelId > Math.min(8, (wallet.completedLevels?.length ?? 0) + 1)) throw new Error('关卡尚未解锁');
       const drops = wallet.drops ?? [];

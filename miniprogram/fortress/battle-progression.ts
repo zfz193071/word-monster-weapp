@@ -26,7 +26,13 @@ export function monsterStats(levelId: number, heroLevel: number, boss = false) {
 }
 
 export function monsterDropCoins(monsterId: string, boss = false): number {
-  return boss ? 10 : stableBattleRandom(`${monsterId}:coins`) < .1 ? 1 : 0;
+  if (!boss) return stableBattleRandom(`${monsterId}:coins`) < .1 ? 1 : 0;
+  return 5 + Math.floor(stableBattleRandom(`${monsterId}:boss-coins`) * 16);
+}
+
+export function bossSoldierDropCount(monsterId: string): number {
+  if (stableBattleRandom(`${monsterId}:soldiers:chance`) >= .3) return 0;
+  return 1 + Math.floor(stableBattleRandom(`${monsterId}:soldiers:count`) * 3);
 }
 
 export function bossChargePhase(elapsedSinceSpawnMs: number): 'normal' | 'warning' | 'charging' {

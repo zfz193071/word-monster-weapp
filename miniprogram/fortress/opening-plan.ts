@@ -26,7 +26,7 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
       const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId);
       return Object.freeze({ waveId: `${sessionId}:wave:${index + 1}`, index, targetWordId,
         optionWordIds: Object.freeze(shuffle([targetWordId, ...shuffle(words.filter(id => id !== targetWordId)).slice(0, 2)])),
-        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true } : {}), dropCoins: monster.dropCoins }))),
+        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
       });
     })) });
 }
@@ -45,6 +45,9 @@ export function validateOpeningPlan(plan: SessionPlan): void {
   for (const wave of plan.waves) {
     if (wave.optionWordIds.length !== 3 || new Set(wave.optionWordIds).size !== 3 || !wave.optionWordIds.includes(wave.targetWordId)
       || wave.optionWordIds.some(id => !words.some(word => word.id === id))
-      || wave.spawnPlan.some(spawn => !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId))) throw new Error('关卡词汇不匹配');
+      || wave.spawnPlan.some(spawn => !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId)
+        || (spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < 5 || spawn.dropCoins! > 20
+          || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount! < 0 || spawn.soldierDropCount! > 3
+          : spawn.dropCoins !== 0 && spawn.dropCoins !== 1))) throw new Error('关卡词汇或掉落规则不匹配');
   }
 }

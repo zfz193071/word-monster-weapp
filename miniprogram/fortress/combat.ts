@@ -3,7 +3,7 @@ import { bossChargePhase, monsterStats } from './battle-progression';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
-import type { CombatContext, CombatEvent, ElementImpact, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels } from './types';
+import type { CombatContext, CombatEvent, ElementImpact, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels, SupportSoldierState } from './types';
 import { assertNoFortressIssues, validateSessionPlan } from './validation';
 
 // Technical simulation cadence, not a configurable gameplay/balance value.
@@ -32,6 +32,7 @@ export interface CreateCombatOptions {
   readonly baseHp: number; // carried across waves, not automatically repaired
   readonly playerX: number;
   readonly skills: SkillLevels;
+  readonly supportSoldiers?: readonly SupportSoldierState[];
   readonly monsterHitbox: Rect; // required; no fake/default monster art geometry
 }
 
@@ -59,6 +60,7 @@ function freezeState(state: CombatState): CombatState {
     monsters: Object.freeze(state.monsters.map(monster => Object.freeze({ ...monster,
       position: Object.freeze({ ...monster.position }), hitbox: Object.freeze({ ...monster.hitbox }),
     }))),
+    supportSoldiers: Object.freeze((state.supportSoldiers ?? []).map(soldier => Object.freeze({ ...soldier, position: Object.freeze({ ...soldier.position }) }))),
     projectiles: Object.freeze(state.projectiles.map(projectile => Object.freeze({ ...projectile,
       ...(projectile.elements ? { elements: Object.freeze({ ...projectile.elements }) } : {}),
       position: Object.freeze({ ...projectile.position }), previousPosition: Object.freeze({ ...projectile.previousPosition }),
@@ -108,6 +110,8 @@ export function createEncounterCombat(options: EncounterCombatOptions): CombatSt
     || options.spawns.some(spawn => !spawn.monsterId.trim() || !(options.allowedWordIds ?? [options.targetWordId]).includes(spawn.wordId) || !BATTLE_WORDS.some(word => word.id === spawn.wordId)
       || !Number.isFinite(spawn.position.x) || spawn.position.x < RULES.monster.spawnMinX || spawn.position.x > RULES.monster.spawnMaxX
       || (spawn.spawnAtMs !== undefined && (!Number.isSafeInteger(spawn.spawnAtMs) || spawn.spawnAtMs < 0))
+      || (spawn.dropCoins !== undefined && (!Number.isInteger(spawn.dropCoins) || spawn.dropCoins < 0 || spawn.dropCoins > 20))
+      || (spawn.soldierDropCount !== undefined && (!spawn.boss || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount < 0 || spawn.soldierDropCount > 3))
       || spawn.position.y !== RULES.monster.startY)) throw new Error('僵尸批次必须包含唯一实体、已允许的水果和有效出生位置');
   return initializeCombat(options, { sessionId: options.sessionId, waveId: `${options.sessionId}:opening`, combatId: options.combatId, generation: options.generation }, options.spawns);
 }
@@ -128,6 +132,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     throw new RangeError('monsterHitbox 必须为正面积矩形，尺寸和相对坐标不可超出战场范围');
   }
   const weaponLevel = weaponForLevel(options.weaponLevel ?? 1).level;
+  if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2 || !Number.isFinite(soldier.attackRemainingMs) || soldier.attackRemainingMs < 0)) throw new Error('援军状态无效');
   const state: CombatState = {
     weaponLevel, context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
@@ -137,11 +142,11 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
       const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
       const size = spawn.boss ? 1.5 : 1;
       return { id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
-      ...(spawn.boss ? { boss: true } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), attackDamage: stats.attackDamage,
+      ...(spawn.boss ? { boss: true } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), ...(spawn.soldierDropCount !== undefined ? { soldierDropCount: spawn.soldierDropCount } : {}), attackDamage: stats.attackDamage,
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
       hitbox: { x: box.x * size, y: box.y * size, width: box.width * size, height: box.height * size }, hp: stats.hp, maxHp: stats.hp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
       attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 }; }),
-    projectiles: [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
+    projectiles: [], supportSoldiers: options.supportSoldiers ?? [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [],
   };
   return freezeState(options.automatic ? { ...state, shotRemainingMs: 0 } : { ...state, projectiles: volley(state, weapon, false, !!state.skills.firepower), nextProjectileSequence: weapon.count });
@@ -194,6 +199,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const events: CombatEvent[] = [];
   const defeated = new Set(previous.defeatedMonsterIds);
   const attacks = new Set(previous.processedBaseAttackIds);
+  let supportSoldiers = [...(previous.supportSoldiers ?? [])];
   const monsters = previous.monsters.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
   const moved = previous.projectiles.map(projectile => {
@@ -218,7 +224,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   });
   contacts.sort((a, b) => a.time - b.time || a.projectileIndex - b.projectileIndex || a.monsterIndex - b.monsterIndex);
   const impacts: ElementImpact[] = (previous.elementImpacts ?? []).filter(impact => impact.untilTick > tick);
-  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning') => {
+  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier') => {
     const monster = monsters[index]; if (monster.hp <= 0 || monster.status === 'waiting') return;
     if (!Number.isSafeInteger(damage) || !Number.isSafeInteger(monster.hp)) throw new RangeError('怪物伤害与生命值必须为整数');
     const hp = Math.max(0, monster.hp - damage);
@@ -227,6 +233,12 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     if (hp === 0 && !defeated.has(monster.id)) {
       defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
       if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
+      if (monster.boss && (monster.soldierDropCount ?? 0) > 0) {
+        const count = Math.min(3, supportSoldiers.length + (monster.soldierDropCount ?? 0));
+        supportSoldiers = Array.from({ length: count }, (_, slot) => ({
+          id: `${monster.id}:soldier:${slot + 1}`, slot, position: supportPosition(player, slot, count), attackRemainingMs: 2000,
+        }));
+      }
     }
   };
   const consumed = new Set<string>();
@@ -251,6 +263,26 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       impacts.push({ kind: 'flame', position, untilTick: tick + 35 });
       monsters.forEach((_candidate, index) => { if (nearby(index, 45)) damageMonster(index, 10 + 5 * elements.flame!, 'flame'); });
     }
+  }
+  const supportCount = supportSoldiers.length;
+  supportSoldiers = supportSoldiers.map(soldier => ({ ...soldier,
+    position: supportPosition(player, soldier.slot, supportCount),
+    attackRemainingMs: Math.max(0, soldier.attackRemainingMs - COMBAT_STEP_MS),
+  }));
+  const supportDamage = weaponForLevel(previous.weaponLevel ?? 1).damage;
+  for (let soldierIndex = 0; soldierIndex < supportSoldiers.length; soldierIndex++) {
+    const soldier = supportSoldiers[soldierIndex];
+    if (soldier.attackRemainingMs > 0) continue;
+    let target = -1; let distance = Infinity;
+    monsters.forEach((monster, index) => {
+      if (monster.hp <= 0 || monster.status === 'waiting' || monster.status === 'retiring'
+        || monster.position.y < 0 || monster.position.y > RULES.arena.baseTop) return;
+      const candidate = Math.hypot(monster.position.x - soldier.position.x, monster.position.y - soldier.position.y);
+      if (candidate < distance) { distance = candidate; target = index; }
+    });
+    if (target < 0) continue;
+    damageMonster(target, supportDamage, 'soldier');
+    supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: 2000 };
   }
   let baseHp = previous.base.hp;
   // Approved B6 ordering: a monster killed this step cannot attack, even if due.
@@ -290,7 +322,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > MAX_PROJECTILES) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters,
+  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers,
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };
@@ -322,6 +354,10 @@ function directionTo(from: Point, to: Point): Point {
   const dx = to.x - from.x; const dy = to.y - from.y;
   const distance = Math.hypot(dx, dy);
   return distance > EPSILON ? { x: dx / distance, y: dy / distance } : { x: 0, y: -1 };
+}
+function supportPosition(player: Point, slot: number, count: number): Point {
+  const offsets = count === 1 ? [-30] : count === 2 ? [-40, 40] : [-50, 0, 50];
+  return { x: playerX(player.x + (offsets[slot] ?? 0)), y: player.y + 20 };
 }
 function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
   const dx = to.x - from.x; const dy = to.y - from.y;

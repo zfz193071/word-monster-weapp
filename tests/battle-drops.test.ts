@@ -16,7 +16,10 @@ test('掉落原子保存、同局50上限、Boss不足额度截断、重建去�
   const restored = createCoinWallet(storage);
   assert.equal(restored.rewardDrop('run', 1, 'run:wave:10:zombie:21', 10).added, 0);
   assert.equal(restored.rewardDrop('next', 1, 'next:wave:1:zombie:1', 1).added, 1);
-  assert.equal(restored.balance(), 151); assert.equal(restored.equipment().level, 2);
+  assert.equal(restored.rewardDrop('boss-run', 1, 'boss-run:wave:10:zombie:1', 17).added, 17);
+  assert.throws(() => restored.rewardDrop('bad-run', 1, 'bad-run:wave:10:zombie:1', 2));
+  assert.throws(() => restored.rewardDrop('bad-run', 1, 'bad-run:wave:10:zombie:2', 21));
+  assert.equal(restored.balance(), 168); assert.equal(restored.equipment().level, 2);
   assert.throws(() => restored.rewardDrop('locked', 3, 'locked:wave:1:zombie:1', 1));
   assert.throws(() => restored.rewardDrop('run', 1, 'other:wave:1:zombie:1', 1));
 });

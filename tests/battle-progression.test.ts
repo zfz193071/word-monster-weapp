@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { bossWaveIndex, monsterStats, bossChargePhase } from '../miniprogram/fortress/battle-progression';
+import { bossWaveIndex, bossSoldierDropCount, monsterDropCoins, monsterStats, bossChargePhase } from '../miniprogram/fortress/battle-progression';
 import { createOpeningEncounter, OPENING_EXPERIENCE } from '../miniprogram/fortress/opening-encounter';
 import { createOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
@@ -36,7 +36,8 @@ test('固定对局计划：10级前无Boss、全局至多一只、最后一怪�
     assert.equal(monsters.filter(monster => monster.boss).length, index < 0 ? 0 : 1);
     if (index >= 0) {
       const wave = plan.waves[index]; const boss = wave.spawnPlan.at(-1)!;
-      assert.equal(boss.boss, true); assert.equal(boss.dropCoins, 10);
+      assert.equal(boss.boss, true); assert.ok(boss.dropCoins! >= 5 && boss.dropCoins! <= 20);
+      assert.ok((boss.soldierDropCount ?? 0) >= 0 && (boss.soldierDropCount ?? 0) <= 3);
       const rebuilt = createOpeningEncounter(id, wave.targetWordId, 3, index, undefined, undefined, plan.waves.slice(0, index).map(w => w.targetWordId));
       assert.equal(rebuilt.monsters.at(-1)!.id, boss.monsterId);
       assert.equal(rebuilt.monsters.at(-1)!.maxHp, monsterStats(1, index + 1).hp * 3);
@@ -61,7 +62,52 @@ test('Boss预警1秒/冲锋2秒、慢速叠加，后台暂停不消耗冲锋时�
   assert.equal(runner.snapshot!.tick, 1000); assert.equal(runner.snapshot!.monsters[0].position.y, next.monsters[0].position.y);
 });
 
-test('Boss死亡仍只10经验和一次10币；有待出场Boss不能清场', () => {
+test('Boss金币5至20枚及0/1至3名援军按怪物ID固定随机结果', () => {
+  const coins = new Set<number>(); const soldiers = new Set<number>();
+  for (let index = 0; index < 120; index++) {
+    const id = `reward-boss-${index}`;
+    const amount = monsterDropCoins(id, true); const count = bossSoldierDropCount(id);
+    assert.ok(Number.isInteger(amount) && amount >= 5 && amount <= 20);
+    assert.ok(Number.isInteger(count) && count >= 0 && count <= 3);
+    assert.equal(monsterDropCoins(id, true), amount); assert.equal(bossSoldierDropCount(id), count);
+    coins.add(amount); soldiers.add(count);
+    const normalDrop = monsterDropCoins(id, false);
+    assert.ok(normalDrop === 0 || normalDrop === 1); assert.equal(monsterDropCoins(id, false), normalDrop);
+  }
+  assert.ok(coins.size > 1); assert.ok(soldiers.has(0)); assert.ok(soldiers.has(1) || soldiers.has(2) || soldiers.has(3));
+});
+
+test('Boss召唤援军，援军每2秒攻击并按普通僵尸规则结算击杀经验与金币', () => {
+  const initial = createOpeningEncounter('kill-boss', 'apple', 0);
+  const boss = { ...initial.monsters[0], boss: true, soldierDropCount: 2, dropCoins: 10, hp: 1, position: { x: 180, y: 100 }, status: 'alive' as const };
+  const target = { ...initial.monsters[1], hp: 30, maxHp: 30, dropCoins: 1, position: { x: 230, y: 100 }, status: 'alive' as const };
+  const state: CombatState = { ...initial, automatic: false, shotRemainingMs: 100_000, monsters: [boss, target], projectiles: [{ id: 'hit', position: { x: 180, y: 120 }, previousPosition: { x: 180, y: 120 }, width: 50, height: 50, damage: 1 }] };
+  let next = stepCombat(state);
+  assert.equal(next.state.supportSoldiers?.length, 2);
+  const nextWave = createOpeningEncounter('kill-boss', 'banana', 1, 1, undefined, undefined, ['apple'], 1, 1, next.state.supportSoldiers);
+  assert.deepEqual(nextWave.supportSoldiers, next.state.supportSoldiers);
+  const pausedRunner = new CombatRunner({ ...next.state, supportSoldiers: next.state.supportSoldiers!.map(soldier => ({ ...soldier, attackRemainingMs: 1000 })) });
+  pausedRunner.frame(0); pausedRunner.pause(); pausedRunner.frame(10_000);
+  assert.equal(pausedRunner.snapshot!.supportSoldiers![0].attackRemainingMs, 1000);
+  pausedRunner.resume(10_000, 1); pausedRunner.frame(10_010);
+  assert.equal(pausedRunner.snapshot!.supportSoldiers![0].attackRemainingMs, 990);
+  assert.ok(next.events.some(event => event.type === 'coinsDropped' && event.monsterId === boss.id && event.amount === 10));
+  let current = next.state;
+  for (let index = 0; index < 198; index++) current = stepCombat(current).state;
+  assert.equal(current.monsters[1].hp, 30);
+  next = stepCombat(current);
+  assert.ok(next.events.some(event => event.type === 'monsterDamaged' && event.kind === 'soldier' && event.monsterId === target.id));
+  assert.equal(next.state.monsters[1].hp, 10);
+  current = next.state;
+  for (let index = 0; index < 199; index++) current = stepCombat(current).state;
+  next = stepCombat(current);
+  assert.ok(next.events.some(event => event.type === 'monsterDefeated' && event.monsterId === target.id));
+  assert.ok(next.events.some(event => event.type === 'coinsDropped' && event.monsterId === target.id && event.amount === 1));
+  const xp = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
+  xp.record(next.events); assert.equal(xp.view.total, 10);
+});
+
+test('Boss死亡仍只10经验和一次计划金币；有待出场Boss不能清场', () => {
   const initial = createOpeningEncounter('kill-boss', 'apple', 0);
   const monster = { ...initial.monsters[0], boss: true, dropCoins: 10, hp: 1, position: { x: 180, y: 100 }, status: 'alive' as const };
   const state: CombatState = { ...initial, monsters: [monster], projectiles: [{ id: 'hit', position: { x: 180, y: 120 }, previousPosition: { x: 180, y: 120 }, width: 50, height: 50, damage: 1 }] };

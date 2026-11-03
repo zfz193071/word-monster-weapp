@@ -367,6 +367,19 @@ export class CanvasScene {
       }
       c.globalAlpha = 1;
     }
+    for (const soldier of state.supportSoldiers ?? []) {
+      const bob = Math.sin(state.tick * .08 + soldier.slot) * 1.5;
+      c.save(); c.translate(soldier.position.x, soldier.position.y + bob);
+      c.fillStyle = 'rgba(31,50,42,.2)'; c.beginPath(); c.ellipse(0, 10, 8, 2.5, 0, 0, Math.PI * 2); c.fill();
+      c.fillStyle = '#315a50'; c.fillRect(-5, -2, 10, 9);
+      c.fillStyle = '#5f8d64'; c.fillRect(-4, -9, 8, 8);
+      c.fillStyle = '#b8d86e'; c.fillRect(-4, -15, 8, 6);
+      c.fillStyle = '#243f3a'; c.fillRect(-2, -13, 1.5, 1.5); c.fillRect(2, -13, 1.5, 1.5);
+      c.fillStyle = '#a8d4e2'; c.fillRect(-5, -17, 10, 3); c.fillRect(-3, -19, 6, 2);
+      c.fillStyle = '#3a4546'; c.fillRect(4, -6, 2, 8); c.fillRect(3, -8, 4, 2);
+      c.fillStyle = '#243a35'; c.fillRect(-4, 6, 3, 4); c.fillRect(1, 6, 3, 4);
+      c.restore();
+    }
     for (const bullet of state.projectiles) {
       if (this.options.preview) { c.fillStyle = '#ffe68e'; c.fillRect(bullet.position.x - bullet.width / 2, bullet.position.y - bullet.height / 2, bullet.width, bullet.height); }
       else if (art) {

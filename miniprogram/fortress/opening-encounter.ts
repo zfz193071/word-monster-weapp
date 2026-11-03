@@ -1,11 +1,11 @@
 import { weaponForLevel } from '../weapons/catalog';
-import { bossWaveIndex, monsterDropCoins } from './battle-progression';
+import { bossSoldierDropCount, bossWaveIndex, monsterDropCoins } from './battle-progression';
 import { createSeededRandom } from './plans';
 import { logicalHitbox } from './viewport';
 import { createEncounterCombat } from './combat';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS, ANIMAL_IDS, getLevel } from './levels';
 import type { SpriteAsset, SceneArt } from './canvas-scene';
-import type { SkillLevels } from './types';
+import type { SkillLevels, SupportSoldierState } from './types';
 import { FORTRESS_RULES } from './rules';
 import type { ExperienceRules } from './experience';
 import type { UpgradeCard, UpgradeOffer } from './upgrade-choice';
@@ -35,7 +35,7 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
     fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true },
     hero: original(`hero-back-weapon-${weaponLevel}`), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
 }
-export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp = FORTRESS_RULES.base.maxHp, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1) {
+export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp = FORTRESS_RULES.base.maxHp, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = []) {
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
   const words = getLevel(levelId).words;
   if (!words.some(word => word.id === wordId) || previousWordIds.some(id => !words.some(word => word.id === id))) throw new Error('词汇不属于本关');
@@ -58,10 +58,10 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   const bossWave = bossWaveIndex(sessionId);
   const plannedSpawns = spawns.map((spawn, index) => {
     const boss = waveIndex === bossWave && index === spawns.length - 1;
-    return { ...spawn, ...(boss ? { boss: true } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss) };
+    return { ...spawn, ...(boss ? { boss: true, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss) };
   });
   return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1 }, weaponLevel, automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp,
-    playerX: 180, skills, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
+    playerX: 180, skills, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     allowedWordIds: [wordId, ...history], spawns: plannedSpawns });
 }
 export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS, base = { hp: FORTRESS_RULES.base.maxHp, maxHp: FORTRESS_RULES.base.maxHp }): UpgradeOffer {

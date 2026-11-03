@@ -81,6 +81,7 @@ export interface FortressRules {
 export interface MonsterSpawn {
   readonly boss?: boolean;
   readonly dropCoins?: number;
+  readonly soldierDropCount?: number;
   readonly spawnAtMs?: number;
   readonly monsterId: string;
   readonly wordId: string;
@@ -112,6 +113,7 @@ export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' |
 export interface MonsterState {
   readonly boss?: boolean;
   readonly dropCoins?: number;
+  readonly soldierDropCount?: number;
   readonly attackDamage?: number;
   readonly attackIntervalMs?: number;
   readonly slowUntilTick?: number;
@@ -123,6 +125,12 @@ export interface MonsterState {
   readonly hp: number; readonly maxHp: number; readonly status: MonsterStatus;
   readonly attackRemainingMs: number;
   readonly attackSequence: number;
+}
+export interface SupportSoldierState {
+  readonly id: string;
+  readonly slot: number;
+  readonly position: Point;
+  readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
   readonly elements?: Readonly<Partial<Record<ElementId, number>>>;
@@ -148,6 +156,7 @@ export interface CombatState {
   readonly player: Point;
   readonly base: { readonly hp: number; readonly maxHp: number };
   readonly monsters: readonly MonsterState[];
+  readonly supportSoldiers?: readonly SupportSoldierState[];
   readonly projectiles: readonly ProjectileState[];
   readonly skills: SkillLevels;
   readonly shotRemainingMs: number;
@@ -157,7 +166,7 @@ export interface CombatState {
 }
 export type CombatEvent =
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
-  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning'; readonly position: Point }
+  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
   | { readonly type: 'baseDestroyed'; readonly context: CombatContext; readonly tick: number };

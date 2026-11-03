@@ -18,9 +18,9 @@ import { createSkillSession, skillCards } from '../../fortress/skills';
 import type { SkillSession } from '../../fortress/skills';
 import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortress/content';
 import type { RetirementView } from '../../fortress/retirement';
-import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
+import type { CombatState, SessionPlan, SkillId, SkillOfferState, SupportSoldierState } from '../../fortress/types';
 
-interface InstanceState { drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -79,7 +79,7 @@ Component({
               onAward: (position, amount) => { if (instance.alive) { instance.scene?.showCoinDrop(position, amount); instance.audio?.playCoin(); } },
             });
             instance.experience = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
-            instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0;
+            instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0; instance.supportSoldiers = [];
             this.setData({ rewardCoins: victoryCoinsForLevel(request?.plan.levelId ?? 1), rewardSaved: false, rewardError: false, victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
           }
           if (this.properties.opening && !instance.audio) {
@@ -164,6 +164,7 @@ Component({
       const state = instances.get(this); const snapshot = state?.scene?.snapshot;
       if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.completed) return;
       state.baseHp = snapshot.base.hp;
+      state.supportSoldiers = snapshot.supportSoldiers ?? [];
       const request = this.properties.previewRequest as { plan: SessionPlan; generation: number };
       const waveIndex = state.waveIndex ?? 0;
       if (waveIndex === OPENING_WAVE_COUNT - 1) {
@@ -185,7 +186,7 @@ Component({
       const result = event.detail; const wave = request.plan.waves[request.waveIndex];
       if (result.context.sessionId !== request.plan.sessionId || result.context.waveId !== wave.waveId || result.context.generation !== request.generation || !result.attempts.length || !result.attempts[result.attempts.length - 1].correct) return;
       state.waveIndex = request.waveIndex;
-      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId), request.plan.levelId, request.plan.weaponLevel);
+      state.pending = createOpeningEncounter(request.plan.sessionId, wave.targetWordId, request.generation, request.waveIndex, state.levels, state.baseHp, request.plan.waves.slice(0, request.waveIndex).map(wave => wave.targetWordId), request.plan.levelId, request.plan.weaponLevel, state.supportSoldiers);
       this.setData({ waveRequest: null, waveNumber: request.waveIndex + 1, frozenFrame: '', ready: false }, () => this.mount());
     },
     claimVictoryReward() {
