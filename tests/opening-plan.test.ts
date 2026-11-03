@@ -28,7 +28,7 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
 });
 test('完整19波击杀升级至20封顶，满级旧技能移出，每次固定三选一', () => {
  const plan=createOpeningPlan('full-run',createSeededRandom(10));const xp=createExperience(plan.sessionId,OPENING_EXPERIENCE);
- let levels: import("../miniprogram/fortress/types").SkillLevels={...ZERO_SKILLS}; let hp=5;
+ let levels: import("../miniprogram/fortress/types").SkillLevels={...ZERO_SKILLS}; let hp=50;
  for(let index=0;index<19;index++){
   const wave=plan.waves[index];let state=createOpeningEncounter(plan.sessionId,wave.targetWordId,index,index,levels,hp,plan.waves.slice(0,index).map(w=>w.targetWordId));
   const upgrades:number[]=[];

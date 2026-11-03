@@ -12,7 +12,7 @@ const geometry = { x: -32, y: -32, width: 64, height: 64 };
 const sessionPlan = createSessionPlan('combat-test', () => 0.5); // all spawns x=180
 function initial(patch: Partial<CreateCombatOptions> = {}): CombatState {
   return createCombat({ plan: sessionPlan, waveIndex: 0, combatId: 'combat-1', generation: 1,
-    baseHp: 5, playerX: 24, skills: { doubleShot: 0, fireRate: 0, bulletWidth: 0 }, monsterHitbox: geometry, ...patch });
+    baseHp: 50, playerX: 24, skills: { doubleShot: 0, fireRate: 0, bulletWidth: 0 }, monsterHitbox: geometry, ...patch });
 }
 function advance(start: CombatState, ms: number, input: CombatInput = {}): { state: CombatState; events: CombatEvent[] } {
   assert.equal(ms % COMBAT_STEP_MS, 0);
@@ -25,7 +25,7 @@ function advance(start: CombatState, ms: number, input: CombatInput = {}): { sta
 
 test('开战立即首发但不会直接杀怪；运动受限在堡垒水平范围', () => {
   const state = initial({ playerX: 180 });
-  assert.equal(state.monsters[0].hp, 8); assert.equal(state.projectiles.length, 1);
+  assert.equal(state.monsters[0].hp, 80); assert.equal(state.projectiles.length, 1);
   assert.deepEqual(state.projectiles[0].position, { x: 180, y: 510 });
   const next = stepCombat(state, { playerX: 999 });
   assert.deepEqual(next.state.player, { x: 336, y: 510 });
@@ -57,12 +57,40 @@ test('固定主角的子弹从七级持枪图的枪口发出，偏移随瞄准�
   assert.ok(Math.abs(angled.position.y - (changedAim.player.y + angledSide.y * 16.8 + angledDirection.y * 34.4)) < 1e-9);
 });
 
+test('火力激发按5秒/20秒节奏提高整数伤害，追踪弹分配不同目标并在击败后重锁', () => {
+  let state = createOpeningEncounter('homing', 'apple', 0, 0,
+    { doubleShot: 1, fireRate: 0, bulletWidth: 0, firepower: 1, homing: 1 });
+  state = { ...state, monsters: state.monsters.map((monster, index) => ({ ...monster, status: 'alive', spawnAtMs: 0,
+    position: { x: index ? 270 : 90, y: 200 }, hitbox: { x: -5, y: -5, width: 10, height: 10 } })) };
+  let result = stepCombat(state); state = result.state;
+  const first = state.projectiles.slice(-2);
+  assert(first.every(projectile => projectile.damage === 15 && Number.isInteger(projectile.damage)));
+  assert.notEqual(first[0].targetMonsterId, first[1].targetMonsterId);
+  const followed = stepCombat(state).state;
+  assert.notDeepEqual(followed.projectiles[0].direction, state.projectiles[0].direction);
+  const targetId = followed.projectiles[0].targetMonsterId!;
+  const other = followed.monsters.find(monster => monster.id !== targetId)!;
+  const killed = stepCombat({ ...followed, monsters: followed.monsters.map(monster => monster.id === targetId ? { ...monster, hp: 0, status: 'defeated' as const } : monster) }).state;
+  assert.equal(killed.projectiles[0].targetMonsterId, other.id);
+
+  let plain = { ...state, automatic: false, monsters: state.monsters.map(monster => ({ ...monster, status: 'waiting' as const, spawnAtMs: 999999 })),
+    projectiles: [], shotRemainingMs: 0, nextProjectileSequence: 0, tick: 0 };
+  const damages: number[] = [];
+  for (let tick = 0; tick < 2001; tick++) {
+    const next = stepCombat(plain); plain = next.state;
+    if (plain.nextProjectileSequence > damages.length) damages.push(...plain.projectiles.slice(-2).map(projectile => projectile.damage));
+  }
+  assert(damages.slice(0, 20).every(damage => damage === 15));
+  assert(damages.slice(20, 80).every(damage => damage === 10));
+  assert(damages.slice(80).every(damage => damage === 15));
+});
+
 test('后续弹道由主角位置决定，只有真实命中消耗怪物耐久', () => {
   const miss = advance(initial(), 4000);
-  assert.equal(miss.state.monsters[0].hp, 8); assert.equal(miss.events.length, 0);
+  assert.equal(miss.state.monsters[0].hp, 80); assert.equal(miss.events.length, 0);
   const aim = advance(initial(), 4000, { playerX: 180 });
-  assert.ok(aim.state.monsters[0].hp < 8);
-  assert.equal(aim.state.base.hp, 5);
+  assert.ok(aim.state.monsters[0].hp < 80);
+  assert.equal(aim.state.base.hp, 50);
   assert.equal(aim.state.player.x, 180);
   assert.equal(aim.state.context.generation, 1, '高频步不改变异步代次');
 });
@@ -74,11 +102,11 @@ test('抵达前不攻击，抵达后完整两秒首次扣血，连续攻击按�
   assert.equal(arrived.monsters[0].position.y, 448); assert.equal(arrived.monsters[0].status, 'attackingBase');
   assert.ok(Math.abs(arrived.monsters[0].attackRemainingMs - 2000) < 1e-6);
   const wait = advance(arrived, 1990);
-  assert.equal(wait.state.base.hp, 5); assert.equal(wait.events.length, 0);
+  assert.equal(wait.state.base.hp, 50); assert.equal(wait.events.length, 0);
   const attack = stepCombat(wait.state);
-  assert.equal(attack.state.base.hp, 4); assert.deepEqual(attack.events.map(e => e.type), ['baseDamaged']);
+  assert.equal(attack.state.base.hp, 40); assert.deepEqual(attack.events.map(e => e.type), ['baseDamaged']);
   const nextAttack = advance(attack.state, 2000);
-  assert.equal(nextAttack.state.base.hp, 3);
+  assert.equal(nextAttack.state.base.hp, 30);
   assert.equal(nextAttack.state.monsters[0].position.y, 448);
   assert.equal(nextAttack.state.processedBaseAttackIds.length, 2);
   assert.equal(new Set(nextAttack.state.processedBaseAttackIds).size, 2);
@@ -95,16 +123,16 @@ test('五次基地攻击失败且只发出一次终局事件，终态不再发�
 });
 
 test('同一步先处理命中：最后一击能阻止到期攻击且不会同时失败', () => {
-  const start = initial({ baseHp: 1, playerX: 180 });
+  const start = initial({ baseHp: 10, playerX: 180 });
   const due: CombatState = { ...start,
     monsters: [{ ...start.monsters[0], position: { x: 180, y: 448 }, hp: 1, status: 'attackingBase', attackRemainingMs: 10 }],
     projectiles: [{ ...start.projectiles[0], position: { x: 180, y: 490 }, previousPosition: { x: 180, y: 490 } }],
   };
   const win = stepCombat(due);
-  assert.equal(win.state.status, 'cleared'); assert.equal(win.state.base.hp, 1);
+  assert.equal(win.state.status, 'cleared'); assert.equal(win.state.base.hp, 10);
   assert.deepEqual(win.events.map(e => e.type), ['monsterDamaged', 'monsterDefeated']);
   assert.equal(win.state.monsters[0].status, 'defeated'); assert.equal(win.state.projectiles.length, 0);
-  const surviveHit = stepCombat({ ...due, monsters: [{ ...due.monsters[0], hp: 2 }] });
+  const surviveHit = stepCombat({ ...due, monsters: [{ ...due.monsters[0], hp: 11 }] });
   assert.equal(surviveHit.state.monsters[0].hp, 1);
   assert.equal(surviveHit.state.status, 'baseDestroyed');
   assert.deepEqual(surviveHit.events.map(e => e.type), ['monsterDamaged', 'baseDamaged', 'baseDestroyed']);
@@ -115,8 +143,8 @@ test('一颗弹体只命中一次；同一帧多弹击败后不重复发击败�
   const shot = { ...start.projectiles[0], position: { x: 180, y: 490 }, previousPosition: { x: 180, y: 490 } };
   const target = { ...start.monsters[0], position: { x: 180, y: 448 }, status: 'attackingBase' as const };
   const hit = stepCombat({ ...start, monsters: [target], projectiles: [shot] });
-  assert.equal(hit.state.monsters[0].hp, 7); assert.equal(hit.state.projectiles.length, 0);
-  assert.equal(stepCombat(hit.state).state.monsters[0].hp, 7);
+  assert.equal(hit.state.monsters[0].hp, 70); assert.equal(hit.state.projectiles.length, 0);
+  assert.equal(stepCombat(hit.state).state.monsters[0].hp, 70);
   const defeat = stepCombat({ ...start, monsters: [{ ...target, hp: 1 }],
     projectiles: [shot, { ...shot, id: 'another-shot' }] });
   assert.equal(defeat.events.filter(e => e.type === 'monsterDefeated').length, 1);
@@ -137,19 +165,19 @@ test('扫掠碰撞覆盖跨越薄目标、高速相对运动与擦边，不把�
   const start = initial({ monsterHitbox: { x: -1, y: -0.01, width: 2, height: 0.02 }, playerX: 180 });
   const result = stepCombat({ ...start, monsters: [{ ...start.monsters[0], position: { x: 180, y: 300 } }],
     projectiles: [{ ...start.projectiles[0], height: 0.02, position: { x: 180, y: 302 }, previousPosition: { x: 180, y: 302 } }] });
-  assert.equal(result.state.monsters[0].hp, 7, '单个逻辑步内完全穿过薄目标仍应命中');
+  assert.equal(result.state.monsters[0].hp, 70, '单个逻辑步内完全穿过薄目标仍应命中');
 });
 
 test('技能参数实际改变弹数、射击周期和碰撞宽度，波间继承不回血', () => {
   const skills = { doubleShot: 2, fireRate: 1, bulletWidth: 1 };
   assert.deepEqual(getWeaponParameters(skills), { count: 3, intervalMs: 400, width: 12 });
-  const start = initial({ waveIndex: 4, skills, baseHp: 2, playerX: 180 });
-  assert.equal(start.base.hp, 2); assert.equal(start.projectiles.length, 3);
+  const start = initial({ waveIndex: 4, skills, baseHp: 20, playerX: 180 });
+  assert.equal(start.base.hp, 20); assert.equal(start.projectiles.length, 3);
   assert.deepEqual(start.projectiles.map(p => p.position.x), [164, 180, 196]);
-  assert.ok(start.projectiles.every(p => p.width === 12 && p.damage === 1));
+  assert.ok(start.projectiles.every(p => p.width === 12 && p.damage === 10));
   const before = advance(start, 390).state; assert.equal(before.nextProjectileSequence, 3);
   const after = stepCombat(before).state; assert.equal(after.nextProjectileSequence, 6);
-  assert.equal(initial().base.hp, 5); assert.equal(initial().projectiles[0].width, 8);
+  assert.equal(initial().base.hp, 50); assert.equal(initial().projectiles[0].width, 8);
   // x=187 is outside an 8-wide bullet against a 2-wide target, inside a 12-wide one.
   const target = { x: 180, y: 300 }; const box = { x: -1, y: -1, width: 2, height: 2 };
   assert.equal(sweptHitTime({ x: 187, y: 310 }, { x: 187, y: 290 }, 8, 18, target, target, box), null);
@@ -169,7 +197,7 @@ test('长时间未命中弹体离开屏幕后释放，数量有上界且新局�
   assert.ok(state.projectiles.every(p => !firstIds.includes(p.id)));
   const other = initial({ plan: createSessionPlan('new-session', () => 0.5), combatId: 'new-combat' });
   assert.equal(other.tick, 0); assert.equal(other.defeatedMonsterIds.length, 0);
-  assert.equal(other.processedBaseAttackIds.length, 0); assert.equal(other.base.hp, 5);
+  assert.equal(other.processedBaseAttackIds.length, 0); assert.equal(other.base.hp, 50);
   assert.deepEqual(other.skills, { doubleShot: 0, fireRate: 0, bulletWidth: 0 });
 });
 
@@ -193,7 +221,7 @@ test('固定种子和逐步输入完全重放，不修改旧快照或配置对�
 
 test('构造拒绝坏几何、已失败基地、错误波次、技能叠加和事件身份', () => {
   for (const patch of [
-    { baseHp: 0 }, { baseHp: 6 }, { baseHp: NaN }, { waveIndex: -1 }, { waveIndex: 5 },
+    { baseHp: 0 }, { baseHp: 51 }, { baseHp: NaN }, { baseHp: 1.5 }, { waveIndex: -1 }, { waveIndex: 5 },
     { combatId: '' }, { generation: -1 }, { generation: 0.5 }, { playerX: Infinity },
     { monsterHitbox: { ...geometry, width: 0 } }, { monsterHitbox: { ...geometry, x: NaN } },
     { skills: { doubleShot: 1, fireRate: 0, bulletWidth: 0 } },
@@ -214,7 +242,7 @@ test('同一时间戳不重复扣血；卡顿有限补帧，不在后续帧偿�
   const runner = new CombatRunner(initial()); assert.equal(runner.frame(100).steps, 0);
   const stalled = runner.frame(30100);
   assert.equal(stalled.steps, MAX_STEPS_PER_FRAME); assert.equal(stalled.droppedMs, 29900);
-  assert.equal(runner.snapshot!.tick, 10); assert.equal(runner.snapshot!.base.hp, 5);
+  assert.equal(runner.snapshot!.tick, 10); assert.equal(runner.snapshot!.base.hp, 50);
   assert.equal(runner.frame(30100).steps, 0); assert.equal(runner.frame(30110).steps, 1);
   assert.throws(() => runner.frame(30109), /不能倒退/);
   assert.throws(() => runner.frame(NaN), /帧时间/);
@@ -232,8 +260,8 @@ test('暂停不消耗移动、射击或基地冷却，恢复仅切代次，销�
   assert.equal(runner.snapshot!.shotRemainingMs, start.shotRemainingMs);
   assert.equal(runner.snapshot!.monsters[0].attackRemainingMs, start.monsters[0].attackRemainingMs);
   for (let ms = 10; ms < 1000; ms += 10) runner.frame(30000 + ms);
-  assert.equal(runner.snapshot!.base.hp, 5);
-  const attack = runner.frame(31000); assert.equal(attack.state!.base.hp, 4);
+  assert.equal(runner.snapshot!.base.hp, 50);
+  const attack = runner.frame(31000); assert.equal(attack.state!.base.hp, 40);
   assert.ok(attack.events.every(event => event.context.generation === 2));
   runner.dispose(); assert.equal(runner.snapshot, null);
   assert.equal(runner.frame(99999).steps, 0); assert.deepEqual(runner.frame(99999).events, []);

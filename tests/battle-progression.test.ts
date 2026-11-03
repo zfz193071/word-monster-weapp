@@ -10,18 +10,18 @@ import { createExperience } from '../miniprogram/fortress/experience';
 import type { CombatState } from '../miniprogram/fortress/types';
 
 test('两维难度边界、出生后数值固定及小数基地血量跨波保留', () => {
-  assert.deepEqual(monsterStats(1, 5), { hp: 8, attackDamage: 1 });
-  assert.deepEqual(monsterStats(1, 6), { hp: 10, attackDamage: 1.1 });
-  assert.deepEqual(monsterStats(1, 10), { hp: 12, attackDamage: 1.2 });
-  assert.deepEqual(monsterStats(8, 15), { hp: 29, attackDamage: 2.21 });
-  assert.deepEqual(monsterStats(8, 20), { hp: 33, attackDamage: 2.38 });
-  assert.deepEqual(monsterStats(8, 15, true), { hp: 87, attackDamage: 3.32 });
+  assert.deepEqual(monsterStats(1, 5), { hp: 80, attackDamage: 10 });
+  assert.deepEqual(monsterStats(1, 6), { hp: 100, attackDamage: 11 });
+  assert.deepEqual(monsterStats(1, 10), { hp: 120, attackDamage: 12 });
+  assert.deepEqual(monsterStats(8, 15), { hp: 290, attackDamage: 22 });
+  assert.deepEqual(monsterStats(8, 20), { hp: 330, attackDamage: 24 });
+  assert.deepEqual(monsterStats(8, 15, true), { hp: 870, attackDamage: 33 });
   for (const value of [0, 9, NaN]) assert.throws(() => monsterStats(value, 6));
   const initial = createOpeningEncounter('fractional', 'apple', 0, 5);
   const attacking: CombatState = { ...initial, automatic: false, monsters: [{ ...initial.monsters[0], status: 'attackingBase', position: { x: 60, y: 480 }, attackRemainingMs: 0 }] };
   const hit = stepCombat(attacking).state;
-  assert.equal(hit.base.hp, 3.9); assert.equal(hit.monsters[0].maxHp, 10);
-  assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 3.9);
+  assert.equal(hit.base.hp, 39); assert.equal(hit.monsters[0].maxHp, 100);
+  assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 39);
 });
 
 test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总399只', () => {

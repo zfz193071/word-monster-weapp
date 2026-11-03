@@ -17,7 +17,7 @@ export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePer
 export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
 export const OPENING_MONSTER_COUNT = 3;
-export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0 });
+export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0, firepower: 0, homing: 0 });
 export const HERO_PATH = '/assets/images/fortress/hero.png';
 const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortress/${name}.png`,
   source: `docs/assets/original/${name}.svg`, rights: '本项目原创矢量美术，2026-11-01', approved: true });
@@ -70,8 +70,10 @@ export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLev
   for (const id of ['flame', 'frost', 'lightning'] as const) {
     const next = (levels[id] ?? 0) + 1;
     cards.push({ id, icon: id, label: `${id === 'flame' ? '火花绽放' : id === 'frost' ? '冰晶缓行' : '跃动电弧'} Lv.${next}`,
-      description: id === 'flame' ? `每5秒附加火焰，半径45内额外造成${1 + .5 * next}伤害` : id === 'frost' ? `每5秒附加冰霜，减速${Math.min(20 + 5 * next, 70)}%，持续2秒` : `每5秒附加雷电，连锁90范围内另一目标，造成${1 + .5 * next}伤害` });
+    description: id === 'flame' ? `每5秒附加火焰，半径45内额外造成${10 + 5 * next}伤害` : id === 'frost' ? `每5秒附加冰霜，减速${Math.min(20 + 5 * next, 70)}%，持续2秒` : `每5秒附加雷电，连锁90范围内另一目标，造成${10 + 5 * next}伤害` });
   }
+  if (!levels.firepower) cards.push({ id: 'firepower', icon: 'firepower', label: '火力激发', description: '子弹伤害提高50%，持续5秒；每20秒自动触发一次' });
+  if (!levels.homing) cards.push({ id: 'homing', icon: 'homing', label: '追踪弹', description: '子弹自动追踪存活僵尸，目标死亡后重新锁定' });
   if (base.hp > 0 && base.hp < base.maxHp * .5) cards.push({ id: 'repair', icon: 'repair', label: '堡垒修复', description: '立即恢复堡垒全部生命值' });
   const seed = [...`${sessionId}:${level}`].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
   const random = createSeededRandom(seed >>> 0);

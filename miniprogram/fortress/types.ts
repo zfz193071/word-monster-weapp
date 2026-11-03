@@ -1,7 +1,7 @@
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
 export type SkillId = 'doubleShot' | 'fireRate' | 'bulletWidth';
 export type ElementId = 'flame' | 'frost' | 'lightning';
-export type BattleSkillId = SkillId | ElementId;
+export type BattleSkillId = SkillId | ElementId | 'firepower' | 'homing';
 export type RandomSource = () => number;
 export interface Point { readonly x: number; readonly y: number }
 export interface Rect extends Point { readonly width: number; readonly height: number }
@@ -37,7 +37,7 @@ export interface SkillDefinition {
   // Absolute values at level 0..maxLevel; no ambiguous percentage stacking.
   readonly values: readonly number[];
 }
-export type SkillLevels = Readonly<Record<SkillId, number> & Partial<Record<ElementId, number>>>;
+export type SkillLevels = Readonly<Record<SkillId, number> & Partial<Record<ElementId | 'firepower' | 'homing', number>>>;
 export interface FortressRules {
   readonly mode: 'fortress';
   readonly schemaVersion: 2;
@@ -127,6 +127,8 @@ export interface MonsterState {
 export interface ProjectileState {
   readonly elements?: Readonly<Partial<Record<ElementId, number>>>;
   readonly direction?: Point;
+  readonly homing?: boolean;
+  readonly targetMonsterId?: string;
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
@@ -134,6 +136,8 @@ export interface ElementImpact { readonly kind: ElementId; readonly position: Po
 export interface CombatState {
   readonly weaponLevel?: number;
   readonly elementReadyTick?: number;
+  readonly firepowerUntilTick?: number;
+  readonly firepowerReadyTick?: number;
   readonly elementImpacts?: readonly ElementImpact[];
   readonly monsterSpeed?: number;
   readonly automatic?: boolean;

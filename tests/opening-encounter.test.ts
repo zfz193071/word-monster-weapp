@@ -70,7 +70,7 @@ test('新版僵尸缩小且移动速度减半', () => {
 test('三波 3→5→7：继承技能与基地血量，每波升级，最终150经验', () => {
   for (const preferred of ['doubleShot', 'fireRate', 'bulletWidth'] as SkillId[]) {
     const xp = createExperience(`three-${preferred}`, OPENING_EXPERIENCE);
-    let levels = { doubleShot: 0, fireRate: 0, bulletWidth: 0 }; let hp = 5;
+    let levels = { doubleShot: 0, fireRate: 0, bulletWidth: 0 }; let hp = 50;
     const ids = new Set<string>();
     for (let wave = 0; wave < 3; wave++) {
       let state = createOpeningEncounter(`three-${preferred}`, ['apple', 'orange', 'grape'][wave], wave, wave, levels, hp);

@@ -6,7 +6,7 @@ import { createCombat, stepCombat, getWeaponParameters } from '../miniprogram/fo
 import type { SkillId, SkillLevels, SessionPlan } from '../miniprogram/fortress/types';
 
 function combat(plan: SessionPlan, waveIndex: number, skills: SkillLevels) {
-  return createCombat({ plan, waveIndex, skills, combatId: `combat-${waveIndex}`, generation: 0, baseHp: 5,
+  return createCombat({ plan, waveIndex, skills, combatId: `combat-${waveIndex}`, generation: 0, baseHp: 50,
     playerX: plan.waves[waveIndex].spawnPlan[0].position.x, monsterHitbox: { x: -30, y: -30, width: 60, height: 60 } });
 }
 function clear(plan: SessionPlan, wave: number, skills: SkillLevels) {
@@ -44,7 +44,7 @@ test('仅已清除的本局前四波能领奖，重开零技能，固定种子�
     const session = createSkillSession(plan, createSeededRandom(5));
     assert.deepEqual(session.levels, zero);
     assert.equal(session.open(combat(plan, 0, zero)), null);
-    const dead = { ...combat(plan, 0, zero), status: 'baseDestroyed' as const, base: { hp: 0, maxHp: 5 } };
+    const dead = { ...combat(plan, 0, zero), status: 'baseDestroyed' as const, base: { hp: 0, maxHp: 50 } };
     assert.equal(session.open(dead), null);
     const foreign = createSessionPlan('other', createSeededRandom(8));
     assert.equal(session.open(clear(foreign, 0, zero)), null);

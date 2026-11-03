@@ -47,11 +47,12 @@ export function createSessionPlan(sessionId: string, random: RandomSource, rules
 }
 export function validateSkillLevels(levels: SkillLevels): void {
   for (const definition of FORTRESS_SKILLS) {
-    const level = levels[definition.id];
+    const level = levels[definition.id] ?? 0;
     if (!Number.isInteger(level) || level < 0 || level > definition.maxLevel) throw new RangeError(`skills.${definition.id}: 等级必须在 0—${definition.maxLevel}`);
   }
   for (const id of ['flame', 'frost', 'lightning'] as const) { const level = levels[id] ?? 0; if (!Number.isSafeInteger(level) || level < 0) throw new RangeError('元素等级必须为非负整数'); }
-  if (Object.keys(levels).some(id => !FORTRESS_SKILLS.some(definition => definition.id === id) && !['flame', 'frost', 'lightning'].includes(id))) throw new RangeError('未知技能');
+  for (const id of ['firepower', 'homing'] as const) { const level = levels[id] ?? 0; if (!Number.isSafeInteger(level) || level < 0 || level > 1) throw new RangeError(`${id}等级必须为0或1`); }
+  if (Object.keys(levels).some(id => !FORTRESS_SKILLS.some(definition => definition.id === id) && !['flame', 'frost', 'lightning', 'firepower', 'homing'].includes(id))) throw new RangeError('未知技能');
 }
 // Only plans candidates. Applying effects/consuming an offer is owned by #11.
 export function createSkillOffer(plan: SessionPlan, afterWaveIndex: number, levels: SkillLevels, random: RandomSource): SkillOffer {

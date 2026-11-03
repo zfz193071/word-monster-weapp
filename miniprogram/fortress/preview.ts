@@ -1,6 +1,7 @@
 import { createCombat } from './combat';
 import { FORTRESS_MONSTERS, monsterDrawWidth } from './content';
 import { createSeededRandom, createSessionPlan } from './plans';
+import { FORTRESS_RULES } from './rules';
 import { logicalHitbox } from './viewport';
 import type { CombatState, SessionPlan } from './types';
 
@@ -22,7 +23,7 @@ export function createPreviewPlanCombat(plan: SessionPlan, generation = 0): Comb
   const wordId = plan.waves[0].targetWordId;
   const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === wordId);
   if (!visual) throw new Error('没有对应的水果怪物素材');
-  return createCombat({ plan, waveIndex: 0, combatId: `${plan.sessionId}:combat:1`, generation, baseHp: 5,
+  return createCombat({ plan, waveIndex: 0, combatId: `${plan.sessionId}:combat:1`, generation, baseHp: FORTRESS_RULES.base.maxHp,
     playerX: plan.waves[0].spawnPlan[0].position.x, skills: { doubleShot: 0, fireRate: 0, bulletWidth: 0 },
     monsterHitbox: logicalHitbox(visual, monsterDrawWidth(visual)) });
 }

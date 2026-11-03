@@ -7,7 +7,7 @@ import { createSessionPlan } from '../miniprogram/fortress/plans';
 import { createViewport, HorizontalControl, logicalHitbox } from '../miniprogram/fortress/viewport';
 
 const initial = () => createCombat({ plan: createSessionPlan('canvas-test', () => 0.5), waveIndex: 0,
-  combatId: 'canvas-combat', generation: 0, baseHp: 5, playerX: 24,
+  combatId: 'canvas-combat', generation: 0, baseHp: 50, playerX: 24,
   skills: { doubleShot: 0, fireRate: 0, bulletWidth: 0 }, monsterHitbox: { x: -32, y: -32, width: 64, height: 64 } });
 function fakeCanvas() {
   let id = 0; const callbacks = new Map<number, (time: number) => void>();
@@ -128,7 +128,7 @@ test('HUD 读真实基地血量；失败停止循环；诊断样本有界且不�
   for (let time = 10; time <= 23000; time += 10) h.frame(time);
   assert.equal(h.scene.snapshot!.status, 'baseDestroyed'); assert.equal(h.scene.snapshot!.base.hp, 0);
   assert.equal(h.callbacks.size, 0); assert.equal(h.hud.length, 6);
-  assert.deepEqual(h.hud.at(-1), { hp: 0, maxHp: 5, status: 'baseDestroyed' });
+  assert.deepEqual(h.hud.at(-1), { hp: 0, maxHp: 50, status: 'baseDestroyed' });
   assert.equal(h.scene.diagnostics.recentFrameGapsMs.length, 120); assert.ok(h.scene.diagnostics.peakProjectiles > 0);
   h.scene.touchStart([{ identifier: 1, clientX: 200 }]); h.frame(30000); assert.equal(h.scene.snapshot!.player.x, 24); h.scene.dispose();
 });

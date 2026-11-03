@@ -20,9 +20,9 @@ export function monsterStats(levelId: number, heroLevel: number, boss = false) {
   if (!Number.isInteger(levelId) || levelId < 1 || levelId > 8
     || !Number.isInteger(heroLevel) || heroLevel < 1 || heroLevel > 20) throw new Error('怪物等级无效');
   const tier = heroLevel < 6 ? 0 : heroLevel < 10 ? 1 : heroLevel < 15 ? 2 : heroLevel < 20 ? 3 : 4;
-  const hp = Math.ceil(8 * (1 + .15 * (levelId - 1)) * (1 + tier * .25));
-  const damage = Math.round(100 * (1 + .1 * (levelId - 1)) * (1 + tier * .1)) / 100;
-  return { hp: hp * (boss ? 3 : 1), attackDamage: Math.round(damage * (boss ? 1.5 : 1) * 100) / 100 };
+  const hp = Math.ceil(8 * (1 + .15 * (levelId - 1)) * (1 + tier * .25)) * 10;
+  const damage = Math.round(10 * (1 + .1 * (levelId - 1)) * (1 + tier * .1));
+  return { hp: hp * (boss ? 3 : 1), attackDamage: Math.round(damage * (boss ? 1.5 : 1)) };
 }
 
 export function monsterDropCoins(monsterId: string, boss = false): number {
