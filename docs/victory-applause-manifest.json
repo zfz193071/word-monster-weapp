@@ -1,0 +1,14 @@
+{
+  "description": "Short small-group crowd applause used before the existing Chinese victory praise voice.",
+  "source": "https://sfxmint.com/sounds/crowd-applause-58",
+  "download": "https://sfxmint.com/dl/crowd-applause-58.mp3",
+  "creator": "SFXMint",
+  "generation": "AI-generated synthetic applause",
+  "license": "CC0 1.0",
+  "originalDurationSeconds": 6.03,
+  "convertedDurationSeconds": 2.86,
+  "conversion": "FFmpeg trims to 2.8 seconds, volume 0.45, short fade-in/out, mono 24kHz 32kbps MP3",
+  "path": "miniprogram/assets/audio/victory-applause.mp3",
+  "sha256": "215740eb218a4517dff4a14c9c2eb4964e7f856075a5602537ce544af714344c",
+  "review": "pending human listening"
+}
