@@ -9,30 +9,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "air",
-    "path": "/learning-assets/audio/zombie-air.mp3",
-    "kind": "audio",
-    "sha256": "9b577d3b980b3a375e83d986122123d5f71b307a1a74c6c86283eee5a684b2f3",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "arm",
     "path": "/learning-assets/audio/learn-arm.mp3",
     "kind": "audio",
     "sha256": "8bda397d5b980a249beb5da654505430220ae2ac0b1de9c2d0227ed6b7cb15c8",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "arm",
-    "path": "/learning-assets/audio/zombie-arm.mp3",
-    "kind": "audio",
-    "sha256": "3ec9a9254d9fedc8a49b33b13ddbc9b00a3e1d9d7da88ebabaadd287e45cc3a3",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -45,30 +27,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "bag",
-    "path": "/learning-assets/audio/zombie-bag.mp3",
-    "kind": "audio",
-    "sha256": "dc2bcb191c21fe766c19ac5a83d1cfca04ae2c83bb77b0807289d19f1abe782d",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "bear",
     "path": "/learning-assets/audio/learn-bear.mp3",
     "kind": "audio",
     "sha256": "831013141346a650ed8f94a6fe6f8525ed141d07fe0367bdd20840e751733968",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "bear",
-    "path": "/learning-assets/audio/zombie-bear.mp3",
-    "kind": "audio",
-    "sha256": "221f730cb57b6db205b273c07a09e53da63447e108ed6250ccebd4b4bc3b9e47",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -81,30 +45,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "bed",
-    "path": "/learning-assets/audio/zombie-bed.mp3",
-    "kind": "audio",
-    "sha256": "a4af2532640c31de1374c236f01ca9d5f1822e33e9ce691822c20f473eaba8a3",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "bee",
     "path": "/learning-assets/audio/learn-bee.mp3",
     "kind": "audio",
     "sha256": "9221eec758d41ff0cba398a8f0971b7a265e63dbaf79cd7caa4a72ecb5679800",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "bee",
-    "path": "/learning-assets/audio/zombie-bee.mp3",
-    "kind": "audio",
-    "sha256": "889ee4233305a8f0c2c47fa2c72b451caacf670e78348c7fc29c721a2ffacfca",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -117,30 +63,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "bike",
-    "path": "/learning-assets/audio/zombie-bike.mp3",
-    "kind": "audio",
-    "sha256": "095ca21b63ac51a2cd5373b65a0e457efdcb38686a6ef41b159aa7caf6c37c67",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "bird",
     "path": "/learning-assets/audio/learn-bird.mp3",
     "kind": "audio",
     "sha256": "9ed8ff4d1ee16bddde92df80fbbcb82357faacd0b7cfc280373a435fd5df1204",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "bird",
-    "path": "/learning-assets/audio/zombie-bird.mp3",
-    "kind": "audio",
-    "sha256": "1a85a3f2366ec6a6eb3c6b309dff14f7e3a8d69b922b48f00aa39b2f835a69e6",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -153,30 +81,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "black",
-    "path": "/learning-assets/audio/zombie-black.mp3",
-    "kind": "audio",
-    "sha256": "da325cce8708d68c24bd6748b7795ede71195ec302639765e3696ad3379e13b5",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "blackboard",
     "path": "/learning-assets/audio/learn-blackboard.mp3",
     "kind": "audio",
     "sha256": "9fa38fd524a3afd08cbe90104cc6f67cf6076b7459aef44ce395406e2b0006f3",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "blackboard",
-    "path": "/learning-assets/audio/zombie-blackboard.mp3",
-    "kind": "audio",
-    "sha256": "05d169a8d0f1abf31e40f42ebf86fc04f4b12ad749771be0a10971c83936bf55",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -189,30 +99,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "blue",
-    "path": "/learning-assets/audio/zombie-blue.mp3",
-    "kind": "audio",
-    "sha256": "8d7f599d78d03b712b756c93e7363f93f2759dfea567ac2a68f909c68a2a751e",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "boat",
     "path": "/learning-assets/audio/learn-boat.mp3",
     "kind": "audio",
     "sha256": "5cfcb9eaf6e49229947c9a7149a85d63d13ed9c8e3bfe9ddcb556f6bbbc347b0",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "boat",
-    "path": "/learning-assets/audio/zombie-boat.mp3",
-    "kind": "audio",
-    "sha256": "10440cbfb5e8f06ff877ee78ddafb0545da6bfe86693fea2759161308e1427dd",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -225,30 +117,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "body",
-    "path": "/learning-assets/audio/zombie-body.mp3",
-    "kind": "audio",
-    "sha256": "a7e7a3de1d58a1403a5352687cc7b0a57ae4fe22ed2f3ea7a5fe7d77dbb9bce9",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "book",
     "path": "/learning-assets/audio/learn-book.mp3",
     "kind": "audio",
     "sha256": "39154cff44851c44c930ce4dd198d9cb45e9b3a78b0128f2754ef31d3563498d",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "book",
-    "path": "/learning-assets/audio/zombie-book.mp3",
-    "kind": "audio",
-    "sha256": "dbac2f07771ae3c8d3bc1ce0857376db46a64d3ebc0e9d3f8d99631ecc8914c6",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -261,30 +135,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "bread",
-    "path": "/learning-assets/audio/zombie-bread.mp3",
-    "kind": "audio",
-    "sha256": "4e7b578876f21cd4dfd330d8975fb70de46559ad686c55e4e5ba139ee2c4aca5",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "brown",
     "path": "/learning-assets/audio/learn-brown.mp3",
     "kind": "audio",
     "sha256": "6b2ad8fa92b387c3d4ad2c36ed807abb370995e5dc71493d2653b9bbf30a0364",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "brown",
-    "path": "/learning-assets/audio/zombie-brown.mp3",
-    "kind": "audio",
-    "sha256": "a536552fd397c34edcb9c3b1feac3cc25170859a892e30a91390a1d2ab150e07",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -297,30 +153,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "cake",
-    "path": "/learning-assets/audio/zombie-cake.mp3",
-    "kind": "audio",
-    "sha256": "ccf9e0b03acd9a994aaf11bbc730ee86b5c39ae8150f68c5acfe2fc34069d319",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "candle",
     "path": "/learning-assets/audio/learn-candle.mp3",
     "kind": "audio",
     "sha256": "b128bca09cc3b217aa2c54f59a99de0d4aea8e698fcd65df9d595e23bd05cf93",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "candle",
-    "path": "/learning-assets/audio/zombie-candle.mp3",
-    "kind": "audio",
-    "sha256": "df5af5ecff65b93ddef3e483df42601c5260708b1991f62f2fec7162cc1b6d5e",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -333,30 +171,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "candy",
-    "path": "/learning-assets/audio/zombie-candy.mp3",
-    "kind": "audio",
-    "sha256": "7bc9332db0a3615fd2ac8665334aebab437f9dbf7762e0cfac2584fdce9d23ba",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "cat",
     "path": "/learning-assets/audio/learn-cat.mp3",
     "kind": "audio",
     "sha256": "2e2596e38798f20ac0b1e88435e86bb1892004fe783088db479314116df593c9",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "cat",
-    "path": "/learning-assets/audio/zombie-cat.mp3",
-    "kind": "audio",
-    "sha256": "7673b7f650e06ecdd82b327db7ba63d40a3edcaede50bb7aaeda716819ae3f81",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -369,30 +189,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "ceiling",
-    "path": "/learning-assets/audio/zombie-ceiling.mp3",
-    "kind": "audio",
-    "sha256": "3155e817095a97e1ffc832871dbdbe30ea3a38cf81b087011b61652e10c6ca7f",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "chair",
     "path": "/learning-assets/audio/learn-chair.mp3",
     "kind": "audio",
     "sha256": "4dd5f7790b5d91d59b33677d2da529e317fb61ef57fb2adba5ed2fbfc3859847",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "chair",
-    "path": "/learning-assets/audio/zombie-chair.mp3",
-    "kind": "audio",
-    "sha256": "b10ec580b6cc992a1aa3558df6317eb5bc9265a9304650e4107be9e3d864da77",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -405,30 +207,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "chicken",
-    "path": "/learning-assets/audio/zombie-chicken.mp3",
-    "kind": "audio",
-    "sha256": "478dfb9b1ee20e14b8272c71c205b14284c0175915efd28461b22dc6b801dfd8",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "clock",
     "path": "/learning-assets/audio/learn-clock.mp3",
     "kind": "audio",
     "sha256": "35d4d72fad003c8e05c23a490fc991bc36863d5aa41509d19a2b4fe5967068cd",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "clock",
-    "path": "/learning-assets/audio/zombie-clock.mp3",
-    "kind": "audio",
-    "sha256": "d265392a8b41a441f45a64584c548469772edc35cb79fc79d767b04675715ca6",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -441,30 +225,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "clothes",
-    "path": "/learning-assets/audio/zombie-clothes.mp3",
-    "kind": "audio",
-    "sha256": "1d60f137ce7ce29548e57c5d3a9d21cbca9945118a6fd47cd9403b98551c4f53",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "computer",
     "path": "/learning-assets/audio/learn-computer.mp3",
     "kind": "audio",
     "sha256": "b1a8f48f8ea53a9ec4cfd62c21e9203005cb394d907aab473a4c1a2cf4f62711",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "computer",
-    "path": "/learning-assets/audio/zombie-computer.mp3",
-    "kind": "audio",
-    "sha256": "c09afee8250287fc380e84efc89e0d7569287de2b20840bba0b592f5b16669ba",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -477,30 +243,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "cow",
-    "path": "/learning-assets/audio/zombie-cow.mp3",
-    "kind": "audio",
-    "sha256": "ffc31d6b3272de531aba56dd3c85b9418f277973e3f5e189a7626b89609bafeb",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "cup",
     "path": "/learning-assets/audio/learn-cup.mp3",
     "kind": "audio",
     "sha256": "e256ae6d622a4b39a1862edc5621c1cd833db5b87913121bd1fe00779d56fe7c",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "cup",
-    "path": "/learning-assets/audio/zombie-cup.mp3",
-    "kind": "audio",
-    "sha256": "457296bffa5d6d11a1d22fda0fd1910be3a685ad15155416adf057ebecd2e3d1",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -513,30 +261,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "desk",
-    "path": "/learning-assets/audio/zombie-desk.mp3",
-    "kind": "audio",
-    "sha256": "180ed036f720bf266551a19eb999738192325524fb46b03ef82ccdc68b45972d",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "dog",
     "path": "/learning-assets/audio/learn-dog.mp3",
     "kind": "audio",
     "sha256": "895e6d5bad8845f0dd7710be0052e8c5d0657e389f516f0bc8ef941018fe054c",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "dog",
-    "path": "/learning-assets/audio/zombie-dog.mp3",
-    "kind": "audio",
-    "sha256": "cfc1c9509f1f839ac7b247bde073416e4efa7ca214da623aaf4f5e0b23712c5d",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -549,30 +279,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "doll",
-    "path": "/learning-assets/audio/zombie-doll.mp3",
-    "kind": "audio",
-    "sha256": "1b67db16709bf002bd24c1fdd6fb58d779f3fe63bcacb00c4e9ad612b38221d8",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "door",
     "path": "/learning-assets/audio/learn-door.mp3",
     "kind": "audio",
     "sha256": "e54dbda0fd376cb21afd5a4cd56e575c2ee56439aeccd83a879349639be09d53",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "door",
-    "path": "/learning-assets/audio/zombie-door.mp3",
-    "kind": "audio",
-    "sha256": "758f22f613bd4222587c30980639940e30fb798737dada2b0a031f393bb91c8b",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -585,30 +297,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "duck",
-    "path": "/learning-assets/audio/zombie-duck.mp3",
-    "kind": "audio",
-    "sha256": "f2dc248caf2b447884fff7b9c956a3adf600cd09eaee5b5650ad646d329b0dbf",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "earth",
     "path": "/learning-assets/audio/learn-earth.mp3",
     "kind": "audio",
     "sha256": "8124d914123338931e2888c013c6ee230378c9aa2d4dabf1545420866c0a32dd",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "earth",
-    "path": "/learning-assets/audio/zombie-earth.mp3",
-    "kind": "audio",
-    "sha256": "df0e05d4201d7ad017517d04fefd5e5924c16583016c1bb59d4b22c7cb8bfd85",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -621,30 +315,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "elephant",
-    "path": "/learning-assets/audio/zombie-elephant.mp3",
-    "kind": "audio",
-    "sha256": "28a977743f3a48a27cccc888125080246738e528b2b4be976a09ed32514521ba",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "eraser",
     "path": "/learning-assets/audio/learn-eraser.mp3",
     "kind": "audio",
     "sha256": "3db4340195b6746d6dff3fe91d4f730de7519fcf596f7d0a1901d0b4714f397e",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "eraser",
-    "path": "/learning-assets/audio/zombie-eraser.mp3",
-    "kind": "audio",
-    "sha256": "a61c20f10b2d339137cfc386ad89fbee5f171473c5fb2d7df64070c7cec56fb5",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -657,30 +333,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "fire",
-    "path": "/learning-assets/audio/zombie-fire.mp3",
-    "kind": "audio",
-    "sha256": "9fa127bb675068d305a3dbefcfe5cc2c28342405cd5f85330069cc3ca22ac1e8",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "fish",
     "path": "/learning-assets/audio/learn-fish.mp3",
     "kind": "audio",
     "sha256": "32c9b41dc9163981ab7d0b508265575bf8120df806d1c3fe56d3d03191208766",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "fish",
-    "path": "/learning-assets/audio/zombie-fish.mp3",
-    "kind": "audio",
-    "sha256": "80f5da183542a2f8b919d5fc89a97c5b9a9affe28a11a0ff2d193708f1c842c7",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -693,30 +351,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "floor",
-    "path": "/learning-assets/audio/zombie-floor.mp3",
-    "kind": "audio",
-    "sha256": "ce075cbb6c4f8956377ed761471d4fc48595e0ea2d57f5833f62161a7519efac",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "forehead",
     "path": "/learning-assets/audio/learn-forehead.mp3",
     "kind": "audio",
     "sha256": "b16b26386bd3b6d109e6c464e19e3f338ec9a1ab3ab7f264b673e247b6605e38",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "forehead",
-    "path": "/learning-assets/audio/zombie-forehead.mp3",
-    "kind": "audio",
-    "sha256": "1f7e65885dac57244a93e464029489ec491f9c2f40fb5a5c16d6338b49139aeb",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -729,30 +369,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "gift",
-    "path": "/learning-assets/audio/zombie-gift.mp3",
-    "kind": "audio",
-    "sha256": "fd11e3e2cc8dd410d8956f4deda949d801f9afc665c65ed7ec2a802d61bcfe99",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "glass",
     "path": "/learning-assets/audio/learn-glass.mp3",
     "kind": "audio",
     "sha256": "ee8799462930068edfeadcdd601d947510ecf93229b34a17d21e5267655ee302",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "glass",
-    "path": "/learning-assets/audio/zombie-glass.mp3",
-    "kind": "audio",
-    "sha256": "a59ae8f163487eb3f6816c4be5caf2e3a9b920cedf6c2b4a54af8167f2130f7d",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -765,30 +387,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "glue",
-    "path": "/learning-assets/audio/zombie-glue.mp3",
-    "kind": "audio",
-    "sha256": "45dcf6537839e9f1378ea6d9766b063b8998479e9c124a25926c213620cfb24a",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "green",
     "path": "/learning-assets/audio/learn-green.mp3",
     "kind": "audio",
     "sha256": "031c2ef56b4c76f44043b2b005c7a7afc62ede78bcfee73fb68b7eccc5c9bf61",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "green",
-    "path": "/learning-assets/audio/zombie-green.mp3",
-    "kind": "audio",
-    "sha256": "6587b5227f87a7fb773bb7a76b6dcbd3fdd441c0a669586c2d374059db69a370",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -801,30 +405,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "hand",
-    "path": "/learning-assets/audio/zombie-hand.mp3",
-    "kind": "audio",
-    "sha256": "98e0d8818737daf3e8af1af737769ee5b331054e87d157ec9513fae37519ed1e",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "head",
     "path": "/learning-assets/audio/learn-head.mp3",
     "kind": "audio",
     "sha256": "1ff57834e750404865b89aaa8790bcd5867c5bfeef0cb2651831d6be7ea9cbe0",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "head",
-    "path": "/learning-assets/audio/zombie-head.mp3",
-    "kind": "audio",
-    "sha256": "0ba3df7f98157873b83cbe25f6a16fc6fe0d16c01d2aee41a01c55ef506d7fa3",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -837,30 +423,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "home",
-    "path": "/learning-assets/audio/zombie-home.mp3",
-    "kind": "audio",
-    "sha256": "b4edb69c4410f62f0c000477b54a3b9b210a459d24869bdd851a9d163de8820b",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "horse",
     "path": "/learning-assets/audio/learn-horse.mp3",
     "kind": "audio",
     "sha256": "911505b2cee45c6126a2a1512d2f89f3ef89ad6fbfcd8c680c71b4a17d4fd502",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "horse",
-    "path": "/learning-assets/audio/zombie-horse.mp3",
-    "kind": "audio",
-    "sha256": "9d6b82a804951f97b104be524cb6eaf2066679886f5ab44cc7bf7d72eee93fa6",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -873,30 +441,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "juice",
-    "path": "/learning-assets/audio/zombie-juice.mp3",
-    "kind": "audio",
-    "sha256": "0c818b4eeb6b4aa04ebcf6fb90abd0fe19972bc70def1745fbd7c495dc29c6cc",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "kite",
     "path": "/learning-assets/audio/learn-kite.mp3",
     "kind": "audio",
     "sha256": "9aaa367d448b93a4d21895e66dd70a4f0f1a6480dd6c88b8686bae8194b66ca9",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "kite",
-    "path": "/learning-assets/audio/zombie-kite.mp3",
-    "kind": "audio",
-    "sha256": "bf58046392af0f51bb9415e35e17caf1e7b0b9e13296b233d0ded677455ecdb9",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -909,30 +459,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "leg",
-    "path": "/learning-assets/audio/zombie-leg.mp3",
-    "kind": "audio",
-    "sha256": "4e50fc42254eecdf813a2647b768286a53aefd4df2af93823d9b2d91a543219b",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "lion",
     "path": "/learning-assets/audio/learn-lion.mp3",
     "kind": "audio",
     "sha256": "d503583791196048c4ae437109a74711f079e9d214aeac3c1bb1477fc4354bcb",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "lion",
-    "path": "/learning-assets/audio/zombie-lion.mp3",
-    "kind": "audio",
-    "sha256": "11e090878dee5edcc63c94c6cd02e9d98b962c5e535df4ab508b50f82ef8bdcf",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -945,30 +477,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "moon",
-    "path": "/learning-assets/audio/zombie-moon.mp3",
-    "kind": "audio",
-    "sha256": "f85f4da0d534eaa8faf7621a70eb3dbee0a4cc5c226f0dfe79407259662617e1",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "notebook",
     "path": "/learning-assets/audio/learn-notebook.mp3",
     "kind": "audio",
     "sha256": "ed0fd46b5e98fc239ecd096e77f3c5da23011a4c252156bc3e255aeb9c55f09f",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "notebook",
-    "path": "/learning-assets/audio/zombie-notebook.mp3",
-    "kind": "audio",
-    "sha256": "f8240d1b1f024bbe8a0469573f47697c5f66994eb44350d1ba31578d51b1cc92",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -981,30 +495,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "palm",
-    "path": "/learning-assets/audio/zombie-palm.mp3",
-    "kind": "audio",
-    "sha256": "7ae5ba6581fe5bb6c0898057571325c3e883efbb8354ada6f807f31b24ecc482",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "panda",
     "path": "/learning-assets/audio/learn-panda.mp3",
     "kind": "audio",
     "sha256": "3b6570612cf0f9a2dcd404ee195426616bcbf894b5da624c5d449c52b5db2a4d",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "panda",
-    "path": "/learning-assets/audio/zombie-panda.mp3",
-    "kind": "audio",
-    "sha256": "43e1f8cfb8930640fa03f85e538f111dc01b5597a73c04e694848d940fbe5344",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1017,30 +513,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "paper",
-    "path": "/learning-assets/audio/zombie-paper.mp3",
-    "kind": "audio",
-    "sha256": "e5573f65f318112b19c452fb44e40ea1bd8683b39097346a28195133f8c1cd4c",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "pen",
     "path": "/learning-assets/audio/learn-pen.mp3",
     "kind": "audio",
     "sha256": "f200898d52df871ad4f6151c42470bf4ac815d9b560bb728d3595f969f0f0e0b",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "pen",
-    "path": "/learning-assets/audio/zombie-pen.mp3",
-    "kind": "audio",
-    "sha256": "c6d3806c22678f9ba6d50f7c5f46b1d517c130bb3a4fdb45d52a4cfe0e241662",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1053,30 +531,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "pencil",
-    "path": "/learning-assets/audio/zombie-pencil.mp3",
-    "kind": "audio",
-    "sha256": "c2fc9615c52e10a24b80a38df07a110e5a77d01526abf000e21715b64ce02269",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "pink",
     "path": "/learning-assets/audio/learn-pink.mp3",
     "kind": "audio",
     "sha256": "65fd62556d29aec6044cc94b48b17b5c4077aa62116868262fc2ebbb9ade7928",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "pink",
-    "path": "/learning-assets/audio/zombie-pink.mp3",
-    "kind": "audio",
-    "sha256": "a1c683e5782222ea253aebc79f2f9f5650cdf5567431ecf5dfc48030152df30b",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1089,30 +549,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "rabbit",
-    "path": "/learning-assets/audio/zombie-rabbit.mp3",
-    "kind": "audio",
-    "sha256": "c8025eb62263c9e2e10c48c5b5651b4595c265cdfe9b25da92389d8d7b956e3e",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "rain",
     "path": "/learning-assets/audio/learn-rain.mp3",
     "kind": "audio",
     "sha256": "3bde0aa16b65eb52ee9adf8d82765f19ee141bf92a2ae16111b0478176f7a735",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "rain",
-    "path": "/learning-assets/audio/zombie-rain.mp3",
-    "kind": "audio",
-    "sha256": "a4b56a1b9325ad40be45b9befcb8c6eb1b9252228f9db75c139e352425b8a76c",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1125,30 +567,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "red",
-    "path": "/learning-assets/audio/zombie-red.mp3",
-    "kind": "audio",
-    "sha256": "4bd86a615435e775a10a333204b1b222f63ad2c92c89deb567bdc18ed7ade003",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "ruler",
     "path": "/learning-assets/audio/learn-ruler.mp3",
     "kind": "audio",
     "sha256": "213e1a1c51abc31d58986925b56ef2e18beb16d9d4b00cfae85113362a02bfe3",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "ruler",
-    "path": "/learning-assets/audio/zombie-ruler.mp3",
-    "kind": "audio",
-    "sha256": "f8919705c5a388ca202a849b40e4e4efe6c71184ba502aff24bd29df247a9e14",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1161,30 +585,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "scissors",
-    "path": "/learning-assets/audio/zombie-scissors.mp3",
-    "kind": "audio",
-    "sha256": "cc03e67d553ced93d7efddfe91ef5911f6a3b16ffdeb7f68e66ce4e75c81ca4a",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "sea",
     "path": "/learning-assets/audio/learn-sea.mp3",
     "kind": "audio",
     "sha256": "fa15fd98cbec5d72beec24417256c3a69186903b31e8a0217acbb6990a1d1b59",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "sea",
-    "path": "/learning-assets/audio/zombie-sea.mp3",
-    "kind": "audio",
-    "sha256": "aeeb58afa45a16c3261bd9591524619e3fdcaa01ca7e9809bb65522e1428088c",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1197,30 +603,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "season",
-    "path": "/learning-assets/audio/zombie-season.mp3",
-    "kind": "audio",
-    "sha256": "3d59c6cc90898399fcf7781a57b99a225b856086899350b5f5daedfe19be1562",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "sharpener",
     "path": "/learning-assets/audio/learn-sharpener.mp3",
     "kind": "audio",
     "sha256": "1d2acebd32f1b9fd99e29ac24ea5d9385fc8e404872b3ba1eb137dec872de210",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "sharpener",
-    "path": "/learning-assets/audio/zombie-sharpener.mp3",
-    "kind": "audio",
-    "sha256": "5efdf5b3a51bf163939765d0d4b73ec9243c13796eee0fcecdd5296446052b8f",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1233,30 +621,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "sheep",
-    "path": "/learning-assets/audio/zombie-sheep.mp3",
-    "kind": "audio",
-    "sha256": "0a43c56144a12123f12abcb0631ffd9449cdd552856c9b51d6cf9e15fdea6032",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "snow",
     "path": "/learning-assets/audio/learn-snow.mp3",
     "kind": "audio",
     "sha256": "4a5343ab000d747754efe3ed9a9d88b86503722362e8fe59aebdce5eedfee046",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "snow",
-    "path": "/learning-assets/audio/zombie-snow.mp3",
-    "kind": "audio",
-    "sha256": "f48c651b223d58b962dd9a04877c123aad9633640b74a2a7ee9ed7929b0c5479",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1269,30 +639,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "star",
-    "path": "/learning-assets/audio/zombie-star.mp3",
-    "kind": "audio",
-    "sha256": "e0a75f2730d79e47dc822b535dd1b0700d1473c809662ba77bcab6d3195b137c",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "sun",
     "path": "/learning-assets/audio/learn-sun.mp3",
     "kind": "audio",
     "sha256": "82bcf1523a40d3a10d85339cb76a62d26b890aa724b03d8fe286e3abbd2927a5",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "sun",
-    "path": "/learning-assets/audio/zombie-sun.mp3",
-    "kind": "audio",
-    "sha256": "4e5ee9168046eb4f76b95726b43ff16ff15f28898ba3834214d04278880e2547",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1305,30 +657,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "tape",
-    "path": "/learning-assets/audio/zombie-tape.mp3",
-    "kind": "audio",
-    "sha256": "99a80f766215950d09b9ded6efef51b7b8983a8975fbaef69314932afa762424",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "tiger",
     "path": "/learning-assets/audio/learn-tiger.mp3",
     "kind": "audio",
     "sha256": "a95de4656b93d15b289da12bb9cc6f5b38000bc1f430664e8e2eb12bf30b6fab",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "tiger",
-    "path": "/learning-assets/audio/zombie-tiger.mp3",
-    "kind": "audio",
-    "sha256": "75b87c8ca649c678ff42cd5229547fb69efbe753cbd69c2eef3c0dae8884aa72",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1341,30 +675,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "towel",
-    "path": "/learning-assets/audio/zombie-towel.mp3",
-    "kind": "audio",
-    "sha256": "66d56cb629037342eb69be7e9e98d20c1981b574b812a78da64159500ecc0efe",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "toy",
     "path": "/learning-assets/audio/learn-toy.mp3",
     "kind": "audio",
     "sha256": "29fa9a914937ae2fe0244a1968600b02b1646a509758c1d56fe9e2888f51b9e9",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "toy",
-    "path": "/learning-assets/audio/zombie-toy.mp3",
-    "kind": "audio",
-    "sha256": "320ea21a505ecc185e733b69255d46496b3e5c7dbf105da7432449c9898e5679",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1377,30 +693,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "wall",
-    "path": "/learning-assets/audio/zombie-wall.mp3",
-    "kind": "audio",
-    "sha256": "8262ccc468792e961bbbf796aa0c9ab4c28bcad8310e4ee947192b7dd6ce99ba",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "weather",
     "path": "/learning-assets/audio/learn-weather.mp3",
     "kind": "audio",
     "sha256": "63675ce68e9380f16fc6434e2b0c4868b279bd9f3e1e938d7752b80d439e5642",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "weather",
-    "path": "/learning-assets/audio/zombie-weather.mp3",
-    "kind": "audio",
-    "sha256": "e85b51fdc5966485cfed61687c0c1d1f9a626ad9ce4a71a6167cac67b3c77ddd",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1413,30 +711,12 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "white",
-    "path": "/learning-assets/audio/zombie-white.mp3",
-    "kind": "audio",
-    "sha256": "489c4fbd4f3b673c1c4ed456e0ebc7e6c0184cae7ee68e8eb7b6de56290ca930",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "wind",
     "path": "/learning-assets/audio/learn-wind.mp3",
     "kind": "audio",
     "sha256": "73a4451f799617c8aa212dfcbbb0887ff85c8f0f6918ddb5aea32d32c1b965f1",
     "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
     "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
-    "reviewStatus": "pending"
-  },
-  {
-    "wordId": "wind",
-    "path": "/learning-assets/audio/zombie-wind.mp3",
-    "kind": "audio",
-    "sha256": "ea03ed2097bca608705337e8b9196e381e9f4f97fcd59c96f6d536d4ce54ac70",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
     "reviewStatus": "pending"
   },
   {
@@ -1449,15 +729,6 @@
     "reviewStatus": "pending"
   },
   {
-    "wordId": "window",
-    "path": "/learning-assets/audio/zombie-window.mp3",
-    "kind": "audio",
-    "sha256": "2472265702a7eb5f2bd0b991f0f4965114740756bc584cd78dcdc608c76c7cca",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
-    "reviewStatus": "pending"
-  },
-  {
     "wordId": "yellow",
     "path": "/learning-assets/audio/learn-yellow.mp3",
     "kind": "audio",
@@ -1467,12 +738,741 @@
     "reviewStatus": "pending"
   },
   {
+    "wordId": "air",
+    "path": "/learning-assets/audio/zombie-air.mp3",
+    "kind": "audio",
+    "sha256": "d28b87d6c2a6bbd1aaa522d10db1fb808830bb23b3fd05d34715497953cfe504",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "arm",
+    "path": "/learning-assets/audio/zombie-arm.mp3",
+    "kind": "audio",
+    "sha256": "a004bf6b682aadc4c1466659f2dcd2fbf3cbf71e64c8a9e2b2188b6e33e0ee22",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bag",
+    "path": "/learning-assets/audio/zombie-bag.mp3",
+    "kind": "audio",
+    "sha256": "3becdcf471c46a27897c7594c442b2c23848c356f123f3abcd3fb5202a5c4936",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bear",
+    "path": "/learning-assets/audio/zombie-bear.mp3",
+    "kind": "audio",
+    "sha256": "7281b4a0d57849c6026db704317de94722c5ea1d00c4a1c0a89337f46f5ee195",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bed",
+    "path": "/learning-assets/audio/zombie-bed.mp3",
+    "kind": "audio",
+    "sha256": "16cff2850e69f5bc769108ca6f15efca94b8225dd7ac858710d9942cb54366db",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bee",
+    "path": "/learning-assets/audio/zombie-bee.mp3",
+    "kind": "audio",
+    "sha256": "45dba9aa37b3bf4e15702652e091f2046f2f3ddbbc6204f8c2518350239792df",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bike",
+    "path": "/learning-assets/audio/zombie-bike.mp3",
+    "kind": "audio",
+    "sha256": "d81f0aa1b6244f7c119f63bb8b34cd27f94b83111c9c0081b2ed97d4d6579770",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bird",
+    "path": "/learning-assets/audio/zombie-bird.mp3",
+    "kind": "audio",
+    "sha256": "8af9a5f3ec1b9e402d2588f2d78916d5ed663d450d83c236dd6b25567182b254",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "black",
+    "path": "/learning-assets/audio/zombie-black.mp3",
+    "kind": "audio",
+    "sha256": "fad848bf294a8a23151569d7d22bf8a3e36ccf2b77210b42ec9e2832d907f1ec",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blackboard",
+    "path": "/learning-assets/audio/zombie-blackboard.mp3",
+    "kind": "audio",
+    "sha256": "422a9f8f159db87f0902f13d0810c7803eaa70ab556b5262bb673d1470ef03ee",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "blue",
+    "path": "/learning-assets/audio/zombie-blue.mp3",
+    "kind": "audio",
+    "sha256": "d7686b2cbb18907191625ad28899560fb32560a2f021e040df90324d9717588b",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "boat",
+    "path": "/learning-assets/audio/zombie-boat.mp3",
+    "kind": "audio",
+    "sha256": "952cb68bcc0a5883e250e6aa0738930bf07f6848686fc7498fe0226af3f3ce52",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "body",
+    "path": "/learning-assets/audio/zombie-body.mp3",
+    "kind": "audio",
+    "sha256": "8c2f585ac0648c423bf12e9f400e4247746dfbe5dc3afa82ec54676e9545aaa3",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "book",
+    "path": "/learning-assets/audio/zombie-book.mp3",
+    "kind": "audio",
+    "sha256": "48ac63b4c82904b129ab8d1232c4d710f2bb7975b55c34bb64a6bd3ed1a1d116",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "bread",
+    "path": "/learning-assets/audio/zombie-bread.mp3",
+    "kind": "audio",
+    "sha256": "007e58c99879d445a9150d1547e5f9986bfb4dc080a483df054eaa444b741b4e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "brown",
+    "path": "/learning-assets/audio/zombie-brown.mp3",
+    "kind": "audio",
+    "sha256": "96608e6668ef9401e5a208ec60f8ef40079ceab654fc200ca4bb07177e9d14e5",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cake",
+    "path": "/learning-assets/audio/zombie-cake.mp3",
+    "kind": "audio",
+    "sha256": "efc234810717d7401e7c23b59b2ac22a64980c079eab8023600b12a8f885f8bc",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candle",
+    "path": "/learning-assets/audio/zombie-candle.mp3",
+    "kind": "audio",
+    "sha256": "1ec572635734434625021a0f9b423bef741aa6180a8e57c5259f4164acfee2b2",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "candy",
+    "path": "/learning-assets/audio/zombie-candy.mp3",
+    "kind": "audio",
+    "sha256": "87961ee8f77033b236cf8840b4dfeab0f89ea5e219c87499239439579c9f10b3",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cat",
+    "path": "/learning-assets/audio/zombie-cat.mp3",
+    "kind": "audio",
+    "sha256": "7542630602af9427a6e8c076aba9c8e4ab3aa45849fc0463e9daea0f7552e301",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ceiling",
+    "path": "/learning-assets/audio/zombie-ceiling.mp3",
+    "kind": "audio",
+    "sha256": "64e264569ed46be63dc096175c9a17f360b24d2b8b33ccb21a7639ed1606fd47",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chair",
+    "path": "/learning-assets/audio/zombie-chair.mp3",
+    "kind": "audio",
+    "sha256": "9239bceb60f0564df1cecd5bf93508703e1888fc2fe50f5e9a731026c7b045af",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "chicken",
+    "path": "/learning-assets/audio/zombie-chicken.mp3",
+    "kind": "audio",
+    "sha256": "f679d105386dc7e53623305098f213a242b7b923ba58e9a322da461a45cb1195",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clock",
+    "path": "/learning-assets/audio/zombie-clock.mp3",
+    "kind": "audio",
+    "sha256": "21d21b51b440623b9a81fbed5347bdea338887672a52d4ad2ac24cf29fe50852",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "clothes",
+    "path": "/learning-assets/audio/zombie-clothes.mp3",
+    "kind": "audio",
+    "sha256": "abd2e1fdc084c23756ed2d5431ff0ba4640bf828fde946b7ffd9ea3294524a85",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "computer",
+    "path": "/learning-assets/audio/zombie-computer.mp3",
+    "kind": "audio",
+    "sha256": "3b2fb633838cae83313ffda3e46c1ef630ab6a9850016c72985a6643029e6214",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cow",
+    "path": "/learning-assets/audio/zombie-cow.mp3",
+    "kind": "audio",
+    "sha256": "36fc71e6b01f60b252478bc3ccadfb0dd305b376a225e425371c764198f3999b",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "cup",
+    "path": "/learning-assets/audio/zombie-cup.mp3",
+    "kind": "audio",
+    "sha256": "eaf0f4ccd4a52f518c687dd4f4759f084e13f13fb84c788cd7cd346cf786c9a6",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "desk",
+    "path": "/learning-assets/audio/zombie-desk.mp3",
+    "kind": "audio",
+    "sha256": "cf03840060f53b48282929bfdcb73080616ca9f201e90b5a8da0009f58ad7b0e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "dog",
+    "path": "/learning-assets/audio/zombie-dog.mp3",
+    "kind": "audio",
+    "sha256": "db7c3d356932e8fd936aa910c2593a959164235a39bcb423b2de0ff5bfa5947d",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "doll",
+    "path": "/learning-assets/audio/zombie-doll.mp3",
+    "kind": "audio",
+    "sha256": "55670ab6008b45da7acd5c129d94cf8d171a109ac1c2411dd3e8c9dfc479805a",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "door",
+    "path": "/learning-assets/audio/zombie-door.mp3",
+    "kind": "audio",
+    "sha256": "295ef6ea7eb2dd376ad0c097b4bc759352f0cd530cce0f500a98ad6cbd90da2e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "duck",
+    "path": "/learning-assets/audio/zombie-duck.mp3",
+    "kind": "audio",
+    "sha256": "9ec172b3bb3a8f41f076ae0b75ad9f66eb9fd2e5934a70af90a8bc9029b00330",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "earth",
+    "path": "/learning-assets/audio/zombie-earth.mp3",
+    "kind": "audio",
+    "sha256": "35e3302ea5656d107b25369a588a61fd2b09821eb400cfd82490c63a89949e60",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "elephant",
+    "path": "/learning-assets/audio/zombie-elephant.mp3",
+    "kind": "audio",
+    "sha256": "2b797ea8adeea6f8f41cdccea72b76ca7f6a204f514a6e1d27ca6c36c4de9a87",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "eraser",
+    "path": "/learning-assets/audio/zombie-eraser.mp3",
+    "kind": "audio",
+    "sha256": "3ad499486307fe0806991240002bde162786cc83c45da383d04837b82fd58929",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fire",
+    "path": "/learning-assets/audio/zombie-fire.mp3",
+    "kind": "audio",
+    "sha256": "05bdfc2416470e05fb056dd2f56a0b8df4bc3c0644bd0caa443c40a575827e19",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "fish",
+    "path": "/learning-assets/audio/zombie-fish.mp3",
+    "kind": "audio",
+    "sha256": "1c4d950c3f35afba90e190073f11513512371829fa33a3d0b03f45ce7f7132cd",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "floor",
+    "path": "/learning-assets/audio/zombie-floor.mp3",
+    "kind": "audio",
+    "sha256": "4399dddcefde8ae958284ab6415cbee626c1d77cc489cb648cad1a1d06aecb30",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "forehead",
+    "path": "/learning-assets/audio/zombie-forehead.mp3",
+    "kind": "audio",
+    "sha256": "d5ef53746a526414afe82c6357050e47c20e96917fd884d4293c8bc6de0d293e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "gift",
+    "path": "/learning-assets/audio/zombie-gift.mp3",
+    "kind": "audio",
+    "sha256": "a6503b454ba0499ebc58eddde15308c4831c31f20f071a3ffa968fa24c003c2e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glass",
+    "path": "/learning-assets/audio/zombie-glass.mp3",
+    "kind": "audio",
+    "sha256": "a87ec938faca371c9f5784c3942b47edd7a59061ef98423b926bababc98f3e8e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "glue",
+    "path": "/learning-assets/audio/zombie-glue.mp3",
+    "kind": "audio",
+    "sha256": "145d08d4210c2f3fa970a40ecf609b90355064dad78f50cedcd27e8d14b770ce",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "green",
+    "path": "/learning-assets/audio/zombie-green.mp3",
+    "kind": "audio",
+    "sha256": "f203d8fc6cdade67138a034b579171439e03be032fd54fe7f882a7034643a3f5",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "hand",
+    "path": "/learning-assets/audio/zombie-hand.mp3",
+    "kind": "audio",
+    "sha256": "81015990b534dd6d70945abe91654e92fa1d2c4f4b63b4995491f7ab85ec82bc",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "head",
+    "path": "/learning-assets/audio/zombie-head.mp3",
+    "kind": "audio",
+    "sha256": "9f6eef32ddc05019582b92f9a92e8d74a48d58d4265dd108f0e7b47b53101ae5",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "home",
+    "path": "/learning-assets/audio/zombie-home.mp3",
+    "kind": "audio",
+    "sha256": "c3470e625cc53d7c3b9ee97cf2bb9099ea027c1376538d66e6880a805c49894a",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "horse",
+    "path": "/learning-assets/audio/zombie-horse.mp3",
+    "kind": "audio",
+    "sha256": "606504f8813e2abfb6a45cb9aca7d5f3955f0dca033b196bb271ce1aab4c211b",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "juice",
+    "path": "/learning-assets/audio/zombie-juice.mp3",
+    "kind": "audio",
+    "sha256": "fb637b89a2881fe731614b82dcca19c12be7a670dd7ab26a602ee1f3d128dc6d",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "kite",
+    "path": "/learning-assets/audio/zombie-kite.mp3",
+    "kind": "audio",
+    "sha256": "9af3f04f6cb14e301fc6c5c0e047cd2889ecc3ac3340bb7130e6e31b51bc04d9",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "leg",
+    "path": "/learning-assets/audio/zombie-leg.mp3",
+    "kind": "audio",
+    "sha256": "09415afef2c8efd5ec45adad8938ce5f166887706cf19e3b7ed436307e30884d",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "lion",
+    "path": "/learning-assets/audio/zombie-lion.mp3",
+    "kind": "audio",
+    "sha256": "188d9bcd443a7e387c8578abb7e7da7581b79ec35eb009714d6aeb46d4f12ce0",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "moon",
+    "path": "/learning-assets/audio/zombie-moon.mp3",
+    "kind": "audio",
+    "sha256": "a756910def45f008555812e10d3b2271b7dddaaa1a2e3fd52fe6d5a535162f8e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "notebook",
+    "path": "/learning-assets/audio/zombie-notebook.mp3",
+    "kind": "audio",
+    "sha256": "3e45fbb1e452ddc027c840d53f03872779cc971e50283c7b45e8a10ca837aab6",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "palm",
+    "path": "/learning-assets/audio/zombie-palm.mp3",
+    "kind": "audio",
+    "sha256": "b1db185b63aa86926d1ff22e0d6eeb8d4f44f461c5448eff5da568b76fbb0b33",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "panda",
+    "path": "/learning-assets/audio/zombie-panda.mp3",
+    "kind": "audio",
+    "sha256": "f4a8901cc948ea0de3e189c3c63d37e1e158def13cfe07de0924318c25fe922a",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "paper",
+    "path": "/learning-assets/audio/zombie-paper.mp3",
+    "kind": "audio",
+    "sha256": "02d1adf921ffeda84fa9cecea3cb5268936c404c2058e453745f64b9f959dd97",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pen",
+    "path": "/learning-assets/audio/zombie-pen.mp3",
+    "kind": "audio",
+    "sha256": "c3a19a0cbae6240a875f9e9aa8b743a46e0acb847d5ea28f6234c931ac195e94",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pencil",
+    "path": "/learning-assets/audio/zombie-pencil.mp3",
+    "kind": "audio",
+    "sha256": "fafb3aaf8b803c7de03cb03f0bc7da4be056ea0b335cf3d4ca848e14dd021780",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "pink",
+    "path": "/learning-assets/audio/zombie-pink.mp3",
+    "kind": "audio",
+    "sha256": "ca054bc6a366ba83615996efd59302cb7c44ef4a5ea4f76adb1ceb464d23a4a1",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rabbit",
+    "path": "/learning-assets/audio/zombie-rabbit.mp3",
+    "kind": "audio",
+    "sha256": "326258f754661103114e83962753b3bc23badaf60927a70252ec509c281b38ec",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "rain",
+    "path": "/learning-assets/audio/zombie-rain.mp3",
+    "kind": "audio",
+    "sha256": "18ceb6501bf190dd66f76ac24282d8c70b3027a5d6fed12f9628e1f62efb4cb4",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "red",
+    "path": "/learning-assets/audio/zombie-red.mp3",
+    "kind": "audio",
+    "sha256": "a01014c220b77754aa0500a3df62e85b8d249d253e76b19349b408e2c4b50ade",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "ruler",
+    "path": "/learning-assets/audio/zombie-ruler.mp3",
+    "kind": "audio",
+    "sha256": "5826610fa4d7fab513b04d8c8e7cc02fcab00782347ac4e6ee9c0a6307f5c623",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "scissors",
+    "path": "/learning-assets/audio/zombie-scissors.mp3",
+    "kind": "audio",
+    "sha256": "c619700a1a0fe0d5f699a8a94c318984500b40027c9577461fdded88ac3c039e",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sea",
+    "path": "/learning-assets/audio/zombie-sea.mp3",
+    "kind": "audio",
+    "sha256": "bb7e553fbc65165f7cce011709b4caa91a4f8e665d64d398520685569f394e63",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "season",
+    "path": "/learning-assets/audio/zombie-season.mp3",
+    "kind": "audio",
+    "sha256": "c7b5bc3a8f953a9f8ee017c9128aabf0861e87d7b44c97dfa2caa350984e62e1",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sharpener",
+    "path": "/learning-assets/audio/zombie-sharpener.mp3",
+    "kind": "audio",
+    "sha256": "1ac2fd8871750bb44f56f1000733652e3b70e207a18e3dbbe12bf905f6d3d026",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sheep",
+    "path": "/learning-assets/audio/zombie-sheep.mp3",
+    "kind": "audio",
+    "sha256": "34aa96deca201aed4688ef92d073c7acb6b30147b74dad5ec02865834b995394",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "snow",
+    "path": "/learning-assets/audio/zombie-snow.mp3",
+    "kind": "audio",
+    "sha256": "4b71a114808e742d038ea6fbbe17e6d78965f8d134c42502c808b470cfe460c6",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "star",
+    "path": "/learning-assets/audio/zombie-star.mp3",
+    "kind": "audio",
+    "sha256": "07b4447e15c492ea7ee42e8a64981e5b62848e8d4388377412c0a421d225a427",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "sun",
+    "path": "/learning-assets/audio/zombie-sun.mp3",
+    "kind": "audio",
+    "sha256": "5b8213a51339041c8d31dbe4e43b5505d1051fc8f6901939ce73837d75e9c9a3",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tape",
+    "path": "/learning-assets/audio/zombie-tape.mp3",
+    "kind": "audio",
+    "sha256": "1b9ccea6e84b68b40443745250a23f66dfa15d89dc0f0ce430b17bb54b8d2df4",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "tiger",
+    "path": "/learning-assets/audio/zombie-tiger.mp3",
+    "kind": "audio",
+    "sha256": "d016ab5387d8297602d6031d7a13e31298ebeacc501c9b29879ab974c7d05152",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "towel",
+    "path": "/learning-assets/audio/zombie-towel.mp3",
+    "kind": "audio",
+    "sha256": "6cd046a81331657e7871607b19dd48daee4291871b2b35a22518dd2cbcc4f3e1",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "toy",
+    "path": "/learning-assets/audio/zombie-toy.mp3",
+    "kind": "audio",
+    "sha256": "94e02dbce47a040a515058a5db2c20dbbff64a97a34874d2d4efa904936c18ff",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wall",
+    "path": "/learning-assets/audio/zombie-wall.mp3",
+    "kind": "audio",
+    "sha256": "cd9221859af6895f5bbcee81a17ab944d6892a78f4f0e303a6481da883010a52",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "weather",
+    "path": "/learning-assets/audio/zombie-weather.mp3",
+    "kind": "audio",
+    "sha256": "c4de8303cd747085cf2a9272ab7de725c4b09688bc101cd26693fffe459701ad",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "white",
+    "path": "/learning-assets/audio/zombie-white.mp3",
+    "kind": "audio",
+    "sha256": "24c9042a2cc0bfd019190d21455c8d45ded6b8ecb7ceea7fb3959e8750b20c7b",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "wind",
+    "path": "/learning-assets/audio/zombie-wind.mp3",
+    "kind": "audio",
+    "sha256": "8837059d08018472f9cb5941b1a2cc22dab27874ccc857ce908cd6f327fc50df",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
+    "wordId": "window",
+    "path": "/learning-assets/audio/zombie-window.mp3",
+    "kind": "audio",
+    "sha256": "8ab3347ae10718a8e2e35152f4ac1d92ecbdd6b68feaf0fc9e94c5b451f5ed1c",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "reviewStatus": "pending"
+  },
+  {
     "wordId": "yellow",
     "path": "/learning-assets/audio/zombie-yellow.mp3",
     "kind": "audio",
-    "sha256": "40d257d7d45bd73b2f45de97c5c2f667a76cedaf73bea55de78a5ae90a1bceee",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; lowered pitch/tremolo/echo",
+    "sha256": "9b7db0468e0e8405d319399e7654a87a4189beaf416c88439f940a655759fdda",
+    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
     "reviewStatus": "pending"
   }
 ]

@@ -1,5 +1,5 @@
 import { LEVEL_ASSETS } from './level-assets-manifest';
-import { EXTRA_IMAGE_ASSETS, EXTRA_AUDIO_ASSETS, LEARNING_VOICE_ASSETS } from './fruit-catalog';
+import { BATTLE_WORDS, EXTRA_IMAGE_ASSETS, EXTRA_AUDIO_ASSETS, LEARNING_VOICE_ASSETS } from './fruit-catalog';
 import { CONTENT_ASSETS } from '../content/assets';
 import { WORDS } from '../content/words';
 import type { FortressWord, MonsterVisual, VisualAsset } from './types';
@@ -15,8 +15,13 @@ export const MONSTER_ASSETS: readonly VisualAsset[] = Object.freeze(FORTRESS_WOR
     rights: `${vector ? 'gem；原 SVG 分离角色并转 PNG' : 'CazBee；原始 PNG 未修改'}；CC0 1.0；https://creativecommons.org/publicdomain/zero/1.0/`,
     reviewStatus: 'approved' as const });
 }));
-export const ZOMBIE_VOICE_ASSETS: readonly VisualAsset[] = Object.freeze(CONTENT_ASSETS.filter(asset => asset.kind === 'audio').map(asset => Object.freeze({ ...asset, path: `/assets/audio/zombie-${asset.wordId}.mp3`, rights: `${asset.rights}；派生僵尸声线：降低音高、轻微放慢、喉音颤动、软饱和及短混响，沿用原许可`, reviewStatus: 'pending' as const })));
-export const FORTRESS_ASSETS: readonly VisualAsset[] = Object.freeze([...CONTENT_ASSETS, ...MONSTER_ASSETS, ...ZOMBIE_VOICE_ASSETS].map(asset => Object.freeze({ ...asset })));
+export const ZOMBIE_VOICE_ASSETS: readonly VisualAsset[] = Object.freeze(BATTLE_WORDS.map(word => Object.freeze({
+  path: `/assets/audio/zombie-${word.id}.mp3`, wordId: word.id, kind: 'audio' as const,
+  source: 'https://huggingface.co/hexgrad/Kokoro-82M',
+  rights: 'Kokoro v1.0 英文合成男声 am_michael；模型 Apache-2.0；响度规范化、播放速率0.8；生成记录见 docs/defeat-voice-manifest.json',
+  reviewStatus: 'pending' as const,
+})));
+export const FORTRESS_ASSETS: readonly VisualAsset[] = Object.freeze([...CONTENT_ASSETS, ...MONSTER_ASSETS, ...ZOMBIE_VOICE_ASSETS.filter(asset => FORTRESS_WORDS.some(word => word.id === asset.wordId))].map(asset => Object.freeze({ ...asset })));
 export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRESS_WORDS.map(word => {
   const vector = word.id === 'banana' || word.id === 'grape';
   const size = vector ? 256 : 32;
@@ -26,4 +31,4 @@ export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRES
 }));
 export function monsterDrawWidth(visual: MonsterVisual): number { return visual.sourceSize.width === 32 ? 112 : 80; }
 
-export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...LEVEL_ASSETS, ...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS, ...LEARNING_VOICE_ASSETS, { path: '/assets/audio/victory-praise.mp3', wordId: 'victory', kind: 'audio', source: 'https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh', rights: 'Kokoro v1.1-zh（Apache-2.0）生成中文鼓励语音；音色zf_001；生成记录见 docs/victory-praise-manifest.json', reviewStatus: 'pending' }]);
+export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...LEVEL_ASSETS, ...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS, ...ZOMBIE_VOICE_ASSETS.filter(asset => !FORTRESS_WORDS.some(word => word.id === asset.wordId)), ...LEARNING_VOICE_ASSETS, { path: '/assets/audio/victory-praise.mp3', wordId: 'victory', kind: 'audio', source: 'https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh', rights: 'Kokoro v1.1-zh（Apache-2.0）生成中文鼓励语音；音色zf_001；生成记录见 docs/victory-praise-manifest.json', reviewStatus: 'pending' }]);

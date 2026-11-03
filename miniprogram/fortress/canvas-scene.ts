@@ -50,11 +50,6 @@ export class CanvasScene {
   private readonly runner: CombatRunner;
   private viewport: Viewport;
   private readonly control: HorizontalControl;
-  private retiringIds = new Set<string>();
-  setRetiringIds(ids: readonly string[]): void {
-    this.retiringIds = new Set(ids);
-    if (!this.disposed && this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
-  }
   private effectTime = 0;
   private coinEffects: { position: Point; amount: number; started: number }[] = [];
   showCoinDrop(position: Point, amount: number): void {
@@ -63,7 +58,6 @@ export class CanvasScene {
     if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.schedule(); }
   }
   private readonly damageNumbers = new DamageNumbers();
-  private deathStarted = new Map<string, number>();
   private images = new Map<string, Image>();
   private cancelLoads: (() => void)[] = [];
   private loadVersion = 0;
@@ -191,7 +185,7 @@ export class CanvasScene {
   }
   private schedule(): void {
     if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
-      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.retiringIds.size && !this.damageNumbers.active && !this.coinEffects.length)) return;
+      || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.damageNumbers.active && !this.coinEffects.length)) return;
     const version = this.frameVersion;
     this.frameId = this.canvas.requestAnimationFrame((now: number) => {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
@@ -248,7 +242,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.deathStarted.clear(); this.retiringIds.clear(); this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
   }
   private draw(state: CombatState): void {
     const c = this.context; const v = this.viewport;
@@ -285,19 +279,9 @@ export class CanvasScene {
         this.sprite(art.weapon, state.player.x - 8, state.player.y - 34, 16, 28);
       }
     }
-    // Ground splashes are painted below living actors and kept until their word finishes.
-    if (art?.fruitHat) for (const monster of state.monsters) {
-      if (monster.hp > 0 || !this.retiringIds.has(monster.id)) continue;
-      if (!this.deathStarted.has(monster.id)) this.deathStarted.set(monster.id, this.effectTime);
-      const age = this.effectTime - this.deathStarted.get(monster.id)!;
-      this.drawDeathSplash(monster.position.x, monster.position.y + 21, monster.id, age);
-    }
     for (const monster of state.monsters) {
-      if (monster.status === 'waiting') continue;
-      if (this.options.art?.fruitHat && monster.hp <= 0 && !this.retiringIds.has(monster.id)) continue;
-      const deathAge = this.effectTime - (this.deathStarted.get(monster.id) ?? this.effectTime);
-      if (art?.fruitHat && monster.hp <= 0 && deathAge >= 240) continue;
-      c.globalAlpha = this.retirement ? this.retirement.opacity : monster.hp <= 0 ? .7 * Math.max(0, 1 - deathAge / 240) : 1;
+      if (monster.status === 'waiting' || monster.hp <= 0) continue;
+      c.globalAlpha = 1;
       const attackPose = baseAttackPose(monster);
       c.save(); c.translate(0, attackPose.lunge * 9);
       if (monster.boss) {
@@ -475,33 +459,6 @@ export class CanvasScene {
     else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 8 : 5, 3, '#d5b461');
     else { oval(0, -1, 3, 2, '#526b59'); line([-5, 4, 5, 5], '#526b59'); }
     line([7, -16, 12, -12], '#4f6a58', 1); line([7, -13, 10, -16], '#4f6a58', 1);
-    c.restore();
-  }
-  private drawDeathSplash(x: number, y: number, id: string, age: number): void {
-    const c = this.context;
-    const seed = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-    const spread = Math.min(1, age / 230);
-    c.save(); c.translate(x, y); c.scale(.35 + spread * .65, .65);
-    c.globalAlpha = .86;
-    c.fillStyle = '#526a36'; c.beginPath();
-    for (let i = 0; i < 32; i++) {
-      const angle = i * Math.PI / 16;
-      const radius = i % 2 ? 12 + (seed + i * 7) % 8 : 22 + (seed + i * 13) % 13;
-      const px = Math.cos(angle) * radius; const py = Math.sin(angle) * radius;
-      if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
-    }
-    c.closePath(); c.fill();
-    c.fillStyle = '#778346'; c.beginPath(); c.ellipse(-3, -1, 15, 11, .2, 0, Math.PI * 2); c.fill();
-    c.fillStyle = '#384d30';
-    for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse((i * 11 + seed) % 22 - 11, (i * 7) % 14 - 7, 3 + i % 2, 2, i, 0, Math.PI * 2); c.fill(); }
-    // Droplets expand outwards, briefly lift, then settle onto the ground.
-    const flight = Math.min(1, age / 430);
-    c.fillStyle = '#5d753b';
-    for (let i = 0; i < 11; i++) {
-      const angle = i * Math.PI * 2 / 11 + seed * .13;
-      const distance = (30 + (seed + i * 7) % 17) * flight;
-      c.beginPath(); c.ellipse(Math.cos(angle) * distance, Math.sin(angle) * distance - Math.sin(flight * Math.PI) * 17, 2 + i % 3, 1.5 + i % 2, angle, 0, Math.PI * 2); c.fill();
-    }
     c.restore();
   }
   private sprite(asset: SpriteAsset, x: number, y: number, width: number, height: number): void {

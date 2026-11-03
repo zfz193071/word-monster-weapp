@@ -41,7 +41,7 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, retiringIds: [] as readonly string[], speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 5, maxHp: 5, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); },
@@ -84,7 +84,7 @@ Component({
           }
           if (this.properties.opening && !instance.audio) {
             instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
-              onChange: view => { if (!instance.alive) return; instance.scene?.setRetiringIds(view.retiringIds); this.setData({ retiringIds: view.retiringIds, speakingWord: view.speakingWord, voiceError: view.error }); },
+              onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
               onDrained: () => { if (instance.alive) this.presentUpgrade(); },
             });
             instance.audio.setVolume(this.properties.musicVolume / 100);
@@ -130,7 +130,7 @@ Component({
             },
             onError: message => { if (valid()) { this.setData({ error: message, ready: false }); this.applyPause(); } },
           });
-          instance.scene = scene; scene.setRetiringIds(instance.audio?.view.retiringIds ?? []); this.applyPause();
+          instance.scene = scene; this.applyPause();
           void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true }); this.applyPause(); this.triggerEvent('sceneready'); } });
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();

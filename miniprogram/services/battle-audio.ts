@@ -6,12 +6,14 @@ import { ALL_BATTLE_WORDS as BATTLE_WORDS, defeatAudioPath } from '../fortress/l
 import type { CombatEvent } from '../fortress/types';
 
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
-type DefeatGroup = { combatId: string; tick: number; wordId: string; monsterIds: string[] };
-export interface BattleAudioView { readonly retiringIds: readonly string[]; readonly speakingWord: string; readonly error: boolean }
+type DefeatWord = { wordId: string; monsterId: string };
+const SETTLE_MS = 300;
+export interface BattleAudioView { readonly speakingWord: string; readonly error: boolean }
 export function createBattleAudio(options: {
   sessionId: string;
   onChange: (view: BattleAudioView) => void;
   onDrained: () => void;
+  now?: () => number;
   audio?: Pick<AudioOptions, 'createContext' | 'schedule' | 'timeoutMs'>;
   createMusicContext?: () => HomeMusicChannel;
   createHitContext?: () => HitChannel;
@@ -23,24 +25,49 @@ export function createBattleAudio(options: {
   let baseHit: HitChannel | undefined;
   let coin: HitChannel | undefined; let lastCoin = -Infinity;
   const heardAttacks = new Set<string>();
-  const queue: DefeatGroup[] = []; const seen = new Set<string>();
+  // A speaking word owns its channel until completion. Only the pending word is replaceable.
+  let current: DefeatWord | undefined; let pending: DefeatWord | undefined;
+  let remaining = 0; let dueAt = 0; let timerRevision = 0; let cancelSettle: (() => void) | undefined;
+  const now = options.now ?? Date.now;
+  const schedule = options.audio?.schedule ?? ((callback, delay) => {
+    const timer = setTimeout(callback, delay); return () => clearTimeout(timer);
+  });
+  const seen = new Set<string>();
+  const busy = () => !!(current || pending);
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
-  const view = (): BattleAudioView => ({ retiringIds: queue.flatMap(group => group.monsterIds),
-    speakingWord: BATTLE_WORDS.find(word => word.id === queue[0]?.wordId)?.text ?? '', error });
+  voice.setPlaybackRate(.8);
+  const view = (): BattleAudioView => ({
+    speakingWord: BATTLE_WORDS.find(word => word.id === (current ?? pending)?.wordId)?.text ?? '', error });
   const publish = () => { if (!disposed) options.onChange(view()); };
-  function mix() { music.setVolume(queue.length ? volume * .2 : volume); }
+  function mix() { music.setVolume(busy() ? volume * .2 : volume); }
+  function cancelTimer() { timerRevision++; cancelSettle?.(); cancelSettle = undefined; }
+  function settle() {
+    cancelTimer();
+    if (disposed || !active || !pending) return;
+    if (remaining <= 0) { speak(); return; }
+    dueAt = now() + remaining;
+    const token = timerRevision;
+    cancelSettle = schedule(() => {
+      if (disposed || !active || token !== timerRevision) return;
+      cancelSettle = undefined; remaining = 0; speak();
+    }, remaining);
+  }
   function speak() {
-    if (disposed || !active || playing || error || !queue.length) return;
-    const entry = queue[0]; const word = BATTLE_WORDS.find(word => word.id === entry.wordId);
+    if (disposed || !active || playing || error) return;
+    if (!current) {
+      if (!pending || remaining > 0) return;
+      current = pending; pending = undefined;
+    }
+    const entry = current; const word = BATTLE_WORDS.find(word => word.id === entry.wordId);
     if (!word) { error = true; publish(); return; }
     playing = true; const token = ++revision; mix(); publish();
-    voice.playReveal(defeatAudioPath(word.id), { sessionId: options.sessionId, roundId: entry.monsterIds[0], revision: token }, success => {
+    voice.playReveal(defeatAudioPath(word.id), { sessionId: options.sessionId, roundId: entry.monsterId, revision: token }, success => {
       if (disposed || !active || token !== revision) return;
       playing = false;
       if (!success) { error = true; publish(); return; }
-      queue.shift(); mix(); publish();
-      if (queue.length) speak(); else options.onDrained();
+      current = undefined; mix(); publish();
+      if (pending) speak(); else options.onDrained();
     });
   }
   function impact() {
@@ -53,7 +80,7 @@ export function createBattleAudio(options: {
         hit.autoplay = false; hit.loop = false; hit.obeyMuteSwitch = true; hit.src = '/assets/audio/battle-hit.mp3';
         hit.onError(() => undefined);
       }
-      hit.volume = queue.length ? .10 : .35;
+      hit.volume = busy() ? .10 : .35;
       hit.stop(); hit.play();
     } catch { /* A missing effect must not stop combat or word playback. */ }
   }
@@ -65,7 +92,7 @@ export function createBattleAudio(options: {
         baseHit.autoplay = false; baseHit.loop = false; baseHit.obeyMuteSwitch = true;
         baseHit.src = '/assets/audio/base-hit.mp3'; baseHit.onError(() => undefined);
       }
-      baseHit.volume = queue.length ? .12 : .4;
+      baseHit.volume = busy() ? .12 : .4;
       baseHit.stop(); baseHit.play();
     } catch { /* Cosmetic effects cannot interrupt combat. */ }
   }
@@ -80,24 +107,23 @@ export function createBattleAudio(options: {
           coin.autoplay = false; coin.loop = false; coin.obeyMuteSwitch = true;
           coin.src = '/assets/audio/coin-collect.mp3'; coin.onError(() => undefined);
         }
-        coin.volume = queue.length ? .08 : .25;
+        coin.volume = busy() ? .08 : .25;
         coin.stop(); coin.play();
       } catch { /* Collection is already saved; cosmetic audio cannot undo it. */ }
     },
     get view() { return view(); },
-    get busy() { return queue.length > 0; },
+    get busy() { return busy(); },
     handle(events: readonly CombatEvent[]) {
       if (disposed) return;
       const local = events.filter(event => event.context.sessionId === options.sessionId);
+      let changed = false;
       for (const event of local) if (event.type === 'monsterDefeated') {
         const key = `${event.context.combatId}:${event.monsterId}`;
         if (!seen.has(key)) {
-          seen.add(key);
-          const group = queue.find(group => group.combatId === event.context.combatId && group.tick === event.tick && group.wordId === event.wordId);
-          if (group) group.monsterIds.push(event.monsterId);
-          else queue.push({ combatId: event.context.combatId, tick: event.tick, wordId: event.wordId, monsterIds: [event.monsterId] });
+          seen.add(key); pending = { wordId: event.wordId, monsterId: event.monsterId }; changed = true;
         }
       }
+      if (changed) { remaining = SETTLE_MS; settle(); }
       if (local.some(event => event.type === 'monsterDamaged')) impact();
       let damaged = false;
       for (const event of local) if (event.type === 'baseDamaged') {
@@ -110,12 +136,15 @@ export function createBattleAudio(options: {
     setActive(value: boolean) {
       if (disposed || value === active) return;
       active = value; music.setActive(value);
-      if (!value) { revision++; playing = false; voice.stop(); try { hit?.stop(); baseHit?.stop(); coin?.stop(); } catch {} }
-      else speak();
+      if (!value) {
+        if (cancelSettle) remaining = Math.max(0, dueAt - now());
+        cancelTimer(); revision++; playing = false; voice.stop();
+        try { hit?.stop(); baseHit?.stop(); coin?.stop(); } catch {}
+      } else { settle(); speak(); }
     },
     setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
     retry() { if (!disposed && active && error) { error = false; speak(); } },
-    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); queue.length = 0;
+    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); cancelTimer(); current = pending = undefined; seen.clear();
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
       try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
       try { coin?.stop(); } catch {} try { coin?.destroy(); } catch {} coin = undefined;

@@ -65,3 +65,20 @@ test('各关词汇的图片、标准读音、退场读音和封面均为非空�
  for(const f of files)if(f.isFile())total+=(await stat(`${f.parentPath}/${f.name}`)).size;
  assert.ok(total<2*1024*1024,`subpackage ${total}`);
 });
+
+test('全部击杀词音与男声生成清单一致，听词音频独立，来源只登记一次',async()=>{
+ const {readFile}=await import('node:fs/promises');const {createHash}=await import('node:crypto');
+ const {defeatAudioPath}=await import('../miniprogram/fortress/levels');
+ const {BATTLE_ASSETS}=await import('../miniprogram/fortress/content');
+ const manifest=JSON.parse(await readFile(new URL('../docs/defeat-voice-manifest.json',import.meta.url),'utf8'));
+ const words=LEVELS.flatMap(level=>level.words);
+ assert.equal(manifest.files.length,words.length);assert.equal(manifest.gender,'male');assert.equal(manifest.playbackRate,.8);
+ for(const word of words){
+  const path=defeatAudioPath(word.id);const records=manifest.files.filter((r:any)=>r.path===path);
+  assert.equal(records.length,1,path);assert.equal(records[0].wordId,word.id);assert.notEqual(word.audioPath,path);
+  const data=await readFile(new URL('../miniprogram'+path,import.meta.url));
+  assert.equal(createHash('sha256').update(data).digest('hex'),records[0].sha256,path);
+  const assets=BATTLE_ASSETS.filter(asset=>asset.path===path);assert.equal(assets.length,1,path);
+  assert.equal(assets[0].source,manifest.modelSource);assert.match(assets[0].rights,/am_michael/);
+ }
+});

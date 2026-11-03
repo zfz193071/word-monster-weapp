@@ -23,8 +23,8 @@ export const EXTRA_AUDIO_ASSETS: readonly VisualAsset[] = EXTRA_FRUITS.flatMap(w
   const author = word.id === 'kiwi' ? 'Commander Keane' : 'Dvortygirl';
   const license = word.id === 'kiwi' ? '4.0' : '3.0';
   const source = `https://commons.wikimedia.org/wiki/File:En-${word.id === 'kiwi' ? 'au' : 'us'}-${word.id}.ogg`;
-  return ['', 'zombie-'].map(prefix => ({ path: `/assets/audio/${prefix}${word.id}.mp3`, wordId: word.id, kind: 'audio' as const, source,
-    rights: `${author}；CC BY-SA ${license}；${prefix ? '降低音高、减速、喉音颤动、软饱和与短混响' : 'OGG转MP3，保留原始词音'}；https://creativecommons.org/licenses/by-sa/${license}/`, reviewStatus: 'pending' as const }));
+  return [{ path: `/assets/audio/${word.id}.mp3`, wordId: word.id, kind: 'audio' as const, source,
+    rights: `${author}；CC BY-SA ${license}；OGG转MP3，保留原始词音；https://creativecommons.org/licenses/by-sa/${license}/`, reviewStatus: 'pending' as const }];
 });
 
 export const LEARNING_VOICE_ASSETS: readonly VisualAsset[] = BATTLE_WORDS.map(word => ({

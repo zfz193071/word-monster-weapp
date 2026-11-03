@@ -3,58 +3,88 @@ import { test } from 'node:test';
 import { createBattleAudio } from '../miniprogram/services/battle-audio';
 import type { CombatEvent } from '../miniprogram/fortress/types';
 class Channel {
-  src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;plays=0;destroyed=false;
+  src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;playbackRate=1;plays=0;stops=0;destroyed=false;
   handlers=new Map<string,Function>();
   onEnded=(f:Function)=>{this.handlers.set('ended',f);};offEnded=()=>{this.handlers.delete('ended');};
   onError=(f:Function)=>{this.handlers.set('error',f);};offError=()=>{this.handlers.delete('error');};
   onPlay=(f:Function)=>{this.handlers.set('play',f);};offPlay=()=>{this.handlers.delete('play');};
   onPause=(f:Function)=>{this.handlers.set('pause',f);};offPause=()=>{this.handlers.delete('pause');};
   onStop=(f:Function)=>{this.handlers.set('stop',f);};offStop=()=>{this.handlers.delete('stop');};
-  play(){this.plays++;this.handlers.get('play')?.();}pause(){this.handlers.get('pause')?.();}stop(){this.handlers.get('stop')?.();}destroy(){this.destroyed=true;}
+  play(){this.plays++;this.handlers.get('play')?.();}pause(){this.handlers.get('pause')?.();}stop(){this.stops++;this.handlers.get('stop')?.();}destroy(){this.destroyed=true;}
 }
 const context={sessionId:'audio-run',combatId:'wave1',waveId:'wave1',generation:0};
 const defeat=(id:string,wordId='apple'):CombatEvent=>({type:'monsterDefeated',context,tick:1,monsterId:id,wordId});
 function setup(){
-  const voices:Channel[]=[];const music=new Channel();const hit=new Channel();let drained=0;
-  const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){drained++;},
-    audio:{createContext(){const c=new Channel();voices.push(c);return c;},schedule(){return()=>{};}},createMusicContext:()=>music,createHitContext:()=>hit});
+  const voices:Channel[]=[];const music=new Channel();const hit=new Channel();let drained=0;let time=0;
+  const timers=new Map<number,{at:number;run:()=>void}>();let next=0;const callbacks:(()=>void)[]=[];
+  const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){drained++;},now:()=>time,
+    audio:{createContext(){const c=new Channel();voices.push(c);return c;},schedule(run,delay){
+      const id=++next;timers.set(id,{at:time+delay,run});callbacks.push(run);return()=>{timers.delete(id);};
+    }},createMusicContext:()=>music,createHitContext:()=>hit});
   controller.setActive(true);
-  return{controller,voices,music,hit,get drained(){return drained;}};
+  return{controller,voices,music,hit,callbacks,timers,get drained(){return drained;},advance(ms:number){
+    const end=time+ms;
+    while(true){const due=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];
+      if(!due)break;time=due[1].at;timers.delete(due[0]);due[1].run();
+    }time=end;
+  },end(){voices.at(-1)!.handlers.get('ended')!();}};
 }
-test('多只击败依次读完才消失，重复事件不重播；背景音乐静音不影响发音',()=>{
- const h=setup();h.controller.setVolume(.6);h.controller.handle([defeat('a'),defeat('b','banana'),defeat('a')]);
- assert.deepEqual(h.controller.view.retiringIds,['a','b']);assert.equal(h.voices.length,1);assert.equal(h.music.volume,.12);
+test('最后击杀后等满300ms，同帧取最后一词；重复事件不重置，播报按0.8倍速',()=>{
+ const h=setup();h.controller.setVolume(.6);h.controller.handle([defeat('a'),defeat('b','banana')]);
+ assert.equal(h.controller.busy,true);assert.equal(h.voices.length,0);assert.equal(h.music.volume,.12);
+ h.advance(150);h.controller.handle([defeat('b','banana'),{...defeat('foreign'),context:{...context,sessionId:'other'}}]);
+ h.advance(149);assert.equal(h.voices.length,0);h.advance(1);assert.equal(h.voices.length,1);
+ assert.equal(h.voices[0].src,'/assets/audio/zombie-banana.mp3');assert.equal(h.voices[0].playbackRate,.8);
  h.controller.setVolume(0);assert.equal(h.music.volume,0);assert.equal(h.voices[0].plays,1);
- h.voices[0].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['b']);assert.equal(h.drained,0);
- assert.equal(h.voices[1].src,'/assets/audio/zombie-banana.mp3');h.voices[1].handlers.get('ended')!();assert.equal(h.drained,1);assert.equal(h.controller.busy,false);
- h.controller.handle([defeat('a')]);assert.equal(h.voices.length,2);h.controller.dispose();assert.equal(h.music.destroyed,true);
+ h.end();assert.equal(h.drained,1);assert.equal(h.controller.busy,false);
+ h.controller.handle([defeat('a')]);h.advance(300);assert.equal(h.voices.length,1);h.controller.dispose();
 });
-test('暂停停止声音但保留退场队列，恢复重读；旧回调及销毁后事件无效',()=>{
- const h=setup();h.controller.handle([defeat('a')]);const stale=h.voices[0].handlers.get('ended')!;
- h.controller.setActive(false);stale();assert.equal(h.controller.busy,true);assert.equal(h.drained,0);
- h.controller.setActive(true);assert.equal(h.voices.length,2);stale();assert.equal(h.controller.busy,true);
- h.controller.dispose();h.voices[1].handlers.get('ended')?.();h.controller.handle([defeat('b')]);assert.equal(h.voices.length,2);assert.equal(h.drained,0);
+test('连续击杀重计300ms，失效定时器不能提前播放',()=>{
+ const h=setup();h.controller.handle([defeat('a')]);const stale=h.callbacks[0];h.advance(200);
+ h.controller.handle([defeat('b','banana')]);stale();h.advance(299);assert.equal(h.voices.length,0);
+ h.advance(1);assert.equal(h.voices[0].src,'/assets/audio/zombie-banana.mp3');h.end();assert.equal(h.drained,1);h.controller.dispose();
 });
-test('发音失败保留怪物、重试后才允许升级，命中只触发效果通道',()=>{
- const h=setup();h.controller.handle([{type:'monsterDamaged',context,tick:1,monsterId:'a',hp:7}]);assert.equal(h.hit.plays,1);assert.equal(h.voices.length,0);
- h.controller.handle([defeat('a')]);h.voices[0].handlers.get('error')!({errCode:1,errMsg:'error'});
+test('当前单词完整读完，期间只保留最新待播词；两个词读完才放行升级或下一波',()=>{
+ const h=setup();h.controller.handle([defeat('a')]);h.advance(300);const first=h.voices[0];
+ h.controller.handle([defeat('b','banana')]);h.advance(300);
+ h.controller.handle([defeat('c','orange'),defeat('d','pear')]);h.advance(300);
+ assert.equal(h.voices.length,1);assert.equal(first.stops,0);assert.equal(first.destroyed,false);
+ assert.equal(h.controller.view.speakingWord,'apple');assert.equal(h.drained,0);
+ h.end();assert.equal(h.voices.length,2);assert.equal(h.voices[1].src,'/assets/audio/zombie-pear.mp3');
+ assert.equal(h.controller.busy,true);assert.equal(h.drained,0);h.end();assert.equal(h.drained,1);
+ assert.equal(h.controller.busy,false);assert.equal(h.music.volume,.22);h.controller.dispose();
+});
+test('当前词结束时最新击杀尚不足300ms，继续等待余下时间再播',()=>{
+ const h=setup();h.controller.handle([defeat('a')]);h.advance(300);
+ h.controller.handle([defeat('b','banana')]);h.advance(100);h.end();
+ assert.equal(h.controller.busy,true);assert.equal(h.drained,0);assert.equal(h.voices.length,1);
+ h.advance(199);assert.equal(h.voices.length,1);h.advance(1);assert.equal(h.voices.length,2);
+ h.end();assert.equal(h.drained,1);h.controller.dispose();
+});
+test('暂停冻结待播倒计时，恢复重读当前词；旧回调和销毁后回调无效',()=>{
+ const h=setup();h.controller.handle([defeat('a')]);h.advance(300);const oldEnd=h.voices[0].handlers.get('ended')!;
+ h.controller.handle([defeat('b','banana')]);h.advance(100);const oldTimer=h.callbacks.at(-1)!;
+ h.controller.setActive(false);oldEnd();oldTimer();h.advance(1000);assert.equal(h.drained,0);
+ h.controller.setActive(true);assert.equal(h.voices.length,2);oldEnd();assert.equal(h.drained,0);
+ h.end();h.advance(199);assert.equal(h.voices.length,2);h.advance(1);assert.equal(h.voices.length,3);
+ const finalEnd=h.voices[2].handlers.get('ended')!;h.controller.dispose();finalEnd();
+ h.callbacks.forEach(run=>run());h.controller.handle([defeat('c')]);assert.equal(h.voices.length,3);assert.equal(h.drained,0);
+ assert.equal(h.timers.size,0);assert.equal(h.music.destroyed,true);
+});
+test('发音失败可重试，保留当前词和最新待播词，不能提前放行',()=>{
+ const h=setup();h.controller.handle([{type:'monsterDamaged',context,tick:1,monsterId:'a',hp:7}]);assert.equal(h.hit.plays,1);
+ h.controller.handle([defeat('a')]);h.advance(300);h.voices[0].handlers.get('error')!({errCode:1,errMsg:'error'});
+ h.controller.handle([defeat('b','banana'),defeat('c','orange')]);h.advance(300);
  assert.equal(h.controller.view.error,true);assert.equal(h.controller.busy,true);assert.equal(h.drained,0);
- h.controller.retry();assert.equal(h.voices.length,2);h.voices[1].handlers.get('ended')!();assert.equal(h.drained,1);assert.equal(h.music.volume,.22);h.controller.dispose();assert.equal(h.hit.destroyed,true);
+ h.controller.retry();assert.equal(h.voices[1].src,'/assets/audio/zombie-apple.mp3');h.end();
+ assert.equal(h.voices[2].src,'/assets/audio/zombie-orange.mp3');assert.equal(h.drained,0);
+ h.end();assert.equal(h.drained,1);h.controller.dispose();assert.equal(h.hit.destroyed,true);
 });
-
-test('同一更新同种水果合并读一次，一起退场；不同更新或水果独立排队',()=>{
- const h=setup();h.controller.handle([defeat('a'),defeat('b'),defeat('c','banana'),{...defeat('d'),tick:2}]);
- assert.deepEqual(h.controller.view.retiringIds,['a','b','c','d']);assert.equal(h.voices.length,1);
- h.voices[0].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['c','d']);assert.equal(h.voices[1].src,'/assets/audio/zombie-banana.mp3');
- h.voices[1].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['d']);assert.equal(h.voices[2].src,'/assets/audio/zombie-apple.mp3');
- h.voices[2].handlers.get('ended')!();assert.equal(h.drained,1);assert.equal(h.controller.busy,false);h.controller.dispose();
-});
-test('合并组失败重试和暂停恢复仍保留全部怪物，跨波不合并',()=>{
- const h=setup();h.controller.handle([defeat('a'),defeat('b'),{...defeat('c'),context:{...context,combatId:'wave2'}}]);
- h.voices[0].handlers.get('error')!({errCode:1,errMsg:'error'});assert.deepEqual(h.controller.view.retiringIds,['a','b','c']);
- h.controller.retry();h.controller.setActive(false);h.controller.setActive(true);
- h.voices[h.voices.length-1].handlers.get('ended')!();assert.deepEqual(h.controller.view.retiringIds,['c']);
- h.voices[h.voices.length-1].handlers.get('ended')!();assert.equal(h.drained,1);h.controller.dispose();
+test('超时不丢词；跨波相同怪物编号不被错误去重',()=>{
+ const h=setup();h.controller.handle([defeat('a')]);h.advance(15300);assert.equal(h.controller.view.error,true);
+ h.controller.retry();h.end();assert.equal(h.drained,1);
+ h.controller.handle([{...defeat('a','dog'),context:{...context,combatId:'wave2'}}]);h.advance(300);
+ assert.equal(h.voices.at(-1)!.src,'/learning-assets/audio/zombie-dog.mp3');h.end();assert.equal(h.drained,2);h.controller.dispose();
 });
 
 test('堡垒受击使用独立音效，重复攻击不重播，暂停不补播，销毁释放',()=>{
