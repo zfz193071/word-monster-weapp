@@ -2,7 +2,7 @@
   "name": "word-monster-weapp",
   "version": "0.1.0",
   "private": true,
-  "description": "单词怪物原生微信小程序",
+  "description": "单词小卫士：听音识词与堡垒闯关微信小程序",
   "engines": {
     "node": ">=22"
   },

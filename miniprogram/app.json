@@ -4,7 +4,7 @@
     "pages/battle/battle"
   ],
   "window": {
-    "navigationBarTitleText": "单词怪物",
+    "navigationBarTitleText": "单词小卫士",
     "navigationBarBackgroundColor": "#fff8ec",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#fff8ec"
