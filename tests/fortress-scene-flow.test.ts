@@ -66,13 +66,15 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   };
   for(const [name,method]of Object.entries(definition.methods))host[name]=(method as Function).bind(host);
   definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();
+  assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');
+  assert.match(readFileSync(new URL('../miniprogram/components/fortress-scene/fortress-scene.wxml',import.meta.url),'utf8'),/class="battle-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
   let picked=0;let repairs=0;
   for(let wave=0;wave<19;wave++){
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,3+wave*2);
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(wave===18){const before=current!.snapshot;host.data.level=20;current!.snapshot={...before,status:'fighting'};host.advanceWave();assert.equal(host.data.completed,false,'20级但最后一波仍有活怪时不能显示胜利');current!.snapshot=before;host.data.level=19;}
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
-    current!.clear();assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
+    current!.clear();assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
       const before=voiceEnds.length;advanceAudio(300);assert.equal(voiceEnds.length,before,'新击杀不能打断当前词');

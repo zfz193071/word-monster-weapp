@@ -8,14 +8,13 @@
       <view class="weapon-stage {{previewLevel === maxWeaponLevel ? 'weapon-stage-ultimate' : ''}}" style="background:radial-gradient(ellipse, {{glowColor}}99, transparent 70%)"><image class="weapon-image {{previewLevel === maxWeaponLevel ? 'weapon-image-ultimate' : ''}}" src="{{weapon.image}}" mode="aspectFit" /></view>
       <button class="weapon-nav" disabled="{{previewLevel >= maxWeaponLevel}}" bindtap="nextWeapon" aria-label="查看下一级武器">›</button>
     </view>
-    <view class="weapon-damage">单发伤害 {{weapon.damage}}</view>
-    <view class="weapon-balance"><text class="coin">●</text> {{balance}}</view>
+    <view class="weapon-damage"><text class="weapon-damage-label">单发伤害</text><text class="weapon-damage-value">{{weapon.damage}}</text></view>
     <view wx:if="{{!isCurrentWeapon}}" class="weapon-preview-note">预览武器 · 当前装备 Lv.{{currentLevel}}</view>
     <view wx:elif="{{error}}" class="weapon-error">{{error}}<button class="weapon-retry" bindtap="retry">重试</button></view>
     <button wx:else class="weapon-upgrade {{holding ? 'holding' : ''}}" disabled="{{!affordable}}" catchtouchstart="startHold" catchtouchend="endHold" catchtouchcancel="stopHold" aria-label="{{weapon.nextCost === null ? '已满级' : '长按升级，消耗' + weapon.nextCost + '金币'}}">
       <view class="hold-progress" style="width:{{progress}}%"></view>
       <view class="upgrade-label"><block wx:if="{{weapon.nextCost !== null}}"><text>{{weapon.nextCost}}</text><text class="coin">●</text></block><text wx:else>已满级</text></view>
     </button>
-    <view class="weapon-hint">{{!isCurrentWeapon ? '左右切换仅预览，不会购买' : error ? '请确认记录后再升级' : weapon.nextCost === null ? '最高等级已达成' : !affordable ? '金币不足，闯关可获得金币' : '持续按住，每秒升一级'}}</view>
+    <view wx:if="{{isCurrentWeapon}}" class="weapon-hint">{{error ? '请确认记录后再升级' : weapon.nextCost === null ? '最高等级已达成' : !affordable ? '金币不足，闯关可获得金币' : '持续按住，每秒升一级'}}</view>
   </view>
 </view>

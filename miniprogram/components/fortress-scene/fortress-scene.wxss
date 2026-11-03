@@ -30,6 +30,8 @@
 .opening-scene { position: relative; height: calc(100vh - 54rpx); overflow: hidden; }
 .opening-scene .canvas-stage { position: absolute; top: 0; left: 0; right: 0; height: calc(100% - 80rpx - env(safe-area-inset-bottom)); min-height: 0; }
 .battle-footer { position: absolute; bottom: env(safe-area-inset-bottom); left: 0; right: 0; height: 80rpx; box-sizing: border-box; display: flex; gap: 20rpx; align-items: center; padding: 12rpx 24rpx; font-size: 24rpx; background: #334b40; }
+.battle-wallet { position:absolute; z-index:14; top:18rpx; left:20rpx; display:flex; align-items:center; gap:10rpx; padding:10rpx 18rpx; border:2rpx solid #f7d775aa; border-radius:28rpx; background:#20372ed9; color:#fff0b1; font-size:28rpx; font-weight:700; box-shadow:0 4rpx 14rpx #17261f66; pointer-events:none; }
+.battle-wallet-icon { color:#ffd45a; font-size:24rpx; text-shadow:0 0 8rpx #ffcb38; }
 .battle-footer .experience-track { flex: 1; }
 .drop-coins { color: #ffe18c; min-width: 68rpx; text-align: right; }
 .drop-error { position: absolute; bottom: calc(90rpx + env(safe-area-inset-bottom)); left: 12%; right: 12%; z-index: 120; }

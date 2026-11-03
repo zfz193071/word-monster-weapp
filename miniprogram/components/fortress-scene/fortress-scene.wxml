@@ -16,6 +16,7 @@
   </view>
   <skill-choice class="upgrade-choice" offer="{{upgradeOffer}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
   <view wx:if="{{dropError}}" class="drop-error"><button disabled="{{inputUnavailable}}" bindtap="retryDrops">掉落金币未到账，点击重试</button></view>
+  <view wx:if="{{opening}}" class="battle-wallet" aria-label="当前金币 {{coinBalance}}"><text class="battle-wallet-icon">●</text><text>{{coinBalance}}</text></view>
   <view wx:if="{{voiceError && !upgradeOffer}}" class="voice-status"><button bindtap="retryVoice">重试发音</button></view>
   <view wx:if="{{!opening}}" class="hud" aria-label="基地剩余 {{hud.hp}} / {{hud.maxHp}} 血量">
     <text>堡垒基地</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text>{{hud.hp}} / {{hud.maxHp}}</text>
