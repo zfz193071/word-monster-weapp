@@ -14,7 +14,7 @@ test('面板仅首指拥有长按，暂停/隐藏/关闭/移除均取消扣费�
  const source=readFileSync(new URL('../miniprogram/components/weapon-panel/weapon-panel.ts',import.meta.url),'utf8');
  runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
   exports:{},Component(value:any){definition=value;},
-  require:(path:string)=>path.endsWith('coin-wallet')?{coinWallet:wallet}:path.endsWith('catalog')?{weaponForLevel}:{createUpgradeHold:(options:any)=>createUpgradeHold({...options,now:()=>time,schedule:(fn:()=>void)=>{tasks.set(++id,fn);return id;},cancel:(token:number)=>tasks.delete(token)})},
+  require:(path:string)=>path.endsWith('coin-wallet')?{coinWallet:wallet}:path.endsWith('catalog')?{weaponForLevel,WEAPONS:[1,2,3,4,5,6,7]}:{createUpgradeHold:(options:any)=>createUpgradeHold({...options,now:()=>time,schedule:(fn:()=>void)=>{tasks.set(++id,fn);return id;},cancel:(token:number)=>tasks.delete(token)})},
  });
  const host:any={properties:{paused:false},data:{},setData(patch:any){Object.assign(this.data,patch);},triggerEvent(name:string){events.push(name);}};
  for(const [key,method] of Object.entries(definition.methods))host[key]=(method as Function).bind(host);
@@ -22,6 +22,14 @@ test('面板仅首指拥有长按，暂停/隐藏/关闭/移除均取消扣费�
  const start=(finger=1)=>host.startHold({touches:[{identifier:finger}]});
  const end=(finger=1)=>host.endHold({changedTouches:[{identifier:finger}]});
  const advance=()=>{time+=1000;const current=[...tasks.values()];tasks.clear();current.forEach(fn=>fn());};
+ assert.equal(host.data.currentLevel,1);assert.equal(host.data.previewLevel,1);assert.equal(host.data.isCurrentWeapon,true);
+ for(let level=2;level<=7;level++)host.nextWeapon();
+ assert.equal(host.data.previewLevel,7);assert.equal(host.data.weapon.level,7);assert.equal(host.data.glowColor,'#ffd94f');assert.equal(host.data.isCurrentWeapon,false);
+ start();advance();assert.equal(wallet.equipment().level,1,'预览其他等级不能购买');
+ for(let level=6;level>=1;level--)host.previousWeapon();
+ assert.equal(host.data.previewLevel,1);assert.equal(host.data.isCurrentWeapon,true);
+ start();host.nextWeapon();advance();assert.equal(wallet.equipment().level,1,'切换预览时要停止正在进行的长按购买');
+ host.previousWeapon();
  start();start(2);end(2);advance();assert.equal(wallet.equipment().level,2);end();advance();assert.equal(wallet.equipment().level,2);
  start();host.properties.paused=true;definition.properties.paused.observer.call(host);advance();assert.equal(wallet.equipment().level,2);
  host.properties.paused=false;definition.properties.paused.observer.call(host);advance();assert.equal(wallet.equipment().level,2);

@@ -4,8 +4,14 @@
 .weapon-close { position:absolute; top:12rpx; right:12rpx; width:64rpx; min-width:0; max-width:64rpx; height:64rpx; padding:0; line-height:58rpx; border-radius:50%; background:transparent; color:#7c826c; font-size:48rpx; }
 button::after { border:0; }
 .weapon-level { display:inline-block; margin-top:24rpx; padding:8rpx 22rpx; border-bottom:6rpx solid; color:#53664e; font-size:27rpx; }
-.weapon-stage { height:300rpx; margin:16rpx 0; display:flex; align-items:center; justify-content:center; }
+.weapon-carousel { display:flex; align-items:center; justify-content:space-between; gap:8rpx; }
+.weapon-nav { flex:0 0 68rpx; width:68rpx; min-width:0; max-width:68rpx; height:88rpx; padding:0; border-radius:28rpx; background:#e3ebd2; color:#526d4d; font-size:58rpx; line-height:78rpx; }
+.weapon-nav[disabled] { opacity:.35; }
+.weapon-stage { flex:1; min-width:0; height:300rpx; margin:16rpx 0; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+.weapon-stage-ultimate { animation:golden-weapon-glow 1.6s ease-in-out infinite alternate; box-shadow:0 0 24rpx #ffd83d99, inset 0 0 40rpx #ffe35966; }
 .weapon-image { width:100%; height:280rpx; }
+.weapon-image-ultimate { filter:drop-shadow(0 0 8rpx #fff36b) drop-shadow(0 0 18rpx #ffc928); }
+@keyframes golden-weapon-glow { from { box-shadow:0 0 18rpx #ffd83d88, inset 0 0 26rpx #ffe35944; } to { box-shadow:0 0 42rpx #ffd52d, inset 0 0 54rpx #ffe359aa; } }
 .weapon-balance { color:#7a5422; font-size:28rpx; margin-bottom:24rpx; }
 .coin { display:inline-flex; justify-content:center; align-items:center; width:34rpx; height:34rpx; border:3rpx solid #e5a83b; border-radius:50%; background:#ffe08a; color:#cb8e24; font-size:16rpx; }
 .weapon-upgrade { position:relative; width:300rpx; min-width:0; max-width:300rpx; padding:0; height:88rpx; border-radius:28rpx; background:#83b749; color:#fffbe7; overflow:hidden; box-shadow:0 6rpx 0 #58783d; }
@@ -13,6 +19,7 @@ button::after { border:0; }
 .hold-progress { position:absolute; left:0; top:0; height:100%; background:#d3ef8799; }
 .upgrade-label { position:relative; height:100%; display:flex; gap:16rpx; align-items:center; justify-content:center; font-size:34rpx; font-weight:700; }
 .weapon-hint { margin-top:24rpx; color:#77816c; font-size:24rpx; }
+.weapon-preview-note { color:#71805e; font-size:27rpx; padding:22rpx 0; }
 .weapon-error { color:#9a5643; font-size:26rpx; }.weapon-retry { width:180rpx; min-width:0; font-size:26rpx; margin-top:12rpx; color:#49654a; background:#d8efcf; }
 
 .weapon-damage { margin-bottom:12rpx; color:#53664e; font-size:26rpx; }
