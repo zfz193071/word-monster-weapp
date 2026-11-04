@@ -1,3 +1,5 @@
+import { loadBattleAssets } from '../../services/battle-assets';
+import { openingArt } from '../../fortress/opening-encounter';
 import { strengthGuide, strengthTarget } from '../../services/strength-guide';
 import type { StrengthTarget } from '../../services/strength-guide';
 import { petStore } from '../../services/pet-store';
@@ -19,6 +21,7 @@ Page({
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
   navigationId: 0,
+  cancelBattleLoad: undefined as (() => void) | undefined,
   collectionRevision: 0,
   collectionAudioRevision: 0,
   collectionAudio: undefined as ReturnType<typeof createAudioAdapter> | undefined,
@@ -126,7 +129,8 @@ Page({
     } });
     this.setData({ homeVisible: true });
     const wantsStrengthGuide = strengthGuide.consume();
-    if (this.enteredBattle || wantsStrengthGuide) {
+    const entryFinished = this.data.request && !fortressEntryStore.isPending(this.data.request.plan.sessionId);
+    if (this.enteredBattle || wantsStrengthGuide || entryFinished) {
       this.enteredBattle = false;
       this.clearChallenge();
     }
@@ -134,7 +138,7 @@ Page({
     if (wantsStrengthGuide) this.setData({ strengthTarget: this.data.coinError ? '' : strengthTarget(this.data.weaponLevel, this.data.petError ? null : this.data.petView) });
   },
   onHide() { this.setData({ homeVisible: false }); this.stopCollectionAudio(); this.synchronizeMusic(); },
-  onUnload() { this.disposed = true; this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
+  onUnload() { this.disposed = true; this.cancelBattleLoad?.(); this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
   synchronizeMusic() { this.music?.setActive(this.data.homeVisible && !this.data.request && !this.data.collectionPlaying); },
   toggleMusic() {
     if (this.data.musicStatus === 'error') this.music?.retry();
@@ -145,6 +149,7 @@ Page({
     if (!this.disposed) this.setData({ sceneCoverReady: event.detail.ready });
   },
   clearChallenge() {
+    this.cancelBattleLoad?.(); this.cancelBattleLoad = undefined;
     this.releaseEntry();
     this.navigationId++;
     this.setData({ sceneCoverReady: false, request: null, opening: false, choiceComplete: false, navigationError: false, preparingLevel: false, entryProgress: 0 });
@@ -181,20 +186,23 @@ Page({
   enterBattle() {
     const request = this.data.request;
     if (this.disposed || this.data.opening || !this.data.choiceComplete || !request) return;
-    // Resource preparation is complete; page navigation is the remaining step.
-    this.setData({ opening: true, entryProgress: 50, navigationError: false });
+    this.cancelBattleLoad?.();
+    this.setData({ opening: true, entryProgress: 0, navigationError: false });
     const navigationId = ++this.navigationId;
-    wx.navigateTo({
-      url: `/pages/battle/battle?mode=fortress&entry=${encodeURIComponent(request.plan.sessionId)}`,
-      success: () => {
-        if (!this.disposed && this.navigationId === navigationId) {
-          this.enteredBattle = true;
-          this.setData({ entryProgress: 100 });
-        }
-      },
-      fail: () => {
-        if (this.disposed || this.navigationId !== navigationId) return;
-        this.setData({ opening: false, navigationError: true });
+    const valid = () => !this.disposed && this.navigationId === navigationId;
+    const fail = () => { if (valid()) this.setData({ opening: false, navigationError: true }); };
+    const firstWave = request.plan.waves[0];
+    this.cancelBattleLoad = loadBattleAssets(openingArt(firstWave.targetWordId,
+      firstWave.spawnPlan.map(monster => monster.wordId), request.plan.weaponLevel), {
+      onProgress: entryProgress => { if (valid()) this.setData({ entryProgress }); },
+      onError: fail,
+      onReady: () => {
+        if (!valid()) return;
+        wx.navigateTo({
+          url: `/pages/battle/battle?mode=fortress&entry=${encodeURIComponent(request.plan.sessionId)}`,
+          success: () => { if (valid()) this.enteredBattle = true; },
+          fail,
+        });
       },
     });
   },

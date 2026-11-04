@@ -6,7 +6,7 @@ import ts from 'typescript';
 import { RoomOrbit } from '../miniprogram/home/room-orbit';
 
 test('首页弹窗保留已绘制画布，暂停/恢复不重建，旋转与后台手势正确取消',()=>{
- let definition:any;const scenes:Scene[]=[];let taps=0;const coverEvents:boolean[]=[];
+ let definition:any;const scenes:Scene[]=[];let taps=0;const coverEvents:boolean[]=[];const timeouts=new Map<number,()=>void>();let timeoutId=0;
  class Scene {
   angle:number;active=false;disposed=false;
   constructor(_canvas:unknown,_w:number,_h:number,_dpr:number,yaw:number){this.angle=yaw;scenes.push(this);}
@@ -18,7 +18,7 @@ test('首页弹窗保留已绘制画布，暂停/恢复不重建，旋转与后�
  }
  const source=readFileSync(new URL('../miniprogram/components/home-scene/home-scene.ts',import.meta.url),'utf8');
  runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
-  exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:2}),nextTick:(fn:Function)=>fn()},
+  exports:{},setTimeout(fn:()=>void){timeouts.set(++timeoutId,fn);return timeoutId;},clearTimeout(id:number){timeouts.delete(id);},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:2}),nextTick:(fn:Function)=>fn()},
   require:(path:string)=>path.endsWith('room-orbit')?{RoomOrbit}:{HomeRoomScene:Scene},
  });
  const host:any={triggerEvent(name:string,detail?:{ready:boolean}){if(name==='coverchange'){coverEvents.push(detail!.ready);return;}assert.equal(name,'herotap');taps++;},properties:{paused:false,covered:false},data:{},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:400})})})})};
@@ -55,6 +55,10 @@ test('首页弹窗保留已绘制画布，暂停/恢复不重建，旋转与后�
   host.properties.covered=false;host.synchronize();assert.equal(scenes[0].active,true);
  }
  assert.equal(scenes.length,1,'连续开关弹窗仍保留原场景');
+ host.properties.covered=true;host.synchronize();
+ for(const finish of [...timeouts.values()])finish();
+ assert.equal(host.data.canvasCovered,true,'图片加载事件丢失时也必须结束遮挡等待');
+ assert.equal(coverEvents.at(-1),true);host.properties.covered=false;host.synchronize();
  scenes[0].capture=()=>'';host.properties.covered=true;host.synchronize();
  assert.equal(host.data.canvasCovered,true,'截图失败也必须隐藏原生层，避免卡片永久等待');
  assert.equal(coverEvents.at(-1),true);host.properties.covered=false;host.synchronize();

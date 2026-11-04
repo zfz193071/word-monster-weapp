@@ -1,3 +1,4 @@
+import { openingArt } from '../miniprogram/fortress/opening-encounter';
 import { createStrengthGuide, strengthTarget } from '../miniprogram/services/strength-guide';
 import { createPetStore } from '../miniprogram/services/pet-store';
 import { collectionWords } from '../miniprogram/fortress/collection';
@@ -13,7 +14,7 @@ import { createBattleController } from '../miniprogram/services/battle';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
-function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
+function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void) {
   const strengthGuide=createStrengthGuide();
   const sessionStore = createSessionStore();
   let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
@@ -32,6 +33,8 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../fortress/opening-encounter') return {openingArt};
+      if (name === '../../services/battle-assets') return {loadBattleAssets: prepare ?? ((_art:unknown, callbacks:any) => {callbacks.onProgress(100);callbacks.onReady();return ()=>{};})};
       if (name === '../../services/strength-guide') return {strengthGuide,strengthTarget};
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
@@ -53,7 +56,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
       showToast() { toastCount++; },
     },
   });
-  return { strengthGuide, petStore, audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
+  return { fortressEntryStore, strengthGuide, petStore, audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
     get navigationCount() { return navigationCount; }, get toastCount() { return toastCount; } };
 }
 
@@ -205,20 +208,20 @@ test('失败后一次性引导主角，点击打开武器面板后清除指引',
  assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
 });
 
-test('出发进度仅在导航完成后到达100%，失败重试和过期回调不误报完成', () => {
+test('图片就绪后显示100%，失败重试和过期回调不误改当前状态', () => {
   const h = homeHarness(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 100);
   const oldSuccess = h.navigation.success;
   h.navigation.fail();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 100);
   h.page.enterBattle(); oldSuccess();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 100);
   h.navigation.success();
   assert.equal(h.page.data.entryProgress, 100);
   h.page.onShow(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 100);
   h.page.onUnload(); h.navigation.success();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 100);
 });
 
 test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', () => {
@@ -243,4 +246,39 @@ test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪�
   const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
   assert.match(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
   assert.match(markup,/wx:if="{{!choiceComplete && sceneCoverReady}}"/);
+});
+
+
+for (const releasedBeforeShow of [false,true]) test(`普通战斗返回清理进度圆环，不依赖导航成功回调（先释放=${releasedBeforeShow}）`, () => {
+  const h=homeHarness();h.page.onShow();h.page.openBattle();correct(h.page);
+  const id=h.page.data.request.plan.sessionId;
+  h.page.onHide();assert.ok(h.fortressEntryStore.claim(id));
+  if(releasedBeforeShow)h.fortressEntryStore.release(id);
+  h.page.onShow();
+  assert.equal(h.page.data.request,null);
+  assert.equal(h.page.data.opening,false);assert.equal(h.page.data.choiceComplete,false);
+  assert.equal(h.page.data.entryProgress,0);assert.equal(h.page.data.sceneCoverReady,false);
+  h.navigation.success();h.navigation.fail();
+  assert.equal(h.page.data.request,null);assert.equal(h.page.data.entryProgress,0);
+  assert.equal(h.page.enteredBattle,false);
+  h.page.openBattle();assert.notEqual(h.page.data.request.plan.sessionId,id);
+});
+
+test('仅切到后台再回首页，尚未进入战斗的听词题保持原题', () => {
+  const h=homeHarness();h.page.onShow();h.page.openBattle();
+  const request=h.page.data.request;h.page.onHide();h.page.onShow();
+  assert.equal(h.page.data.request,request);
+});
+
+
+test('战斗图片逐张加载时更新圆环，完成前不导航，失败可重试且取消后无迟到跳转', () => {
+  const jobs:any[]=[];
+  const h=homeHarness(undefined,(_art,callbacks)=>{const job={callbacks,cancelled:false};jobs.push(job);callbacks.onProgress(0);return()=>{job.cancelled=true;};});
+  h.page.openBattle();correct(h.page);assert.equal(h.navigationCount,0);assert.equal(h.page.data.entryProgress,0);
+  jobs[0].callbacks.onProgress(37);assert.equal(h.page.data.entryProgress,37);assert.equal(h.navigationCount,0);
+  jobs[0].callbacks.onError();assert.equal(h.page.data.navigationError,true);assert.equal(h.page.data.opening,false);
+  h.page.enterBattle();assert.equal(h.page.data.entryProgress,0);assert.equal(jobs[0].cancelled,true);
+  jobs[0].callbacks.onReady();assert.equal(h.navigationCount,0);
+  jobs[1].callbacks.onProgress(100);jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);
+  h.page.onUnload();jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);assert.equal(jobs[1].cancelled,true);
 });

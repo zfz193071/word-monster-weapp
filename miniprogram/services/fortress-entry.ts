@@ -42,6 +42,11 @@ export function createFortressEntryStore(canEnter: (levelId: number) => boolean 
       claimed = true;
       return completed;
     },
+    // Only an unclaimed entry can still belong to the home listening dialog.
+    // Once battle claims or releases it, returning home must dismiss that dialog.
+    isPending(sessionId: string): boolean {
+      return request?.plan.sessionId === sessionId && !claimed;
+    },
     release(sessionId: string) {
       if (request?.plan.sessionId !== sessionId) return;
       request = undefined; completed = undefined; claimed = false;

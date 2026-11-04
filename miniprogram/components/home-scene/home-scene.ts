@@ -2,7 +2,7 @@ import type { StrengthTarget } from '../../services/strength-guide';
 import type { PetAppearance } from '../../pets/catalog';
 import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
-interface State { orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
+interface State { coverTimer?: ReturnType<typeof setTimeout>; orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
 const states=new WeakMap<object,State>();
 Component({
   properties:{ guide:{type:String,value:'',observer(){this.updateGuide();}},pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
@@ -10,7 +10,7 @@ Component({
   lifetimes:{
     attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0,covered:false,captureId:0});},
     ready(){this.mount();},
-    detached(){const state=states.get(this);if(state){state.tap=undefined;state.orbit.cancel();state.alive=false;state.epoch++;state.scene?.dispose();}states.delete(this);},
+    detached(){const state=states.get(this);if(state){if(state.coverTimer!==undefined)clearTimeout(state.coverTimer);state.tap=undefined;state.orbit.cancel();state.alive=false;state.epoch++;state.scene?.dispose();}states.delete(this);},
   },
   pageLifetimes:{
     show(){const state=states.get(this);if(state){state.visible=true;this.synchronize();}},
@@ -26,7 +26,7 @@ Component({
     },
     mount(){
       const state=states.get(this);if(!state?.alive)return;state.tap=undefined;state.orbit.cancel();const epoch=++state.epoch;
-      state.scene?.dispose();state.scene=undefined;state.covered=false;
+      if(state.coverTimer!==undefined)clearTimeout(state.coverTimer);state.scene?.dispose();state.scene=undefined;state.covered=false;
       this.createSelectorQuery().select('#room-canvas').fields({node:true,size:true,rect:true},result=>{
         if(!state.alive||epoch!==state.epoch)return;
         try{
@@ -54,10 +54,13 @@ Component({
         state.scene.setActive(false);
         const src=state.scene.capture();
         const id=++state.captureId;
+        if(state.coverTimer!==undefined)clearTimeout(state.coverTimer);
+        state.coverTimer=setTimeout(()=>this.finishCover(id),1500);
         if(src)this.setData({frozenFrames:[{id,src}]});
         else this.finishCover(id);
       }
       state.covered=this.properties.covered;
+      if(!state.covered){if(state.coverTimer!==undefined)clearTimeout(state.coverTimer);state.coverTimer=undefined;}
       // Retain both the native drawing buffer and its last snapshot. Hide the
       // native layer only after the image has loaded; reopening needs no mount.
       if(!state.covered&&this.data.canvasCovered){this.triggerEvent('coverchange',{ready:false});this.setData({canvasCovered:false},restore);}
@@ -65,13 +68,14 @@ Component({
     },
     frozenReady(event:WechatMiniprogram.BaseEvent){
       const state=states.get(this);
-      if(state?.alive&&this.properties.covered&&event.currentTarget.dataset.captureId===state.captureId){
+      if(state?.alive&&this.properties.covered&&Number(event.currentTarget.dataset.captureId)===state.captureId){
         this.finishCover(state.captureId);
       }
     },
     finishCover(captureId:number){
       const state=states.get(this);
       if(!state?.alive||!this.properties.covered||state.captureId!==captureId)return;
+      if(state.coverTimer!==undefined)clearTimeout(state.coverTimer);state.coverTimer=undefined;
       this.setData({canvasCovered:true},()=>{
         if(state.alive&&this.properties.covered&&state.captureId===captureId)this.triggerEvent('coverchange',{ready:true});
       });
