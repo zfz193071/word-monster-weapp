@@ -2,17 +2,17 @@ type Channel = Pick<WechatMiniprogram.InnerAudioContext,
   'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'play' | 'pause' | 'stop' | 'destroy' |
   'onEnded' | 'offEnded' | 'onError' | 'offError'>;
 
-// One celebration per completed session: applause first, then the praise voice.
+// One celebration per completed session: applause, cheering, then the praise voice.
 // Pause the channel itself to resume the current stage in place.
 export function createVictoryAudio(createContext: () => Channel = () => wx.createInnerAudioContext()) {
   let channel: Channel | undefined;
   let active = false; let finished = false; let disposed = false;
-  let stage: 'applause' | 'praise' = 'applause';
-  function playStage(next: 'applause' | 'praise') {
+  let stage: 'applause' | 'cheer' | 'praise' = 'applause';
+  function playStage(next: 'applause' | 'cheer' | 'praise') {
     stage = next;
     try {
       if (!channel) return;
-      channel.src = stage === 'applause' ? '/assets/audio/victory-applause.mp3' : '/assets/audio/victory-praise.mp3';
+      channel.src = `/assets/audio/victory-${stage}.mp3`;
       if (active) channel.play();
     } catch { finished = true; release(); }
   }
@@ -23,8 +23,8 @@ export function createVictoryAudio(createContext: () => Channel = () => wx.creat
       try { action(); } catch { /* Release other resources even if a platform operation fails. */ }
     }
   }
-  function ended() { if (!channel || disposed) return; if (stage === 'applause') { playStage('praise'); return; } finished = true; release(); }
-  function failed() { if (!channel || disposed) return; if (stage === 'applause') { playStage('praise'); return; } finished = true; release(); }
+  function ended() { if (!channel || disposed) return; if (stage !== 'praise') { playStage(stage === 'applause' ? 'cheer' : 'praise'); return; } finished = true; release(); }
+  function failed() { if (!channel || disposed) return; if (stage !== 'praise') { playStage(stage === 'applause' ? 'cheer' : 'praise'); return; } finished = true; release(); }
   return {
     setActive(value: boolean) {
       if (disposed || finished || value === active) return;

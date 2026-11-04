@@ -34,7 +34,7 @@ test('普通与元素伤害逐次记录，致命伤害不按剩余血量截断�
  const result=stepCombat({...initial,shotRemainingMs:500,projectiles:[projectile]});
  const hits=result.events.filter(e=>e.type==='monsterDamaged');
  assert.deepEqual(hits.map(e=>[e.kind,e.damage]),[['projectile',4],['lightning',15],['flame',15],['flame',15],['flame',15]]);
- assert.deepEqual(result.state.monsters.map(m=>m.hp),[61,50,65,80]);
+ assert.deepEqual(result.state.monsters.map(m=>m.hp),[61,50,65,80,80,80,80,80]);
  const kill=stepCombat({...initial,shotRemainingMs:500,monsters:initial.monsters.map((m,i)=>i===0?{...m,hp:1}:m),projectiles:[{...projectile,elements:undefined}]});
  const event=kill.events.find(e=>e.type==='monsterDamaged');assert.equal(event?.hp,0);assert.equal(event?.damage,4);
  assert.equal(kill.events.filter(e=>e.type==='monsterDefeated').length,1);

@@ -1,3 +1,5 @@
+import { createPetDrops } from '../miniprogram/services/pet-drops';
+import { createPetStore } from '../miniprogram/services/pet-store';
 import { createBattleAudio } from '../miniprogram/services/battle-audio';
 import { createCoinWallet, victoryCoinsForLevel } from '../miniprogram/services/coin-wallet';
 import * as drops from '../miniprogram/services/battle-drops';
@@ -21,6 +23,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
+  let petSaved:unknown; const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
   let rewards=0;let praises=0;let praiseActive=false;let praiseDisposed=false;let audioOptions:any;let busy=false;let current:FakeScene;
   let audioClock=0;let timerSequence=0;const timers=new Map<number,{run:()=>void;at:number}>();const voiceEnds:(()=>void)[]=[];
   function advanceAudio(ms:number){const end=audioClock+ms;while(true){const next=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;audioClock=next[1].at;timers.delete(next[0]);next[1].run();}audioClock=end;}
@@ -41,6 +44,8 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
+      if(name.endsWith('/pet-drops'))return {createPetDrops};
+      if(name.endsWith('/pet-store'))return {petStore};
       if(name.endsWith('/coin-wallet'))return {victoryCoinsForLevel,coinWallet:{...wallet,rewardVictory(sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return wallet.rewardVictory(sessionId,levelId);}}};
       if(name.endsWith('/battle-drops'))return drops;
       if(name.endsWith('/victory-audio'))return {createVictoryAudio(){let started=false;return{setActive(active:boolean){praiseActive=active;if(active&&!started){started=true;praises++;}},dispose(){praiseDisposed=true;}};}};
@@ -73,7 +78,12 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   for(let wave=0;wave<19;wave++){
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,OPENING_MONSTER_COUNTS[wave]);
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
-    if(wave===18){const before=current!.snapshot;host.data.level=20;current!.snapshot={...before,status:'fighting'};host.advanceWave();assert.equal(host.data.completed,false,'20级但最后一波仍有活怪时不能显示胜利');current!.snapshot=before;host.data.level=19;}
+    if(wave===18 && !realAudio){
+      current!.options.onEvents(current!.snapshot.monsters.slice(0,-2).map(m=>({type:'monsterDefeated',context:current!.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId})));
+      assert.equal(host.data.level,20);assert.equal(host.data.xpCurrent,0);
+      host.advanceWave();assert.equal(host.data.completed,false,'真实经验已到20级但最后一波仍有活怪时不能显示胜利');
+      assert.equal(host.data.upgradeOffer,null,'清场前不弹最终技能选择');
+    }
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     current!.clear();assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
@@ -101,11 +111,12 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
       const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
+  assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss).length,'真实Boss事件发宠物奖励且重复事件不重复领取');
   if(repair)assert(repairs>0 && repairs<19);
   const expectedDrops=Math.min(50,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);
   assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins+expectedDrops);assert.equal(wallet.balance(),expectedCoins+expectedDrops);
-  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,4712);
+  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,8056);assert.equal(host.data.xpCurrent,16);
   assert.equal(praiseActive,true);host.properties.paused=true;definition.properties.paused.observer.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
   host.properties.paused=false;definition.properties.paused.observer.call(host);assert.equal(praiseActive,true);
   definition.pageLifetimes.hide.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);

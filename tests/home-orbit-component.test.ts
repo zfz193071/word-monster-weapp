@@ -12,6 +12,7 @@ test('首页弹窗保留已绘制画布，暂停/恢复不重建，旋转与后�
   constructor(_canvas:unknown,_w:number,_h:number,_dpr:number,yaw:number){this.angle=yaw;scenes.push(this);}
   hitHero(x:number,y:number){return x===100&&y===100;}
   setWeaponLevel(_value:number){}
+  setPet(){} hitPet(){return false;}
   setYaw(value:number){this.angle=value;}setActive(value:boolean){this.active=value;}dispose(){this.disposed=true;}capture(){return 'frame';}
  }
  const source=readFileSync(new URL('../miniprogram/components/home-scene/home-scene.ts',import.meta.url),'utf8');

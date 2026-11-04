@@ -1,8 +1,9 @@
+import type { PetAppearance } from '../pets/catalog';
 import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
-interface Face { readonly actor?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
-interface ProjectedFace { readonly actor?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
+interface Face { readonly actor?: boolean; readonly pet?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
+interface ProjectedFace { readonly actor?: boolean; readonly pet?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
 const LIGHT: Point3 = [-.35, .85, .4];
@@ -152,19 +153,49 @@ function hero(seconds:number,level=1):Face[]{
   };
   return f.map(face=>({...face,actor:true,points:face.points.map(transform),normal:normalize([face.normal[0]*cos+face.normal[2]*sin,face.normal[1],-face.normal[0]*sin+face.normal[2]*cos])}));
 }
+// Original low-poly companion, sharing the room's lighting, depth and orbit.
+function fox(seconds:number, appearance:PetAppearance):Face[]{
+  const f:Face[]=[]; const adult=appearance.level>=7, teen=appearance.level>=4;
+  const scale=adult?1:teen?.85:.68; const blue='#85bdcf', cream='#fff0ce';
+  const sway=Math.sin(seconds*2.2)*.15;
+  ellipsoid(f,.4,.45,-.36+sway,.22,.22,.64,blue);
+  ellipsoid(f,.4,.48,-.84+sway,.19,.18,.28,cream);
+  for(const x of [-.22,.22])for(const z of [-.18,.22])ellipsoid(f,x,.13,z,.13,.16,.16,'#587e9d');
+  ellipsoid(f,0,.48,0,.36,.41,.43,blue);
+  ellipsoid(f,0,.54,.32,.24,.25,.14,cream);
+  ellipsoid(f,0,.94,.13,.42,.35,.34,blue);
+  for(const x of [-.27,.27]){
+    const front:Point3[]=[[x-.18,1.1,.18],[x+.18,1.1,.18],[x,1.65,.07]];
+    f.push({points:front,color:blue,normal:[0,.15,1]});
+    f.push({points:front.map(p=>[p[0],p[1],p[2]-.15] as Point3),color:blue,normal:[0,.15,-1]});
+    f.push({points:[[x-.1,1.16,.19],[x+.1,1.16,.19],[x,1.48,.12]],color:'#e6b8b4',normal:[0,0,1]});
+  }
+  for(const x of [-.19,.19]){
+    ellipsoid(f,x,.85,.40,.19,.15,.08,cream);
+    box(f,x,1.0,.435,.07,.09,.025,'#354c63');
+    box(f,x-.015,1.03,.45,.02,.025,.012,'#ffffff');
+  }
+  ellipsoid(f,0,.86,.47,.07,.055,.045,'#354c63');
+  box(f,0,1.19,.38,.06,.14,.025,'#ffe291');
+  if(appearance.equipped.includes('collar')){box(f,0,.67,.32,.55,.09,.15,'#9b83c1');ellipsoid(f,0,.61,.43,.065,.065,.035,'#ffe291');}
+  if(appearance.equipped.includes('hat')){box(f,0,1.27,.07,.85,.08,.63,'#bfa478');box(f,0,1.41,.03,.42,.24,.4,'#dec294');}
+  if(appearance.equipped.includes('charm')){box(f,.32,.53,.3,.05,.24,.04,'#f4d271');box(f,.37,.42,.34,.12,.09,.06,'#ffe291');box(f,.33,.35,.34,.06,.14,.06,'#ffe291');}
+  return f.map(face=>({...face,pet:true,points:face.points.map(p=>[p[0]*scale+.85,p[1]*scale+Math.sin(seconds*2.2)*.015,p[2]*scale+1.45] as Point3)}));
+}
 function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
   const view=rotateRoomPoint(VIEW,-yaw);
   return faces.filter(face=>dot(face.normal,view)>0.001).map(face=>{
     const p=face.points.map(point=>projectRoomPoint(point,yaw));
     // A near solid wall must occlude the room, rather than remain behind actors.
     const layer=face.wall ? (view[face.wall==='x'?0:2]<0 ? 4 : 1) : face.layer??3;
-    return { actor:face.actor, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
+    return { actor:face.actor, pet:face.pet, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
 }
 export class HomeRoomScene {
   private readonly context:Context;
   private weaponLevel=1;
+  private pet:PetAppearance|null=null;
   private drawnFaces:ProjectedFace[]=[];
   private readonly roomFaces=room();
   private staticFaces:ProjectedFace[];
@@ -186,7 +217,10 @@ export class HomeRoomScene {
   setWeaponLevel(level:number){
     weaponForLevel(level);this.weaponLevel=level;if(!this.active&&!this.disposed)this.draw();
   }
-  hitHero(x:number,y:number):boolean{
+  setPet(pet:PetAppearance|null){this.pet=pet;if(!this.disposed&&!this.active)this.draw();}
+  hitHero(x:number,y:number):boolean{return this.hitActor(x,y,'actor');}
+  hitPet(x:number,y:number):boolean{return this.hitActor(x,y,'pet');}
+  private hitActor(x:number,y:number,target:'actor'|'pet'):boolean{
     if(this.disposed||!Number.isFinite(x)||!Number.isFinite(y))return false;
     const scale=Math.min(this.width/9.6,this.height/9.2);
     const px=(x-this.width/2)/scale,py=(y-this.height*.56)/scale;
@@ -197,7 +231,7 @@ export class HomeRoomScene {
         const [ax,ay]=face.points[a], [bx,by]=face.points[b];
         if((ay>py)!==(by>py)&&px<(bx-ax)*(py-ay)/(by-ay)+ax)inside=!inside;
       }
-      if(inside)return face.actor===true;
+      if(inside)return face[target]===true;
     }
     return false;
   }
@@ -249,7 +283,7 @@ export class HomeRoomScene {
         if(i===0)c.moveTo(px,py);else c.lineTo(px,py);
       });c.closePath();c.fill();
     }
-    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed,this.weaponLevel),this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
+    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed,this.weaponLevel),this.yaw),...projectFaces(this.pet?fox(this.elapsed,this.pet):[],this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
     this.drawnFaces=faces;
     for(const face of faces){
       c.globalAlpha=face.opacity;c.fillStyle=face.color;c.strokeStyle=face.color;c.lineWidth=.45;

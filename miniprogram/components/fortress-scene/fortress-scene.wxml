@@ -1,4 +1,5 @@
 <view class="scene {{inputUnavailable ? 'scene-paused' : ''}} {{opening ? 'opening-scene' : ''}}">
+  <view wx:if="{{petReward}}" class="pet-reward" aria-live="polite"><button wx:if="{{petDropError}}" bindtap="retryPetDrops" disabled="{{inputUnavailable}}">{{petReward}}</button><text wx:else>{{petReward}}</text></view>
   <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>
   <view wx:if="{{completed}}" class="victory-overlay" aria-label="挑战成功，达到20级，完成19波挑战">
     <view class="victory-glow" />
@@ -41,7 +42,7 @@
 
   <button wx:if="{{opening && !completed && hud.status === 'baseDestroyed' && !upgradeOffer}}" class="return-home" bindtap="returnHome">返回小屋</button>
   <view class="canvas-stage"><image wx:if="{{(upgradeOffer || waveRequest || completed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{!!upgradeOffer || completed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
-  <view wx:if="{{opening}}" class="battle-footer"><text>Lv. {{level}}</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><view class="experience-track"><view style="width: {{xpPercent}}%"></view></view><text class="drop-coins" aria-label="本局击杀已获得{{dropCoins}}金币">● {{dropCoins}}</text></view>
+  <view wx:if="{{opening}}" class="battle-footer"><text>Lv. {{level}}</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text wx:if="{{level >= 20}}" class="experience-cap" aria-label="已满级，经验上限无限，清空剩余僵尸即可通关">经验 {{xpCurrent}} / ∞ · 清场</text><view wx:else class="experience-track"><view style="width: {{xpPercent}}%"></view></view><text class="drop-coins" aria-label="本局击杀已获得{{dropCoins}}金币">● {{dropCoins}}</text></view>
   <view wx:if="{{!opening}}" class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
     <text>‹ 左右拖动 ›</text>

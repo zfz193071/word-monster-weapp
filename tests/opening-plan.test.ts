@@ -13,10 +13,14 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
   for (let seed = 0; seed < 50; seed++) {
     const plan = createOpeningPlan(`plan-${seed}`, createSeededRandom(seed)); validateOpeningPlan(plan);
     assert.equal(plan.waves.length, 19);
+    assert.deepEqual(plan.waves.map(w => w.spawnPlan.length), [8,13,18,23,28,33,38,43,48,53,58,63,68,73,78,83,88,93,98]);
     assert.equal(new Set(plan.waves.slice(0,11).map(w=>w.targetWordId)).size,11);
     assert.equal(new Set(plan.waves.slice(11).map(w=>w.targetWordId)).size,8);
     for (const [index,wave] of plan.waves.entries()) {
       const count=OPENING_MONSTER_COUNTS[index];assert.equal(wave.spawnPlan.length,count);
+      const batches = new Map<number, number>();
+      for (const spawn of wave.spawnPlan) batches.set(spawn.spawnAtMs!, (batches.get(spawn.spawnAtMs!) ?? 0) + 1);
+      assert.ok([...batches.values()].every(size => size >= 3 && size <= 5), '含尾批的全部批次均为3至5只');
       const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
       assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(count/2):count);
       const oldCounts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);
@@ -26,11 +30,11 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
     }
   }
 });
-test('完整19波击杀升级至20封顶，满级旧技能移出，每次固定三选一', () => {
+test('7级武器完整19波击杀升级至20封顶，满级旧技能移出，每次固定三选一', () => {
  const plan=createOpeningPlan('full-run',createSeededRandom(10));const xp=createExperience(plan.sessionId,OPENING_EXPERIENCE);
  let levels: import("../miniprogram/fortress/types").SkillLevels={...ZERO_SKILLS}; let hp=50;
  for(let index=0;index<19;index++){
-  const wave=plan.waves[index];let state=createOpeningEncounter(plan.sessionId,wave.targetWordId,index,index,levels,hp,plan.waves.slice(0,index).map(w=>w.targetWordId));
+  const wave=plan.waves[index];let state=createOpeningEncounter(plan.sessionId,wave.targetWordId,index,index,levels,hp,plan.waves.slice(0,index).map(w=>w.targetWordId),1,7);
   const upgrades:number[]=[];
   for(let tick=0;tick<20000&&state.status==='fighting';tick++){const next=stepCombat(state);state=next.state;upgrades.push(...xp.record(next.events).upgrades);}
   assert.equal(state.status,'cleared',`wave ${index+1}`);hp=state.base.hp;assert.deepEqual(upgrades,[index+2]);
@@ -38,5 +42,5 @@ test('完整19波击杀升级至20封顶，满级旧技能移出，每次固定�
   assert.ok(offer.cards.every(c=>!['doubleShot','fireRate','bulletWidth'].includes(c.id)||(levels[c.id as BattleSkillId]??0)<3));
   const chosen=(offer.cards.find(c=>c.id==='fireRate')??offer.cards.find(c=>c.id==='doubleShot')??offer.cards.find(c=>c.id==='bulletWidth')??offer.cards.find(c=>c.id==='flame')??offer.cards[0]).id as BattleSkillId;levels={...levels,[chosen]:(levels[chosen]??0)+1};
  }
- assert.equal(xp.view.total,4712);assert.equal(xp.view.level,20);assert.ok(xp.view.total>OPENING_EXPERIENCE.levelThresholds.at(-1)!,'20级后击杀仍累计经验');assert.equal(Object.values(levels).reduce((a,b)=>a+b,0),19);
+ assert.equal(xp.view.total,8056);assert.equal(xp.view.level,20);assert.ok(xp.view.total>OPENING_EXPERIENCE.levelThresholds.at(-1)!,'20级后击杀仍累计经验');assert.equal(Object.values(levels).reduce((a,b)=>a+b,0),19);
 });

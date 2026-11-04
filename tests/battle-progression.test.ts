@@ -15,7 +15,7 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   assert.deepEqual(monsterStats(1, 10), { hp: 120, attackDamage: 12 });
   assert.deepEqual(monsterStats(8, 15), { hp: 290, attackDamage: 22 });
   assert.deepEqual(monsterStats(8, 20), { hp: 330, attackDamage: 24 });
-  assert.deepEqual(monsterStats(8, 15, true), { hp: 870, attackDamage: 33 });
+  assert.deepEqual(monsterStats(8, 15, true), { hp: 2320, attackDamage: 33 });
   for (const value of [0, 9, NaN]) assert.throws(() => monsterStats(value, 6));
   const initial = createOpeningEncounter('fractional', 'apple', 0, 5);
   const attacking: CombatState = { ...initial, automatic: false, monsters: [{ ...initial.monsters[0], status: 'attackingBase', position: { x: 60, y: 480 }, attackRemainingMs: 0 }] };
@@ -24,7 +24,7 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 39);
 });
 
-test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总589只', () => {
+test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总1007只', () => {
   let bossRuns = 0; let emptyRuns = 0;
   for (let run = 0; run < 60; run++) {
     const id = `boss-plan-${run}`;
@@ -32,7 +32,7 @@ test('固定对局计划：10级前无Boss、全局至多一只、最后一怪�
     if (index < 0) emptyRuns++; else { bossRuns++; assert.ok(index >= 9 && index < 19); }
     const plan = createOpeningPlan(id, createSeededRandom(run));
     const monsters = plan.waves.flatMap(wave => wave.spawnPlan);
-    assert.equal(monsters.length, 589);
+    assert.equal(monsters.length, 1007);
     assert.equal(monsters.filter(monster => monster.boss).length, index < 0 ? 0 : 1);
     if (index >= 0) {
       const wave = plan.waves[index]; const boss = wave.spawnPlan.at(-1)!;
@@ -40,7 +40,7 @@ test('固定对局计划：10级前无Boss、全局至多一只、最后一怪�
       assert.ok((boss.soldierDropCount ?? 0) >= 0 && (boss.soldierDropCount ?? 0) <= 3);
       const rebuilt = createOpeningEncounter(id, wave.targetWordId, 3, index, undefined, undefined, plan.waves.slice(0, index).map(w => w.targetWordId));
       assert.equal(rebuilt.monsters.at(-1)!.id, boss.monsterId);
-      assert.equal(rebuilt.monsters.at(-1)!.maxHp, monsterStats(1, index + 1).hp * 3);
+      assert.equal(rebuilt.monsters.at(-1)!.maxHp, monsterStats(1, index + 1).hp * 8);
       assert.equal(rebuilt.monsters.at(-1)!.hitbox.width, rebuilt.monsters[0].hitbox.width * 1.5);
       assert.deepEqual(rebuilt.monsters.map(m => m.dropCoins), wave.spawnPlan.map(m => m.dropCoins));
     }

@@ -22,7 +22,7 @@ export function monsterStats(levelId: number, heroLevel: number, boss = false) {
   const tier = heroLevel < 6 ? 0 : heroLevel < 10 ? 1 : heroLevel < 15 ? 2 : heroLevel < 20 ? 3 : 4;
   const hp = Math.ceil(8 * (1 + .15 * (levelId - 1)) * (1 + tier * .25)) * 10;
   const damage = Math.round(10 * (1 + .1 * (levelId - 1)) * (1 + tier * .1));
-  return { hp: hp * (boss ? 3 : 1), attackDamage: Math.round(damage * (boss ? 1.5 : 1)) };
+  return { hp: hp * (boss ? 8 : 1), attackDamage: Math.round(damage * (boss ? 1.5 : 1)) };
 }
 
 export function monsterDropCoins(monsterId: string, boss = false): number {

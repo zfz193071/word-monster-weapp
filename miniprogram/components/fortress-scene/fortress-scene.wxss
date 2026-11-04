@@ -31,6 +31,7 @@
 .opening-scene .canvas-stage { position: absolute; top: 0; left: 0; right: 0; height: calc(100% - 80rpx - env(safe-area-inset-bottom)); min-height: 0; }
 .battle-footer { position: absolute; bottom: env(safe-area-inset-bottom); left: 0; right: 0; height: 80rpx; box-sizing: border-box; display: flex; gap: 20rpx; align-items: center; padding: 12rpx 24rpx; font-size: 24rpx; background: #334b40; }
 .battle-footer .experience-track { flex: 1; }
+.battle-footer .experience-cap { flex: 1; color: #ffe49a; font-size: 20rpx; text-align: center; }
 .drop-coins { color: #ffe18c; min-width: 68rpx; text-align: right; }
 .drop-error { position: absolute; bottom: calc(90rpx + env(safe-area-inset-bottom)); left: 12%; right: 12%; z-index: 120; }
 .drop-error button { font-size: 24rpx; color: #594523; background: #ffebac; }
@@ -79,3 +80,5 @@
 .scene-paused .victory-particle,
 .scene-paused .firework-spark,
 .scene-paused .victory-reward { animation-play-state: paused; }
+
+.pet-reward { position:absolute; top:12rpx; left:12%; right:12%; z-index:120; padding:12rpx; border-radius:18rpx; text-align:center; background:#fff1cce8; color:#486052; font-size:24rpx; pointer-events:none; }.pet-reward button { pointer-events:auto; font-size:24rpx; }

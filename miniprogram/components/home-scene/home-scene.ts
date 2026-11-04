@@ -1,9 +1,10 @@
+import type { PetAppearance } from '../../pets/catalog';
 import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
 interface State { orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
 const states=new WeakMap<object,State>();
 Component({
-  properties:{ weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
+  properties:{ pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
   data:{error:false,canvasCovered:false,frozenFrames:[] as {id:number;src:string}[]},
   lifetimes:{
     attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0,covered:false,captureId:0});},
@@ -26,6 +27,7 @@ Component({
           state.width=result.width;state.left=result.left??0;state.top=result.top??0;
           state.scene=new HomeRoomScene(result.node,result.width,result.height,wx.getWindowInfo().pixelRatio,state.orbit.yaw);
           state.scene.setWeaponLevel(this.properties.weaponLevel);
+          state.scene.setPet(this.properties.pet as PetAppearance|null);
           this.setData({error:false});this.synchronize();
         }catch{this.setData({error:true});}
       }).exec();
@@ -76,7 +78,11 @@ Component({
       state.orbit.end(event.changedTouches);
       if(!tap||!touch)return;state.tap=undefined;
       if(!tap.moved&&Math.hypot(touch.clientX-tap.x,touch.clientY-tap.y)<6&&state.visible&&!this.properties.paused&&!this.properties.covered
-        &&state.scene?.hitHero(touch.clientX-state.left,touch.clientY-state.top))this.triggerEvent('herotap');
+        &&state.scene){
+        const x=touch.clientX-state.left,y=touch.clientY-state.top;
+        if(state.scene.hitPet(x,y))this.triggerEvent('pettap');
+        else if(state.scene.hitHero(x,y))this.triggerEvent('herotap');
+      }
     },
     touchCancel(){const state=states.get(this);if(state){state.tap=undefined;state.orbit.cancel();}},
     stopTap(){},

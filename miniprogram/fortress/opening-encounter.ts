@@ -14,7 +14,7 @@ import { FORTRESS_SKILLS } from './rules';
 export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
 export const OPENING_EXPERIENCE_PER_KILL = 8;
-export const OPENING_MONSTER_COUNTS: readonly number[] = Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, waveIndex) => 4 + waveIndex * 3));
+export const OPENING_MONSTER_COUNTS: readonly number[] = Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, waveIndex) => 8 + waveIndex * 5));
 const totalOpeningMonsters = OPENING_MONSTER_COUNTS.reduce((sum, count) => sum + count, 0);
 export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: OPENING_EXPERIENCE_PER_KILL,
   // Each of the first 18 clears grants one level; level 20 arrives before the final wave is cleared.
@@ -61,7 +61,10 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   for (let i = fruitIds.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [fruitIds[i], fruitIds[j]] = [fruitIds[j], fruitIds[i]]; }
   const spawns = []; let spawnAtMs = 0;
   while (spawns.length < count) {
-    const size = Math.min(count - spawns.length, 1 + Math.floor(random() * 3));
+    const remaining = count - spawns.length;
+    // Keep the final batch within 3–5 as well, without changing the wave total.
+    const sizes = [3, 4, 5].filter(size => remaining === size || remaining - size >= 3);
+    const size = sizes[Math.floor(random() * sizes.length)];
     const lanes = [56, 118, 180, 242, 304];
     for (let i = lanes.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [lanes[i], lanes[j]] = [lanes[j], lanes[i]]; }
     for (let member = 0; member < size; member++) spawns.push({ monsterId: `${sessionId}:wave:${waveIndex + 1}:zombie:${spawns.length + 1}`, wordId: fruitIds[spawns.length], spawnAtMs,

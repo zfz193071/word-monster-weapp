@@ -46,3 +46,17 @@ test('恢复首帧绘制后才移除占位截图，暂停取消过期切换回�
  scene.setActive(false);scene.setActive(true,()=>switches++);const stale=frame!;scene.setActive(false);stale(80);assert.equal(switches,1);
  scene.dispose();
 });
+
+test('小雷狐成长和装扮参与原房间深度绘制，宠物点击与主角区分且隐藏后不可点击',()=>{
+ const context=new Proxy({}, {get(){return ()=>{};},set(){return true;}});
+ const scene=new HomeRoomScene({getContext:()=>context} as unknown as WechatMiniprogram.Canvas,480,550,1);
+ const pixel=(point:readonly [number,number,number])=>{const p=projectRoomPoint(point,0);return [240+p.x*50,308+p.y*50] as const;};
+ for(const level of [1,4,7,10]){
+   scene.setPet({level,equipped:level>=7?['collar','hat','charm']:[]});
+   const scale=level>=7?1:level>=4?.85:.68;
+   const point=pixel([.85,.9*scale,1.45+.4*scale]);
+   assert.equal(scene.hitPet(...point),true);assert.equal(scene.hitHero(...point),false);
+ }
+ scene.setPet(null);assert.equal(scene.hitPet(...pixel([.85,.9,1.85])),false);
+ scene.dispose();
+});

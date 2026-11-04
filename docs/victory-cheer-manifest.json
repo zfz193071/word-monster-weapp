@@ -1,0 +1,12 @@
+{
+  "description": "Victory crowd cheer between applause and praise",
+  "source": "https://sfxmint.com/sounds/crowd-cheer-43",
+  "download": "https://sfxmint.com/dl/crowd-cheer-43.mp3",
+  "creator": "SFXMint",
+  "generation": "AI-generated synthetic crowd",
+  "license": "CC0 1.0",
+  "conversion": "FFmpeg: trim 3.4s, volume 0.7, fade in 0.05s, fade out 3.1s/0.3s, mono 24kHz 32kbps MP3",
+  "path": "miniprogram/assets/audio/victory-cheer.mp3",
+  "sha256": "9aaad44b7d0e5316b4cf0bcf2f22afa1f480725a8eeaec2156f2143bb76d4921",
+  "review": "pending human listening"
+}

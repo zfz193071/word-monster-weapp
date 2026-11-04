@@ -1,3 +1,4 @@
+import { createPetStore } from '../miniprogram/services/pet-store';
 import { collectionWords } from '../miniprogram/fortress/collection';
 import { LEVELS } from '../miniprogram/fortress/levels';
 import { createCoinWallet } from '../miniprogram/services/coin-wallet';
@@ -16,6 +17,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
   let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
   const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
   const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id));
+  let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
   let page: any;
   let navigation: any;
   let navigationCount = 0;
@@ -28,6 +30,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
       if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
       if (name === '../../services/coin-wallet') return { coinWallet: wallet };
@@ -47,7 +50,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
       showToast() { toastCount++; },
     },
   });
-  return { audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
+  return { petStore, audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
     get navigationCount() { return navigationCount; }, get toastCount() { return toastCount; } };
 }
 
@@ -113,7 +116,8 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
   const sessionStore = createSessionStore();
   let redirects = 0;
   function loadPage() {
-    let page: any;
+    let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
+  let page: any;
     const source = readFileSync(new URL('../miniprogram/pages/battle/battle.ts', import.meta.url), 'utf8');
     runInNewContext(ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
@@ -177,4 +181,15 @@ test('集合播放对应标准音频，连续点击不重叠，旧回调与关�
  h.page.toggleCredits();assert.equal(h.audioCalls[2].disposed,true);assert.equal(h.page.data.collectionPlaying,'');
  h.page.toggleCredits();tap('apple');h.page.onHide();assert.equal(h.audioCalls[3].disposed,true);tap('banana');assert.equal(h.audioCalls.length,4);
  h.page.onUnload();h.audioCalls[3].done(false);assert.equal(h.page.data.collectionAudioError,'');
+});
+
+test('伙伴面板打开暂停场景覆盖，喂养和换装读写真实存档，后台拒绝操作',()=>{
+ const h=homeHarness();h.petStore.rewardBoss('pet','pet:wave:1:zombie:1');
+ let i=0;while(h.petStore.view().food===0){const session=`food-${i++}`;h.petStore.rewardBoss(session,`${session}:wave:1:zombie:1`);}
+ h.page.onShow();h.page.openPet();assert.equal(h.page.data.showPet,true);assert.equal(h.page.data.petView.owned,true);
+ const revision=h.page.data.petView.revision;const before=h.page.data.petView.food;
+ const event={currentTarget:{dataset:{action:'feed',revision}}};h.page.petAction(event);
+ assert.equal(h.page.data.petView.food,before-1);h.page.petAction(event);assert.equal(h.page.data.petView.food,before-1);
+ h.page.onHide();h.page.petAction({currentTarget:{dataset:{action:'feed',revision:h.page.data.petView.revision}}});assert.equal(h.petStore.view().food,before-1);
+ h.page.onShow();h.page.closePet();assert.equal(h.page.data.showPet,false);h.page.openWeapon();assert.equal(h.page.data.showWeapon,true);
 });
