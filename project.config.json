@@ -26,7 +26,8 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileHotReLoad": false
   },
   "packOptions": {
     "ignore": [

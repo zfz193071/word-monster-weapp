@@ -282,3 +282,15 @@ test('战斗图片逐张加载时更新圆环，完成前不导航，失败可�
   jobs[1].callbacks.onProgress(100);jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);
   h.page.onUnload();jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);assert.equal(jobs[1].cancelled,true);
 });
+
+test('关卡资源准备失败后退出0%等待并解除按钮锁，重试可以进入听词',async()=>{
+ let attempts=0;
+ const h=homeHarness(async()=>{if(++attempts===1)throw Error('关卡资源加载超时');});
+ h.wallet.rewardVictory('unlock-colors',1);h.page.onShow();
+ await h.page.openBattle();
+ assert.equal(h.page.data.preparingLevel,false);assert.equal(h.page.data.request,null);
+ assert.ok(h.page.data.entryError);
+ await h.page.openBattle();
+ assert.equal(h.page.data.preparingLevel,false);assert.equal(h.page.data.entryError,'');
+ assert.equal(h.page.data.request.plan.levelId,2);
+});
