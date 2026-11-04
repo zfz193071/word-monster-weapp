@@ -20,8 +20,8 @@ test('清波选择修复恢复满血且不增加武器等级，重复消费被�
  const initial=createOpeningEncounter('repair','apple',0,0,ZERO_SKILLS,20);
  const runner=new CombatRunner({...initial,status:'cleared'});
  const choices=createUpgradeChoices();choices.open({id:'repair-offer',level:2,cards:[{id:'repair',icon:'repair',label:'修复',description:'恢复满血'}]});
- assert(choices.select('repair-offer','repair'));runner.restoreBase();assert.equal(runner.snapshot!.base.hp,50);assert.deepEqual(runner.snapshot!.skills,ZERO_SKILLS);
- assert.equal(choices.select('repair-offer','repair'),null);runner.restoreBase();assert.equal(runner.snapshot!.base.hp,50);
+ assert(choices.select('repair-offer','repair'));runner.restoreBase();assert.equal(runner.snapshot!.base.hp,1000);assert.deepEqual(runner.snapshot!.skills,ZERO_SKILLS);
+ assert.equal(choices.select('repair-offer','repair'),null);runner.restoreBase();assert.equal(runner.snapshot!.base.hp,1000);
  const failed=new CombatRunner({...initial,status:'baseDestroyed',base:{...initial.base,hp:0}});failed.restoreBase();assert.equal(failed.snapshot!.base.hp,0);
  const fighting=new CombatRunner(initial);fighting.restoreBase();assert.equal(fighting.snapshot!.base.hp,20);
  runner.dispose();runner.restoreBase();assert.equal(runner.snapshot,null);

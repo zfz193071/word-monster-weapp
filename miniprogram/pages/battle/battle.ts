@@ -1,3 +1,4 @@
+import { strengthGuide } from '../../services/strength-guide';
 import { fortressEntryStore } from '../../services/fortress-entry';
 import { sessionStore } from '../../services/session';
 import type { GameState } from '../../game/engine';
@@ -76,6 +77,12 @@ Page({
 
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); },
   updateCoinBalance(event: WechatMiniprogram.CustomEvent<{ balance: number }>) { const balance = event.detail.balance; if (Number.isSafeInteger(balance) && balance >= 0) this.setData({ coinBalance: balance }); },
+  becomingStronger: false,
+  becomeStronger() {
+    if (this.becomingStronger) return;
+    this.becomingStronger = true; strengthGuide.request();
+    wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/home/home', fail: () => { this.becomingStronger = false; } }) });
+  },
   returnHome() { wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {

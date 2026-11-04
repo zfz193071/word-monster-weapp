@@ -73,9 +73,12 @@ button::after { border: 0; }
 .collection-card .collection-play.playing { background: #658c62; color: #fffbe7; }
 .collection-audio-error { color: #9a5643; font-size: 23rpx; text-align: center; padding: 12rpx; }
 
-.pet-button { position:absolute; right:28rpx; bottom:180rpx; z-index:4; border-radius:28rpx; padding:12rpx 20rpx; background:#fff4d8; color:#47675d; font-size:24rpx; line-height:1.6; }
 .pet-modal { position:relative; box-sizing:border-box; width:100%; max-width:650rpx; padding:36rpx 28rpx; border:6rpx solid #fff9e4; border-radius:36rpx; background:#fff8e7; color:#456452; }
 .pet-title { display:block; font-size:40rpx; font-weight:bold; }.pet-subtitle { display:block; margin:10rpx 0 24rpx; font-size:23rpx; color:#81917a; }.pet-scroll { max-height:65vh; height:650rpx; }
 .pet-stage { margin:18rpx 0; font-size:32rpx; font-weight:bold; }.pet-progress { height:16rpx; border-radius:12rpx; overflow:hidden; background:#e3e6d2; }.pet-progress view { height:100%; background:#80b8c4; }.pet-caption { display:block; text-align:center; font-size:22rpx; color:#7c8974; margin:12rpx 0; }
 .pet-supplies { display:flex; justify-content:space-around; padding:26rpx 0; font-size:27rpx; }.pet-actions { display:flex; gap:12rpx; }.pet-actions button { flex:1; margin:0; padding:12rpx 6rpx; font-size:23rpx; line-height:1.6; border-radius:20rpx; background:#658c62; color:#fff8e7; }.pet-actions button[disabled] { background:#e3e6d2; color:#a1aa94; }
 .pet-section { display:block; margin:30rpx 0 16rpx; font-size:28rpx; font-weight:bold; }.pet-gear { display:flex; align-items:center; gap:14rpx; margin-bottom:12rpx; padding:12rpx; background:#f2ecd9; border-radius:20rpx; font-size:26rpx; }.pet-gear-symbol { width:40rpx; text-align:center; color:#ad8b45; font-size:32rpx; }.pet-gear button { margin:0 0 0 auto; font-size:23rpx; line-height:1.8; border-radius:16rpx; color:#456452; background:#fffdf4; }.pet-empty { padding:80rpx 16rpx; text-align:center; line-height:1.8; }.pet-message { display:block; text-align:center; margin-top:20rpx; color:#568158; font-size:24rpx; }.pet-error { padding:30rpx 12rpx; color:#9a5643; text-align:center; }
+
+.strength-hint { position:absolute; bottom:26%; left:12%; right:12%; z-index:4; padding:16rpx 20rpx; border-radius:24rpx; text-align:center; background:#fff3d5ed; color:#4e684e; font-size:27rpx; pointer-events:none; }
+
+.entry-loading { position: absolute; z-index: 3; bottom: 18vh; left: 50%; transform: translateX(-50%); }

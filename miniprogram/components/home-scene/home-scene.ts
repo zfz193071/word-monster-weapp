@@ -1,10 +1,11 @@
+import type { StrengthTarget } from '../../services/strength-guide';
 import type { PetAppearance } from '../../pets/catalog';
 import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
 interface State { orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
 const states=new WeakMap<object,State>();
 Component({
-  properties:{ pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
+  properties:{ guide:{type:String,value:'',observer(){this.updateGuide();}},pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
   data:{error:false,canvasCovered:false,frozenFrames:[] as {id:number;src:string}[]},
   lifetimes:{
     attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0,covered:false,captureId:0});},
@@ -17,6 +18,12 @@ Component({
     resize(){this.mount();},
   },
   methods:{
+    updateGuide(){
+      const state=states.get(this);if(!state?.scene)return;
+      const guide=this.properties.guide as StrengthTarget;
+      if(guide){state.tap=undefined;state.orbit=new RoomOrbit();state.scene.setYaw(0);}
+      state.scene.setGuide(guide);
+    },
     mount(){
       const state=states.get(this);if(!state?.alive)return;state.tap=undefined;state.orbit.cancel();const epoch=++state.epoch;
       state.scene?.dispose();state.scene=undefined;state.covered=false;
@@ -28,6 +35,7 @@ Component({
           state.scene=new HomeRoomScene(result.node,result.width,result.height,wx.getWindowInfo().pixelRatio,state.orbit.yaw);
           state.scene.setWeaponLevel(this.properties.weaponLevel);
           state.scene.setPet(this.properties.pet as PetAppearance|null);
+          this.updateGuide();
           this.setData({error:false});this.synchronize();
         }catch{this.setData({error:true});}
       }).exec();

@@ -5,6 +5,7 @@
   "usingComponents": {
     "fortress-choice": "/components/fortress-choice/fortress-choice",
     "home-scene": "/components/home-scene/home-scene",
-    "weapon-panel": "/components/weapon-panel/weapon-panel"
+    "weapon-panel": "/components/weapon-panel/weapon-panel",
+    "loading-progress": "/components/loading-progress/loading-progress"
   }
 }

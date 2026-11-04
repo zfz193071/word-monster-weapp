@@ -33,16 +33,16 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false; paused=false;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
-    async load(){this.options.onHud({hp:this.snapshot.base.hp,maxHp:5,status:this.snapshot.status});return true;}
+    async load(){this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});return true;}
     dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}showCoinDrop(){}captureFrame(){return 'frame';}
-    restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:5}};}
+    restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
     applySkills(levels:SkillLevels){this.snapshot={...this.snapshot,skills:levels};}
     clear(){const events:CombatEvent[]=this.snapshot.monsters.flatMap(m=>[
       {type:'monsterDefeated' as const,context:this.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId},
       ...(m.dropCoins ? [{type:'coinsDropped' as const,context:this.snapshot.context,tick:1,monsterId:m.id,amount:m.dropCoins,position:m.position}] : []),
     ]);if(realAudio){this.options.onEvents(events.slice(0,1));advanceAudio(300);}
-    this.snapshot={...this.snapshot,status:'cleared'};this.options.onHud({hp:this.snapshot.base.hp,maxHp:5,status:'cleared'});this.options.onEvents(events);this.options.onEvents(events);}
+    this.snapshot={...this.snapshot,status:'cleared'};this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:'cleared'});this.options.onEvents(events);this.options.onEvents(events);}
   }
   const source=readFileSync(new URL('../miniprogram/components/fortress-scene/fortress-scene.ts',import.meta.url),'utf8');
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
@@ -111,7 +111,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
       host.chooseUpgrade(selection);
       assert.equal(JSON.stringify({skills:current!.snapshot.skills,hp:current!.snapshot.base.hp,request:host.data.waveRequest}),afterSelection,'重复点击不能重复应用或推进');
     }
-    if(repair && current!.snapshot.base.hp===5)repairs++;
+    if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
     const expectedHp=current!.snapshot.base.hp;
     if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
       const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);

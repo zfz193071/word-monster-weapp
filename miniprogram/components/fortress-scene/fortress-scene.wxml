@@ -40,8 +40,12 @@
     <block wx:else><text>技能已获得</text><text>{{skillSummary}}</text><text class="skill-detail">开发预览：下一波听词流程待接入</text></block>
   </view>
 
-  <button wx:if="{{opening && !completed && hud.status === 'baseDestroyed' && !upgradeOffer}}" class="return-home" bindtap="returnHome">返回小屋</button>
-  <view class="canvas-stage"><image wx:if="{{(upgradeOffer || waveRequest || completed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{!!upgradeOffer || completed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
+  <view wx:if="{{failed}}" class="defeat-overlay" role="dialog" aria-label="战斗失败">
+    <view class="crying-hero" aria-hidden="true"><view class="crying-helmet" /><view class="crying-eye left-eye" /><view class="crying-eye right-eye" /><view class="crying-mouth" /><view class="crying-tear left-tear" /><view class="crying-tear right-tear" /></view>
+    <text class="defeat-title">这次没能守住小屋</text><text class="defeat-subtitle">变强一点，下次再来！</text>
+    <button class="strengthen-button" bindtap="becomeStronger" disabled="{{inputUnavailable}}">我要变强</button>
+  </view>
+  <view class="canvas-stage"><image wx:if="{{(upgradeOffer || waveRequest || completed || failed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{!!upgradeOffer || completed || failed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
   <view wx:if="{{opening}}" class="battle-footer"><text>Lv. {{level}}</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text wx:if="{{level >= 20}}" class="experience-cap" aria-label="已满级，经验上限无限，清空剩余僵尸即可通关">经验 {{xpCurrent}} / ∞ · 清场</text><view wx:else class="experience-track"><view style="width: {{xpPercent}}%"></view></view><text class="drop-coins" aria-label="本局击杀已获得{{dropCoins}}金币">● {{dropCoins}}</text></view>
   <view wx:if="{{!opening}}" class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">

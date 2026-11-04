@@ -1,0 +1,9 @@
+:host { display: block; }
+.progress-ring { position: relative; width: 112rpx; height: 112rpx; margin: 0 auto; border-radius: 50%; background: #dce9dc; }
+.half { position: absolute; top: 0; width: 56rpx; height: 112rpx; overflow: hidden; }
+.right { right: 0; }
+.left { left: 0; }
+.fill { position: absolute; top: 0; width: 56rpx; height: 112rpx; background: #79ad4c; transition: transform .2s ease-out; }
+.right .fill { left: -56rpx; border-radius: 112rpx 0 0 112rpx; transform-origin: right center; }
+.left .fill { left: 56rpx; border-radius: 0 112rpx 112rpx 0; transform-origin: left center; }
+.progress-center { position: absolute; inset: 10rpx; border-radius: 50%; background: #fff8ec; display: flex; align-items: center; justify-content: center; color: #456452; font-size: 27rpx; font-weight: bold; font-variant-numeric: tabular-nums; }

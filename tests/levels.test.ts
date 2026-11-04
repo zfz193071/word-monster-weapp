@@ -35,7 +35,7 @@ test('动物速度28、1.5秒攻击一次；水果速度20、2秒攻击一次',(
   assert.equal(initial.monsterSpeed,speed);assert.ok(initial.monsters.every(m=>m.attackIntervalMs===interval));
   let state={...initial,automatic:false,monsters:[{...initial.monsters[0],position:{x:60,y:480},status:'attackingBase' as const}]};
   for(let ms=0;ms<interval-10;ms+=10)state=stepCombat(state).state as typeof state;
-  assert.equal(state.base.hp,50);state=stepCombat(state).state as typeof state;assert.equal(state.base.hp,level===3 ? 38 : 40);
+  assert.equal(state.base.hp,initial.base.maxHp);state=stepCombat(state).state as typeof state;assert.equal(state.base.hp,initial.base.maxHp-(level===3 ? 12 : 10));
  }
  assert.equal(ANIMAL_IDS.length,16);
 });

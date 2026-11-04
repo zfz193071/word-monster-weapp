@@ -40,3 +40,8 @@ export function bossChargePhase(elapsedSinceSpawnMs: number): 'normal' | 'warnin
   const phase = (elapsedSinceSpawnMs - 8000) % 8000;
   return phase < 1000 ? 'warning' : phase < 3000 ? 'charging' : 'normal';
 }
+
+export function fortressMaxHp(levelId: number): number {
+  if (!Number.isInteger(levelId) || levelId < 1 || levelId > 8) throw new Error('堡垒关卡无效');
+  return 1000 + (levelId - 1) * 200;
+}

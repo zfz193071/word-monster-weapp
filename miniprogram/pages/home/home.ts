@@ -1,3 +1,5 @@
+import { strengthGuide, strengthTarget } from '../../services/strength-guide';
+import type { StrengthTarget } from '../../services/strength-guide';
 import { petStore } from '../../services/pet-store';
 import type { PetView } from '../../services/pet-store';
 import { createAudioAdapter } from '../../services/audio';
@@ -12,7 +14,7 @@ import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { showPet: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { strengthTarget: '' as StrengthTarget, showPet: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -29,8 +31,10 @@ Page({
   },
   openPet() {
     if (!this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showWeapon) return;
-    this.stopCollectionAudio(); this.refreshPet();
-    this.setData({ showPet: true, showLevels: false, showCredits: false, petMessage: '' });
+    this.refreshPet();
+    if (!this.data.petView?.owned || this.data.petError) return;
+    this.stopCollectionAudio();
+    this.setData({ strengthTarget: '', showPet: true, showLevels: false, showCredits: false, petMessage: '' });
   },
   closePet() { this.setData({ showPet: false }); },
   petAction(event: WechatMiniprogram.BaseEvent) {
@@ -107,7 +111,7 @@ Page({
   },
   openWeapon() {
     if (!this.data.homeVisible || this.data.showPet || this.data.request || this.data.showCredits || this.data.showLevels || this.data.preparingLevel) return;
-    this.setData({ showWeapon: true });
+    this.setData({ strengthTarget: '', showWeapon: true });
   },
   closeWeapon() { this.setData({ showWeapon: false }); },
   equipmentChanged(event: WechatMiniprogram.CustomEvent<{ level:number; balance:number; error:boolean }>) {
@@ -126,6 +130,7 @@ Page({
       this.clearChallenge();
     }
     this.refreshLevels(); this.synchronizeMusic();
+    if (strengthGuide.consume()) this.setData({ strengthTarget: this.data.coinError ? '' : strengthTarget(this.data.weaponLevel, this.data.petError ? null : this.data.petView) });
   },
   onHide() { this.setData({ homeVisible: false }); this.stopCollectionAudio(); this.synchronizeMusic(); },
   onUnload() { this.disposed = true; this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
@@ -153,13 +158,14 @@ Page({
     try {
       if (!coinWallet.canEnter(levelId)) return;
       if (levelId > 1) {
-        this.setData({ preparingLevel: true, entryError: '' });
+        this.setData({ preparingLevel: true, entryProgress: 0, entryError: '' });
         await loadLevelAssets();
         if (this.disposed) return;
+        this.setData({ entryProgress: 100 });
       }
       const request = fortressEntryStore.start(Date.now(), levelId);
       this.stopCollectionAudio(); this.music?.setActive(false);
-      this.setData({ request, showLevels: false, showCredits: false, entryError: '', choiceComplete: false, navigationError: false });
+      this.setData({ strengthTarget: '', request, showLevels: false, showCredits: false, entryError: '', choiceComplete: false, navigationError: false });
     } catch { if (!this.disposed) this.setData({ entryError: '关卡暂时无法准备，请重试' }); }
     finally { if (!this.disposed) this.setData({ preparingLevel: false }); }
   },
@@ -171,12 +177,16 @@ Page({
   enterBattle() {
     const request = this.data.request;
     if (this.disposed || this.data.opening || !this.data.choiceComplete || !request) return;
-    this.setData({ opening: true, navigationError: false });
+    // Resource preparation is complete; page navigation is the remaining step.
+    this.setData({ opening: true, entryProgress: 50, navigationError: false });
     const navigationId = ++this.navigationId;
     wx.navigateTo({
       url: `/pages/battle/battle?mode=fortress&entry=${encodeURIComponent(request.plan.sessionId)}`,
       success: () => {
-        if (!this.disposed && this.navigationId === navigationId) this.enteredBattle = true;
+        if (!this.disposed && this.navigationId === navigationId) {
+          this.enteredBattle = true;
+          this.setData({ entryProgress: 100 });
+        }
       },
       fail: () => {
         if (this.disposed || this.navigationId !== navigationId) return;

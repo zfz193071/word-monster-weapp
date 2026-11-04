@@ -1,3 +1,4 @@
+import type { StrengthTarget } from '../services/strength-guide';
 import type { PetAppearance } from '../pets/catalog';
 import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
@@ -157,7 +158,8 @@ function hero(seconds:number,level=1):Face[]{
 function fox(seconds:number, appearance:PetAppearance):Face[]{
   const f:Face[]=[]; const adult=appearance.level>=7, teen=appearance.level>=4;
   const scale=adult?1:teen?.85:.68; const blue='#85bdcf', cream='#fff0ce';
-  const sway=Math.sin(seconds*2.2)*.15;
+  const rhythm=Math.sin(seconds*4);
+  const sway=Math.sin(seconds*6)*.20;
   ellipsoid(f,.4,.45,-.36+sway,.22,.22,.64,blue);
   ellipsoid(f,.4,.48,-.84+sway,.19,.18,.28,cream);
   for(const x of [-.22,.22])for(const z of [-.18,.22])ellipsoid(f,x,.13,z,.13,.16,.16,'#587e9d');
@@ -180,7 +182,12 @@ function fox(seconds:number, appearance:PetAppearance):Face[]{
   if(appearance.equipped.includes('collar')){box(f,0,.67,.32,.55,.09,.15,'#9b83c1');ellipsoid(f,0,.61,.43,.065,.065,.035,'#ffe291');}
   if(appearance.equipped.includes('hat')){box(f,0,1.27,.07,.85,.08,.63,'#bfa478');box(f,0,1.41,.03,.42,.24,.4,'#dec294');}
   if(appearance.equipped.includes('charm')){box(f,.32,.53,.3,.05,.24,.04,'#f4d271');box(f,.37,.42,.34,.12,.09,.06,'#ffe291');box(f,.33,.35,.34,.06,.14,.06,'#ffe291');}
-  return f.map(face=>({...face,pet:true,points:face.points.map(p=>[p[0]*scale+.85,p[1]*scale+Math.sin(seconds*2.2)*.015,p[2]*scale+1.45] as Point3)}));
+  // Rock the whole companion around its feet; clothing and hit geometry follow.
+  const angle=rhythm*.12,cos=Math.cos(angle),sin=Math.sin(angle);
+  return f.map(face=>({...face,pet:true,
+    normal:[face.normal[0]*cos-face.normal[1]*sin,face.normal[0]*sin+face.normal[1]*cos,face.normal[2]] as Point3,
+    points:face.points.map(p=>[(p[0]*cos-p[1]*sin)*scale+.85+rhythm*.10,
+      (p[0]*sin+p[1]*cos)*scale+Math.abs(rhythm)*.06,p[2]*scale+1.45] as Point3)}));
 }
 function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
   const view=rotateRoomPoint(VIEW,-yaw);
@@ -195,6 +202,7 @@ function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
 export class HomeRoomScene {
   private readonly context:Context;
   private weaponLevel=1;
+  private guide:StrengthTarget='';
   private pet:PetAppearance|null=null;
   private drawnFaces:ProjectedFace[]=[];
   private readonly roomFaces=room();
@@ -217,6 +225,7 @@ export class HomeRoomScene {
   setWeaponLevel(level:number){
     weaponForLevel(level);this.weaponLevel=level;if(!this.active&&!this.disposed)this.draw();
   }
+  setGuide(target:StrengthTarget){this.guide=target;if(!this.disposed&&!this.active)this.draw();}
   setPet(pet:PetAppearance|null){this.pet=pet;if(!this.disposed&&!this.active)this.draw();}
   hitHero(x:number,y:number):boolean{return this.hitActor(x,y,'actor');}
   hitPet(x:number,y:number):boolean{return this.hitActor(x,y,'pet');}
@@ -289,6 +298,17 @@ export class HomeRoomScene {
       c.globalAlpha=face.opacity;c.fillStyle=face.color;c.strokeStyle=face.color;c.lineWidth=.45;
       c.beginPath();face.points.forEach(([x,y],i)=>{if(i===0)c.moveTo(x*scale,y*scale);else c.lineTo(x*scale,y*scale);});c.closePath();c.fill();c.stroke();
     }
-    c.globalAlpha=1;c.restore();
+    c.globalAlpha=1;
+    if(this.guide){
+      const point=projectRoomPoint(this.guide==='pet'?[.85,1.1,1.6]:[-.5,1.9,1.1],this.yaw);
+      c.save();c.translate(point.x*scale,point.y*scale-42+Math.sin(this.elapsed*5)*5);
+      c.fillStyle='#ffe1ad';c.strokeStyle='#806447';c.lineWidth=2;c.lineJoin='round';
+      c.beginPath();c.moveTo(-9,-12);c.lineTo(9,-12);c.lineTo(9,-3);
+      c.quadraticCurveTo(15,-1,15,6);c.lineTo(15,13);c.quadraticCurveTo(13,18,9,13);
+      c.quadraticCurveTo(6,18,2,13);c.lineTo(2,29);c.quadraticCurveTo(-1,37,-6,30);
+      c.lineTo(-6,9);c.lineTo(-11,14);c.lineTo(-18,8);c.quadraticCurveTo(-23,0,-15,1);
+      c.lineTo(-10,5);c.closePath();c.fill();c.stroke();c.fillStyle='#7c9f87';c.fillRect(-11,-16,22,7);c.restore();
+    }
+    c.restore();
   }
 }

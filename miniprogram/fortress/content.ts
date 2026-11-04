@@ -32,6 +32,7 @@ export const FORTRESS_MONSTERS: readonly MonsterVisual[] = Object.freeze(FORTRES
 export function monsterDrawWidth(visual: MonsterVisual): number { return visual.sourceSize.width === 32 ? 112 : 80; }
 
 export const BATTLE_ASSETS: readonly VisualAsset[] = Object.freeze([...LEVEL_ASSETS, ...FORTRESS_ASSETS, ...EXTRA_IMAGE_ASSETS, ...EXTRA_AUDIO_ASSETS, ...ZOMBIE_VOICE_ASSETS.filter(asset => !FORTRESS_WORDS.some(word => word.id === asset.wordId)), ...LEARNING_VOICE_ASSETS,
+  { path: '/assets/audio/defeat-sad.mp3', wordId: 'defeat', kind: 'audio', source: 'scripts/create-defeat-audio.py', rights: '本项目原创合成小调音效，无第三方采样；见 docs/defeat-sound-manifest.json', reviewStatus: 'pending' },
   { path: '/assets/audio/victory-cheer.mp3', wordId: 'victory-cheer', kind: 'audio', source: 'https://sfxmint.com/sounds/crowd-cheer-43', rights: 'SFXMint AI生成欢呼；CC0 1.0；转码及哈希见 docs/victory-cheer-manifest.json', reviewStatus: 'pending' },
   { path: '/assets/audio/victory-applause.mp3', wordId: 'victory-applause', kind: 'audio', source: 'https://sfxmint.com/sounds/crowd-applause-58', rights: 'SFXMint AI生成短掌声；CC0 1.0；原始文件按24kHz单声道32kbps转码，来源及哈希见 docs/victory-applause-manifest.json', reviewStatus: 'pending' },
   { path: '/assets/audio/victory-praise.mp3', wordId: 'victory', kind: 'audio', source: 'https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh', rights: 'Kokoro v1.1-zh（Apache-2.0）生成中文鼓励语音；音色zf_001；生成记录见 docs/victory-praise-manifest.json', reviewStatus: 'pending' }]);

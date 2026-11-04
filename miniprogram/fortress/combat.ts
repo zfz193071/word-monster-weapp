@@ -1,7 +1,7 @@
 import { battlePetPosition, createBattlePet, PET_ATTACK_INTERVAL_MS, petDamage } from '../pets/battle';
 import type { BattlePet } from '../pets/battle';
 import { weaponForLevel } from '../weapons/catalog';
-import { bossChargePhase, monsterStats } from './battle-progression';
+import { bossChargePhase, fortressMaxHp, monsterStats } from './battle-progression';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
@@ -122,7 +122,8 @@ export function createEncounterCombat(options: EncounterCombatOptions): CombatSt
 function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex'>, context: CombatContext, spawns: readonly MonsterSpawn[]): CombatState {
   if (!options.combatId.trim()) throw new RangeError('combatId 不能为空');
   if (!Number.isSafeInteger(options.generation) || options.generation < 0) throw new RangeError('generation 必须为非负安全整数');
-  if (!Number.isSafeInteger(options.baseHp) || options.baseHp <= 0 || options.baseHp > RULES.base.maxHp) throw new RangeError(`baseHp 必须为1—${RULES.base.maxHp}的整数；失败局不能进入下一波`);
+  const maxHp = options.difficulty ? fortressMaxHp(options.difficulty.levelId) : RULES.base.maxHp;
+  if (!Number.isSafeInteger(options.baseHp) || options.baseHp <= 0 || options.baseHp > maxHp) throw new RangeError(`baseHp 必须为1—${maxHp}的整数；失败局不能进入下一波`);
   const weapon = getWeaponParameters(options.skills);
   const monsterSpeed = options.monsterSpeed ?? RULES.monster.speed;
   if (!Number.isFinite(monsterSpeed) || monsterSpeed <= 0) throw new RangeError('monsterSpeed 必须为正数');
@@ -143,7 +144,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     weaponLevel, context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
     tick: 0, ...(options.skills.firepower ? { firepowerUntilTick: 500, firepowerReadyTick: 2000 } : {}), status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
-    base: { hp: options.baseHp, maxHp: RULES.base.maxHp }, skills: options.skills,
+    base: { hp: options.baseHp, maxHp }, skills: options.skills,
     monsters: spawns.map(spawn => {
       const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
       const size = spawn.boss ? 1.5 : 1;

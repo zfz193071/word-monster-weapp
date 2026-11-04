@@ -5,16 +5,16 @@
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
   <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinBalance}}</text></view>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
-  <view wx:if="{{preparingLevel && !showLevels}}" class="entry-error">正在出发…</view>
+  <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><loading-progress progress="{{entryProgress}}" /></view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet}}" weapon-level="{{weaponLevel}}" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
+    <home-scene class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
   </view>
+  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
   <view class="start-dock">
     <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>
   </view>
-  <button class="pet-button" bindtap="openPet" aria-label="打开伙伴面板">伙伴</button>
   <view wx:if="{{showPet}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="pet-modal" role="dialog" aria-label="小雷狐伙伴">
       <button class="close-button" bindtap="closePet" aria-label="关闭">×</button>
@@ -47,13 +47,13 @@
         <view class="success-mark">✓</view>
         <view wx:if="{{navigationError}}">暂时没能进入战场</view>
         <button wx:if="{{navigationError}}" class="retry-entry" bindtap="enterBattle">重试</button>
-        <view wx:else>正在出发…</view>
+        <loading-progress wx:else progress="{{entryProgress}}" />
       </view>
     </view>
   </view>
   <view wx:if="{{showLevels}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="levels-modal" role="dialog" aria-label="选择关卡">
-      <view class="levels-title">{{preparingLevel ? '正在出发…' : '冒险地图'}}</view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
+      <view class="levels-title"><loading-progress wx:if="{{preparingLevel}}" progress="{{entryProgress}}" /><text wx:else>冒险地图</text></view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
       <view wx:if="{{entryError}}" class="level-load-error">{{entryError}}</view>
       <view wx:if="{{progressError}}" class="progress-error">进度暂时无法读取<button bindtap="refreshLevels">重试</button></view>
       <scroll-view wx:else scroll-y class="levels-scroll"><view class="levels-grid">

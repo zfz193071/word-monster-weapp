@@ -82,3 +82,14 @@
 .scene-paused .victory-reward { animation-play-state: paused; }
 
 .pet-reward { position:absolute; top:12rpx; left:12%; right:12%; z-index:120; padding:12rpx; border-radius:18rpx; text-align:center; background:#fff1cce8; color:#486052; font-size:24rpx; pointer-events:none; }.pet-reward button { pointer-events:auto; font-size:24rpx; }
+
+.defeat-overlay { position:absolute; inset:0; z-index:110; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(28,44,58,.93); color:#f5f0df; }
+.crying-hero { position:relative; width:200rpx; height:190rpx; margin-bottom:50rpx; border-radius:44% 44% 48% 48%; background:#e7bb8b; box-shadow:0 14rpx 0 #162d3b55; animation:sad-rock 1600ms ease-in-out infinite; }
+.crying-helmet { position:absolute; top:-22rpx; left:-12rpx; width:224rpx; height:90rpx; border-radius:110rpx 110rpx 22rpx 22rpx; background:#91a56f; border-bottom:14rpx solid #bdcb93; }
+.crying-eye { position:absolute; top:95rpx; width:40rpx; height:15rpx; border-top:7rpx solid #665743; border-radius:50%; }.left-eye { left:33rpx; transform:rotate(-12deg); }.right-eye { right:33rpx; transform:rotate(12deg); }
+.crying-mouth { position:absolute; top:145rpx; left:78rpx; width:44rpx; height:20rpx; border-top:6rpx solid #9b685c; border-radius:50%; }
+.crying-tear { position:absolute; top:112rpx; width:17rpx; height:30rpx; border-radius:50% 50% 55% 55%; background:#9adbed; animation:sad-tear 1100ms ease-in infinite; }.left-tear { left:44rpx; }.right-tear { right:44rpx; animation-delay:450ms; }
+.defeat-title { font-size:36rpx; font-weight:bold; }.defeat-subtitle { margin:22rpx 0 50rpx; color:#bdcddb; font-size:26rpx; }.strengthen-button { width:350rpx; border-radius:50rpx; background:#f0d58c; color:#4e583f; font-size:32rpx; font-weight:bold; }
+@keyframes sad-rock { 0%,100% { transform:rotate(-4deg) translateY(0); } 50% { transform:rotate(4deg) translateY(7rpx); } }
+@keyframes sad-tear { 0% { opacity:0; transform:translateY(0); } 20% { opacity:1; } 100% { opacity:0; transform:translateY(90rpx); } }
+.scene-paused .crying-hero,.scene-paused .crying-tear { animation-play-state:paused; }

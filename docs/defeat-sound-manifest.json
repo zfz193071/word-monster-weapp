@@ -1,0 +1,8 @@
+{
+  "source": "scripts/create-defeat-audio.py",
+  "rights": "本项目原创合成，无第三方采样",
+  "path": "miniprogram/assets/audio/defeat-sad.mp3",
+  "sha256": "dbb045bdd0f34e229c4f34033ec5d412f03b5a778d7460a01324c324a5a2c378",
+  "review": "pending human listening",
+  "description": "2.6秒轻柔小调下行音效，失败时播放一次"
+}

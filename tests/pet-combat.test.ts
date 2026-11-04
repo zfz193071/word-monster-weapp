@@ -35,7 +35,7 @@ test('雷击击杀复用经验/金币且不会挡伤，暂停/跨波保留计时
  assert.equal(killed.events.filter(e=>e.type==='monsterDefeated').length,1);assert.equal(killed.events.filter(e=>e.type==='coinsDropped').length,1);
  const xp=createExperience('pet-fight',OPENING_EXPERIENCE);xp.record(killed.events);xp.record(killed.events);assert.equal(xp.view.total,8);
  const attacker={...fixture(),monsters:[{...fixture().monsters[0],status:'attackingBase' as const,position:{x:250,y:480},attackRemainingMs:0}]};
- const hit=stepCombat(attacker);assert.equal(hit.state.base.hp,40);assert.ok(hit.state.pet,'宠物不受伤或消失，也不替堡垒挡伤');
+ const hit=stepCombat(attacker);assert.equal(hit.state.base.hp,990);assert.ok(hit.state.pet,'宠物不受伤或消失，也不替堡垒挡伤');
  const runner=new CombatRunner(fixture());runner.frame(0);runner.frame(100);assert.equal(runner.snapshot?.pet?.attackRemainingMs,1900);
  runner.pause();runner.frame(10000);assert.equal(runner.snapshot?.pet?.attackRemainingMs,1900);runner.resume(10000,1);runner.frame(10010);assert.equal(runner.snapshot?.pet?.attackRemainingMs,1890);
  runner.applyPet(createBattlePet({level:1,equipped:[]}));assert.equal(runner.snapshot?.pet?.attackRemainingMs,1890);

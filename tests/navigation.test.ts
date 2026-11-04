@@ -1,3 +1,4 @@
+import { createStrengthGuide, strengthTarget } from '../miniprogram/services/strength-guide';
 import { createPetStore } from '../miniprogram/services/pet-store';
 import { collectionWords } from '../miniprogram/fortress/collection';
 import { LEVELS } from '../miniprogram/fortress/levels';
@@ -13,6 +14,7 @@ import { createFortressEntryStore } from '../miniprogram/services/fortress-entry
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
 function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
+  const strengthGuide=createStrengthGuide();
   const sessionStore = createSessionStore();
   let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
   const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
@@ -30,6 +32,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/strength-guide') return {strengthGuide,strengthTarget};
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
       if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
@@ -50,7 +53,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}) {
       showToast() { toastCount++; },
     },
   });
-  return { petStore, audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
+  return { strengthGuide, petStore, audioCalls, wallet, sessionStore, get page() { return page; }, get navigation() { return navigation; },
     get navigationCount() { return navigationCount; }, get toastCount() { return toastCount; } };
 }
 
@@ -192,4 +195,28 @@ test('伙伴面板打开暂停场景覆盖，喂养和换装读写真实存档�
  assert.equal(h.page.data.petView.food,before-1);h.page.petAction(event);assert.equal(h.page.data.petView.food,before-1);
  h.page.onHide();h.page.petAction({currentTarget:{dataset:{action:'feed',revision:h.page.data.petView.revision}}});assert.equal(h.petStore.view().food,before-1);
  h.page.onShow();h.page.closePet();assert.equal(h.page.data.showPet,false);h.page.openWeapon();assert.equal(h.page.data.showWeapon,true);
+});
+
+
+test('失败后一次性引导主角，点击打开武器面板后清除指引',()=>{
+ const h=homeHarness();h.strengthGuide.request();h.page.onShow();assert.equal(h.page.data.strengthTarget,'weapon');
+ h.page.openWeapon();assert.equal(h.page.data.showWeapon,true);assert.equal(h.page.data.strengthTarget,'');
+ h.page.closeWeapon();h.page.onShow();assert.equal(h.page.data.strengthTarget,'','普通返回不重复出现');
+ assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
+});
+
+test('出发进度仅在导航完成后到达100%，失败重试和过期回调不误报完成', () => {
+  const h = homeHarness(); h.page.openBattle(); correct(h.page);
+  assert.equal(h.page.data.entryProgress, 50);
+  const oldSuccess = h.navigation.success;
+  h.navigation.fail();
+  assert.equal(h.page.data.entryProgress, 50);
+  h.page.enterBattle(); oldSuccess();
+  assert.equal(h.page.data.entryProgress, 50);
+  h.navigation.success();
+  assert.equal(h.page.data.entryProgress, 100);
+  h.page.onShow(); h.page.openBattle(); correct(h.page);
+  assert.equal(h.page.data.entryProgress, 50);
+  h.page.onUnload(); h.navigation.success();
+  assert.equal(h.page.data.entryProgress, 50);
 });

@@ -1,3 +1,4 @@
+import { createDefeatAudio } from '../../services/defeat-audio';
 import { createBattlePet } from '../../pets/battle';
 import type { BattlePet } from '../../pets/battle';
 import { petStore } from '../../services/pet-store';
@@ -24,7 +25,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState, SupportSoldierState } from '../../fortress/types';
 
-interface InstanceState { pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -45,12 +46,12 @@ Component({
   observers: {
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 50, maxHp: 50, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: 30, xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); },
     ready() { this.mount(); },
-    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.drops?.dispose(); state.petDrops?.dispose(); state.audio?.dispose(); state.victoryAudio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
+    detached() { const state = instances.get(this); if (state) { state.alive = false; state.epoch++; state.scene?.dispose(); state.drops?.dispose(); state.petDrops?.dispose(); state.audio?.dispose(); state.victoryAudio?.dispose(); state.defeatAudio?.dispose(); state.skills?.dispose(); state.experience?.dispose(); state.upgrades?.dispose(); } instances.delete(this); },
   },
   pageLifetimes: {
     hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
@@ -78,7 +79,8 @@ Component({
           if (this.properties.opening && !retained) {
             instance.experience?.dispose(); instance.upgrades?.dispose();
             instance.drops?.dispose(); instance.petDrops?.dispose();
-            this.setData({ petReward: '', petDropError: false });
+            instance.defeatAudio?.dispose(); instance.defeatAudio = undefined;
+            this.setData({ failed: false, petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
               bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss).map(monster => monster.monsterId)) ?? [], store: petStore,
               onChange: (message, error) => { if (instance.alive) { this.setData({ petReward: message, petDropError: error }); if (!error) this.syncBattlePet(); } },
@@ -135,7 +137,7 @@ Component({
                 }
                 if (scene.snapshot?.status === 'cleared') { instance.awaitingWaveEnd = true; this.presentUpgrade(); }
               }
-              if (scene.snapshot?.status === 'baseDestroyed') instance.audio?.setActive(false);
+              if (scene.snapshot?.status === 'baseDestroyed') this.presentDefeat();
               this.triggerEvent('combatevents', { events, state: scene.snapshot });
             },
             onError: message => { if (valid()) { this.setData({ error: message, ready: false }); this.applyPause(); } },
@@ -147,7 +149,19 @@ Component({
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
-    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); const paused = unavailable || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
+    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); state.defeatAudio?.setActive(!unavailable); const paused = unavailable || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
+    presentDefeat() {
+      const state = instances.get(this);
+      if (!this.properties.opening || !state?.alive || !state.scene || state.scene.snapshot?.status !== 'baseDestroyed' || this.data.failed) return;
+      state.audio?.setActive(false); state.pendingOffer = undefined; state.awaitingWaveEnd = false;
+      this.setData({ failed: true, upgradeOffer: null, frozenFrame: state.scene.captureFrame() });
+      state.defeatAudio = createDefeatAudio(); this.applyPause();
+    },
+    becomeStronger() {
+      const state = instances.get(this);
+      if (!this.data.failed || !state?.visible || this.properties.paused) return;
+      this.triggerEvent('strengthenguide');
+    },
     presentUpgrade() {
       const state = instances.get(this);
       if (!state?.awaitingWaveEnd || state.audio?.busy || !state.scene || !state.visible || this.properties.paused) return;

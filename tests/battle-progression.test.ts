@@ -20,8 +20,8 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   const initial = createOpeningEncounter('fractional', 'apple', 0, 5);
   const attacking: CombatState = { ...initial, automatic: false, monsters: [{ ...initial.monsters[0], status: 'attackingBase', position: { x: 60, y: 480 }, attackRemainingMs: 0 }] };
   const hit = stepCombat(attacking).state;
-  assert.equal(hit.base.hp, 39); assert.equal(hit.monsters[0].maxHp, 100);
-  assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 39);
+  assert.equal(hit.base.hp, 989); assert.equal(hit.monsters[0].maxHp, 100);
+  assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 989);
 });
 
 test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总1007只', () => {
@@ -116,17 +116,17 @@ test('僵尸优先攻击30点生命的小士兵；士兵被击败后后续攻击
   ] };
   let hit = stepCombat(state); state = hit.state;
   assert.equal(state.supportSoldiers?.[0].hp, 10);
-  assert.equal(state.base.hp, 50);
+  assert.equal(state.base.hp, 1000);
   assert.ok(hit.events.some(event => event.type === 'supportSoldierDamaged' && event.hp === 10));
   const nextWave = createOpeningEncounter('soldier-shield', 'banana', 1, 1, undefined, undefined, ['apple'], 1, 1, state.supportSoldiers);
   assert.equal(nextWave.supportSoldiers?.[0].hp, 10, '受伤状态应跨波保留');
   hit = stepCombat(state); state = hit.state;
   assert.equal(state.supportSoldiers?.length, 0);
-  assert.equal(state.base.hp, 50);
+  assert.equal(state.base.hp, 1000);
   assert.ok(hit.events.some(event => event.type === 'supportSoldierDefeated' && event.soldierId === 'shield-soldier-1'));
   hit = stepCombat(state);
-  assert.equal(hit.state.base.hp, 30);
-  assert.ok(hit.events.some(event => event.type === 'baseDamaged' && event.hp === 30));
+  assert.equal(hit.state.base.hp, 980);
+  assert.ok(hit.events.some(event => event.type === 'baseDamaged' && event.hp === 980));
 });
 
 test('Boss死亡按普通规则给8经验和一次计划金币；有待出场Boss不能清场', () => {

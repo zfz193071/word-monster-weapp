@@ -1,0 +1,5 @@
+<view class="progress-ring" role="progressbar" aria-label="{{percent}}%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{percent}}">
+  <view class="half right"><view class="fill" style="transform: rotate({{rightDegrees}}deg)"></view></view>
+  <view class="half left"><view class="fill" style="transform: rotate({{leftDegrees}}deg)"></view></view>
+  <view class="progress-center"><text>{{percent}}%</text></view>
+</view>
