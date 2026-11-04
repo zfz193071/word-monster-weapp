@@ -78,20 +78,25 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();
   assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');
   assert.match(readFileSync(new URL('../miniprogram/pages/battle/battle.wxml',import.meta.url),'utf8'),/class="toolbar-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
-  const { OPENING_MONSTER_COUNTS } = await import('../miniprogram/fortress/opening-encounter');
+  const { openingMonsterCount } = await import('../miniprogram/fortress/opening-encounter');
   let picked=0;let repairs=0;
   for(let wave=0;wave<19;wave++){
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
-    assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,OPENING_MONSTER_COUNTS[wave]);
+    assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,openingMonsterCount(wave,level.id));
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
-    const killsToUpgrade=(opening.OPENING_EXPERIENCE.levelThresholds[wave]-host.data.experience)/8;
-    assert.ok(killsToUpgrade>0 && killsToUpgrade<current!.snapshot.monsters.length);
-    current!.options.onEvents(current!.snapshot.monsters.slice(0,killsToUpgrade).map(m=>({type:'monsterDefeated',context:current!.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId})));
-    assert.equal(host.data.level,wave+2);assert.equal(current!.snapshot.status,'fighting');
+    let awardedThisWave=0;
+    const waveMonsters=current!.snapshot.monsters;
+    while(host.data.level<20 && opening.OPENING_EXPERIENCE.levelThresholds[host.data.level-1] <= host.data.experience+(waveMonsters.length-awardedThisWave)*8){
+    const killsToUpgrade=(opening.OPENING_EXPERIENCE.levelThresholds[host.data.level-1]-host.data.experience)/8;
+    const nextLevel=host.data.level+1;
+    assert.ok(killsToUpgrade>0 && killsToUpgrade<=waveMonsters.length-awardedThisWave);
+    current!.options.onEvents(waveMonsters.slice(awardedThisWave,awardedThisWave+killsToUpgrade).map(m=>({type:'monsterDefeated',context:current!.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId})));
+    awardedThisWave+=killsToUpgrade;
+    assert.equal(host.data.level,nextLevel);assert.equal(current!.snapshot.status,'fighting');
     assert.equal(host.data.xpCurrent,0,'达到门槛升级后当前级经验归零');
-    assert.equal(host.data.xpRequired,wave<18?(wave+2)*40:0);
-    assert.equal(host.data.xpPercent,wave<18?0:100,'新等级从空经验条开始，满级沿用清场状态');
+    assert.equal(host.data.xpRequired,nextLevel<20?nextLevel*40:0);
+    assert.equal(host.data.xpPercent,nextLevel<20?0:100,'新等级从空经验条开始，满级沿用清场状态');
     {
       const offer=host.data.upgradeOffer;assert.ok(offer);assert.equal(offer.cards.length,3);assert.equal(host.data.waveRequest,null);
       assert.equal(current!.paused,true,'技能弹窗出现即暂停战场');assert.equal(host.data.frozenFrame,'frame');
@@ -106,7 +111,8 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
     }
     assert.equal(current!.paused,false,'选完技能立即继续同一轮');
     assert.equal(host.data.waveRequest,null,'活怪未清完不得跳到下一轮');
-    current!.clear();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
+    }
+    current!.clear();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
       const before=voiceEnds.length;advanceAudio(300);assert.equal(voiceEnds.length,before,'新击杀不能打断当前词');
@@ -125,7 +131,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   const expectedDrops=Math.min(50,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);
   assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins+expectedDrops);assert.equal(wallet.balance(),expectedCoins+expectedDrops);
-  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,8056);assert.equal(host.data.xpCurrent,456);
+  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);const totalXp=plan.waves.reduce((sum,w)=>sum+w.spawnPlan.length*8,0);assert.equal(host.data.experience,totalXp);assert.equal(host.data.xpCurrent,totalXp-7600);
   assert.equal(praiseActive,true);host.properties.paused=true;definition.properties.paused.observer.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
   host.properties.paused=false;definition.properties.paused.observer.call(host);assert.equal(praiseActive,true);
   definition.pageLifetimes.hide.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
@@ -139,8 +145,8 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
     await Promise.resolve();
     assert.equal(current!.snapshot.context.sessionId,nextPlan.sessionId,'切换颜色关不能继续保留水果关的场景');
     assert.ok(oldScene.disposed);
-    assert.ok(current!.snapshot.monsters.every(m=>levels.getLevel(2).words.some(word=>word.id===m.wordId)));
-    assert.ok(Object.keys(current!.options.art.fruitHats).every(id=>levels.getLevel(2).words.some(word=>word.id===id)));
+    assert.equal(current!.snapshot.monsters.filter(m=>levels.getLevel(1).words.some(word=>word.id===m.wordId)).length,Math.round(current!.snapshot.monsters.length*.3));
+    assert.ok(Object.keys(current!.options.art.fruitHats).every(id=>[...levels.getLevel(1).words,...levels.getLevel(2).words].some(word=>word.id===id)));
     assert.equal(host.data.completed,false);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.xpCurrent,0);assert.equal(host.data.xpRequired,40);assert.equal(host.data.xpPercent,0);
   }

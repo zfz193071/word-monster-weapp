@@ -15,6 +15,11 @@ export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
 export const OPENING_EXPERIENCE_PER_KILL = 8;
 export const OPENING_MONSTER_COUNTS: readonly number[] = Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, waveIndex) => 8 + waveIndex * 5));
+export function openingMonsterCount(waveIndex: number, levelId = 1): number {
+  if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
+  getLevel(levelId);
+  return levelId > 1 ? Math.ceil(OPENING_MONSTER_COUNTS[waveIndex] * 1.25) : OPENING_MONSTER_COUNTS[waveIndex];
+}
 export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({
   experiencePerKill: OPENING_EXPERIENCE_PER_KILL,
   // Cumulative XP: each level costs currentLevel * 40, independent of waves.
@@ -49,12 +54,17 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
   const words = getLevel(levelId).words;
   if (!words.some(word => word.id === wordId) || previousWordIds.some(id => !words.some(word => word.id === id))) throw new Error('词汇不属于本关');
-  const count = OPENING_MONSTER_COUNTS[waveIndex];
+  const count = openingMonsterCount(waveIndex, levelId);
   let seed = 2166136261;
   for (const char of `${sessionId}:${waveIndex}`) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
   const random = createSeededRandom(seed >>> 0);
   const history = [...new Set(previousWordIds)].filter(id => id !== wordId && BATTLE_WORDS.some(word => word.id === id));
-  const fruitIds = Array.from({ length: count }, (_, index) => !history.length || index < Math.ceil(count / 2) ? wordId : history[(index - Math.ceil(count / 2)) % history.length]);
+  const previousLevelIds = levelId > 1 ? getLevel(levelId - 1).words.map(word => word.id) : [];
+  const previousCount = previousLevelIds.length ? Math.round(count * .3) : 0;
+  const currentCount = count - previousCount;
+  const fruitIds = Array.from({ length: currentCount }, (_, index) => !history.length || index < Math.ceil(currentCount / 2) ? wordId : history[(index - Math.ceil(currentCount / 2)) % history.length]);
+  const offset = previousLevelIds.length ? Math.floor(random() * previousLevelIds.length) : 0;
+  for (let index = 0; index < previousCount; index++) fruitIds.push(previousLevelIds[(offset + index) % previousLevelIds.length]);
   for (let i = fruitIds.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [fruitIds[i], fruitIds[j]] = [fruitIds[j], fruitIds[i]]; }
   const spawns = []; let spawnAtMs = 0;
   while (spawns.length < count) {
@@ -75,7 +85,10 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   });
   return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1 }, weaponLevel, automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId),
     playerX: 180, skills, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
-    allowedWordIds: [wordId, ...history], spawns: plannedSpawns });
+    monsterHitboxes: Object.fromEntries([...new Set(fruitIds)].map(id => {
+      const art = openingArt(id); return [id, logicalHitbox(art.monsterVisual, art.monsterWidth)];
+    })),
+    allowedWordIds: [wordId, ...history, ...previousLevelIds], spawns: plannedSpawns });
 }
 export function openingSkillOffer(sessionId: string, level = 2, levels: SkillLevels = ZERO_SKILLS, base = { hp: FORTRESS_RULES.base.maxHp, maxHp: FORTRESS_RULES.base.maxHp }): UpgradeOffer {
   const cards: UpgradeCard[] = FORTRESS_SKILLS.filter(skill => levels[skill.id] < skill.maxLevel).map(skill => ({ id: skill.id, label: skill.label, icon: skill.id,

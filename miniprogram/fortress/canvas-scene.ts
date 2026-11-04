@@ -438,11 +438,11 @@ export class CanvasScene {
       c.restore();
     }
   }
-  // Original geometry: shared zombie eyes and stitches, species-specific silhouettes.
+  // Original animal silhouettes with sunken red eyes, fangs and stitched patches.
   private drawAnimal(id: string, x: number, y: number, tick: number): void {
     const c = this.context;
     const stride = tick ? Math.sin(tick * .095) : 0;
-    const colors: Record<string, string> = { bear: '#9f8a65', bee: '#d5bc54', bird: '#7da9ab', cat: '#96a986', chicken: '#b8bea0', cow: '#d5d4b9', dog: '#a7a071', duck: '#9fb278', elephant: '#91a4a1', fish: '#83a6b4', horse: '#ac9273', lion: '#bca35d', panda: '#c4cdb6', rabbit: '#b4c6b2', sheep: '#cdd4bc', tiger: '#c6a355' };
+    const colors: Record<string, string> = { bear: '#70664e', bee: '#a39543', bird: '#547b79', cat: '#687b5c', chicken: '#8a9472', cow: '#a7ad8b', dog: '#7e7c51', duck: '#748650', elephant: '#637d77', fish: '#547c87', horse: '#817257', lion: '#958345', panda: '#a6b597', rabbit: '#8b9f83', sheep: '#aab497', tiger: '#a38a42' };
     c.save(); c.translate(x, y);
     c.fillStyle = 'rgba(37,62,56,.18)'; c.beginPath(); c.ellipse(0, 22, 18, 4, 0, 0, Math.PI * 2); c.fill();
     const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); };
@@ -450,12 +450,17 @@ export class CanvasScene {
     const body = colors[id];
     if (id === 'bee' || id === 'bird' || id === 'chicken' || id === 'duck') {
       const lift = id === 'bee' || id === 'bird' ? stride * 3 : 0;
-      oval(-16, -2 + lift, 8, 4, '#d9e8cf', -.5); oval(16, -2 - lift, 8, 4, '#d9e8cf', .5);
+      oval(-16, -2 + lift, 8, 4, '#9caa91', -.5); oval(16, -2 - lift, 8, 4, '#9caa91', .5);
     } else if (id === 'fish') {
       c.fillStyle = '#577f87'; c.beginPath(); c.moveTo(-13, 0); c.lineTo(-23, -10 + stride * 2); c.lineTo(-23, 10 + stride * 2); c.closePath(); c.fill();
     } else {
       // Four legs step in opposing diagonal pairs.
-      for (let leg = 0; leg < 4; leg++) oval((leg % 2 ? 1 : -1) * (leg < 2 ? 8 : 13), 13 + (leg % 2 ? 1 : -1) * stride * 3, 3.5, 8, leg < 2 ? '#647866' : '#849379');
+      for (let leg = 0; leg < 4; leg++) {
+        const footX = (leg % 2 ? 1 : -1) * (leg < 2 ? 8 : 13);
+        const footY = 13 + (leg % 2 ? 1 : -1) * stride * 3;
+        oval(footX, footY, 3.5, 8, leg < 2 ? '#465746' : '#64765b');
+        for (const offset of [-1.7, 1.7]) line([footX + offset, footY + 5, footX + offset, footY + 8], '#d9d3a7', 1.3);
+      }
       line([13, 3, 22, -3, 20, -11 + stride * 2], body, 4);
     }
     if (id === 'lion') oval(0, -7, 19, 18, '#89794d');
@@ -477,11 +482,25 @@ export class CanvasScene {
     if (id === 'panda') { oval(-6, -8, 5, 6, '#53685e', -.4); oval(6, -8, 5, 6, '#53685e', .4); }
     if (id === 'cow') { line([-8, -15, -13, -23], '#e0d8a0', 3); line([8, -15, 13, -23], '#e0d8a0', 3); }
     if (id === 'chicken') { oval(-3, -21, 3, 5, '#b96e5a'); oval(3, -21, 3, 5, '#b96e5a'); }
-    oval(-5, -8, 4, 4.5, '#edf0bf'); oval(5, -7, 4, 4.5, '#edf0bf'); oval(-4, -7, 1.5, 2, '#3e594d'); oval(6, -6, 1.5, 2, '#3e594d');
+    // Wide dark sockets and compact glowing pupils remain readable at battle scale.
+    oval(-5.5, -8, 5.5, 5.5, '#26352f', -.18); oval(5.5, -7, 5.5, 5.5, '#26352f', .18);
+    oval(-5, -7.5, 3.2, 3.2, '#b74e42'); oval(5, -6.5, 3.2, 3.2, '#b74e42');
+    oval(-4.5, -7.5, 1, 2.3, '#ffe49b'); oval(4.5, -6.5, 1, 2.3, '#ffe49b');
+    line([-11, -13, -2, -10], '#26352f', 2.5); line([2, -9, 11, -12], '#26352f', 2.5);
+    oval(0, 6, 7.5, 5, '#26352f');
+    c.fillStyle = '#e5ddad';
+    for (const toothX of [-4, 3]) {
+      c.beginPath(); c.moveTo(toothX - 1.5, 2); c.lineTo(toothX + 1.5, 2); c.lineTo(toothX, 7); c.closePath(); c.fill();
+    }
+    line([-5, 10, -1, 11, 3, 10], '#4b5946', 1.5);
     if (id === 'elephant') { line([0, -1, 0, 11, 5, 14], '#6c8983', 6); }
     else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 8 : 5, 3, '#d5b461');
-    else { oval(0, -1, 3, 2, '#526b59'); line([-5, 4, 5, 5], '#526b59'); }
-    line([7, -16, 12, -12], '#4f6a58', 1); line([7, -13, 10, -16], '#4f6a58', 1);
+    else oval(0, -1, 3, 2, '#344a3c');
+    // A stitched skin patch adds an undead cue without obscuring ears or markings.
+    line([7, -18, 12, -13, 10, -10], '#303f34', 1.5);
+    line([7, -15, 11, -18], '#c8c49c', 1); line([9, -12, 14, -15], '#c8c49c', 1);
+    line([-12, 7, -8, 9, -11, 13], '#344a3c', 1.5);
+    line([-13, 9, -8, 11], '#b6b58d', 1);
     c.restore();
   }
   private sprite(asset: SpriteAsset, x: number, y: number, width: number, height: number): void {

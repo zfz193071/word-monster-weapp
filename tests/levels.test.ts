@@ -4,12 +4,12 @@ import { LEVELS, getLevel, ANIMAL_IDS } from '../miniprogram/fortress/levels';
 import { createOpeningPlan, validateOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
-import { OPENING_MONSTER_COUNTS } from '../miniprogram/fortress/opening-encounter';
+import { openingMonsterCount } from '../miniprogram/fortress/opening-encounter';
 import { stepCombat } from '../miniprogram/fortress/combat';
 import { createCoinWallet } from '../miniprogram/services/coin-wallet';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
 
-test('八关分类隔离、19波循环学词、复习无相邻重复，混合只使用本关历史词',()=>{
+test('八关分类隔离、19波循环学词、复习无相邻重复，混合使用本关已学词和上一关复习词',()=>{
  for(const level of LEVELS) for(let seed=0;seed<20;seed++){
   const plan=createOpeningPlan(`l${level.id}-${seed}`,createSeededRandom(seed),level.id);validateOpeningPlan(plan);
   assert.equal(plan.waves.length,19);assert.equal(plan.levelId,level.id);
@@ -17,8 +17,9 @@ test('八关分类隔离、19波循环学词、复习无相邻重复，混合只
   for(const [index,wave] of plan.waves.entries()){
    assert.ok(ids.includes(wave.targetWordId));assert.ok(wave.optionWordIds.every(id=>ids.includes(id)));
    const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
-   assert.equal(wave.spawnPlan.length,OPENING_MONSTER_COUNTS[index]);
-   assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(OPENING_MONSTER_COUNTS[index]/2):OPENING_MONSTER_COUNTS[index]);
+   assert.equal(wave.spawnPlan.length,openingMonsterCount(index,level.id));
+   const currentCount=wave.spawnPlan.length-(level.id>1?Math.round(wave.spawnPlan.length*.3):0);
+   assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(currentCount/2):currentCount);
    const counts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);
    if(index) {assert.notEqual(wave.targetWordId,plan.waves[index-1].targetWordId);assert.ok(Math.max(...counts)-Math.min(...counts)<=1);}
   }

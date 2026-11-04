@@ -36,6 +36,7 @@ export interface CreateCombatOptions {
   readonly playerX: number;
   readonly skills: SkillLevels;
   readonly supportSoldiers?: readonly SupportSoldierState[];
+  readonly monsterHitboxes?: Readonly<Record<string, Rect>>;
   readonly monsterHitbox: Rect; // required; no fake/default monster art geometry
 }
 
@@ -130,11 +131,13 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   const attackIntervalMs = options.monsterAttackIntervalMs ?? RULES.monster.attackIntervalMs;
   if (!Number.isFinite(attackIntervalMs) || attackIntervalMs <= 0) throw new Error('攻击间隔无效');
   const box = options.monsterHitbox;
-  for (const key of ['x', 'y', 'width', 'height'] as const) finite(box[key], `monsterHitbox.${key}`);
-  if (box.width <= 0 || box.height <= 0 || box.width > RULES.arena.width || box.height > RULES.arena.height
-    || Math.abs(box.x) > RULES.arena.width || Math.abs(box.y) > RULES.arena.height
-    || Math.abs(box.x + box.width) > RULES.arena.width || Math.abs(box.y + box.height) > RULES.arena.height) {
-    throw new RangeError('monsterHitbox 必须为正面积矩形，尺寸和相对坐标不可超出战场范围');
+  for (const box of [options.monsterHitbox, ...Object.values(options.monsterHitboxes ?? {})]) {
+    for (const key of ['x', 'y', 'width', 'height'] as const) finite(box[key], `monsterHitbox.${key}`);
+    if (box.width <= 0 || box.height <= 0 || box.width > RULES.arena.width || box.height > RULES.arena.height
+      || Math.abs(box.x) > RULES.arena.width || Math.abs(box.y) > RULES.arena.height
+      || Math.abs(box.x + box.width) > RULES.arena.width || Math.abs(box.y + box.height) > RULES.arena.height) {
+      throw new RangeError('monsterHitbox 必须为正面积矩形，尺寸和相对坐标不可超出战场范围');
+    }
   }
   const weaponLevel = weaponForLevel(options.weaponLevel ?? 1).level;
   if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2
@@ -148,10 +151,11 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     monsters: spawns.map(spawn => {
       const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
       const size = spawn.boss ? 1.5 : 1;
+      const hitbox = options.monsterHitboxes?.[spawn.wordId] ?? box;
       return { id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
       ...(spawn.boss ? { boss: true } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), ...(spawn.soldierDropCount !== undefined ? { soldierDropCount: spawn.soldierDropCount } : {}), attackDamage: stats.attackDamage,
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
-      hitbox: { x: box.x * size, y: box.y * size, width: box.width * size, height: box.height * size }, hp: stats.hp, maxHp: stats.hp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
+      hitbox: { x: hitbox.x * size, y: hitbox.y * size, width: hitbox.width * size, height: hitbox.height * size }, hp: stats.hp, maxHp: stats.hp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
       attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 }; }),
     projectiles: [], supportSoldiers: options.supportSoldiers ?? [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [],

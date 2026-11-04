@@ -1,6 +1,6 @@
 import { weaponForLevel } from '../weapons/catalog';
 import { getLevel } from './levels';
-import { createOpeningEncounter, OPENING_MONSTER_COUNTS, OPENING_WAVE_COUNT } from './opening-encounter';
+import { createOpeningEncounter, openingMonsterCount, OPENING_WAVE_COUNT } from './opening-encounter';
 import type { RandomSource, SessionPlan } from './types';
 
 export function createOpeningPlan(sessionId: string, random: RandomSource, levelId = 1, weaponLevel = 1): SessionPlan {
@@ -34,18 +34,20 @@ export function validateOpeningPlan(plan: SessionPlan): void {
   weaponForLevel(plan.weaponLevel ?? 1);
   if (plan.kind !== 'fruit-defense' || !plan.sessionId.trim() || plan.waves.length !== OPENING_WAVE_COUNT) throw new Error('新版计划无效');
   const words = getLevel(plan.levelId).words;
+  const previousIds = (plan.levelId ?? 1) > 1 ? getLevel(plan.levelId! - 1).words.map(word => word.id) : [];
   for (const [index, wave] of plan.waves.entries()) {
     if (wave.index !== index || wave.waveId !== `${plan.sessionId}:wave:${index + 1}` || !words.some(word => word.id === wave.targetWordId)
-      || wave.spawnPlan.length !== OPENING_MONSTER_COUNTS[index] || (index && wave.targetWordId === plan.waves[index - 1].targetWordId)) throw new Error('新版波次无效');
+      || wave.spawnPlan.length !== openingMonsterCount(index, plan.levelId) || (index && wave.targetWordId === plan.waves[index - 1].targetWordId)) throw new Error('新版波次无效');
   }
   for (let start = 0; start < plan.waves.length; start += words.length) {
     const cycle = plan.waves.slice(start, start + words.length);
     if (new Set(cycle.map(wave => wave.targetWordId)).size !== cycle.length) throw new Error('词汇学习与复习顺序无效');
   }
   for (const wave of plan.waves) {
-    if (wave.optionWordIds.length !== 3 || new Set(wave.optionWordIds).size !== 3 || !wave.optionWordIds.includes(wave.targetWordId)
+    if (wave.spawnPlan.filter(spawn => previousIds.includes(spawn.wordId)).length !== (previousIds.length ? Math.round(wave.spawnPlan.length * .3) : 0)
+      || wave.optionWordIds.length !== 3 || new Set(wave.optionWordIds).size !== 3 || !wave.optionWordIds.includes(wave.targetWordId)
       || wave.optionWordIds.some(id => !words.some(word => word.id === id))
-      || wave.spawnPlan.some(spawn => !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId)
+      || wave.spawnPlan.some(spawn => (!previousIds.includes(spawn.wordId) && !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId))
         || (spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < 5 || spawn.dropCoins! > 20
           || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount! < 0 || spawn.soldierDropCount! > 3
           : spawn.dropCoins !== 0 && spawn.dropCoins !== 1))) throw new Error('关卡词汇或掉落规则不匹配');
