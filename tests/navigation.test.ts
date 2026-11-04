@@ -220,3 +220,27 @@ test('出发进度仅在导航完成后到达100%，失败重试和过期回调�
   h.page.onUnload(); h.navigation.success();
   assert.equal(h.page.data.entryProgress, 50);
 });
+
+test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', () => {
+  const h = homeHarness(); h.page.onShow(); h.page.openBattle(); correct(h.page);
+  h.page.onHide();
+  h.strengthGuide.request(); h.page.onShow();
+  assert.equal(h.page.data.request, null);
+  assert.equal(h.page.data.opening, false);
+  assert.equal(h.page.data.strengthTarget, 'weapon');
+  h.navigation.success();
+  assert.equal(h.page.enteredBattle, false, '迟到导航回调不能污染返回后的首页');
+});
+
+
+test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪标记', () => {
+  const h=homeHarness();h.page.openBattle();
+  assert.equal(h.page.data.sceneCoverReady,false);
+  h.page.sceneCoverChanged({detail:{ready:true}});
+  assert.equal(h.page.data.sceneCoverReady,true);
+  h.page.closeChallenge();h.page.openBattle();
+  assert.equal(h.page.data.sceneCoverReady,false);
+  const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
+  assert.match(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
+  assert.match(markup,/wx:if="{{!choiceComplete && sceneCoverReady}}"/);
+});

@@ -84,21 +84,14 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,OPENING_MONSTER_COUNTS[wave]);
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
-    if(wave===18 && !realAudio){
-      current!.options.onEvents(current!.snapshot.monsters.slice(0,-2).map(m=>({type:'monsterDefeated',context:current!.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId})));
-      assert.equal(host.data.level,20);assert.equal(host.data.xpCurrent,0);
-      host.advanceWave();assert.equal(host.data.completed,false,'真实经验已到20级但最后一波仍有活怪时不能显示胜利');
-      assert.equal(host.data.upgradeOffer,null,'清场前不弹最终技能选择');
-    }
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
-    current!.clear();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
-    assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
-    if(realAudio){
-      const before=voiceEnds.length;advanceAudio(300);assert.equal(voiceEnds.length,before,'新击杀不能打断当前词');
-      voiceEnds.at(-1)!();assert.equal(voiceEnds.length,before+1,'当前词结束才播最新待播词');
-      assert.equal(host.data.upgradeOffer,null,'最后待播词未结束，不弹技能');assert.equal(host.data.waveRequest,null);assert.equal(host.data.completed,false);
-      voiceEnds.at(-1)!();
-    }else{busy=false;audioOptions.onDrained();}
+    const killsToUpgrade=(opening.OPENING_EXPERIENCE.levelThresholds[wave]-host.data.experience)/8;
+    assert.ok(killsToUpgrade>0 && killsToUpgrade<current!.snapshot.monsters.length);
+    current!.options.onEvents(current!.snapshot.monsters.slice(0,killsToUpgrade).map(m=>({type:'monsterDefeated',context:current!.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId})));
+    assert.equal(host.data.level,wave+2);assert.equal(current!.snapshot.status,'fighting');
+    assert.equal(host.data.xpCurrent,0,'达到门槛升级后当前级经验归零');
+    assert.equal(host.data.xpRequired,wave<18?(wave+2)*40:0);
+    assert.equal(host.data.xpPercent,wave<18?0:100,'新等级从空经验条开始，满级沿用清场状态');
     {
       const offer=host.data.upgradeOffer;assert.ok(offer);assert.equal(offer.cards.length,3);assert.equal(host.data.waveRequest,null);
       assert.equal(current!.paused,true,'技能弹窗出现即暂停战场');assert.equal(host.data.frozenFrame,'frame');
@@ -111,6 +104,16 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
       host.chooseUpgrade(selection);
       assert.equal(JSON.stringify({skills:current!.snapshot.skills,hp:current!.snapshot.base.hp,request:host.data.waveRequest}),afterSelection,'重复点击不能重复应用或推进');
     }
+    assert.equal(current!.paused,false,'选完技能立即继续同一轮');
+    assert.equal(host.data.waveRequest,null,'活怪未清完不得跳到下一轮');
+    current!.clear();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,wave+2);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
+    assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
+    if(realAudio){
+      const before=voiceEnds.length;advanceAudio(300);assert.equal(voiceEnds.length,before,'新击杀不能打断当前词');
+      voiceEnds.at(-1)!();assert.equal(voiceEnds.length,before+1,'当前词结束才播最新待播词');
+      assert.equal(host.data.upgradeOffer,null,'最后待播词未结束，不弹技能');assert.equal(host.data.waveRequest,null);assert.equal(host.data.completed,false);
+      voiceEnds.at(-1)!();
+    }else{busy=false;audioOptions.onDrained();}
     if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
     const expectedHp=current!.snapshot.base.hp;
     if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
@@ -122,10 +125,24 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   const expectedDrops=Math.min(50,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);
   assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins+expectedDrops);assert.equal(wallet.balance(),expectedCoins+expectedDrops);
-  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,8056);assert.equal(host.data.xpCurrent,16);
+  assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);assert.equal(host.data.experience,8056);assert.equal(host.data.xpCurrent,456);
   assert.equal(praiseActive,true);host.properties.paused=true;definition.properties.paused.observer.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
   host.properties.paused=false;definition.properties.paused.observer.call(host);assert.equal(praiseActive,true);
   definition.pageLifetimes.hide.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
   definition.pageLifetimes.show.call(host);assert.equal(praiseActive,true);assert.equal(host.data.inputUnavailable,false);
-  assert.equal(rewards,1);assert.equal(praises,1);definition.lifetimes.detached.call(host);assert.equal(praiseDisposed,true);
+  assert.equal(rewards,1);assert.equal(praises,1);
+  if(level.id===1 && !repair && !realAudio){
+    const oldScene=current!;
+    const nextPlan=createOpeningPlan('next-color-session',createSeededRandom(18),2,7);
+    host.properties.previewRequest={plan:nextPlan,generation:2};
+    definition.observers.previewRequest?.call(host,host.properties.previewRequest);
+    await Promise.resolve();
+    assert.equal(current!.snapshot.context.sessionId,nextPlan.sessionId,'切换颜色关不能继续保留水果关的场景');
+    assert.ok(oldScene.disposed);
+    assert.ok(current!.snapshot.monsters.every(m=>levels.getLevel(2).words.some(word=>word.id===m.wordId)));
+    assert.ok(Object.keys(current!.options.art.fruitHats).every(id=>levels.getLevel(2).words.some(word=>word.id===id)));
+    assert.equal(host.data.completed,false);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
+    assert.equal(host.data.xpCurrent,0);assert.equal(host.data.xpRequired,40);assert.equal(host.data.xpPercent,0);
+  }
+  definition.lifetimes.detached.call(host);assert.equal(praiseDisposed,true);
 });

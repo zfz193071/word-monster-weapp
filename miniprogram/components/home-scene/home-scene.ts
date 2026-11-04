@@ -37,7 +37,7 @@ Component({
           state.scene.setPet(this.properties.pet as PetAppearance|null);
           this.updateGuide();
           this.setData({error:false});this.synchronize();
-        }catch{this.setData({error:true});}
+        }catch{this.setData({error:true});if(this.properties.covered)this.finishCover(++state.captureId);}
       }).exec();
     },
     synchronize(){
@@ -53,19 +53,28 @@ Component({
       if(this.properties.covered&&!state.covered){
         state.scene.setActive(false);
         const src=state.scene.capture();
-        if(src)this.setData({frozenFrames:[{id:++state.captureId,src}]});
+        const id=++state.captureId;
+        if(src)this.setData({frozenFrames:[{id,src}]});
+        else this.finishCover(id);
       }
       state.covered=this.properties.covered;
       // Retain both the native drawing buffer and its last snapshot. Hide the
       // native layer only after the image has loaded; reopening needs no mount.
-      if(!state.covered&&this.data.canvasCovered)this.setData({canvasCovered:false},restore);
+      if(!state.covered&&this.data.canvasCovered){this.triggerEvent('coverchange',{ready:false});this.setData({canvasCovered:false},restore);}
       else restore();
     },
     frozenReady(event:WechatMiniprogram.BaseEvent){
       const state=states.get(this);
       if(state?.alive&&this.properties.covered&&event.currentTarget.dataset.captureId===state.captureId){
-        this.setData({canvasCovered:true});
+        this.finishCover(state.captureId);
       }
+    },
+    finishCover(captureId:number){
+      const state=states.get(this);
+      if(!state?.alive||!this.properties.covered||state.captureId!==captureId)return;
+      this.setData({canvasCovered:true},()=>{
+        if(state.alive&&this.properties.covered&&state.captureId===captureId)this.triggerEvent('coverchange',{ready:true});
+      });
     },
     touchStart(event:WechatMiniprogram.TouchEvent){
       const state=states.get(this);

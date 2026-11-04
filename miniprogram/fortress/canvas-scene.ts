@@ -311,9 +311,8 @@ export class CanvasScene {
           for (const side of [-1, 1]) {
             const hip = side < 0 ? 50 : 78;
             c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
-            const leg = side < 0 ? monsterArt.walkParts.left : monsterArt.walkParts.right;
             const color = monsterArt.outfitColors?.[monster.wordId] ?? '#a28a6e';
-            this.spriteTinted(leg, -hip, -110, 128, 160, color); c.restore();
+            c.translate(-hip, -110); this.drawZombieLeg(side, color); c.restore();
           }
           if (attackPose.lunge !== 0) {
             c.strokeStyle = '#89996b'; c.lineWidth = 16; c.lineCap = 'round';
@@ -490,16 +489,24 @@ export class CanvasScene {
     if (!image) throw new Error('已预载图片丢失');
     this.context.drawImage(image, x, y, width, height);
   }
-  private spriteTinted(asset: SpriteAsset, x: number, y: number, width: number, height: number, color: string): void {
-    const context = this.context;
-    context.save();
-    this.sprite(asset, x, y, width, height);
-    context.globalCompositeOperation = 'source-atop';
-    context.fillStyle = color;
-    context.fillRect(x, y, width, height);
-    // Multiplying the source art back over the dye keeps its highlights, folds, and outline.
-    context.globalCompositeOperation = 'multiply';
-    this.sprite(asset, x, y, width, height);
-    context.restore();
+  private drawZombieLeg(side: number, color: string): void {
+    // Color only the trouser geometry. Compositing a sprite-sized rectangle on
+    // the main canvas would also dye the background and the other leg.
+    const c = this.context;
+    c.strokeStyle = '#374c46'; c.lineWidth = 4; c.lineJoin = 'round';
+    c.fillStyle = color; c.beginPath();
+    if (side < 0) {
+      c.moveTo(39, 108); c.lineTo(35, 143); c.lineTo(55, 144); c.lineTo(63, 116); c.lineTo(59, 108);
+    } else {
+      c.moveTo(65, 108); c.lineTo(71, 144); c.lineTo(92, 143); c.lineTo(88, 108);
+    }
+    c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#4d5853'; c.beginPath();
+    if (side < 0) {
+      c.moveTo(35, 137); c.quadraticCurveTo(18, 143, 25, 150); c.lineTo(56, 150); c.lineTo(56, 139);
+    } else {
+      c.moveTo(72, 139); c.lineTo(72, 150); c.lineTo(103, 150); c.quadraticCurveTo(110, 141, 91, 136);
+    }
+    c.closePath(); c.fill(); c.stroke();
   }
 }

@@ -15,14 +15,11 @@ export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
 export const OPENING_EXPERIENCE_PER_KILL = 8;
 export const OPENING_MONSTER_COUNTS: readonly number[] = Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, waveIndex) => 8 + waveIndex * 5));
-const totalOpeningMonsters = OPENING_MONSTER_COUNTS.reduce((sum, count) => sum + count, 0);
-export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({ experiencePerKill: OPENING_EXPERIENCE_PER_KILL,
-  // Each of the first 18 clears grants one level; level 20 arrives before the final wave is cleared.
-  // Experience continues accumulating after the level cap.
-  levelThresholds: Object.freeze(Array.from({ length: OPENING_WAVE_COUNT }, (_, index) => {
-    const defeated = OPENING_MONSTER_COUNTS.slice(0, index + 1).reduce((sum, count) => sum + count, 0);
-    return (index === OPENING_WAVE_COUNT - 1 ? totalOpeningMonsters - 2 : defeated) * OPENING_EXPERIENCE_PER_KILL;
-  })) });
+export const OPENING_EXPERIENCE: ExperienceRules = Object.freeze({
+  experiencePerKill: OPENING_EXPERIENCE_PER_KILL,
+  // Cumulative XP: each level costs currentLevel * 40, independent of waves.
+  levelThresholds: Object.freeze(Array.from({ length: MAX_HERO_LEVEL - 1 }, (_, index) => 20 * (index + 1) * (index + 2))),
+});
 export const ZERO_SKILLS: SkillLevels = Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0, firepower: 0, homing: 0 });
 export const HERO_PATH = '/assets/images/fortress/hero.png';
 const original = (name: string): SpriteAsset => ({ path: `/assets/images/fortress/${name}.png`,

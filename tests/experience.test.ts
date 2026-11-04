@@ -50,3 +50,13 @@ test('候选允许一至三项，空候选或重复技能拒绝', () => {
 test('满级后剩余一项或两项技能可正常领取', () => {
   for (const count of [1, 2]) { const choices = createUpgradeChoices(); const next = { ...offer, cards: offer.cards.slice(0, count) }; assert.ok(choices.open(next)); assert.equal(choices.select(next.id, next.cards[0].id)?.id, next.cards[0].id); }
 });
+
+test('正式升级门槛为当前等级乘40，每只怪8经验且余量保留', async () => {
+  const { OPENING_EXPERIENCE } = await import('../miniprogram/fortress/opening-encounter');
+  assert.deepEqual(OPENING_EXPERIENCE.levelThresholds, Array.from({length:19},(_,i)=>20*(i+1)*(i+2)));
+  const xp = createExperience('run', OPENING_EXPERIENCE);
+  assert.deepEqual(xp.record(Array.from({length:4},(_,i)=>kill(String(i)))), {total:32,level:1,upgrades:[]});
+  assert.deepEqual(xp.record([kill('4'),kill('5')]), {total:48,level:2,upgrades:[2]});
+  assert.equal(xp.view.total-OPENING_EXPERIENCE.levelThresholds[0],8);
+  assert.deepEqual(xp.record(Array.from({length:9},(_,i)=>kill(String(i+6)))), {total:120,level:3,upgrades:[3]});
+});

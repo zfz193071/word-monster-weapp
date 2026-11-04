@@ -1,5 +1,5 @@
 <view class="room-stage">
-  <image wx:for="{{frozenFrames}}" wx:key="id" class="room-frozen" src="{{item.src}}" mode="scaleToFill" data-capture-id="{{item.id}}" bindload="frozenReady" />
+  <image wx:for="{{frozenFrames}}" wx:key="id" class="room-frozen" src="{{item.src}}" mode="scaleToFill" data-capture-id="{{item.id}}" bindload="frozenReady" binderror="frozenReady" />
   <canvas type="2d" id="room-canvas" class="room-canvas" hidden="{{canvasCovered}}" catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel" catchtap="stopTap" />
   <button wx:if="{{error}}" class="room-retry" bindtap="retry">重新加载场景</button>
 </view>

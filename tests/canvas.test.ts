@@ -117,7 +117,7 @@ test('全部图片加载成功才开战；失败后可重试，旧加载回调�
   assert.ok(h.commands.some(command => command.method === 'drawImage')); h.scene.dispose();
 });
 
-test('步行僵尸的腿部素材使用衣服色调着色并保留原图明暗层', async () => {
+test('僵尸裤腿着色不覆盖另一条腿或战场背景', async () => {
   const art = artFixture();
   const leg = { ...art.monster, path: '/assets/images/test-leg.png' };
   const shirt = { ...art.monster, path: '/assets/images/test-shirt.png' };
@@ -127,8 +127,8 @@ test('步行僵尸的腿部素材使用衣服色调着色并保留原图明暗�
   const loading = h.scene.load(); for (const image of h.images) image.onload(); assert.equal(await loading, true);
   h.frame(0);
   const operations = h.commands.filter(command => command.method === 'setGlobalCompositeOperation').map(command => command.args[0]);
-  assert.ok(operations.includes('source-atop'));
-  assert.ok(operations.includes('multiply'));
+  assert.ok(!operations.includes('source-atop'), '不能在已绘制的战场上整块染色');
+  assert.ok(!operations.includes('multiply'));
   h.scene.dispose();
 });
 

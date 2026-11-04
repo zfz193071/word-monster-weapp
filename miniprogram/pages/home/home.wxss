@@ -24,7 +24,7 @@ button::after { border: 0; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 32rpx; background: #203b3a99; }
 .choice-modal { position: relative; width: 100%; max-width: 680rpx; padding: 64rpx 16rpx 24rpx; box-sizing: border-box; border: 6rpx solid #fff9e4; border-radius: 44rpx; background: #fff8e7; box-shadow: 0 16rpx 0 #243d3d33; }
 .close-button { position: absolute; right: 16rpx; top: 12rpx; width: 64rpx; height: 64rpx; padding: 0; line-height: 58rpx; border-radius: 50%; font-size: 48rpx; background: transparent; color: #7c826c; z-index: 1; }
-.entry-status { padding: 30rpx 0 60rpx; text-align: center; font-size: 28rpx; color: #49654a; }.success-mark { font-size: 90rpx; color: #83b749; margin-bottom: 24rpx; }.retry-entry { margin-top: 30rpx; width: 240rpx; background: #d8efcf; color: #49654a; }
+.entry-status { padding: 30rpx 0 60rpx; text-align: center; font-size: 28rpx; color: #49654a; }.retry-entry { margin-top: 30rpx; width: 240rpx; background: #d8efcf; color: #49654a; }
 
 .info-button,.close-button { min-width: 0; max-width: 64rpx; }.start-button { min-width: 0; max-width: 264rpx; }.retry-entry { min-width: 0; max-width: 240rpx; }
 
