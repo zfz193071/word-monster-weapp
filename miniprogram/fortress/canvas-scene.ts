@@ -1,3 +1,5 @@
+import type { BattlePet } from '../pets/battle';
+import { drawBattlePet } from '../pets/battle-art';
 import { drawBattleBackground } from './battle-background';
 import { bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
@@ -94,6 +96,7 @@ export class CanvasScene {
   captureFrame(): string {
     try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
   }
+  applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   applySkills(skills: SkillLevels): void { this.runner.applySkills(skills); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   restoreBase(): void {
     this.runner.restoreBase();
@@ -370,6 +373,7 @@ export class CanvasScene {
       }
       c.globalAlpha = 1;
     }
+    drawBattlePet(c, state);
     for (const soldier of state.supportSoldiers ?? []) {
       const bob = Math.sin(state.tick * .08 + soldier.slot) * 1.5;
       c.save(); c.translate(soldier.position.x, soldier.position.y + bob);

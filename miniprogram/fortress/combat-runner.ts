@@ -1,4 +1,5 @@
-import { applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
+import type { BattlePet } from '../pets/battle';
+import { attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
 
@@ -46,6 +47,7 @@ export class CombatRunner {
     if (this.current.status !== 'fighting') this.remainderMs = 0;
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
   }
+  applyPet(pet: BattlePet): void { if (this.current) this.current = attachCombatPet(this.current, pet); }
   applySkills(skills: SkillLevels): void {
     if (this.current) this.current = applyCombatSkills(this.current, skills);
   }

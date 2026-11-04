@@ -1,3 +1,4 @@
+import type { BattlePet } from '../pets/battle';
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
 export type SkillId = 'doubleShot' | 'fireRate' | 'bulletWidth';
 export type ElementId = 'flame' | 'frost' | 'lightning';
@@ -144,6 +145,7 @@ export interface ProjectileState {
 }
 export interface ElementImpact { readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  readonly pet?: BattlePet;
   readonly weaponLevel?: number;
   readonly elementReadyTick?: number;
   readonly firepowerUntilTick?: number;
@@ -168,7 +170,7 @@ export interface CombatState {
 }
 export type CombatEvent =
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
-  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier'; readonly position: Point }
+  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number }
   | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string }

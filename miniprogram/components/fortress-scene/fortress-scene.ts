@@ -1,3 +1,5 @@
+import { createBattlePet } from '../../pets/battle';
+import type { BattlePet } from '../../pets/battle';
 import { petStore } from '../../services/pet-store';
 import { createPetDrops } from '../../services/pet-drops';
 import { coinWallet, victoryCoinsForLevel } from '../../services/coin-wallet';
@@ -22,7 +24,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState, SupportSoldierState } from '../../fortress/types';
 
-interface InstanceState { petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; pendingOffer?: UpgradeOffer; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -79,7 +81,7 @@ Component({
             this.setData({ petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
               bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss).map(monster => monster.monsterId)) ?? [], store: petStore,
-              onChange: (message, error) => { if (instance.alive) this.setData({ petReward: message, petDropError: error }); },
+              onChange: (message, error) => { if (instance.alive) { this.setData({ petReward: message, petDropError: error }); if (!error) this.syncBattlePet(); } },
             });
             this.setData({ dropCoins: 0, dropError: false });
             instance.drops = createBattleDrops({ sessionId: initial.context.sessionId, levelId: request?.plan.levelId ?? 1, wallet: coinWallet,
@@ -87,7 +89,7 @@ Component({
               onAward: (position, amount) => { if (instance.alive) { instance.scene?.showCoinDrop(position, amount); instance.audio?.playCoin(); } },
             });
             instance.experience = createExperience(initial.context.sessionId, OPENING_EXPERIENCE);
-            instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0; instance.supportSoldiers = [];
+            instance.upgrades = createUpgradeChoices(); instance.levels = ZERO_SKILLS; instance.waveIndex = 0; instance.supportSoldiers = []; instance.pet = undefined;
             this.setData({ rewardCoins: victoryCoinsForLevel(request?.plan.levelId ?? 1), rewardSaved: false, rewardError: false, victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, upgradeOffer: null, upgradeSummary: '' });
           }
           if (this.properties.opening && !instance.audio) {
@@ -138,7 +140,9 @@ Component({
             },
             onError: message => { if (valid()) { this.setData({ error: message, ready: false }); this.applyPause(); } },
           });
-          instance.scene = scene; this.applyPause();
+          instance.scene = scene;
+          if (instance.pet) scene.applyPet(instance.pet);
+          this.syncBattlePet(); this.applyPause();
           void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true }); this.applyPause(); this.triggerEvent('sceneready'); } });
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
@@ -153,7 +157,15 @@ Component({
       this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: offer }); this.applyPause();
     },
     retryVoice() { instances.get(this)?.audio?.retry(); },
-    retryPetDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) state.petDrops?.retry(); },
+    syncBattlePet() {
+      const state = instances.get(this);
+      if (!this.properties.opening || !state?.alive || !state.scene || state.scene.snapshot?.pet) return;
+      try {
+        const pet = petStore.view();
+        if (pet.owned) { state.scene.applyPet(createBattlePet(pet)); state.pet = state.scene.snapshot?.pet; }
+      } catch { this.setData({ petReward: '宠物暂时无法读取，点击重试', petDropError: true }); }
+    },
+    retryPetDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) { this.setData({ petDropError: false, petReward: '' }); state.petDrops?.retry(); this.syncBattlePet(); } },
     retryDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) state.drops?.retry(); },
     chooseUpgrade(event: WechatMiniprogram.CustomEvent<{ offerId: string; cardId: string }>) {
       const state = instances.get(this);
@@ -174,6 +186,7 @@ Component({
       if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.completed) return;
       state.baseHp = snapshot.base.hp;
       state.supportSoldiers = snapshot.supportSoldiers ?? [];
+      state.pet = snapshot.pet;
       const request = this.properties.previewRequest as { plan: SessionPlan; generation: number };
       const waveIndex = state.waveIndex ?? 0;
       if (waveIndex === OPENING_WAVE_COUNT - 1) {

@@ -22,7 +22,7 @@ export class DamageNumbers {
     this.prune(now);
     return this.effects.map(({ event, started, lane }) => {
       const progress = Math.max(0, (now - started) / DAMAGE_NUMBER_DURATION_MS);
-      return { text: `-${event.damage}`, color: event.kind === 'flame' ? '#ffbc6b' : event.kind === 'lightning' ? '#d8bdff' : event.kind === 'soldier' ? '#b7f2d3' : '#fff8d6',
+      return { text: `-${event.damage}`, color: event.kind === 'flame' ? '#ffbc6b' : (event.kind === 'lightning' || event.kind === 'pet') ? '#d8bdff' : event.kind === 'soldier' ? '#b7f2d3' : '#fff8d6',
         position: { x: Math.max(22, Math.min(338, event.position.x + [0, -22, 22][lane % 3])), y: Math.max(24, event.position.y - 12) - 30 * progress - Math.floor(lane / 3) * 20 },
         opacity: Math.min(1, (1 - progress) / .45), scale: 1 + .18 * Math.max(0, 1 - progress * 5) };
     });

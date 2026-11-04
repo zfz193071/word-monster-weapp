@@ -1,3 +1,5 @@
+import { battlePetPosition, createBattlePet, PET_ATTACK_INTERVAL_MS, petDamage } from '../pets/battle';
+import type { BattlePet } from '../pets/battle';
 import { weaponForLevel } from '../weapons/catalog';
 import { bossChargePhase, monsterStats } from './battle-progression';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
@@ -54,6 +56,7 @@ export function getWeaponParameters(levels: SkillLevels): WeaponParameters {
 }
 function freezeState(state: CombatState): CombatState {
   return Object.freeze({ ...state,
+    ...(state.pet ? { pet: createBattlePet(state.pet, state.pet.attackRemainingMs) } : {}),
     ...(state.aimDirection ? { aimDirection: Object.freeze({ ...state.aimDirection }) } : {}),
     ...(state.elementImpacts ? { elementImpacts: Object.freeze(state.elementImpacts.map(impact => Object.freeze({ ...impact, position: Object.freeze({ ...impact.position }), ...(impact.target ? { target: Object.freeze({ ...impact.target }) } : {}) }))) } : {}),
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
@@ -227,7 +230,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   });
   contacts.sort((a, b) => a.time - b.time || a.projectileIndex - b.projectileIndex || a.monsterIndex - b.monsterIndex);
   const impacts: ElementImpact[] = (previous.elementImpacts ?? []).filter(impact => impact.untilTick > tick);
-  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier') => {
+  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet') => {
     const monster = monsters[index]; if (monster.hp <= 0 || monster.status === 'waiting') return;
     if (!Number.isSafeInteger(damage) || !Number.isSafeInteger(monster.hp)) throw new RangeError('怪物伤害与生命值必须为整数');
     const hp = Math.max(0, monster.hp - damage);
@@ -287,6 +290,25 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     damageMonster(target, supportDamage, 'soldier');
     supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: 2000 };
   }
+  let pet = previous.pet;
+  if (pet) {
+    pet = { ...pet, attackRemainingMs: Math.max(0, pet.attackRemainingMs - COMBAT_STEP_MS) };
+    if (pet.attackRemainingMs === 0) {
+      const position = battlePetPosition(player);
+      let target = -1; let distance = Infinity;
+      monsters.forEach((monster, index) => {
+        if (monster.hp <= 0 || monster.status === 'waiting' || monster.status === 'retiring'
+          || monster.position.y < 0 || monster.position.y > RULES.arena.baseTop) return;
+        const candidate = Math.hypot(monster.position.x - position.x, monster.position.y - position.y);
+        if (candidate < distance) { distance = candidate; target = index; }
+      });
+      if (target >= 0) {
+        impacts.push({ kind: 'lightning', position, target: monsters[target].position, untilTick: tick + 35 });
+        damageMonster(target, petDamage(pet.level), 'pet');
+        pet = { ...pet, attackRemainingMs: PET_ATTACK_INTERVAL_MS };
+      }
+    }
+  }
   let baseHp = previous.base.hp;
   // Approved B6 ordering: a monster killed this step cannot attack, even if due.
   monsters.forEach((monster, index) => {
@@ -335,7 +357,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > MAX_PROJECTILES) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers,
+  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, ...(pet ? { pet } : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };
@@ -382,4 +404,10 @@ function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
   if (distanceSquared < lateral * lateral) return directionTo(from, to);
   return { x: (dx * forward + dy * lateral) / distanceSquared,
     y: (dy * forward - dx * lateral) / distanceSquared };
+}
+
+// Attaching a companion never resets an existing attack timer.
+export function attachCombatPet(state: CombatState, pet: BattlePet): CombatState {
+  if (state.pet || state.status === 'baseDestroyed') return state;
+  return freezeState({ ...state, pet: createBattlePet(pet, pet.attackRemainingMs) });
 }
