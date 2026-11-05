@@ -28,3 +28,6 @@
 .skill-guide { position:absolute; bottom:12rpx; right:12rpx; font-size:62rpx; line-height:1.2; pointer-events:none; animation:skill-point 800ms ease-in-out infinite; }
 .guide-paused { animation-play-state:paused; }
 @keyframes skill-point { 50% { transform:translateY(-14rpx); } }
+
+.skill-card.card-chosen { opacity: .6; }
+.skill-card.card-chosen .card-select { font-size: 24rpx; }

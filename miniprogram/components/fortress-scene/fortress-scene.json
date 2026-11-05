@@ -1,1 +1,1 @@
-{"component": true, "usingComponents": {"skill-choice": "/components/skill-choice/skill-choice", "fortress-choice": "/components/fortress-choice/fortress-choice"}}
+{"component": true, "usingComponents": {"skill-choice": "/components/skill-choice/skill-choice", "fortress-choice": "/components/fortress-choice/fortress-choice", "loading-progress": "/components/loading-progress/loading-progress"}}

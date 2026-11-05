@@ -32,14 +32,14 @@
     </view>
   </view>
   <view wx:if="{{skillQuiz}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="skill-quiz" request="{{skillQuiz}}" paused="{{inputUnavailable || !!error}}" bindstartcombat="finishSkillQuiz" /></view></view>
-  <skill-choice wx:if="{{!skillQuiz}}" class="upgrade-choice" remaining="{{skillPicksRemaining}}" offer="{{upgradeOffer}}" show-guide="{{skillShowGuide}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
+  <skill-choice wx:if="{{!skillQuiz}}" class="upgrade-choice" remaining="{{skillPicksRemaining}}" quiz-incorrect="{{skillQuizIncorrect}}" offer="{{upgradeOffer}}" show-guide="{{skillShowGuide}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
   <view wx:if="{{dropError}}" class="drop-error"><button disabled="{{inputUnavailable}}" bindtap="retryDrops">掉落金币未到账，点击重试</button></view>
   <view wx:if="{{voiceError && !upgradeOffer}}" class="voice-status"><button bindtap="retryVoice">重试发音</button></view>
   <view wx:if="{{!opening}}" class="hud" aria-label="基地剩余 {{hud.hp}} / {{hud.maxHp}} 血量">
     <text>堡垒基地</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text>{{hud.hp}} / {{hud.maxHp}}</text>
   </view>
   <view wx:if="{{error}}" class="scene-status"><text>战场暂时无法打开</text><text class="error-detail">{{error}}</text><button bindtap="retry">重试</button></view>
-  <view wx:elif="{{!ready && !opening}}" class="scene-status">正在准备战场…</view>
+  <view wx:elif="{{!ready}}" class="scene-status battle-loading"><loading-progress wx:if="{{opening}}" progress="{{loadingProgress}}" /><text wx:else>正在准备战场…</text></view>
   <view wx:elif="{{retirement}}" class="scene-status retirement">
     <view class="retirement-word"><image src="{{retirement.fruitImagePath}}" mode="aspectFit" /><text>{{retirement.word}}</text></view>
     <text wx:if="{{paused}}">已暂停</text>
@@ -62,7 +62,7 @@
     <text class="defeat-title">这次没能守住小屋</text><text class="defeat-subtitle">变强一点，下次再来！</text>
     <button class="strengthen-button" bindtap="becomeStronger" disabled="{{inputUnavailable}}">我要变强</button>
   </view>
-  <view class="canvas-stage"><image wx:if="{{(reviveOpen || upgradeOffer || waveRequest || completed || failed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{reviveOpen || !!upgradeOffer || completed || failed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
+  <view class="canvas-stage"><image wx:if="{{(reviveOpen || upgradeOffer || waveRequest || completed || failed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{reviveOpen || !!upgradeOffer || completed || failed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" style="opacity: {{ready ? 1 : 0}}" /></view>
   <view wx:if="{{opening}}" class="battle-footer"><text>Lv. {{level}}</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text wx:if="{{level >= 20}}" class="experience-cap" aria-label="已满级，经验上限无限，清空剩余僵尸即可通关">经验 {{xpCurrent}} / ∞ · 清场</text><view wx:else class="level-experience" aria-label="当前等级经验 {{xpCurrent}} / {{xpRequired}}"><text class="experience-value">经验 {{xpCurrent}} / {{xpRequired}}</text><view class="experience-track" role="progressbar" aria-valuemin="0" aria-valuemax="{{xpRequired}}" aria-valuenow="{{xpCurrent}}"><view style="width: {{xpPercent}}%"></view></view></view><text class="drop-coins" aria-label="本局击杀已获得{{dropCoins}}金币">● {{dropCoins}}</text></view>
   <view wx:if="{{!opening}}" class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">

@@ -45,6 +45,7 @@ export interface SceneOptions {
   readonly retirement?: RetirementOptions;
   readonly onHud: (hud: SceneHud) => void;
   readonly onEvents: (events: readonly CombatEvent[]) => void;
+  readonly onLoadProgress?: (percent: number) => void;
   readonly onError: (message: string) => void;
 }
 export interface FrameDiagnostics { readonly frames: number; readonly maxFrameGapMs: number; readonly recentFrameGapsMs: readonly number[]; readonly droppedSimulationMs: number; readonly peakProjectiles: number }
@@ -154,10 +155,16 @@ export class CanvasScene {
     this.cancelPendingLoads();
     const version = ++this.loadVersion;
     try {
+      this.options.onLoadProgress?.(0);
       const assets = this.validateArt();
       if (assets.length) {
         const unique = [...new Set(assets.map(asset => asset.path))];
-        const loaded = await Promise.all(unique.map(path => this.loadImage(path)));
+        let completed = 0;
+        const loaded = await Promise.all(unique.map(async path => {
+          const image = await this.loadImage(path);
+          if (!this.disposed && version === this.loadVersion) this.options.onLoadProgress?.(Math.floor(++completed / unique.length * 99));
+          return image;
+        }));
         if (this.disposed || version !== this.loadVersion) return false;
         this.images = new Map(loaded.map((image, index) => [unique[index], image]));
         const visual = this.monsterArt!.monsterVisual;
@@ -168,6 +175,7 @@ export class CanvasScene {
       this.cancelLoads = [];
       this.ready = true;
       this.draw(this.runner.snapshot!); this.publishHud(this.runner.snapshot!); this.schedule();
+      this.options.onLoadProgress?.(100);
       return true;
     } catch (error) {
       if (!this.disposed && version === this.loadVersion) {

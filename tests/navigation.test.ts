@@ -219,20 +219,20 @@ test('失败后一次性引导主角，点击打开武器面板后清除指引',
  assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
 });
 
-test('图片就绪后显示100%，失败重试和过期回调不误改当前状态', () => {
+test('首页图片就绪后显示50%并交由战斗页继续加载，失败重试和过期回调不误改当前状态', () => {
   const h = homeHarness(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
   const oldSuccess = h.navigation.success;
   h.navigation.fail();
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
   h.page.enterBattle(); oldSuccess();
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
   h.navigation.success();
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
   h.page.onShow(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
   h.page.onUnload(); h.navigation.success();
-  assert.equal(h.page.data.entryProgress, 100);
+  assert.equal(h.page.data.entryProgress, 50);
 });
 
 test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', () => {
@@ -286,7 +286,7 @@ test('战斗图片逐张加载时更新圆环，完成前不导航，失败可�
   const jobs:any[]=[];
   const h=homeHarness(undefined,(_art,callbacks)=>{const job={callbacks,cancelled:false};jobs.push(job);callbacks.onProgress(0);return()=>{job.cancelled=true;};});
   h.page.openBattle();correct(h.page);assert.equal(h.navigationCount,0);assert.equal(h.page.data.entryProgress,0);
-  jobs[0].callbacks.onProgress(37);assert.equal(h.page.data.entryProgress,37);assert.equal(h.navigationCount,0);
+  jobs[0].callbacks.onProgress(37);assert.equal(h.page.data.entryProgress,18);assert.equal(h.navigationCount,0);
   jobs[0].callbacks.onError();assert.equal(h.page.data.navigationError,true);assert.equal(h.page.data.opening,false);
   h.page.enterBattle();assert.equal(h.page.data.entryProgress,0);assert.equal(jobs[0].cancelled,true);
   jobs[0].callbacks.onReady();assert.equal(h.navigationCount,0);

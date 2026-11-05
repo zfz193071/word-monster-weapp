@@ -263,3 +263,19 @@ test('复活画布仅在就绪暂停时允许，保存失败保留死亡状态�
   assert.equal(h.scene.revive('soldier','fallen',debit),false);h.scene.setPaused(false);h.frame(1000);assert.equal(h.errors.length,0);
   h.scene.dispose();assert.equal(h.scene.revive('soldier','fallen',debit),false);
 });
+
+test('战场进度包含实际Canvas图片解码，只有首帧绘制完成才能达到100%', async () => {
+  const progress: number[] = []; let drawnAtCompletion = false;
+  const h = harness(false, artFixture(), {onLoadProgress(percent) {
+    progress.push(percent);
+    if (percent === 100) drawnAtCompletion = h.commands.some(command => command.method === 'drawImage');
+  }});
+  const pending = h.scene.load();
+  assert.deepEqual(progress, [0]);
+  h.images[0].onload(); await Promise.resolve();
+  assert.ok(progress.at(-1)! > 0 && progress.at(-1)! < 100);
+  for (const image of h.images.slice(1)) image.onload();
+  assert.equal(await pending, true);
+  assert.equal(progress.at(-1), 100); assert.equal(drawnAtCompletion, true);
+  h.scene.dispose();
+});

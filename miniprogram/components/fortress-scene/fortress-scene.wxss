@@ -110,3 +110,7 @@
 .revive-overlay { position:absolute; inset:0; z-index:35; background:rgba(16,35,30,.72); display:flex; align-items:center; justify-content:center; }
 .revive-dialog { width:570rpx; max-height:80%; box-sizing:border-box; padding:28rpx; border:5rpx solid #e7d8a9; border-radius:28rpx; background:#edf0d7; color:#344d3d; display:flex; flex-direction:column; gap:18rpx; text-align:center; }
 .revive-title { font-size:36rpx; font-weight:bold; }.revive-list { height:360rpx; }.revive-dialog button { margin:12rpx 0; background:#729456; color:#fff8dd; font-size:28rpx; }.revive-dialog button[disabled] { background:#a3aa94; color:#eef1e5; }.revive-error { color:#9b493d; font-size:24rpx; }
+
+.battle-loading { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; background: #fff8ec; }
+
+.opening-scene .battle-loading { inset: 0; width: 100%; border-radius: 0; }

@@ -262,7 +262,7 @@ Page({
     const firstWave = request.plan.waves[0];
     this.cancelBattleLoad = loadBattleAssets(openingArt(firstWave.targetWordId,
       firstWave.spawnPlan.map(monster => monster.wordId), request.plan.weaponLevel), {
-      onProgress: entryProgress => { if (valid()) this.setData({ entryProgress }); },
+      onProgress: entryProgress => { if (valid()) this.setData({ entryProgress: Math.floor(entryProgress / 2) }); },
       onError: fail,
       onReady: () => {
         if (!valid()) return;
