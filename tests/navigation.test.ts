@@ -1,3 +1,4 @@
+import { createDailyCheckin, beijingDate } from '../miniprogram/services/daily-checkin';
 import { createDifficultyStore } from '../miniprogram/services/difficulty-store';
 import { DIFFICULTIES } from '../miniprogram/fortress/difficulty';
 import { openingArt } from '../miniprogram/fortress/opening-encounter';
@@ -25,6 +26,8 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
   const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
   const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id), ()=>wallet.equipment().level, ()=>difficultyStore.read());
   let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
+  let checkinSaved: unknown;
+  const dailyCheckin = createDailyCheckin({coins: wallet, pets: petStore, storage: {getStorageSync: () => checkinSaved, setStorageSync: (_key, value) => {checkinSaved=structuredClone(value);}}});
   let page: any;
   let navigation: any;
   let navigationCount = 0;
@@ -37,6 +40,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/daily-checkin') return {dailyCheckin, beijingDate};
       if (name === '../../services/difficulty-store') return {difficultyStore};
       if (name === '../../fortress/difficulty') return {DIFFICULTIES};
       if (name === '../../fortress/opening-encounter') return {openingArt};

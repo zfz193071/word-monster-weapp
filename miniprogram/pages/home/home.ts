@@ -1,3 +1,5 @@
+import { dailyCheckin, beijingDate } from '../../services/daily-checkin';
+import type { CheckinView } from '../../services/daily-checkin';
 import { difficultyStore } from '../../services/difficulty-store';
 import { DIFFICULTIES } from '../../fortress/difficulty';
 import type { DifficultyId } from '../../fortress/difficulty';
@@ -19,7 +21,7 @@ import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
 Page({
-  data: { showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -31,12 +33,54 @@ Page({
   enteredBattle: false,
   disposed: false,
 
+  checkinTimer: undefined as ReturnType<typeof setTimeout> | undefined,
+  stopCheckinClock() { if (this.checkinTimer !== undefined) clearTimeout(this.checkinTimer); this.checkinTimer = undefined; },
+  scheduleCheckinRefresh() {
+    this.stopCheckinClock();
+    if (this.disposed || !this.data.homeVisible || !this.data.showCheckin) return;
+    const now = Date.now();
+    const nextMidnight = Date.parse(`${beijingDate(now)}T00:00:00+08:00`) + 86400000;
+    this.checkinTimer = setTimeout(() => this.refreshCheckin(), Math.max(1000, nextMidnight - now + 50));
+  },
+  refreshCheckin() {
+    if (this.disposed || !this.data.homeVisible || !this.data.showCheckin) return;
+    this.setData({checkinBusy: true, checkinError: '', checkinMessage: ''});
+    try {
+      const checkinView = dailyCheckin.open();
+      this.setData({checkinView});
+      this.refreshPet();
+      try { this.setData({coinBalance: coinWallet.balance(), coinError: false}); }
+      catch { this.setData({coinError: true}); }
+    } catch (error) { this.setData({checkinError: error instanceof Error ? error.message : '签到暂时不可用，请重试'}); }
+    finally { this.setData({checkinBusy: false}); this.scheduleCheckinRefresh(); }
+  },
+  openCheckin() {
+    if (this.disposed || !this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showPet || this.data.showDifficulty || this.data.showCheckin) return;
+    this.stopCollectionAudio();
+    this.setData({showCheckin: true, sceneCoverReady: (this.data.showLevels || this.data.showCredits) && this.data.sceneCoverReady, showLevels: false, showCredits: false});
+    this.refreshCheckin();
+  },
+  closeCheckin() { this.stopCheckinClock(); this.setData({showCheckin: false}); },
+  claimCheckin(event: WechatMiniprogram.BaseEvent) {
+    if (this.disposed || !this.data.homeVisible || !this.data.showCheckin || this.data.checkinBusy || this.data.checkinError) return;
+    const date = String(event.currentTarget.dataset.date ?? '');
+    if (!this.data.checkinView?.cards.some(card => card.date === date && card.status === 'available')) return;
+    this.setData({checkinBusy: true, checkinError: '', checkinMessage: ''});
+    try {
+      const result = dailyCheckin.claim(date);
+      this.setData({checkinView: result.view, checkinMessage: result.claimed ? '签到成功，奖励已到账' : result.view.claimed ? '今天已经领取啦' : '新的一天，请点击今日奖励'});
+      this.refreshPet();
+      try { this.setData({coinBalance: coinWallet.balance(), coinError: false}); }
+      catch { this.setData({coinError: true}); }
+    } catch { this.setData({checkinError: '领取未完成，请重试确认到账'}); }
+    finally { this.setData({checkinBusy: false}); this.scheduleCheckinRefresh(); }
+  },
   refreshDifficulty() {
     try { const difficulty = difficultyStore.read(); this.setData({ difficulty, difficultyLabel: DIFFICULTIES[difficulty].label, difficultyError: '' }); }
     catch { this.setData({ difficultyError: '难度读取失败，请重新选择' }); }
   },
   openDifficulty() {
-    if (this.disposed || !this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showPet || this.data.showWeapon || this.data.showDifficulty) return;
+    if (this.disposed || !this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showPet || this.data.showWeapon || this.data.showDifficulty || this.data.showCheckin) return;
     this.stopCollectionAudio(); this.refreshDifficulty();
     this.setData({ showDifficulty: true, showLevels: false, showCredits: false });
   },
@@ -55,7 +99,7 @@ Page({
     catch { this.setData({ petError: '宠物记录暂时无法读取，请重试' }); }
   },
   openPet() {
-    if (!this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showDifficulty) return;
+    if (!this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showDifficulty || this.data.showCheckin) return;
     this.refreshPet();
     if (!this.data.petView?.owned || this.data.petError) return;
     this.stopCollectionAudio();
@@ -79,10 +123,10 @@ Page({
       this.setData({ progressError: false, levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > completed.length + 1, completed: completed.includes(level.id) })) });
     } catch { this.setData({ progressError: true }); }
   },
-  toggleLevels() { if (this.data.showDifficulty || this.data.showPet || this.data.request) return; this.stopCollectionAudio(); this.refreshLevels(); this.setData({ showLevels: !this.data.showLevels, showCredits: false }); },
+  toggleLevels() { if (this.data.showCheckin || this.data.showDifficulty || this.data.showPet || this.data.request) return; this.stopCollectionAudio(); this.refreshLevels(); this.setData({ showLevels: !this.data.showLevels, showCredits: false }); },
   selectLevel(event: WechatMiniprogram.BaseEvent) { return this.beginLevel(Number(event.currentTarget.dataset.levelId)); },
   toggleCredits() {
-    if (this.data.showPet || this.data.showDifficulty) return;
+    if (this.data.showPet || this.data.showDifficulty || this.data.showCheckin) return;
     this.stopCollectionAudio();
     this.collectionRevision++;
     if (this.data.showCredits) { this.setData({ showCredits: false }); return; }
@@ -135,7 +179,7 @@ Page({
     }) });
   },
   openWeapon() {
-    if (!this.data.homeVisible || this.data.showPet || this.data.request || this.data.showCredits || this.data.showLevels || this.data.preparingLevel || this.data.showDifficulty) return;
+    if (!this.data.homeVisible || this.data.showPet || this.data.request || this.data.showCredits || this.data.showLevels || this.data.preparingLevel || this.data.showDifficulty || this.data.showCheckin) return;
     this.setData({ strengthTarget: '', showWeapon: true });
   },
   closeWeapon() { this.setData({ showWeapon: false }); },
@@ -151,6 +195,7 @@ Page({
       if (!this.disposed) this.setData({ musicEnabled: view.enabled, musicStatus: view.status });
     } });
     this.setData({ homeVisible: true });
+    if (this.data.showCheckin) this.refreshCheckin();
     const wantsStrengthGuide = strengthGuide.consume();
     const entryFinished = this.data.request && !fortressEntryStore.isPending(this.data.request.plan.sessionId);
     if (this.enteredBattle || wantsStrengthGuide || entryFinished) {
@@ -160,8 +205,8 @@ Page({
     this.refreshLevels(); this.synchronizeMusic();
     if (wantsStrengthGuide) this.setData({ strengthTarget: this.data.coinError ? '' : strengthTarget(this.data.weaponLevel, this.data.petError ? null : this.data.petView) });
   },
-  onHide() { this.setData({ homeVisible: false }); this.stopCollectionAudio(); this.synchronizeMusic(); },
-  onUnload() { this.disposed = true; this.cancelBattleLoad?.(); this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
+  onHide() { this.stopCheckinClock(); this.setData({ homeVisible: false }); this.stopCollectionAudio(); this.synchronizeMusic(); },
+  onUnload() { this.stopCheckinClock(); this.disposed = true; this.cancelBattleLoad?.(); this.stopCollectionAudio(); this.music?.dispose(); this.music = undefined; this.releaseEntry(); },
   synchronizeMusic() { this.music?.setActive(this.data.homeVisible && !this.data.request && !this.data.collectionPlaying); },
   toggleMusic() {
     if (this.data.musicStatus === 'error') this.music?.retry();
@@ -186,7 +231,7 @@ Page({
     catch { this.setData({ entryError: '关卡记录暂时无法读取，请重试' }); }
   },
   async beginLevel(levelId: number) {
-    if (this.disposed || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showPet || this.data.showDifficulty) return;
+    if (this.disposed || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showPet || this.data.showDifficulty || this.data.showCheckin) return;
     try {
       if (!coinWallet.canEnter(levelId)) return;
       if (levelId > 1) {

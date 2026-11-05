@@ -36,6 +36,12 @@ export function createPetStore(storage: Storage) {
   }
   return {
     view,
+    rewardCheckin(receipt: string) {
+      if (!/^checkin:\d{4}-\d{2}-\d{2}$/.test(receipt)) throw new Error('签到标识无效');
+      const p = read();
+      if (p.receipts.includes(receipt)) return;
+      p.food += 3; p.receipts.push(receipt); save(p);
+    },
     rewardBoss(sessionId: string, monsterId: string): string {
       if (!sessionId.trim() || !monsterId.startsWith(`${sessionId}:wave:`)) throw new Error('宠物掉落标识无效');
       const p = read();
