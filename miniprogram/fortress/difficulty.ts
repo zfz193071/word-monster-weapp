@@ -1,6 +1,6 @@
 export type DifficultyId = 'easy' | 'normal' | 'hard' | 'nightmare';
 export const DIFFICULTIES = Object.freeze({
-  easy: { label: '简单', hp: .75, damage: .75, speed: .9 },
+  easy: { label: '简单', hp: .6, damage: .5, speed: .8 },
   normal: { label: '普通', hp: 1, damage: 1, speed: 1 },
   hard: { label: '困难', hp: 1.5, damage: 1.3, speed: 1.1 },
   nightmare: { label: '噩梦', hp: 2, damage: 1.6, speed: 1.2 },

@@ -226,15 +226,30 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   let supportSoldiers = [...(previous.supportSoldiers ?? [])];
   const pending = previous.incomingMonsters ?? [];
   let arrivalCount = 0;
-  while (arrivalCount < pending.length && (pending[arrivalCount].spawnAtMs ?? 0) <= tick * COMBAT_STEP_MS) arrivalCount++;
-  const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
+  let invasion = previous.invasion;
   const waveStarts = previous.waveStartTimesMs;
-  if (waveStarts) {
-    const before = waveStarts.filter(time => time <= previous.tick * COMBAT_STEP_MS).length;
-    const after = waveStarts.filter(time => time <= tick * COMBAT_STEP_MS).length;
-    if (after !== before) events.push({type:'waveStarted', context:previous.context, tick, waveNumber:after});
+  if (invasion && pending.length) {
+    const nextWave = waveStarts!.filter(time => time <= pending[0].spawnAtMs!).length;
+    const alive = previous.monsters.filter(monster => monster.hp > 0 && monster.status !== 'retiring').length;
+    const limit = invasion.aliveLimits?.[nextWave - 1] ?? Infinity;
+    if (tick * COMBAT_STEP_MS >= invasion.nextAtMs && alive < limit) {
+      arrivalCount = 1;
+      // Schedule from actual admission, never catch up a delayed backlog in a burst.
+      const interval = pending.length > 1 ? pending[1].spawnAtMs! - pending[0].spawnAtMs! : 0;
+      invasion = Object.freeze({...invasion, nextAtMs:tick * COMBAT_STEP_MS + interval, waveNumber:nextWave});
+      if (nextWave !== previous.invasion!.waveNumber) events.push({type:'waveStarted', context:previous.context, tick, waveNumber:nextWave});
+    }
+  } else if (!invasion) {
+    while (arrivalCount < pending.length && (pending[arrivalCount].spawnAtMs ?? 0) <= tick * COMBAT_STEP_MS) arrivalCount++;
+    if (waveStarts) {
+      const before = waveStarts.filter(time => time <= previous.tick * COMBAT_STEP_MS).length;
+      const after = waveStarts.filter(time => time <= tick * COMBAT_STEP_MS).length;
+      if (after !== before) events.push({type:'waveStarted', context:previous.context, tick, waveNumber:after});
+    }
   }
-  const arrivals = arrivalCount ? [...previous.monsters, ...pending.slice(0, arrivalCount)] : previous.monsters;
+  const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
+  const admitted = invasion ? pending.slice(0, arrivalCount).map(monster => ({...monster, spawnAtMs:tick * COMBAT_STEP_MS})) : pending.slice(0, arrivalCount);
+  const arrivals = arrivalCount ? [...previous.monsters, ...admitted] : previous.monsters;
   const monsters = arrivals.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
   const moved = previous.projectiles.filter(projectile => (projectile.expiresAtTick ?? Infinity) > tick).map(projectile => {
@@ -429,7 +444,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : MAX_PROJECTILES)) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
+  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };

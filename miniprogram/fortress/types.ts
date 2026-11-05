@@ -160,7 +160,9 @@ export interface ElementImpact { readonly radius?: number; readonly kind: Elemen
 export interface CombatState {
   // Scheduled arrivals share the stage clock; never participate in collisions before arrival.
   readonly incomingMonsters?: readonly MonsterState[];
+  // Planned wave boundaries identify queued monsters; admission may occur later at the alive limit.
   readonly waveStartTimesMs?: readonly number[];
+  readonly invasion?: Readonly<{ nextAtMs: number; waveNumber: number; aliveLimits?: readonly number[] }>;
   readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;
   readonly weaponLevel?: number;
