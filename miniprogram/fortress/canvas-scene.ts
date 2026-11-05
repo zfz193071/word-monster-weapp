@@ -510,8 +510,7 @@ export class CanvasScene {
   private drawAnimal(id: string, x: number, y: number, tick: number): void {
     const c = this.context;
     const stride = tick ? Math.sin(tick * .095) : 0;
-    const colors: Record<string, string> = { bear: '#9b704b', bee: '#e6bd38', bird: '#547b79', cat: '#77859a', chicken: '#8a9472', cow: '#a7ad8b', dog: '#7e7c51', duck: '#77a96f', elephant: '#637d77', fish: '#54acb8', horse: '#ad7657', lion: '#958345', panda: '#e1e2d2', rabbit: '#8b9f83', sheep: '#aab497', tiger: '#de9749' };
-    const distinct = ['bear', 'bee', 'cat', 'duck', 'fish', 'horse', 'panda', 'tiger'].includes(id);
+    const colors: Record<string, string> = { bear: '#9b704b', bee: '#e6bd38', bird: '#69a8bc', cat: '#77859a', chicken: '#dfd1a5', cow: '#e5e0cb', dog: '#b99770', duck: '#77a96f', elephant: '#87a9a8', fish: '#54acb8', horse: '#ad7657', lion: '#d2aa52', panda: '#e1e2d2', rabbit: '#b8a9ca', sheep: '#e5e4cc', tiger: '#de9749' };
     c.save(); c.translate(x, y);
     c.fillStyle = 'rgba(37,62,56,.18)'; c.beginPath(); c.ellipse(0, 22, 18, 4, 0, 0, Math.PI * 2); c.fill();
     const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); };
@@ -519,8 +518,9 @@ export class CanvasScene {
     const body = colors[id];
     if (id === 'bee' || id === 'bird' || id === 'chicken' || id === 'duck') {
       const lift = id === 'bee' || id === 'bird' ? stride * 3 : 0;
-      oval(-16, -2 + lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, id === 'bee' ? '#c8ede3' : '#9caa91', -.5);
-      oval(16, -2 - lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, id === 'bee' ? '#c8ede3' : '#9caa91', .5);
+      const wingColor = id === 'bee' ? '#c8ede3' : id === 'bird' ? '#91cbd0' : id === 'chicken' ? '#f1e5c6' : '#9caa91';
+      oval(-16, -2 + lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, wingColor, -.5);
+      oval(16, -2 - lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, wingColor, .5);
     } else if (id === 'fish') {
       c.fillStyle = '#577f87'; c.beginPath(); c.moveTo(-13, 0); c.lineTo(-23, -10 + stride * 2); c.lineTo(-23, 10 + stride * 2); c.closePath(); c.fill();
     } else {
@@ -533,19 +533,20 @@ export class CanvasScene {
       }
       line([13, 3, 22, -3, 20, -11 + stride * 2], body, 4);
     }
-    if (id === 'lion') oval(0, -7, 19, 18, '#89794d');
-    if (id === 'sheep') for (let i = 0; i < 8; i++) oval(Math.cos(i * Math.PI / 4) * 10, Math.sin(i * Math.PI / 4) * 9, 7, 7, '#dde0c9');
+    if (id === 'lion') oval(0, -7, 20, 19, '#a6733e');
+    if (id === 'sheep') for (let i = 0; i < 10; i++) oval(Math.cos(i * Math.PI / 5) * 12, Math.sin(i * Math.PI / 5) * 10, 7, 7, '#f5f0da');
     oval(0, 4, id === 'fish' ? 19 : 14, id === 'fish' ? 12 : 13, body);
+    if (id === 'cow') { oval(-8, 2, 5, 5, '#556269'); oval(8, 11, 5, 4, '#556269'); }
     if (id === 'bee') { line([-9, 3, 9, 3], '#596357', 4); line([-8, 10, 8, 10], '#596357', 4); line([-5, -12, -10, -22], '#596357'); line([5, -12, 10, -22], '#596357'); }
     if (id === 'tiger') for (const side of [-1, 1]) { line([side * 12, 1, side * 7, 4], '#5d6651', 3); line([side * 12, 8, side * 8, 10], '#5d6651', 3); }
     if (id === 'cow') { oval(-7, 6, 5, 6, '#596b5d'); oval(7, -1, 4, 4, '#596b5d'); }
     if (id !== 'fish' && id !== 'bee') {
-      if (id === 'elephant') { oval(-14, -9, 9, 13, body); oval(14, -9, 9, 13, body); }
-      else if (id === 'rabbit') { oval(-7, -20, 4, 12, body, -.18); oval(7, -20, 4, 12, body, .18); }
+      if (id === 'elephant') { oval(-16, -9, 11, 15, body); oval(16, -9, 11, 15, body); oval(-16, -9, 6, 10, '#b2c1ae'); oval(16, -9, 6, 10, '#b2c1ae'); }
+      else if (id === 'rabbit') { oval(-7, -22, 5, 15, body, -.18); oval(7, -22, 5, 15, body, .18); oval(-7, -22, 2, 10, '#dca8b6', -.18); oval(7, -22, 2, 10, '#dca8b6', .18); }
       else if (['cat', 'tiger', 'horse'].includes(id)) {
         c.fillStyle = body;
         for (const side of [-1, 1]) { c.beginPath(); c.moveTo(side * 13, -10); c.lineTo(side * 12, -24); c.lineTo(side * 3, -14); c.closePath(); c.fill(); }
-      } else if (id === 'dog') { oval(-12, -8, 5, 10, '#7c8061', .25); oval(12, -8, 5, 10, '#7c8061', -.25); }
+      } else if (id === 'dog') { oval(-13, -7, 6, 12, '#765e4c', .25); oval(13, -7, 6, 12, '#765e4c', -.25); }
       else if (['bear', 'panda', 'lion', 'sheep'].includes(id)) { oval(-10, -17, 5, 5, id === 'panda' ? '#53685e' : body); oval(10, -17, 5, 5, id === 'panda' ? '#53685e' : body); }
       oval(0, -7, id === 'horse' ? 9 : 12, id === 'horse' ? 14 : 11, body);
     }
@@ -560,29 +561,39 @@ export class CanvasScene {
       oval(-6, -8, 7, 8, '#405149', -.3); oval(6, -8, 7, 8, '#405149', .3);
       oval(0, 2, 8, 6, '#f0eadb');
     }
+    if (id === 'bird') {
+      c.fillStyle = '#4d879b'; c.beginPath(); c.moveTo(-11, 7); c.lineTo(-20, 16); c.lineTo(-9, 12); c.closePath(); c.fill();
+      oval(0, 0, 7, 5, '#8ed1cf');
+    }
+    if (id === 'chicken') { oval(-3, -21, 4, 6, '#d45c4b'); oval(3, -21, 4, 6, '#d45c4b'); oval(6, 3, 3, 5, '#d45c4b'); }
+    if (id === 'dog') oval(0, 3, 9, 6, '#e0c6a0');
+    if (id === 'lion') oval(0, 2, 9, 6, '#ead28b');
+    if (id === 'rabbit') { oval(0, 2, 7, 5, '#e7dce3'); oval(13, 11, 4, 4, '#e7dce3'); }
+    if (id === 'sheep') { oval(0, -5, 10, 11, '#937965'); for (const px of [-10, -4, 3, 10]) oval(px, -17, 4, 5, '#f5f0da'); }
     if (id === 'fish') {
       c.fillStyle = '#40818c'; c.beginPath(); c.moveTo(-5, -8); c.lineTo(3, -21); c.lineTo(10, -7); c.closePath(); c.fill();
       line([8, -2, 11, 2, 8, 6], '#e2d5a1', 2);
       for (const px of [-8, -1, 6]) oval(px, 9, 2, 1, '#aed9cf');
     }
     if (id === 'cow') { line([-8, -15, -13, -23], '#e0d8a0', 3); line([8, -15, 13, -23], '#e0d8a0', 3); }
-    if (id === 'chicken') { oval(-3, -21, 3, 5, '#b96e5a'); oval(3, -21, 3, 5, '#b96e5a'); }
     // Wide dark sockets and compact glowing pupils remain readable at battle scale.
-    const socket = distinct ? 3.7 : 5.5;
-    const pupil = distinct ? 2.1 : 3.2;
-    oval(-5.5, -8, socket, socket, '#26352f', -.18); oval(5.5, -7, socket, socket, '#26352f', .18);
-    oval(-5, -7.5, pupil, pupil, '#b74e42'); oval(5, -6.5, pupil, pupil, '#b74e42');
-    oval(-4.5, -7.5, 1, distinct ? 1.5 : 2.3, '#ffe49b'); oval(4.5, -6.5, 1, distinct ? 1.5 : 2.3, '#ffe49b');
+    oval(-5.5, -8, 3.7, 3.7, '#26352f', -.18); oval(5.5, -7, 3.7, 3.7, '#26352f', .18);
+    oval(-5, -7.5, 2.1, 2.1, '#b74e42'); oval(5, -6.5, 2.1, 2.1, '#b74e42');
+    oval(-4.5, -7.5, 1, 1.5, '#ffe49b'); oval(4.5, -6.5, 1, 1.5, '#ffe49b');
     line([-11, -13, -2, -10], '#26352f', 2.5); line([2, -9, 11, -12], '#26352f', 2.5);
-    oval(0, 6, distinct ? 4.5 : 7.5, distinct ? 3.5 : 5, '#26352f');
+    oval(0, 6, 4.5, 3.5, '#26352f');
     c.fillStyle = '#e5ddad';
-    for (const toothX of (distinct ? [-2.5, 2.5] : [-4, 3])) {
+    for (const toothX of [-2.5, 2.5]) {
       c.beginPath(); c.moveTo(toothX - 1.5, 2); c.lineTo(toothX + 1.5, 2); c.lineTo(toothX, 7); c.closePath(); c.fill();
     }
     line([-5, 10, -1, 11, 3, 10], '#4b5946', 1.5);
-    if (id === 'elephant') { line([0, -1, 0, 11, 5, 14], '#6c8983', 6); }
+    if (id === 'elephant') { line([0, -1, 1, 13, 7, 18], '#698f91', 7); line([-5, 5, -9, 9], '#f1dfad', 2); line([5, 5, 9, 9], '#f1dfad', 2); }
     else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 11 : 5, id === 'duck' ? 5 : 3, id === 'duck' ? '#e8ad54' : '#d5b461');
     else oval(0, -1, 3, 2, '#344a3c');
+    if (id === 'cow') { oval(0, 5, 10, 7, '#cfaeaa'); oval(-4, 6, 1.4, 1.8, '#6e5a58'); oval(4, 6, 1.4, 1.8, '#6e5a58'); }
+    if (id === 'dog') oval(0, 0, 4, 3, '#3f4b3d');
+    if (id === 'lion') oval(0, 0, 4, 3, '#735840');
+    if (id === 'rabbit') { c.fillStyle = '#fff7e9'; c.fillRect(-3, 6, 2, 5); c.fillRect(1, 6, 2, 5); }
     if (id === 'cat') {
       for (const side of [-1, 1]) { line([side * 4, 0, side * 18, -3], '#e6dcc1', 1.5); line([side * 4, 2, side * 18, 5], '#e6dcc1', 1.5); }
       oval(0, -1, 2.5, 2, '#c88f8d');
