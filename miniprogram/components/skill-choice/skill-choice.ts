@@ -1,3 +1,4 @@
+import { SKILL_QUALITIES } from '../../fortress/skill-quality';
 import { validateUpgradeOffer } from '../../fortress/upgrade-choice';
 import type { UpgradeCard, UpgradeOffer } from '../../fortress/upgrade-choice';
 
@@ -12,13 +13,15 @@ Component({
       try { if (value) { validateUpgradeOffer(value); valid = true; } } catch { /* Invalid offers cannot be consumed. */ }
       const sameGroup = value && (value.id === this.data.groupId || value.id === `${this.data.groupId}:second`);
       const cards = sameGroup ? this.data.displayCards : value?.cards ?? [];
-      this.setData({ valid, groupId: sameGroup ? this.data.groupId : value?.id ?? '',
+      const rank = (card: UpgradeCard) => SKILL_QUALITIES.findIndex(quality => quality.id === card.resultingQuality);
+      const guideCard = valid ? value?.cards.reduce<UpgradeCard | undefined>((best, card) => !best || rank(card) > rank(best) ? card : best, undefined) : undefined;
+      this.setData({ valid, guideCardId: guideCard?.id ?? '', groupId: sameGroup ? this.data.groupId : value?.id ?? '',
         displayCards: cards.map(card => ({...card, chosen: !value?.cards.some(candidate => candidate.id === card.id)})),
       });
     } },
     disabled: { type: Boolean, value: false },
   },
-  data: { valid: false, selectedOfferId: '', groupId: '', displayCards: [] as (UpgradeCard & {chosen: boolean})[] },
+  data: { valid: false, selectedOfferId: '', guideCardId: '', groupId: '', displayCards: [] as (UpgradeCard & {chosen: boolean})[] },
   methods: {
     stopScroll() {},
     choose(event: WechatMiniprogram.BaseEvent) {

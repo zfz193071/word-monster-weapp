@@ -279,3 +279,20 @@ test('战场进度包含实际Canvas图片解码，只有首帧绘制完成才�
   assert.equal(progress.at(-1), 100); assert.equal(drawnAtCompletion, true);
   h.scene.dispose();
 });
+
+test('八关加载图片前先绘制本关背景，背景与加载后的战场一致且不提前开战', async () => {
+  for (let levelId = 1; levelId <= 8; levelId++) {
+    const art = artFixture();
+    const h = harness(false, {...art, fruitHat: art.monster}, {levelId});
+    const pending = h.scene.load();
+    const background = h.commands.slice();
+    assert.ok(background.some(command => command.method === 'fillRect'));
+    assert.ok(background.some(command => command.method === 'arc' || command.method === 'fill'));
+    assert.equal(background.some(command => command.method === 'drawImage'), false);
+    assert.equal(h.callbacks.size, 0);
+    for (const image of h.images) image.onload();
+    assert.equal(await pending, true);
+    assert.deepEqual(h.commands.slice(background.length, background.length * 2), background);
+    h.scene.dispose();
+  }
+});

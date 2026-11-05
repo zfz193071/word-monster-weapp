@@ -3,7 +3,7 @@
   <button class="speed-control" bindtap="changeSpeed" disabled="{{view.paused || view.phase === 'started' || view.phase === 'answered'}}" aria-label="播放速度 {{view.playbackRate}} 倍，点击切换"><view class="speed-symbol" aria-hidden="true">▷</view><text>{{view.playbackRate}}×</text></button>
   <view class="sound-halo {{view.phase === 'playing' && !view.paused ? 'speaking' : ''}}" aria-hidden="true"><view class="speaker"></view><view class="sound-wave"></view></view>
   <view wx:if="{{!(request.singleAttempt && view.phase === 'answered' && !view.correct)}}" class="prompt" aria-live="polite">{{view.message}}</view>
-  <view wx:if="{{request.singleAttempt && view.phase !== 'answered'}}" class="quiz-caption">首次答对最多选2个技能，答错选1个</view>
+  <view wx:if="{{request.singleAttempt && view.phase !== 'answered'}}" class="quiz-caption">首次答对可选两个技能，答错选一个</view>
   <view wx:if="{{request.singleAttempt && view.phase === 'answered' && view.correct}}" class="quiz-flowers {{view.paused ? 'flowers-paused' : ''}}" aria-label="答对啦，送你鲜花和掌声"><text>🌸</text><text>🌼</text><text>🌷</text><text>🌸</text><text>🌼</text><text>🌷</text></view>
   <view class="choices">
     <button wx:for="{{view.cards}}" wx:key="key" class="choice {{item.hinted ? 'hinted' : ''}}" aria-label="{{item.label}}" disabled="{{!view.canChoose}}"

@@ -1,3 +1,6 @@
+import { createSeededRandom } from './plans';
+import { FORTRESS_RULES } from './rules';
+import type { Point } from './types';
 import type { DifficultyId } from './difficulty';
 
 export const INVASION_BATCH_LIMITS: Readonly<Record<DifficultyId, number>> = Object.freeze({
@@ -9,4 +12,26 @@ export function invasionBatchSize(elapsedMs: number, limit: number): number {
   const size = elapsedMs < 20000 ? 1 : elapsedMs < 60000 ? 2 : elapsedMs < 120000 ? 3
     : elapsedMs < 180000 ? 5 : elapsedMs < 240000 ? 8 : elapsedMs < 300000 ? 10 : 12;
   return Math.min(size, limit);
+}
+
+// Randomise a batch inside the existing upper entry strip. Stable IDs make
+// retries/replays deterministic without keeping mutable random state in combat.
+export function invasionBatchPositions(ids: readonly string[], startY: number): readonly Point[] {
+  let seed = 2166136261;
+  for (const char of ids.join('|')) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
+  const random = createSeededRandom(seed >>> 0);
+  const {spawnMinX, spawnMaxX} = FORTRESS_RULES.monster;
+  const positions: Point[] = [];
+  for (const _id of ids) {
+    let best: Point | undefined; let bestDistance = -1;
+    // Avoid coincident centres without falling back to a visible grid.
+    for (let attempt = 0; attempt < 64; attempt++) {
+      const candidate = {x: spawnMinX + random() * (spawnMaxX - spawnMinX), y: startY - random() * 64};
+      const distance = positions.reduce((nearest, point) => Math.min(nearest, Math.hypot(point.x - candidate.x, point.y - candidate.y)), Infinity);
+      if (distance > bestDistance) { best = candidate; bestDistance = distance; }
+      if (distance >= 36) break;
+    }
+    positions.push(Object.freeze(best!));
+  }
+  return Object.freeze(positions);
 }

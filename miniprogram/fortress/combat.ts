@@ -1,4 +1,4 @@
-import { invasionBatchSize } from './spawn-pressure';
+import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
 import { coinRulesFor } from './difficulty';
@@ -253,11 +253,10 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     }
   }
   const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
-  const admitted = invasion ? pending.slice(0, arrivalCount).map((monster, index) => {
-    const columns = Math.min(6, arrivalCount);
-    return {...monster, spawnAtMs:tick * COMBAT_STEP_MS,
-      ...(arrivalCount > 1 ? {position:{x:48 + (index % columns) * 264 / (columns - 1), y:monster.position.y - Math.floor(index / columns) * 64}} : {})};
-  }) : pending.slice(0, arrivalCount);
+  const batch = pending.slice(0, arrivalCount);
+  const positions = invasion && arrivalCount > 1 ? invasionBatchPositions(batch.map(monster => monster.id), RULES.monster.startY) : undefined;
+  const admitted = invasion ? batch.map((monster, index) => ({...monster, spawnAtMs:tick * COMBAT_STEP_MS,
+    ...(positions ? {position: positions[index]} : {})})) : batch;
   const arrivals = arrivalCount ? [...previous.monsters, ...admitted] : previous.monsters;
   const monsters = arrivals.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);

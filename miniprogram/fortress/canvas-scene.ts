@@ -155,6 +155,7 @@ export class CanvasScene {
     this.cancelPendingLoads();
     const version = ++this.loadVersion;
     try {
+      this.drawBackground();
       this.options.onLoadProgress?.(0);
       const assets = this.validateArt();
       if (assets.length) {
@@ -267,7 +268,7 @@ export class CanvasScene {
     this.setPaused(true); this.disposed = true; this.loadVersion++;
     this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
   }
-  private draw(state: CombatState): void {
+  private drawBackground(): void {
     const c = this.context; const v = this.viewport;
     c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.canvas.width, this.canvas.height);
     c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
@@ -278,6 +279,10 @@ export class CanvasScene {
       c.fillStyle = '#21434a';
       for (let y = 32; y < 480; y += 64) for (let x = 24; x < 360; x += 48) c.fillRect(x, y, 2, 2);
     }
+  }
+  private draw(state: CombatState): void {
+    this.drawBackground();
+    const c = this.context;
     if (state.base.hp < this.lastHp) this.baseFlashUntil = state.tick + 16;
     this.lastHp = state.base.hp;
     for (const monster of state.monsters) {

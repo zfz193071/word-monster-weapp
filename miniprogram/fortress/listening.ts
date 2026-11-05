@@ -64,7 +64,7 @@ export function createListening(options: ListeningOptions) {
   function view(): ListeningView {
     return { ...(options.singleAttempt && attempts.length ? {correct:attempts[0].correct, answerText:`正确答案：${word.text} · ${word.meaningZh}`} : {}), playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
       message: paused ? '已暂停' : phase === 'audioError' ? '声音暂时无法播放，请重试' : images.includes('failed') ? '图片加载失败，请重试'
-        : phase === 'answered' ? (attempts[0].correct ? '答对了，最多可选两个不同技能' : '记住这个单词，这次可以选一个技能') : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的图片' : errors ? '再听一次，选出图片' : '听一听，选图片',
+        : phase === 'answered' ? (attempts[0].correct ? '可选两个技能' : '记住这个单词，这次可以选一个技能') : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的图片' : errors ? '再听一次，选出图片' : '听一听，选图片',
       cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), text: words.find(word => word.id === id)!.text, meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: (phase === 'answered' || errors >= FORTRESS_RULES.learning.hintAfterErrors) && id === wave.targetWordId })) };
   }
   const publish = () => { if (!disposed) options.onChange(view()); };

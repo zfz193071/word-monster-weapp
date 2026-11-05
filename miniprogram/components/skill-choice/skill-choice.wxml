@@ -6,7 +6,7 @@
       <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.description}}</view>
-      <view wx:if="{{showGuide && !item.chosen && item.id === offer.cards[0].id}}" class="skill-guide {{disabled ? 'guide-paused' : ''}}" aria-label="再选择一个技能">👆</view>
+      <view wx:if="{{showGuide && !item.chosen && item.id === guideCardId}}" class="skill-guide {{disabled ? 'guide-paused' : ''}}" aria-label="再选择一个技能">👆</view>
       <view class="card-select" aria-hidden="true">{{item.chosen ? '已选择 ✓' : '＋'}}</view>
     </button>
   </view>

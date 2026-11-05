@@ -93,3 +93,40 @@ test('批次不越过轮次边界，剩余不足补足，下一批保留原存�
  assert.equal(next.events.filter(e=>e.type==='waveStarted'&&e.waveNumber===2).length,1);
  assert(next.state.monsters.some(m=>m.id===initial.monsters[0].id&&m.hp>0));
 });
+
+test('噩梦双怪批次不固定左右两端，后期12只不排成整齐横排', () => {
+ const initial=createStageInvasion(plan(1,'nightmare'),1);
+ const pending=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:19:'));
+ const spawn=(elapsed:number)=>stepCombat({...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+  tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}}).state.monsters;
+ const pair=spawn(20000);
+ assert.equal(pair.length,2);
+ assert(pair.some(m=>m.position.x>80&&m.position.x<280),'双怪批次必须能出现在中间，而非固定48/312');
+ const late=spawn(300000);
+ assert.equal(late.length,12);
+ assert(new Set(late.map(m=>Math.round(m.position.y))).size>2,'后期不应固定两排');
+ assert(late.every(m=>m.position.x>=48&&m.position.x<=312&&m.position.y<=-32));
+ assert.deepEqual(spawn(300000).map(m=>m.position),late.map(m=>m.position),'同状态回放不重抽位置');
+});
+
+test('噩梦后期连续批次覆盖左中右，位置可重放且不修改原队列与入场节奏', () => {
+ const initial=createStageInvasion(plan(1,'nightmare'),1);
+ const pending=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:19:'));
+ const original=JSON.stringify(pending);
+ let state={...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+  tick:300000/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:300000}};
+ const groups:number[][]=[]; const bands=new Set<number>();
+ for (let batch=0;batch<3;batch++) {
+  const before=state;const result=stepCombat(before);const fresh=result.state.monsters.slice(before.monsters.length);
+  assert.equal(fresh.length,12);
+  assert.deepEqual(stepCombat(before).state.monsters,result.state.monsters);
+  for(const m of fresh){assert(m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-96);bands.add(Math.min(2,Math.floor((m.position.x-48)/88)));}
+  groups.push(fresh.map(m=>m.position.x));
+  const interval=before.incomingMonsters[12].spawnAtMs!-before.incomingMonsters[11].spawnAtMs!;
+  assert.equal(result.state.invasion!.nextAtMs,result.state.tick*COMBAT_STEP_MS+interval);
+  state={...result.state,monsters:[...result.state.monsters],incomingMonsters:[...result.state.incomingMonsters!],automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+   tick:Math.ceil(result.state.invasion!.nextAtMs/COMBAT_STEP_MS)-1,invasion:result.state.invasion!};
+ }
+ assert.equal(bands.size,3);assert.notDeepEqual(groups[0],groups[1]);assert.notDeepEqual(groups[1],groups[2]);
+ assert.equal(JSON.stringify(pending),original);
+});
