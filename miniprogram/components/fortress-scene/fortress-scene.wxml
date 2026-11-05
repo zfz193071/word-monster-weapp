@@ -1,9 +1,9 @@
 <view class="scene {{inputUnavailable ? 'scene-paused' : ''}} {{opening ? 'opening-scene' : ''}}">
   <view wx:if="{{opening && !completed && !failed}}" class="soldier-control">
     <button wx:if="{{soldierStockError}}" class="soldier-retry" bindtap="refreshSoldierStock" disabled="{{inputUnavailable}}">士兵库存读取失败 · 重试</button>
-    <button wx:else class="soldier-summon" bindtap="summonSoldier" data-revision="{{soldierRevision}}" disabled="{{reviveOpen || soldierBusy || !soldierStock || soldiersInBattle >= 3 || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}" aria-label="召唤士兵，库存{{soldierStock}}，在场{{soldiersInBattle}}名，最多3名"><text>召唤士兵 ×{{soldierStock}}</text><text class="soldier-count">在场 {{soldiersInBattle}} / 3</text></button>
+    <button wx:else class="soldier-summon" bindtap="summonSoldier" data-revision="{{soldierRevision}}" disabled="{{reviveOpen || soldierBusy || !soldierStock || soldiersInBattle >= 3 || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}" aria-label="召唤士兵，库存{{soldierStock}}，在场{{soldiersInBattle}}名，最多3名"><text>召唤士兵 ×{{soldierStock}}</text></button>
     <button wx:if="{{flagStockError}}" class="soldier-retry" bindtap="refreshFlags" disabled="{{inputUnavailable}}">旗帜读取失败 · 重试</button>
-    <button wx:else class="soldier-summon" bindtap="openRevive" disabled="{{reviveOpen || !flagStock || !reviveTargets.length || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}"><text>⚑ 复活 ×{{flagStock}}</text><text class="soldier-count">选择战死伙伴</text></button>
+    <button wx:else class="soldier-summon" bindtap="openRevive" disabled="{{reviveOpen || !flagStock || !reviveTargets.length || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}"><text>⚑ 复活 ×{{flagStock}}</text></button>
     <text wx:if="{{soldierSummonError}}" class="soldier-error">{{soldierSummonError}}</text>
   </view>
   <view wx:if="{{reviveOpen}}" class="revive-overlay" role="dialog" aria-label="复活伙伴">

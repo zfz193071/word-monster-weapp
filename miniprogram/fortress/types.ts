@@ -158,6 +158,9 @@ export interface ProjectileState {
 }
 export interface ElementImpact { readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  // Scheduled arrivals share the stage clock; never participate in collisions before arrival.
+  readonly incomingMonsters?: readonly MonsterState[];
+  readonly waveStartTimesMs?: readonly number[];
   readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;
   readonly weaponLevel?: number;
@@ -184,6 +187,7 @@ export interface CombatState {
   readonly processedBaseAttackIds: readonly string[];
 }
 export type CombatEvent =
+  | { readonly type: 'waveStarted'; readonly context: CombatContext; readonly tick: number; readonly waveNumber: number }
   | { readonly type: 'petDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox'; readonly hp: number }
   | { readonly type: 'petDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox' }
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }

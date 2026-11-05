@@ -69,7 +69,7 @@ function freezeState(state: CombatState): CombatState {
     ...(state.elementImpacts ? { elementImpacts: Object.freeze(state.elementImpacts.map(impact => Object.freeze({ ...impact, position: Object.freeze({ ...impact.position }), ...(impact.target ? { target: Object.freeze({ ...impact.target }) } : {}) }))) } : {}),
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
     base: Object.freeze({ ...state.base }), skills: Object.freeze({ ...state.skills }),
-    monsters: Object.freeze(state.monsters.map(monster => Object.freeze({ ...monster,
+    monsters: Object.freeze(state.monsters.map(monster => Object.isFrozen(monster) ? monster : Object.freeze({ ...monster,
       ...(monster.burn ? { burn: Object.freeze({ ...monster.burn }) } : {}),
       position: Object.freeze({ ...monster.position }), hitbox: Object.freeze({ ...monster.hitbox }),
     }))),
@@ -224,7 +224,18 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const attacks = new Set(previous.processedBaseAttackIds);
   const fallenSoldiers = [...(previous.fallenSoldiers ?? [])];
   let supportSoldiers = [...(previous.supportSoldiers ?? [])];
-  const monsters = previous.monsters.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
+  const pending = previous.incomingMonsters ?? [];
+  let arrivalCount = 0;
+  while (arrivalCount < pending.length && (pending[arrivalCount].spawnAtMs ?? 0) <= tick * COMBAT_STEP_MS) arrivalCount++;
+  const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
+  const waveStarts = previous.waveStartTimesMs;
+  if (waveStarts) {
+    const before = waveStarts.filter(time => time <= previous.tick * COMBAT_STEP_MS).length;
+    const after = waveStarts.filter(time => time <= tick * COMBAT_STEP_MS).length;
+    if (after !== before) events.push({type:'waveStarted', context:previous.context, tick, waveNumber:after});
+  }
+  const arrivals = arrivalCount ? [...previous.monsters, ...pending.slice(0, arrivalCount)] : previous.monsters;
+  const monsters = arrivals.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
   const moved = previous.projectiles.filter(projectile => (projectile.expiresAtTick ?? Infinity) > tick).map(projectile => {
     const availableTargets = activeTargets.filter(monster => !projectile.hitMonsterIds?.includes(monster.id));
@@ -243,7 +254,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       const width = Math.abs(direction.y) * projectile.width + Math.abs(direction.x) * projectile.height;
       const height = Math.abs(direction.x) * projectile.width + Math.abs(direction.y) * projectile.height;
       const time = sweptHitTime(projectile.previousPosition, projectile.position, width, height,
-        previous.monsters[monsterIndex].position, monster.position, monster.hitbox);
+        arrivals[monsterIndex].position, monster.position, monster.hitbox);
       if (time !== null) contacts.push({ time, projectileIndex, monsterIndex });
     });
   });
@@ -392,7 +403,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     baseHp = Math.max(0, baseHp - (monster.attackDamage ?? RULES.monster.attackDamage));
     events.push({ type: 'baseDamaged', context: previous.context, tick, attackId, monsterId: monster.id, hp: baseHp });
   });
-  const status = baseHp === 0 ? 'baseDestroyed' : monsters.every(monster => defeated.has(monster.id)) ? 'cleared' : 'fighting';
+  const status = baseHp === 0 ? 'baseDestroyed' : incomingMonsters.length === 0 && monsters.every(monster => defeated.has(monster.id)) ? 'cleared' : 'fighting';
   if (status === 'baseDestroyed') events.push({ type: 'baseDestroyed', context: previous.context, tick });
   let projectiles: readonly ProjectileState[] = status === 'fighting' ? moved.filter(projectile => !consumed.has(projectile.id)
     && projectile.position.y + projectile.height / 2 >= 0
@@ -418,7 +429,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : MAX_PROJECTILES)) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
+  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };

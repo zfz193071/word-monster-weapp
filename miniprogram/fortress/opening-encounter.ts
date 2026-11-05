@@ -14,6 +14,9 @@ import type { ExperienceRules } from './experience';
 import type { UpgradeCard, UpgradeOffer } from './upgrade-choice';
 import { FORTRESS_SKILLS } from './rules';
 
+export const SPAWN_INTERVALS: Readonly<Record<DifficultyId, readonly [number, number]>> = Object.freeze({
+  easy: [1800, 1000], normal: [1500, 800], hard: [1200, 650], nightmare: [1000, 500],
+});
 export const MAX_HERO_LEVEL = 20;
 export const OPENING_WAVE_COUNT = MAX_HERO_LEVEL - 1;
 export const OPENING_EXPERIENCE_PER_KILL = 8;
@@ -82,7 +85,8 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     for (let member = 0; member < size; member++) spawns.push({ monsterId: `${sessionId}:wave:${waveIndex + 1}:zombie:${spawns.length + 1}`, wordId: fruitIds[spawns.length], spawnAtMs,
       position: { x: lanes[member] + random() * 12 - 6, y: FORTRESS_RULES.monster.startY } });
     // Timed arrivals continue while earlier enemies are still alive.
-    spawnAtMs += 1500 - Math.round(700 * Math.min(1, batchIndex / Math.max(1, batchSizes.length - 2)));
+    const [start, end] = SPAWN_INTERVALS[difficulty];
+    spawnAtMs += start - Math.round((start - end) * Math.min(1, batchIndex / Math.max(1, batchSizes.length - 2)));
   }
   // Keep category counts unchanged even when the last slot was a previous-stage monster.
   if (waveIndex === OPENING_WAVE_COUNT - 1 && !words.some(word => word.id === spawns[spawns.length - 1].wordId)) {

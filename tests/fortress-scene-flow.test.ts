@@ -1,3 +1,4 @@
+import * as invasion from '../miniprogram/fortress/stage-invasion';
 import * as continuation from '../miniprogram/fortress/continuation';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
 import * as quality from '../miniprogram/fortress/skill-quality';
@@ -45,16 +46,23 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
     applySkills(levels:SkillLevels,collection:quality.SkillCollection){this.snapshot={...this.snapshot,skills:levels,skillCollection:collection};}
-    clear(){const events:CombatEvent[]=this.snapshot.monsters.flatMap(m=>[
+    arrive(wave:number){
+      const matches=(m:CombatState['monsters'][number])=>m.id.startsWith(`${plan.sessionId}:wave:${wave+1}:`);
+      const incoming=this.snapshot.incomingMonsters ?? [];
+      this.snapshot={...this.snapshot,tick:Math.ceil(this.snapshot.waveStartTimesMs![wave]/10),monsters:[...this.snapshot.monsters,...incoming.filter(matches)],incomingMonsters:incoming.filter(m=>!matches(m))};
+      this.options.onEvents([{type:'waveStarted',context:this.snapshot.context,tick:this.snapshot.tick,waveNumber:wave+1}]);
+    }
+    clear(wave:number){const targets=this.snapshot.monsters.filter(m=>m.id.startsWith(`${plan.sessionId}:wave:${wave+1}:`));const events:CombatEvent[]=targets.flatMap(m=>[
       {type:'monsterDefeated' as const,context:this.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId},
       ...(m.dropCoins ? [{type:'coinsDropped' as const,context:this.snapshot.context,tick:1,monsterId:m.id,amount:m.dropCoins,position:m.position}] : []),
     ]);if(realAudio){this.options.onEvents(events.slice(0,1));advanceAudio(300);}
-    this.snapshot={...this.snapshot,status:'cleared'};this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:'cleared'});this.options.onEvents(events);this.options.onEvents(events);}
+    this.snapshot={...this.snapshot,status:wave===18?'cleared':'fighting',monsters:this.snapshot.monsters.map(m=>targets.includes(m)?{...m,hp:0,status:'defeated'}:m)};this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});this.options.onEvents(events);this.options.onEvents(events);}
   }
   const source=readFileSync(new URL('../miniprogram/components/fortress-scene/fortress-scene.ts',import.meta.url),'utf8');
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
+      if(name.endsWith('/stage-invasion'))return invasion;
       if(name.endsWith('/continuation'))return continuation;
       if(name.endsWith('/level-assets'))return {loadLevelAssets(){loadCount++;return loadNext();}};
       if(name.endsWith("/pets/battle"))return petBattle;
@@ -94,15 +102,18 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   let picked=0;let repairs=0;let bossPicked=0;
   function consumeBossOffers(){while(host.data.upgradeOffer?.source){const offer=host.data.upgradeOffer;assert(current!.paused);assert(offer.cards.every((c:any)=>c.quality===offer.source));bossPicked++;host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}}
 
+  const stageScene=current!;
   for(let wave=0;wave<19;wave++){
+    current!.arrive(wave);
+    const waveMonsters=current!.snapshot.monsters.filter(m=>m.id.startsWith(`${plan.sessionId}:wave:${wave+1}:`));
+    assert.equal(current!,stageScene,'整关不重建场景');
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
-    assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,openingMonsterCount(wave,level.id));
+    assert.equal(host.data.waveNumber,wave+1);assert.equal(waveMonsters.length,openingMonsterCount(wave,level.id));
     assert.equal(current!.snapshot.monsterSpeed, (level.id === 3 ? 28 * 1.2 : 20));
-    for(const monster of current!.snapshot.monsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
+    for(const monster of waveMonsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     let awardedThisWave=0;
-    const waveMonsters=current!.snapshot.monsters;
     while(host.data.level<20 && opening.OPENING_EXPERIENCE.levelThresholds[host.data.level-1] <= host.data.experience+(waveMonsters.length-awardedThisWave)*8){
     const killsToUpgrade=(opening.OPENING_EXPERIENCE.levelThresholds[host.data.level-1]-host.data.experience)/8;
     const nextLevel=host.data.level+1;
@@ -127,10 +138,10 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     }
     consumeBossOffers();
     assert.equal(current!.paused,false,'选完技能立即继续同一轮');
-    assert.equal(host.data.waveRequest,null,'活怪未清完不得跳到下一轮');
+    assert.equal(host.data.waveRequest,null,'整关过程中不弹轮间听词');
     }
     if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,pet:{...current!.snapshot.pet,hp:0,defeatedPosition:{x:250,y:480}},fallenSoldiers:[{id:'fallen-guard',slot:0,hp:0,maxHp:30,position:{x:150,y:500},attackRemainingMs:0}]};
-    current!.clear();consumeBossOffers();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
+    current!.clear(wave);consumeBossOffers();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
       const before=voiceEnds.length;advanceAudio(300);assert.equal(voiceEnds.length,before,'新击杀不能打断当前词');
@@ -139,9 +150,8 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       voiceEnds.at(-1)!();
     }else{busy=false;audioOptions.onDrained();}
     if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
-    const expectedHp=current!.snapshot.base.hp;
-    if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
-      const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);if(level.id===2){assert.equal(current!.snapshot.pet?.hp,0);assert.equal(current!.snapshot.fallenSoldiers?.[0].id,'fallen-guard');}
+    if(wave<18){assert.equal(host.data.waveRequest,null);assert.equal(current!.disposed,false);assert.equal(current!.snapshot.status,'fighting');
+      if(level.id===2){assert.equal(current!.snapshot.pet?.hp,0);assert.equal(current!.snapshot.fallenSoldiers?.[0].id,'fallen-guard');}
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
   assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
@@ -191,7 +201,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     await Promise.resolve();
     assert.equal(current!.snapshot.context.sessionId,nextPlan.sessionId,'切换颜色关不能继续保留水果关的场景');
     assert.ok(oldScene.disposed);
-    assert.equal(current!.snapshot.monsters.filter(m=>levels.getLevel(1).words.some(word=>word.id===m.wordId)).length,Math.round(current!.snapshot.monsters.length*.3));
+    assert.equal([...current!.snapshot.monsters,...(current!.snapshot.incomingMonsters??[])].filter(m=>levels.getLevel(1).words.some(word=>word.id===m.wordId)).length,nextPlan.waves.reduce((sum,w)=>sum+Math.round(w.spawnPlan.length*.3),0));
     assert.ok(Object.keys(current!.options.art.fruitHats).every(id=>[...levels.getLevel(1).words,...levels.getLevel(2).words].some(word=>word.id===id)));
     assert.equal(host.data.completed,false);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.xpCurrent,0);assert.equal(host.data.xpRequired,40);assert.equal(host.data.xpPercent,0);

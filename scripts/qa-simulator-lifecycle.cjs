@@ -109,7 +109,7 @@ async function chooseSkill(scene, offer) {
       await delay(500);
       const nextOffer = await bounded(scene.data('upgradeOffer'), 'follow-up offer'); if (nextOffer) await chooseSkill(scene, nextOffer);
       const request = await bounded(scene.data('waveRequest'), 'wave request');
-      if (request) { const choice = await bounded(scene.$('.wave-choice'), 'wave choice'); if (choice) await selectWord(choice, request.plan.waves[request.waveIndex].targetWordId); }
+      assert.equal(request,null,'同一关连续进攻不应出现轮间听词');
       const current=await bounded(scene.data(),'battle view');observations.push({level:current.level,experience:current.experience,wave:current.waveNumber,hp:current.hud.hp,status:current.hud.status});
       if (await bounded(scene.data('failed'), 'failure state')) break;
     }
