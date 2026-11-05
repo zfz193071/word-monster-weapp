@@ -73,6 +73,7 @@ function freezeState(state: CombatState): CombatState {
       ...(monster.burn ? { burn: Object.freeze({ ...monster.burn }) } : {}),
       position: Object.freeze({ ...monster.position }), hitbox: Object.freeze({ ...monster.hitbox }),
     }))),
+    fallenSoldiers: Object.freeze((state.fallenSoldiers ?? []).map(soldier => Object.freeze({...soldier, position: Object.freeze({...soldier.position})}))),
     supportSoldiers: Object.freeze((state.supportSoldiers ?? []).map(soldier => Object.freeze({ ...soldier, position: Object.freeze({ ...soldier.position }) }))),
     projectiles: Object.freeze(state.projectiles.map(projectile => Object.freeze({ ...projectile,
       ...(projectile.hitMonsterIds ? { hitMonsterIds: Object.freeze([...projectile.hitMonsterIds]) } : {}),
@@ -221,6 +222,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const events: CombatEvent[] = [];
   const defeated = new Set(previous.defeatedMonsterIds);
   const attacks = new Set(previous.processedBaseAttackIds);
+  const fallenSoldiers = [...(previous.fallenSoldiers ?? [])];
   let supportSoldiers = [...(previous.supportSoldiers ?? [])];
   const monsters = previous.monsters.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
@@ -374,7 +376,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     if (soldierIndex >= 0) {
       const soldier = supportSoldiers[soldierIndex];
       const hp = Math.max(0, soldier.hp - (monster.attackDamage ?? RULES.monster.attackDamage));
-      if (hp === 0) supportSoldiers.splice(soldierIndex, 1);
+      if (hp === 0) { supportSoldiers.splice(soldierIndex, 1); if (!fallenSoldiers.some(s => s.id === soldier.id)) fallenSoldiers.push({...soldier, hp: 0}); }
       else supportSoldiers[soldierIndex] = { ...soldier, hp };
       events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
       if (hp === 0) events.push({ type: 'supportSoldierDefeated', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id });
@@ -416,7 +418,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : MAX_PROJECTILES)) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, ...(pet ? { pet } : {}),
+  const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };
@@ -479,4 +481,16 @@ function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
 export function attachCombatPet(state: CombatState, pet: BattlePet): CombatState {
   if (state.pet || state.status === 'baseDestroyed') return state;
   return freezeState({ ...state, pet: createBattlePet(pet, pet.attackRemainingMs, pet) });
+}
+
+// Revival is prepared in full before inventory is debited by the paused runner.
+export function reviveCompanion(state: CombatState, kind: string, id: string): CombatState | null {
+  if (state.status !== 'fighting' || state.base.hp <= 0) return null;
+  if (kind === 'pet') {
+    if (id !== 'thunder-fox' || !state.pet || state.pet.hp !== 0) return null;
+    return freezeState({...state, pet: createBattlePet(state.pet)});
+  }
+  if (kind !== 'soldier' || !state.fallenSoldiers?.some(s => s.id === id)) return null;
+  const next = summonSupportSoldier(state, id);
+  return next ? freezeState({...next, fallenSoldiers: state.fallenSoldiers.filter(s => s.id !== id)}) : null;
 }

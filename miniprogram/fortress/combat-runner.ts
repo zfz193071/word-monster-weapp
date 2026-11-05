@@ -1,6 +1,6 @@
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
-import { summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
+import { reviveCompanion, summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
 
@@ -56,6 +56,12 @@ export class CombatRunner {
     // exists between persisting the debit and installing the prepared snapshot.
     this.current = next;
     return true;
+  }
+  revive(kind: string, id: string, debit: () => boolean): boolean {
+    if (!this.current || !this.paused) return false;
+    const next = reviveCompanion(this.current, kind, id);
+    if (!next || !debit()) return false;
+    this.current = next; return true;
   }
   applyPet(pet: BattlePet): void { if (this.current) this.current = attachCombatPet(this.current, pet); }
   applySkills(skills: SkillLevels, collection?: SkillCollection): void {

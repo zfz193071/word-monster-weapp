@@ -30,7 +30,7 @@
             <view class="checkin-progress"><view style="width:{{(checkinView.day - (checkinView.claimed ? 0 : 1)) / 7 * 100}}%"></view></view>
             <text class="checkin-message" aria-live="polite">{{checkinMessage || (checkinView.claimed ? '今天已签到，明天再来吧' : '点击今日奖励，直接领取')}}</text>
             <view class="checkin-inventory"><text>宠物粮 ×{{petError ? '—' : petView.food}}</text><text>士兵 ×{{checkinView.soldiers}}</text><text>复活旗帜 ×{{checkinView.flags}}</text></view>
-            <text class="checkin-rule">士兵可在战斗中召唤，旗帜使用功能即将开放</text>
+            <text class="checkin-rule">士兵可在战斗中召唤，旗帜可复活战死伙伴</text>
           </block>
         </view>
       </scroll-view>

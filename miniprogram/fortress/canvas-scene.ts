@@ -105,6 +105,10 @@ export class CanvasScene {
     // Rendering failures must not be reported as a failed inventory transaction.
     return this.runner.summonSoldier(id, debit);
   }
+  revive(kind: string, id: string, debit: () => boolean): boolean {
+    if (!this.ready || this.disposed || !this.paused) return false;
+    return this.runner.revive(kind, id, debit);
+  }
   restoreBase(): void {
     this.runner.restoreBase();
     if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.publishHud(this.runner.snapshot); }

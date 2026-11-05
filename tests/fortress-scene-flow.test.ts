@@ -129,7 +129,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(current!.paused,false,'选完技能立即继续同一轮');
     assert.equal(host.data.waveRequest,null,'活怪未清完不得跳到下一轮');
     }
-    if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,pet:{...current!.snapshot.pet,hp:0,defeatedPosition:{x:250,y:480}}};
+    if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,pet:{...current!.snapshot.pet,hp:0,defeatedPosition:{x:250,y:480}},fallenSoldiers:[{id:'fallen-guard',slot:0,hp:0,maxHp:30,position:{x:150,y:500},attackRemainingMs:0}]};
     current!.clear();consumeBossOffers();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
@@ -141,7 +141,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
     const expectedHp=current!.snapshot.base.hp;
     if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
-      const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);if(level.id===2)assert.equal(current!.snapshot.pet?.hp,0);
+      const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);if(level.id===2){assert.equal(current!.snapshot.pet?.hp,0);assert.equal(current!.snapshot.fallenSoldiers?.[0].id,'fallen-guard');}
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
   assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
@@ -176,7 +176,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     host.nextWave({detail:{context:{...context,sessionId:'stale'},attempts:[{correct:true}]}});assert.equal(host.data.waveRequest,next);
     host.nextWave({detail:{context,attempts:[{correct:true,selectedWordId:target,targetWordId:target,sessionId:context.sessionId,waveId:context.waveId}]}});await Promise.resolve();
     assert.equal(host.data.error,'');assert.equal(host.data.level,1);assert.equal(host.data.experience,0);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
-    assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);
+    assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);assert.equal(current!.snapshot.fallenSoldiers?.length ?? 0,0);
     assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(host.data.skillInventory.length,Object.keys(carried).length);assert.equal(current!.snapshot.weaponLevel,7);
     assert.equal(current!.snapshot.tick,0);assert.equal(current!.snapshot.elementReadyTick,500);if(current!.snapshot.skills.firepower)assert.equal(current!.snapshot.firepowerUntilTick,qualitySkills.qualityEffects(carried).firepowerTicks);
     if(pet){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.pet?.defeatedPosition,undefined);}assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));

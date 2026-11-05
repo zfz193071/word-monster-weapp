@@ -174,6 +174,7 @@ export interface CombatState {
   readonly player: Point;
   readonly base: { readonly hp: number; readonly maxHp: number };
   readonly monsters: readonly MonsterState[];
+  readonly fallenSoldiers?: readonly SupportSoldierState[];
   readonly supportSoldiers?: readonly SupportSoldierState[];
   readonly projectiles: readonly ProjectileState[];
   readonly skills: SkillLevels;

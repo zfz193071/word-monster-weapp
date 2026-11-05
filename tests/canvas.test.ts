@@ -253,3 +253,13 @@ for (const levelId of [1, 3, 8]) for (const status of ['fighting', 'cleared'] as
     h.scene.dispose();
   });
 }
+
+test('复活画布仅在就绪暂停时允许，保存失败保留死亡状态，恢复帧绘制满血士兵', async () => {
+  const h=harness(true,undefined,{initial:{...initial(),fallenSoldiers:[{id:'fallen',slot:0,hp:0,maxHp:30,position:{x:10,y:10},attackRemainingMs:0}]}});let debits=0;
+  const debit=()=>{debits++;return true;};
+  assert.equal(h.scene.revive('soldier','fallen',debit),false);await h.scene.load();assert.equal(h.scene.revive('soldier','fallen',debit),false);
+  h.scene.setPaused(true);assert.throws(()=>h.scene.revive('soldier','fallen',()=>{throw Error('disk');}));assert.equal(h.scene.snapshot!.fallenSoldiers!.length,1);
+  assert(h.scene.revive('soldier','fallen',debit));assert.equal(h.scene.snapshot!.supportSoldiers![0].hp,30);assert.equal(debits,1);
+  assert.equal(h.scene.revive('soldier','fallen',debit),false);h.scene.setPaused(false);h.frame(1000);assert.equal(h.errors.length,0);
+  h.scene.dispose();assert.equal(h.scene.revive('soldier','fallen',debit),false);
+});
