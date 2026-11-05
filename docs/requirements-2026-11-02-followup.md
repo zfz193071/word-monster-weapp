@@ -656,3 +656,12 @@
 - 新增 `scripts/qa-simulator-continuous.cjs`，真实开局、自然进攻，不注入战斗或存档。模拟器观测第2轮时Lv.1/0经验，证明首轮怪物尚未被击败就已进下一轮；暂停1600ms轮次/经验/堡垒血量不变，恢复后进第3轮，全程无轮间听词，最终返回首页。日志 `/private/tmp/wm-continuous-qa.log`、报告 `/private/tmp/wm-continuous-qa/report.json`、截图 `/private/tmp/wm-continuous-qa/overlapping-waves.png` 已目视检查。环境iPhone 12/13(Pro)、390×753、DPR3、SDK3.17.5；不代表19轮完整自然通关或真机帧率验收。
 - 既有 `qa-simulator-lifecycle.cjs` 移除轮间答题操作并断言连续关内不再出现听词。本轮代码未提交，之前已完成的按钮精简/底栏对齐及品质验收脚本保留。
 - 最终复跑310项全部通过（`/private/tmp/wm-continuous-final.log`）；#63代码范围完成关闭，剩余完整19轮自然通关、四档实战平衡、小屏/真机和长局性能/音频验收已回填 #55。
+
+
+### 2026-11-05 提交连续进攻，继续 #55 生命周期验收
+
+- 已本地提交 `29a4ca7`（连续进攻、按钮精简及底栏对齐），未推送。审查当前开放工单及 #55 评论（无新评论），未发现新增明确且未实现的功能；继续集成验收，不重复开发已有玩法。
+- 对已提交的 `scripts/qa-simulator-lifecycle.cjs` 做连续进攻回归。首次运行自动化按字段读取 waveRequest 得到 undefined，断言失败；改为读取完整组件 data 再取字段，未改游戏逻辑。脚本语法及 diff 检查通过。
+- 最终模拟器正常操作通过：暂停1200ms战场变化0像素，恢复后变化9167像素；自然升级选择期间冻结1200ms变化0像素，选择精良“灵巧追踪”后恢复战斗。关内无轮间听词；观察至第5轮堡垒自然战败（1400→0），因此不声称19轮通关或平衡验收通过。
+- 返回首页 opening=false、request=null、entryProgress=0；重新答题开战后技能为空、Lv.1，结束返回首页。没有注入战斗状态、修改存档或消耗士兵/旗帜库存。
+- 报告 `/private/tmp/wm-stream-lifecycle/report.json` 与同目录截图；iPhone 12/13(Pro)模拟器390×753、SDK3.17.5。完整19轮自然通关、四难度平衡、长局FPS、小屏/真机及人工听审仍未完成，#55保持开放。本次脚本修正与记录尚未提交。

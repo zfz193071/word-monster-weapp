@@ -31,7 +31,7 @@ async function enter() {
   await bounded((await bounded(home.$('.start-button'), 'start button')).tap(), 'start');
   let selected = false;
   for (let i = 0; i < 70; i++) {
-    const request = await bounded(home.data('request'), 'entry request');
+    const request = (await bounded(home.data(), 'entry request')).request;
     const choice = await bounded(home.$('.fruit-dialog-choice'), 'home choice');
     if (request && choice && await selectWord(choice, request.plan.waves[0].targetWordId)) { selected = true; break; }
     await delay(250);
@@ -41,7 +41,7 @@ async function enter() {
     const page = await bounded(mini.currentPage(), 'current page');
     if (page.path === 'pages/battle/battle') {
       const scene = await bounded(page.$('.fortress-preview'), 'scene');
-      if (scene && await bounded(scene.data('ready'), 'scene readiness')) return { page, scene };
+      if (scene && (await bounded(scene.data(), 'scene readiness')).ready) return { page, scene };
     }
     await delay(250);
   }
@@ -87,7 +87,7 @@ async function chooseSkill(scene, offer) {
     report.pausePixels=pausePixels;report.resumePixels=resumePixels;
     report.checks.push('真实暂停按钮：1200ms战场像素保持不变，恢复后可见运动'); console.log(report.checks.at(-1));
     let offer;
-    for (let i = 0; i < 160; i++) { offer = await bounded(scene.data('upgradeOffer'), 'upgrade offer'); if (offer) break; await delay(400); }
+    for (let i = 0; i < 160; i++) { offer = (await bounded(scene.data(), 'upgrade offer')).upgradeOffer; if (offer) break; await delay(400); }
     assert(offer, '自然击杀未触发升级');
     await delay(300);
     const frozenState = await bounded(scene.data(), 'frozen state');
@@ -102,23 +102,23 @@ async function chooseSkill(scene, offer) {
     const selected = await chooseSkill(scene, offer); await delay(900);
     assert.equal((await bounded(scene.data(), 'selected panel')).upgradeOffer, null);
     const selectedFrame=await capture('selected-before');await delay(900);assert(changedPixels(selectedFrame,await capture('selected-after'))>100,'选择技能后战场未恢复可见运动');
-    const inventory = await bounded(scene.data('skillInventory'), 'inventory'); assert(inventory.some(item => item.id === selected.id));
+    const inventory = (await bounded(scene.data(), 'inventory')).skillInventory; assert(inventory.some(item => item.id === selected.id));
     report.checks.push('自然升级面板冻结1200ms，选择后携带技能恢复战斗'); report.selected = selected; console.log(report.checks.at(-1));
     const observations = [];
     for (let i = 0; i < 20; i++) {
       await delay(500);
-      const nextOffer = await bounded(scene.data('upgradeOffer'), 'follow-up offer'); if (nextOffer) await chooseSkill(scene, nextOffer);
-      const request = await bounded(scene.data('waveRequest'), 'wave request');
+      const nextOffer = (await bounded(scene.data(), 'follow-up offer')).upgradeOffer; if (nextOffer) await chooseSkill(scene, nextOffer);
+      const request = (await bounded(scene.data(), 'wave request')).waveRequest;
       assert.equal(request,null,'同一关连续进攻不应出现轮间听词');
       const current=await bounded(scene.data(),'battle view');observations.push({level:current.level,experience:current.experience,wave:current.waveNumber,hp:current.hud.hp,status:current.hud.status});
-      if (await bounded(scene.data('failed'), 'failure state')) break;
+      if ((await bounded(scene.data(), 'failure state')).failed) break;
     }
     report.observations = observations;
     await bounded((await bounded(page.$('.battle-toolbar button'), 'home button')).tap(), 'return home'); await delay(600);
     const home = await bounded(mini.currentPage(), 'returned page'); assert.equal(home.path,'pages/home/home');
     const homeData = await bounded(home.data(), 'returned home data'); assert.equal(homeData.opening,false); assert.equal(homeData.request,null); assert.equal(homeData.entryProgress,0);
     ({page,scene} = await enter()); await bounded((await bounded(page.$('.pause-button'), 'pause button')).tap(), 'pause fresh battle'); await delay(200);
-    assert.equal((await bounded(scene.data('skillInventory'),'fresh inventory')).length,0);assert.equal(await bounded(scene.data('level'),'fresh level'),1);
+    assert.equal(((await bounded(scene.data(), 'fresh inventory')).skillInventory).length,0);assert.equal((await bounded(scene.data(), 'fresh level')).level,1);
     report.checks.push('退出后新开局技能面板为空、人物Lv.1，首页加载状态已清理'); console.log(report.checks.at(-1));
     await bounded(mini.screenshot({path:join(output,'fresh-run.png')}), 'fresh screenshot'); report.passed = true;
   } catch (error) { report.passed = false; report.error = error.stack; process.exitCode = 1; console.error(error.stack); }
