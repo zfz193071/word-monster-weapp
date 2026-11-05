@@ -1,4 +1,5 @@
 <view class="scene {{inputUnavailable ? 'scene-paused' : ''}} {{opening ? 'opening-scene' : ''}}">
+  <view wx:if="{{bossNotice && !failed}}" class="boss-notice {{goldenLoot ? 'golden-loot' : ''}}" aria-live="polite"><text wx:if="{{goldenLoot}}" class="loot-star">★</text><text>{{bossNotice}}</text></view>
   <view wx:if="{{petReward}}" class="pet-reward" aria-live="polite"><button wx:if="{{petDropError}}" bindtap="retryPetDrops" disabled="{{inputUnavailable}}">{{petReward}}</button><text wx:else>{{petReward}}</text></view>
   <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>
   <view wx:if="{{completed}}" class="victory-overlay" aria-label="挑战成功，达到20级，完成19波挑战">

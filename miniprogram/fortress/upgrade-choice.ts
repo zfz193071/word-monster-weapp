@@ -11,12 +11,14 @@ export interface UpgradeCard {
   readonly icon: 'doubleShot' | 'fireRate' | 'bulletWidth' | 'flame' | 'frost' | 'lightning' | 'firepower' | 'homing' | 'repair';
 }
 export interface UpgradeOffer {
+  readonly source?: 'level' | 'elite' | 'legendary';
   readonly id: string;
   readonly level: number;
   readonly cards: readonly UpgradeCard[];
 }
 
 export function validateUpgradeOffer(offer: UpgradeOffer): void {
+  if (offer.source !== undefined && !['level','elite','legendary'].includes(offer.source)) throw new Error('技能奖励来源无效');
   for (const card of offer.cards) {
     if (card.quality !== undefined && (card.id === 'repair' || !SKILL_QUALITIES.some(q => q.id === card.quality)
       || !SKILL_QUALITIES.some(q => q.id === card.resultingQuality && q.label === card.qualityLabel)
@@ -40,10 +42,10 @@ export function createUpgradeChoices() {
     open(offer: UpgradeOffer): UpgradeOffer | null {
       if (disposed) return null;
       if (active) return active.id === offer.id ? active : null;
-      if (offers.has(offer.id) || levels.has(offer.level)) return null;
+      if (offers.has(offer.id) || ((!offer.source || offer.source === 'level') && levels.has(offer.level))) return null;
       validateUpgradeOffer(offer);
       active = Object.freeze({ ...offer, cards: Object.freeze(offer.cards.map(card => Object.freeze({ ...card }))) });
-      offers.set(offer.id, active); levels.add(offer.level);
+      offers.set(offer.id, active); if (!offer.source || offer.source === 'level') levels.add(offer.level);
       return active;
     },
     select(offerId: string, cardId: string): UpgradeCard | null {

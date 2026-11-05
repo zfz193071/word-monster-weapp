@@ -1,4 +1,4 @@
-import { applySkillReward, rollUpgradeCandidates, SKILL_QUALITIES, qualityRank } from './skill-quality';
+import { applySkillReward, rollUpgradeCandidates, SKILL_QUALITIES, qualityRank, SKILL_IDS, canImproveSkill } from './skill-quality';
 import type { SkillCollection } from './skill-quality';
 import type { BattleSkillId, RandomSource, SkillLevels } from './types';
 import type { UpgradeOffer } from './upgrade-choice';
@@ -54,4 +54,18 @@ export function qualitySkillOffer(sessionId: string, level: number, skills: Skil
       resultingQuality:owned.quality,qualityLabel:quality.label,skillLevel:owned.level };
   });
   return {id:`${sessionId}:level:${level}`,level,cards};
+}
+
+export function bossSkillOffer(monsterId: string, quality: 'elite' | 'legendary', skills: SkillCollection, random: RandomSource): UpgradeOffer {
+  const eligible = SKILL_IDS.filter(id => canImproveSkill(skills[id], quality));
+  for (let i = eligible.length - 1; i > 0; i--) {
+    const value = random();
+    if (!Number.isFinite(value) || value < 0 || value >= 1) throw new Error('随机数无效');
+    const j = Math.floor(value * (i + 1)); [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
+  }
+  return { id: `${monsterId}:skill:${quality}`, level: 2, source: quality, cards: eligible.slice(0, 3).map(id => {
+    const next = applySkillReward(skills, {id, quality}); const owned = next[id]!;
+    return {id, icon:id, label:LABELS[id], description:qualityDescription(id, next), quality,
+      resultingQuality:owned.quality, qualityLabel:SKILL_QUALITIES[qualityRank(owned.quality)].label, skillLevel:owned.level};
+  }) };
 }

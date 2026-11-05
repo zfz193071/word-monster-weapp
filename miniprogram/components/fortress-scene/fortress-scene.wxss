@@ -95,3 +95,10 @@
 @keyframes sad-rock { 0%,100% { transform:rotate(-4deg) translateY(0); } 50% { transform:rotate(4deg) translateY(7rpx); } }
 @keyframes sad-tear { 0% { opacity:0; transform:translateY(0); } 20% { opacity:1; } 100% { opacity:0; transform:translateY(90rpx); } }
 .scene-paused .crying-hero,.scene-paused .crying-tear { animation-play-state:paused; }
+
+.boss-notice { position:absolute; z-index:6; top:110rpx; left:20rpx; right:20rpx; text-align:center; color:#fff5d1; background:rgba(59,43,26,.85); border-radius:20rpx; padding:14rpx; pointer-events:none; }
+.golden-loot { border:2rpx solid #f6d266; background:linear-gradient(120deg,#694819,#b77a24,#694819); box-shadow:0 0 30rpx #edc25a; animation:loot-arrival 1.5s ease-out; }
+.loot-star { display:inline-block; color:#ffe99a; font-size:44rpx; margin-right:14rpx; animation:loot-star 1.5s ease-out; }
+@keyframes loot-arrival { from { opacity:0; transform:scale(.65); } 50% { opacity:1; transform:scale(1.08); } to { transform:scale(1); } }
+@keyframes loot-star { from { transform:rotate(-180deg) scale(.3); } to { transform:rotate(0) scale(1); } }
+.scene-paused .golden-loot, .scene-paused .loot-star { animation-play-state:paused; }

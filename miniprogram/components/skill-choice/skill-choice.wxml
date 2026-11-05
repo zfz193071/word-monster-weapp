@@ -1,7 +1,7 @@
 <view wx:if="{{offer && valid}}" class="skill-overlay" catchtouchmove="stopScroll" role="dialog" aria-label="选择升级技能">
   <view class="skill-cards">
     <button wx:for="{{offer.cards}}" wx:key="id" class="skill-card card-{{item.icon}} quality-{{item.resultingQuality}}" disabled="{{disabled || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
-      <view class="card-kicker">{{item.icon === 'flame' || item.icon === 'frost' || item.icon === 'lightning' ? '元素强化' : item.icon === 'repair' ? '堡垒补给' : '武器强化'}}</view><view class="card-top">{{item.label}}</view>
+      <view class="card-kicker">{{offer.source === 'elite' ? '铁桶战利品 · 精英技能' : offer.source === 'legendary' ? '王者战利品 · 传说技能' : item.icon === 'flame' || item.icon === 'frost' || item.icon === 'lightning' ? '元素强化' : item.icon === 'repair' ? '堡垒补给' : '武器强化'}}</view><view class="card-top">{{item.label}}</view>
       <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.description}}</view>

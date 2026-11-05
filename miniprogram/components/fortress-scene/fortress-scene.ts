@@ -1,4 +1,4 @@
-import { qualitySkillOffer, skillLevels, qualityDescription } from '../../fortress/quality-skills';
+import { bossSkillOffer, qualitySkillOffer, skillLevels, qualityDescription } from '../../fortress/quality-skills';
 import { applySkillReward, SKILL_QUALITIES, qualityRank } from '../../fortress/skill-quality';
 import type { SkillCollection } from '../../fortress/skill-quality';
 import { createDefeatAudio } from '../../services/defeat-audio';
@@ -28,7 +28,7 @@ import { FORTRESS_MONSTERS, MONSTER_ASSETS, monsterDrawWidth } from '../../fortr
 import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState, SupportSoldierState } from '../../fortress/types';
 
-interface InstanceState { collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; supportSoldiers?: readonly SupportSoldierState[]; waveIndex?: number; baseHp?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -54,6 +54,7 @@ Component({
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
   data: { failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+    bossNotice: '', goldenLoot: false,
     skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); },
@@ -87,17 +88,19 @@ Component({
           if (this.properties.opening && !retained) {
             instance.audio?.dispose(); instance.audio = undefined;
             instance.victoryAudio?.dispose(); instance.victoryAudio = undefined;
-            instance.upgradeLevels = []; instance.awaitingWaveEnd = false;
+            instance.upgradeLevels = []; instance.bossRewards = []; instance.bossSeen = new Set(); instance.awaitingWaveEnd = false;
             instance.experience?.dispose(); instance.upgrades?.dispose();
             instance.drops?.dispose(); instance.petDrops?.dispose();
             instance.defeatAudio?.dispose(); instance.defeatAudio = undefined;
-            this.setData({ completed: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, petReward: '', petDropError: false });
+            this.setData({ completed: false, bossNotice: '', goldenLoot: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
               bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss && monster.bossKind !== 'grand').map(monster => monster.monsterId)) ?? [], store: petStore,
               onChange: (message, error) => { if (instance.alive) { this.setData({ petReward: message, petDropError: error }); if (!error) this.syncBattlePet(); } },
             });
             this.setData({ dropCoins: 0, dropError: false });
             instance.drops = createBattleDrops({ sessionId: initial.context.sessionId, levelId: request?.plan.levelId ?? 1, difficulty: request?.plan.difficulty, wallet: coinWallet,
+              monsterPosition: id => instance.scene?.snapshot?.monsters.find(monster => monster.id === id)?.position,
+              grandBosses: Object.fromEntries(request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.bossKind === 'grand').map(monster => [monster.monsterId, monster.position])) ?? []),
               onChange: view => { if (instance.alive) { const balance = coinWallet.balance(); this.setData({ dropCoins: view.total, dropError: view.error, coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); } },
               onAward: (position, amount) => { if (instance.alive) { instance.scene?.showCoinDrop(position, amount); instance.audio?.playCoin(); } },
             });
@@ -133,7 +136,6 @@ Component({
             onHud: hud => { if (valid()) this.setData({ hud, hpPercent: hud.hp / hud.maxHp * 100 }); },
             onEvents: events => {
               if (!valid()) return;
-              instance.audio?.handle(events);
               instance.drops?.handle(events);
               instance.petDrops?.handle(events);
               if (instance.experience && instance.upgrades) {
@@ -143,8 +145,18 @@ Component({
                 const current = xp.total - thresholds[xp.level - 1];
                 this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
                 if (scene.snapshot?.status !== 'baseDestroyed') {
+                  for (const event of events) {
+                    if (event.type !== 'monsterDefeated' || event.context.sessionId !== instance.sessionId || instance.bossSeen?.has(event.monsterId)) continue;
+                    const boss = request?.plan.waves.flatMap(wave => wave.spawnPlan).find(monster => monster.monsterId === event.monsterId && monster.boss);
+                    if (!boss) continue;
+                    instance.bossSeen?.add(event.monsterId);
+                    if (boss.bossKind === 'grand' && request?.plan.levelId === 8) this.setData({goldenLoot:true, bossNotice:'堡垒破坏王已击败 · 金色战利品'});
+                    else (instance.bossRewards ??= []).push({id:event.monsterId, quality:boss.bossKind === 'grand' ? 'legendary' : 'elite'});
+                  }
+                  instance.bossRewards?.sort((a,b) => (a.quality === 'elite' ? 0 : 1) - (b.quality === 'elite' ? 0 : 1));
                   (instance.upgradeLevels ??= []).push(...xp.upgrades);
                   if (scene.snapshot?.status === 'cleared') instance.awaitingWaveEnd = true;
+                  instance.audio?.handle(events);
                   this.presentUpgrade();
                 }
               }
@@ -164,8 +176,9 @@ Component({
     presentDefeat() {
       const state = instances.get(this);
       if (!this.properties.opening || !state?.alive || !state.scene || state.scene.snapshot?.status !== 'baseDestroyed' || this.data.failed) return;
-      state.audio?.setActive(false); state.upgradeLevels = []; state.awaitingWaveEnd = false;
-      this.setData({ failed: true, upgradeOffer: null, frozenFrame: state.scene.captureFrame() });
+      state.audio?.setActive(false); state.upgradeLevels = []; state.bossRewards = []; state.awaitingWaveEnd = false;
+      state.upgrades?.dispose(); state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection);
+      this.setData({ failed: true, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, frozenFrame: state.scene.captureFrame() });
       state.defeatAudio = createDefeatAudio(); this.applyPause();
     },
     becomeStronger() {
@@ -175,7 +188,7 @@ Component({
     },
     presentUpgrade() {
       const state = instances.get(this);
-      if (!state?.scene || !state.visible || this.properties.paused || this.data.upgradeOffer || this.data.failed) return;
+      if (!state?.scene || !state.visible || this.properties.paused || this.data.upgradeOffer || this.data.failed || state.scene.snapshot?.status === 'baseDestroyed') return;
       while (state.upgradeLevels?.length) {
         const level = state.upgradeLevels.shift()!;
         const seed = [...`${state.sessionId}:${level}`].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
@@ -186,6 +199,17 @@ Component({
           this.applyPause(); return;
         }
       }
+      while (state.bossRewards?.length) {
+        const reward = state.bossRewards.shift()!;
+        const seed = [...reward.id].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
+        const candidate = bossSkillOffer(reward.id, reward.quality, state.collection ?? {}, createSeededRandom(seed >>> 0));
+        const offer = candidate.cards.length ? state.upgrades?.open(candidate) : null;
+        if (offer) {
+          this.setData({frozenFrame:state.scene.captureFrame(), upgradeOffer:offer}); this.applyPause(); return;
+        }
+        this.setData({bossNotice:'技能已满'});
+      }
+      this.applyPause();
       if (state.awaitingWaveEnd && !state.audio?.busy) { state.awaitingWaveEnd = false; this.advanceWave(); }
     },
     retryVoice() { instances.get(this)?.audio?.retry(); },
@@ -201,7 +225,7 @@ Component({
     retryDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) state.drops?.retry(); },
     chooseUpgrade(event: WechatMiniprogram.CustomEvent<{ offerId: string; cardId: string }>) {
       const state = instances.get(this);
-      if (!state?.levels || this.properties.paused || !state.visible || !state.scene || this.data.error) return;
+      if (!state?.levels || this.properties.paused || !state.visible || !state.scene || this.data.error || this.data.failed || state.scene.snapshot?.status === 'baseDestroyed') return;
       const selected = state.upgrades?.select(event.detail.offerId, event.detail.cardId);
       if (!selected) return;
       if (selected.id === 'repair') state.scene.restoreBase();
@@ -214,11 +238,11 @@ Component({
         this.setData({ skillInventory: Object.entries(state.collection).map(([key, skill]) => ({id:key, quality:skill.quality, label:`${labels[key as BattleSkillId]} · ${SKILL_QUALITIES[qualityRank(skill.quality)].label} Lv.${skill.level}`,description:qualityDescription(key as BattleSkillId,state.collection!)})) });
       }
       this.setData({ upgradeOffer: null, frozenFrame: '', upgradeSummary: `${selected.label} · ${selected.description}` });
-      this.applyPause(); this.presentUpgrade();
+      this.presentUpgrade();
     },
     advanceWave() {
       const state = instances.get(this); const snapshot = state?.scene?.snapshot;
-      if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.upgradeOffer || state.upgradeLevels?.length || this.data.completed) return;
+      if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.upgradeOffer || state.upgradeLevels?.length || state.bossRewards?.length || this.data.completed) return;
       state.baseHp = snapshot.base.hp;
       state.supportSoldiers = snapshot.supportSoldiers ?? [];
       state.pet = snapshot.pet;
@@ -227,6 +251,7 @@ Component({
       if (waveIndex === OPENING_WAVE_COUNT - 1) {
         if (this.data.level < MAX_HERO_LEVEL) return;
         this.setData({ frozenFrame: state.scene.captureFrame(), upgradeOffer: null, completed: true, upgradeSummary: this.data.upgradeSummary });
+        if (request.plan.levelId === 8) { state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection); state.upgrades?.dispose(); this.setData({skillInventory:[]}); }
         this.applyPause(); this.claimVictoryReward();
         state.victoryAudio?.dispose();
         state.victoryAudio = createVictoryAudio();

@@ -14,7 +14,7 @@ test('失败只出现我要变强，音效一次、暂停恢复和退出释放�
  class Scene {
   snapshot:any;options:any;paused=false;
   constructor(_node:any,options:any){this.options=options;this.snapshot=options.initial;scene=this;}
-  async load(){return true;}setPaused(value:boolean){this.paused=value;}captureFrame(){return 'failed-frame';}dispose(){}applyPet(){}
+  async load(){return true;}setPaused(value:boolean){this.paused=value;}captureFrame(){return 'failed-frame';}dispose(){}applyPet(){}applySkills(skills:any,skillCollection:any){this.snapshot={...this.snapshot,skills,skillCollection};}
  }
  runInNewContext(ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
   exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},

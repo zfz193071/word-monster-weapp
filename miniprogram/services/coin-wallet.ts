@@ -6,10 +6,14 @@ export function victoryCoinsForLevel(levelId: number): number {
   if (!Number.isInteger(levelId) || levelId < 1 || levelId > LEVEL_VICTORY_COINS.length) throw new Error('无效奖励关卡');
   return LEVEL_VICTORY_COINS[levelId - 1];
 }
+export function grandBossCoins(difficulty: DifficultyId = 'normal'): number {
+  coinRulesFor(difficulty); return {easy:10,normal:20,hard:40,nightmare:60}[difficulty];
+}
 export const COIN_WALLET_KEY = 'word-monster:coin-wallet:v1';
 interface DropReceipt { monsterId: string; amount: number }
 interface DropSession { difficulty?: DifficultyId; sessionId: string; levelId: number; receipts: DropReceipt[] }
-interface Wallet { version: 1; balance: number; rewardedSessions: string[]; completedLevels?: number[]; weaponLevel?: number; drops?: DropSession[] }
+interface BossReceipt { sessionId: string; levelId: number; difficulty: DifficultyId; amount: number }
+interface Wallet { bossDrops?: BossReceipt[]; version: 1; balance: number; rewardedSessions: string[]; completedLevels?: number[]; weaponLevel?: number; drops?: DropSession[] }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
 export function createCoinWallet(storage: Storage) {
   function read(): Wallet {
@@ -22,6 +26,10 @@ export function createCoinWallet(storage: Storage) {
     if (!Array.isArray(completedLevels) || completedLevels.some((id, index) => id !== index + 1) || completedLevels.length > 8) throw new Error('关卡记录暂时无法读取');
     const weaponLevel = value.weaponLevel === undefined ? 1 : value.weaponLevel;
     weaponForLevel(weaponLevel);
+    const bossDrops = value.bossDrops;
+    if (bossDrops !== undefined && (!Array.isArray(bossDrops) || bossDrops.some(entry => !entry || typeof entry.sessionId !== 'string' || !entry.sessionId.trim()
+      || !Number.isInteger(entry.levelId) || entry.levelId < 1 || entry.levelId > 8 || !['easy','normal','hard','nightmare'].includes(entry.difficulty) || entry.amount !== grandBossCoins(entry.difficulty))
+      || new Set(bossDrops.map(entry => `${entry.sessionId}:${entry.levelId}`)).size !== bossDrops.length)) throw new Error('大Boss奖励记录暂时无法读取');
     const drops = value.drops;
     if (drops !== undefined && (!Array.isArray(drops) || drops.some(entry => !entry || typeof entry.sessionId !== 'string' || !entry.sessionId.trim()
       || !Number.isInteger(entry.levelId) || entry.levelId < 1 || entry.levelId > 8 || !Array.isArray(entry.receipts)
@@ -31,6 +39,7 @@ export function createCoinWallet(storage: Storage) {
       || entry.receipts.reduce((sum, receipt) => sum + receipt.amount, 0) > coinRulesFor(entry.difficulty).limit)
       || new Set(drops.map(entry => entry.sessionId)).size !== drops.length)) throw new Error('掉落金币记录暂时无法读取');
     return { version: 1, weaponLevel, balance: value.balance, rewardedSessions: [...value.rewardedSessions], completedLevels: [...completedLevels],
+      ...(bossDrops ? { bossDrops: bossDrops.map(entry => ({...entry})) } : {}),
       ...(drops ? { drops: drops.map(entry => ({ ...entry, receipts: entry.receipts.map(receipt => ({ ...receipt })) })) } : {}) };
   }
   return {
@@ -71,6 +80,18 @@ export function createCoinWallet(storage: Storage) {
       storage.setStorageSync(COIN_WALLET_KEY, { ...wallet, balance, drops: [...drops.filter(item => item.sessionId !== sessionId), entry] });
       return { balance, added, total: total + added };
     },
+    rewardGrandBoss(sessionId: string, levelId: number, difficulty: DifficultyId = 'normal') {
+      const amount = grandBossCoins(difficulty); const wallet = read();
+      if (!sessionId.trim() || !Number.isInteger(levelId) || levelId < 1 || levelId > Math.min(8, (wallet.completedLevels?.length ?? 0) + 1)) throw new Error('大Boss奖励关卡无效');
+      const receipts = wallet.bossDrops ?? [];
+      const previous = receipts.find(entry => entry.sessionId === sessionId && entry.levelId === levelId);
+      if (previous && previous.difficulty !== difficulty) throw new Error('大Boss奖励难度不匹配');
+      if (previous) return { balance: wallet.balance, added: 0, total: previous.amount };
+      const balance = wallet.balance + amount;
+      if (!Number.isSafeInteger(balance)) throw new Error('金币余额超出范围');
+      storage.setStorageSync(COIN_WALLET_KEY, {...wallet, balance, bossDrops: [...receipts, {sessionId, levelId, difficulty, amount}]});
+      return {balance, added: amount, total: amount};
+    },
     rewardVictory(sessionId: string, levelId?: number) {
       if (!sessionId.trim()) throw new Error('奖励缺少对局标识');
       const coins = victoryCoinsForLevel(levelId ?? 1);
@@ -81,7 +102,7 @@ export function createCoinWallet(storage: Storage) {
       const balance = wallet.balance + coins;
       if (!Number.isSafeInteger(balance)) throw new Error('金币余额超出范围');
       // Balance and receipt are one synchronous storage write, so retries cannot double-credit.
-      storage.setStorageSync(COIN_WALLET_KEY, { version: 1, ...(wallet.drops ? { drops: wallet.drops } : {}), ...(wallet.weaponLevel !== undefined ? { weaponLevel: wallet.weaponLevel } : {}), balance, rewardedSessions: [...wallet.rewardedSessions, sessionId], ...(levelId !== undefined || completed.length ? { completedLevels: levelId === completed.length + 1 ? [...completed, levelId] : completed } : {}) });
+      storage.setStorageSync(COIN_WALLET_KEY, { version: 1, ...(wallet.bossDrops ? {bossDrops: wallet.bossDrops} : {}), ...(wallet.drops ? { drops: wallet.drops } : {}), ...(wallet.weaponLevel !== undefined ? { weaponLevel: wallet.weaponLevel } : {}), balance, rewardedSessions: [...wallet.rewardedSessions, sessionId], ...(levelId !== undefined || completed.length ? { completedLevels: levelId === completed.length + 1 ? [...completed, levelId] : completed } : {}) });
       return { balance, added: coins };
     },
   };
