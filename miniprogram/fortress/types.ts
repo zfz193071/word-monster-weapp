@@ -83,6 +83,8 @@ export interface FortressRules {
 }
 export interface MonsterSpawn {
   readonly boss?: boolean;
+  readonly bossKind?: 'iron' | 'grand';
+  readonly shockwaveDamage?: number;
   readonly dropCoins?: number;
   readonly soldierDropCount?: number;
   readonly spawnAtMs?: number;
@@ -118,6 +120,8 @@ export interface MonsterState {
   readonly frozenUntilTick?: number;
   readonly burn?: { readonly damage: number; readonly nextTick: number; readonly untilTick: number };
   readonly boss?: boolean;
+  readonly bossKind?: 'iron' | 'grand';
+  readonly shockwaveDamage?: number;
   readonly dropCoins?: number;
   readonly soldierDropCount?: number;
   readonly attackDamage?: number;

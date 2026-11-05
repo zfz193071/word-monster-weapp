@@ -75,7 +75,7 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     const size = Math.min(count - scheduled, scheduled / count < 1 / 3 ? 3 : scheduled / count < 2 / 3 ? 4 : 5);
     batchSizes.push(size); scheduled += size;
   }
-  const spawns = []; let spawnAtMs = 0;
+  const spawns: { monsterId: string; wordId: string; spawnAtMs: number; position: { x: number; y: number } }[] = []; let spawnAtMs = 0;
   for (const [batchIndex, size] of batchSizes.entries()) {
     const lanes = [56, 118, 180, 242, 304];
     for (let i = lanes.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [lanes[i], lanes[j]] = [lanes[j], lanes[i]]; }
@@ -84,10 +84,16 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     // Timed arrivals continue while earlier enemies are still alive.
     spawnAtMs += 1500 - Math.round(700 * Math.min(1, batchIndex / Math.max(1, batchSizes.length - 2)));
   }
+  // Keep category counts unchanged even when the last slot was a previous-stage monster.
+  if (waveIndex === OPENING_WAVE_COUNT - 1 && !words.some(word => word.id === spawns[spawns.length - 1].wordId)) {
+    const current = spawns.findIndex(spawn => words.some(word => word.id === spawn.wordId));
+    [spawns[current].wordId, spawns[spawns.length - 1].wordId] = [spawns[spawns.length - 1].wordId, spawns[current].wordId];
+  }
   const bossWave = bossWaveIndex(sessionId);
   const plannedSpawns = spawns.map((spawn, index) => {
+    if (waveIndex === OPENING_WAVE_COUNT - 1 && index === spawns.length - 1) return { ...spawn, boss: true, bossKind: 'grand' as const, dropCoins: 0 };
     const boss = waveIndex === bossWave && index === spawns.length - 1;
-    return { ...spawn, ...(boss ? { boss: true, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
+    return { ...spawn, ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
   });
   return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId),
     playerX: 180, skills, skillCollection, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),

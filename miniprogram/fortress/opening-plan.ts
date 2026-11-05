@@ -29,7 +29,7 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
       const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId, weaponLevel, [], difficulty);
       return Object.freeze({ waveId: `${sessionId}:wave:${index + 1}`, index, targetWordId,
         optionWordIds: Object.freeze(shuffle([targetWordId, ...shuffle(words.filter(id => id !== targetWordId)).slice(0, 2)])),
-        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
+        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, bossKind: monster.bossKind, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
       });
     })) });
 }
@@ -47,12 +47,17 @@ export function validateOpeningPlan(plan: SessionPlan): void {
     const cycle = plan.waves.slice(start, start + words.length);
     if (new Set(cycle.map(wave => wave.targetWordId)).size !== cycle.length) throw new Error('词汇学习与复习顺序无效');
   }
+  const ironWaves = plan.waves.filter(wave => wave.spawnPlan.some(spawn => spawn.boss && spawn.bossKind !== 'grand'));
+  if (ironWaves.length > 1 || ironWaves.some(wave => wave.index < 9 || wave.index > 17 || wave.spawnPlan.filter(spawn => spawn.boss).length !== 1)) throw new Error('铁桶出场规则不匹配');
   for (const wave of plan.waves) {
+    const grand = wave.spawnPlan.filter(spawn => spawn.bossKind === 'grand');
+    if (grand.length !== (wave.index === 18 ? 1 : 0) || grand.some(spawn => !spawn.boss || !words.some(word => word.id === spawn.wordId)
+      || spawn.spawnAtMs !== Math.max(...wave.spawnPlan.map(item => item.spawnAtMs ?? 0)))) throw new Error('大Boss出场规则不匹配');
     if (wave.spawnPlan.filter(spawn => previousIds.includes(spawn.wordId)).length !== (previousIds.length ? Math.round(wave.spawnPlan.length * .3) : 0)
       || wave.optionWordIds.length !== 3 || new Set(wave.optionWordIds).size !== 3 || !wave.optionWordIds.includes(wave.targetWordId)
       || wave.optionWordIds.some(id => !words.some(word => word.id === id))
       || wave.spawnPlan.some(spawn => (!previousIds.includes(spawn.wordId) && !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId))
-        || (spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < coins.bossMin || spawn.dropCoins! > coins.bossMax
+        || (spawn.bossKind === 'grand' ? spawn.dropCoins !== 0 || spawn.soldierDropCount !== undefined : spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < coins.bossMin || spawn.dropCoins! > coins.bossMax
           || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount! < 0 || spawn.soldierDropCount! > 3
           : spawn.dropCoins !== 0 && spawn.dropCoins !== coins.normal))) throw new Error('关卡词汇或掉落规则不匹配');
   }

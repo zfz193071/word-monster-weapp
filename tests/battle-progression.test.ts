@@ -24,16 +24,16 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 989);
 });
 
-test('固定对局计划：10级前无Boss、全局至多一只、最后一怪替换且总1007只', () => {
+test('固定对局计划：前9轮无铁桶、每关至多一只铁桶及一只大Boss、最后一怪替换且总1007只', () => {
   let bossRuns = 0; let emptyRuns = 0;
   for (let run = 0; run < 60; run++) {
     const id = `boss-plan-${run}`;
     const index = bossWaveIndex(id);
-    if (index < 0) emptyRuns++; else { bossRuns++; assert.ok(index >= 9 && index < 19); }
+    if (index < 0) emptyRuns++; else { bossRuns++; assert.ok(index >= 9 && index < 18); }
     const plan = createOpeningPlan(id, createSeededRandom(run));
     const monsters = plan.waves.flatMap(wave => wave.spawnPlan);
     assert.equal(monsters.length, 1007);
-    assert.equal(monsters.filter(monster => monster.boss).length, index < 0 ? 0 : 1);
+    assert.equal(monsters.filter(monster => monster.bossKind === 'iron').length, index < 0 ? 0 : 1);
     if (index >= 0) {
       const wave = plan.waves[index]; const boss = wave.spawnPlan.at(-1)!;
       assert.equal(boss.boss, true); assert.ok(boss.dropCoins! >= 5 && boss.dropCoins! <= 20);

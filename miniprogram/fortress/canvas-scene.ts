@@ -2,7 +2,7 @@ import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
 import { drawBattlePet } from '../pets/battle-art';
 import { drawBattleBackground } from './battle-background';
-import { bossChargePhase } from './battle-progression';
+import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
@@ -290,7 +290,7 @@ export class CanvasScene {
       const attackPose = baseAttackPose(monster);
       c.save(); c.translate(0, attackPose.lunge * 9);
       if (monster.boss) {
-        c.translate(monster.position.x, monster.position.y); c.scale(1.5, 1.5); c.translate(-monster.position.x, -monster.position.y);
+        c.translate(monster.position.x, monster.position.y); c.scale(monster.bossKind === 'grand' ? 2 : 1.5, monster.bossKind === 'grand' ? 2 : 1.5); c.translate(-monster.position.x, -monster.position.y);
       }
       const monsterArt = this.monsterArt;
       if (!monsterArt && this.options.preview) {
@@ -337,7 +337,26 @@ export class CanvasScene {
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
       }
-      if (monster.boss && monster.hp > 0) {
+      if (monster.bossKind === 'grand' && monster.hp > 0) {
+        const elapsed = state.tick * 10 - (monster.spawnAtMs ?? 0);
+        const warning = grandBossWindingUp(elapsed);
+        c.save(); c.translate(monster.position.x, monster.position.y);
+        c.fillStyle = '#657982'; c.strokeStyle = '#e8ba58'; c.lineWidth = 2;
+        c.beginPath(); c.moveTo(-17, -7); c.lineTo(17, -7); c.lineTo(12, 15); c.lineTo(0, 20); c.lineTo(-12, 15); c.closePath(); c.fill(); c.stroke();
+        c.fillStyle = '#f5c54f'; c.beginPath(); c.moveTo(-15, -24); c.lineTo(-17, -39); c.lineTo(-7, -32); c.lineTo(0, -44); c.lineTo(7, -32); c.lineTo(17, -39); c.lineTo(15, -24); c.closePath(); c.fill(); c.stroke();
+        c.fillStyle = '#e55257'; c.fillRect(-3, -31, 6, 5);
+        const hat = monsterArt?.fruitHats?.[monster.wordId] ?? monsterArt?.fruitHat;
+        if (hat) this.sprite(hat, -9, -66, 18, 18);
+        c.fillStyle = '#4a2630'; c.fillRect(-24, 29, 48, 5);
+        c.fillStyle = '#f16a59'; c.fillRect(-24, 29, 48 * monster.hp / monster.maxHp, 5);
+        if (warning) {
+          c.strokeStyle = state.tick % 20 < 10 ? '#ff302f' : '#ff9583'; c.lineWidth = 3;
+          c.beginPath(); c.ellipse(0, 22, 30, 10, 0, 0, Math.PI * 2); c.stroke();
+          c.fillStyle = '#ff302f'; c.fillRect(-2, -17, 4, 13); c.fillRect(-2, -1, 4, 4);
+        }
+        c.restore();
+      }
+      if (monster.boss && monster.bossKind !== 'grand' && monster.hp > 0) {
         const phase = bossChargePhase(state.tick * 10 - (monster.spawnAtMs ?? 0));
         const x = monster.position.x; const y = monster.position.y;
         c.save(); c.translate(x, y);
@@ -359,6 +378,16 @@ export class CanvasScene {
         c.restore();
       }
       c.restore();
+      if (monster.bossKind === 'grand') {
+        const elapsed = state.tick * 10 - (monster.spawnAtMs ?? 0);
+        const phase = elapsed % 10000;
+        if (elapsed >= 11000 && phase >= 1000 && phase < 1400) {
+          c.save(); c.globalAlpha = 1 - (phase - 1000) / 400;
+          c.strokeStyle = '#ff514c'; c.lineWidth = 5;
+          c.beginPath(); c.moveTo(monster.position.x, monster.position.y); c.lineTo(180, 480); c.stroke();
+          c.beginPath(); c.ellipse(180, 480, 30 + (phase - 1000) / 3, 14, 0, 0, Math.PI * 2); c.stroke(); c.restore();
+        }
+      }
       if (attackPose.impact > 0) {
         c.save(); c.globalAlpha = attackPose.impact; c.strokeStyle = '#ffe9ad'; c.lineWidth = 3;
         for (let ray = 0; ray < 5; ray++) {

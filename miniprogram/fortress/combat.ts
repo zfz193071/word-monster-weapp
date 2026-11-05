@@ -5,7 +5,7 @@ import type { DifficultyId } from './difficulty';
 import { battlePetPosition, createBattlePet, PET_ATTACK_INTERVAL_MS, petDamage } from '../pets/battle';
 import type { BattlePet } from '../pets/battle';
 import { weaponForLevel } from '../weapons/catalog';
-import { bossChargePhase, fortressMaxHp, monsterStats } from './battle-progression';
+import { grandBossWindingUp, bossChargePhase, fortressMaxHp, monsterStats } from './battle-progression';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
@@ -159,11 +159,11 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     tick: 0, ...(options.skills.firepower ? { firepowerUntilTick: options.skillCollection ? qualityEffects(options.skillCollection).firepowerTicks : 500, firepowerReadyTick: 2000 } : {}), status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
     base: { hp: options.baseHp, maxHp }, skills: options.skills, ...(options.skillCollection ? { skillCollection: options.skillCollection } : {}),
     monsters: spawns.map(spawn => {
-      const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss, options.difficulty.mode) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
-      const size = spawn.boss ? 1.5 : 1;
+      const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.bossKind === 'grand' ? 'grand' : spawn.boss, options.difficulty.mode) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
+      const size = spawn.bossKind === 'grand' ? 2 : spawn.boss ? 1.5 : 1;
       const hitbox = options.monsterHitboxes?.[spawn.wordId] ?? box;
       return { id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,
-      ...(spawn.boss ? { boss: true } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), ...(spawn.soldierDropCount !== undefined ? { soldierDropCount: spawn.soldierDropCount } : {}), attackDamage: stats.attackDamage,
+      ...(spawn.boss ? { boss: true, bossKind: spawn.bossKind ?? 'iron', ...(spawn.bossKind === 'grand' ? { shockwaveDamage: stats.shockwaveDamage ?? RULES.monster.attackDamage * 3 } : {}) } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), ...(spawn.soldierDropCount !== undefined ? { soldierDropCount: spawn.soldierDropCount } : {}), attackDamage: stats.attackDamage,
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
       hitbox: { x: hitbox.x * size, y: hitbox.y * size, width: hitbox.width * size, height: hitbox.height * size }, hp: stats.hp, maxHp: stats.hp, status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
       attackIntervalMs, attackRemainingMs: attackIntervalMs, attackSequence: 0 }; }),
@@ -200,7 +200,7 @@ function advanceMonster(monster: MonsterState, speed: number, elapsedMs: number)
   if (monster.hp === 0 || monster.status === 'retiring') return monster;
   if (!monster.boss && (monster.frozenUntilTick ?? -1) >= elapsedMs / COMBAT_STEP_MS) return monster;
   if (monster.status === 'attackingBase') return { ...monster, attackRemainingMs: monster.attackRemainingMs - COMBAT_STEP_MS };
-  if (monster.boss) speed *= .7 * (bossChargePhase(elapsedMs - (monster.spawnAtMs ?? 0)) === 'charging' ? 1.5 : 1);
+  if (monster.boss) speed *= .7 * (monster.bossKind !== 'grand' && bossChargePhase(elapsedMs - (monster.spawnAtMs ?? 0)) === 'charging' ? 1.5 : 1);
   if ((monster.slowUntilTick ?? 0) > elapsedMs / COMBAT_STEP_MS) speed *= 1 - (monster.slowRatio ?? 0);
   const distance = RULES.monster.attackY - monster.position.y;
   const travel = speed * COMBAT_STEP_MS / 1000;
@@ -250,13 +250,14 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet') => {
     const monster = monsters[index]; if (monster.hp <= 0 || monster.status === 'waiting') return;
     if (!Number.isSafeInteger(damage) || !Number.isSafeInteger(monster.hp)) throw new RangeError('怪物伤害与生命值必须为整数');
+    if (monster.bossKind === 'grand' && grandBossWindingUp(tick * COMBAT_STEP_MS - (monster.spawnAtMs ?? 0))) damage = Math.ceil(damage * 1.5);
     const hp = Math.max(0, monster.hp - damage);
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
     events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, position: Object.freeze({ ...monster.position }) });
     if (hp === 0 && !defeated.has(monster.id)) {
       defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
       if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
-      if (monster.boss && (monster.soldierDropCount ?? 0) > 0) {
+      if (monster.boss && monster.bossKind !== 'grand' && (monster.soldierDropCount ?? 0) > 0) {
         const count = Math.min(3, supportSoldiers.length + (monster.soldierDropCount ?? 0));
         supportSoldiers = Array.from({ length: count }, (_, slot) => ({
           id: `${monster.id}:soldier:${slot + 1}`, slot, position: supportPosition(player, slot, count), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000,
@@ -288,7 +289,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const position = { x: projectile.previousPosition.x + (projectile.position.x - projectile.previousPosition.x) * contact.time, y: projectile.previousPosition.y + (projectile.position.y - projectile.previousPosition.y) * contact.time };
     const nearby = (index: number, radius: number) => monsters[index].hp > 0 && monsters[index].status !== 'waiting' && monsters[index].status !== 'retiring' && Math.hypot(monsters[index].position.x - position.x, monsters[index].position.y - position.y) <= radius;
     if (elements?.frost) {
-      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, ...(!monster.boss && effect?.freezeTicks ? { frozenUntilTick: tick + effect.freezeTicks } : {}), slowRatio: effect ? Math.min(effect.frostSlow, monster.boss ? .35 : .7) : Math.min(.2 + .05 * elements.frost, .7) };
+      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, ...(!monster.boss && effect?.freezeTicks ? { frozenUntilTick: tick + effect.freezeTicks } : {}), slowRatio: effect ? Math.min(effect.frostSlow, monster.boss ? .35 : .7) : Math.min(.2 + .05 * elements.frost, monster.boss ? .35 : .7) };
       impacts.push({ kind: 'frost', position: monster.position, untilTick: tick + 35 });
     }
     if (elements?.lightning) {
@@ -351,6 +352,16 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     }
   }
   let baseHp = previous.base.hp;
+  // Resolve shockwaves after damage: a boss killed on release cannot attack.
+  monsters.forEach(monster => {
+    const elapsed = tick * COMBAT_STEP_MS - (monster.spawnAtMs ?? 0);
+    if (monster.bossKind !== 'grand' || monster.hp <= 0 || baseHp <= 0 || elapsed < 11000 || Math.floor((elapsed - 1000) / 10000) === Math.floor((elapsed - COMBAT_STEP_MS - 1000) / 10000)) return;
+    const attackId = `${previous.context.combatId}:${monster.id}:shockwave:${Math.floor(elapsed / 10000)}`;
+    if (attacks.has(attackId)) return;
+    attacks.add(attackId);
+    baseHp = Math.max(0, baseHp - (monster.shockwaveDamage ?? RULES.monster.attackDamage * 3));
+    events.push({ type: 'baseDamaged', context: previous.context, tick, attackId, monsterId: monster.id, hp: baseHp });
+  });
   // Approved B6 ordering: a monster killed this step cannot attack, even if due.
   monsters.forEach((monster, index) => {
     if (baseHp <= 0 || monster.hp <= 0 || (!monster.boss && (monster.frozenUntilTick ?? -1) >= tick) || monster.status !== 'attackingBase' || monster.attackRemainingMs > EPSILON) return;

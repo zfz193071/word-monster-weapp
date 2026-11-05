@@ -93,7 +93,7 @@ Component({
             instance.defeatAudio?.dispose(); instance.defeatAudio = undefined;
             this.setData({ completed: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
-              bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss).map(monster => monster.monsterId)) ?? [], store: petStore,
+              bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss && monster.bossKind !== 'grand').map(monster => monster.monsterId)) ?? [], store: petStore,
               onChange: (message, error) => { if (instance.alive) { this.setData({ petReward: message, petDropError: error }); if (!error) this.syncBattlePet(); } },
             });
             this.setData({ dropCoins: 0, dropError: false });

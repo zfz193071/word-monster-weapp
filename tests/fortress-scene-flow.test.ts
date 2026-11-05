@@ -91,7 +91,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,openingMonsterCount(wave,level.id));
     assert.equal(current!.snapshot.monsterSpeed, (level.id === 3 ? 28 * 1.2 : 20));
-    for(const monster of current!.snapshot.monsters){const stats=monsterStats(level.id,wave+1,monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
+    for(const monster of current!.snapshot.monsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     let awardedThisWave=0;
@@ -135,7 +135,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
       const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
-  assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss).length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
+  assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
   if(repair)assert(repairs>0 && repairs<19);
   const expectedDrops=Math.min(coinRulesFor(plan.difficulty).limit,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);

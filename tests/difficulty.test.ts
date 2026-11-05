@@ -32,7 +32,7 @@ test('四档在八关全部19轮缩放生命攻击移速（含铁桶），不改
    const state=createOpeningEncounter('difficulty-regression',word,1,wave,undefined,undefined,[],level,1,[],id);
    assert.equal(state.monsterSpeed,normal.monsterSpeed!*mode.speed);assert.deepEqual(state.base,normal.base);
    assert.deepEqual(state.monsters.map(m=>[m.id,m.wordId,m.spawnAtMs,m.boss]),normal.monsters.map(m=>[m.id,m.wordId,m.spawnAtMs,m.boss]));
-   state.monsters.forEach((m,i)=>{assert.equal(m.dropCoins,monsterDropCoins(m.id,m.boss,id));assert.equal(m.hp,Math.ceil(normal.monsters[i].hp*mode.hp));assert.equal(m.attackDamage,Math.ceil(normal.monsters[i].attackDamage!*mode.damage));});
+   state.monsters.forEach((m,i)=>{assert.equal(m.dropCoins,m.bossKind==='grand'?0:monsterDropCoins(m.id,m.boss,id));assert.equal(m.hp,Math.ceil(normal.monsters[i].hp*mode.hp));assert.equal(m.attackDamage,Math.ceil(normal.monsters[i].attackDamage!*mode.damage));});
   }
  }
 });
