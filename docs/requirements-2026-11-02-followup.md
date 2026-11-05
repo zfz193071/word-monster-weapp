@@ -564,3 +564,15 @@
 - 模拟器自然升级通过：`node /private/tmp/wm-entry-qa/quality.cjs`，自然击杀升至Lv.2，实际显示精良跃动电弧、简陋火力激发/火花绽放；选择精良电弧后弹框关闭、技能记录为精良Lv.1。截图 `/private/tmp/wm-quality-offer.png` 已目视检查，日志 `/private/tmp/wm-55-quality.log`。此结果不覆盖未出现的稀有/精英/传说卡片。
 - 收尾：`node /private/tmp/wm-entry-qa/acceptance-info.cjs` 确认停留首页、无进度环与听词弹框残留，日志 `/private/tmp/wm-55-simulator-info.log`。
 - 未完成：模拟器Boss警示/碰撞、全部品质特效、小屏、完整连续闯关和长局帧率；真机性能、前后台音频清理、士兵/金币/胜利演出；93词男声0.8倍速及女声逐词人工听审。#34/#36/#37/#45/#46 等关联项不据此关闭，#55 保持开放。新增测试及本验收记录尚未提交。
+
+
+### 2026-11-05 提交验收基础，补验模拟器生命周期
+
+- 已本地提交 `45d5f21`（逻辑长局、必出铁桶组件链及前轮验收记录）。继续 #55，无新需求冲突；不重复实现已完成玩法。
+- 新增可复用脚本 `scripts/qa-simulator-lifecycle.cjs`，通过真实按钮、正常听词与自然击杀验证，不注入战斗快照或修改存档余额。依赖可由 `WM_AUTOMATOR_MODULE`（miniprogram-automator）、`WM_CANVAS_MODULE`（@napi-rs/canvas）指定外部安装位置；先以微信 CLI auto 开启9420端口，再执行 `node scripts/qa-simulator-lifecycle.cjs`。
+- 模拟器仍为 iPhone 12/13 (Pro)、devtools、基础库3.17.5、390×753、DPR3。最终执行通过，日志 `/private/tmp/wm-lifecycle-run.log`，报告 `/private/tmp/wm-lifecycle-qa/report.json`；已正常返回首页并断开自动化连接。
+- 暂停1200ms战场变化0像素；恢复900ms变化12722像素。自然升级后，技能选择1200ms内冻结帧与经验均不变，排除卡片动画区域的战场变化0像素；选择简陋Lv.1灵巧追踪后弹框关闭、技能入列并恢复可见运动。截图比对仅证明可见冻结/恢复，不代替内部计时或音频验证。
+- 卡片自带火焰呼吸动画，因此技能面板比较遮掉截图中35%～76%高度的卡片区域，保留露出的战场及主角；同时比较完整冻结帧与经验值。该截图范围针对当前模拟器布局，不代表小屏适配验证。初轮全区域比较因此误报，已修正；自动化方法调用及空值路径读取兼容问题改为真实点击和完整数据读取，不修改游戏代码。
+- 正常推进到第2轮后返回首页，确认 opening=false、request=null、entryProgress=0；重新听词开战后人物Lv.1、技能列表为空。`skill-frozen.png` 与 `fresh-run.png` 位于上述报告目录，已目视检查。
+- `node --check scripts/qa-simulator-lifecycle.cjs`、`git diff --check` 通过。本轮仅新增验收脚本和记录，尚未提交；未重跑不受影响的全量逻辑测试。
+- #55 继续保持开放：全部品质/Boss/完整连续闯关/小屏尚未完成模拟器验收，真机性能、前后台音频及逐词人工听审仍未完成，不据此关闭关联工单。
