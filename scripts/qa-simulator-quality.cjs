@@ -1,3 +1,4 @@
+const {answerSkillQuiz}=require('./qa-skill-quiz.cjs');
 // Run with node --import tsx after starting the WeChat CLI auto service.
 // Presentation fixtures only; no skill selection or storage injection.
 const a=require(process.env.WM_AUTOMATOR_MODULE || 'miniprogram-automator');const assert=require('node:assert/strict');const fs=require('node:fs');
@@ -12,7 +13,7 @@ const output=process.env.WM_QA_OUTPUT || '/private/tmp/wm-quality-visual';fs.mkd
 mini=await timed(a.connect({wsEndpoint:process.env.WM_AUTOMATOR_ENDPOINT || 'ws://127.0.0.1:9420'}),'connect');
 report.system=await mini.systemInfo();report.fixture=true;report.note='Temporary display offers; no boss kill, skill acquisition, or device performance claim';report.qualities=[];
 const {p,s}=await enter();let natural;
-for(let i=0;i<240;i++){natural=await s.data();if(natural.upgradeOffer)break;await sleep(500);}
+for(let i=0;i<240;i++){natural=await s.data();if(natural.skillQuiz)await answerSkillQuiz(s,false);else if(natural.upgradeOffer)break;await sleep(500);}
 assert(natural.upgradeOffer && natural.frozenFrame,'natural upgrade must freeze battlefield first');
 for(const q of SKILL_QUALITIES){
  const owned=Object.fromEntries(SKILL_IDS.map(id=>[id,{level:4,quality:q.id}]));

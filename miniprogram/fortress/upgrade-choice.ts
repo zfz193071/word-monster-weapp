@@ -37,24 +37,32 @@ export function createUpgradeChoices() {
   const selected = new Set<string>();
   let active: UpgradeOffer | null = null;
   let disposed = false;
+  let remaining = 0;
   return {
     get current() { return active; },
-    open(offer: UpgradeOffer): UpgradeOffer | null {
+    get remaining() { return remaining; },
+    open(offer: UpgradeOffer, requireAnswer = false): UpgradeOffer | null {
       if (disposed) return null;
       if (active) return active.id === offer.id ? active : null;
       if (offers.has(offer.id) || ((!offer.source || offer.source === 'level') && levels.has(offer.level))) return null;
       validateUpgradeOffer(offer);
       active = Object.freeze({ ...offer, cards: Object.freeze(offer.cards.map(card => Object.freeze({ ...card }))) });
+      remaining = requireAnswer ? 0 : 1;
       offers.set(offer.id, active); if (!offer.source || offer.source === 'level') levels.add(offer.level);
       return active;
     },
+    answer(offerId: string, correct: boolean): boolean {
+      if (disposed || !active || active.id !== offerId || remaining !== 0) return false;
+      remaining = Math.min(correct ? 2 : 1, active.cards.length); return true;
+    },
     select(offerId: string, cardId: string): UpgradeCard | null {
-      if (disposed || !active || active.id !== offerId || selected.has(offerId)) return null;
+      if (disposed || !remaining || !active || active.id !== offerId || selected.has(offerId)) return null;
       const card = active.cards.find(card => card.id === cardId);
       if (!card) return null;
-      selected.add(offerId); active = null;
+      selected.add(offerId); remaining--;
+      active = remaining ? Object.freeze({...active, id:`${active.id}:second`, cards:Object.freeze(active.cards.filter(item => item.id !== cardId))}) : null;
       return card;
     },
-    dispose() { disposed = true; active = null; offers.clear(); levels.clear(); selected.clear(); },
+    dispose() { disposed = true; active = null; remaining = 0; offers.clear(); levels.clear(); selected.clear(); },
   };
 }

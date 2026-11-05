@@ -9,10 +9,12 @@ import { assertNoFortressIssues, validateSessionPlan } from './validation';
 import type { AttemptV2, RandomSource, SessionPlan, WaveContext } from './types';
 
 export interface ListeningView {
+  readonly answerText?: string;
+  readonly correct?: boolean;
   readonly playbackRate: number;
   readonly token: string;
   readonly imageToken: string;
-  readonly phase: 'idle' | 'playing' | 'ready' | 'audioError' | 'started';
+  readonly phase: 'idle' | 'playing' | 'ready' | 'audioError' | 'answered' | 'started';
   readonly paused: boolean;
   readonly canChoose: boolean;
   readonly message: string;
@@ -21,6 +23,7 @@ export interface ListeningView {
 }
 export interface ListeningResult { readonly context: WaveContext; readonly attempts: readonly AttemptV2[] }
 export interface ListeningOptions {
+  readonly singleAttempt?: boolean;
   readonly variant?: 'fruit';
   readonly random?: RandomSource;
   readonly plan: SessionPlan;
@@ -59,10 +62,10 @@ export function createListening(options: ListeningOptions) {
   const imageToken = () => `${prefix}:image:${imageRevision}`;
   const available = () => !disposed && !paused && phase === 'ready' && images.every(status => status === 'loaded');
   function view(): ListeningView {
-    return { playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
+    return { ...(options.singleAttempt && attempts.length ? {correct:attempts[0].correct, answerText:`正确答案：${word.text} · ${word.meaningZh}`} : {}), playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
       message: paused ? '已暂停' : phase === 'audioError' ? '声音暂时无法播放，请重试' : images.includes('failed') ? '图片加载失败，请重试'
-        : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的图片' : errors ? '再听一次，选出图片' : '听一听，选图片',
-      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), text: words.find(word => word.id === id)!.text, meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: errors >= FORTRESS_RULES.learning.hintAfterErrors && id === wave.targetWordId })) };
+        : phase === 'answered' ? (attempts[0].correct ? '答对了，最多可选两个不同技能' : '记住这个单词，这次可以选一个技能') : phase === 'started' ? '选对了，守护基地吧！' : errors >= 2 ? '试试亮起来的图片' : errors ? '再听一次，选出图片' : '听一听，选图片',
+      cards: optionIds.map((id, index) => ({ id, key: `${imageToken()}:${index}`, portraitPath: portrait(id), text: words.find(word => word.id === id)!.text, meaningZh: words.find(word => word.id === id)!.meaningZh, label: `选项 ${index + 1}`, hinted: (phase === 'answered' || errors >= FORTRESS_RULES.learning.hintAfterErrors) && id === wave.targetWordId })) };
   }
   const publish = () => { if (!disposed) options.onChange(view()); };
   const audio = createAudioAdapter({ ...options.audio, sessionId: context.sessionId, emit: event => {
@@ -78,7 +81,7 @@ export function createListening(options: ListeningOptions) {
     get view() { return view(); },
     get attempts() { return attempts; },
     cyclePlaybackRate() {
-      if (disposed || paused || phase === 'started') return;
+      if (disposed || paused || phase === 'started' || phase === 'answered') return;
       playbackRate = playbackRate === .8 ? 1 : playbackRate === 1 ? 1.2 : .8;
       replays++; play();
     },
@@ -90,7 +93,9 @@ export function createListening(options: ListeningOptions) {
         targetWordId: wave.targetWordId, selectedWordId: id, correct, hintUsed: errors >= FORTRESS_RULES.learning.hintAfterErrors,
         attemptIndex: attempts.length + 1, replayCount: replays });
       attempts = Object.freeze([...attempts, attempt]);
-      if (correct) {
+      if (options.singleAttempt) {
+        phase = 'answered'; revision++; audio.dispose(); publish();
+      } else if (correct) {
         phase = 'started'; revision++; audio.dispose(); publish();
         options.onStartCombat({ context, attempts });
       } else {
@@ -101,6 +106,10 @@ export function createListening(options: ListeningOptions) {
         }
         play();
       }
+    },
+    continueQuiz(eventToken: string) {
+      if (disposed || paused || !options.singleAttempt || phase !== 'answered' || eventToken !== token()) return;
+      phase = 'started'; revision++; publish(); options.onStartCombat({context, attempts});
     },
     replay(eventToken: string) { if (!disposed && !paused && eventToken === token() && (phase === 'ready' || phase === 'playing')) { replays++; play(); } },
     retryAudio(eventToken: string) { if (!disposed && !paused && eventToken === token() && phase === 'audioError') play(); },

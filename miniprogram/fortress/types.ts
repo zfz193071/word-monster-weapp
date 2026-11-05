@@ -162,7 +162,7 @@ export interface CombatState {
   readonly incomingMonsters?: readonly MonsterState[];
   // Planned wave boundaries identify queued monsters; admission may occur later at the alive limit.
   readonly waveStartTimesMs?: readonly number[];
-  readonly invasion?: Readonly<{ nextAtMs: number; waveNumber: number; aliveLimits?: readonly number[] }>;
+  readonly invasion?: Readonly<{ nextAtMs: number; waveNumber: number; batchLimit?: number; aliveLimits?: readonly number[] }>;
   readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;
   readonly weaponLevel?: number;

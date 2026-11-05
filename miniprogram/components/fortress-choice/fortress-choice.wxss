@@ -25,3 +25,7 @@
 .fruit-english { display: block; margin-top: 10rpx; font-size: 26rpx; line-height: 1.4; font-weight: 700; overflow-wrap: break-word; }
 .fruit-meaning { display: block; margin-top: 4rpx; font-size: 22rpx; line-height: 1.4; font-weight: normal; color: #64715d; }
 .speed-control { min-width: 0; max-width: 126rpx; }
+
+.answer-result { margin:20rpx 8rpx; color:#34543d; font-size:28rpx; font-weight:700; text-align:center; }
+
+.quiz-caption { margin:0 6rpx 16rpx; font-size:23rpx; color:#617454; text-align:center; }

@@ -12,10 +12,10 @@ class Voice {
   play() {} stop() { this.handlers.get('stop')?.(); } destroy() { this.destroyed = true; }
   end() { this.handlers.get('end')?.(); }
 }
-function setup(id = 'listening', generation = 0, variant?: 'fruit') {
+function setup(id = 'listening', generation = 0, variant?: 'fruit', singleAttempt=false) {
   const plan = createSessionPlan(id, createSeededRandom(42));
   const voices: Voice[] = []; const timers = new Set<() => void>(); const results: any[] = [];
-  const controller = createListening({ plan, variant, random: createSeededRandom(7), waveIndex: 0, generation, onChange() {}, onStartCombat: r => results.push(r),
+  const controller = createListening({ plan, variant, singleAttempt, random: createSeededRandom(7), waveIndex: 0, generation, onChange() {}, onStartCombat: r => results.push(r),
     audio: { createContext: () => { const v = new Voice(); voices.push(v); return v; }, schedule: cb => { timers.add(cb); return () => { timers.delete(cb); }; } } });
   const target = plan.waves[0].targetWordId;
   const wrong = plan.waves[0].optionWordIds.find(id => id !== target)!;
@@ -123,4 +123,17 @@ test('听词默认0.8倍，三档循环立即重播，旧回调不允许提前�
  const stale=h.voices[0].handlers.get('end')!;
  for(const rate of [1,1.2,.8]){h.controller.cyclePlaybackRate();assert.equal(h.controller.view.playbackRate,rate);assert.equal(h.voices.at(-1)!.playbackRate,rate);stale();assert.equal(h.controller.view.canChoose,false);}
  h.voices.at(-1)!.end();assert.equal(h.controller.view.canChoose,true);h.controller.setPaused(true);const count=h.voices.length;h.controller.cyclePlaybackRate();assert.equal(h.voices.length,count);h.controller.dispose();
+});
+
+for (const correct of [true,false]) test(`技能听词首次${correct?'答对':'答错'}只记一次，揭示答案后确认进入技能，后台及重复确认无效`,()=>{
+ const h=setup('skill-question',9,'fruit',true),c=h.controller;c.start();h.load();h.voices[0].end();
+ const token=c.view.token;const wrong=c.view.cards.find(card=>card.id!==h.target)!.id;
+ c.choose(token,correct?h.target:wrong);assert.equal(c.view.phase,'answered');assert.equal(c.view.correct,correct);
+ assert(c.view.answerText?.includes(h.target));assert(c.view.cards.find(card=>card.id===h.target)!.hinted);
+ assert.equal(h.results.length,0);assert.equal(c.view.canChoose,false);
+ c.choose(c.view.token,h.target);c.replay(c.view.token);c.cyclePlaybackRate();assert.equal(c.attempts.length,1);assert.equal(h.voices.length,1);
+ c.setPaused(true);c.continueQuiz(c.view.token);assert.equal(h.results.length,0);
+ c.setPaused(false);c.continueQuiz(token);assert.equal(h.results.length,0);
+ c.continueQuiz(c.view.token);c.continueQuiz(c.view.token);assert.equal(h.results.length,1);assert.equal(h.results[0].attempts[0].correct,correct);
+ c.dispose();assert.equal(h.timers.size,0);
 });

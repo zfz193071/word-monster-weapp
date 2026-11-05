@@ -1,3 +1,4 @@
+import { invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
 import { coinRulesFor } from './difficulty';
@@ -233,9 +234,13 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const alive = previous.monsters.filter(monster => monster.hp > 0 && monster.status !== 'retiring').length;
     const limit = invasion.aliveLimits?.[nextWave - 1] ?? Infinity;
     if (tick * COMBAT_STEP_MS >= invasion.nextAtMs && alive < limit) {
-      arrivalCount = 1;
-      // Schedule from actual admission, never catch up a delayed backlog in a burst.
-      const interval = pending.length > 1 ? pending[1].spawnAtMs! - pending[0].spawnAtMs! : 0;
+      const batchSize = invasionBatchSize(tick * COMBAT_STEP_MS, invasion.batchLimit ?? 1);
+      // Keep each batch within its wave; the following wave keeps its own limit/event.
+      const nextWaveAt = waveStarts![nextWave] ?? Infinity;
+      while (arrivalCount < pending.length && arrivalCount < batchSize && arrivalCount < limit - alive
+        && pending[arrivalCount].spawnAtMs! < nextWaveAt) arrivalCount++;
+      // A delayed batch never catches up by firing several batches back-to-back.
+      const interval = pending.length > arrivalCount ? pending[arrivalCount].spawnAtMs! - pending[arrivalCount - 1].spawnAtMs! : 0;
       invasion = Object.freeze({...invasion, nextAtMs:tick * COMBAT_STEP_MS + interval, waveNumber:nextWave});
       if (nextWave !== previous.invasion!.waveNumber) events.push({type:'waveStarted', context:previous.context, tick, waveNumber:nextWave});
     }
@@ -248,7 +253,11 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     }
   }
   const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
-  const admitted = invasion ? pending.slice(0, arrivalCount).map(monster => ({...monster, spawnAtMs:tick * COMBAT_STEP_MS})) : pending.slice(0, arrivalCount);
+  const admitted = invasion ? pending.slice(0, arrivalCount).map((monster, index) => {
+    const columns = Math.min(6, arrivalCount);
+    return {...monster, spawnAtMs:tick * COMBAT_STEP_MS,
+      ...(arrivalCount > 1 ? {position:{x:48 + (index % columns) * 264 / (columns - 1), y:monster.position.y - Math.floor(index / columns) * 64}} : {})};
+  }) : pending.slice(0, arrivalCount);
   const arrivals = arrivalCount ? [...previous.monsters, ...admitted] : previous.monsters;
   const monsters = arrivals.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);

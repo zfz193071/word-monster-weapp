@@ -1,3 +1,4 @@
+import { skillQuizAnswer } from './helpers/skill-quiz';
 import * as invasion from '../miniprogram/fortress/stage-invasion';
 import * as continuation from '../miniprogram/fortress/continuation';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
@@ -100,7 +101,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   assert.match(readFileSync(new URL('../miniprogram/pages/battle/battle.wxml',import.meta.url),'utf8'),/class="toolbar-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
   const { openingMonsterCount } = await import('../miniprogram/fortress/opening-encounter');
   let picked=0;let repairs=0;let bossPicked=0;
-  function consumeBossOffers(){while(host.data.upgradeOffer?.source){const offer=host.data.upgradeOffer;assert(current!.paused);assert(offer.cards.every((c:any)=>c.quality===offer.source));bossPicked++;host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}}
+  function consumeBossOffers(){while(host.data.upgradeOffer?.source){const offer=host.data.upgradeOffer;assert(current!.paused);assert(offer.cards.every((c:any)=>c.quality===offer.source));bossPicked++;host.finishSkillQuiz({detail:skillQuizAnswer(host.data.skillQuiz)});host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}}
 
   const stageScene=current!;
   for(let wave=0;wave<19;wave++){
@@ -131,6 +132,9 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       definition.pageLifetimes.hide.call(host);host.chooseUpgrade(selection);
       assert.equal(host.data.upgradeOffer,offer,'后台不能消费技能');
       definition.pageLifetimes.show.call(host);assert.equal(current!.paused,true,'返回前台仍由技能面板保持暂停');
+      host.chooseUpgrade(selection);assert.equal(host.data.upgradeOffer,offer,'未答题不能领取技能');
+      host.finishSkillQuiz({detail:skillQuizAnswer(host.data.skillQuiz)});
+      assert.equal(host.data.skillPicksRemaining,1);assert.equal(host.data.skillQuiz,null);
       picked++;host.chooseUpgrade(selection);
       const afterSelection=JSON.stringify({skills:current!.snapshot.skills,hp:current!.snapshot.base.hp,request:host.data.waveRequest});
       host.chooseUpgrade(selection);

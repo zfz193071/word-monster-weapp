@@ -10,7 +10,7 @@ import {createBattlePet} from '../miniprogram/pets/battle';
 import {getLevel} from '../miniprogram/fortress/levels';
 
 const plan=(stage=1,mode:'easy'|'normal'|'hard'|'nightmare'='normal')=>createOpeningPlan('continuous',createSeededRandom(41),stage,1,mode);
-test('8关四难度19轮同一时钟，数量/30%混编/Boss保留，逐只出场并整关缓慢加速',()=>{
+test('8关四难度19轮同一时钟，数量/30%混编/Boss保留，开局单只并保留递增出怪间隔',()=>{
  for(let stage=1;stage<=8;stage++)for(const difficulty of ['easy','normal','hard','nightmare'] as const){
   const p=plan(stage,difficulty),state=createStageInvasion(p,1),all=[...state.monsters,...state.incomingMonsters!];
   assert.equal(state.monsters.length,1);assert.equal(all.length,p.waves.reduce((n,w)=>n+w.spawnPlan.length,0));assert.equal(new Set(all.map(m=>m.id)).size,all.length);
@@ -48,7 +48,7 @@ test('当前怪全死但待出场时不提前通关，最后一批全死后才�
  assert.equal(lost.status,'baseDestroyed');assert.equal(lost.incomingMonsters!.length,0);
 });
 
-test('简单模式满员延迟、死亡后逐只补充，暂停不出怪，波次和Boss使用实际入场时间',()=>{
+test('简单模式满员延迟、死亡后按空位补充，暂停不出怪，波次和Boss使用实际入场时间',()=>{
  let state=createStageInvasion(plan(1,'easy'),1);
  state={...state,automatic:false,shotRemainingMs:1e9,monsterSpeed:0};
  for(let i=0;i<2;i++)state=stepCombat({...state,tick:Math.ceil(state.invasion!.nextAtMs/COMBAT_STEP_MS)-1}).state;
@@ -58,10 +58,38 @@ test('简单模式满员延迟、死亡后逐只补充，暂停不出怪，波�
  assert.equal(state.monsters.length,3);assert.equal(state.incomingMonsters,pending);assert.equal(state.invasion!.waveNumber,1);
  const runner=new CombatRunner(state);runner.pause();assert.equal(runner.frame(1e9).steps,0);assert.equal(runner.snapshot,state);runner.dispose();
  state={...state,monsters:state.monsters.map(m=>({...m,hp:0,status:'defeated' as const})),defeatedMonsterIds:state.monsters.map(m=>m.id)};
- state=stepCombat(state).state;assert.equal(state.monsters.length,4);assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
- state=stepCombat(state).state;assert.equal(state.monsters.length,4,'积压不能追赶式爆发');
+ state=stepCombat(state).state;assert.equal(state.monsters.length,6);assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
+ state=stepCombat(state).state;assert.equal(state.monsters.length,6,'积压不能追赶式爆发');
  const grand=state.incomingMonsters!.find(m=>m.bossKind==='grand')!;
  const result=stepCombat({...state,tick:10000000,incomingMonsters:[grand]});
  assert.equal(result.state.monsters.at(-1)!.spawnAtMs,result.state.tick*COMBAT_STEP_MS);
  assert(result.events.some(e=>e.type==='waveStarted'&&e.waveNumber===19));
+});
+
+test('按实际战斗时间从1→2→3→5递增至各难度批量上限，同批同时入场且不重叠',()=>{
+ for(const [mode,limit] of [['easy',5],['normal',8],['hard',10],['nightmare',12]] as const){
+  const initial=createStageInvasion(plan(1,mode),1);
+  // The final wave has enough remaining monsters and the largest easy alive limit.
+  const pending=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:19:'));
+  for(const [elapsed,size] of [[19990,1],[20000,2],[59990,2],[60000,3],[119990,3],[120000,5],[180000,8],[240000,10],[300000,12]]){
+   const state={...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+    tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}};
+   const result=stepCombat(state);const expected=Math.min(size,limit);
+   assert.equal(result.state.monsters.length,expected,`${mode} @ ${elapsed}`);
+   assert(result.state.monsters.every(m=>m.spawnAtMs===elapsed));
+   assert.equal(new Set(result.state.monsters.map(m=>`${m.position.x}:${m.position.y}`)).size,expected);
+   assert.equal(stepCombat(result.state).state.monsters.length,expected,'下一帧不能连发积压批次');
+  }
+ }
+});
+test('批次不越过轮次边界，剩余不足补足，下一批保留原存活怪物并发出一次换轮事件',()=>{
+ const initial=createStageInvasion(plan(),1);
+ const last=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:1:')).slice(-1);
+ const rest=initial.incomingMonsters!.filter(m=>!m.id.includes(':wave:1:'));
+ let state: typeof initial={...initial,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,tick:30000,incomingMonsters:[...last,...rest]};
+ const first=stepCombat(state);assert.equal(first.state.monsters.length,2);assert.equal(first.events.filter(e=>e.type==='waveStarted').length,0);
+ state={...first.state,tick:Math.ceil(first.state.invasion!.nextAtMs/COMBAT_STEP_MS)-1};
+ const next=stepCombat(state);assert.equal(next.state.monsters.length,10);
+ assert.equal(next.events.filter(e=>e.type==='waveStarted'&&e.waveNumber===2).length,1);
+ assert(next.state.monsters.some(m=>m.id===initial.monsters[0].id&&m.hp>0));
 });

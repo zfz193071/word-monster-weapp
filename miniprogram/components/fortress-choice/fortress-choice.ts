@@ -28,7 +28,7 @@ Component({
       this.setData({ view: null, error: '' });
       if (!this.properties.request) return;
       try {
-        const request = this.properties.request as { plan: SessionPlan; waveIndex: number; generation: number; variant?: 'fruit' };
+        const request = this.properties.request as { plan: SessionPlan; waveIndex: number; generation: number; variant?: 'fruit'; singleAttempt?: boolean };
         state.controller = createListening({ ...request,
           onChange: view => { if (valid()) this.setData({ view }); },
           onStartCombat: result => { if (valid()) this.triggerEvent('startcombat', result); },
@@ -37,6 +37,7 @@ Component({
       } catch { this.setData({ error: '听词挑战暂时无法准备，请重新进入' }); }
     },
     applyPause() { const state = instances.get(this); state?.controller?.setPaused(this.properties.paused || !state.visible); },
+    continueQuiz(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.continueQuiz(event.currentTarget.dataset.token); },
     changeSpeed() { instances.get(this)?.controller?.cyclePlaybackRate(); },
     choose(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; instances.get(this)?.controller?.choose(data.token, data.wordId); },
     replay(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.replay(event.currentTarget.dataset.token); },

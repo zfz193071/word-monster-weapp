@@ -1,3 +1,4 @@
+const {answerSkillQuiz}=require('./qa-skill-quiz.cjs');
 // Start DevTools with `cli auto --project <repo> --auto-port 9420` first.
 // WM_AUTOMATOR_MODULE and WM_CANVAS_MODULE may point to external installations
 // of miniprogram-automator and @napi-rs/canvas respectively.
@@ -87,7 +88,7 @@ async function chooseSkill(scene, offer) {
     report.pausePixels=pausePixels;report.resumePixels=resumePixels;
     report.checks.push('真实暂停按钮：1200ms战场像素保持不变，恢复后可见运动'); console.log(report.checks.at(-1));
     let offer;
-    for (let i = 0; i < 160; i++) { offer = (await bounded(scene.data(), 'upgrade offer')).upgradeOffer; if (offer) break; await delay(400); }
+    for (let i = 0; i < 160; i++) { const d=await bounded(scene.data(), 'upgrade offer'); if(d.skillQuiz){await answerSkillQuiz(scene,false);}else{offer=d.upgradeOffer;if(offer)break;} await delay(400); }
     assert(offer, '自然击杀未触发升级');
     await delay(300);
     const frozenState = await bounded(scene.data(), 'frozen state');
@@ -107,7 +108,7 @@ async function chooseSkill(scene, offer) {
     const observations = [];
     for (let i = 0; i < 20; i++) {
       await delay(500);
-      const nextOffer = (await bounded(scene.data(), 'follow-up offer')).upgradeOffer; if (nextOffer) await chooseSkill(scene, nextOffer);
+      const nextState = await bounded(scene.data(), 'follow-up offer'); if(nextState.skillQuiz)await answerSkillQuiz(scene,false);else if(nextState.upgradeOffer)await chooseSkill(scene,nextState.upgradeOffer);
       const request = (await bounded(scene.data(), 'wave request')).waveRequest;
       assert.equal(request,null,'同一关连续进攻不应出现轮间听词');
       const current=await bounded(scene.data(),'battle view');observations.push({level:current.level,experience:current.experience,wave:current.waveNumber,hp:current.hud.hp,status:current.hud.status});

@@ -1,3 +1,4 @@
+import { skillQuizAnswer } from './helpers/skill-quiz';
 import * as invasion from '../miniprogram/fortress/stage-invasion';
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -33,7 +34,7 @@ async function setup(stage=1, full=false){
  for(const [key,method]of Object.entries(definition.methods))host[key]=(method as Function).bind(host);
  definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();assert.equal(host.data.error,'');
  function kill(m:MonsterSpawn):CombatEvent{return{type:'monsterDefeated',context:scene.snapshot.context,tick:1,monsterId:m.monsterId,wordId:m.wordId};}
- function select(){const offer=host.data.upgradeOffer;assert(offer);const detail={offerId:offer.id,cardId:offer.cards[0].id};host.chooseUpgrade({detail});return detail;}
+ function select(){host.finishSkillQuiz({detail:skillQuizAnswer(host.data.skillQuiz)});const offer=host.data.upgradeOffer;assert(offer);const detail={offerId:offer.id,cardId:offer.cards[0].id};host.chooseUpgrade({detail});return detail;}
  return {host,definition,plan,wallet,scene,kill,select,audioActive:()=>active};
 }
 test('同帧升级→精英→传说逐个暂停；重复事件/点击无重复技能或经验，最后恢复读词',async()=>{
@@ -69,4 +70,32 @@ test('死亡丢弃已打开精英与排队传说，迟到的选择和恢复回�
  h.scene.snapshot={...h.scene.snapshot,status:'baseDestroyed',base:{...h.scene.snapshot.base,hp:0}};h.scene.options.onEvents([{type:'baseDestroyed',context:h.scene.snapshot.context,tick:2}]);
  h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});h.definition.pageLifetimes.hide.call(h.host);h.definition.pageLifetimes.show.call(h.host);h.host.presentUpgrade();
  assert(h.host.data.failed);assert.equal(h.host.data.upgradeOffer,null);assert.equal(Object.keys(h.scene.snapshot.skillCollection).length,0);assert.equal(h.wallet.balance(),20);h.definition.lifetimes.detached.call(h.host);
+});
+test('升级和Boss均先答题，答对连续选两个不同技能后才推进下一奖励；后台/旧答题拒绝',async()=>{
+ const h=await setup();const all=h.plan.waves.flatMap(w=>w.spawnPlan);const iron=all.find(m=>m.bossKind==='iron')!;const grand=all.find(m=>m.bossKind==='grand')!;
+ h.scene.options.onEvents([h.kill(grand),h.kill(iron),...h.plan.waves[0].spawnPlan.slice(0,3).map(h.kill)]);
+ for(const source of [undefined,'elite','legendary']){
+  const offer=h.host.data.upgradeOffer;const quiz=h.host.data.skillQuiz;assert(quiz);assert.equal(offer.source,source);assert(h.scene.paused);
+  h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});assert.equal(h.host.data.upgradeOffer,offer);
+  const result=skillQuizAnswer(quiz,true);
+  h.host.finishSkillQuiz({detail:{...result,context:{...result.context,generation:quiz.generation+1}}});assert.equal(h.host.data.skillQuiz,quiz);
+  h.definition.pageLifetimes.hide.call(h.host);h.host.finishSkillQuiz({detail:result});assert.equal(h.host.data.skillQuiz,quiz);
+  h.definition.pageLifetimes.show.call(h.host);h.host.finishSkillQuiz({detail:result});assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,2);
+  h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});
+  const second=h.host.data.upgradeOffer;assert.equal(second.source,source);assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,1);assert(h.scene.paused);assert.equal(h.host.data.frozenFrame,'frame');
+  assert(!second.cards.some((card:any)=>card.id===offer.cards[0].id));
+  h.host.finishSkillQuiz({detail:result});h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});assert.equal(h.host.data.upgradeOffer,second);
+  h.host.chooseUpgrade({detail:{offerId:second.id,cardId:second.cards[0].id}});
+ }
+ assert.equal(h.host.data.upgradeOffer,null);assert(!h.scene.paused);assert.equal(Object.values(h.scene.snapshot.skillCollection).reduce((n:number,s:any)=>n+s.level,0),6);
+ h.definition.lifetimes.detached.call(h.host);
+});
+test('答题和二选阶段退出均清空，不接受迟到答案或第二次选择',async()=>{
+ for(const afterFirst of [false,true]){
+  const h=await setup();h.scene.options.onEvents(h.plan.waves[0].spawnPlan.slice(0,5).map(h.kill));
+  const result=skillQuizAnswer(h.host.data.skillQuiz,true);
+  if(afterFirst){h.host.finishSkillQuiz({detail:result});const offer=h.host.data.upgradeOffer;h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}
+  const pending=h.host.data.upgradeOffer;h.host.endRun();h.host.finishSkillQuiz({detail:result});h.host.chooseUpgrade({detail:{offerId:pending.id,cardId:pending.cards[0].id}});
+  assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,0);assert.equal(h.host.data.upgradeOffer,null);assert.equal(h.host.data.skillInventory.length,0);
+ }
 });

@@ -31,7 +31,8 @@
       <button class="victory-home" bindtap="returnHome">返回小屋</button>
     </view>
   </view>
-  <skill-choice class="upgrade-choice" offer="{{upgradeOffer}}" owned-skills="{{skillInventory}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
+  <view wx:if="{{skillQuiz}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="skill-quiz" request="{{skillQuiz}}" paused="{{inputUnavailable || !!error}}" bindstartcombat="finishSkillQuiz" /></view></view>
+  <skill-choice wx:if="{{!skillQuiz}}" class="upgrade-choice" remaining="{{skillPicksRemaining}}" offer="{{upgradeOffer}}" owned-skills="{{skillInventory}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
   <view wx:if="{{dropError}}" class="drop-error"><button disabled="{{inputUnavailable}}" bindtap="retryDrops">掉落金币未到账，点击重试</button></view>
   <view wx:if="{{voiceError && !upgradeOffer}}" class="voice-status"><button bindtap="retryVoice">重试发音</button></view>
   <view wx:if="{{!opening}}" class="hud" aria-label="基地剩余 {{hud.hp}} / {{hud.maxHp}} 血量">
