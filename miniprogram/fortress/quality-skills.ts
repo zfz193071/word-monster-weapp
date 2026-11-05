@@ -14,6 +14,8 @@ export function qualityEffects(skills: SkillCollection) {
     count: level('doubleShot') ? Math.min(8, level('doubleShot') + 1 + Math.max(0, rank('doubleShot') - 2)) : 1,
     intervalMs: Math.max(160, 500 * (1 - .08 * level('fireRate') * q('fireRate'))),
     width: level('bulletWidth') ? Math.min(56, (8 + 4 * level('bulletWidth')) * q('bulletWidth')) : 8,
+    widthDamageBonus: level('bulletWidth') ? Math.max(0, rank('bulletWidth') - 2) * .1 : 0,
+    homingPenetrations: level('homing') ? Math.max(0, rank('homing') - 2) : 0,
     projectileMultiplier: (1 + (level('bulletWidth') ? Math.max(0, rank('bulletWidth') - 2) * .1 : 0)) * (1 + .02 * level('homing') * q('homing')),
     flameDamage: level('flame') ? Math.ceil((10 + 5 * level('flame')) * q('flame')) : 0,
     flameRadius: [45,45,60,75,90][rank('flame')],
@@ -32,12 +34,12 @@ export function qualityDescription(id: BattleSkillId, skills: SkillCollection): 
   switch (id) {
     case 'doubleShot': return `每次齐射${effect.count}发；元素仅附于其中一发`;
     case 'fireRate': return `自动射击间隔${number(effect.intervalMs)}毫秒`;
-    case 'bulletWidth': return `弹丸宽度${number(effect.width)}`;
+    case 'bulletWidth': return `弹丸宽度${number(effect.width)}${effect.widthDamageBonus ? `；普通子弹伤害增加${number(effect.widthDamageBonus * 100)}%` : ''}`;
     case 'flame': return `每5秒充能，半径${effect.flameRadius}内造成${effect.flameDamage}火焰伤害`;
     case 'frost': return `每5秒充能，减速${number(effect.frostSlow * 100)}%，持续2秒；Boss最多35%`;
     case 'lightning': return `每5秒充能，额外命中${effect.lightningTargets}个目标，每个${effect.lightningDamage}伤害，范围${effect.lightningRange}`;
     case 'firepower': return `开场及每20秒触发，普通子弹伤害增加${number(effect.firepowerBonus * 100)}%，持续${effect.firepowerTicks / 100}秒`;
-    case 'homing': return `自动追踪并重新锁定，普通子弹伤害增加${number(.02 * skills.homing!.level * SKILL_QUALITIES[qualityRank(skills.homing!.quality)].multiplier * 100)}%`;
+    case 'homing': return `自动追踪并重新锁定，普通子弹伤害增加${number(.02 * skills.homing!.level * SKILL_QUALITIES[qualityRank(skills.homing!.quality)].multiplier * 100)}%${effect.homingPenetrations ? `；额外穿透${effect.homingPenetrations}个目标，逐次保留70%伤害` : ''}；最多飞行4秒`;
   }
 }
 export function qualitySkillOffer(sessionId: string, level: number, skills: SkillCollection, base: {hp:number;maxHp:number}, random: RandomSource): UpgradeOffer {

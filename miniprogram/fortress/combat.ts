@@ -74,6 +74,7 @@ function freezeState(state: CombatState): CombatState {
     }))),
     supportSoldiers: Object.freeze((state.supportSoldiers ?? []).map(soldier => Object.freeze({ ...soldier, position: Object.freeze({ ...soldier.position }) }))),
     projectiles: Object.freeze(state.projectiles.map(projectile => Object.freeze({ ...projectile,
+      ...(projectile.hitMonsterIds ? { hitMonsterIds: Object.freeze([...projectile.hitMonsterIds]) } : {}),
       ...(projectile.elements ? { elements: Object.freeze({ ...projectile.elements }) } : {}),
       position: Object.freeze({ ...projectile.position }), previousPosition: Object.freeze({ ...projectile.previousPosition }),
       ...(projectile.direction ? { direction: Object.freeze({ ...projectile.direction }) } : {}),
@@ -98,7 +99,7 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false, f
       ?? homingTargets.sort((a, b) => Math.hypot(a.position.x - position.x, a.position.y - position.y) - Math.hypot(b.position.x - position.x, b.position.y - position.y))[0];
     if (target) usedTargets.add(target.id);
     return { id: `${state.context.sessionId}:${state.context.combatId}:bullet:${state.nextProjectileSequence + index}`,
-      ...(state.skillCollection ? { skillCollection: state.skillCollection, expiresAtTick: state.tick + 400 } : {}),
+      ...(state.skillCollection ? { skillCollection: state.skillCollection, expiresAtTick: state.tick + 400, remainingPenetrations: qualityEffects(state.skillCollection).homingPenetrations, hitMonsterIds: [] } : {}),
       ...(charged && index === 0 ? { elements: { flame: state.skills.flame ?? 0, frost: state.skills.frost ?? 0, lightning: state.skills.lightning ?? 0 } } : {}),
       position, previousPosition: position, ...(target ? { direction: directionTo(position, target.position), targetMonsterId: target.id } : state.aimDirection ? { direction: state.aimDirection } : {}), ...(state.skills.homing ? { homing: true } : {}), width: weapon.width, height: RULES.projectile.height, damage: state.skillCollection ? Math.ceil(weaponForLevel(state.weaponLevel ?? 1).damage * qualityEffects(state.skillCollection).projectileMultiplier * (firepowerActive ? 1 + qualityEffects(state.skillCollection).firepowerBonus : 1)) : firepowerActive ? Math.round(weaponForLevel(state.weaponLevel ?? 1).damage * 1.5) : weaponForLevel(state.weaponLevel ?? 1).damage };
   });
@@ -222,8 +223,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const monsters = previous.monsters.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
   const moved = previous.projectiles.filter(projectile => (projectile.expiresAtTick ?? Infinity) > tick).map(projectile => {
-    let target = projectile.homing ? activeTargets.find(monster => monster.id === projectile.targetMonsterId) : undefined;
-    if (projectile.homing && !target) target = activeTargets.slice().sort((a, b) => Math.hypot(a.position.x - projectile.position.x, a.position.y - projectile.position.y) - Math.hypot(b.position.x - projectile.position.x, b.position.y - projectile.position.y))[0];
+    const availableTargets = activeTargets.filter(monster => !projectile.hitMonsterIds?.includes(monster.id));
+    let target = projectile.homing ? availableTargets.find(monster => monster.id === projectile.targetMonsterId) : undefined;
+    if (projectile.homing && !target) target = availableTargets.slice().sort((a, b) => Math.hypot(a.position.x - projectile.position.x, a.position.y - projectile.position.y) - Math.hypot(b.position.x - projectile.position.x, b.position.y - projectile.position.y))[0];
     const direction = target ? directionTo(projectile.position, target.position) : projectile.direction ?? { x: 0, y: -1 };
     return { ...projectile, ...(projectile.homing ? { targetMonsterId: target?.id } : {}), direction, previousPosition: projectile.position,
       position: { x: projectile.position.x + direction.x * RULES.projectile.speed * COMBAT_STEP_MS / 1000, y: projectile.position.y + direction.y * RULES.projectile.speed * COMBAT_STEP_MS / 1000 } };
@@ -232,7 +234,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const contacts: { time: number; projectileIndex: number; monsterIndex: number }[] = [];
   moved.forEach((projectile, projectileIndex) => {
     monsters.forEach((monster, monsterIndex) => {
-      if (monster.hp <= 0 || defeated.has(monster.id) || monster.status === 'retiring' || monster.status === 'waiting') return;
+      if (monster.hp <= 0 || defeated.has(monster.id) || projectile.hitMonsterIds?.includes(monster.id) || monster.status === 'retiring' || monster.status === 'waiting') return;
       const direction = projectile.direction ?? { x: 0, y: -1 };
       const width = Math.abs(direction.y) * projectile.width + Math.abs(direction.x) * projectile.height;
       const height = Math.abs(direction.x) * projectile.width + Math.abs(direction.y) * projectile.height;
@@ -263,8 +265,11 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const consumed = new Set<string>();
   for (const contact of contacts) {
     const projectile = moved[contact.projectileIndex]; const monster = monsters[contact.monsterIndex];
-    if (consumed.has(projectile.id) || defeated.has(monster.id)) continue;
-    consumed.add(projectile.id);
+    if (consumed.has(projectile.id) || defeated.has(monster.id) || projectile.hitMonsterIds?.includes(monster.id)) continue;
+    if ((projectile.remainingPenetrations ?? 0) > 0) {
+      moved[contact.projectileIndex] = { ...projectile, remainingPenetrations: projectile.remainingPenetrations! - 1,
+        hitMonsterIds: [...(projectile.hitMonsterIds ?? []), monster.id], damage: Math.ceil(projectile.damage * .7), elements: undefined, targetMonsterId: undefined };
+    } else consumed.add(projectile.id);
     damageMonster(contact.monsterIndex, projectile.damage, 'projectile');
     const elements = projectile.elements;
     const effect = projectile.skillCollection ? qualityEffects(projectile.skillCollection) : undefined;

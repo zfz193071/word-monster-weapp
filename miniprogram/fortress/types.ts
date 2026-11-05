@@ -139,6 +139,8 @@ export interface SupportSoldierState {
   readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
+  readonly hitMonsterIds?: readonly string[];
+  readonly remainingPenetrations?: number;
   readonly expiresAtTick?: number;
   readonly skillCollection?: SkillCollection;
   readonly elements?: Readonly<Partial<Record<ElementId, number>>>;
