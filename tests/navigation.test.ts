@@ -137,6 +137,7 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
       exports: {}, require: (name: string) => name === '../../services/fortress-entry' ? { fortressEntryStore: createFortressEntryStore() } : name === '../../services/session' ? { sessionStore } : { createBattleController },
       Page: (definition: any) => {
         page = definition;
+        page.selectComponent = () => null;
         page.setData = (patch: Record<string, unknown>) => Object.assign(page.data, patch);
       },
       wx: { reLaunch: ({ url }: { url: string }) => {

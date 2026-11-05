@@ -102,3 +102,5 @@
 @keyframes loot-arrival { from { opacity:0; transform:scale(.65); } 50% { opacity:1; transform:scale(1.08); } to { transform:scale(1); } }
 @keyframes loot-star { from { transform:rotate(-180deg) scale(.3); } to { transform:rotate(0) scale(1); } }
 .scene-paused .golden-loot, .scene-paused .loot-star { animation-play-state:paused; }
+
+.victory-continue { margin-top:18rpx; width:80%; border-radius:36rpx; background:#e8bd58; color:#45321b; font-weight:700; font-size:28rpx; }

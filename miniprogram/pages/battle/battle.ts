@@ -80,10 +80,11 @@ Page({
   becomingStronger: false,
   becomeStronger() {
     if (this.becomingStronger) return;
+    this.selectComponent('.fortress-preview')?.endRun?.();
     this.becomingStronger = true; strengthGuide.request();
     wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/home/home', fail: () => { this.becomingStronger = false; } }) });
   },
-  returnHome() { wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
+  returnHome() { this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {
     const wordId = event.currentTarget.dataset.wordId;
@@ -103,6 +104,7 @@ Page({
   restartPreview() { if (this.data.preview) { if (this.data.choicePreview) { this.resetChoicePreview(); return; } this.setData({ previewPaused: true }); this.selectComponent('.fortress-preview')?.restartPreview(); } },
 
   onUnload() {
+    this.selectComponent('.fortress-preview')?.endRun?.();
     if (this.data.fromHome && this.data.choiceRequest) fortressEntryStore.release(this.data.choiceRequest.plan.sessionId);
     this.controller?.dispose();
     this.controller = undefined;

@@ -1,3 +1,4 @@
+import * as continuation from '../miniprogram/fortress/continuation';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
 import * as quality from '../miniprogram/fortress/skill-quality';
 import { coinRulesFor } from '../miniprogram/fortress/difficulty';
@@ -24,13 +25,14 @@ import { createOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortress/types';
 
-for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repair:false,realAudio:false})),{level:levels.LEVELS[0],repair:true,realAudio:false},{level:levels.LEVELS[0],repair:false,realAudio:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}${realAudio ? "与实际播报调度" : ""}`, async () => {
+for (const {level,repair,realAudio,exit} of [...levels.LEVELS.map(level=>({level,repair:false,realAudio:false})),{level:levels.LEVELS[0],repair:true,realAudio:false},{level:levels.LEVELS[0],repair:false,realAudio:true},{level:levels.LEVELS[0],repair:false,realAudio:false,exit:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}${realAudio ? "与实际播报调度" : ""}${exit ? "与准备时退出" : ""}`, async () => {
   const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id, 7, level.id === 3 ? 'nightmare' : 'normal');let definition:any;let host:any;
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
   let petSaved:unknown; const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
   if(level.id===2)petStore.rewardBoss('prior','prior:wave:1:zombie:1');
+  let loadCount=0;let loadNext=()=>Promise.resolve();
   let rewards=0;let praises=0;let praiseActive=false;let praiseDisposed=false;let audioOptions:any;let busy=false;let current:FakeScene;
   let audioClock=0;let timerSequence=0;const timers=new Map<number,{run:()=>void;at:number}>();const voiceEnds:(()=>void)[]=[];
   function advanceAudio(ms:number){const end=audioClock+ms;while(true){const next=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;audioClock=next[1].at;timers.delete(next[0]);next[1].run();}audioClock=end;}
@@ -52,6 +54,8 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
     require(name:string){
+      if(name.endsWith('/continuation'))return continuation;
+      if(name.endsWith('/level-assets'))return {loadLevelAssets(){loadCount++;return loadNext();}};
       if(name.endsWith("/pets/battle"))return petBattle;
       if(name.endsWith('/pet-drops'))return {createPetDrops};
       if(name.endsWith('/pet-store'))return {petStore};
@@ -149,6 +153,34 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   definition.pageLifetimes.hide.call(host);assert.equal(praiseActive,false);assert.equal(host.data.inputUnavailable,true);
   definition.pageLifetimes.show.call(host);assert.equal(praiseActive,true);assert.equal(host.data.inputUnavailable,false);
   assert.equal(rewards,1);assert.equal(praises,1);
+  if(exit){
+    let done=()=>{};loadNext=()=>new Promise<void>(resolve=>{done=resolve;});const pending=host.continueStage();const abandoned=current!;host.returnHome();done();await pending;
+    assert(abandoned.disposed);assert.equal(host.data.waveRequest,null);assert.equal(host.data.skillInventory.length,0);assert.equal(host.data.continueBusy,false);
+    abandoned.options.onEvents([]);host.presentUpgrade();await host.continueStage();assert.equal(loadCount,1);assert.equal(host.data.waveRequest,null);
+    definition.lifetimes.detached.call(host);return;
+  }
+  if(level.id<8){
+    const carried=JSON.parse(JSON.stringify(current!.snapshot.skillCollection));const pet=current!.snapshot.pet;const oldScene=current!;
+    current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:1},supportSoldiers:[{id:'leftover',slot:0,hp:30,maxHp:30,position:{x:160,y:500},attackRemainingMs:100}]};
+    host.data.rewardSaved=false;await host.continueStage();assert.equal(loadCount,0,'上关奖励未保存不能继续');host.data.rewardSaved=true;
+    host.data.dropError=true;await host.continueStage();assert.equal(loadCount,0,'掉落未保存不能跨关丢弃重试');host.data.dropError=false;
+    host.data.petDropError=true;await host.continueStage();assert.equal(loadCount,0);host.data.petDropError=false;
+    loadNext=()=>Promise.reject(Error('network'));await host.continueStage();assert(host.data.completed);assert(host.data.continueError);assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(rewards,1);
+    let resolveNext=()=>{};loadNext=()=>new Promise<void>(resolve=>{resolveNext=resolve;});const prepare=host.continueStage();await host.continueStage();assert.equal(loadCount,2,'连点只准备一次');
+    definition.pageLifetimes.hide.call(host);resolveNext();await prepare;assert(host.data.completed,'后台资源就绪仍停留胜利页');definition.pageLifetimes.show.call(host);
+    assert.equal(host.data.completed,false);const next=host.data.waveRequest;assert.equal(next.waveIndex,0);assert.equal(next.plan.levelId,level.id+1);assert.equal(next.plan.weaponLevel,7);assert.equal(next.plan.difficulty,plan.difficulty);assert(oldScene.disposed);assert.equal(rewards,1);
+    const context={sessionId:next.plan.sessionId,waveId:next.plan.waves[0].waveId,generation:next.generation};const target=next.plan.waves[0].targetWordId;
+    host.nextWave({detail:{context,attempts:[{correct:false}]}});assert.equal(host.data.waveRequest,next);
+    host.nextWave({detail:{context:{...context,sessionId:'stale'},attempts:[{correct:true}]}});assert.equal(host.data.waveRequest,next);
+    host.nextWave({detail:{context,attempts:[{correct:true,selectedWordId:target,targetWordId:target,sessionId:context.sessionId,waveId:context.waveId}]}});await Promise.resolve();
+    assert.equal(host.data.error,'');assert.equal(host.data.level,1);assert.equal(host.data.experience,0);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
+    assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);
+    assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(host.data.skillInventory.length,Object.keys(carried).length);assert.equal(current!.snapshot.weaponLevel,7);
+    assert.equal(current!.snapshot.tick,0);assert.equal(current!.snapshot.elementReadyTick,500);if(current!.snapshot.skills.firepower)assert.equal(current!.snapshot.firepowerUntilTick,qualitySkills.qualityEffects(carried).firepowerTicks);
+    assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));
+    assert.equal(current!.snapshot.monsters[0].hp,monsterStats(level.id+1,1,false,plan.difficulty).hp);
+    const preserved=current!.snapshot;definition.observers.previewRequest.call(host,host.properties.previewRequest);assert.equal(current!.snapshot,preserved,'父页面重复传入最初入口不能重置连续关卡');definition.pageLifetimes.hide.call(host);definition.pageLifetimes.show.call(host);assert.equal(current!.snapshot,preserved,'后台恢复不创建新局或清技能');
+  }else{assert.equal(host.data.canContinue,false);await host.continueStage();assert.equal(loadCount,0);}
   if(level.id===1 && !repair && !realAudio){
     const oldScene=current!;
     const nextPlan=createOpeningPlan('next-color-session',createSeededRandom(18),2,7);
