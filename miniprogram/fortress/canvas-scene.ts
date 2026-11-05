@@ -302,9 +302,9 @@ export class CanvasScene {
         if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) c.globalAlpha *= 0.55;
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
         if (monsterArt.animalIds?.includes(monster.wordId)) {
-          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.status === 'alive' || monster.status === 'entering') ? state.tick : 0);
+          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick : 0);
         } else if (monsterArt.walkParts) {
-          const walking = monster.hp > 0 && (monster.status === 'entering' || monster.status === 'alive');
+          const walking = monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
           const seed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
           const stride = walking ? Math.sin(state.tick * .07 + seed) : 0;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
@@ -368,6 +368,20 @@ export class CanvasScene {
         }
         c.restore();
       }
+      if (monster.hp > 0 && !monster.boss && (monster.frozenUntilTick ?? -1) >= state.tick) {
+        c.fillStyle = 'rgba(168,237,249,.35)'; c.strokeStyle = '#dbfbff'; c.lineWidth = 2;
+        c.fillRect(monster.position.x - 22, monster.position.y - 34, 44, 56);
+        c.strokeRect(monster.position.x - 22, monster.position.y - 34, 44, 56);
+      }
+      if (monster.hp > 0 && monster.burn && monster.burn.untilTick >= state.tick) {
+        c.fillStyle = '#f8a14e';
+        for (let flame = 0; flame < 3; flame++) {
+          const x = monster.position.x - 15 + flame * 15;
+          const height = 10 + 5 * Math.sin(state.tick * .12 + flame);
+          c.beginPath(); c.moveTo(x - 5, monster.position.y + 22); c.lineTo(x, monster.position.y + 12 - height);
+          c.lineTo(x + 5, monster.position.y + 22); c.fill();
+        }
+      }
       if (monster.hp > 0 && (monster.slowUntilTick ?? 0) > state.tick) {
         c.strokeStyle = '#b6f5fa'; c.lineWidth = 2; c.beginPath(); c.ellipse(monster.position.x, monster.position.y + 18, 20, 8, 0, 0, Math.PI * 2); c.stroke();
       }
@@ -407,8 +421,9 @@ export class CanvasScene {
       const progress = Math.min(1, Math.max(0, 1 - (impact.untilTick - state.tick) / 35));
       c.save(); c.globalAlpha = (1 - progress) * .85; c.translate(impact.position.x, impact.position.y);
       if (impact.kind === 'flame') {
-        c.fillStyle = '#ffbc58'; c.beginPath(); c.arc(0, 0, 45 * (.3 + .7 * progress), 0, Math.PI * 2); c.fill(); c.strokeStyle = '#ed763a'; c.lineWidth = 3; c.stroke();
-        c.fillStyle = '#fff3ab'; for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * 35 * progress, Math.sin(angle) * 35 * progress, 4, 0, Math.PI * 2); c.fill(); }
+        const radius = impact.radius ?? 45;
+        c.fillStyle = '#ffbc58'; c.beginPath(); c.arc(0, 0, radius * (.3 + .7 * progress), 0, Math.PI * 2); c.fill(); c.strokeStyle = '#ed763a'; c.lineWidth = 3; c.stroke();
+        c.fillStyle = '#fff3ab'; for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * radius * .78 * progress, Math.sin(angle) * radius * .78 * progress, 4, 0, Math.PI * 2); c.fill(); }
       } else if (impact.kind === 'frost') {
         c.strokeStyle = '#d4ffff'; c.lineWidth = 3;
         for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }

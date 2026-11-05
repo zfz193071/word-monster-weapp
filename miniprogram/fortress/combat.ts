@@ -70,6 +70,7 @@ function freezeState(state: CombatState): CombatState {
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
     base: Object.freeze({ ...state.base }), skills: Object.freeze({ ...state.skills }),
     monsters: Object.freeze(state.monsters.map(monster => Object.freeze({ ...monster,
+      ...(monster.burn ? { burn: Object.freeze({ ...monster.burn }) } : {}),
       position: Object.freeze({ ...monster.position }), hitbox: Object.freeze({ ...monster.hitbox }),
     }))),
     supportSoldiers: Object.freeze((state.supportSoldiers ?? []).map(soldier => Object.freeze({ ...soldier, position: Object.freeze({ ...soldier.position }) }))),
@@ -197,6 +198,7 @@ export function sweptHitTime(from: Point, to: Point, width: number, height: numb
 function advanceMonster(monster: MonsterState, speed: number, elapsedMs: number): MonsterState {
   if (elapsedMs < (monster.spawnAtMs ?? 0)) return monster;
   if (monster.hp === 0 || monster.status === 'retiring') return monster;
+  if (!monster.boss && (monster.frozenUntilTick ?? -1) >= elapsedMs / COMBAT_STEP_MS) return monster;
   if (monster.status === 'attackingBase') return { ...monster, attackRemainingMs: monster.attackRemainingMs - COMBAT_STEP_MS };
   if (monster.boss) speed *= .7 * (bossChargePhase(elapsedMs - (monster.spawnAtMs ?? 0)) === 'charging' ? 1.5 : 1);
   if ((monster.slowUntilTick ?? 0) > elapsedMs / COMBAT_STEP_MS) speed *= 1 - (monster.slowRatio ?? 0);
@@ -262,6 +264,16 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       }
     }
   };
+  // Damage over time uses simulation ticks and the same kill/drop path as direct hits.
+  monsters.forEach((monster, index) => {
+    const burn = monster.burn;
+    if (!burn || monster.hp <= 0 || monster.status === 'waiting' || monster.status === 'retiring') return;
+    if (tick > burn.untilTick) { monsters[index] = { ...monster, burn: undefined }; return; }
+    if (tick >= burn.nextTick) {
+      damageMonster(index, burn.damage, 'flame');
+      monsters[index] = { ...monsters[index], burn: { ...burn, nextTick: burn.nextTick + 100 } };
+    }
+  });
   const consumed = new Set<string>();
   for (const contact of contacts) {
     const projectile = moved[contact.projectileIndex]; const monster = monsters[contact.monsterIndex];
@@ -276,7 +288,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const position = { x: projectile.previousPosition.x + (projectile.position.x - projectile.previousPosition.x) * contact.time, y: projectile.previousPosition.y + (projectile.position.y - projectile.previousPosition.y) * contact.time };
     const nearby = (index: number, radius: number) => monsters[index].hp > 0 && monsters[index].status !== 'waiting' && monsters[index].status !== 'retiring' && Math.hypot(monsters[index].position.x - position.x, monsters[index].position.y - position.y) <= radius;
     if (elements?.frost) {
-      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, slowRatio: effect ? Math.min(effect.frostSlow, monster.boss ? .35 : .7) : Math.min(.2 + .05 * elements.frost, .7) };
+      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, ...(!monster.boss && effect?.freezeTicks ? { frozenUntilTick: tick + effect.freezeTicks } : {}), slowRatio: effect ? Math.min(effect.frostSlow, monster.boss ? .35 : .7) : Math.min(.2 + .05 * elements.frost, .7) };
       impacts.push({ kind: 'frost', position: monster.position, untilTick: tick + 35 });
     }
     if (elements?.lightning) {
@@ -286,8 +298,17 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       for (const {index} of targets) { impacts.push({ kind: 'lightning', position, target: monsters[index].position, untilTick: tick + 35 }); damageMonster(index, effect?.lightningDamage ?? 10 + 5 * elements.lightning, 'lightning'); }
     }
     if (elements?.flame) {
-      impacts.push({ kind: 'flame', position, untilTick: tick + 35 });
-      monsters.forEach((_candidate, index) => { if (nearby(index, effect?.flameRadius ?? 45)) damageMonster(index, effect?.flameDamage ?? 10 + 5 * elements.flame!, 'flame'); });
+      impacts.push({ kind: 'flame', position, radius: effect?.flameRadius ?? 45, untilTick: tick + 35 });
+      monsters.forEach((_candidate, index) => {
+        if (!nearby(index, effect?.flameRadius ?? 45)) return;
+        const damage = effect?.flameDamage ?? 10 + 5 * elements.flame!;
+        damageMonster(index, damage, 'flame');
+        if (effect?.burnRatio && monsters[index].hp > 0) {
+          const current = monsters[index].burn;
+          monsters[index] = { ...monsters[index], burn: { damage: Math.ceil(damage * effect.burnRatio), untilTick: tick + 200,
+            nextTick: current && current.untilTick >= tick ? current.nextTick : tick + 100 } };
+        }
+      });
     }
   }
   const supportCount = supportSoldiers.length;
@@ -332,7 +353,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   let baseHp = previous.base.hp;
   // Approved B6 ordering: a monster killed this step cannot attack, even if due.
   monsters.forEach((monster, index) => {
-    if (baseHp <= 0 || monster.hp <= 0 || monster.status !== 'attackingBase' || monster.attackRemainingMs > EPSILON) return;
+    if (baseHp <= 0 || monster.hp <= 0 || (!monster.boss && (monster.frozenUntilTick ?? -1) >= tick) || monster.status !== 'attackingBase' || monster.attackRemainingMs > EPSILON) return;
     const attackSequence = monster.attackSequence + 1;
     const attackId = `${previous.context.combatId}:${monster.id}:attack:${attackSequence}`;
     monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) };

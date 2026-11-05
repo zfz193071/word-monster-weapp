@@ -115,6 +115,8 @@ export interface WaveContext {
 export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly frozenUntilTick?: number;
+  readonly burn?: { readonly damage: number; readonly nextTick: number; readonly untilTick: number };
   readonly boss?: boolean;
   readonly dropCoins?: number;
   readonly soldierDropCount?: number;
@@ -150,7 +152,7 @@ export interface ProjectileState {
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
-export interface ElementImpact { readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
+export interface ElementImpact { readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
   readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;

@@ -18,6 +18,8 @@ export function qualityEffects(skills: SkillCollection) {
     homingPenetrations: level('homing') ? Math.max(0, rank('homing') - 2) : 0,
     projectileMultiplier: (1 + (level('bulletWidth') ? Math.max(0, rank('bulletWidth') - 2) * .1 : 0)) * (1 + .02 * level('homing') * q('homing')),
     flameDamage: level('flame') ? Math.ceil((10 + 5 * level('flame')) * q('flame')) : 0,
+    burnRatio: level('flame') ? [0,0,0,.25,.5][rank('flame')] : 0,
+    freezeTicks: level('frost') ? [0,0,0,30,60][rank('frost')] : 0,
     flameRadius: [45,45,60,75,90][rank('flame')],
     frostSlow: level('frost') ? Math.min(.7, (.2 + .05 * level('frost')) * q('frost')) : 0,
     lightningDamage: level('lightning') ? Math.ceil((10 + 5 * level('lightning')) * q('lightning')) : 0,
@@ -35,8 +37,8 @@ export function qualityDescription(id: BattleSkillId, skills: SkillCollection): 
     case 'doubleShot': return `每次齐射${effect.count}发；元素仅附于其中一发`;
     case 'fireRate': return `自动射击间隔${number(effect.intervalMs)}毫秒`;
     case 'bulletWidth': return `弹丸宽度${number(effect.width)}${effect.widthDamageBonus ? `；普通子弹伤害增加${number(effect.widthDamageBonus * 100)}%` : ''}`;
-    case 'flame': return `每5秒充能，半径${effect.flameRadius}内造成${effect.flameDamage}火焰伤害`;
-    case 'frost': return `每5秒充能，减速${number(effect.frostSlow * 100)}%，持续2秒；Boss最多35%`;
+    case 'flame': return `每5秒充能，半径${effect.flameRadius}内造成${effect.flameDamage}火焰伤害${effect.burnRatio ? `；灼烧2秒，每秒${Math.ceil(effect.flameDamage * effect.burnRatio)}伤害` : ''}`;
+    case 'frost': return `每5秒充能，减速${number(effect.frostSlow * 100)}%，持续2秒${effect.freezeTicks ? `（含冻结${effect.freezeTicks / 100}秒）` : ''}；Boss免冻、最多减速35%`;
     case 'lightning': return `每5秒充能，额外命中${effect.lightningTargets}个目标，每个${effect.lightningDamage}伤害，范围${effect.lightningRange}`;
     case 'firepower': return `开场及每20秒触发，普通子弹伤害增加${number(effect.firepowerBonus * 100)}%，持续${effect.firepowerTicks / 100}秒`;
     case 'homing': return `自动追踪并重新锁定，普通子弹伤害增加${number(.02 * skills.homing!.level * SKILL_QUALITIES[qualityRank(skills.homing!.quality)].multiplier * 100)}%${effect.homingPenetrations ? `；额外穿透${effect.homingPenetrations}个目标，逐次保留70%伤害` : ''}；最多飞行4秒`;
