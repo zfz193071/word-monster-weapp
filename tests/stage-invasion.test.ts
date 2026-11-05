@@ -130,3 +130,58 @@ test('噩梦后期连续批次覆盖左中右，位置可重放且不修改原�
  assert.equal(bands.size,3);assert.notDeepEqual(groups[0],groups[1]);assert.notDeepEqual(groups[1],groups[2]);
  assert.equal(JSON.stringify(pending),original);
 });
+
+test('四种难度在早中后关卡的入场覆盖上方区域，不集中于一处或两处', () => {
+ for (const difficulty of ['easy','normal','hard','nightmare'] as const) {
+  const bandCounts=[0,0,0,0,0]; let total=0;
+  for (const stage of [1,3,8]) {
+   const initial=createStageInvasion(plan(stage,difficulty),1);
+   for (const elapsed of [20000,120000,300000]) for (let wave=1;wave<=19;wave++) {
+    const pending=initial.incomingMonsters!.filter(m=>m.id.includes(`:wave:${wave}:`));
+    if (!pending.length) continue;
+    const result=stepCombat({...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+      tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}});
+    for(const monster of result.state.monsters) {
+      assert(monster.position.x>=48&&monster.position.x<=312,`${difficulty} x boundary`);
+      assert(monster.position.y<=-32&&monster.position.y>=-96,`${difficulty} y boundary`);
+      const band=Math.min(4,Math.floor((monster.position.x-48)/(264/5)));
+      bandCounts[band]++;total++;
+    }
+   }
+  }
+  assert(total>200,`${difficulty} sample too small`);
+  assert(bandCounts.every(count=>count>0),`${difficulty}: ${bandCounts}`);
+  assert(Math.max(...bandCounts)/total<.35,`${difficulty} clusters in one area: ${bandCounts}`);
+  assert([...bandCounts].sort((a,b)=>b-a).slice(0,2).reduce((a,b)=>a+b,0)/total<.62,`${difficulty} clusters in two areas: ${bandCounts}`);
+ }
+});
+
+test('四种难度的单只入场也使用连续随机位置，不局限于五条固定窄通道', () => {
+ const fixedLanes=[56,118,180,242,304];
+ for(const difficulty of ['easy','normal','hard','nightmare'] as const){
+  const initial=createStageInvasion(plan(3,difficulty),1);
+  const positions:number[]=[];
+  for(let wave=1;wave<=19;wave++){
+   const incoming=initial.incomingMonsters!.filter(monster=>monster.id.includes(`:wave:${wave}:`));
+   if(!incoming.length)continue;
+   const elapsed=10000;
+   const state=stepCombat({...initial,monsters:[],incomingMonsters:incoming,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+    tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}}).state;
+   assert.equal(state.monsters.length,1);
+   positions.push(state.monsters[0].position.x);
+  }
+  assert(positions.some(x=>fixedLanes.every(lane=>Math.abs(x-lane)>10)),`${difficulty} remains confined to fixed lanes`);
+  assert(positions.some(x=>x<120)&&positions.some(x=>x>150&&x<210)&&positions.some(x=>x>240),`${difficulty} does not cover width`);
+ }
+});
+
+
+test('四种难度开场首只怪物也不局限于固定窄通道', () => {
+ const lanes=[56,118,180,242,304];
+ for (const difficulty of ['easy','normal','hard','nightmare'] as const) {
+  const positions=Array.from({length:12},(_,seed)=>createStageInvasion(createOpeningPlan(`opening-${seed}`,createSeededRandom(seed+1),1,1,difficulty),1).monsters[0].position.x);
+  assert(positions.some(x=>lanes.every(lane=>Math.abs(x-lane)>10)),`${difficulty} opening position remains on fixed lanes`);
+  assert(positions.every(x=>x>=48&&x<=312));
+  assert(Object.isFrozen(createStageInvasion(plan(1,difficulty),1).monsters[0]));
+ }
+});

@@ -254,7 +254,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   }
   const incomingMonsters = arrivalCount ? Object.freeze(pending.slice(arrivalCount)) : pending;
   const batch = pending.slice(0, arrivalCount);
-  const positions = invasion && arrivalCount > 1 ? invasionBatchPositions(batch.map(monster => monster.id), RULES.monster.startY) : undefined;
+  const positions = invasion && arrivalCount ? invasionBatchPositions(batch.map(monster => monster.id), RULES.monster.startY) : undefined;
   const admitted = invasion ? batch.map((monster, index) => ({...monster, spawnAtMs:tick * COMBAT_STEP_MS,
     ...(positions ? {position: positions[index]} : {})})) : batch;
   const arrivals = arrivalCount ? [...previous.monsters, ...admitted] : previous.monsters;

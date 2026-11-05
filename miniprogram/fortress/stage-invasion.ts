@@ -1,4 +1,4 @@
-import { INVASION_BATCH_LIMITS } from './spawn-pressure';
+import { INVASION_BATCH_LIMITS, invasionBatchPositions } from './spawn-pressure';
 import { createOpeningEncounter } from './opening-encounter';
 import { skillLevels } from './quality-skills';
 import { validateOpeningPlan } from './opening-plan';
@@ -27,7 +27,7 @@ export function createStageInvasion(plan: SessionPlan, generation: number, colle
   }
   const first = waves[0];
   return Object.freeze({...first, context:Object.freeze({...first.context, combatId:`${plan.sessionId}:stage`}),
-    monsters:Object.freeze(monsters.filter(monster => monster.spawnAtMs === 0)),
+    monsters:Object.freeze(monsters.filter(monster => monster.spawnAtMs === 0).map(monster => Object.freeze({...monster, position:invasionBatchPositions([monster.id], monster.position.y)[0]}))),
     incomingMonsters:Object.freeze(monsters.slice(1)), waveStartTimesMs:Object.freeze(starts),
     invasion:Object.freeze({nextAtMs:monsters[1].spawnAtMs!, waveNumber:1, batchLimit:INVASION_BATCH_LIMITS[difficulty],
       ...(difficulty === 'easy' ? {aliveLimits:Object.freeze(waves.map((_, index) => 3 + Math.floor(12 * index / (waves.length - 1))))} : {})})});
