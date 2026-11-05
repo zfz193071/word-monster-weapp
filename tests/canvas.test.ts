@@ -199,3 +199,42 @@ test('最后一击飘字在清场后仍完成动画，暂停和销毁不推进�
  h.scene.setPaused(false);h.frame(10000);for(let t=10100;t<=10900;t+=100)h.frame(t);
  assert.equal(h.callbacks.size,0);assert.equal(h.errors.length,0);h.scene.dispose();assert.equal(h.callbacks.size,0);
 });
+
+// Exercises the real repair -> draw -> HUD path while no animation frame can run.
+for (const levelId of [1, 3, 8]) for (const status of ['fighting', 'cleared'] as const) {
+  test(`第${levelId}关${status}暂停修复：立即发布满血HUD，旧帧不覆盖，跨轮保持`, async () => {
+    const { createOpeningEncounter, ZERO_SKILLS } = await import('../miniprogram/fortress/opening-encounter');
+    const { getLevel } = await import('../miniprogram/fortress/levels');
+    const word = getLevel(levelId).words[0].id;
+    const state = { ...createOpeningEncounter(`repair-${levelId}`, word, 1, 0, ZERO_SKILLS, 20, [], levelId, 1, [], 'normal', {}), status };
+    const h = harness(true, undefined, { initial: state });
+    await h.scene.load();
+    assert.deepEqual(h.hud.at(-1), { hp: 20, maxHp: state.base.maxHp, status });
+    const stale = [...h.callbacks.values()][0];
+    h.scene.setPaused(true);
+    const tick = h.scene.snapshot!.tick;
+    const draws = h.commands.length;
+    h.scene.restoreBase();
+    assert.equal(h.scene.snapshot!.base.hp, state.base.maxHp);
+    assert.deepEqual(h.hud.at(-1), { hp: state.base.maxHp, maxHp: state.base.maxHp, status });
+    assert(h.commands.length > draws, '无需动画帧就重新绘制修复状态');
+    assert.equal(h.scene.snapshot!.tick, tick);
+    assert.equal(h.callbacks.size, 0);
+    const hudCount = h.hud.length;
+    h.scene.restoreBase();
+    assert.equal(h.hud.length, hudCount, '重复调用不产生第二次状态更新');
+    stale?.(5000);
+    assert.equal(h.scene.snapshot!.base.hp, state.base.maxHp, '暂停前的迟到帧不能覆盖修复');
+    const next = createOpeningEncounter(`repair-${levelId}`, word, 2, 1, h.scene.snapshot!.skills, h.scene.snapshot!.base.hp, [word], levelId, 1, [], 'normal', {});
+    assert.equal(next.base.hp, next.base.maxHp);
+    if (status === 'fighting') {
+      h.scene.setPaused(false);
+      h.frame(6000);
+      for (let time = 6100; time <= 66000 && h.scene.snapshot!.base.hp === state.base.maxHp; time += 100) h.frame(time);
+      assert(h.scene.snapshot!.base.hp < state.base.maxHp, '恢复战斗后新的攻击仍然正常扣血');
+      const lastHud = h.hud.at(-1) as { hp: number; maxHp: number };
+      assert.equal(lastHud.hp, h.scene.snapshot!.base.hp);
+    }
+    h.scene.dispose();
+  });
+}
