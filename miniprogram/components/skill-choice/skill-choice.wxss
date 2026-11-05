@@ -17,3 +17,9 @@
 .repair view { position: absolute; width: 22rpx; height: 68rpx; border: 0; border-radius: 5rpx; background: #f5fff0; }
 .repair view:nth-child(2) { transform: rotate(90deg); }
 .repair view:last-child { display: none; }
+
+.quality-crude { --quality-color:#92989b; }.quality-fine { --quality-color:#599c62; }.quality-rare { --quality-color:#438acb; }.quality-elite { --quality-color:#9b62c6; }.quality-legendary { --quality-color:#d9a331; }
+.skill-card[class*="quality-"] { border-color:var(--quality-color,#f2d9a5); }
+.quality-badge { display:inline-block; padding:5rpx 12rpx; border-radius:18rpx; background:var(--quality-color); color:#fff; font-size:21rpx; }
+.owned-skills { max-height:22vh; width:100%; max-width:900rpx; margin-top:20rpx; border-radius:16rpx; background:#fff8e7; }
+.owned-skill { margin:12rpx; padding:0 12rpx; border-left:6rpx solid var(--quality-color); font-size:22rpx; color:#304940; }.owned-description { display:block; margin-top:4rpx; font-size:19rpx; color:#657d66; }

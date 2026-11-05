@@ -1,3 +1,4 @@
+import type { SkillCollection } from './skill-quality';
 import type { DifficultyId } from './difficulty';
 import type { BattlePet } from '../pets/battle';
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
@@ -138,6 +139,8 @@ export interface SupportSoldierState {
   readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
+  readonly expiresAtTick?: number;
+  readonly skillCollection?: SkillCollection;
   readonly elements?: Readonly<Partial<Record<ElementId, number>>>;
   readonly direction?: Point;
   readonly homing?: boolean;
@@ -147,6 +150,7 @@ export interface ProjectileState {
 }
 export interface ElementImpact { readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;
   readonly weaponLevel?: number;
   readonly elementReadyTick?: number;

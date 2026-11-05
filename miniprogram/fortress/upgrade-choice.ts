@@ -1,4 +1,10 @@
+import { SKILL_QUALITIES } from './skill-quality';
+import type { SkillQuality } from './skill-quality';
 export interface UpgradeCard {
+  readonly quality?: SkillQuality;
+  readonly resultingQuality?: SkillQuality;
+  readonly qualityLabel?: string;
+  readonly skillLevel?: number;
   readonly id: string;
   readonly label: string;
   readonly description: string;
@@ -11,6 +17,11 @@ export interface UpgradeOffer {
 }
 
 export function validateUpgradeOffer(offer: UpgradeOffer): void {
+  for (const card of offer.cards) {
+    if (card.quality !== undefined && (card.id === 'repair' || !SKILL_QUALITIES.some(q => q.id === card.quality)
+      || !SKILL_QUALITIES.some(q => q.id === card.resultingQuality && q.label === card.qualityLabel)
+      || !Number.isInteger(card.skillLevel) || card.skillLevel! < 1 || card.skillLevel! > 5)) throw new Error('技能品质或等级无效');
+  }
   if (!offer.id.trim() || !Number.isSafeInteger(offer.level) || offer.level < 2 || (offer.cards.length < 1 || offer.cards.length > 3)
     || new Set(offer.cards.map(card => card.id)).size !== offer.cards.length
     || offer.cards.some(card => !card.id.trim() || !card.label.trim() || !card.description.trim()

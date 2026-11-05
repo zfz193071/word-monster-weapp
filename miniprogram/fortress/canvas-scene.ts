@@ -1,3 +1,4 @@
+import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
 import { drawBattlePet } from '../pets/battle-art';
 import { drawBattleBackground } from './battle-background';
@@ -97,7 +98,7 @@ export class CanvasScene {
     try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
   }
   applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
-  applySkills(skills: SkillLevels): void { this.runner.applySkills(skills); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   restoreBase(): void {
     this.runner.restoreBase();
     if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.publishHud(this.runner.snapshot); }

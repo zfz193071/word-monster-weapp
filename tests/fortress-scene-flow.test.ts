@@ -1,3 +1,5 @@
+import * as qualitySkills from '../miniprogram/fortress/quality-skills';
+import * as quality from '../miniprogram/fortress/skill-quality';
 import { coinRulesFor } from '../miniprogram/fortress/difficulty';
 import { monsterStats } from '../miniprogram/fortress/battle-progression';
 import * as petBattle from '../miniprogram/pets/battle';
@@ -39,7 +41,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
     dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}showCoinDrop(){}captureFrame(){return 'frame';}
     restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
-    applySkills(levels:SkillLevels){this.snapshot={...this.snapshot,skills:levels};}
+    applySkills(levels:SkillLevels,collection:quality.SkillCollection){this.snapshot={...this.snapshot,skills:levels,skillCollection:collection};}
     clear(){const events:CombatEvent[]=this.snapshot.monsters.flatMap(m=>[
       {type:'monsterDefeated' as const,context:this.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId},
       ...(m.dropCoins ? [{type:'coinsDropped' as const,context:this.snapshot.context,tick:1,monsterId:m.id,amount:m.dropCoins,position:m.position}] : []),
@@ -56,6 +58,9 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
       if(name.endsWith('/coin-wallet'))return {victoryCoinsForLevel,coinWallet:{...wallet,rewardVictory(sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return wallet.rewardVictory(sessionId,levelId);}}};
       if(name.endsWith('/battle-drops'))return drops;
       if(name.endsWith('/victory-audio'))return {createVictoryAudio(){let started=false;return{setActive(active:boolean){praiseActive=active;if(active&&!started){started=true;praises++;}},dispose(){praiseDisposed=true;}};}};
+      if(name.endsWith('/quality-skills'))return qualitySkills;
+      if(name.endsWith('/skill-quality'))return quality;
+      if(name.endsWith('/plans'))return {createSeededRandom};
       if(name.endsWith('/opening-encounter'))return opening;
       if(name.endsWith('/experience'))return experience;
       if(name.endsWith('/upgrade-choice'))return upgrades;

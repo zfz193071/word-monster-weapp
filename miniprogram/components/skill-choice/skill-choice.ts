@@ -3,6 +3,7 @@ import type { UpgradeOffer } from '../../fortress/upgrade-choice';
 
 Component({
   properties: {
+    ownedSkills: { type: Array, value: [] },
     offer: { type: Object, value: null, observer() {
       const value = this.properties.offer as UpgradeOffer | null;
       let valid = false;

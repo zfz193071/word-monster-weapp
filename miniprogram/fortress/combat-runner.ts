@@ -1,3 +1,4 @@
+import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
 import { attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
@@ -48,11 +49,11 @@ export class CombatRunner {
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
   }
   applyPet(pet: BattlePet): void { if (this.current) this.current = attachCombatPet(this.current, pet); }
-  applySkills(skills: SkillLevels): void {
-    if (this.current) this.current = applyCombatSkills(this.current, skills);
+  applySkills(skills: SkillLevels, collection?: SkillCollection): void {
+    if (this.current) this.current = applyCombatSkills(this.current, skills, collection);
   }
   restoreBase(): void {
-    if (!this.current || this.current.status !== 'cleared' || this.current.base.hp <= 0 || this.current.base.hp >= this.current.base.maxHp * .5) return;
+    if (!this.current || (this.current.status !== 'cleared' && !(this.current.skillCollection && this.paused && this.current.status === 'fighting')) || this.current.base.hp <= 0 || this.current.base.hp >= this.current.base.maxHp * .5) return;
     this.current = Object.freeze({ ...this.current, base: Object.freeze({ ...this.current.base, hp: this.current.base.maxHp }) });
   }
   pause(): void {

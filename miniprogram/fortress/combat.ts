@@ -1,3 +1,5 @@
+import { qualityEffects, skillLevels } from './quality-skills';
+import type { SkillCollection } from './skill-quality';
 import { coinRulesFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
 import { battlePetPosition, createBattlePet, PET_ATTACK_INTERVAL_MS, petDamage } from '../pets/battle';
@@ -16,6 +18,7 @@ const EPSILON = 1e-8;
 const AUTO_MUZZLE_LATERAL = 16.8;
 const AUTO_MUZZLE_FORWARD = 34.4;
 export const SUPPORT_SOLDIER_MAX_HP = 30;
+const QUALITY_PROJECTILE_LIMIT = (Math.ceil(4000 / 160) + 1) * 8; // Four-second lifetime, fastest cadence, largest volley.
 const MIN_INTERVAL = Math.min(...FORTRESS_SKILLS[1].values);
 const MAX_SHOTS = Math.max(...FORTRESS_SKILLS[0].values);
 export const MAX_PROJECTILES = (Math.ceil(
@@ -37,6 +40,7 @@ export interface CreateCombatOptions {
   readonly baseHp: number; // carried across waves, not automatically repaired
   readonly playerX: number;
   readonly skills: SkillLevels;
+  readonly skillCollection?: SkillCollection;
   readonly supportSoldiers?: readonly SupportSoldierState[];
   readonly monsterHitboxes?: Readonly<Record<string, Rect>>;
   readonly monsterHitbox: Rect; // required; no fake/default monster art geometry
@@ -49,7 +53,8 @@ function playerX(value: number): number {
   finite(value, 'playerX');
   return Math.max(RULES.arena.playerMinX, Math.min(RULES.arena.playerMaxX, value));
 }
-export function getWeaponParameters(levels: SkillLevels): WeaponParameters {
+export function getWeaponParameters(levels: SkillLevels, collection?: SkillCollection): WeaponParameters {
+  if (collection) return qualityEffects(collection);
   validateSkillLevels(levels);
   const value = (id: 'doubleShot' | 'fireRate' | 'bulletWidth'): number => {
     const definition = FORTRESS_SKILLS.find(skill => skill.id === id)!;
@@ -93,8 +98,9 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false, f
       ?? homingTargets.sort((a, b) => Math.hypot(a.position.x - position.x, a.position.y - position.y) - Math.hypot(b.position.x - position.x, b.position.y - position.y))[0];
     if (target) usedTargets.add(target.id);
     return { id: `${state.context.sessionId}:${state.context.combatId}:bullet:${state.nextProjectileSequence + index}`,
+      ...(state.skillCollection ? { skillCollection: state.skillCollection, expiresAtTick: state.tick + 400 } : {}),
       ...(charged && index === 0 ? { elements: { flame: state.skills.flame ?? 0, frost: state.skills.frost ?? 0, lightning: state.skills.lightning ?? 0 } } : {}),
-      position, previousPosition: position, ...(target ? { direction: directionTo(position, target.position), targetMonsterId: target.id } : state.aimDirection ? { direction: state.aimDirection } : {}), ...(state.skills.homing ? { homing: true } : {}), width: weapon.width, height: RULES.projectile.height, damage: firepowerActive ? Math.round(weaponForLevel(state.weaponLevel ?? 1).damage * 1.5) : weaponForLevel(state.weaponLevel ?? 1).damage };
+      position, previousPosition: position, ...(target ? { direction: directionTo(position, target.position), targetMonsterId: target.id } : state.aimDirection ? { direction: state.aimDirection } : {}), ...(state.skills.homing ? { homing: true } : {}), width: weapon.width, height: RULES.projectile.height, damage: state.skillCollection ? Math.ceil(weaponForLevel(state.weaponLevel ?? 1).damage * qualityEffects(state.skillCollection).projectileMultiplier * (firepowerActive ? 1 + qualityEffects(state.skillCollection).firepowerBonus : 1)) : firepowerActive ? Math.round(weaponForLevel(state.weaponLevel ?? 1).damage * 1.5) : weaponForLevel(state.weaponLevel ?? 1).damage };
   });
 }
 export function createCombat(options: CreateCombatOptions): CombatState {
@@ -127,7 +133,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   if (!Number.isSafeInteger(options.generation) || options.generation < 0) throw new RangeError('generation 必须为非负安全整数');
   const maxHp = options.difficulty ? fortressMaxHp(options.difficulty.levelId) : RULES.base.maxHp;
   if (!Number.isSafeInteger(options.baseHp) || options.baseHp <= 0 || options.baseHp > maxHp) throw new RangeError(`baseHp 必须为1—${maxHp}的整数；失败局不能进入下一波`);
-  const weapon = getWeaponParameters(options.skills);
+  const weapon = getWeaponParameters(options.skills, options.skillCollection);
   const monsterSpeed = options.monsterSpeed ?? RULES.monster.speed;
   if (!Number.isFinite(monsterSpeed) || monsterSpeed <= 0) throw new RangeError('monsterSpeed 必须为正数');
   const attackIntervalMs = options.monsterAttackIntervalMs ?? RULES.monster.attackIntervalMs;
@@ -148,8 +154,8 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   const state: CombatState = {
     weaponLevel, context, monsterSpeed, elementReadyTick: 500, elementImpacts: [],
     ...(options.automatic ? { automatic: true, aimDirection: { x: 0, y: -1 } } : {}),
-    tick: 0, ...(options.skills.firepower ? { firepowerUntilTick: 500, firepowerReadyTick: 2000 } : {}), status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
-    base: { hp: options.baseHp, maxHp }, skills: options.skills,
+    tick: 0, ...(options.skills.firepower ? { firepowerUntilTick: options.skillCollection ? qualityEffects(options.skillCollection).firepowerTicks : 500, firepowerReadyTick: 2000 } : {}), status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
+    base: { hp: options.baseHp, maxHp }, skills: options.skills, ...(options.skillCollection ? { skillCollection: options.skillCollection } : {}),
     monsters: spawns.map(spawn => {
       const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss, options.difficulty.mode) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
       const size = spawn.boss ? 1.5 : 1;
@@ -215,7 +221,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   let supportSoldiers = [...(previous.supportSoldiers ?? [])];
   const monsters = previous.monsters.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
   const activeTargets = monsters.filter(monster => monster.hp > 0 && monster.status !== 'waiting' && monster.status !== 'retiring' && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
-  const moved = previous.projectiles.map(projectile => {
+  const moved = previous.projectiles.filter(projectile => (projectile.expiresAtTick ?? Infinity) > tick).map(projectile => {
     let target = projectile.homing ? activeTargets.find(monster => monster.id === projectile.targetMonsterId) : undefined;
     if (projectile.homing && !target) target = activeTargets.slice().sort((a, b) => Math.hypot(a.position.x - projectile.position.x, a.position.y - projectile.position.y) - Math.hypot(b.position.x - projectile.position.x, b.position.y - projectile.position.y))[0];
     const direction = target ? directionTo(projectile.position, target.position) : projectile.direction ?? { x: 0, y: -1 };
@@ -261,20 +267,22 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     consumed.add(projectile.id);
     damageMonster(contact.monsterIndex, projectile.damage, 'projectile');
     const elements = projectile.elements;
+    const effect = projectile.skillCollection ? qualityEffects(projectile.skillCollection) : undefined;
     const position = { x: projectile.previousPosition.x + (projectile.position.x - projectile.previousPosition.x) * contact.time, y: projectile.previousPosition.y + (projectile.position.y - projectile.previousPosition.y) * contact.time };
     const nearby = (index: number, radius: number) => monsters[index].hp > 0 && monsters[index].status !== 'waiting' && monsters[index].status !== 'retiring' && Math.hypot(monsters[index].position.x - position.x, monsters[index].position.y - position.y) <= radius;
     if (elements?.frost) {
-      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, slowRatio: Math.min(.2 + .05 * elements.frost, .7) };
+      if (monsters[contact.monsterIndex].hp > 0) monsters[contact.monsterIndex] = { ...monsters[contact.monsterIndex], slowUntilTick: tick + 200, slowRatio: effect ? Math.min(effect.frostSlow, monster.boss ? .35 : .7) : Math.min(.2 + .05 * elements.frost, .7) };
       impacts.push({ kind: 'frost', position: monster.position, untilTick: tick + 35 });
     }
     if (elements?.lightning) {
-      let target = -1; let nearest = Infinity;
-      monsters.forEach((candidate, index) => { if (index === contact.monsterIndex || !nearby(index, 90)) return; const distance = Math.hypot(candidate.position.x - position.x, candidate.position.y - position.y); if (distance < nearest) { nearest = distance; target = index; } });
-      if (target >= 0) { impacts.push({ kind: 'lightning', position, target: monsters[target].position, untilTick: tick + 35 }); damageMonster(target, 10 + 5 * elements.lightning, 'lightning'); }
+      const targets = monsters.map((candidate, index) => ({ index, distance: Math.hypot(candidate.position.x - position.x, candidate.position.y - position.y) }))
+        .filter(item => item.index !== contact.monsterIndex && nearby(item.index, effect?.lightningRange ?? 90))
+        .sort((a,b) => a.distance - b.distance || a.index - b.index).slice(0, effect?.lightningTargets ?? 1);
+      for (const {index} of targets) { impacts.push({ kind: 'lightning', position, target: monsters[index].position, untilTick: tick + 35 }); damageMonster(index, effect?.lightningDamage ?? 10 + 5 * elements.lightning, 'lightning'); }
     }
     if (elements?.flame) {
       impacts.push({ kind: 'flame', position, untilTick: tick + 35 });
-      monsters.forEach((_candidate, index) => { if (nearby(index, 45)) damageMonster(index, 10 + 5 * elements.flame!, 'flame'); });
+      monsters.forEach((_candidate, index) => { if (nearby(index, effect?.flameRadius ?? 45)) damageMonster(index, effect?.flameDamage ?? 10 + 5 * elements.flame!, 'flame'); });
     }
   }
   const supportCount = supportSoldiers.length;
@@ -348,13 +356,13 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const aimDirection = target ? (previous.automatic
     ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL)
     : directionTo(player, target.position)) : previous.aimDirection;
-  const weapon = getWeaponParameters(previous.skills);
+  const weapon = getWeaponParameters(previous.skills, previous.skillCollection);
   let shotRemainingMs = previous.shotRemainingMs - COMBAT_STEP_MS;
   let nextProjectileSequence = previous.nextProjectileSequence;
   let elementReadyTick = previous.elementReadyTick ?? 500;
   let firepowerUntilTick = previous.firepowerUntilTick;
   let firepowerReadyTick = previous.firepowerReadyTick;
-  if (previous.skills.firepower && tick >= (firepowerReadyTick ?? 0)) { firepowerUntilTick = tick + 500; firepowerReadyTick = tick + 2000; }
+  if (previous.skills.firepower && tick >= (firepowerReadyTick ?? 0)) { firepowerUntilTick = tick + (previous.skillCollection ? qualityEffects(previous.skillCollection).firepowerTicks : 500); firepowerReadyTick = tick + 2000; }
   const firepowerActive = !!previous.skills.firepower && tick < (firepowerUntilTick ?? 0);
   if (status === 'fighting' && shotRemainingMs <= EPSILON && (!previous.automatic || target)) {
     const charged = tick >= elementReadyTick && !!(previous.skills.flame || previous.skills.frost || previous.skills.lightning);
@@ -363,7 +371,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     nextProjectileSequence += weapon.count;
     shotRemainingMs += weapon.intervalMs;
   }
-  if (projectiles.length > MAX_PROJECTILES) throw new RangeError('弹体数量超过已确认参数推导的上限');
+  if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : MAX_PROJECTILES)) throw new RangeError('弹体数量超过已确认参数推导的上限');
   const state = freezeState({ ...previous, ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, ...(pet ? { pet } : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
@@ -376,9 +384,9 @@ export function rebindCombatGeneration(state: CombatState, generation: number): 
 }
 
 
-export function applyCombatSkills(state: CombatState, skills: SkillLevels): CombatState {
-  getWeaponParameters(skills);
-  return freezeState({ ...state, skills });
+export function applyCombatSkills(state: CombatState, skills: SkillLevels, collection?: SkillCollection): CombatState {
+  getWeaponParameters(skills, collection);
+  return freezeState({ ...state, skills: collection ? skillLevels(collection) : skills, ...(collection ? { skillCollection: collection } : {}) });
 }
 
 

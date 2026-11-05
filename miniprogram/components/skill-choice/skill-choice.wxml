@@ -1,10 +1,12 @@
 <view wx:if="{{offer && valid}}" class="skill-overlay" catchtouchmove="stopScroll" role="dialog" aria-label="选择升级技能">
   <view class="skill-cards">
-    <button wx:for="{{offer.cards}}" wx:key="id" class="skill-card card-{{item.icon}}" disabled="{{disabled || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
+    <button wx:for="{{offer.cards}}" wx:key="id" class="skill-card card-{{item.icon}} quality-{{item.resultingQuality}}" disabled="{{disabled || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
       <view class="card-kicker">{{item.icon === 'flame' || item.icon === 'frost' || item.icon === 'lightning' ? '元素强化' : item.icon === 'repair' ? '堡垒补给' : '武器强化'}}</view><view class="card-top">{{item.label}}</view>
+      <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.description}}</view>
       <view class="card-select" aria-hidden="true">＋</view>
     </button>
   </view>
+  <scroll-view wx:if="{{ownedSkills.length}}" scroll-y class="owned-skills"><view wx:for="{{ownedSkills}}" wx:key="id" class="owned-skill quality-{{item.quality}}"><text>{{item.label}}</text><text class="owned-description">{{item.description}}</text></view></scroll-view>
 </view>
