@@ -80,9 +80,9 @@ test('升级和Boss均先答题，答对连续选两个不同技能后才推进�
   const result=skillQuizAnswer(quiz,true);
   h.host.finishSkillQuiz({detail:{...result,context:{...result.context,generation:quiz.generation+1}}});assert.equal(h.host.data.skillQuiz,quiz);
   h.definition.pageLifetimes.hide.call(h.host);h.host.finishSkillQuiz({detail:result});assert.equal(h.host.data.skillQuiz,quiz);
-  h.definition.pageLifetimes.show.call(h.host);h.host.finishSkillQuiz({detail:result});assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,2);
+  h.definition.pageLifetimes.show.call(h.host);h.host.finishSkillQuiz({detail:result});assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,2);assert.equal(h.host.data.skillShowGuide,false);
   h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});
-  const second=h.host.data.upgradeOffer;assert.equal(second.source,source);assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,1);assert(h.scene.paused);assert.equal(h.host.data.frozenFrame,'frame');
+  const second=h.host.data.upgradeOffer;assert.equal(second.source,source);assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,1);assert.equal(h.host.data.skillShowGuide,true);assert(h.scene.paused);assert.equal(h.host.data.frozenFrame,'frame');
   assert(!second.cards.some((card:any)=>card.id===offer.cards[0].id));
   h.host.finishSkillQuiz({detail:result});h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});assert.equal(h.host.data.upgradeOffer,second);
   h.host.chooseUpgrade({detail:{offerId:second.id,cardId:second.cards[0].id}});
@@ -96,6 +96,6 @@ test('答题和二选阶段退出均清空，不接受迟到答案或第二次�
   const result=skillQuizAnswer(h.host.data.skillQuiz,true);
   if(afterFirst){h.host.finishSkillQuiz({detail:result});const offer=h.host.data.upgradeOffer;h.host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});}
   const pending=h.host.data.upgradeOffer;h.host.endRun();h.host.finishSkillQuiz({detail:result});h.host.chooseUpgrade({detail:{offerId:pending.id,cardId:pending.cards[0].id}});
-  assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,0);assert.equal(h.host.data.upgradeOffer,null);assert.equal(h.host.data.skillInventory.length,0);
+  assert.equal(h.host.data.skillQuiz,null);assert.equal(h.host.data.skillPicksRemaining,0);assert.equal(h.host.data.skillShowGuide,false);assert.equal(h.host.data.upgradeOffer,null);assert.equal(h.host.data.skillInventory.length,0);
  }
 });

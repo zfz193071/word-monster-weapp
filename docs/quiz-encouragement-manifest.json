@@ -1,0 +1,15 @@
+{
+  "text": "小朋友下次加油哦！",
+  "voice": "zf_001",
+  "speed": 0.95,
+  "model": "Kokoro-82M-v1.1-zh",
+  "license": "Apache-2.0",
+  "source": "https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh",
+  "runtime": "kokoro-onnx 0.6.1",
+  "path": "miniprogram/assets/audio/quiz-encouragement.mp3",
+  "sha256": "480a27f078e96f21574872919ea2be5060f4ed2be9e108801d365a81cf6e74e7",
+  "review": "pending human listening",
+  "onnxSource": "https://huggingface.co/onnx-community/Kokoro-82M-v1.1-zh-ONNX",
+  "modelFile": "onnx/model_quantized.onnx",
+  "modelSha256": "a39469be791eeaa3089c1ed5e58b8731d1f2462ea0e7dae2bc44388e58f973d8"
+}

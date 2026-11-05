@@ -29,3 +29,13 @@
 .answer-result { margin:20rpx 8rpx; color:#34543d; font-size:28rpx; font-weight:700; text-align:center; }
 
 .quiz-caption { margin:0 6rpx 16rpx; font-size:23rpx; color:#617454; text-align:center; }
+
+.quiz-flowers { position:absolute; inset:0; pointer-events:none; z-index:5; overflow:hidden; }
+.quiz-flowers text { position:absolute; left:6%; top:10%; font-size:60rpx; animation:quiz-flower 1800ms ease-in-out infinite; }
+.quiz-flowers text:nth-child(2) { left:23%; top:3%; animation-delay:-300ms; }
+.quiz-flowers text:nth-child(3) { left:42%; top:7%; animation-delay:-600ms; }
+.quiz-flowers text:nth-child(4) { left:60%; top:2%; animation-delay:-900ms; }
+.quiz-flowers text:nth-child(5) { left:78%; top:8%; animation-delay:-1200ms; }
+.quiz-flowers text:nth-child(6) { left:88%; top:20%; animation-delay:-1500ms; }
+.flowers-paused text { animation-play-state:paused; }
+@keyframes quiz-flower { 0% { opacity:0; transform:translateY(80rpx) scale(.5) rotate(-20deg); } 35% { opacity:1; } 100% { opacity:0; transform:translateY(-100rpx) scale(1.3) rotate(30deg); } }

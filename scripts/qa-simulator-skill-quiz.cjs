@@ -19,11 +19,11 @@ async function chooseCurrent(s){const d=await s.data();const panel=await s.$('.u
   await mini.screenshot({path:path.join(output,correct?'correct-answer.png':'wrong-answer.png')});
   const before=await s.data();await sleep(1200);const held=await s.data();assert.equal(held.experience,before.experience);assert.equal(held.hud.hp,before.hud.hp);assert.equal(held.waveNumber,before.waveNumber);
   await answerSkillQuiz(s,correct,true);
-  for(let i=0;i<40&&(await s.data()).skillQuiz;i++)await sleep(100);
-  let state=await s.data();assert.equal(state.skillQuiz,null);assert.equal(state.skillPicksRemaining,correct?2:1);
+  for(let i=0;i<100&&(await s.data()).skillQuiz;i++)await sleep(100);
+  let state=await s.data();assert.equal(state.skillQuiz,null);assert.equal(state.skillPicksRemaining,correct?2:1);assert.equal(state.skillShowGuide,false);assert.equal(await (await s.$('.upgrade-choice')).$('.owned-skills'),null);
   await mini.screenshot({path:path.join(output,correct?'two-skills.png':'one-skill.png')});
   const first=await chooseCurrent(s);await sleep(300);state=await s.data();
-  if(correct){assert.equal(state.skillPicksRemaining,1);assert.equal(state.skillQuiz,null);assert(!state.upgradeOffer.cards.some(c=>c.id===first.id));await mini.screenshot({path:path.join(output,'second-skill.png')});await chooseCurrent(s);await sleep(300);}
+  if(correct){assert.equal(state.skillPicksRemaining,1);assert.equal(state.skillShowGuide,true);assert(await (await s.$('.upgrade-choice')).$('.skill-guide')); assert.equal(state.skillQuiz,null);assert(!state.upgradeOffer.cards.some(c=>c.id===first.id));await mini.screenshot({path:path.join(output,'second-skill.png')});await chooseCurrent(s);await sleep(300);}
   state=await s.data();assert.equal(state.upgradeOffer,null);assert.equal(state.skillPicksRemaining,0);
   report[correct?'correct':'wrong']={level:initial.level,picks:correct?2:1,answer:view.answerText};console.log(correct?'correct: two different skills passed':'wrong: one skill passed');
  }

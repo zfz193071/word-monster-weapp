@@ -21,7 +21,10 @@
 .quality-crude { --quality-color:#92989b; }.quality-fine { --quality-color:#599c62; }.quality-rare { --quality-color:#438acb; }.quality-elite { --quality-color:#9b62c6; }.quality-legendary { --quality-color:#d9a331; }
 .skill-card[class*="quality-"] { border-color:var(--quality-color,#f2d9a5); }
 .quality-badge { display:inline-block; padding:5rpx 12rpx; border-radius:18rpx; background:var(--quality-color); color:#fff; font-size:21rpx; }
-.owned-skills { max-height:22vh; width:100%; max-width:900rpx; margin-top:20rpx; border-radius:16rpx; background:#fff8e7; }
-.owned-skill { margin:12rpx; padding:0 12rpx; border-left:6rpx solid var(--quality-color); font-size:22rpx; color:#304940; }.owned-description { display:block; margin-top:4rpx; font-size:19rpx; color:#657d66; }
 
 .pick-count { color:#fff8de; background:#365b49; border-radius:24rpx; padding:12rpx 26rpx; margin-bottom:24rpx; font-size:28rpx; font-weight:700; }
+
+.skill-card { position: relative; }
+.skill-guide { position:absolute; bottom:12rpx; right:12rpx; font-size:62rpx; line-height:1.2; pointer-events:none; animation:skill-point 800ms ease-in-out infinite; }
+.guide-paused { animation-play-state:paused; }
+@keyframes skill-point { 50% { transform:translateY(-14rpx); } }

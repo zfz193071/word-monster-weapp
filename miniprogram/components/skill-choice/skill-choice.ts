@@ -4,7 +4,7 @@ import type { UpgradeOffer } from '../../fortress/upgrade-choice';
 Component({
   properties: {
     remaining: { type: Number, value: 0 },
-    ownedSkills: { type: Array, value: [] },
+    showGuide: { type: Boolean, value: false },
     offer: { type: Object, value: null, observer() {
       const value = this.properties.offer as UpgradeOffer | null;
       let valid = false;

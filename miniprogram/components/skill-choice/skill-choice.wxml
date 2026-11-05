@@ -6,8 +6,8 @@
       <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.description}}</view>
+      <view wx:if="{{showGuide && index === 0}}" class="skill-guide {{disabled ? 'guide-paused' : ''}}" aria-label="再选择一个技能">👆</view>
       <view class="card-select" aria-hidden="true">＋</view>
     </button>
   </view>
-  <scroll-view wx:if="{{ownedSkills.length}}" scroll-y class="owned-skills"><view wx:for="{{ownedSkills}}" wx:key="id" class="owned-skill quality-{{item.quality}}"><text>{{item.label}}</text><text class="owned-description">{{item.description}}</text></view></scroll-view>
 </view>

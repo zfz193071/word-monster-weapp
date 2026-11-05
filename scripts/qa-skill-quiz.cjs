@@ -4,7 +4,7 @@ async function answerSkillQuiz(scene, correct=true, advance=true) {
   if(!request)return false;
   const choice=await scene.$('.skill-quiz');if(!choice)return true;
   const {view}=await choice.data();if(!view||view.paused)return true;
-  if(view.phase==='answered') {if(advance)await(await choice.$('.quiz-continue')).tap();return true;}
+  if(view.phase==='answered') return true; // Feedback automatically opens the skill cards.
   if(!view.canChoose)return true;
   const target=request.plan.waves[request.waveIndex].targetWordId;
   for(const card of await choice.$$('.choice')){
