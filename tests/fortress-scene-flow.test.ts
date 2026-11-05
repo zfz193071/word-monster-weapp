@@ -2,7 +2,7 @@ import * as continuation from '../miniprogram/fortress/continuation';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
 import * as quality from '../miniprogram/fortress/skill-quality';
 import { coinRulesFor } from '../miniprogram/fortress/difficulty';
-import { monsterStats } from '../miniprogram/fortress/battle-progression';
+import { bossWaveIndex, monsterStats } from '../miniprogram/fortress/battle-progression';
 import * as petBattle from '../miniprogram/pets/battle';
 import { attachCombatPet } from '../miniprogram/fortress/combat';
 import { createPetDrops } from '../miniprogram/services/pet-drops';
@@ -25,8 +25,9 @@ import { createOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortress/types';
 
-for (const {level,repair,realAudio,exit} of [...levels.LEVELS.map(level=>({level,repair:false,realAudio:false})),{level:levels.LEVELS[0],repair:true,realAudio:false},{level:levels.LEVELS[0],repair:false,realAudio:true},{level:levels.LEVELS[0],repair:false,realAudio:false,exit:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}${realAudio ? "与实际播报调度" : ""}${exit ? "与准备时退出" : ""}`, async () => {
-  const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id, 7, level.id === 3 ? 'nightmare' : 'normal');let definition:any;let host:any;
+for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(level=>({level,repair:false,realAudio:false})),{level:levels.LEVELS[0],repair:true,realAudio:false},{level:levels.LEVELS[0],repair:false,realAudio:true},{level:levels.LEVELS[0],repair:false,realAudio:false,exit:true},{level:levels.LEVELS[0],repair:false,realAudio:false,bossChain:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}${realAudio ? "与实际播报调度" : ""}${exit ? "与准备时退出" : ""}${bossChain ? "与必出铁桶精英及传说连续闯关" : ""}`, async () => {
+  let bossSeed=0;while(bossWaveIndex(`acceptance-${bossSeed}`)<0)bossSeed++;
+  const plan=createOpeningPlan(bossChain?`acceptance-${bossSeed}`:'component-run',createSeededRandom(12), level.id, 7, level.id === 3 ? 'nightmare' : 'normal');let definition:any;let host:any;
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
