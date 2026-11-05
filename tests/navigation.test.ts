@@ -1,3 +1,5 @@
+import { createDifficultyStore } from '../miniprogram/services/difficulty-store';
+import { DIFFICULTIES } from '../miniprogram/fortress/difficulty';
 import { openingArt } from '../miniprogram/fortress/opening-encounter';
 import { createStrengthGuide, strengthTarget } from '../miniprogram/services/strength-guide';
 import { createPetStore } from '../miniprogram/services/pet-store';
@@ -15,11 +17,13 @@ import { createFortressEntryStore } from '../miniprogram/services/fortress-entry
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
 function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void) {
+  let savedDifficulty: unknown;
+  const difficultyStore = createDifficultyStore({getStorageSync:()=>savedDifficulty,setStorageSync:(_key,value)=>{savedDifficulty=value;}});
   const strengthGuide=createStrengthGuide();
   const sessionStore = createSessionStore();
   let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
   const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
-  const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id));
+  const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id), ()=>wallet.equipment().level, ()=>difficultyStore.read());
   let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
   let page: any;
   let navigation: any;
@@ -33,6 +37,8 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/difficulty-store') return {difficultyStore};
+      if (name === '../../fortress/difficulty') return {DIFFICULTIES};
       if (name === '../../fortress/opening-encounter') return {openingArt};
       if (name === '../../services/battle-assets') return {loadBattleAssets: prepare ?? ((_art:unknown, callbacks:any) => {callbacks.onProgress(100);callbacks.onReady();return ()=>{};})};
       if (name === '../../services/strength-guide') return {strengthGuide,strengthTarget};
@@ -293,4 +299,15 @@ test('关卡资源准备失败后退出0%等待并解除按钮锁，重试可以
  await h.page.openBattle();
  assert.equal(h.page.data.preparingLevel,false);assert.equal(h.page.data.entryError,'');
  assert.equal(h.page.data.request.plan.levelId,2);
+});
+
+test('首页难度选择保存后自动关闭，开战携带难度，已有听词时不能改档',async()=>{
+ const h=homeHarness();h.page.onShow();assert.equal(h.page.data.difficulty,'normal');
+ h.page.openDifficulty();assert.equal(h.page.data.showDifficulty,true);
+ await h.page.openBattle();assert.equal(h.page.data.request,null);
+ h.page.selectDifficulty({detail:{id:'nightmare'}});assert.equal(h.page.data.difficultyLabel,'噩梦');
+ assert.equal(h.page.data.showDifficulty,false);
+ await h.page.openBattle();assert.equal(h.page.data.request.plan.difficulty,'nightmare');
+ h.page.openDifficulty();assert.equal(h.page.data.showDifficulty,false);
+ h.page.selectDifficulty({detail:{id:'easy'}});assert.equal(h.page.data.difficulty,'nightmare');
 });

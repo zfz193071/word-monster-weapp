@@ -1,0 +1,21 @@
+:host { display:block; }
+.icon-frame { position:relative; width:104rpx; height:104rpx; }
+.icon-disc { width:104rpx; height:104rpx; display:flex; align-items:center; justify-content:center; border-radius:50%; background:#e4eed6; }
+.symbol { position:relative; box-sizing:border-box; }
+.easy .symbol { width:44rpx; height:64rpx; border-radius:36rpx 4rpx 36rpx 4rpx; background:#81b85b; transform:rotate(20deg); border:4rpx solid #4f8345; }
+.easy .detail { position:absolute; left:17rpx; top:10rpx; width:4rpx; height:50rpx; background:#e0f0b0; transform:rotate(22deg); }
+.normal .icon-disc { background:#dcecf1; }
+.normal .symbol { width:56rpx; height:64rpx; border:5rpx solid #44778e; background:#79b3c8; border-radius:10rpx 10rpx 30rpx 30rpx; }
+.normal .detail { position:absolute; top:10rpx; left:20rpx; height:31rpx; width:5rpx; background:#e6f5f6; }
+.normal .detail::after { content:''; position:absolute; top:10rpx; left:-9rpx; width:23rpx; height:5rpx; background:#e6f5f6; }
+.hard .icon-disc { background:#ffe7cf; }
+.hard .symbol { width:48rpx; height:62rpx; border:4rpx solid #bd6536; border-radius:4rpx 35rpx 28rpx 28rpx; background:#ed9545; transform:rotate(25deg); }
+.hard .detail { position:absolute; bottom:5rpx; left:9rpx; width:24rpx; height:32rpx; border-radius:4rpx 22rpx 18rpx 18rpx; background:#ffe1a0; }
+.nightmare .icon-disc { background:#e5ddee; }
+.nightmare .symbol { width:64rpx; height:55rpx; border:4rpx solid #685478; background:#e9e0f0; border-radius:30rpx 30rpx 18rpx 18rpx; }
+.nightmare .symbol::before,.nightmare .symbol::after { content:''; position:absolute; top:20rpx; width:15rpx; height:13rpx; background:#685478; border-radius:50%; }
+.nightmare .symbol::before { left:8rpx; transform:rotate(20deg); }.nightmare .symbol::after { right:8rpx; transform:rotate(-20deg); }
+.nightmare .detail { position:absolute; bottom:-13rpx; left:13rpx; width:30rpx; height:17rpx; border-radius:0 0 7rpx 7rpx; background:repeating-linear-gradient(90deg,#685478 0,#685478 4rpx,#e9e0f0 4rpx,#e9e0f0 10rpx); }
+
+.compact { width:44rpx; height:38rpx; }
+.compact .icon-disc { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.48); background:transparent; }

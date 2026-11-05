@@ -1,0 +1,13 @@
+<view class="difficulty-panel" role="dialog" aria-label="游戏难度">
+  <button class="close" bindtap="close" aria-label="关闭">×</button>
+  <text class="title">游戏难度</text>
+  <view class="choices">
+    <button wx:for="{{choices}}" wx:key="id" class="choice {{item.id}} {{selected === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="choose" aria-label="{{item.label + (selected === item.id ? '，已选择' : '')}}">
+      <difficulty-icon kind="{{item.id}}" />
+      <text class="label">{{item.label}}</text>
+      <view class="selection-dot" />
+    </button>
+  </view>
+  <text class="caption">选择自动保存，下次开战生效</text>
+  <text wx:if="{{error}}" class="error" aria-live="polite">{{error}}</text>
+</view>

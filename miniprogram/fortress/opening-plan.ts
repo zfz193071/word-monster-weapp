@@ -1,9 +1,12 @@
+import { coinRulesFor, difficultyFor } from './difficulty';
+import type { DifficultyId } from './difficulty';
 import { weaponForLevel } from '../weapons/catalog';
 import { getLevel } from './levels';
 import { createOpeningEncounter, openingMonsterCount, OPENING_WAVE_COUNT } from './opening-encounter';
 import type { RandomSource, SessionPlan } from './types';
 
-export function createOpeningPlan(sessionId: string, random: RandomSource, levelId = 1, weaponLevel = 1): SessionPlan {
+export function createOpeningPlan(sessionId: string, random: RandomSource, levelId = 1, weaponLevel = 1, difficulty: DifficultyId = 'normal'): SessionPlan {
+  difficultyFor(difficulty);
   weaponForLevel(weaponLevel);
   if (!sessionId.trim()) throw new Error('会话不能为空');
   const shuffle = (ids: readonly string[]) => {
@@ -21,9 +24,9 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
     if (cycle[0] === targets[targets.length - 1]) [cycle[0], cycle[1]] = [cycle[1], cycle[0]];
     targets.push(...cycle.slice(0, OPENING_WAVE_COUNT - targets.length));
   }
-  return Object.freeze({ kind: 'fruit-defense', levelId, weaponLevel, mode: 'fortress', schemaVersion: 2, contentVersion: 2, sessionId,
+  return Object.freeze({ kind: 'fruit-defense', levelId, weaponLevel, difficulty, mode: 'fortress', schemaVersion: 2, contentVersion: 2, sessionId,
     waves: Object.freeze(targets.map((targetWordId, index) => {
-      const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId);
+      const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId, weaponLevel, [], difficulty);
       return Object.freeze({ waveId: `${sessionId}:wave:${index + 1}`, index, targetWordId,
         optionWordIds: Object.freeze(shuffle([targetWordId, ...shuffle(words.filter(id => id !== targetWordId)).slice(0, 2)])),
         spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
@@ -31,6 +34,7 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
     })) });
 }
 export function validateOpeningPlan(plan: SessionPlan): void {
+  const coins = coinRulesFor(plan.difficulty);
   weaponForLevel(plan.weaponLevel ?? 1);
   if (plan.kind !== 'fruit-defense' || !plan.sessionId.trim() || plan.waves.length !== OPENING_WAVE_COUNT) throw new Error('新版计划无效');
   const words = getLevel(plan.levelId).words;
@@ -48,8 +52,8 @@ export function validateOpeningPlan(plan: SessionPlan): void {
       || wave.optionWordIds.length !== 3 || new Set(wave.optionWordIds).size !== 3 || !wave.optionWordIds.includes(wave.targetWordId)
       || wave.optionWordIds.some(id => !words.some(word => word.id === id))
       || wave.spawnPlan.some(spawn => (!previousIds.includes(spawn.wordId) && !plan.waves.slice(0, wave.index + 1).some(previous => previous.targetWordId === spawn.wordId))
-        || (spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < 5 || spawn.dropCoins! > 20
+        || (spawn.boss ? !Number.isInteger(spawn.dropCoins) || spawn.dropCoins! < coins.bossMin || spawn.dropCoins! > coins.bossMax
           || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount! < 0 || spawn.soldierDropCount! > 3
-          : spawn.dropCoins !== 0 && spawn.dropCoins !== 1))) throw new Error('关卡词汇或掉落规则不匹配');
+          : spawn.dropCoins !== 0 && spawn.dropCoins !== coins.normal))) throw new Error('关卡词汇或掉落规则不匹配');
   }
 }

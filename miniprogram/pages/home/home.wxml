@@ -5,12 +5,16 @@
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
   <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinBalance}}</text></view>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
+  <button class="difficulty-button" bindtap="openDifficulty" aria-label="游戏难度，当前{{difficultyLabel}}"><difficulty-icon class="difficulty-mark" kind="{{difficulty}}" compact="{{true}}" /><text>{{difficultyLabel}}</text></button>
+  <view wx:if="{{showDifficulty}}" class="modal-backdrop" catchtouchmove="stopScroll">
+    <difficulty-panel class="home-difficulty-panel" selected="{{difficulty}}" error="{{difficultyError}}" bindselect="selectDifficulty" bindclose="closeDifficulty" />
+  </view>
   <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><loading-progress progress="{{entryProgress}}" /></view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
+    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
   </view>
-  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
+  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
   <view class="start-dock">
     <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>

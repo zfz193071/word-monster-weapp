@@ -6,6 +6,8 @@
     "fortress-choice": "/components/fortress-choice/fortress-choice",
     "home-scene": "/components/home-scene/home-scene",
     "weapon-panel": "/components/weapon-panel/weapon-panel",
-    "loading-progress": "/components/loading-progress/loading-progress"
+    "loading-progress": "/components/loading-progress/loading-progress",
+    "difficulty-panel": "/components/difficulty-panel/difficulty-panel",
+    "difficulty-icon": "/components/difficulty-icon/difficulty-icon"
   }
 }

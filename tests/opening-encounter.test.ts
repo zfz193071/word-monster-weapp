@@ -101,19 +101,23 @@ test('7级武器三波8→13→18：继承技能与基地血量，每波升级�
 });
 
 
-test('随机分批计划可重放，每批3至5只、间隔800至1500毫秒、队内不重叠且待出场不移动', () => {
+test('递增分批计划可重放，3→4→5只且尾批补足、间隔递减、队内不重叠且待出场不移动', () => {
   const sizes = new Set<number>(); const positions = new Set<number>();
   for (let run = 0; run < 100; run++) {
-    const initial = createOpeningEncounter(`spawn-${run}`, 'apple', 0, 2);
-    assert.deepEqual(initial, createOpeningEncounter(`spawn-${run}`, 'apple', 0, 2));
+    const initial = createOpeningEncounter(`spawn-${run}`, 'apple', 0, 18);
+    assert.deepEqual(initial, createOpeningEncounter(`spawn-${run}`, 'apple', 0, 18));
     const batches = new Map<number, number[]>();
     for (const m of initial.monsters) { const time=m.spawnAtMs!; batches.set(time,[...(batches.get(time) ?? []),m.position.x]);positions.add(m.position.x); }
-    let previous = 0;
+    let previous = 0; let previousGap=1500; let previousSize=3;
     for (const [time, xs] of batches) {
-      assert.ok(xs.length >= 3 && xs.length <= 5); sizes.add(xs.length);
-      if(time) assert.ok(time-previous>=800 && time-previous<=1500);previous=time;
+      const last=time===[...batches.keys()].at(-1);
+      assert.ok(xs.length >= (last ? 1 : 3) && xs.length <= 5);
+      if(!last){assert.ok(xs.length>=previousSize);sizes.add(xs.length);}previousSize=xs.length;
+      if(time){const gap=time-previous;assert.ok(gap>=800 && gap<=previousGap);previousGap=gap;}previous=time;
       for(let i=0;i<xs.length;i++)for(let j=i+1;j<xs.length;j++)assert.ok(Math.abs(xs[i]-xs[j])>=48);
     }
+    if(run===0){let state=initial;for(let tick=0;tick<151;tick++)state=stepCombat(state).state;assert.ok(state.monsters.slice(0,3).every(m=>m.status!=='defeated' && m.status!=='retiring'));assert.ok(state.monsters.filter(m=>m.status!=='waiting').length>3,'前批仍存活时后批照常出场');}
+    const times=[...batches.keys()];assert.equal(times[1],1500);assert.equal(times.at(-1)!-times.at(-2)!,800);
     const next=stepCombat(initial).state;
     for (let i=0;i<initial.monsters.length;i++)if(initial.monsters[i].spawnAtMs!>10)assert.deepEqual(next.monsters[i],initial.monsters[i]);
   }

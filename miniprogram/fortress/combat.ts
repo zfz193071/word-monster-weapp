@@ -1,3 +1,5 @@
+import { coinRulesFor } from './difficulty';
+import type { DifficultyId } from './difficulty';
 import { battlePetPosition, createBattlePet, PET_ATTACK_INTERVAL_MS, petDamage } from '../pets/battle';
 import type { BattlePet } from '../pets/battle';
 import { weaponForLevel } from '../weapons/catalog';
@@ -23,7 +25,7 @@ export interface CombatInput { readonly playerX?: number }
 export interface WeaponParameters { readonly count: number; readonly intervalMs: number; readonly width: number }
 export interface CombatStep { readonly state: CombatState; readonly events: readonly CombatEvent[] }
 export interface CreateCombatOptions {
-  readonly difficulty?: { readonly levelId: number; readonly heroLevel: number };
+  readonly difficulty?: { readonly levelId: number; readonly heroLevel: number; readonly mode?: DifficultyId };
   readonly weaponLevel?: number;
   readonly automatic?: boolean;
   readonly monsterSpeed?: number;
@@ -115,7 +117,7 @@ export function createEncounterCombat(options: EncounterCombatOptions): CombatSt
     || options.spawns.some(spawn => !spawn.monsterId.trim() || !(options.allowedWordIds ?? [options.targetWordId]).includes(spawn.wordId) || !BATTLE_WORDS.some(word => word.id === spawn.wordId)
       || !Number.isFinite(spawn.position.x) || spawn.position.x < RULES.monster.spawnMinX || spawn.position.x > RULES.monster.spawnMaxX
       || (spawn.spawnAtMs !== undefined && (!Number.isSafeInteger(spawn.spawnAtMs) || spawn.spawnAtMs < 0))
-      || (spawn.dropCoins !== undefined && (!Number.isInteger(spawn.dropCoins) || spawn.dropCoins < 0 || spawn.dropCoins > 20))
+      || (spawn.dropCoins !== undefined && (!Number.isInteger(spawn.dropCoins) || spawn.dropCoins < 0 || spawn.dropCoins > coinRulesFor(options.difficulty?.mode).bossMax))
       || (spawn.soldierDropCount !== undefined && (!spawn.boss || !Number.isInteger(spawn.soldierDropCount) || spawn.soldierDropCount < 0 || spawn.soldierDropCount > 3))
       || spawn.position.y !== RULES.monster.startY)) throw new Error('僵尸批次必须包含唯一实体、已允许的水果和有效出生位置');
   return initializeCombat(options, { sessionId: options.sessionId, waveId: `${options.sessionId}:opening`, combatId: options.combatId, generation: options.generation }, options.spawns);
@@ -149,7 +151,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     tick: 0, ...(options.skills.firepower ? { firepowerUntilTick: 500, firepowerReadyTick: 2000 } : {}), status: 'fighting', player: { x: playerX(options.playerX), y: RULES.arena.playerY },
     base: { hp: options.baseHp, maxHp }, skills: options.skills,
     monsters: spawns.map(spawn => {
-      const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
+      const stats = options.difficulty ? monsterStats(options.difficulty.levelId, options.difficulty.heroLevel, spawn.boss, options.difficulty.mode) : { hp: RULES.monster.maxHp, attackDamage: RULES.monster.attackDamage };
       const size = spawn.boss ? 1.5 : 1;
       const hitbox = options.monsterHitboxes?.[spawn.wordId] ?? box;
       return { id: spawn.monsterId, wordId: spawn.wordId, position: spawn.position,

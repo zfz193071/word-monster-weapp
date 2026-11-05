@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "difficulty-icon": "/components/difficulty-icon/difficulty-icon"
+  }
+}

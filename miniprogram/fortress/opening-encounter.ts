@@ -1,3 +1,5 @@
+import { difficultyFor } from './difficulty';
+import type { DifficultyId } from './difficulty';
 import { weaponForLevel } from '../weapons/catalog';
 import { bossSoldierDropCount, bossWaveIndex, fortressMaxHp, monsterDropCoins } from './battle-progression';
 import { createSeededRandom } from './plans';
@@ -50,7 +52,8 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
     fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true },
     hero: original(`hero-back-weapon-${weaponLevel}`), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
 }
-export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp: number | undefined = undefined, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = []) {
+export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp: number | undefined = undefined, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = [], difficulty: DifficultyId = 'normal') {
+  const multipliers = difficultyFor(difficulty);
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
   const words = getLevel(levelId).words;
   if (!words.some(word => word.id === wordId) || previousWordIds.some(id => !words.some(word => word.id === id))) throw new Error('词汇不属于本关');
@@ -66,24 +69,26 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   const offset = previousLevelIds.length ? Math.floor(random() * previousLevelIds.length) : 0;
   for (let index = 0; index < previousCount; index++) fruitIds.push(previousLevelIds[(offset + index) % previousLevelIds.length]);
   for (let i = fruitIds.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [fruitIds[i], fruitIds[j]] = [fruitIds[j], fruitIds[i]]; }
+  const batchSizes: number[] = [];
+  for (let scheduled = 0; scheduled < count;) {
+    const size = Math.min(count - scheduled, scheduled / count < 1 / 3 ? 3 : scheduled / count < 2 / 3 ? 4 : 5);
+    batchSizes.push(size); scheduled += size;
+  }
   const spawns = []; let spawnAtMs = 0;
-  while (spawns.length < count) {
-    const remaining = count - spawns.length;
-    // Keep the final batch within 3–5 as well, without changing the wave total.
-    const sizes = [3, 4, 5].filter(size => remaining === size || remaining - size >= 3);
-    const size = sizes[Math.floor(random() * sizes.length)];
+  for (const [batchIndex, size] of batchSizes.entries()) {
     const lanes = [56, 118, 180, 242, 304];
     for (let i = lanes.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [lanes[i], lanes[j]] = [lanes[j], lanes[i]]; }
     for (let member = 0; member < size; member++) spawns.push({ monsterId: `${sessionId}:wave:${waveIndex + 1}:zombie:${spawns.length + 1}`, wordId: fruitIds[spawns.length], spawnAtMs,
       position: { x: lanes[member] + random() * 12 - 6, y: FORTRESS_RULES.monster.startY } });
-    spawnAtMs += 800 + Math.floor(random() * 701);
+    // Timed arrivals continue while earlier enemies are still alive.
+    spawnAtMs += 1500 - Math.round(700 * Math.min(1, batchIndex / Math.max(1, batchSizes.length - 2)));
   }
   const bossWave = bossWaveIndex(sessionId);
   const plannedSpawns = spawns.map((spawn, index) => {
     const boss = waveIndex === bossWave && index === spawns.length - 1;
-    return { ...spawn, ...(boss ? { boss: true, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss) };
+    return { ...spawn, ...(boss ? { boss: true, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
   });
-  return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1 }, weaponLevel, automatic: true, monsterSpeed: levelId === 3 ? 28 : 20, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId),
+  return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId),
     playerX: 180, skills, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     monsterHitboxes: Object.fromEntries([...new Set(fruitIds)].map(id => {
       const art = openingArt(id); return [id, logicalHitbox(art.monsterVisual, art.monsterWidth)];

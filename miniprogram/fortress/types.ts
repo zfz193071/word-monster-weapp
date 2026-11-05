@@ -1,3 +1,4 @@
+import type { DifficultyId } from './difficulty';
 import type { BattlePet } from '../pets/battle';
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
 export type SkillId = 'doubleShot' | 'fireRate' | 'bulletWidth';
@@ -96,6 +97,7 @@ export interface WavePlan {
   readonly spawnPlan: readonly MonsterSpawn[];
 }
 export interface SessionPlan {
+  readonly difficulty?: DifficultyId;
   readonly weaponLevel?: number;
   readonly kind?: 'fruit-defense';
   readonly levelId?: number;

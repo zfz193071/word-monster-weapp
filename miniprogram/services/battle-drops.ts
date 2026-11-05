@@ -1,9 +1,10 @@
+import type { DifficultyId } from '../fortress/difficulty';
 import type { CombatEvent, Point } from '../fortress/types';
 import type { createCoinWallet } from './coin-wallet';
 
 type Drop = Extract<CombatEvent, { type: 'coinsDropped' }>;
 export function createBattleDrops(options: {
-  sessionId: string; levelId: number;
+  sessionId: string; levelId: number; difficulty?: DifficultyId;
   wallet: Pick<ReturnType<typeof createCoinWallet>, 'rewardDrop'>;
   onChange(view: { total: number; error: boolean }): void;
   onAward(position: Point, amount: number): void;
@@ -17,7 +18,7 @@ export function createBattleDrops(options: {
     const awarded: { position: Point; amount: number }[] = [];
     for (const [id, event] of pending) {
       try {
-        const result = options.wallet.rewardDrop(options.sessionId, options.levelId, event.monsterId, event.amount);
+        const result = options.wallet.rewardDrop(options.sessionId, options.levelId, event.monsterId, event.amount, options.difficulty);
         total = result.total; pending.delete(id);
         if (result.added) awarded.push({ position: event.position, amount: result.added });
       } catch { error = true; break; }

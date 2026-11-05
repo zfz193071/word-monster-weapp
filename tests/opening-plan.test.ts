@@ -20,7 +20,8 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
       const count=OPENING_MONSTER_COUNTS[index];assert.equal(wave.spawnPlan.length,count);
       const batches = new Map<number, number>();
       for (const spawn of wave.spawnPlan) batches.set(spawn.spawnAtMs!, (batches.get(spawn.spawnAtMs!) ?? 0) + 1);
-      assert.ok([...batches.values()].every(size => size >= 3 && size <= 5), '含尾批的全部批次均为3至5只');
+      const sizes=[...batches.values()];
+      assert.ok(sizes.every((size,index) => size >= (index===sizes.length-1 ? 1 : 3) && size <= 5), '尾批补足剩余数量，其他批次3至5只');
       const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
       assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(count/2):count);
       const oldCounts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);

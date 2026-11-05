@@ -1,3 +1,5 @@
+import { coinRulesFor } from '../miniprogram/fortress/difficulty';
+import { monsterStats } from '../miniprogram/fortress/battle-progression';
 import * as petBattle from '../miniprogram/pets/battle';
 import { attachCombatPet } from '../miniprogram/fortress/combat';
 import { createPetDrops } from '../miniprogram/services/pet-drops';
@@ -21,7 +23,7 @@ import { createSeededRandom } from '../miniprogram/fortress/plans';
 import type { CombatState, CombatEvent, SkillLevels } from '../miniprogram/fortress/types';
 
 for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repair:false,realAudio:false})),{level:levels.LEVELS[0],repair:true,realAudio:false},{level:levels.LEVELS[0],repair:false,realAudio:true}]) test(`关卡${level.id}组件19波：退场读词、技能、下一题与结算${repair ? "与随机修复" : ""}${realAudio ? "与实际播报调度" : ""}`, async () => {
-  const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id, 7);let definition:any;let host:any;
+  const plan=createOpeningPlan('component-run',createSeededRandom(12), level.id, 7, level.id === 3 ? 'nightmare' : 'normal');let definition:any;let host:any;
   let saved:unknown={version:1,balance:0,rewardedSessions:[],completedLevels:Array.from({length:level.id-1},(_,i)=>i+1)};
   const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_key,value)=>{saved=structuredClone(value);}});
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
@@ -83,6 +85,8 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   for(let wave=0;wave<19;wave++){
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
     assert.equal(host.data.waveNumber,wave+1);assert.equal(current!.snapshot.monsters.length,openingMonsterCount(wave,level.id));
+    assert.equal(current!.snapshot.monsterSpeed, (level.id === 3 ? 28 * 1.2 : 20));
+    for(const monster of current!.snapshot.monsters){const stats=monsterStats(level.id,wave+1,monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     let awardedThisWave=0;
@@ -128,7 +132,7 @@ for (const {level,repair,realAudio} of [...levels.LEVELS.map(level=>({level,repa
   }
   assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss).length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
   if(repair)assert(repairs>0 && repairs<19);
-  const expectedDrops=Math.min(50,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
+  const expectedDrops=Math.min(coinRulesFor(plan.difficulty).limit,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);
   assert.equal(host.data.rewardCoins,expectedCoins);assert.equal(host.data.coinBalance,expectedCoins+expectedDrops);assert.equal(wallet.balance(),expectedCoins+expectedDrops);
   assert.equal(rewards,1);assert.equal(praises,1);assert.equal(host.data.rewardSaved,true);host.advanceWave();host.claimVictoryReward();assert.equal(rewards,1);assert.equal(praises,1);assert.equal(picked,19);assert.equal(host.data.level,20);const totalXp=plan.waves.reduce((sum,w)=>sum+w.spawnPlan.length*8,0);assert.equal(host.data.experience,totalXp);assert.equal(host.data.xpCurrent,totalXp-7600);

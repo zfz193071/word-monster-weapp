@@ -1,0 +1,1 @@
+<view class="icon-frame {{kind}} {{compact ? 'compact' : ''}}" aria-hidden="true"><view class="icon-disc"><view class="symbol"><view class="detail" /></view></view></view>
