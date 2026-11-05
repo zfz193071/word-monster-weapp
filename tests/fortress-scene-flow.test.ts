@@ -129,6 +129,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(current!.paused,false,'选完技能立即继续同一轮');
     assert.equal(host.data.waveRequest,null,'活怪未清完不得跳到下一轮');
     }
+    if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,pet:{...current!.snapshot.pet,hp:0,defeatedPosition:{x:250,y:480}}};
     current!.clear();consumeBossOffers();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
@@ -140,7 +141,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
     const expectedHp=current!.snapshot.base.hp;
     if(wave<18){const request=host.data.waveRequest;assert.equal(request.waveIndex,wave+1);assert.ok(current!.disposed);
-      const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);
+      const target=plan.waves[wave+1];host.nextWave({detail:{context:{sessionId:plan.sessionId,waveId:target.waveId,generation:request.generation},attempts:[{correct:true}]}});await Promise.resolve();assert.equal(current!.snapshot.base.hp,expectedHp);if(level.id===2)assert.equal(current!.snapshot.pet?.hp,0);
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
   assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
@@ -178,7 +179,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);
     assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(host.data.skillInventory.length,Object.keys(carried).length);assert.equal(current!.snapshot.weaponLevel,7);
     assert.equal(current!.snapshot.tick,0);assert.equal(current!.snapshot.elementReadyTick,500);if(current!.snapshot.skills.firepower)assert.equal(current!.snapshot.firepowerUntilTick,qualitySkills.qualityEffects(carried).firepowerTicks);
-    assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));
+    if(pet){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.pet?.defeatedPosition,undefined);}assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));
     assert.equal(current!.snapshot.monsters[0].hp,monsterStats(level.id+1,1,false,plan.difficulty).hp);
     const preserved=current!.snapshot;definition.observers.previewRequest.call(host,host.properties.previewRequest);assert.equal(current!.snapshot,preserved,'父页面重复传入最初入口不能重置连续关卡');definition.pageLifetimes.hide.call(host);definition.pageLifetimes.show.call(host);assert.equal(current!.snapshot,preserved,'后台恢复不创建新局或清技能');
   }else{assert.equal(host.data.canContinue,false);await host.continueStage();assert.equal(loadCount,0);}

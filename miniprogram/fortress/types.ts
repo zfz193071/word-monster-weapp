@@ -183,6 +183,8 @@ export interface CombatState {
   readonly processedBaseAttackIds: readonly string[];
 }
 export type CombatEvent =
+  | { readonly type: 'petDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox'; readonly hp: number }
+  | { readonly type: 'petDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox' }
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
   | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }

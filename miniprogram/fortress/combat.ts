@@ -64,7 +64,7 @@ export function getWeaponParameters(levels: SkillLevels, collection?: SkillColle
 }
 function freezeState(state: CombatState): CombatState {
   return Object.freeze({ ...state,
-    ...(state.pet ? { pet: createBattlePet(state.pet, state.pet.attackRemainingMs) } : {}),
+    ...(state.pet ? { pet: createBattlePet(state.pet, state.pet.attackRemainingMs, state.pet) } : {}),
     ...(state.aimDirection ? { aimDirection: Object.freeze({ ...state.aimDirection }) } : {}),
     ...(state.elementImpacts ? { elementImpacts: Object.freeze(state.elementImpacts.map(impact => Object.freeze({ ...impact, position: Object.freeze({ ...impact.position }), ...(impact.target ? { target: Object.freeze({ ...impact.target }) } : {}) }))) } : {}),
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
@@ -332,8 +332,8 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     damageMonster(target, supportDamage, 'soldier');
     supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: 2000 };
   }
-  let pet = previous.pet;
-  if (pet) {
+  let pet = previous.pet ? createBattlePet(previous.pet, previous.pet.attackRemainingMs, previous.pet) : undefined;
+  if (pet && pet.hp > 0) {
     pet = { ...pet, attackRemainingMs: Math.max(0, pet.attackRemainingMs - COMBAT_STEP_MS) };
     if (pet.attackRemainingMs === 0) {
       const position = battlePetPosition(player);
@@ -378,6 +378,13 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       else supportSoldiers[soldierIndex] = { ...soldier, hp };
       events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
       if (hp === 0) events.push({ type: 'supportSoldierDefeated', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id });
+      return;
+    }
+    if (pet && pet.hp > 0) {
+      const hp = Math.max(0, pet.hp - (monster.attackDamage ?? RULES.monster.attackDamage));
+      pet = {...pet, hp, ...(hp === 0 ? {defeatedPosition: battlePetPosition(player)} : {})};
+      events.push({type: 'petDamaged', context: previous.context, tick, attackId, monsterId: monster.id, petId: 'thunder-fox', hp});
+      if (hp === 0) events.push({type: 'petDefeated', context: previous.context, tick, attackId, monsterId: monster.id, petId: 'thunder-fox'});
       return;
     }
     baseHp = Math.max(0, baseHp - (monster.attackDamage ?? RULES.monster.attackDamage));
@@ -471,5 +478,5 @@ function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
 // Attaching a companion never resets an existing attack timer.
 export function attachCombatPet(state: CombatState, pet: BattlePet): CombatState {
   if (state.pet || state.status === 'baseDestroyed') return state;
-  return freezeState({ ...state, pet: createBattlePet(pet, pet.attackRemainingMs) });
+  return freezeState({ ...state, pet: createBattlePet(pet, pet.attackRemainingMs, pet) });
 }

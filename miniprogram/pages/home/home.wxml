@@ -65,7 +65,7 @@
             <view class="pet-actions"><button bindtap="petAction" data-action="feed" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.food || petView.level === 10}}">喂一份 · +10经验</button><button bindtap="petAction" data-action="hatch" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.eggs}}">免费孵化</button></view>
             <text class="pet-section">我的装扮</text>
             <view wx:for="{{petView.equipmentItems}}" wx:key="id" class="pet-gear"><text class="pet-gear-symbol">{{item.symbol}}</text><text>{{item.name}}</text><button bindtap="petAction" data-action="equip" data-gear="{{item.id}}" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !item.owned}}">{{!item.owned ? '未获得' : item.equipped ? '取下' : '穿戴'}}</button></view>
-            <text class="pet-caption">每2秒雷击 · 伤害 {{10 + 2 * (petView.level - 1)}} · 不受伤</text><text class="pet-caption">装扮只改变外观，不影响战斗</text>
+            <text class="pet-caption">生命 {{100 + 20 * (petView.level - 1)}} · 每2秒雷击 · 伤害 {{10 + 2 * (petView.level - 1)}}</text><text class="pet-caption">士兵之后替堡垒挡伤 · 新关卡满血恢复</text><text class="pet-caption">装扮只改变外观，不影响战斗</text>
           </block>
           <text wx:if="{{petMessage}}" class="pet-message" aria-live="polite">{{petMessage}}</text>
         </block>
