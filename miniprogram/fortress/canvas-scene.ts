@@ -510,7 +510,8 @@ export class CanvasScene {
   private drawAnimal(id: string, x: number, y: number, tick: number): void {
     const c = this.context;
     const stride = tick ? Math.sin(tick * .095) : 0;
-    const colors: Record<string, string> = { bear: '#70664e', bee: '#a39543', bird: '#547b79', cat: '#687b5c', chicken: '#8a9472', cow: '#a7ad8b', dog: '#7e7c51', duck: '#748650', elephant: '#637d77', fish: '#547c87', horse: '#817257', lion: '#958345', panda: '#a6b597', rabbit: '#8b9f83', sheep: '#aab497', tiger: '#a38a42' };
+    const colors: Record<string, string> = { bear: '#9b704b', bee: '#e6bd38', bird: '#547b79', cat: '#77859a', chicken: '#8a9472', cow: '#a7ad8b', dog: '#7e7c51', duck: '#77a96f', elephant: '#637d77', fish: '#54acb8', horse: '#ad7657', lion: '#958345', panda: '#e1e2d2', rabbit: '#8b9f83', sheep: '#aab497', tiger: '#de9749' };
+    const distinct = ['bear', 'bee', 'cat', 'duck', 'fish', 'horse', 'panda', 'tiger'].includes(id);
     c.save(); c.translate(x, y);
     c.fillStyle = 'rgba(37,62,56,.18)'; c.beginPath(); c.ellipse(0, 22, 18, 4, 0, 0, Math.PI * 2); c.fill();
     const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); };
@@ -518,7 +519,8 @@ export class CanvasScene {
     const body = colors[id];
     if (id === 'bee' || id === 'bird' || id === 'chicken' || id === 'duck') {
       const lift = id === 'bee' || id === 'bird' ? stride * 3 : 0;
-      oval(-16, -2 + lift, 8, 4, '#9caa91', -.5); oval(16, -2 - lift, 8, 4, '#9caa91', .5);
+      oval(-16, -2 + lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, id === 'bee' ? '#c8ede3' : '#9caa91', -.5);
+      oval(16, -2 - lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, id === 'bee' ? '#c8ede3' : '#9caa91', .5);
     } else if (id === 'fish') {
       c.fillStyle = '#577f87'; c.beginPath(); c.moveTo(-13, 0); c.lineTo(-23, -10 + stride * 2); c.lineTo(-23, 10 + stride * 2); c.closePath(); c.fill();
     } else {
@@ -548,22 +550,49 @@ export class CanvasScene {
       oval(0, -7, id === 'horse' ? 9 : 12, id === 'horse' ? 14 : 11, body);
     }
     if (id === 'panda') { oval(-6, -8, 5, 6, '#53685e', -.4); oval(6, -8, 5, 6, '#53685e', .4); }
+    if (id === 'bear') oval(0, 1, 10, 7, '#c99a69');
+    if (id === 'cat') { oval(-7, -2, 5, 4, '#a4b0bf'); oval(7, -2, 5, 4, '#a4b0bf'); }
+    if (id === 'horse') {
+      line([-7, -20, -10, -28, -3, -25, 1, -29], '#4a5346', 4);
+      oval(0, 5, 7, 12, '#c69272');
+    }
+    if (id === 'panda') {
+      oval(-6, -8, 7, 8, '#405149', -.3); oval(6, -8, 7, 8, '#405149', .3);
+      oval(0, 2, 8, 6, '#f0eadb');
+    }
+    if (id === 'fish') {
+      c.fillStyle = '#40818c'; c.beginPath(); c.moveTo(-5, -8); c.lineTo(3, -21); c.lineTo(10, -7); c.closePath(); c.fill();
+      line([8, -2, 11, 2, 8, 6], '#e2d5a1', 2);
+      for (const px of [-8, -1, 6]) oval(px, 9, 2, 1, '#aed9cf');
+    }
     if (id === 'cow') { line([-8, -15, -13, -23], '#e0d8a0', 3); line([8, -15, 13, -23], '#e0d8a0', 3); }
     if (id === 'chicken') { oval(-3, -21, 3, 5, '#b96e5a'); oval(3, -21, 3, 5, '#b96e5a'); }
     // Wide dark sockets and compact glowing pupils remain readable at battle scale.
-    oval(-5.5, -8, 5.5, 5.5, '#26352f', -.18); oval(5.5, -7, 5.5, 5.5, '#26352f', .18);
-    oval(-5, -7.5, 3.2, 3.2, '#b74e42'); oval(5, -6.5, 3.2, 3.2, '#b74e42');
-    oval(-4.5, -7.5, 1, 2.3, '#ffe49b'); oval(4.5, -6.5, 1, 2.3, '#ffe49b');
+    const socket = distinct ? 3.7 : 5.5;
+    const pupil = distinct ? 2.1 : 3.2;
+    oval(-5.5, -8, socket, socket, '#26352f', -.18); oval(5.5, -7, socket, socket, '#26352f', .18);
+    oval(-5, -7.5, pupil, pupil, '#b74e42'); oval(5, -6.5, pupil, pupil, '#b74e42');
+    oval(-4.5, -7.5, 1, distinct ? 1.5 : 2.3, '#ffe49b'); oval(4.5, -6.5, 1, distinct ? 1.5 : 2.3, '#ffe49b');
     line([-11, -13, -2, -10], '#26352f', 2.5); line([2, -9, 11, -12], '#26352f', 2.5);
-    oval(0, 6, 7.5, 5, '#26352f');
+    oval(0, 6, distinct ? 4.5 : 7.5, distinct ? 3.5 : 5, '#26352f');
     c.fillStyle = '#e5ddad';
-    for (const toothX of [-4, 3]) {
+    for (const toothX of (distinct ? [-2.5, 2.5] : [-4, 3])) {
       c.beginPath(); c.moveTo(toothX - 1.5, 2); c.lineTo(toothX + 1.5, 2); c.lineTo(toothX, 7); c.closePath(); c.fill();
     }
     line([-5, 10, -1, 11, 3, 10], '#4b5946', 1.5);
     if (id === 'elephant') { line([0, -1, 0, 11, 5, 14], '#6c8983', 6); }
-    else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 8 : 5, 3, '#d5b461');
+    else if (['bird','chicken','duck'].includes(id)) oval(0, -1, id === 'duck' ? 11 : 5, id === 'duck' ? 5 : 3, id === 'duck' ? '#e8ad54' : '#d5b461');
     else oval(0, -1, 3, 2, '#344a3c');
+    if (id === 'cat') {
+      for (const side of [-1, 1]) { line([side * 4, 0, side * 18, -3], '#e6dcc1', 1.5); line([side * 4, 2, side * 18, 5], '#e6dcc1', 1.5); }
+      oval(0, -1, 2.5, 2, '#c88f8d');
+    }
+    if (id === 'horse') { oval(0, 13, 7, 5, '#d2a080'); oval(-3, 14, 1, 1.5, '#4a5346'); oval(3, 14, 1, 1.5, '#4a5346'); }
+    if (id === 'duck') line([-9, 1, 0, 3, 10, 1], '#ae703d', 1.5);
+    if (id === 'tiger') {
+      line([-5, -19, -2, -15, -1, -12], '#584a36', 2.5); line([5, -19, 2, -15, 1, -12], '#584a36', 2.5);
+      line([-11, -4, -8, -2], '#584a36', 2.5); line([11, -4, 8, -2], '#584a36', 2.5);
+    }
     // A stitched skin patch adds an undead cue without obscuring ears or markings.
     line([7, -18, 12, -13, 10, -10], '#303f34', 1.5);
     line([7, -15, 11, -18], '#c8c49c', 1); line([9, -12, 14, -15], '#c8c49c', 1);
