@@ -1,4 +1,9 @@
 <view class="scene {{inputUnavailable ? 'scene-paused' : ''}} {{opening ? 'opening-scene' : ''}}">
+  <view wx:if="{{opening && !completed && !failed}}" class="soldier-control">
+    <button wx:if="{{soldierStockError}}" class="soldier-retry" bindtap="refreshSoldierStock" disabled="{{inputUnavailable}}">士兵库存读取失败 · 重试</button>
+    <button wx:else class="soldier-summon" bindtap="summonSoldier" data-revision="{{soldierRevision}}" disabled="{{soldierBusy || !soldierStock || soldiersInBattle >= 3 || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}" aria-label="召唤士兵，库存{{soldierStock}}，在场{{soldiersInBattle}}名，最多3名"><text>召唤士兵 ×{{soldierStock}}</text><text class="soldier-count">在场 {{soldiersInBattle}} / 3</text></button>
+    <text wx:if="{{soldierSummonError}}" class="soldier-error">{{soldierSummonError}}</text>
+  </view>
   <view wx:if="{{bossNotice && !failed}}" class="boss-notice {{goldenLoot ? 'golden-loot' : ''}}" aria-live="polite"><text wx:if="{{goldenLoot}}" class="loot-star">★</text><text>{{bossNotice}}</text></view>
   <view wx:if="{{petReward}}" class="pet-reward" aria-live="polite"><button wx:if="{{petDropError}}" bindtap="retryPetDrops" disabled="{{inputUnavailable}}">{{petReward}}</button><text wx:else>{{petReward}}</text></view>
   <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>

@@ -421,6 +421,16 @@ export function rebindCombatGeneration(state: CombatState, generation: number): 
 }
 
 
+// Build the complete next state before the caller commits the inventory debit.
+export function summonSupportSoldier(state: CombatState, id: string): CombatState | null {
+  const current = state.supportSoldiers ?? [];
+  if (state.status !== 'fighting' || state.base.hp <= 0 || !id.trim() || current.length >= 3 || current.some(soldier => soldier.id === id)) return null;
+  const count = current.length + 1;
+  const soldiers = current.map((soldier, slot) => ({...soldier, slot, position: supportPosition(state.player, slot, count)}));
+  soldiers.push({id, slot: current.length, position: supportPosition(state.player, current.length, count), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000});
+  return freezeState({...state, supportSoldiers: soldiers});
+}
+
 export function applyCombatSkills(state: CombatState, skills: SkillLevels, collection?: SkillCollection): CombatState {
   getWeaponParameters(skills, collection);
   return freezeState({ ...state, skills: collection ? skillLevels(collection) : skills, ...(collection ? { skillCollection: collection } : {}) });

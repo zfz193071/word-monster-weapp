@@ -37,6 +37,21 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('画布就绪且恢复第一帧后才能召唤；保存失败不添实体，下一帧绘制成功召唤', async () => {
+  const h = harness(); let debits = 0;
+  const debit = () => {debits++; return true;};
+  assert.equal(h.scene.summonSoldier('early',debit),false);
+  await h.scene.load();
+  assert.throws(()=>h.scene.summonSoldier('disk',()=>{throw Error('disk');}));
+  assert.equal(h.scene.snapshot!.supportSoldiers!.length,0);
+  h.scene.setPaused(true);assert.equal(h.scene.summonSoldier('paused',debit),false);
+  h.scene.setPaused(false);assert.equal(h.scene.summonSoldier('before-resume-frame',debit),false);
+  h.frame(1000);assert(h.scene.summonSoldier('active',debit));
+  assert.equal(debits,1);assert.equal(h.scene.snapshot!.supportSoldiers![0].hp,30);
+  const count=h.commands.length;h.frame(1010);assert(h.commands.length>count);
+  h.scene.dispose();assert.equal(h.scene.summonSoldier('disposed',debit),false);assert.equal(debits,1);
+});
+
 test('清场后金币演出继续绘制，暂停冻结、恢复连续、结束和销毁清理帧', async () => {
   const h = harness(true, undefined, { initial: { ...initial(), status: 'cleared' } });
   await h.scene.load(); assert.equal(h.callbacks.size, 0);

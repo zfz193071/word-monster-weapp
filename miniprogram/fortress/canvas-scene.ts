@@ -99,6 +99,12 @@ export class CanvasScene {
   }
   applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  summonSoldier(id: string, debit: () => boolean): boolean {
+    if (!this.ready || this.disposed || this.paused || this.needsResume) return false;
+    // The existing animation loop draws the committed state on its next frame.
+    // Rendering failures must not be reported as a failed inventory transaction.
+    return this.runner.summonSoldier(id, debit);
+  }
   restoreBase(): void {
     this.runner.restoreBase();
     if (this.ready && this.runner.snapshot) { this.draw(this.runner.snapshot); this.publishHud(this.runner.snapshot); }

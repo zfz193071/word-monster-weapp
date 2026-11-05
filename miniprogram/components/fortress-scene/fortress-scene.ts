@@ -1,3 +1,4 @@
+import { dailyCheckin } from '../../services/daily-checkin';
 import { loadLevelAssets } from '../../services/level-assets';
 import { nextStageRequest } from '../../fortress/continuation';
 import type { StageRequest } from '../../fortress/continuation';
@@ -51,7 +52,7 @@ Component({
     previewWord: { type: String, value: 'apple', observer() { if (instances.get(this)?.scene && this.properties.preview) this.mount(true); } },
     initialState: { type: Object, value: null },
     art: { type: Object, value: null },
-    paused: { type: Boolean, value: false, observer() { this.applyPause(); this.presentUpgrade(); this.finishContinuation(); } },
+    paused: { type: Boolean, value: false, observer() { this.refreshSoldierStock(); this.applyPause(); this.presentUpgrade(); this.finishContinuation(); } },
   },
   observers: {
     previewRequest(request: { plan: SessionPlan } | null) {
@@ -60,20 +61,41 @@ Component({
     },
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+  data: { soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueError: false,
     skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
-    attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); },
+    attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.refreshSoldierStock(); },
     ready() { this.mount(); },
     detached() { this.endRun(); instances.delete(this); },
   },
   pageLifetimes: {
     hide() { const state = instances.get(this); if (state) { state.visible = false; this.applyPause(); } },
-    show() { const state = instances.get(this); if (state) { state.visible = true; const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.applyPause(); this.presentUpgrade(); this.finishContinuation(); } },
+    show() { const state = instances.get(this); if (state) { state.visible = true; const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.refreshSoldierStock(); this.applyPause(); this.presentUpgrade(); this.finishContinuation(); } },
     resize() { this.measureResize(); },
   },
   methods: {
+    refreshSoldierCount() {
+      const count = instances.get(this)?.scene?.snapshot?.supportSoldiers?.length ?? 0;
+      if (this.data.soldiersInBattle !== count) this.setData({soldiersInBattle: count});
+    },
+    refreshSoldierStock() {
+      if (!this.properties.opening) return;
+      try {
+        const stock = dailyCheckin.soldierInventory();
+        this.setData({soldierStock: stock.count, soldierRevision: stock.revision, soldierStockError: false});
+      } catch { this.setData({soldierStockError: true}); }
+    },
+    summonSoldier(event: WechatMiniprogram.BaseEvent) {
+      const state = instances.get(this);
+      if (!this.properties.opening || !state?.alive || !state.visible || !state.scene || this.properties.paused || !this.data.ready || this.data.error || this.data.upgradeOffer || this.data.waveRequest || this.data.completed || this.data.failed || this.data.soldierBusy || this.data.soldierStockError) return;
+      const revision = Number(event.currentTarget.dataset.revision);
+      this.setData({soldierBusy: true, soldierSummonError: ''});
+      try {
+        state.scene.summonSoldier(`${state.sessionId}:summon:${revision}`, () => dailyCheckin.consumeSoldier(revision));
+      } catch { this.setData({soldierSummonError: '召唤未完成，库存未扣除，请重试'}); }
+      finally { this.refreshSoldierStock(); this.refreshSoldierCount(); this.setData({soldierBusy: false}); }
+    },
     mount(replace = false) {
       const instance = instances.get(this); if (!instance?.alive) return;
       const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance });
@@ -81,7 +103,8 @@ Component({
       instance.scene?.dispose(); instance.scene = undefined;
       instance.skills?.dispose(); instance.skills = undefined;
       const epoch = ++instance.epoch;
-      this.setData({ ready: false, error: '', retirement: null, skillOffer: null, skillCards: [], skillSummary: '' });
+      this.refreshSoldierStock();
+      this.setData({ soldierSummonError: '', ready: false, error: '', retirement: null, skillOffer: null, skillCards: [], skillSummary: '' });
       const valid = () => instance.alive && instance.epoch === epoch;
       this.createSelectorQuery().select('#battle-canvas').fields({ node: true, size: true, rect: true }, result => {
         if (!valid()) return;
@@ -145,6 +168,7 @@ Component({
             onHud: hud => { if (valid()) this.setData({ hud, hpPercent: hud.hp / hud.maxHp * 100 }); },
             onEvents: events => {
               if (!valid()) return;
+              this.refreshSoldierCount();
               instance.drops?.handle(events);
               instance.petDrops?.handle(events);
               if (instance.experience && instance.upgrades) {
@@ -177,7 +201,7 @@ Component({
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();
-          void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true }); this.applyPause(); this.triggerEvent('sceneready'); } });
+          void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true }); this.refreshSoldierCount(); this.applyPause(); this.triggerEvent('sceneready'); } });
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
@@ -321,9 +345,9 @@ Component({
       const state = instances.get(this); if (!state?.alive) return;
       state.alive = false; state.epoch++; state.stageCarry = undefined; state.preparedStage = undefined; state.activeRequest = undefined;
       state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.upgradeLevels = []; state.bossRewards = [];
-      state.scene?.dispose(); state.scene = undefined; state.pending = undefined;
+      state.scene?.dispose(); state.scene = undefined; state.pending = undefined; state.supportSoldiers = undefined;
       state.audio?.dispose(); state.victoryAudio?.dispose(); state.defeatAudio?.dispose(); state.drops?.dispose(); state.petDrops?.dispose(); state.upgrades?.dispose(); state.experience?.dispose(); state.skills?.dispose();
-      this.setData({skillInventory:[],upgradeOffer:null,waveRequest:null,canContinue:false,continueBusy:false});
+      this.setData({soldiersInBattle:0,skillInventory:[],upgradeOffer:null,waveRequest:null,canContinue:false,continueBusy:false});
     },
     returnHome() { this.endRun(); this.triggerEvent('returnhome'); },
     choosePreviewSkill(event: WechatMiniprogram.TouchEvent) {

@@ -10,7 +10,7 @@ export const CHECKIN_REWARDS = {
 } as const;
 type Kind = keyof typeof CHECKIN_REWARDS;
 interface Entry { date: string; kind: Kind; status: 'offered' | 'pending' | 'claimed' }
-interface Save { version: 1; entries: Entry[]; soldiers: number; flags: number }
+interface Save { soldierRevision?: number; version: 1; entries: Entry[]; soldiers: number; flags: number }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
 export function beijingDate(now: number): string {
   return new Date(now + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -28,7 +28,7 @@ export function createDailyCheckin(options: {
     const raw = options.storage.getStorageSync(CHECKIN_KEY);
     if (raw === '' || raw === null || raw === undefined) return {version: 1, entries: [], soldiers: 0, flags: 0};
     const value = raw as Save;
-    if (!value || value.version !== 1 || !Number.isSafeInteger(value.soldiers) || value.soldiers < 0
+    if (!value || value.version !== 1 || (value.soldierRevision !== undefined && (!Number.isSafeInteger(value.soldierRevision) || value.soldierRevision < 0)) || !Number.isSafeInteger(value.soldiers) || value.soldiers < 0
       || !Number.isSafeInteger(value.flags) || value.flags < 0 || !Array.isArray(value.entries)
       || value.entries.some((e, i) => !e || typeof e.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(e.date)
         || !Object.prototype.hasOwnProperty.call(CHECKIN_REWARDS, e.kind) || !['offered', 'pending', 'claimed'].includes(e.status)
@@ -45,9 +45,9 @@ export function createDailyCheckin(options: {
     // can resume this journal without double-crediting coins or pet food.
     if (pending.kind === 'coins') options.coins.rewardCheckin(receipt);
     if (pending.kind === 'food') options.pets.rewardCheckin(receipt);
-    if (pending.kind === 'soldier') value.soldiers++;
+    if (pending.kind === 'soldier') { value.soldiers++; value.soldierRevision = (value.soldierRevision ?? 0) + 1; }
     if (pending.kind === 'flag') value.flags++;
-    if (!Number.isSafeInteger(value.soldiers) || !Number.isSafeInteger(value.flags)) throw new Error('奖励库存超出范围');
+    if (!Number.isSafeInteger(value.soldiers) || !Number.isSafeInteger(value.flags) || !Number.isSafeInteger(value.soldierRevision ?? 0)) throw new Error('奖励库存超出范围');
     pending.status = 'claimed'; save(value); return value;
   }
   function prepare(): Save {
@@ -86,6 +86,17 @@ export function createDailyCheckin(options: {
     };
   }
   return {
+    soldierInventory() {
+      const value = read();
+      return {count: value.soldiers, revision: value.soldierRevision ?? 0};
+    },
+    consumeSoldier(expectedRevision: number): boolean {
+      const value = read(); const revision = value.soldierRevision ?? 0;
+      if (!Number.isSafeInteger(expectedRevision) || expectedRevision !== revision || value.soldiers === 0) return false;
+      if (!Number.isSafeInteger(revision + 1)) throw new Error('士兵库存记录超出范围');
+      save({...value, soldiers: value.soldiers - 1, soldierRevision: revision + 1});
+      return true;
+    },
     open() { return view(prepare()); },
     claim(expectedDate: string) {
       const value = prepare();

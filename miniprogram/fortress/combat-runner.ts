@@ -1,6 +1,6 @@
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
-import { attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
+import { summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
 
@@ -47,6 +47,15 @@ export class CombatRunner {
     }
     if (this.current.status !== 'fighting') this.remainderMs = 0;
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
+  }
+  summonSoldier(id: string, debit: () => boolean): boolean {
+    if (!this.current || this.paused) return false;
+    const next = summonSupportSoldier(this.current, id);
+    if (!next || !debit()) return false;
+    // Everything that can reject the spawn runs before the debit. No async gap
+    // exists between persisting the debit and installing the prepared snapshot.
+    this.current = next;
+    return true;
   }
   applyPet(pet: BattlePet): void { if (this.current) this.current = attachCombatPet(this.current, pet); }
   applySkills(skills: SkillLevels, collection?: SkillCollection): void {
