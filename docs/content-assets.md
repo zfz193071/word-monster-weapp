@@ -74,6 +74,8 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 
 `victory-praise.mp3` 为“你真棒！”中文合成语音，使用 [Kokoro-82M-v1.1-zh](https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh)（Apache-2.0）、女声zf_001和0.95语速生成，44.1kHz单声道96kbps。不分发模型及运行工具，只打包生成的音频。生成脚本 `scripts/create-victory-praise.py`，哈希及来源记录 `docs/victory-praise-manifest.json`；实际听感待真人试听。
 
+`quiz-praise-bilingual.mp3` 为听写答对时“你真棒！Great job!”的双语女声，使用同一Kokoro模型、音色zf_001、0.95语速生成，44.1kHz单声道96kbps。与掌声同时播放；掌声接受战斗音量调节，语音保持原音量。生成脚本 `scripts/create-quiz-praise.py`，哈希及来源记录 `docs/quiz-praise-bilingual-manifest.json`；实际听感及真机播放待真人检查。
+
 ## 八关分类资源（2026-11-02）
 
 - 分类和中英文词汇来源：本机 `english-kids-site/lib/data.ts`、`lib/words.ts`；选取清单见 `level-word-source.json`。保留11种水果，新增82个词，总计93词。

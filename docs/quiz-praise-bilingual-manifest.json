@@ -1,0 +1,15 @@
+{
+  "text": "你真棒！Great job!",
+  "phonemes": "ㄋㄧ3/ㄓㄣ1ㄅㄤ4! ɡɹˈeɪt dʒˈɑb!",
+  "voice": "zf_001",
+  "speed": 0.95,
+  "model": "Kokoro-82M-v1.1-zh",
+  "license": "Apache-2.0",
+  "source": "https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh",
+  "runtime": "kokoro-onnx 0.6.1",
+  "path": "miniprogram/assets/audio/quiz-praise-bilingual.mp3",
+  "onnxSource": "https://huggingface.co/onnx-community/Kokoro-82M-v1.1-zh-ONNX",
+  "modelSha256": "a39469be791eeaa3089c1ed5e58b8731d1f2462ea0e7dae2bc44388e58f973d8",
+  "sha256": "aff210b26e44cdeda79a56ac8e051cc96687e86cca57471bb44f2bc00c368d81",
+  "review": "pending human listening"
+}

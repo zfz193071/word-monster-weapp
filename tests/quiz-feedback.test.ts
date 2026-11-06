@@ -1,48 +1,57 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createQuizFeedback } from '../miniprogram/services/quiz-feedback';
+
 class Channel {
- src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;plays=0;pauses=0;destroyed=0;
- end=()=>{};error=()=>{};
- onEnded(fn:()=>void){this.end=fn;}offEnded(){this.end=()=>{};}
- onError(fn:()=>void){this.error=fn;}offError(){this.error=()=>{};}
- play(){this.plays++;}pause(){this.pauses++;}stop(){}destroy(){this.destroyed++;}
+  src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;plays=0;pauses=0;destroyed=0;
+  end=()=>{};error=()=>{};
+  onEnded(fn:()=>void){this.end=fn;}offEnded(fn:()=>void){if(this.end===fn)this.end=()=>{};}
+  onError(fn:()=>void){this.error=fn;}offError(fn:()=>void){if(this.error===fn)this.error=()=>{};}
+  play(){this.plays++;}pause(){this.pauses++;}stop(){}destroy(){this.destroyed++;}
 }
 function setup(correct=true){
- const channel=new Channel();let time=0,completed=0;const tasks=new Map<number,{at:number;run:()=>void}>();let id=0;
- const feedback=createQuizFeedback(correct,()=>completed++,{createContext:()=>channel,now:()=>time,schedule(run,delay){const key=++id;tasks.set(key,{at:time+delay,run});return()=>{tasks.delete(key);};}});
- return{channel,feedback,get completed(){return completed;},tick(ms:number){time+=ms;for(const[key,task]of [...tasks])if(task.at<=time){tasks.delete(key);task.run();}}};
+  const channels:Channel[]=[];let time=0,completed=0;const tasks=new Map<number,{at:number;run:()=>void}>();let id=0;
+  const feedback=createQuizFeedback(correct,()=>completed++,{createContext(){const channel=new Channel();channels.push(channel);return channel;},now:()=>time,schedule(run,delay){const key=++id;tasks.set(key,{at:time+delay,run});return()=>{tasks.delete(key);};}});
+  return{channels,feedback,get completed(){return completed;},tick(ms:number){time+=ms;for(const[key,task]of [...tasks])if(task.at<=time){tasks.delete(key);task.run();}}};
 }
-test('答对先播掌声再播完整女声，结束后自动前进一次',()=>{
- const h=setup();h.feedback.setActive(true);assert.equal(h.channel.src,'/assets/audio/victory-applause.mp3');const late=h.channel.end;h.channel.end();assert.equal(h.channel.src,'/assets/audio/victory-praise.mp3');h.tick(1799);assert.equal(h.completed,0);h.channel.end();h.tick(1);assert.equal(h.completed,1);late();h.feedback.setActive(false);h.feedback.setActive(true);assert.equal(h.completed,1);assert.equal(h.channel.destroyed,1);
-});
-test('掌声的迟到结束或错误回调不能截断正在播放的女声',()=>{
- const h=setup();h.feedback.setActive(true);
- const applauseEnded=h.channel.end,applauseError=h.channel.error;
- applauseEnded();assert.equal(h.channel.src,'/assets/audio/victory-praise.mp3');
- applauseEnded();applauseError();h.tick(1800);
- assert.equal(h.completed,0);assert.equal(h.channel.destroyed,0);
- h.channel.end();assert.equal(h.completed,1);
-});
-test('答错鼓励语结束自动前进；后台冻结，返回继续且不重复创建',()=>{
- const h=setup(false);h.feedback.setActive(true);assert.equal(h.channel.src,'/assets/audio/quiz-encouragement.mp3');h.tick(700);h.feedback.setActive(false);h.channel.end();h.tick(20000);assert.equal(h.completed,0);h.feedback.setActive(true);assert.equal(h.completed,1);
-});
-test('静音或无结束回调有前台超时兜底，暂停不计时，销毁忽略迟到回调',()=>{
- const h=setup();h.feedback.setActive(true);h.tick(1000);h.feedback.setActive(false);h.tick(20000);h.feedback.setActive(true);h.tick(5999);assert.equal(h.completed,0);h.tick(1);assert.equal(h.completed,1);
- const other=setup(false);other.feedback.setActive(true);const late=other.channel.end;other.feedback.dispose();late();other.tick(9000);assert.equal(other.completed,0);assert.equal(other.channel.destroyed,1);
-});
-test('音频失败仍能进入技能选择',()=>{
- const h=setup(false);h.feedback.setActive(true);h.channel.error();h.tick(600);assert.equal(h.completed,1);
+
+test('答对时掌声与双语女声同阶段开始，掌声结束不提前进入技能选择',()=>{
+  const h=setup();h.feedback.setVolume(.22);h.feedback.setActive(true);
+  assert.equal(h.channels.length,2);
+  const [voice,applause]=h.channels;
+  assert.equal(voice.src,'/assets/audio/quiz-praise-bilingual.mp3');
+  assert.equal(applause.src,'/assets/audio/victory-applause.mp3');
+  assert.equal(voice.plays,1);assert.equal(applause.plays,1);
+  applause.end();h.tick(1800);assert.equal(h.completed,0);
+  voice.end();assert.equal(h.completed,1);
+  assert.equal(voice.destroyed,1);assert.equal(applause.destroyed,1);
 });
 
-test('掌声后女声未结束不提前进入技能选择，后台暂停后续播报',()=>{
- const h=setup();h.feedback.setActive(true);h.channel.end();h.tick(3200);assert.equal(h.completed,0);h.feedback.setActive(false);h.tick(20000);assert.equal(h.completed,0);h.feedback.setActive(true);h.channel.end();assert.equal(h.completed,1);
+test('女声持续超过最短鲜花时间仍等待自然结束，暂停与迟到回调不截断',()=>{
+  const h=setup();h.feedback.setActive(true);const voice=h.channels[0];const oldEnd=voice.end;
+  h.tick(1000);h.feedback.setActive(false);oldEnd();h.tick(20000);assert.equal(h.completed,0);
+  h.feedback.setActive(true);oldEnd();h.tick(3500);assert.equal(h.completed,0);
+  assert.equal(voice.plays,2);assert.equal(h.channels[1].plays,2);
+  voice.end();assert.equal(h.completed,1);
 });
-test('掌声随战斗音量静音和恢复，女声保持原音量',()=>{
- const h=setup();h.feedback.setVolume(0);h.feedback.setActive(true);
- assert.equal(h.channel.volume,0);
- h.feedback.setVolume(.7);assert.equal(h.channel.volume,.7);
- h.channel.end();assert.equal(h.channel.volume,1);
- h.feedback.setVolume(0);assert.equal(h.channel.volume,1);
- h.feedback.dispose();
+
+test('战斗音量仅调掌声，双语女声保持原音量',()=>{
+  const h=setup();h.feedback.setVolume(0);h.feedback.setActive(true);
+  const [voice,applause]=h.channels;assert.equal(applause.volume,0);assert.equal(voice.volume,1);
+  h.feedback.setVolume(.7);assert.equal(applause.volume,.7);assert.equal(voice.volume,1);
+  h.feedback.dispose();assert.equal(voice.destroyed,1);assert.equal(applause.destroyed,1);
+});
+
+test('答错只播放原鼓励语，音频错误与后台超时仍能继续',()=>{
+  const wrong=setup(false);wrong.feedback.setActive(true);
+  assert.equal(wrong.channels.length,1);assert.equal(wrong.channels[0].src,'/assets/audio/quiz-encouragement.mp3');
+  wrong.channels[0].error();wrong.tick(600);assert.equal(wrong.completed,1);
+  const stalled=setup();stalled.feedback.setActive(true);stalled.tick(1000);stalled.feedback.setActive(false);stalled.tick(20000);assert.equal(stalled.completed,0);
+  stalled.feedback.setActive(true);stalled.tick(10999);assert.equal(stalled.completed,0);stalled.tick(1);assert.equal(stalled.completed,1);
+});
+
+test('退出后迟到音频回调不重复前进',()=>{
+  const h=setup();h.feedback.setActive(true);const lateVoice=h.channels[0].end,lateApplause=h.channels[1].end;
+  h.feedback.dispose();lateVoice();lateApplause();h.tick(20000);h.feedback.setActive(true);
+  assert.equal(h.completed,0);assert.equal(h.channels.length,2);
 });
