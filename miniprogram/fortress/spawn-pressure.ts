@@ -22,14 +22,18 @@ export function invasionBatchPositions(ids: readonly string[], startY: number): 
   const random = createSeededRandom(seed >>> 0);
   const {spawnMinX, spawnMaxX} = FORTRESS_RULES.monster;
   const positions: Point[] = [];
+  // Wider batches need more offscreen depth. The old 64px strip squeezed
+  // 10–12 full-size monsters into nearly one visible row despite random x.
+  const depth = 64 + Math.max(0, ids.length - 6) * 20;
+  const spacing = ids.length > 6 ? 42 : 36;
   for (const _id of ids) {
     let best: Point | undefined; let bestDistance = -1;
     // Avoid coincident centres without falling back to a visible grid.
     for (let attempt = 0; attempt < 64; attempt++) {
-      const candidate = {x: spawnMinX + random() * (spawnMaxX - spawnMinX), y: startY - random() * 64};
+      const candidate = {x: spawnMinX + random() * (spawnMaxX - spawnMinX), y: startY - random() * depth};
       const distance = positions.reduce((nearest, point) => Math.min(nearest, Math.hypot(point.x - candidate.x, point.y - candidate.y)), Infinity);
       if (distance > bestDistance) { best = candidate; bestDistance = distance; }
-      if (distance >= 36) break;
+      if (distance >= spacing) break;
     }
     positions.push(Object.freeze(best!));
   }

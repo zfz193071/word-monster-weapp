@@ -104,8 +104,8 @@ test('噩梦双怪批次不固定左右两端，后期12只不排成整齐横排
  assert(pair.some(m=>m.position.x>80&&m.position.x<280),'双怪批次必须能出现在中间，而非固定48/312');
  const late=spawn(300000);
  assert.equal(late.length,12);
- assert(new Set(late.map(m=>Math.round(m.position.y))).size>2,'后期不应固定两排');
- assert(late.every(m=>m.position.x>=48&&m.position.x<=312&&m.position.y<=-32));
+ assert(Math.max(...late.map(m=>m.position.y))-Math.min(...late.map(m=>m.position.y))>105,'后期大批次应拉开纵向入场深度，避免挤成一排');
+ assert(late.every(m=>m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-216));
  assert.deepEqual(spawn(300000).map(m=>m.position),late.map(m=>m.position),'同状态回放不重抽位置');
 });
 
@@ -120,7 +120,8 @@ test('噩梦后期连续批次覆盖左中右，位置可重放且不修改原�
   const before=state;const result=stepCombat(before);const fresh=result.state.monsters.slice(before.monsters.length);
   assert.equal(fresh.length,12);
   assert.deepEqual(stepCombat(before).state.monsters,result.state.monsters);
-  for(const m of fresh){assert(m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-96);bands.add(Math.min(2,Math.floor((m.position.x-48)/88)));}
+  assert(Math.max(...fresh.map(m=>m.position.y))-Math.min(...fresh.map(m=>m.position.y))>100,'后期连续批次应有纵向错落');
+  for(const m of fresh){assert(m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-216);bands.add(Math.min(2,Math.floor((m.position.x-48)/88)));}
   groups.push(fresh.map(m=>m.position.x));
   const interval=before.incomingMonsters[12].spawnAtMs!-before.incomingMonsters[11].spawnAtMs!;
   assert.equal(result.state.invasion!.nextAtMs,result.state.tick*COMBAT_STEP_MS+interval);
@@ -143,7 +144,7 @@ test('四种难度在早中后关卡的入场覆盖上方区域，不集中于�
       tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}});
     for(const monster of result.state.monsters) {
       assert(monster.position.x>=48&&monster.position.x<=312,`${difficulty} x boundary`);
-      assert(monster.position.y<=-32&&monster.position.y>=-96,`${difficulty} y boundary`);
+      assert(monster.position.y<=-32&&monster.position.y>=-216,`${difficulty} y boundary`);
       const band=Math.min(4,Math.floor((monster.position.x-48)/(264/5)));
       bandCounts[band]++;total++;
     }
