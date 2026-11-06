@@ -260,8 +260,9 @@ Page({
     const valid = () => !this.disposed && this.navigationId === navigationId;
     const fail = () => { if (valid()) this.setData({ opening: false, navigationError: true }); };
     const firstWave = request.plan.waves[0];
+    const levelWordIds = [...new Set(request.plan.waves.flatMap(wave => wave.spawnPlan.map(monster => monster.wordId)))];
     this.cancelBattleLoad = loadBattleAssets(openingArt(firstWave.targetWordId,
-      firstWave.spawnPlan.map(monster => monster.wordId), request.plan.weaponLevel), {
+      levelWordIds, request.plan.weaponLevel), {
       onProgress: entryProgress => { if (valid()) this.setData({ entryProgress: Math.floor(entryProgress / 2) }); },
       onError: fail,
       onReady: () => {

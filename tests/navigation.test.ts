@@ -92,6 +92,21 @@ test('首页点击仅开三选一弹窗，选对后导航一次，返回后重�
   h.page.openBattle(); assert.notEqual(h.page.data.request.plan.sessionId, first.plan.sessionId);
   assert.equal(h.navigationCount, 1);
 });
+test('进入战斗前预载当前关卡全部波次可能出现的怪物素材', () => {
+  let art: ReturnType<typeof openingArt> | undefined;
+  const h = homeHarness(undefined, (value, callbacks) => {
+    art = value as ReturnType<typeof openingArt>;
+    callbacks.onProgress(100); callbacks.onReady(); return () => {};
+  });
+  h.page.openBattle();
+  const plan = h.page.data.request.plan;
+  correct(h.page);
+  const wordIds = new Set(plan.waves.flatMap((wave: {spawnPlan: {wordId: string}[]}) => wave.spawnPlan.map(monster => monster.wordId)));
+  for (const id of wordIds) {
+    assert.ok(art?.outfitBodies?.[id], `缺少 ${id} 的僵尸素材`);
+    assert.ok(art?.fruitHats?.[id], `缺少 ${id} 的头饰素材`);
+  }
+});
 test('导航失败可重试，旧失败回调不能解除新导航锁', () => {
   const h = homeHarness(); h.page.openBattle(); correct(h.page);
   const oldFail = h.navigation.fail; oldFail();
