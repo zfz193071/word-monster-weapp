@@ -16,6 +16,14 @@ function setup(correct=true){
 test('答对先播掌声再播完整女声，结束后自动前进一次',()=>{
  const h=setup();h.feedback.setActive(true);assert.equal(h.channel.src,'/assets/audio/victory-applause.mp3');const late=h.channel.end;h.channel.end();assert.equal(h.channel.src,'/assets/audio/victory-praise.mp3');h.tick(1799);assert.equal(h.completed,0);h.channel.end();h.tick(1);assert.equal(h.completed,1);late();h.feedback.setActive(false);h.feedback.setActive(true);assert.equal(h.completed,1);assert.equal(h.channel.destroyed,1);
 });
+test('掌声的迟到结束或错误回调不能截断正在播放的女声',()=>{
+ const h=setup();h.feedback.setActive(true);
+ const applauseEnded=h.channel.end,applauseError=h.channel.error;
+ applauseEnded();assert.equal(h.channel.src,'/assets/audio/victory-praise.mp3');
+ applauseEnded();applauseError();h.tick(1800);
+ assert.equal(h.completed,0);assert.equal(h.channel.destroyed,0);
+ h.channel.end();assert.equal(h.completed,1);
+});
 test('答错鼓励语结束自动前进；后台冻结，返回继续且不重复创建',()=>{
  const h=setup(false);h.feedback.setActive(true);assert.equal(h.channel.src,'/assets/audio/quiz-encouragement.mp3');h.tick(700);h.feedback.setActive(false);h.channel.end();h.tick(20000);assert.equal(h.completed,0);h.feedback.setActive(true);assert.equal(h.completed,1);
 });

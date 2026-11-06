@@ -15,10 +15,26 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
   let elapsed = 0, startedAt = 0;
   let cancel: (() => void) | undefined;
   let channel: Channel | undefined;
+  let stage = 0;
+  let listener: (() => void) | undefined;
+  function unlisten(old: Channel) {
+    stage++;
+    const previous = listener; listener = undefined;
+    if (!previous) return;
+    try { old.offEnded(previous); } catch { /* A stale callback is also gated by stage. */ }
+    try { old.offError(previous); } catch { /* Keep cleanup moving. */ }
+  }
+  function listen(current: Channel) {
+    const token = ++stage;
+    const next = () => { if (token === stage) advance(); };
+    listener = next;
+    current.onEnded(next); current.onError(next);
+  }
   function release() {
     const old = channel; channel = undefined;
     if (!old) return;
-    for (const action of [() => old.offEnded(advance), () => old.offError(advance), () => old.stop(), () => old.destroy()]) {
+    unlisten(old);
+    for (const action of [() => old.stop(), () => old.destroy()]) {
       try { action(); } catch { /* Always try the remaining cleanup operations. */ }
     }
   }
@@ -36,7 +52,12 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
     if (correct && !praiseStarted) {
       praiseStarted = true;
       try {
-        if (channel) { channel.src = '/assets/audio/victory-praise.mp3'; if (active) channel.play(); }
+        if (channel) {
+          unlisten(channel);
+          channel.src = '/assets/audio/victory-praise.mp3';
+          listen(channel);
+          if (active) channel.play();
+        }
         else audioDone = true;
       } catch { audioDone = true; release(); }
     } else { audioDone = true; release(); }
@@ -57,7 +78,7 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
             channel = (options.createContext ?? (() => wx.createInnerAudioContext()))();
             channel.src = correct ? '/assets/audio/victory-applause.mp3' : '/assets/audio/quiz-encouragement.mp3';
             channel.autoplay = false; channel.loop = false; channel.obeyMuteSwitch = true;
-            channel.onEnded(advance); channel.onError(advance);
+            listen(channel);
           }
           channel.play();
         }
