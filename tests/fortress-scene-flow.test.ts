@@ -42,7 +42,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false; paused=false; speed=1;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
-    async load(){this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});return true;}
+    async load(){this.options.onLoadProgress?.(0);this.options.onLoadProgress?.(100);this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});return true;}
     dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}setSpeed(value:number){this.speed=value;}showCoinDrop(){}captureFrame(){return 'frame';}
     restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
@@ -66,6 +66,8 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       if(name.endsWith('/stage-invasion'))return invasion;
       if(name.endsWith('/continuation'))return continuation;
       if(name.endsWith('/level-assets'))return {loadLevelAssets(){loadCount++;return loadNext();}};
+      if(name.endsWith('/battle-assets'))return {battleAudioPaths:()=>[],loadBattleAssets(_art:unknown,callbacks:any){callbacks.onProgress(100);callbacks.onReady();return()=>{};}};
+      if(name.endsWith('/battle-background'))return {battleBackgroundCover:(levelId:number)=>`/assets/images/battle-backgrounds/level-${levelId}.png`,battleBackgroundColor:()=> '#a1b777'};
       if(name.endsWith("/pets/battle"))return petBattle;
       if(name.endsWith('/pet-drops'))return {createPetDrops};
       if(name.endsWith('/pet-store'))return {petStore};
@@ -91,12 +93,15 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       return{};
     },
   });
+  const updates:any[]=[];
   host={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,combatSpeed:2,previewRequest:{plan,generation:1}},
-    setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(){},
+    setData(patch:any,done?:()=>void){updates.push(patch);Object.assign(this.data,patch);done?.();},triggerEvent(){},
     createSelectorQuery(){return{select(){return{fields(_fields:any,callback:Function){return{exec(){callback({node:{},width:360,height:560,left:0});}};}};}};},
   };
   for(const [name,method]of Object.entries(definition.methods))host[name]=(method as Function).bind(host);
   definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();
+  assert.equal(host.data.loadingProgress,100);
+  assert.ok(updates.filter(patch=>patch.loadingProgress===100).every(patch=>patch.ready===true),'100%仅随战斗首帧就绪发布');
   assert.equal(current!.speed,2);
   host.properties.combatSpeed=2.5;definition.properties.combatSpeed.observer.call(host,2.5);assert.equal(current!.speed,2.5);
   assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');

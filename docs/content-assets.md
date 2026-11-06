@@ -78,6 +78,8 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 
 ## 八关分类资源（2026-11-02）
 
+战斗加载首帧使用八张本项目原创背景 PNG，与 `battle-background.ts` 的关卡战场配色和图案一致，由 `scripts/generate-battle-loading-backgrounds.cjs` 生成；Canvas 建立后改用实时绘制背景，资源完全就绪后显示战斗首帧。
+
 - 分类和中英文词汇来源：本机 `english-kids-site/lib/data.ts`、`lib/words.ts`；选取清单见 `level-word-source.json`。保留11种水果，新增82个词，总计93词。
 - 新图片：OpenMoji 17.0.0 的54种图标（CC BY-SA 4.0）及本项目原创颜色/工具/家居/身体示意图，原SVG保存在 `docs/assets/levels/`。逐项来源见 `level-image-manifest.json`。已查看整张联系表确认图片内容；glass按原词库“玻璃”用玻璃板图，不画饮水杯。
 - 8张封面使用原创底景嵌入对应选词图；含OpenMoji图的合成图沿用CC BY-SA 4.0。水果沿用原CC0苹果，颜色封面原创。

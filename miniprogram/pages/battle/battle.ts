@@ -7,6 +7,7 @@ import { createBattleController } from '../../services/battle';
 import type { BattleView } from '../../services/battle';
 import { FORTRESS_WORDS } from '../../fortress/content';
 import { createSeededRandom, createSessionPlan } from '../../fortress/plans';
+import { battleBackgroundColor, battleBackgroundCover } from '../../fortress/battle-background';
 import type { SessionPlan } from '../../fortress/types';
 import type { ListeningResult } from '../../fortress/listening';
 
@@ -22,7 +23,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { musicVolume: 22, combatSpeed: 1, volumeOpen: false, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { musicVolume: 22, combatSpeed: 1, volumeOpen: false, fromHome: false, loadingCover: battleBackgroundCover(1), loadingColor: battleBackgroundColor(1), coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
@@ -35,6 +36,7 @@ Page({
       const entry = fortressEntryStore.claim(query.entry ?? '');
       if (!entry) { wx.reLaunch({ url: '/pages/home/home' }); return; }
       this.setData({ fromHome: true, preview: true, choiceStarted: true, previewPaused: false,
+        loadingCover: battleBackgroundCover(entry.request.plan.levelId), loadingColor: battleBackgroundColor(entry.request.plan.levelId),
         previewWord: entry.request.plan.waves[0].targetWordId, choiceRequest: entry.request });
       return;
     }

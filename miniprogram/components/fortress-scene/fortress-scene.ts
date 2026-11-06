@@ -1,6 +1,7 @@
 import { createStageInvasion } from '../../fortress/stage-invasion';
 import { dailyCheckin } from '../../services/daily-checkin';
 import { loadLevelAssets } from '../../services/level-assets';
+import { battleAudioPaths, loadBattleAssets } from '../../services/battle-assets';
 import { nextStageRequest } from '../../fortress/continuation';
 import type { StageRequest } from '../../fortress/continuation';
 import { bossSkillOffer, qualitySkillOffer, skillLevels, qualityDescription } from '../../fortress/quality-skills';
@@ -24,6 +25,7 @@ import { createUpgradeChoices } from '../../fortress/upgrade-choice';
 import type { UpgradeOffer } from '../../fortress/upgrade-choice';
 import type { BattleSkillId, SkillLevels } from '../../fortress/types';
 import { CanvasScene } from '../../fortress/canvas-scene';
+import { battleBackgroundColor, battleBackgroundCover } from '../../fortress/battle-background';
 import type { SceneArt } from '../../fortress/canvas-scene';
 import { createPreviewCombat, createPreviewPlan, createPreviewPlanCombat } from '../../fortress/preview';
 import { createSeededRandom } from '../../fortress/plans';
@@ -34,7 +36,7 @@ import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
 interface SkillQuizRequest { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit'; singleAttempt: true; offerId: string }
-interface InstanceState { quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
@@ -49,6 +51,8 @@ Component({
   properties: {
     musicVolume: { type: Number, value: 22, observer(value: number) { const state = instances.get(this); state?.audio?.setVolume(value / 100); state?.victoryAudio?.setVolume(value / 100); state?.defeatAudio?.setVolume(value / 100); } },
     combatSpeed: { type: Number, value: 1, observer(value: number) { instances.get(this)?.scene?.setSpeed?.(value); } },
+    loadingCover: { type: String, value: '' },
+    loadingColor: { type: String, value: '#112c36' },
     opening: { type: Boolean, value: false },
     preview: { type: Boolean, value: false },
     previewRequest: { type: Object, value: null },
@@ -65,7 +69,7 @@ Component({
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
   data: { loadingBackground: '', loadingProgress: 50, skillQuiz: null as SkillQuizRequest | null, skillShowGuide: false, skillQuizIncorrect: false, skillPicksRemaining: 0, reviveOpen: false, reviveBusy: false, reviveError: '', flagStock: 0, flagRevision: 0, flagStockError: false, reviveTargets: [] as {kind:string; id:string; label:string; disabled:boolean}[], soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
-    bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueError: false,
+    bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageCover: '', stageLoadingColor: '',
     skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.refreshSoldierStock(); },
@@ -145,7 +149,8 @@ Component({
       instance.skills?.dispose(); instance.skills = undefined;
       const epoch = ++instance.epoch;
       this.refreshSoldierStock();
-      this.setData({ soldierSummonError: '', loadingBackground: '', loadingProgress: 50, ready: false, error: '', retirement: null, skillOffer: null, skillCards: [], skillSummary: '' });
+      const loadingLevel = (instance.activeRequest ?? this.properties.previewRequest as StageRequest | null)?.plan.levelId ?? 1;
+      this.setData({ soldierSummonError: '', loadingBackground: '', stageCover: this.properties.opening ? battleBackgroundCover(loadingLevel) : '', stageLoadingColor: this.properties.opening ? battleBackgroundColor(loadingLevel) : '', loadingProgress: 50, ready: false, error: '', retirement: null, skillOffer: null, skillCards: [], skillSummary: '' });
       const valid = () => instance.alive && instance.epoch === epoch;
       this.createSelectorQuery().select('#battle-canvas').fields({ node: true, size: true, rect: true }, result => {
         if (!valid()) return;
@@ -206,7 +211,11 @@ Component({
                 this.triggerEvent('retirementcomplete', result);
               },
             },
-            onLoadProgress: percent => { if (valid()) this.setData({ loadingProgress: 50 + Math.floor(percent / 2), ...(percent === 0 ? {loadingBackground: scene.captureFrame()} : {}) }); },
+            onLoadProgress: percent => {
+              if (!valid()) return;
+              const background = percent === 0 ? scene.captureFrame() : '';
+              this.setData({ loadingProgress: Math.min(99, 50 + Math.floor(percent / 2)), ...(background ? { loadingBackground: background } : {}) });
+            },
             onHud: hud => { if (valid()) this.setData({ hud, hpPercent: hud.hp / hud.maxHp * 100 }); },
             onEvents: events => {
               if (!valid()) return;
@@ -246,7 +255,7 @@ Component({
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();
-          void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true }); this.refreshSoldierCount(); this.applyPause(); this.triggerEvent('sceneready'); } });
+          void scene.load().then(ready => { if (valid() && ready) { this.setData({ ready: true, loadingProgress: 100 }); this.refreshSoldierCount(); this.applyPause(); this.triggerEvent('sceneready'); } });
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
@@ -374,15 +383,33 @@ Component({
       const state = instances.get(this);
       if (!state?.alive || !state.visible || this.properties.paused || !this.data.completed || !this.data.rewardSaved || this.data.dropError || this.data.petDropError || !this.data.canContinue || state.preparingStage || state.preparedStage) return;
       state.preparingStage = true; const epoch = state.epoch;
-      this.setData({continueBusy:true, continueError:false});
+      this.setData({continueBusy:true, continueProgress:0, continueError:false});
       try {
         await loadLevelAssets();
         if (!state.alive || state.epoch !== epoch) return;
         const request = state.activeRequest ?? this.properties.previewRequest as StageRequest;
-        state.preparedStage = nextStageRequest(request);
+        const next = nextStageRequest(request);
+        const wordIds = [...new Set([
+          ...getLevel(next.plan.levelId).words.map(word => word.id),
+          ...next.plan.waves.flatMap(wave => [wave.targetWordId, ...wave.spawnPlan.map(monster => monster.wordId)]),
+        ])];
+        await new Promise<void>((resolve, reject) => {
+          let cancel = () => {}, settled = false;
+          state.cancelStageLoad = () => { cancel(); if (!settled) { settled = true; reject(new Error('关卡加载已取消')); } };
+          cancel = loadBattleAssets(openingArt(next.plan.waves[0].targetWordId, wordIds, next.plan.weaponLevel), {
+            onProgress: progress => { if (state.alive && state.epoch === epoch) this.setData({ continueProgress: progress }); },
+            onReady: () => { if (!settled) { settled = true; resolve(); } },
+            onError: () => { if (!settled) { settled = true; reject(new Error('关卡资源加载失败')); } },
+          }, { imagePaths: [battleBackgroundCover(next.plan.levelId)], audioPaths: battleAudioPaths(wordIds) });
+          if (settled) state.cancelStageLoad = undefined;
+        });
+        if (!state.alive || state.epoch !== epoch) return;
+        state.cancelStageLoad = undefined;
+        state.preparedStage = next;
         state.stageCarry = {collection:state.collection ?? Object.freeze({}), ...(state.scene?.snapshot?.pet ? {pet:createBattlePet(state.scene.snapshot.pet)} : {})};
         state.preparingStage = false; this.finishContinuation();
       } catch {
+        state.cancelStageLoad = undefined;
         if (state.alive && state.epoch === epoch) { state.preparingStage = false; this.setData({continueBusy:false,continueError:true}); }
       }
     },
@@ -396,6 +423,7 @@ Component({
     endRun() {
       const state = instances.get(this); if (!state?.alive) return;
       state.alive = false; state.epoch++; state.stageCarry = undefined; state.preparedStage = undefined; state.activeRequest = undefined;
+      state.cancelStageLoad?.(); state.cancelStageLoad = undefined;
       state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.upgradeLevels = []; state.bossRewards = [];
       state.scene?.dispose(); state.scene = undefined; state.pending = undefined;
       state.audio?.dispose(); state.victoryAudio?.dispose(); state.defeatAudio?.dispose(); state.drops?.dispose(); state.petDrops?.dispose(); state.upgrades?.dispose(); state.experience?.dispose(); state.skills?.dispose();

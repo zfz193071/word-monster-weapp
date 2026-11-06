@@ -3,7 +3,8 @@ import type { CheckinView } from '../../services/daily-checkin';
 import { difficultyStore } from '../../services/difficulty-store';
 import { DIFFICULTIES } from '../../fortress/difficulty';
 import type { DifficultyId } from '../../fortress/difficulty';
-import { loadBattleAssets } from '../../services/battle-assets';
+import { battleAudioPaths, loadBattleAssets } from '../../services/battle-assets';
+import { battleBackgroundCover } from '../../fortress/battle-background';
 import { openingArt } from '../../fortress/opening-encounter';
 import { strengthGuide, strengthTarget } from '../../services/strength-guide';
 import type { StrengthTarget } from '../../services/strength-guide';
@@ -260,7 +261,10 @@ Page({
     const valid = () => !this.disposed && this.navigationId === navigationId;
     const fail = () => { if (valid()) this.setData({ opening: false, navigationError: true }); };
     const firstWave = request.plan.waves[0];
-    const levelWordIds = [...new Set(request.plan.waves.flatMap(wave => wave.spawnPlan.map(monster => monster.wordId)))];
+    const levelWordIds = [...new Set([
+      ...(LEVELS.find(level => level.id === request.plan.levelId)?.words.map(word => word.id) ?? []),
+      ...request.plan.waves.flatMap(wave => [wave.targetWordId, ...wave.spawnPlan.map(monster => monster.wordId)]),
+    ])];
     this.cancelBattleLoad = loadBattleAssets(openingArt(firstWave.targetWordId,
       levelWordIds, request.plan.weaponLevel), {
       onProgress: entryProgress => { if (valid()) this.setData({ entryProgress: Math.floor(entryProgress / 2) }); },
@@ -273,6 +277,6 @@ Page({
           fail,
         });
       },
-    });
+    }, { imagePaths: [battleBackgroundCover(request.plan.levelId)], audioPaths: battleAudioPaths(levelWordIds) });
   },
 });

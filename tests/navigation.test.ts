@@ -44,7 +44,8 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
       if (name === '../../services/difficulty-store') return {difficultyStore};
       if (name === '../../fortress/difficulty') return {DIFFICULTIES};
       if (name === '../../fortress/opening-encounter') return {openingArt};
-      if (name === '../../services/battle-assets') return {loadBattleAssets: prepare ?? ((_art:unknown, callbacks:any) => {callbacks.onProgress(100);callbacks.onReady();return ()=>{};})};
+      if (name === '../../services/battle-assets') return {battleAudioPaths: () => [], loadBattleAssets: prepare ?? ((_art:unknown, callbacks:any) => {callbacks.onProgress(100);callbacks.onReady();return ()=>{};})};
+      if (name === '../../fortress/battle-background') return {battleBackgroundCover: (levelId:number) => `/assets/images/battle-backgrounds/level-${levelId}.png`};
       if (name === '../../services/strength-guide') return {strengthGuide,strengthTarget};
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
@@ -153,7 +154,7 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
     runInNewContext(ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
     }).outputText, {
-      exports: {}, require: (name: string) => name === '../../services/fortress-entry' ? { fortressEntryStore: createFortressEntryStore() } : name === '../../services/session' ? { sessionStore } : { createBattleController },
+      exports: {}, require: (name: string) => name === '../../services/fortress-entry' ? { fortressEntryStore: createFortressEntryStore() } : name === '../../services/session' ? { sessionStore } : name === '../../fortress/battle-background' ? { battleBackgroundCover: () => '', battleBackgroundColor: () => '' } : { createBattleController },
       Page: (definition: any) => {
         page = definition;
         page.selectComponent = () => null;

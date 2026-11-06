@@ -10,6 +10,13 @@ const palettes = [
   ['#89b6ca', '#c4dce0', '#e4f3ef', '#648fae'], // lakeside
   ['#b1cbbd', '#dbe5d1', '#f0f4df', '#7b9d98'], // exercise garden
 ] as const;
+export function battleBackgroundColor(levelId = 1): string {
+  return (palettes[levelId - 1] ?? palettes[0])[0];
+}
+export function battleBackgroundCover(levelId = 1): string {
+  const id = Number.isInteger(levelId) && levelId >= 1 && levelId <= palettes.length ? levelId : 1;
+  return `/assets/images/battle-backgrounds/level-${id}.png`;
+}
 export function drawBattleBackground(c: Context, levelId = 1): void {
   const [ground, road, line, accent] = palettes[levelId - 1] ?? palettes[0];
   c.fillStyle = ground; c.fillRect(0, 0, 360, 560);

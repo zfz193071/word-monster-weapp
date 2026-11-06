@@ -17,6 +17,7 @@
     "check:fortress:assets": "node --import tsx scripts/check-fortress.ts --assets"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "miniprogram-api-typings": "5.2.3",
     "tsx": "4.23.15",
     "typescript": "5.9.3"
