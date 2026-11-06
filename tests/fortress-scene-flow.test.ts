@@ -104,6 +104,10 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   assert.ok(updates.filter(patch=>patch.loadingProgress===100).every(patch=>patch.ready===true),'100%仅随战斗首帧就绪发布');
   assert.equal(current!.speed,2);
   host.properties.combatSpeed=2.5;definition.properties.combatSpeed.observer.call(host,2.5);assert.equal(current!.speed,2.5);
+  host.properties.volumeOpen=true;definition.properties.volumeOpen.observer.call(host,true);
+  assert.equal(host.data.volumeFrame,'frame');assert.equal(host.data.inputUnavailable,true);assert.equal(current!.paused,true,'音量窗口覆盖画布时冻结战斗');
+  host.properties.volumeOpen=false;definition.properties.volumeOpen.observer.call(host,false);
+  assert.equal(host.data.volumeFrame,'');assert.equal(host.data.inputUnavailable,false);assert.equal(current!.paused,false,'关闭音量窗口后恢复战斗');
   assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');
   assert.match(readFileSync(new URL('../miniprogram/pages/battle/battle.wxml',import.meta.url),'utf8'),/class="toolbar-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
   const { openingMonsterCount } = await import('../miniprogram/fortress/opening-encounter');

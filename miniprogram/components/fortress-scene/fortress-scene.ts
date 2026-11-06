@@ -51,6 +51,12 @@ Component({
   properties: {
     musicVolume: { type: Number, value: 22, observer(value: number) { const state = instances.get(this); state?.audio?.setVolume(value / 100); state?.victoryAudio?.setVolume(value / 100); state?.defeatAudio?.setVolume(value / 100); } },
     combatSpeed: { type: Number, value: 1, observer(value: number) { instances.get(this)?.scene?.setSpeed?.(value); } },
+    volumeOpen: { type: Boolean, value: false, observer(open: boolean) {
+      const state = instances.get(this);
+      this.setData({ volumeFrame: open ? state?.scene?.captureFrame() ?? '' : '' });
+      this.applyPause();
+      if (!open) this.presentUpgrade();
+    } },
     loadingCover: { type: String, value: '' },
     loadingColor: { type: String, value: '#112c36' },
     opening: { type: Boolean, value: false },
@@ -69,7 +75,7 @@ Component({
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
   data: { loadingBackground: '', loadingProgress: 50, skillQuiz: null as SkillQuizRequest | null, skillShowGuide: false, skillQuizIncorrect: false, skillPicksRemaining: 0, reviveOpen: false, reviveBusy: false, reviveError: '', flagStock: 0, flagRevision: 0, flagStockError: false, reviveTargets: [] as {kind:string; id:string; label:string; disabled:boolean}[], soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
-    bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageCover: '', stageLoadingColor: '',
+    volumeFrame: '', bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageCover: '', stageLoadingColor: '',
     skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.refreshSoldierStock(); },
@@ -259,7 +265,7 @@ Component({
         } catch (error) { if (valid()) this.setData({ error: error instanceof Error ? error.message : '战场初始化失败' }); }
       }).exec();
     },
-    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); state.defeatAudio?.setActive(!unavailable); const paused = unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
+    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible || this.properties.volumeOpen; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); state.defeatAudio?.setActive(!unavailable); const paused = unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
     presentDefeat() {
       const state = instances.get(this);
       if (!this.properties.opening || !state?.alive || !state.scene || state.scene.snapshot?.status !== 'baseDestroyed' || this.data.failed) return;
@@ -276,7 +282,7 @@ Component({
     },
     presentUpgrade() {
       const state = instances.get(this);
-      if (!state?.scene || !state.visible || this.properties.paused || this.data.upgradeOffer || this.data.reviveOpen || this.data.failed || state.scene.snapshot?.status === 'baseDestroyed') return;
+      if (!state?.scene || !state.visible || this.properties.paused || this.properties.volumeOpen || this.data.upgradeOffer || this.data.reviveOpen || this.data.failed || state.scene.snapshot?.status === 'baseDestroyed') return;
       while (state.upgradeLevels?.length) {
         const level = state.upgradeLevels.shift()!;
         const seed = [...`${state.sessionId}:${level}`].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) | 0, 17);
