@@ -22,3 +22,12 @@ test('战斗倍速按钮按四档循环，新开页面恢复默认一倍',()=>{
  for(const expected of [1.5,2,2.5,1,1.5]){host.cycleCombatSpeed();assert.equal(host.data.combatSpeed,expected);}
  assert.equal(definition.data.combatSpeed,1);
 });
+test('战斗音量本局调节有效，返回首页后新开战斗恢复默认22%',()=>{
+ let definition:any;
+ const source=readFileSync(new URL('../miniprogram/pages/battle/battle.ts',import.meta.url),'utf8');
+ runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{exports:{},Page(value:any){definition=value;},require(name:string){return name.endsWith('/battle-background')?{battleBackgroundCover:()=>'',battleBackgroundColor:()=>''}:{};}});
+ const first={...definition,data:{...definition.data},setData(patch:object){Object.assign(this.data,patch);}};
+ first.changeMusicVolume({detail:{value:67}});assert.equal(first.data.musicVolume,67);
+ const next={...definition,data:{...definition.data}};
+ assert.equal(next.data.musicVolume,22);
+});
