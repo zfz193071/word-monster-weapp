@@ -20,6 +20,7 @@ export class CombatRunner {
   private previousTime: number | undefined;
   private remainderMs = 0;
   private paused = false;
+  private speed = 1;
   constructor(initial: CombatState) { this.current = initial; }
   get snapshot(): CombatState | null { return this.current; }
 
@@ -32,9 +33,9 @@ export class CombatRunner {
     if (nowMs < this.previousTime) throw new RangeError('帧时间不能倒退');
     const elapsed = nowMs - this.previousTime;
     this.previousTime = nowMs;
-    const available = this.remainderMs + elapsed;
+    const available = this.remainderMs + elapsed * this.speed;
     const completeSteps = Math.floor(available / COMBAT_STEP_MS);
-    const count = Math.min(completeSteps, MAX_STEPS_PER_FRAME);
+    const count = Math.min(completeSteps, MAX_STEPS_PER_FRAME * this.speed);
     const droppedMs = Math.max(0, completeSteps - count) * COMBAT_STEP_MS;
     this.remainderMs = available % COMBAT_STEP_MS;
     const events: CombatEvent[] = [];
@@ -47,6 +48,10 @@ export class CombatRunner {
     }
     if (this.current.status !== 'fighting') this.remainderMs = 0;
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
+  }
+  setSpeed(value: number): void {
+    if (value !== 1 && value !== 1.5 && value !== 2 && value !== 2.5) throw new RangeError('无效战斗倍率');
+    this.speed = value;
   }
   summonSoldier(id: string, debit: () => boolean): boolean {
     if (!this.current || this.paused) return false;

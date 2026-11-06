@@ -48,6 +48,7 @@ function inventory(collection: SkillCollection) {
 Component({
   properties: {
     musicVolume: { type: Number, value: 22, observer(value: number) { const state = instances.get(this); state?.audio?.setVolume(value / 100); state?.victoryAudio?.setVolume(value / 100); state?.defeatAudio?.setVolume(value / 100); } },
+    combatSpeed: { type: Number, value: 1, observer(value: number) { instances.get(this)?.scene?.setSpeed?.(value); } },
     opening: { type: Boolean, value: false },
     preview: { type: Boolean, value: false },
     previewRequest: { type: Object, value: null },
@@ -241,6 +242,7 @@ Component({
             },
             onError: message => { if (valid()) { this.setData({ error: message, ready: false }); this.applyPause(); } },
           });
+          scene.setSpeed?.(this.properties.combatSpeed ?? 1);
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();

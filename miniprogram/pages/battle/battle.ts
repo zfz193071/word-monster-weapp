@@ -10,6 +10,8 @@ import { createSeededRandom, createSessionPlan } from '../../fortress/plans';
 import type { SessionPlan } from '../../fortress/types';
 import type { ListeningResult } from '../../fortress/listening';
 
+const COMBAT_SPEEDS = [1, 1.5, 2, 2.5] as const;
+
 function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventContext; wordId: string } | undefined {
   const data = event.currentTarget.dataset;
   const revision = Number(data.revision);
@@ -20,7 +22,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { musicVolume: 22, volumeOpen: false, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { musicVolume: 22, combatSpeed: 1, volumeOpen: false, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
@@ -76,6 +78,7 @@ Page({
   },
 
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); },
+  cycleCombatSpeed() { const index = COMBAT_SPEEDS.indexOf(this.data.combatSpeed as typeof COMBAT_SPEEDS[number]); this.setData({ combatSpeed: COMBAT_SPEEDS[(index + 1) % COMBAT_SPEEDS.length] }); },
   openVolume() { this.setData({ volumeOpen: true }); },
   closeVolume() { this.setData({ volumeOpen: false }); },
   noop() {},

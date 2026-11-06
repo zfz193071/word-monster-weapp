@@ -112,6 +112,15 @@ test('面板暂停取消帧与触摸，迟到帧无效，恢复不追赶后台�
   h.frame(30010); assert.equal(h.scene.snapshot!.tick, before!.tick + 1);
   h.scene.dispose(); stale(60000); assert.equal(h.callbacks.size, 0); assert.equal(h.scene.snapshot, null);
 });
+test('Canvas 倍速推进同一战斗时钟，暂停期间不积压战斗帧', async () => {
+  const h=harness();await h.scene.load();h.scene.setSpeed(2.5);
+  h.frame(0);h.frame(100);assert.equal(h.scene.snapshot!.tick,25);
+  h.scene.setPaused(true);h.frame(100000);assert.equal(h.scene.snapshot!.tick,25);
+  h.scene.setPaused(false);h.frame(100000);assert.equal(h.scene.snapshot!.tick,25);
+  h.frame(100020);assert.equal(h.scene.snapshot!.tick,30);
+  h.scene.setSpeed(1);h.frame(100030);assert.equal(h.scene.snapshot!.tick,31);
+  h.scene.dispose();
+});
 
 test('正式模式缺图/未批准/错配几何时不启动模拟，不自动回退占位', async () => {
   const missing = harness(false); assert.equal(await missing.scene.load(), false); assert.equal(missing.callbacks.size, 0); assert.equal(missing.scene.snapshot!.tick, 0); missing.scene.dispose();

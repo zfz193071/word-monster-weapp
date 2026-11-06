@@ -56,6 +56,7 @@ export class CanvasScene {
   private viewport: Viewport;
   private readonly control: HorizontalControl;
   private effectTime = 0;
+  private combatSpeed = 1;
   private coinEffects: { position: Point; amount: number; started: number }[] = [];
   showCoinDrop(position: Point, amount: number): void {
     if (this.disposed || amount <= 0) return;
@@ -215,7 +216,7 @@ export class CanvasScene {
       if (version !== this.frameVersion || this.disposed || this.paused) return;
       this.frameId = undefined;
       try {
-        this.effectTime += this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime));
+        this.effectTime += this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime)) * this.combatSpeed;
         if (this.retirement) {
           const elapsed = this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, now - this.lastFrameTime));
           this.lastFrameTime = now; this.retirement.advance(elapsed);
@@ -247,6 +248,11 @@ export class CanvasScene {
         this.options.onError(error instanceof Error ? error.message : '战场运行失败');
       }
     });
+  }
+  setSpeed(value: number): void {
+    if (this.disposed) return;
+    this.runner.setSpeed(value);
+    this.combatSpeed = value;
   }
   setPaused(paused: boolean): void {
     if (this.disposed || paused === this.paused) return;

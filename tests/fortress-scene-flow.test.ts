@@ -40,10 +40,10 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   let audioClock=0;let timerSequence=0;const timers=new Map<number,{run:()=>void;at:number}>();const voiceEnds:(()=>void)[]=[];
   function advanceAudio(ms:number){const end=audioClock+ms;while(true){const next=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;audioClock=next[1].at;timers.delete(next[0]);next[1].run();}audioClock=end;}
   class FakeScene {
-    snapshot:CombatState; options:any; disposed=false; paused=false;
+    snapshot:CombatState; options:any; disposed=false; paused=false; speed=1;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
     async load(){this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});return true;}
-    dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}showCoinDrop(){}captureFrame(){return 'frame';}
+    dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}setSpeed(value:number){this.speed=value;}showCoinDrop(){}captureFrame(){return 'frame';}
     restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
     applySkills(levels:SkillLevels,collection:quality.SkillCollection){this.snapshot={...this.snapshot,skills:levels,skillCollection:collection};}
@@ -91,12 +91,14 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       return{};
     },
   });
-  host={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan,generation:1}},
+  host={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,combatSpeed:2,previewRequest:{plan,generation:1}},
     setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(){},
     createSelectorQuery(){return{select(){return{fields(_fields:any,callback:Function){return{exec(){callback({node:{},width:360,height:560,left:0});}};}};}};},
   };
   for(const [name,method]of Object.entries(definition.methods))host[name]=(method as Function).bind(host);
   definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();
+  assert.equal(current!.speed,2);
+  host.properties.combatSpeed=2.5;definition.properties.combatSpeed.observer.call(host,2.5);assert.equal(current!.speed,2.5);
   assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');
   assert.match(readFileSync(new URL('../miniprogram/pages/battle/battle.wxml',import.meta.url),'utf8'),/class="toolbar-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
   const { openingMonsterCount } = await import('../miniprogram/fortress/opening-encounter');
@@ -190,7 +192,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     host.nextWave({detail:{context:{...context,sessionId:'stale'},attempts:[{correct:true}]}});assert.equal(host.data.waveRequest,next);
     host.nextWave({detail:{context,attempts:[{correct:true,selectedWordId:target,targetWordId:target,sessionId:context.sessionId,waveId:context.waveId}]}});await Promise.resolve();
     assert.equal(host.data.error,'');assert.equal(host.data.level,1);assert.equal(host.data.experience,0);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
-    assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);assert.equal(current!.snapshot.fallenSoldiers?.length ?? 0,0);
+    assert.equal(current!.speed,2.5,'进入下一关沿用当前倍率');assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);assert.equal(current!.snapshot.fallenSoldiers?.length ?? 0,0);
     assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(host.data.skillInventory.length,Object.keys(carried).length);assert.equal(current!.snapshot.weaponLevel,7);
     assert.equal(current!.snapshot.tick,0);assert.equal(current!.snapshot.elementReadyTick,500);if(current!.snapshot.skills.firepower)assert.equal(current!.snapshot.firepowerUntilTick,qualitySkills.qualityEffects(carried).firepowerTicks);
     if(pet){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.pet?.defeatedPosition,undefined);}assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));

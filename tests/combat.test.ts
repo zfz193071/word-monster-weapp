@@ -247,6 +247,22 @@ test('同一时间戳不重复扣血；卡顿有限补帧，不在后续帧偿�
   assert.throws(() => runner.frame(30109), /不能倒退/);
   assert.throws(() => runner.frame(NaN), /帧时间/);
 });
+test('倍速共用战斗时钟，四档按比例推进且暂停恢复不补帧', () => {
+  for (const speed of [1, 1.5, 2, 2.5]) {
+    const runner = new CombatRunner(initial());
+    runner.setSpeed(speed);
+    runner.frame(0);
+    assert.equal(runner.frame(100).steps, speed * 10);
+    assert.equal(runner.snapshot!.tick, speed * 10);
+    runner.pause();
+    assert.equal(runner.frame(100000).steps, 0);
+    runner.resume(100000, runner.snapshot!.context.generation + 1);
+    assert.equal(runner.frame(100020).steps, speed * 2);
+    runner.dispose();
+  }
+  const runner = new CombatRunner(initial());
+  assert.throws(() => runner.setSpeed(3), RangeError);
+});
 
 test('暂停不消耗移动、射击或基地冷却，恢复仅切代次，销毁释放状态', () => {
   const start = advance(initial(), 13000).state; // arrived, one second before attack
