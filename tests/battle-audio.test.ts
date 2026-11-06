@@ -15,14 +15,14 @@ class Channel {
 const context={sessionId:'audio-run',combatId:'wave1',waveId:'wave1',generation:0};
 const defeat=(id:string,wordId='apple'):CombatEvent=>({type:'monsterDefeated',context,tick:1,monsterId:id,wordId});
 function setup(){
-  const voices:Channel[]=[];const music=new Channel();const hit=new Channel();let drained=0;let time=0;
+  const voices:Channel[]=[];const music=new Channel();const hit=new Channel();const base=new Channel();const coin=new Channel();let drained=0;let time=0;
   const timers=new Map<number,{at:number;run:()=>void}>();let next=0;const callbacks:(()=>void)[]=[];
   const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){drained++;},now:()=>time,
     audio:{createContext(){const c=new Channel();voices.push(c);return c;},schedule(run,delay){
       const id=++next;timers.set(id,{at:time+delay,run});callbacks.push(run);return()=>{timers.delete(id);};
-    }},createMusicContext:()=>music,createHitContext:()=>hit});
+    }},createMusicContext:()=>music,createHitContext:()=>hit,createBaseHitContext:()=>base,createCoinContext:()=>coin});
   controller.setActive(true);
-  return{controller,voices,music,hit,callbacks,timers,get drained(){return drained;},advance(ms:number){
+  return{controller,voices,music,hit,base,coin,callbacks,timers,get drained(){return drained;},advance(ms:number){
     const end=time+ms;
     while(true){const due=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];
       if(!due)break;time=due[1].at;timers.delete(due[0]);due[1].run();
@@ -106,4 +106,19 @@ test('金币短音效合并密集调用，暂停和销毁后不播放',()=>{
  controller.setActive(true);controller.playCoin();controller.playCoin();assert.equal(coin.plays,1);assert.equal(coin.src,'/assets/audio/coin-collect.mp3');
  controller.setActive(false);controller.playCoin();assert.equal(coin.plays,1);
  controller.dispose();assert.equal(coin.destroyed,true);controller.playCoin();assert.equal(coin.plays,1);
+});
+test('战斗音量可即时静音并恢复已创建和后续创建的音效，播词不受影响',()=>{
+ const h=setup();
+ h.controller.handle([{type:'monsterDamaged',context,tick:1,monsterId:'a',hp:7}]);
+ h.controller.setVolume(0);
+ assert.equal(h.music.volume,0);assert.equal(h.hit.volume,0);
+ h.controller.setVolume(.7);
+ assert.ok(h.hit.volume>0);
+ h.controller.setVolume(0);
+ h.controller.handle([{type:'baseDamaged',context,tick:2,attackId:'a:2',monsterId:'a',hp:5}]);
+ h.controller.playCoin();
+ assert.equal(h.base.volume,0);assert.equal(h.coin.volume,0);
+ h.controller.handle([defeat('a')]);h.advance(300);
+ assert.equal(h.voices[0].volume,1);
+ h.controller.dispose();
 });

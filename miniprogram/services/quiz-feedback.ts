@@ -1,5 +1,5 @@
 type Channel = Pick<WechatMiniprogram.InnerAudioContext,
-  'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'play' | 'pause' | 'stop' | 'destroy' | 'onEnded' | 'offEnded' | 'onError' | 'offError'>;
+  'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'play' | 'pause' | 'stop' | 'destroy' | 'onEnded' | 'offEnded' | 'onError' | 'offError'>;
 interface Options {
   createContext?: () => Channel;
   now?: () => number;
@@ -16,6 +16,7 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
   let cancel: (() => void) | undefined;
   let channel: Channel | undefined;
   let stage = 0;
+  let effectVolume = 1;
   let listener: (() => void) | undefined;
   function unlisten(old: Channel) {
     stage++;
@@ -55,6 +56,7 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
         if (channel) {
           unlisten(channel);
           channel.src = '/assets/audio/victory-praise.mp3';
+          channel.volume = 1;
           listen(channel);
           if (active) channel.play();
         }
@@ -78,6 +80,7 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
             channel = (options.createContext ?? (() => wx.createInnerAudioContext()))();
             channel.src = correct ? '/assets/audio/victory-applause.mp3' : '/assets/audio/quiz-encouragement.mp3';
             channel.autoplay = false; channel.loop = false; channel.obeyMuteSwitch = true;
+            channel.volume = correct ? effectVolume : 1;
             listen(channel);
           }
           channel.play();
@@ -85,6 +88,7 @@ export function createQuizFeedback(correct: boolean, onComplete: () => void, opt
       } catch { audioDone = true; release(); }
       progress();
     },
+    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { effectVolume = Math.max(0, Math.min(1, value)); if (channel && correct && !praiseStarted) channel.volume = effectVolume; } },
     dispose() { if (disposed) return; disposed = true; cancel?.(); cancel = undefined; release(); },
   };
 }

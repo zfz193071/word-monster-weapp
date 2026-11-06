@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createVictoryAudio } from '../miniprogram/services/victory-audio';
 class Channel {
- src='';autoplay=false;loop=false;obeyMuteSwitch=true;plays=0;pauses=0;stops=0;destroyed=0;throwOnPause=false;throwOnStop=false;
+ src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;plays=0;pauses=0;stops=0;destroyed=0;throwOnPause=false;throwOnStop=false;
  end=()=>{};error=()=>{};
  onEnded(fn:()=>void){this.end=fn;}offEnded(){this.end=()=>{};}
  onError(fn:()=>void){this.error=fn;}offError(){this.error=()=>{};}
@@ -26,4 +26,13 @@ test('音频平台异常也释放通道，不影响已完成结算或产生重�
  const audio=createVictoryAudio(()=>channel);audio.setActive(true);audio.setActive(false);assert.equal(channel.destroyed,1);
  audio.setActive(true);assert.equal(channel.plays,1);audio.dispose();assert.equal(channel.destroyed,1);
  const failed=new Channel();const second=createVictoryAudio(()=>failed);second.setActive(true);failed.error();assert.equal(failed.destroyed,0);assert.equal(failed.src,'/assets/audio/victory-cheer.mp3');assert.equal(failed.plays,2);failed.error();assert.equal(failed.src,'/assets/audio/victory-praise.mp3');failed.error();assert.equal(failed.destroyed,1);second.setActive(false);second.setActive(true);assert.equal(failed.plays,3);
+});
+test('胜利掌声和欢呼跟随音量，鼓励语保持原音量',()=>{
+ const channel=new Channel();const audio=createVictoryAudio(()=>channel);
+ audio.setVolume(0);audio.setActive(true);assert.equal(channel.volume,0);
+ audio.setVolume(.4);assert.equal(channel.volume,.4);
+ channel.end();assert.equal(channel.volume,.4);
+ channel.end();assert.equal(channel.volume,1);
+ audio.setVolume(0);assert.equal(channel.volume,1);
+ audio.dispose();
 });

@@ -1,6 +1,6 @@
 type Channel = Pick<WechatMiniprogram.InnerAudioContext,
   'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'play' | 'pause' | 'stop' | 'destroy' |
-  'onEnded' | 'offEnded' | 'onError' | 'offError'>;
+  'onEnded' | 'offEnded' | 'onError' | 'offError' | 'volume'>;
 
 // One celebration per completed session: applause, cheering, then the praise voice.
 // Pause the channel itself to resume the current stage in place.
@@ -8,11 +8,13 @@ export function createVictoryAudio(createContext: () => Channel = () => wx.creat
   let channel: Channel | undefined;
   let active = false; let finished = false; let disposed = false;
   let stage: 'applause' | 'cheer' | 'praise' = 'applause';
+  let volume = 1;
   function playStage(next: 'applause' | 'cheer' | 'praise') {
     stage = next;
     try {
       if (!channel) return;
       channel.src = `/assets/audio/victory-${stage}.mp3`;
+      channel.volume = stage === 'praise' ? 1 : volume;
       if (active) channel.play();
     } catch { finished = true; release(); }
   }
@@ -34,11 +36,13 @@ export function createVictoryAudio(createContext: () => Channel = () => wx.creat
         if (!channel) {
           channel = createContext(); channel.autoplay = false; channel.loop = false; channel.obeyMuteSwitch = true;
           channel.src = '/assets/audio/victory-applause.mp3';
+          channel.volume = volume;
           channel.onEnded(ended); channel.onError(failed);
         }
         channel.play();
       } catch { finished = true; release(); }
     },
+    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); if (channel && stage !== 'praise') channel.volume = volume; } },
     dispose() { if (disposed) return; disposed = true; release(); },
   };
 }

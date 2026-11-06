@@ -47,7 +47,7 @@ function inventory(collection: SkillCollection) {
 }
 Component({
   properties: {
-    musicVolume: { type: Number, value: 22, observer(value: number) { instances.get(this)?.audio?.setVolume(value / 100); } },
+    musicVolume: { type: Number, value: 22, observer(value: number) { const state = instances.get(this); state?.audio?.setVolume(value / 100); state?.victoryAudio?.setVolume(value / 100); state?.defeatAudio?.setVolume(value / 100); } },
     opening: { type: Boolean, value: false },
     preview: { type: Boolean, value: false },
     previewRequest: { type: Object, value: null },
@@ -256,7 +256,7 @@ Component({
       state.audio?.setActive(false); state.upgradeLevels = []; state.bossRewards = []; state.awaitingWaveEnd = false;
       state.upgrades?.dispose(); state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection);
       this.setData({ reviveOpen:false, reviveTargets:[], failed: true, canContinue: false, continueBusy: false, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, frozenFrame: state.scene.captureFrame() });
-      state.defeatAudio = createDefeatAudio(); this.applyPause();
+      state.defeatAudio = createDefeatAudio(); state.defeatAudio.setVolume?.(this.properties.musicVolume / 100); this.applyPause();
     },
     becomeStronger() {
       const state = instances.get(this);
@@ -345,7 +345,7 @@ Component({
       this.setData({ frozenFrame: state.scene.captureFrame(), waveNumber:OPENING_WAVE_COUNT, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, completed: true, canContinue: (request.plan.levelId ?? 1) < 8, upgradeSummary: this.data.upgradeSummary });
       if (request.plan.levelId === 8) { state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection); state.upgrades?.dispose(); this.setData({skillInventory:[]}); }
       this.applyPause(); this.claimVictoryReward();
-      state.victoryAudio?.dispose(); state.victoryAudio = createVictoryAudio(); state.victoryAudio.setActive(state.visible && !this.properties.paused);
+      state.victoryAudio?.dispose(); state.victoryAudio = createVictoryAudio(); state.victoryAudio.setVolume?.(this.properties.musicVolume / 100); state.victoryAudio.setActive(state.visible && !this.properties.paused);
     },
     nextWave(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
       const state = instances.get(this); const request = this.data.waveRequest;

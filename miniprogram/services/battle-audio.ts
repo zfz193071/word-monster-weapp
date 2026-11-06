@@ -40,7 +40,13 @@ export function createBattleAudio(options: {
   const view = (): BattleAudioView => ({
     speakingWord: BATTLE_WORDS.find(word => word.id === (current ?? pending)?.wordId)?.text ?? '', error });
   const publish = () => { if (!disposed) options.onChange(view()); };
-  function mix() { music.setVolume(busy() ? volume * .2 : volume); }
+  const effectVolume = (level: number) => Math.min(1, volume / .22 * level);
+  function mix() {
+    music.setVolume(busy() ? volume * .2 : volume);
+    if (hit) hit.volume = effectVolume(busy() ? .10 : .35);
+    if (baseHit) baseHit.volume = effectVolume(busy() ? .12 : .4);
+    if (coin) coin.volume = effectVolume(busy() ? .08 : .25);
+  }
   function cancelTimer() { timerRevision++; cancelSettle?.(); cancelSettle = undefined; }
   function settle() {
     cancelTimer();
@@ -80,7 +86,7 @@ export function createBattleAudio(options: {
         hit.autoplay = false; hit.loop = false; hit.obeyMuteSwitch = true; hit.src = '/assets/audio/battle-hit.mp3';
         hit.onError(() => undefined);
       }
-      hit.volume = busy() ? .10 : .35;
+      hit.volume = effectVolume(busy() ? .10 : .35);
       hit.stop(); hit.play();
     } catch { /* A missing effect must not stop combat or word playback. */ }
   }
@@ -92,7 +98,7 @@ export function createBattleAudio(options: {
         baseHit.autoplay = false; baseHit.loop = false; baseHit.obeyMuteSwitch = true;
         baseHit.src = '/assets/audio/base-hit.mp3'; baseHit.onError(() => undefined);
       }
-      baseHit.volume = busy() ? .12 : .4;
+      baseHit.volume = effectVolume(busy() ? .12 : .4);
       baseHit.stop(); baseHit.play();
     } catch { /* Cosmetic effects cannot interrupt combat. */ }
   }
@@ -107,7 +113,7 @@ export function createBattleAudio(options: {
           coin.autoplay = false; coin.loop = false; coin.obeyMuteSwitch = true;
           coin.src = '/assets/audio/coin-collect.mp3'; coin.onError(() => undefined);
         }
-        coin.volume = busy() ? .08 : .25;
+        coin.volume = effectVolume(busy() ? .08 : .25);
         coin.stop(); coin.play();
       } catch { /* Collection is already saved; cosmetic audio cannot undo it. */ }
     },

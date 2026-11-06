@@ -8,6 +8,7 @@ const instances = new WeakMap<object, Instance>();
 Component({
   properties: {
     request: { type: Object, value: null, observer() { if (instances.get(this)?.ready) this.mount(); } },
+    musicVolume: { type: Number, value: 22, observer(value: number) { instances.get(this)?.feedback?.setVolume(value / 100); } },
     paused: { type: Boolean, value: false, observer() { this.applyPause(); } },
   },
   data: { view: null as ListeningView | null, error: '' },
@@ -39,6 +40,7 @@ Component({
               state.feedback = createQuizFeedback(view.correct === true, () => {
                 if (valid() && state.visible && !this.properties.paused && state.controller) state.controller.continueQuiz(state.controller.view.token);
               });
+              state.feedback.setVolume(this.properties.musicVolume / 100);
             }
             state.feedback?.setActive(!view.paused && state.visible && !this.properties.paused);
           },

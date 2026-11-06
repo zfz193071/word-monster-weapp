@@ -20,7 +20,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { musicVolume: 22, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { musicVolume: 22, volumeOpen: false, fromHome: false, coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   session: undefined as GameState | undefined,
   controller: undefined as ReturnType<typeof createBattleController> | undefined,
@@ -48,7 +48,7 @@ Page({
 
   onReady() { this.controller?.start(); },
   onShow() { this.controller?.resume(); },
-  onHide() { this.controller?.pause(); },
+  onHide() { if (this.data.volumeOpen) this.setData({ volumeOpen: false }); this.controller?.pause(); },
 
   choose(event: WechatMiniprogram.BaseEvent) {
     const target = eventTarget(event);
@@ -76,6 +76,9 @@ Page({
   },
 
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); },
+  openVolume() { this.setData({ volumeOpen: true }); },
+  closeVolume() { this.setData({ volumeOpen: false }); },
+  noop() {},
   updateCoinBalance(event: WechatMiniprogram.CustomEvent<{ balance: number }>) { const balance = event.detail.balance; if (Number.isSafeInteger(balance) && balance >= 0) this.setData({ coinBalance: balance }); },
   becomingStronger: false,
   becomeStronger() {
@@ -84,7 +87,7 @@ Page({
     this.becomingStronger = true; strengthGuide.request();
     wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/home/home', fail: () => { this.becomingStronger = false; } }) });
   },
-  returnHome() { this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
+  returnHome() { this.closeVolume(); this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {
     const wordId = event.currentTarget.dataset.wordId;

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createQuizFeedback } from '../miniprogram/services/quiz-feedback';
 class Channel {
- src='';autoplay=false;loop=false;obeyMuteSwitch=true;plays=0;pauses=0;destroyed=0;
+ src='';autoplay=false;loop=false;obeyMuteSwitch=true;volume=1;plays=0;pauses=0;destroyed=0;
  end=()=>{};error=()=>{};
  onEnded(fn:()=>void){this.end=fn;}offEnded(){this.end=()=>{};}
  onError(fn:()=>void){this.error=fn;}offError(){this.error=()=>{};}
@@ -37,4 +37,12 @@ test('音频失败仍能进入技能选择',()=>{
 
 test('掌声后女声未结束不提前进入技能选择，后台暂停后续播报',()=>{
  const h=setup();h.feedback.setActive(true);h.channel.end();h.tick(3200);assert.equal(h.completed,0);h.feedback.setActive(false);h.tick(20000);assert.equal(h.completed,0);h.feedback.setActive(true);h.channel.end();assert.equal(h.completed,1);
+});
+test('掌声随战斗音量静音和恢复，女声保持原音量',()=>{
+ const h=setup();h.feedback.setVolume(0);h.feedback.setActive(true);
+ assert.equal(h.channel.volume,0);
+ h.feedback.setVolume(.7);assert.equal(h.channel.volume,.7);
+ h.channel.end();assert.equal(h.channel.volume,1);
+ h.feedback.setVolume(0);assert.equal(h.channel.volume,1);
+ h.feedback.dispose();
 });

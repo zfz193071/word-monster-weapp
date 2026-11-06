@@ -15,7 +15,7 @@
   </view>
   <view wx:if="{{bossNotice && !failed}}" class="boss-notice {{goldenLoot ? 'golden-loot' : ''}}" aria-live="polite"><text wx:if="{{goldenLoot}}" class="loot-star">★</text><text>{{bossNotice}}</text></view>
   <view wx:if="{{petReward}}" class="pet-reward" aria-live="polite"><button wx:if="{{petDropError}}" bindtap="retryPetDrops" disabled="{{inputUnavailable}}">{{petReward}}</button><text wx:else>{{petReward}}</text></view>
-  <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>
+  <view wx:if="{{waveRequest}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="wave-choice" request="{{waveRequest}}" music-volume="{{musicVolume}}" paused="{{paused}}" bindstartcombat="nextWave" /></view></view>
   <view wx:if="{{completed}}" class="victory-overlay" aria-label="挑战成功，达到20级，完成19波挑战">
     <view class="victory-glow" />
     <view class="fireworks" aria-hidden="true"><view wx:for="{{fireworks}}" wx:key="id" wx:for-item="burst" class="firework" style="left: {{burst.x}}%; top: {{burst.y}}%;"><view wx:for="{{fireworkRays}}" wx:key="id" class="firework-ray" style="transform: rotate({{item.angle}}deg)"><view class="firework-spark" style="background: {{item.color}}; box-shadow: 0 0 12rpx {{item.color}}; animation-delay: {{burst.delay}}ms" /></view></view></view>
@@ -31,7 +31,7 @@
       <button class="victory-home" bindtap="returnHome">返回小屋</button>
     </view>
   </view>
-  <view wx:if="{{skillQuiz}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="skill-quiz" request="{{skillQuiz}}" paused="{{inputUnavailable || !!error}}" bindstartcombat="finishSkillQuiz" /></view></view>
+  <view wx:if="{{skillQuiz}}" class="wave-modal"><view class="wave-dialog"><fortress-choice class="skill-quiz" request="{{skillQuiz}}" music-volume="{{musicVolume}}" paused="{{inputUnavailable || !!error}}" bindstartcombat="finishSkillQuiz" /></view></view>
   <skill-choice wx:if="{{!skillQuiz}}" class="upgrade-choice" remaining="{{skillPicksRemaining}}" quiz-incorrect="{{skillQuizIncorrect}}" offer="{{upgradeOffer}}" show-guide="{{skillShowGuide}}" disabled="{{inputUnavailable || !!error}}" bindselectskill="chooseUpgrade" />
   <view wx:if="{{dropError}}" class="drop-error"><button disabled="{{inputUnavailable}}" bindtap="retryDrops">掉落金币未到账，点击重试</button></view>
   <view wx:if="{{voiceError && !upgradeOffer}}" class="voice-status"><button bindtap="retryVoice">重试发音</button></view>
