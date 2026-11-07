@@ -22,6 +22,8 @@ V2 存储契约使用 `mode=fortress`、`schemaVersion=2`、`contentVersion=2` �
 
 ## 安装与检查
 
+发布操作见 [小程序发布说明](docs/release.md)。一键检查并上传开发版本：`npm run release:upload -- --version 1.0.0 --desc "首次发布"`；仅本地检查：`npm run release:check`。上传后需在微信公众平台提交审核并发布。
+
 使用 Node.js 22 或以上版本，在仓库根目录执行：
 
 ```sh

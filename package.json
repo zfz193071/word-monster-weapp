@@ -7,6 +7,8 @@
     "node": ">=22"
   },
   "scripts": {
+    "release:upload": "node scripts/release-upload.mjs",
+    "release:check": "node scripts/release-upload.mjs --check-only",
     "typecheck": "tsc --noEmit",
     "check:project": "node scripts/check-project.mjs",
     "check": "npm run typecheck && npm run check:project && npm run check:content && npm run check:fortress",
