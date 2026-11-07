@@ -124,12 +124,30 @@ async function selectWord(home) {
     }
     report.finalSpeed = (await bounded(page.data(), 'final speed')).combatSpeed;
     assert.equal(report.intervals.length, 4);
+    await bounded((await findElement(page, '.battle-toolbar > button', 'return button')).tap(), 'return home');
+    for (let attempt = 0; attempt < 60; attempt++) {
+      const current = await bounded(mini.currentPage(), 'return route');
+      if (current?.path === 'pages/home/home') {
+        const state = await bounded(current.data(), 'returned home state');
+        if (!state.opening && state.request === null && state.entryProgress === 0) {
+          report.returnedHome = true;
+          break;
+        }
+      }
+      await wait(100);
+    }
+    assert.equal(report.returnedHome, true, 'Home route and entry state did not reset');
     report.passed = true;
   } catch (error) {
     report.passed = false; report.error = error.stack || String(error); process.exitCode = 1; console.error(report.error);
   } finally {
     if (mini) {
-      try { await bounded(mini.reLaunch('/pages/home/home'), 'return home', 6000); report.returnedHome = true; } catch {}
+      if (!report.returnedHome) {
+        try {
+          await bounded(mini.reLaunch('/pages/home/home'), 'cleanup home', 6000);
+          report.cleanupHome = (await bounded(mini.currentPage(), 'cleanup route')).path === 'pages/home/home';
+        } catch (error) { report.cleanupError = String(error); }
+      }
       try { await bounded(mini.disconnect(), 'disconnect', 3000); } catch {}
     }
     writeFileSync(join(output, 'report.json'), JSON.stringify(report, null, 2));
