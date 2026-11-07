@@ -5,11 +5,12 @@ const { mkdirSync, writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 const automator = require(process.env.WM_AUTOMATOR_MODULE || 'miniprogram-automator');
 const { answerSkillQuiz } = require('./qa-skill-quiz.cjs');
+const { sampleWindows } = require('./qa-speed-sampling.cjs');
 
 const output = process.env.WM_QA_OUTPUT || '/private/tmp/wm-speed-qa';
 mkdirSync(output, { recursive: true });
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-const report = { intervals: [], note: '单次自然战斗；记录不同倍率的经验/波次/HUD变化，不代表四档平衡或真机帧率' };
+const report = { intervals: [], note: '单次自然战斗；observedWindowMs仅计入两端未观察到暂停的等待窗口，不是精确战斗时间。读状态及处理答题的耗时不计入，短暂暂停可能漏采；经验差不用于验证倍率比例，不代表四档平衡或真机帧率。' };
 let mini;
 async function bounded(promise, label, ms = 15000) {
   let timer;
@@ -27,14 +28,16 @@ async function findElement(page, selector, label) {
 async function resolvePrompts(scene) {
   let state = await bounded(scene.data(), 'combat state');
   if (state.skillQuiz) {
-    await answerSkillQuiz(scene, true);
     for (let i = 0; i < 100; i++) {
+      await bounded(answerSkillQuiz(scene, true), 'answer skill quiz');
       await wait(100);
       state = await bounded(scene.data(), 'quiz feedback');
-      if (!state.skillQuiz && state.upgradeOffer) break;
+      if (!state.skillQuiz) break;
     }
+    assert(!state.skillQuiz, 'Skill quiz did not finish');
   }
   for (let i = 0; i < 3 && state.upgradeOffer; i++) {
+    const offerId = state.upgradeOffer.id;
     const offered = new Set(state.upgradeOffer.cards.map(card => card.id));
     let panel;
     for (let poll = 0; poll < 120; poll++) {
@@ -56,9 +59,11 @@ async function resolvePrompts(scene) {
     for (let poll = 0; poll < 80; poll++) {
       await wait(100);
       state = await bounded(scene.data(), 'post-skill state');
-      if (!state.upgradeOffer) break;
+      if (!state.upgradeOffer || state.upgradeOffer.id !== offerId) break;
     }
+    assert(!state.upgradeOffer || state.upgradeOffer.id !== offerId, 'Skill selection did not advance');
   }
+  assert(!state.skillQuiz && !state.upgradeOffer, 'Pending reward was not resolved');
   return state;
 }
 async function selectWord(home) {
@@ -98,29 +103,23 @@ async function selectWord(home) {
     assert.equal((await bounded(page.data(), 'initial speed')).combatSpeed, 1);
     for (const speed of [1, 1.5, 2, 2.5]) {
       let currentSpeed = (await bounded(page.data(), 'speed state')).combatSpeed;
-      while (currentSpeed !== speed) {
+      for (let attempts = 0; currentSpeed !== speed && attempts < 4; attempts++) {
         await bounded((await findElement(page, '.speed-trigger', 'speed button')).tap(), 'cycle speed');
         await wait(200);
         currentSpeed = (await bounded(page.data(), 'speed state')).combatSpeed;
       }
-      const before = await resolvePrompts(scene);
-      const start = Date.now();
-      const durationMs = 8000;
-      let activeMs = 0;
-      while (activeMs < durationMs) {
-        const waitStarted = Date.now();
-        await wait(500);
-        activeMs += Date.now() - waitStarted;
-        const readStarted = Date.now();
-        const state = await resolvePrompts(scene);
-        activeMs = Math.max(0, activeMs - (Date.now() - readStarted));
-        if (state.failed || state.completed) break;
-      }
-      const after = await bounded(scene.data(), 'interval result');
-      const item = { speed, wallMs: Date.now() - start, activeMs: Math.round(activeMs), startXp: before.experience, endXp: after.experience,
+      assert.equal(currentSpeed, speed, 'Speed button did not reach target');
+      const sample = await sampleWindows({
+        read: () => bounded(scene.data(), 'sample state'),
+        resolvePrompts: () => resolvePrompts(scene), wait,
+      });
+      const { before, after } = sample;
+      const item = { speed, wallMs: Math.round(sample.wallMs), observedWindowMs: Math.round(sample.observedWindowMs),
+        excludedWindows: sample.excludedWindows, complete: sample.complete, startXp: before.experience, endXp: after.experience,
         xpDelta: after.experience - before.experience, startWave: before.waveNumber, endWave: after.waveNumber,
         startHp: before.hud.hp, endHp: after.hud.hp };
       report.intervals.push(item);
+      assert(sample.complete, 'Battle ended before the sampling window completed');
       await bounded(mini.screenshot({ path: join(output, `${String(speed).replace('.', '_')}x.png`) }), 'speed screenshot');
     }
     report.finalSpeed = (await bounded(page.data(), 'final speed')).combatSpeed;
