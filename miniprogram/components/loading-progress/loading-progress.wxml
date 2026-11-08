@@ -1,5 +1,15 @@
-<view class="progress-ring" role="progressbar" aria-label="{{percent}}%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{percent}}">
-  <view class="half right"><view class="fill" style="transform: rotate({{rightDegrees}}deg)"></view></view>
-  <view class="half left"><view class="fill" style="transform: rotate({{leftDegrees}}deg)"></view></view>
-  <view class="progress-center"><text>{{percent}}%</text></view>
+<view class="loading-chase" role="progressbar" aria-label="战场准备 {{percent}}%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{percent}}">
+  <view class="chase-scene" aria-hidden="true">
+    <view class="speed-line line-one"></view><view class="speed-line line-two"></view>
+    <view class="runner pet"><image class="step-first" src="/assets/images/loading-chase/fox.png" mode="aspectFit" /><image class="step-second" src="/assets/images/loading-chase/fox-stride.png" mode="aspectFit" /></view>
+    <view class="runner hero"><image class="step-first" src="/assets/images/loading-chase/hero.png" mode="aspectFit" /><image class="step-second" src="/assets/images/loading-chase/hero-stride.png" mode="aspectFit" /><view class="muzzle">✦</view></view>
+    <view class="bullet bullet-one"></view><view class="bullet bullet-two"></view>
+    <view class="magic magic-one"></view><view class="magic magic-two"></view>
+    <view class="runner zombie"><image class="step-first" src="/assets/images/loading-chase/zombie.png" mode="aspectFit" /><image class="step-second" src="/assets/images/loading-chase/zombie-stride.png" mode="aspectFit" /><view class="tear tear-one"></view><view class="tear tear-two"></view></view>
+    <view class="dust dust-one"></view><view class="dust dust-two"></view>
+    <view class="chase-ground"></view>
+  </view>
+  <view class="progress-track"><view class="progress-fill" style="width: {{percent}}%"></view></view>
+  <view class="loading-caption"><text>正在集结，准备开战</text><text class="percent">{{percent}}%</text></view>
+  <text class="loading-tip">追上僵尸！狐狸的魔法已就位</text>
 </view>

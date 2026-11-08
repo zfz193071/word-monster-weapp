@@ -14,7 +14,7 @@ test('失败只出现我要变强，音效一次、暂停恢复和退出释放�
  class Scene {
   snapshot:any;options:any;paused=false;
   constructor(_node:any,options:any){this.options=options;this.snapshot=options.initial;scene=this;}
-  async load(){return true;}setPaused(value:boolean){this.paused=value;}captureFrame(){return 'failed-frame';}dispose(){}applyPet(){}applySkills(skills:any,skillCollection:any){this.snapshot={...this.snapshot,skills,skillCollection};}
+  async present(){return true;}async load(){return true;}setPaused(value:boolean){this.paused=value;}captureFrame(){return 'failed-frame';}dispose(){}applyPet(){}applySkills(skills:any,skillCollection:any){this.snapshot={...this.snapshot,skills,skillCollection};}
  }
  runInNewContext(ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
   exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},
@@ -27,9 +27,9 @@ test('失败只出现我要变强，音效一次、暂停恢复和退出释放�
    return realRequire(name);
   }
  });
- const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('defeat',createSeededRandom(1)),generation:1}},setData(patch:any){Object.assign(this.data,patch);},triggerEvent(name:string){events.push(name);},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
+ const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('defeat',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(name:string){events.push(name);},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
  for(const [key,fn]of Object.entries(definition.methods))host[key]=(fn as Function).bind(host);
- definition.lifetimes.attached.call(host);host.mount();await Promise.resolve();
+ definition.lifetimes.attached.call(host);host.mount();await new Promise(resolve => setImmediate(resolve));
  scene.snapshot={...scene.snapshot,status:'baseDestroyed',base:{hp:0,maxHp:1000}};
  scene.options.onEvents([{type:'baseDestroyed',context:scene.snapshot.context,tick:1}]);
  assert.equal(host.data.failed,true);assert.equal(host.data.frozenFrame,'failed-frame');assert.equal(scene.paused,true);assert.equal(audioCount,1);assert.equal(audioActive,true);

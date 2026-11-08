@@ -99,6 +99,35 @@ export class CanvasScene {
   captureFrame(): string {
     try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
   }
+  private cancelPresentation?: () => void;
+  // Decoding and drawImage only submit work. Keep the loading cover until a
+  // complete frame has crossed the Canvas presentation boundary.
+  present(): Promise<boolean> {
+    this.cancelPresentation?.();
+    if (!this.ready || this.disposed) return Promise.resolve(false);
+    return new Promise(resolve => {
+      let frame: number | undefined;
+      const finish = (ready: boolean) => {
+        clearTimeout(timeout);
+        if (frame !== undefined) this.canvas.cancelAnimationFrame(frame);
+        this.cancelPresentation = undefined;
+        resolve(ready);
+      };
+      this.cancelPresentation = () => finish(false);
+      const timeout = setTimeout(() => {
+        finish(false);
+        this.options.onError('战场画面呈现超时，请重试');
+      }, 10000);
+      frame = this.canvas.requestAnimationFrame(() => {
+        try {
+          this.draw(this.runner.snapshot!);
+          frame = this.canvas.requestAnimationFrame(() => finish(true));
+        } catch {
+          finish(false); this.options.onError('战场画面绘制失败，请重试');
+        }
+      });
+    });
+  }
   applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   summonSoldier(id: string, debit: () => boolean): boolean {
@@ -271,7 +300,7 @@ export class CanvasScene {
   private acceptsInput(): boolean { return this.ready && !this.paused && !this.disposed && !this.runner.snapshot?.automatic && this.runner.snapshot?.status === 'fighting'; }
   dispose(): void {
     if (this.disposed) return;
-    this.setPaused(true); this.disposed = true; this.loadVersion++;
+    this.cancelPresentation?.(); this.setPaused(true); this.disposed = true; this.loadVersion++;
     this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
   }
   private drawBackground(): void {

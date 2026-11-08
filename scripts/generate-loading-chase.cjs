@@ -1,0 +1,19 @@
+// Original vector artwork for the loading scene; rasterized for WeChat images.
+const { Resvg } = require('@resvg/resvg-js');
+const { mkdirSync, writeFileSync } = require('node:fs');
+const dir = 'miniprogram/assets/images/loading-chase';
+mkdirSync(dir, { recursive: true });
+const art = {
+  hero: `<path fill="#263a3f" d="M54 134l-20 40 22 8 26-38 19 31 25-8-20-49z"/><path fill="#4f6662" d="M30 166l-9 18 38 2 2-13m41-7 3 18 36-1-15-17"/><path fill="#62836c" d="M56 78q-25 18-17 62l68 6 6-58z"/><path fill="#354b47" d="M53 93l-8 28 57 9 3-27z"/><path fill="#edc092" d="M53 40q-6 47 27 52 30 2 36-37l-14-26z"/><path fill="#d9a44e" d="M45 51l-7-23 21 5L65 9l19 16 26-8-3 20 16 8-21 17-10-14-24 9z"/><path fill="#283c40" d="M88 59l16-4-3 9-13 2"/><path fill="none" d="M98 76l12-2"/><path fill="#edc092" d="M80 94l24 15 29-9 8 12-39 16-32-17"/><path fill="#273b43" d="M91 88l12-14 39 7 1 11 28 0v10l-30 2-20-3-2 23-13-2-1-20-24-1z"/><path stroke="#a6c1c0" d="M108 85h26m8 11h24"/><path fill="#8ca49c" d="M45 83l17 9-12 15-13-12z"/>`,
+  fox: `<path fill="#81becb" d="M72 130Q8 139 14 80q22 22 50 17z"/><path fill="#fff2d2" d="M14 80q12 11 23 14l-3 22-17-9z"/><path fill="#75afc3" d="M65 111q-17 37 12 46l35-7 10-35z"/><path fill="#fff2d2" d="M81 116q-10 30 12 33 20-9 13-32"/><path fill="#536c8a" d="M67 146l-13 21 21 4 16-19m16-6 9 21 23-2-18-21"/><path fill="#81becb" d="M56 82L51 30l31 26 29-4 28-25-2 56q14 29-29 41-52-3-52-42z"/><path fill="#e9b3b6" d="M59 48l4 27 13-13m42 0 13-18-2 30"/><path fill="#fff2d2" d="M62 91l28 7 37-10-9 23-28 7z"/><path stroke="#294353" stroke-width="6" d="M83 83l7 3m24-5 7-3"/><path fill="#294353" d="M97 98l11-1-5 7z"/><path stroke="#f5cf70" stroke-width="8" d="M79 120l35-2"/><path fill="#81becb" d="M113 124l27-19 8 11-22 25z"/><path fill="#fff0ac" d="M145 81l6 14 15 5-15 5-6 15-5-15-14-5 14-5z"/>`,
+  zombie: `<path fill="#65767a" d="M74 136l-13 36 23 5 14-29 17 21 24-11-25-34z"/><path fill="#34464c" d="M57 166l-6 19h32l5-13m28-13 16 18 23-10-17-17"/><path fill="#a1a957" d="M65 78l-16 52 18-4 10 18 51-15-10-44z"/><path fill="#8cb5af" d="M83 97q-28 39-8 53 36 17 54-13l-9-36z"/><path fill="#b7d5bd" d="M82 117q-14 25 17 28 22-3 19-18z"/><path fill="#8cb5af" d="M58 45q-9 51 33 58 40 1 47-36l-22-33z"/><path fill="#68523d" d="M48 48l13-15-1-18 34 8 24-9 15 26 14 13-39-7-20 13z"/><path fill="#fff0c8" d="M59 91l8 13 11-7 9 13 13-8 10 6 11-15"/><path stroke-width="5" fill="none" d="M77 62l11 6m22-5 12-7"/><path fill="#283e47" d="M102 84q13-14 24 0l-9 12z"/><path fill="#fff5df" d="M108 81l11-1-2 6-7-1z"/><path fill="#8cb5af" d="M68 107L40 87l-12 7 30 32m62-18 23-9 10 10-28 17"/><path stroke="#a7e9ff" stroke-width="5" fill="none" d="M79 72Q66 81 50 70m62 1q13 5 27-7"/>`
+};
+const stride = {
+ hero: art.hero.replace('M54 134l-20 40 22 8 26-38 19 31 25-8-20-49z', 'M54 134l12 42 24-3-9-32 40 12 12-19-33-12z').replace('M30 166l-9 18 38 2 2-13m41-7 3 18 36-1-15-17', 'M65 169l-1 18 37-4-12-15m31-25 16 17 27-13-25-10'),
+ fox: art.fox.replace('M67 146l-13 21 21 4 16-19m16-6 9 21 23-2-18-21', 'M67 146l9 24 21-3-14-21m24 0-7 21 22 2 4-23'),
+ zombie: art.zombie.replace('M74 136l-13 36 23 5 14-29 17 21 24-11-25-34z', 'M74 136l16 37 24-7-16-25 28 6 12-19-29-3z').replace('M57 166l-6 19h32l5-13m28-13 16 18 23-10-17-17', 'M90 164l-1 21 32-4-9-17m13-27 12 18 28-7-26-16'),
+};
+for (const [name, body] of Object.entries({...art, ...Object.fromEntries(Object.entries(stride).map(([name, body]) => [`${name}-stride`, body]))})) {
+ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="200" viewBox="0 0 180 200"><g stroke="#293e40" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">${body}</g></svg>`;
+ writeFileSync(`${dir}/${name}.png`, new Resvg(svg, { font: { loadSystemFonts: false }, fitTo: { mode: 'width', value: 360 } }).render().asPng());
+}

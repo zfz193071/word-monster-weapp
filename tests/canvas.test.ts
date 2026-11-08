@@ -305,3 +305,18 @@ test('八关加载图片前先绘制本关背景，背景与加载后的战场�
     h.scene.dispose();
   }
 });
+
+test('入场必须等待完整画面跨过呈现帧，取消入场不能继续开战', async () => {
+  const h = harness(false, artFixture());
+  const loading = h.scene.load();
+  for (const image of h.images) image.onload();
+  await loading;
+  h.scene.setPaused(true);
+  let shown = false;
+  const presenting = h.scene.present().then(value => { shown = value; return value; });
+  await Promise.resolve(); assert.equal(shown, false);
+  h.frame(0); await Promise.resolve(); assert.equal(shown, false);
+  h.frame(16); assert.equal(await presenting, true);
+  const cancelled = h.scene.present(); h.scene.dispose();
+  assert.equal(await cancelled, false);
+});

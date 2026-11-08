@@ -22,7 +22,7 @@ test('复活面板暂停、取消、后台拦截、保存失败和重复点击�
     runner:CombatRunner;options:any;disposed=false;
     constructor(_node:unknown,options:any){this.options=options;this.runner=new CombatRunner(options.initial);current=this;}
     get snapshot(){return this.runner.snapshot;}
-    async load(){this.options.onHud({hp:this.snapshot!.base.hp,maxHp:this.snapshot!.base.maxHp,status:this.snapshot!.status});return true;}
+    async present(){return true;}async load(){this.options.onHud({hp:this.snapshot!.base.hp,maxHp:this.snapshot!.base.maxHp,status:this.snapshot!.status});return true;}
     setPaused(paused:boolean){if(paused)this.runner.pause();else if(this.snapshot)this.runner.resume(0,this.snapshot.context.generation+1);}
     revive(kind:string,id:string,debit:()=>boolean){return this.runner.revive(kind,id,debit);}
     summonSoldier(id:string,debit:()=>boolean){return this.runner.summonSoldier(id,debit);}
@@ -41,9 +41,9 @@ test('复活面板暂停、取消、后台拦截、保存失败和重复点击�
     },
   });
   async function mount(){
-    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any){Object.assign(this.data,patch);},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
+    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
     for(const [key,fn]of Object.entries(definition.methods))host[key]=(fn as Function).bind(host);
-    definition.lifetimes.attached.call(host);host.mount();await Promise.resolve();return host;
+    definition.lifetimes.attached.call(host);host.mount();await new Promise(resolve => setImmediate(resolve));return host;
   }
   const host=await mount();
   host.openRevive();assert.equal(host.data.reviveOpen,false,'没有死亡目标不开面板');

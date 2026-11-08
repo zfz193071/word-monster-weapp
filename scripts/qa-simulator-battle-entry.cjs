@@ -48,6 +48,7 @@ async function selectCorrectWord(home) {
     await wait(700);
     await bounded((await bounded(home.$('.start-button'), 'start button')).tap(), 'start battle');
     report.word = await selectCorrectWord(home);
+    let capturedLoading = false;
 
     let page;
     let scene;
@@ -60,6 +61,10 @@ async function selectCorrectWord(home) {
       } else {
         const state = await bounded(home.data(), 'home loading state');
         report.observations.push({ page: 'home', progress: state.entryProgress, opening: state.opening });
+        if (state.opening && !capturedLoading) {
+          await bounded(mini.screenshot({ path: join(output, 'entry-loading.png') }), 'entry animation screenshot');
+          capturedLoading = true;
+        }
       }
       await wait(150);
     }

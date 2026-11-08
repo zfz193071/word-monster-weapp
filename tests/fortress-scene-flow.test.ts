@@ -35,6 +35,8 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   const expectedCoins=[100,120,150,170,190,210,230,250][level.id-1];
   let petSaved:unknown; const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
   if(level.id===2)petStore.rewardBoss('prior','prior:wave:1:zombie:1');
+  let reveal!: () => void;
+  const presentation = new Promise<void>(resolve => { reveal = resolve; });
   let loadCount=0;let loadNext=()=>Promise.resolve();
   let rewards=0;let praises=0;let praiseActive=false;let praiseDisposed=false;let audioOptions:any;let busy=false;let current:FakeScene;
   let audioClock=0;let timerSequence=0;const timers=new Map<number,{run:()=>void;at:number}>();const voiceEnds:(()=>void)[]=[];
@@ -42,6 +44,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   class FakeScene {
     snapshot:CombatState; options:any; disposed=false; paused=false; speed=1;
     constructor(_node:unknown,options:any){this.options=options;this.snapshot=options.initial;current=this;}
+    async present(){await presentation;return true;}
     async load(){this.options.onLoadProgress?.(0);this.options.onLoadProgress?.(100);this.options.onHud({hp:this.snapshot.base.hp,maxHp:this.snapshot.base.maxHp,status:this.snapshot.status});return true;}
     dispose(){this.disposed=true;}setPaused(value:boolean){this.paused=value;}setSpeed(value:number){this.speed=value;}showCoinDrop(){}captureFrame(){return 'frame';}
     restoreBase(){this.snapshot={...this.snapshot,base:{...this.snapshot.base,hp:this.snapshot.base.maxHp}};}
@@ -99,7 +102,10 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     createSelectorQuery(){return{select(){return{fields(_fields:any,callback:Function){return{exec(){callback({node:{},width:360,height:560,left:0});}};}};}};},
   };
   for(const [name,method]of Object.entries(definition.methods))host[name]=(method as Function).bind(host);
-  definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await Promise.resolve();
+  definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await new Promise(resolve => setImmediate(resolve));
+  assert.equal(host.data.ready,false,'图片已解码但画面未呈现时，必须继续显示加载层');
+  assert.ok(host.data.loadingProgress<100);
+  reveal();await new Promise(resolve => setImmediate(resolve));
   assert.equal(host.data.loadingProgress,100);
   assert.ok(updates.filter(patch=>patch.loadingProgress===100).every(patch=>patch.ready===true),'100%仅随战斗首帧就绪发布');
   assert.equal(current!.speed,2);
