@@ -4,16 +4,13 @@
   "source": "Built-in image_gen; project apple sample used as style reference; no third-party images introduced.",
   "rights": "AI-generated project assets; not a claim of exclusive copyright.",
   "processing": "Original alpha preserved; aspect-preserving high-quality resize and lossless PNG encoding; no quantization.",
-  "status": "Incomplete batch; missing originals; not integrated",
-  "missing": [
-    "grape",
-    "watermelon"
-  ],
+  "status": "Batch prepared for review, not integrated or device-accepted",
+  "missing": [],
   "totals": {
-    "64": 49546,
-    "128": 164197,
-    "256": 569263,
-    "512": 2017335
+    "64": 62591,
+    "128": 207351,
+    "256": 716994,
+    "512": 2533544
   },
   "entries": [
     {
@@ -159,6 +156,104 @@
           "bytes": 225599,
           "rgbaBytes": 1048576,
           "sha256": "a2eed85b170b5886a7fa50b626c414e49ca67f80ffb2f0e8ff8af90119e5844d"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "grape",
+      "meaningZh": "葡萄",
+      "audioPath": "/assets/audio/learn-grape.mp3",
+      "original": "originals/grape.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1230328,
+      "sha256": "990be8e979ccf614cb9ff4b0655521a52ba81f874888e7d1023ca816d439d024",
+      "transparent": 989879,
+      "partial": 582004,
+      "contentBounds": {
+        "left": 223,
+        "top": 83,
+        "right": 1057,
+        "bottom": 1169
+      },
+      "variants": [
+        {
+          "file": "variants/grape-64.png",
+          "size": 64,
+          "bytes": 5777,
+          "rgbaBytes": 16384,
+          "sha256": "ec39afb0cb9a0e0cdcb558b474da723620b271e6bac1fe7b07ebda2eaf950805"
+        },
+        {
+          "file": "variants/grape-128.png",
+          "size": 128,
+          "bytes": 18797,
+          "rgbaBytes": 65536,
+          "sha256": "3d3b3626dbf6cafa57b9d942771ecb46be230b0ff5537685b6d1720f76a654d7"
+        },
+        {
+          "file": "variants/grape-256.png",
+          "size": 256,
+          "bytes": 62229,
+          "rgbaBytes": 262144,
+          "sha256": "96f48c341ca2e1cc4d600417e003549ed69c0a6f74ee7a48c6f8afafe727080e"
+        },
+        {
+          "file": "variants/grape-512.png",
+          "size": 512,
+          "bytes": 211529,
+          "rgbaBytes": 1048576,
+          "sha256": "0c8d1c19ae9986f9e0ffaa62ef244e425ff730eb3c24b02326e3d55d39f47822"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "watermelon",
+      "meaningZh": "西瓜",
+      "audioPath": "/assets/audio/learn-watermelon.mp3",
+      "original": "originals/watermelon.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1793185,
+      "sha256": "5e13799e1932225e9b6f5bcac6fd7a17bb1c8f23051a3a286c8d185c490df0ca",
+      "transparent": 755660,
+      "partial": 816180,
+      "contentBounds": {
+        "left": 120,
+        "top": 47,
+        "right": 1088,
+        "bottom": 1199
+      },
+      "variants": [
+        {
+          "file": "variants/watermelon-64.png",
+          "size": 64,
+          "bytes": 7268,
+          "rgbaBytes": 16384,
+          "sha256": "ddb31e047a5a09d1fba431dd382be7b445eee2555cd8fd8adb66e9e9e0952758"
+        },
+        {
+          "file": "variants/watermelon-128.png",
+          "size": 128,
+          "bytes": 24357,
+          "rgbaBytes": 65536,
+          "sha256": "76b75caa67fdf5f76c61a4a4a787f3942af95afda2249714cd415879c2f9c7a9"
+        },
+        {
+          "file": "variants/watermelon-256.png",
+          "size": 256,
+          "bytes": 85502,
+          "rgbaBytes": 262144,
+          "sha256": "62542597df81c21c95a10d5a23b17cb41204987ea0087da980e119e4db687cf6"
+        },
+        {
+          "file": "variants/watermelon-512.png",
+          "size": 512,
+          "bytes": 304680,
+          "rgbaBytes": 1048576,
+          "sha256": "2ba58dc0d4451c25a27fd8168adaff2eed35be9e994821004e55c8a360af356b"
         }
       ],
       "reviewStatus": "pending-batch-visual-review"
