@@ -1,0 +1,235 @@
+{
+  "date": "2026-11-09",
+  "tool": "built-in image_gen",
+  "status": "representative-samples-pending-review",
+  "reference": "../concepts/style-study-01.png",
+  "processing": "Generated originals preserved. Canvas high-quality resize and lossless PNG encoding only; no palette quantization or manual background removal.",
+  "evidence": "Alpha pixel inspection and static size variants, not device performance or final visual acceptance.",
+  "entries": [
+    {
+      "name": "apple-display",
+      "path": "originals/apple-display.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1495699,
+      "sha256": "33729ff2acb8dc8f98bfd6922c07321b37e65aae9330b058811e3e4daf1bfca9",
+      "alphaVerified": true,
+      "transparent": 840519,
+      "partial": 731463,
+      "opaque": 534,
+      "contentBounds": {
+        "left": 146,
+        "top": 87,
+        "right": 1111,
+        "bottom": 1147
+      },
+      "variants": [
+        {
+          "file": "variants/apple-display-256.png",
+          "size": 256,
+          "bytes": 69777,
+          "rgbaBytes": 262144,
+          "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e"
+        },
+        {
+          "file": "variants/apple-display-512.png",
+          "size": 512,
+          "bytes": 246761,
+          "rgbaBytes": 1048576,
+          "sha256": "f6bdc742662dbff98db226a272a18fff1e804f6a383620dfd87760d583fd36bb"
+        }
+      ]
+    },
+    {
+      "name": "apple-battle",
+      "path": "originals/apple-battle.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1469183,
+      "sha256": "c681f542111a0e4fa2949196dc2d791cc4e7ed7fbc54f4270000fd6b2565da43",
+      "alphaVerified": true,
+      "transparent": 636090,
+      "partial": 936261,
+      "opaque": 165,
+      "contentBounds": {
+        "left": 168,
+        "top": 135,
+        "right": 1079,
+        "bottom": 1108
+      },
+      "variants": [
+        {
+          "file": "variants/apple-battle-64.png",
+          "size": 64,
+          "bytes": 5358,
+          "rgbaBytes": 16384,
+          "sha256": "2c51a7afdf9630b208d66ad9bd1fae37e03b79997b0b6b741a146e040f2d89d8"
+        },
+        {
+          "file": "variants/apple-battle-128.png",
+          "size": 128,
+          "bytes": 17961,
+          "rgbaBytes": 65536,
+          "sha256": "20fe52a003796fcfe962614dbc841ce00536fa80929ad81ce1c1b7187aea142c"
+        },
+        {
+          "file": "variants/apple-battle-256.png",
+          "size": 256,
+          "bytes": 62940,
+          "rgbaBytes": 262144,
+          "sha256": "212bc189feb49f9c8e9fb0d913996cc0f247669c282a8ec9aeb4b044c6bee5d3"
+        }
+      ]
+    },
+    {
+      "name": "rabbit-display",
+      "path": "originals/rabbit-display.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1346476,
+      "sha256": "1bb1232458801f0090f4fa5add1c2acb0382446c14f3fdcaffe90de6eb9ab9e0",
+      "alphaVerified": true,
+      "transparent": 970662,
+      "partial": 601740,
+      "opaque": 114,
+      "contentBounds": {
+        "left": 171,
+        "top": 76,
+        "right": 1140,
+        "bottom": 1160
+      },
+      "variants": [
+        {
+          "file": "variants/rabbit-display-256.png",
+          "size": 256,
+          "bytes": 64446,
+          "rgbaBytes": 262144,
+          "sha256": "25b27cb69ef039a4ae38fd9fcb668eb6bf1716bb46fb6e06dea9e5afca032906"
+        },
+        {
+          "file": "variants/rabbit-display-512.png",
+          "size": 512,
+          "bytes": 221262,
+          "rgbaBytes": 1048576,
+          "sha256": "a532b0f0d404bce8c598c5dc57f91f2ec3fcce3e3631fe2d5c96f1912a41a495"
+        }
+      ]
+    },
+    {
+      "name": "rabbit-battle",
+      "path": "originals/rabbit-battle.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1548641,
+      "sha256": "0f62ffe65e2d5c912a615c85e11c070da1f0e000e73ec91e24072fa77a4191ff",
+      "alphaVerified": true,
+      "transparent": 897334,
+      "partial": 674728,
+      "opaque": 454,
+      "contentBounds": {
+        "left": 109,
+        "top": 83,
+        "right": 1169,
+        "bottom": 1155
+      },
+      "variants": [
+        {
+          "file": "variants/rabbit-battle-64.png",
+          "size": 64,
+          "bytes": 6843,
+          "rgbaBytes": 16384,
+          "sha256": "a23a93c9ee6a0c19784dc2f7bb4f8f140cc83538ce9c644cb47ed4c86531d667"
+        },
+        {
+          "file": "variants/rabbit-battle-128.png",
+          "size": 128,
+          "bytes": 21951,
+          "rgbaBytes": 65536,
+          "sha256": "f3606ba6eea1a42d644c23cd111f18643dfd2a14c18753542134c3668a871492"
+        },
+        {
+          "file": "variants/rabbit-battle-256.png",
+          "size": 256,
+          "bytes": 71162,
+          "rgbaBytes": 262144,
+          "sha256": "3c357c0b3d7517064b98bae6fae1a3e8b85e8da62e471eb6cadf5f2850f00b4b"
+        }
+      ]
+    },
+    {
+      "name": "bird-display",
+      "path": "originals/bird-display.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1111007,
+      "sha256": "c77160b9fd4d9cf226e87c167c914aa60373fd784fe57b41c921243f3f693489",
+      "alphaVerified": true,
+      "transparent": 1073549,
+      "partial": 498739,
+      "opaque": 228,
+      "contentBounds": {
+        "left": 143,
+        "top": 192,
+        "right": 1109,
+        "bottom": 1102
+      },
+      "variants": [
+        {
+          "file": "variants/bird-display-256.png",
+          "size": 256,
+          "bytes": 56374,
+          "rgbaBytes": 262144,
+          "sha256": "70a9521e27fbccccde73da70ac2c5b1ba1f1bab1c80a63f694f1ddc3f8ea7500"
+        },
+        {
+          "file": "variants/bird-display-512.png",
+          "size": 512,
+          "bytes": 190550,
+          "rgbaBytes": 1048576,
+          "sha256": "e400a1e1a7ec8116c98975d388805559ed50780c3aa77994bc3031b7d843a53a"
+        }
+      ]
+    },
+    {
+      "name": "bird-battle",
+      "path": "originals/bird-battle.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1363517,
+      "sha256": "0213c079ab408bedfece6399b7a9d9e039a03828ce18af0c064bb55a951b1135",
+      "alphaVerified": true,
+      "transparent": 969590,
+      "partial": 602550,
+      "opaque": 376,
+      "contentBounds": {
+        "left": 130,
+        "top": 124,
+        "right": 1086,
+        "bottom": 1137
+      },
+      "variants": [
+        {
+          "file": "variants/bird-battle-64.png",
+          "size": 64,
+          "bytes": 6318,
+          "rgbaBytes": 16384,
+          "sha256": "4f104d9e79eb18c88af92cb86909353b78b466ee0532ac0840c3d321fb0a6113"
+        },
+        {
+          "file": "variants/bird-battle-128.png",
+          "size": 128,
+          "bytes": 20263,
+          "rgbaBytes": 65536,
+          "sha256": "da4a4cf865bfd9faea7cb897d05ee752054205b711f3ea1fa0b96503be8219d2"
+        },
+        {
+          "file": "variants/bird-battle-256.png",
+          "size": 256,
+          "bytes": 67046,
+          "rgbaBytes": 262144,
+          "sha256": "d232905e06ca72e81fa6ffd7cdae0f7b77e5eaf066825b70ed81ea323a266178"
+        }
+      ]
+    }
+  ]
+}

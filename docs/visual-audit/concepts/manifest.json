@@ -8,7 +8,7 @@
   "width": 1536,
   "height": 1024,
   "decodedRgbaBytes": 6291456,
-  "status": "pending-user-style-review",
+  "status": "style-direction-approved",
   "purpose": "Concept board only, outside runtime packages",
   "source": "Original AI generation without input reference images",
   "limitations": [
@@ -16,5 +16,10 @@
     "Not actual-size runtime or device evidence",
     "Fox health bar in generated tablet vignette is incorrect: pet remains invulnerable with no HP bar",
     "Building proportions, unit positions and generated UI are not approved gameplay changes"
-  ]
+  ],
+  "approval": {
+    "date": "2026-11-09",
+    "user": "采用，继续制作代表样张",
+    "scope": "画风方向及代表样张制作；非最终素材、批量制作或玩法审批"
+  }
 }

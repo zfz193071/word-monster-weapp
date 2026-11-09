@@ -1,0 +1,4937 @@
+{
+  "schemaVersion": 1,
+  "evidence": "Source dependency audit; complete current+previous category union. Not compiled package sizes, runtime residency, timing or device verification.",
+  "limits": "Per-level totals use weapon 1, include loading cover and shared art, exclude UI/home assets, audio decode memory, Canvas buffers and texture copies. Only the equipped hero variant is needed.",
+  "heroVariants": [
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-1.png",
+      "package": "scene-images",
+      "bytes": 9720,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-2.png",
+      "package": "scene-images",
+      "bytes": 10142,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-3.png",
+      "package": "scene-images",
+      "bytes": 10349,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-4.png",
+      "package": "scene-images",
+      "bytes": 10378,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-5.png",
+      "package": "scene-images",
+      "bytes": 10969,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-6.png",
+      "package": "scene-images",
+      "bytes": 10618,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    },
+    {
+      "path": "/assets/images/fortress/hero-back-weapon-7.png",
+      "package": "scene-images",
+      "bytes": 11110,
+      "width": 160,
+      "height": 200,
+      "rgbaBytes": 128000
+    }
+  ],
+  "levels": [
+    {
+      "levelId": 1,
+      "category": "fruits",
+      "currentWordIds": [
+        "apple",
+        "banana",
+        "orange",
+        "grape",
+        "watermelon",
+        "pear",
+        "strawberry",
+        "cherry",
+        "pineapple",
+        "kiwi",
+        "peach"
+      ],
+      "previousWordIds": [],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/apple.png",
+          "package": "scene-images",
+          "bytes": 9919,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/banana.png",
+          "package": "scene-images",
+          "bytes": 71640,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/battle-backgrounds/level-1.png",
+          "package": "scene-images",
+          "bytes": 16808,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/cherry.png",
+          "package": "scene-images",
+          "bytes": 11628,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-apple.png",
+          "package": "scene-images",
+          "bytes": 15198,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-banana.png",
+          "package": "scene-images",
+          "bytes": 15368,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-cherry.png",
+          "package": "scene-images",
+          "bytes": 15049,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-grape.png",
+          "package": "scene-images",
+          "bytes": 15289,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-kiwi.png",
+          "package": "scene-images",
+          "bytes": 15282,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-orange.png",
+          "package": "scene-images",
+          "bytes": 15493,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-peach.png",
+          "package": "scene-images",
+          "bytes": 15468,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pear.png",
+          "package": "scene-images",
+          "bytes": 15504,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pineapple.png",
+          "package": "scene-images",
+          "bytes": 15317,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-strawberry.png",
+          "package": "scene-images",
+          "bytes": 15287,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-watermelon.png",
+          "package": "scene-images",
+          "bytes": 14923,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/grape.png",
+          "package": "scene-images",
+          "bytes": 15017,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/kiwi.png",
+          "package": "scene-images",
+          "bytes": 127714,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/orange.png",
+          "package": "scene-images",
+          "bytes": 9726,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/peach.png",
+          "package": "scene-images",
+          "bytes": 12998,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/pear.png",
+          "package": "scene-images",
+          "bytes": 72767,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/pineapple.png",
+          "package": "scene-images",
+          "bytes": 238041,
+          "width": 512,
+          "height": 512,
+          "rgbaBytes": 1048576
+        },
+        {
+          "path": "/assets/images/strawberry.png",
+          "package": "scene-images",
+          "bytes": 12094,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/watermelon.png",
+          "package": "scene-images",
+          "bytes": 10682,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/learn-apple.mp3",
+          "package": "main",
+          "bytes": 8194
+        },
+        {
+          "path": "/assets/audio/learn-banana.mp3",
+          "package": "main",
+          "bytes": 9448
+        },
+        {
+          "path": "/assets/audio/learn-cherry.mp3",
+          "package": "main",
+          "bytes": 7253
+        },
+        {
+          "path": "/assets/audio/learn-grape.mp3",
+          "package": "main",
+          "bytes": 5999
+        },
+        {
+          "path": "/assets/audio/learn-kiwi.mp3",
+          "package": "main",
+          "bytes": 7880
+        },
+        {
+          "path": "/assets/audio/learn-orange.mp3",
+          "package": "main",
+          "bytes": 10075
+        },
+        {
+          "path": "/assets/audio/learn-peach.mp3",
+          "package": "main",
+          "bytes": 7880
+        },
+        {
+          "path": "/assets/audio/learn-pear.mp3",
+          "package": "main",
+          "bytes": 6940
+        },
+        {
+          "path": "/assets/audio/learn-pineapple.mp3",
+          "package": "main",
+          "bytes": 8821
+        },
+        {
+          "path": "/assets/audio/learn-strawberry.mp3",
+          "package": "main",
+          "bytes": 9761
+        },
+        {
+          "path": "/assets/audio/learn-watermelon.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/assets/audio/zombie-apple.mp3",
+          "package": "main",
+          "bytes": 10702
+        },
+        {
+          "path": "/assets/audio/zombie-banana.mp3",
+          "package": "main",
+          "bytes": 11642
+        },
+        {
+          "path": "/assets/audio/zombie-cherry.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/zombie-grape.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/zombie-kiwi.mp3",
+          "package": "main",
+          "bytes": 11328
+        },
+        {
+          "path": "/assets/audio/zombie-orange.mp3",
+          "package": "main",
+          "bytes": 11642
+        },
+        {
+          "path": "/assets/audio/zombie-peach.mp3",
+          "package": "main",
+          "bytes": 10075
+        },
+        {
+          "path": "/assets/audio/zombie-pear.mp3",
+          "package": "main",
+          "bytes": 8821
+        },
+        {
+          "path": "/assets/audio/zombie-pineapple.mp3",
+          "package": "main",
+          "bytes": 12896
+        },
+        {
+          "path": "/assets/audio/zombie-strawberry.mp3",
+          "package": "main",
+          "bytes": 13523
+        },
+        {
+          "path": "/assets/audio/zombie-watermelon.mp3",
+          "package": "main",
+          "bytes": 14150
+        }
+      ],
+      "imageBytes": 824094,
+      "estimatedImageRgbaBytes": 15625456,
+      "audioBytes": 603579
+    },
+    {
+      "levelId": 2,
+      "category": "color-shape",
+      "currentWordIds": [
+        "black",
+        "blue",
+        "brown",
+        "green",
+        "pink",
+        "red",
+        "white",
+        "yellow"
+      ],
+      "previousWordIds": [
+        "apple",
+        "banana",
+        "orange",
+        "grape",
+        "watermelon",
+        "pear",
+        "strawberry",
+        "cherry",
+        "pineapple",
+        "kiwi",
+        "peach"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/apple.png",
+          "package": "scene-images",
+          "bytes": 9919,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/banana.png",
+          "package": "scene-images",
+          "bytes": 71640,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/battle-backgrounds/level-2.png",
+          "package": "scene-images",
+          "bytes": 16264,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/cherry.png",
+          "package": "scene-images",
+          "bytes": 11628,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-apple.png",
+          "package": "scene-images",
+          "bytes": 15198,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-banana.png",
+          "package": "scene-images",
+          "bytes": 15368,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-black.png",
+          "package": "scene-images",
+          "bytes": 15084,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-blue.png",
+          "package": "scene-images",
+          "bytes": 15337,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-brown.png",
+          "package": "scene-images",
+          "bytes": 15207,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-cherry.png",
+          "package": "scene-images",
+          "bytes": 15049,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-grape.png",
+          "package": "scene-images",
+          "bytes": 15289,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-green.png",
+          "package": "scene-images",
+          "bytes": 15059,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-kiwi.png",
+          "package": "scene-images",
+          "bytes": 15282,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-orange.png",
+          "package": "scene-images",
+          "bytes": 15493,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-peach.png",
+          "package": "scene-images",
+          "bytes": 15468,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pear.png",
+          "package": "scene-images",
+          "bytes": 15504,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pineapple.png",
+          "package": "scene-images",
+          "bytes": 15317,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pink.png",
+          "package": "scene-images",
+          "bytes": 15628,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-red.png",
+          "package": "scene-images",
+          "bytes": 15198,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-strawberry.png",
+          "package": "scene-images",
+          "bytes": 15287,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-watermelon.png",
+          "package": "scene-images",
+          "bytes": 14923,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-white.png",
+          "package": "scene-images",
+          "bytes": 15257,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-yellow.png",
+          "package": "scene-images",
+          "bytes": 15368,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/grape.png",
+          "package": "scene-images",
+          "bytes": 15017,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/kiwi.png",
+          "package": "scene-images",
+          "bytes": 127714,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/orange.png",
+          "package": "scene-images",
+          "bytes": 9726,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/peach.png",
+          "package": "scene-images",
+          "bytes": 12998,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/pear.png",
+          "package": "scene-images",
+          "bytes": 72767,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/pineapple.png",
+          "package": "scene-images",
+          "bytes": 238041,
+          "width": 512,
+          "height": 512,
+          "rgbaBytes": 1048576
+        },
+        {
+          "path": "/assets/images/strawberry.png",
+          "package": "scene-images",
+          "bytes": 12094,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/assets/images/watermelon.png",
+          "package": "scene-images",
+          "bytes": 10682,
+          "width": 618,
+          "height": 618,
+          "rgbaBytes": 1527696
+        },
+        {
+          "path": "/learning-assets/images/black.png",
+          "package": "learning-assets",
+          "bytes": 4649,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/blue.png",
+          "package": "learning-assets",
+          "bytes": 4619,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/brown.png",
+          "package": "learning-assets",
+          "bytes": 4632,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/green.png",
+          "package": "learning-assets",
+          "bytes": 4528,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pink.png",
+          "package": "learning-assets",
+          "bytes": 4542,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/red.png",
+          "package": "learning-assets",
+          "bytes": 4600,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/white.png",
+          "package": "learning-assets",
+          "bytes": 4023,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/yellow.png",
+          "package": "learning-assets",
+          "bytes": 4568,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/learn-apple.mp3",
+          "package": "main",
+          "bytes": 8194
+        },
+        {
+          "path": "/assets/audio/learn-banana.mp3",
+          "package": "main",
+          "bytes": 9448
+        },
+        {
+          "path": "/assets/audio/learn-cherry.mp3",
+          "package": "main",
+          "bytes": 7253
+        },
+        {
+          "path": "/assets/audio/learn-grape.mp3",
+          "package": "main",
+          "bytes": 5999
+        },
+        {
+          "path": "/assets/audio/learn-kiwi.mp3",
+          "package": "main",
+          "bytes": 7880
+        },
+        {
+          "path": "/assets/audio/learn-orange.mp3",
+          "package": "main",
+          "bytes": 10075
+        },
+        {
+          "path": "/assets/audio/learn-peach.mp3",
+          "package": "main",
+          "bytes": 7880
+        },
+        {
+          "path": "/assets/audio/learn-pear.mp3",
+          "package": "main",
+          "bytes": 6940
+        },
+        {
+          "path": "/assets/audio/learn-pineapple.mp3",
+          "package": "main",
+          "bytes": 8821
+        },
+        {
+          "path": "/assets/audio/learn-strawberry.mp3",
+          "package": "main",
+          "bytes": 9761
+        },
+        {
+          "path": "/assets/audio/learn-watermelon.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/assets/audio/zombie-apple.mp3",
+          "package": "main",
+          "bytes": 10702
+        },
+        {
+          "path": "/assets/audio/zombie-banana.mp3",
+          "package": "main",
+          "bytes": 11642
+        },
+        {
+          "path": "/assets/audio/zombie-cherry.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/zombie-grape.mp3",
+          "package": "main",
+          "bytes": 10388
+        },
+        {
+          "path": "/assets/audio/zombie-kiwi.mp3",
+          "package": "main",
+          "bytes": 11328
+        },
+        {
+          "path": "/assets/audio/zombie-orange.mp3",
+          "package": "main",
+          "bytes": 11642
+        },
+        {
+          "path": "/assets/audio/zombie-peach.mp3",
+          "package": "main",
+          "bytes": 10075
+        },
+        {
+          "path": "/assets/audio/zombie-pear.mp3",
+          "package": "main",
+          "bytes": 8821
+        },
+        {
+          "path": "/assets/audio/zombie-pineapple.mp3",
+          "package": "main",
+          "bytes": 12896
+        },
+        {
+          "path": "/assets/audio/zombie-strawberry.mp3",
+          "package": "main",
+          "bytes": 13523
+        },
+        {
+          "path": "/assets/audio/zombie-watermelon.mp3",
+          "package": "main",
+          "bytes": 14150
+        },
+        {
+          "path": "/learning-assets/audio/learn-black.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-blue.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-brown.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-green.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-pink.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-red.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-white.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-yellow.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/zombie-black.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-blue.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-brown.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-green.mp3",
+          "package": "learning-assets",
+          "bytes": 5868
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pink.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-red.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-white.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-yellow.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        }
+      ],
+      "imageBytes": 981849,
+      "estimatedImageRgbaBytes": 17460464,
+      "audioBytes": 674900
+    },
+    {
+      "levelId": 3,
+      "category": "animals-plants",
+      "currentWordIds": [
+        "bear",
+        "bee",
+        "bird",
+        "cat",
+        "chicken",
+        "cow",
+        "dog",
+        "duck",
+        "elephant",
+        "fish",
+        "horse",
+        "lion",
+        "panda",
+        "rabbit",
+        "sheep",
+        "tiger"
+      ],
+      "previousWordIds": [
+        "black",
+        "blue",
+        "brown",
+        "green",
+        "pink",
+        "red",
+        "white",
+        "yellow"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-3.png",
+          "package": "scene-images",
+          "bytes": 15840,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-black.png",
+          "package": "scene-images",
+          "bytes": 15084,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-blue.png",
+          "package": "scene-images",
+          "bytes": 15337,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-brown.png",
+          "package": "scene-images",
+          "bytes": 15207,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-green.png",
+          "package": "scene-images",
+          "bytes": 15059,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-pink.png",
+          "package": "scene-images",
+          "bytes": 15628,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-red.png",
+          "package": "scene-images",
+          "bytes": 15198,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-white.png",
+          "package": "scene-images",
+          "bytes": 15257,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body-yellow.png",
+          "package": "scene-images",
+          "bytes": 15368,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/bear.png",
+          "package": "learning-assets",
+          "bytes": 8399,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bee.png",
+          "package": "learning-assets",
+          "bytes": 6004,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bird.png",
+          "package": "learning-assets",
+          "bytes": 5043,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/black.png",
+          "package": "learning-assets",
+          "bytes": 4649,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/blue.png",
+          "package": "learning-assets",
+          "bytes": 4619,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/brown.png",
+          "package": "learning-assets",
+          "bytes": 4632,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cat.png",
+          "package": "learning-assets",
+          "bytes": 6508,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/chicken.png",
+          "package": "learning-assets",
+          "bytes": 5889,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cow.png",
+          "package": "learning-assets",
+          "bytes": 6408,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/dog.png",
+          "package": "learning-assets",
+          "bytes": 7321,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/duck.png",
+          "package": "learning-assets",
+          "bytes": 5881,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/elephant.png",
+          "package": "learning-assets",
+          "bytes": 6678,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/fish.png",
+          "package": "learning-assets",
+          "bytes": 4972,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/green.png",
+          "package": "learning-assets",
+          "bytes": 4528,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/horse.png",
+          "package": "learning-assets",
+          "bytes": 7829,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/lion.png",
+          "package": "learning-assets",
+          "bytes": 10514,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/panda.png",
+          "package": "learning-assets",
+          "bytes": 8117,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pink.png",
+          "package": "learning-assets",
+          "bytes": 4542,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/rabbit.png",
+          "package": "learning-assets",
+          "bytes": 6258,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/red.png",
+          "package": "learning-assets",
+          "bytes": 4600,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sheep.png",
+          "package": "learning-assets",
+          "bytes": 6377,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/tiger.png",
+          "package": "learning-assets",
+          "bytes": 7851,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/white.png",
+          "package": "learning-assets",
+          "bytes": 4023,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/yellow.png",
+          "package": "learning-assets",
+          "bytes": 4568,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-bear.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-bee.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-bird.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-black.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-blue.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-brown.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-cat.mp3",
+          "package": "learning-assets",
+          "bytes": 3360
+        },
+        {
+          "path": "/learning-assets/audio/learn-chicken.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-cow.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-dog.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-duck.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-elephant.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-fish.mp3",
+          "package": "learning-assets",
+          "bytes": 3831
+        },
+        {
+          "path": "/learning-assets/audio/learn-green.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-horse.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/learn-lion.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-panda.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-pink.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-rabbit.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-red.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-sheep.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-tiger.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-white.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-yellow.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bear.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bee.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bird.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-black.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-blue.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-brown.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cat.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/zombie-chicken.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cow.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-dog.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-duck.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-elephant.mp3",
+          "package": "learning-assets",
+          "bytes": 6338
+        },
+        {
+          "path": "/learning-assets/audio/zombie-fish.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-green.mp3",
+          "package": "learning-assets",
+          "bytes": 5868
+        },
+        {
+          "path": "/learning-assets/audio/zombie-horse.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-lion.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-panda.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pink.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-rabbit.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-red.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sheep.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-tiger.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-white.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-yellow.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        }
+      ],
+      "imageBytes": 331070,
+      "estimatedImageRgbaBytes": 6389760,
+      "audioBytes": 598564
+    },
+    {
+      "levelId": 4,
+      "category": "tools",
+      "currentWordIds": [
+        "book",
+        "clock",
+        "computer",
+        "pen",
+        "pencil",
+        "ruler",
+        "blackboard",
+        "eraser",
+        "paper",
+        "scissors",
+        "notebook",
+        "glue",
+        "tape",
+        "sharpener"
+      ],
+      "previousWordIds": [
+        "bear",
+        "bee",
+        "bird",
+        "cat",
+        "chicken",
+        "cow",
+        "dog",
+        "duck",
+        "elephant",
+        "fish",
+        "horse",
+        "lion",
+        "panda",
+        "rabbit",
+        "sheep",
+        "tiger"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-4.png",
+          "package": "scene-images",
+          "bytes": 16829,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/bear.png",
+          "package": "learning-assets",
+          "bytes": 8399,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bee.png",
+          "package": "learning-assets",
+          "bytes": 6004,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bird.png",
+          "package": "learning-assets",
+          "bytes": 5043,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/blackboard.png",
+          "package": "learning-assets",
+          "bytes": 2387,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/book.png",
+          "package": "learning-assets",
+          "bytes": 2612,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cat.png",
+          "package": "learning-assets",
+          "bytes": 6508,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/chicken.png",
+          "package": "learning-assets",
+          "bytes": 5889,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/clock.png",
+          "package": "learning-assets",
+          "bytes": 3838,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/computer.png",
+          "package": "learning-assets",
+          "bytes": 3913,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cow.png",
+          "package": "learning-assets",
+          "bytes": 6408,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/dog.png",
+          "package": "learning-assets",
+          "bytes": 7321,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/duck.png",
+          "package": "learning-assets",
+          "bytes": 5881,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/elephant.png",
+          "package": "learning-assets",
+          "bytes": 6678,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/eraser.png",
+          "package": "learning-assets",
+          "bytes": 3370,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/fish.png",
+          "package": "learning-assets",
+          "bytes": 4972,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/glue.png",
+          "package": "learning-assets",
+          "bytes": 2217,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/horse.png",
+          "package": "learning-assets",
+          "bytes": 7829,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/lion.png",
+          "package": "learning-assets",
+          "bytes": 10514,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/notebook.png",
+          "package": "learning-assets",
+          "bytes": 2882,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/panda.png",
+          "package": "learning-assets",
+          "bytes": 8117,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/paper.png",
+          "package": "learning-assets",
+          "bytes": 1538,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pen.png",
+          "package": "learning-assets",
+          "bytes": 3928,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pencil.png",
+          "package": "learning-assets",
+          "bytes": 3110,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/rabbit.png",
+          "package": "learning-assets",
+          "bytes": 6258,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/ruler.png",
+          "package": "learning-assets",
+          "bytes": 5569,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/scissors.png",
+          "package": "learning-assets",
+          "bytes": 7180,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sharpener.png",
+          "package": "learning-assets",
+          "bytes": 2799,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sheep.png",
+          "package": "learning-assets",
+          "bytes": 6377,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/tape.png",
+          "package": "learning-assets",
+          "bytes": 3396,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/tiger.png",
+          "package": "learning-assets",
+          "bytes": 7851,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-bear.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-bee.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-bird.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-blackboard.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/learn-book.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-cat.mp3",
+          "package": "learning-assets",
+          "bytes": 3360
+        },
+        {
+          "path": "/learning-assets/audio/learn-chicken.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-clock.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-computer.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-cow.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-dog.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-duck.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-elephant.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-eraser.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-fish.mp3",
+          "package": "learning-assets",
+          "bytes": 3831
+        },
+        {
+          "path": "/learning-assets/audio/learn-glue.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-horse.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/learn-lion.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-notebook.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-panda.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-paper.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-pen.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-pencil.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-rabbit.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-ruler.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-scissors.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/learn-sharpener.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/learn-sheep.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-tape.mp3",
+          "package": "learning-assets",
+          "bytes": 3360
+        },
+        {
+          "path": "/learning-assets/audio/learn-tiger.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bear.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bee.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bird.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-blackboard.mp3",
+          "package": "learning-assets",
+          "bytes": 6652
+        },
+        {
+          "path": "/learning-assets/audio/zombie-book.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cat.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/zombie-chicken.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-clock.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-computer.mp3",
+          "package": "learning-assets",
+          "bytes": 6809
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cow.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-dog.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-duck.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-elephant.mp3",
+          "package": "learning-assets",
+          "bytes": 6338
+        },
+        {
+          "path": "/learning-assets/audio/zombie-eraser.mp3",
+          "package": "learning-assets",
+          "bytes": 6652
+        },
+        {
+          "path": "/learning-assets/audio/zombie-fish.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-glue.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-horse.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-lion.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-notebook.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-panda.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-paper.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pen.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pencil.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-rabbit.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-ruler.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-scissors.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sharpener.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sheep.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-tape.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-tiger.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        }
+      ],
+      "imageBytes": 222499,
+      "estimatedImageRgbaBytes": 6619136,
+      "audioBytes": 662557
+    },
+    {
+      "levelId": 5,
+      "category": "home-items",
+      "currentWordIds": [
+        "bed",
+        "desk",
+        "door",
+        "chair",
+        "floor",
+        "wall",
+        "ceiling"
+      ],
+      "previousWordIds": [
+        "book",
+        "clock",
+        "computer",
+        "pen",
+        "pencil",
+        "ruler",
+        "blackboard",
+        "eraser",
+        "paper",
+        "scissors",
+        "notebook",
+        "glue",
+        "tape",
+        "sharpener"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-5.png",
+          "package": "scene-images",
+          "bytes": 15341,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/bed.png",
+          "package": "learning-assets",
+          "bytes": 2206,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/blackboard.png",
+          "package": "learning-assets",
+          "bytes": 2387,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/book.png",
+          "package": "learning-assets",
+          "bytes": 2612,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/ceiling.png",
+          "package": "learning-assets",
+          "bytes": 3463,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/chair.png",
+          "package": "learning-assets",
+          "bytes": 4384,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/clock.png",
+          "package": "learning-assets",
+          "bytes": 3838,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/computer.png",
+          "package": "learning-assets",
+          "bytes": 3913,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/desk.png",
+          "package": "learning-assets",
+          "bytes": 2367,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/door.png",
+          "package": "learning-assets",
+          "bytes": 2286,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/eraser.png",
+          "package": "learning-assets",
+          "bytes": 3370,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/floor.png",
+          "package": "learning-assets",
+          "bytes": 3210,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/glue.png",
+          "package": "learning-assets",
+          "bytes": 2217,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/notebook.png",
+          "package": "learning-assets",
+          "bytes": 2882,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/paper.png",
+          "package": "learning-assets",
+          "bytes": 1538,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pen.png",
+          "package": "learning-assets",
+          "bytes": 3928,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/pencil.png",
+          "package": "learning-assets",
+          "bytes": 3110,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/ruler.png",
+          "package": "learning-assets",
+          "bytes": 5569,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/scissors.png",
+          "package": "learning-assets",
+          "bytes": 7180,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sharpener.png",
+          "package": "learning-assets",
+          "bytes": 2799,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/tape.png",
+          "package": "learning-assets",
+          "bytes": 3396,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/wall.png",
+          "package": "learning-assets",
+          "bytes": 3105,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-bed.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-blackboard.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/learn-book.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-ceiling.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/learn-chair.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-clock.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-computer.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-desk.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-door.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-eraser.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-floor.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-glue.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-notebook.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-paper.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-pen.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-pencil.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-ruler.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-scissors.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/learn-sharpener.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/learn-tape.mp3",
+          "package": "learning-assets",
+          "bytes": 3360
+        },
+        {
+          "path": "/learning-assets/audio/learn-wall.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bed.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-blackboard.mp3",
+          "package": "learning-assets",
+          "bytes": 6652
+        },
+        {
+          "path": "/learning-assets/audio/zombie-book.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-ceiling.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-chair.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-clock.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-computer.mp3",
+          "package": "learning-assets",
+          "bytes": 6809
+        },
+        {
+          "path": "/learning-assets/audio/zombie-desk.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-door.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-eraser.mp3",
+          "package": "learning-assets",
+          "bytes": 6652
+        },
+        {
+          "path": "/learning-assets/audio/zombie-floor.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-glue.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-notebook.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-paper.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pen.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-pencil.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-ruler.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-scissors.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sharpener.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-tape.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-wall.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        }
+      ],
+      "imageBytes": 131983,
+      "estimatedImageRgbaBytes": 5292032,
+      "audioBytes": 584828
+    },
+    {
+      "levelId": 6,
+      "category": "daily-items",
+      "currentWordIds": [
+        "bag",
+        "bike",
+        "bread",
+        "cake",
+        "candle",
+        "candy",
+        "clothes",
+        "cup",
+        "doll",
+        "home",
+        "boat",
+        "kite",
+        "gift",
+        "towel",
+        "window",
+        "glass",
+        "juice",
+        "toy"
+      ],
+      "previousWordIds": [
+        "bed",
+        "desk",
+        "door",
+        "chair",
+        "floor",
+        "wall",
+        "ceiling"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-6.png",
+          "package": "scene-images",
+          "bytes": 12608,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/bag.png",
+          "package": "learning-assets",
+          "bytes": 3210,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bed.png",
+          "package": "learning-assets",
+          "bytes": 2206,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bike.png",
+          "package": "learning-assets",
+          "bytes": 6572,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/boat.png",
+          "package": "learning-assets",
+          "bytes": 4907,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bread.png",
+          "package": "learning-assets",
+          "bytes": 2359,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cake.png",
+          "package": "learning-assets",
+          "bytes": 5166,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/candle.png",
+          "package": "learning-assets",
+          "bytes": 2240,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/candy.png",
+          "package": "learning-assets",
+          "bytes": 6233,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/ceiling.png",
+          "package": "learning-assets",
+          "bytes": 3463,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/chair.png",
+          "package": "learning-assets",
+          "bytes": 4384,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/clothes.png",
+          "package": "learning-assets",
+          "bytes": 4953,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cup.png",
+          "package": "learning-assets",
+          "bytes": 3979,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/desk.png",
+          "package": "learning-assets",
+          "bytes": 2367,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/doll.png",
+          "package": "learning-assets",
+          "bytes": 6025,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/door.png",
+          "package": "learning-assets",
+          "bytes": 2286,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/floor.png",
+          "package": "learning-assets",
+          "bytes": 3210,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/gift.png",
+          "package": "learning-assets",
+          "bytes": 3508,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/glass.png",
+          "package": "learning-assets",
+          "bytes": 3426,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/home.png",
+          "package": "learning-assets",
+          "bytes": 2209,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/juice.png",
+          "package": "learning-assets",
+          "bytes": 3710,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/kite.png",
+          "package": "learning-assets",
+          "bytes": 4838,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/towel.png",
+          "package": "learning-assets",
+          "bytes": 1811,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/toy.png",
+          "package": "learning-assets",
+          "bytes": 11040,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/wall.png",
+          "package": "learning-assets",
+          "bytes": 3105,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/window.png",
+          "package": "learning-assets",
+          "bytes": 2467,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-bag.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-bed.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-bike.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-boat.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-bread.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-cake.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-candle.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-candy.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/learn-ceiling.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/learn-chair.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-clothes.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-cup.mp3",
+          "package": "learning-assets",
+          "bytes": 2263
+        },
+        {
+          "path": "/learning-assets/audio/learn-desk.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-doll.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-door.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-floor.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-gift.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-glass.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-home.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-juice.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-kite.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-towel.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-toy.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-wall.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-window.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bag.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bed.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bike.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-boat.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bread.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cake.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-candle.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-candy.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-ceiling.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-chair.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-clothes.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cup.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-desk.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-doll.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-door.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-floor.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-gift.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-glass.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-home.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-juice.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-kite.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-towel.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-toy.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/zombie-wall.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-window.mp3",
+          "package": "learning-assets",
+          "bytes": 5868
+        }
+      ],
+      "imageBytes": 159164,
+      "estimatedImageRgbaBytes": 5881856,
+      "audioBytes": 607794
+    },
+    {
+      "levelId": 7,
+      "category": "nature",
+      "currentWordIds": [
+        "air",
+        "earth",
+        "fire",
+        "moon",
+        "rain",
+        "sea",
+        "season",
+        "snow",
+        "star",
+        "sun",
+        "weather",
+        "wind"
+      ],
+      "previousWordIds": [
+        "bag",
+        "bike",
+        "bread",
+        "cake",
+        "candle",
+        "candy",
+        "clothes",
+        "cup",
+        "doll",
+        "home",
+        "boat",
+        "kite",
+        "gift",
+        "towel",
+        "window",
+        "glass",
+        "juice",
+        "toy"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-7.png",
+          "package": "scene-images",
+          "bytes": 15683,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/air.png",
+          "package": "learning-assets",
+          "bytes": 2670,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bag.png",
+          "package": "learning-assets",
+          "bytes": 3210,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bike.png",
+          "package": "learning-assets",
+          "bytes": 6572,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/boat.png",
+          "package": "learning-assets",
+          "bytes": 4907,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/bread.png",
+          "package": "learning-assets",
+          "bytes": 2359,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cake.png",
+          "package": "learning-assets",
+          "bytes": 5166,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/candle.png",
+          "package": "learning-assets",
+          "bytes": 2240,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/candy.png",
+          "package": "learning-assets",
+          "bytes": 6233,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/clothes.png",
+          "package": "learning-assets",
+          "bytes": 4953,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/cup.png",
+          "package": "learning-assets",
+          "bytes": 3979,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/doll.png",
+          "package": "learning-assets",
+          "bytes": 6025,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/earth.png",
+          "package": "learning-assets",
+          "bytes": 8147,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/fire.png",
+          "package": "learning-assets",
+          "bytes": 6267,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/gift.png",
+          "package": "learning-assets",
+          "bytes": 3508,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/glass.png",
+          "package": "learning-assets",
+          "bytes": 3426,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/home.png",
+          "package": "learning-assets",
+          "bytes": 2209,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/juice.png",
+          "package": "learning-assets",
+          "bytes": 3710,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/kite.png",
+          "package": "learning-assets",
+          "bytes": 4838,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/moon.png",
+          "package": "learning-assets",
+          "bytes": 6203,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/rain.png",
+          "package": "learning-assets",
+          "bytes": 5134,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sea.png",
+          "package": "learning-assets",
+          "bytes": 6322,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/season.png",
+          "package": "learning-assets",
+          "bytes": 6700,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/snow.png",
+          "package": "learning-assets",
+          "bytes": 4467,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/star.png",
+          "package": "learning-assets",
+          "bytes": 3734,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sun.png",
+          "package": "learning-assets",
+          "bytes": 7010,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/towel.png",
+          "package": "learning-assets",
+          "bytes": 1811,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/toy.png",
+          "package": "learning-assets",
+          "bytes": 11040,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/weather.png",
+          "package": "learning-assets",
+          "bytes": 3297,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/wind.png",
+          "package": "learning-assets",
+          "bytes": 5492,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/window.png",
+          "package": "learning-assets",
+          "bytes": 2467,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-air.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-bag.mp3",
+          "package": "learning-assets",
+          "bytes": 2734
+        },
+        {
+          "path": "/learning-assets/audio/learn-bike.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-boat.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-bread.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-cake.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-candle.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-candy.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/learn-clothes.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-cup.mp3",
+          "package": "learning-assets",
+          "bytes": 2263
+        },
+        {
+          "path": "/learning-assets/audio/learn-doll.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-earth.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-fire.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-gift.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-glass.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-home.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-juice.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-kite.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-moon.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-rain.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-sea.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-season.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-snow.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-star.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-sun.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-towel.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-toy.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-weather.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-wind.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-window.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-air.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bag.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bike.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-boat.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-bread.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cake.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-candle.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-candy.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-clothes.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-cup.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/zombie-doll.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-earth.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-fire.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-gift.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-glass.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-home.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-juice.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-kite.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-moon.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-rain.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sea.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-season.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-snow.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-star.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sun.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-towel.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-toy.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/zombie-weather.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-wind.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-window.mp3",
+          "package": "learning-assets",
+          "bytes": 5868
+        }
+      ],
+      "imageBytes": 206661,
+      "estimatedImageRgbaBytes": 6619136,
+      "audioBytes": 651431
+    },
+    {
+      "levelId": 8,
+      "category": "body-parts",
+      "currentWordIds": [
+        "hand",
+        "head",
+        "leg",
+        "body",
+        "arm",
+        "palm",
+        "forehead"
+      ],
+      "previousWordIds": [
+        "air",
+        "earth",
+        "fire",
+        "moon",
+        "rain",
+        "sea",
+        "season",
+        "snow",
+        "star",
+        "sun",
+        "weather",
+        "wind"
+      ],
+      "checkedPlans": 12,
+      "images": [
+        {
+          "path": "/assets/images/battle-backgrounds/level-8.png",
+          "package": "scene-images",
+          "bytes": 12382,
+          "width": 360,
+          "height": 560,
+          "rgbaBytes": 806400
+        },
+        {
+          "path": "/assets/images/fortress/base.png",
+          "package": "scene-images",
+          "bytes": 2869,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/bullet.png",
+          "package": "scene-images",
+          "bytes": 641,
+          "width": 24,
+          "height": 48,
+          "rgbaBytes": 4608
+        },
+        {
+          "path": "/assets/images/fortress/destroyed-base.png",
+          "package": "scene-images",
+          "bytes": 5183,
+          "width": 720,
+          "height": 160,
+          "rgbaBytes": 460800
+        },
+        {
+          "path": "/assets/images/fortress/hero-back-weapon-1.png",
+          "package": "scene-images",
+          "bytes": 9720,
+          "width": 160,
+          "height": 200,
+          "rgbaBytes": 128000
+        },
+        {
+          "path": "/assets/images/fortress/weapon.png",
+          "package": "scene-images",
+          "bytes": 908,
+          "width": 32,
+          "height": 56,
+          "rgbaBytes": 7168
+        },
+        {
+          "path": "/assets/images/fortress/zombie-body.png",
+          "package": "scene-images",
+          "bytes": 15221,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-left.png",
+          "package": "scene-images",
+          "bytes": 1563,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie-leg-right.png",
+          "package": "scene-images",
+          "bytes": 1572,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/assets/images/fortress/zombie.png",
+          "package": "scene-images",
+          "bytes": 9205,
+          "width": 128,
+          "height": 160,
+          "rgbaBytes": 81920
+        },
+        {
+          "path": "/learning-assets/images/air.png",
+          "package": "learning-assets",
+          "bytes": 2670,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/arm.png",
+          "package": "learning-assets",
+          "bytes": 7236,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/body.png",
+          "package": "learning-assets",
+          "bytes": 5546,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/earth.png",
+          "package": "learning-assets",
+          "bytes": 8147,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/fire.png",
+          "package": "learning-assets",
+          "bytes": 6267,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/forehead.png",
+          "package": "learning-assets",
+          "bytes": 3090,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/hand.png",
+          "package": "learning-assets",
+          "bytes": 3983,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/head.png",
+          "package": "learning-assets",
+          "bytes": 2847,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/leg.png",
+          "package": "learning-assets",
+          "bytes": 4832,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/moon.png",
+          "package": "learning-assets",
+          "bytes": 6203,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/palm.png",
+          "package": "learning-assets",
+          "bytes": 6394,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/rain.png",
+          "package": "learning-assets",
+          "bytes": 5134,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sea.png",
+          "package": "learning-assets",
+          "bytes": 6322,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/season.png",
+          "package": "learning-assets",
+          "bytes": 6700,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/snow.png",
+          "package": "learning-assets",
+          "bytes": 4467,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/star.png",
+          "package": "learning-assets",
+          "bytes": 3734,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/sun.png",
+          "package": "learning-assets",
+          "bytes": 7010,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/weather.png",
+          "package": "learning-assets",
+          "bytes": 3297,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/learning-assets/images/wind.png",
+          "package": "learning-assets",
+          "bytes": 5492,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        }
+      ],
+      "audio": [
+        {
+          "path": "/assets/audio/base-hit.mp3",
+          "package": "main",
+          "bytes": 2759
+        },
+        {
+          "path": "/assets/audio/battle-hit.mp3",
+          "package": "main",
+          "bytes": 1923
+        },
+        {
+          "path": "/assets/audio/battle-loop.mp3",
+          "package": "main",
+          "bytes": 265656
+        },
+        {
+          "path": "/assets/audio/coin-collect.mp3",
+          "package": "main",
+          "bytes": 3386
+        },
+        {
+          "path": "/assets/audio/defeat-sad.mp3",
+          "package": "main",
+          "bytes": 16220
+        },
+        {
+          "path": "/assets/audio/quiz-encouragement.mp3",
+          "package": "main",
+          "bytes": 27942
+        },
+        {
+          "path": "/assets/audio/quiz-praise-bilingual.mp3",
+          "package": "main",
+          "bytes": 26375
+        },
+        {
+          "path": "/assets/audio/victory-applause.mp3",
+          "package": "main",
+          "bytes": 11660
+        },
+        {
+          "path": "/assets/audio/victory-cheer.mp3",
+          "package": "main",
+          "bytes": 14060
+        },
+        {
+          "path": "/assets/audio/victory-praise.mp3",
+          "package": "main",
+          "bytes": 15404
+        },
+        {
+          "path": "/learning-assets/audio/learn-air.mp3",
+          "package": "learning-assets",
+          "bytes": 3204
+        },
+        {
+          "path": "/learning-assets/audio/learn-arm.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-body.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-earth.mp3",
+          "package": "learning-assets",
+          "bytes": 2890
+        },
+        {
+          "path": "/learning-assets/audio/learn-fire.mp3",
+          "package": "learning-assets",
+          "bytes": 4144
+        },
+        {
+          "path": "/learning-assets/audio/learn-forehead.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-hand.mp3",
+          "package": "learning-assets",
+          "bytes": 4301
+        },
+        {
+          "path": "/learning-assets/audio/learn-head.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-leg.mp3",
+          "package": "learning-assets",
+          "bytes": 3047
+        },
+        {
+          "path": "/learning-assets/audio/learn-moon.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-palm.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-rain.mp3",
+          "package": "learning-assets",
+          "bytes": 3674
+        },
+        {
+          "path": "/learning-assets/audio/learn-sea.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-season.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/learn-snow.mp3",
+          "package": "learning-assets",
+          "bytes": 4458
+        },
+        {
+          "path": "/learning-assets/audio/learn-star.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/learn-sun.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-weather.mp3",
+          "package": "learning-assets",
+          "bytes": 3517
+        },
+        {
+          "path": "/learning-assets/audio/learn-wind.mp3",
+          "package": "learning-assets",
+          "bytes": 3987
+        },
+        {
+          "path": "/learning-assets/audio/zombie-air.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-arm.mp3",
+          "package": "learning-assets",
+          "bytes": 5711
+        },
+        {
+          "path": "/learning-assets/audio/zombie-body.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-earth.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-fire.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-forehead.mp3",
+          "package": "learning-assets",
+          "bytes": 6338
+        },
+        {
+          "path": "/learning-assets/audio/zombie-hand.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-head.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-leg.mp3",
+          "package": "learning-assets",
+          "bytes": 4771
+        },
+        {
+          "path": "/learning-assets/audio/zombie-moon.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-palm.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-rain.mp3",
+          "package": "learning-assets",
+          "bytes": 5241
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sea.mp3",
+          "package": "learning-assets",
+          "bytes": 4614
+        },
+        {
+          "path": "/learning-assets/audio/zombie-season.mp3",
+          "package": "learning-assets",
+          "bytes": 6025
+        },
+        {
+          "path": "/learning-assets/audio/zombie-snow.mp3",
+          "package": "learning-assets",
+          "bytes": 5398
+        },
+        {
+          "path": "/learning-assets/audio/zombie-star.mp3",
+          "package": "learning-assets",
+          "bytes": 5555
+        },
+        {
+          "path": "/learning-assets/audio/zombie-sun.mp3",
+          "package": "learning-assets",
+          "bytes": 4928
+        },
+        {
+          "path": "/learning-assets/audio/zombie-weather.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        },
+        {
+          "path": "/learning-assets/audio/zombie-wind.mp3",
+          "package": "learning-assets",
+          "bytes": 5085
+        }
+      ],
+      "imageBytes": 158635,
+      "estimatedImageRgbaBytes": 4997120,
+      "audioBytes": 556184
+    }
+  ]
+}

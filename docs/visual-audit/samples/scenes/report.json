@@ -1,0 +1,50 @@
+[
+  {
+    "name": "phone-low",
+    "width": 390,
+    "height": 620,
+    "dpr": 2,
+    "count": 6,
+    "arenaWidth": 352.258064516129,
+    "source": "Current CanvasScene with fixed review fixture and image substitutions; not gameplay/device capture",
+    "animalBox": 48,
+    "appleBadge": 21.25,
+    "petHealthBar": false
+  },
+  {
+    "name": "phone-high",
+    "width": 390,
+    "height": 620,
+    "dpr": 2,
+    "count": 18,
+    "arenaWidth": 352.258064516129,
+    "source": "Current CanvasScene with fixed review fixture and image substitutions; not gameplay/device capture",
+    "animalBox": 48,
+    "appleBadge": 21.25,
+    "petHealthBar": false
+  },
+  {
+    "name": "ipad-low",
+    "width": 1024,
+    "height": 580,
+    "dpr": 2,
+    "count": 6,
+    "arenaWidth": 988.6896551724137,
+    "source": "Current CanvasScene with fixed review fixture and image substitutions; not gameplay/device capture",
+    "animalBox": 48,
+    "appleBadge": 21.25,
+    "petHealthBar": false
+  },
+  {
+    "name": "ipad-high",
+    "width": 1024,
+    "height": 580,
+    "dpr": 2,
+    "count": 18,
+    "arenaWidth": 988.6896551724137,
+    "source": "Current CanvasScene with fixed review fixture and image substitutions; not gameplay/device capture",
+    "animalBox": 48,
+    "appleBadge": 21.25,
+    "petHealthBar": false
+  }
+]
