@@ -1,0 +1,5 @@
+{
+  "prompt": "Use case: precise-object-edit. Correct this goldfish vocabulary illustration. Keep the orange fish body, scales, fins, fan tail, pose, square canvas, soft cartoon rendering and transparent background. Change ONLY its face to an anatomically recognizable friendly FISH face: small rounded fish lips, clear gill cover, expressive round fish eye. Remove the mammalian pink nose, furry cheeks, rabbit muzzle and teeth entirely. No fur, no nose, no whiskers, no mammal muzzle. Preserve full uncropped subject with clear transparent margins, alpha background with no glow/shadow or scenery.",
+  "input": "originals/fish.png",
+  "output": "originals/fish-corrected.png"
+}

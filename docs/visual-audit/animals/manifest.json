@@ -1,0 +1,748 @@
+{
+  "date": "2026-11-09",
+  "issue": 85,
+  "source": "Built-in image_gen; project rabbit sample used as style reference; no third-party images introduced.",
+  "rights": "AI-generated project assets; not a claim of exclusive copyright.",
+  "processing": "Original alpha preserved; aspect-preserving high-quality resize and lossless PNG encoding; no quantization.",
+  "status": "Incomplete batch; missing originals; not integrated",
+  "missing": [
+    "horse",
+    "lion"
+  ],
+  "totals": {
+    "64": 84126,
+    "128": 272106,
+    "256": 912965,
+    "512": 3131211
+  },
+  "entries": [
+    {
+      "wordId": "bear",
+      "meaningZh": "熊",
+      "audioPath": "/learning-assets/audio/learn-bear.mp3",
+      "original": "originals/bear.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#bear",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1663510,
+      "sha256": "ecdac3d84b36a2852e3b0526da7c015caf1c45a3a886903157a379a769d628d5",
+      "transparent": 865648,
+      "partial": 706703,
+      "contentBounds": {
+        "left": 155,
+        "top": 98,
+        "right": 1091,
+        "bottom": 1181
+      },
+      "variants": [
+        {
+          "file": "variants/bear-64.png",
+          "size": 64,
+          "bytes": 6173,
+          "rgbaBytes": 16384,
+          "sha256": "25a8a18e76a4bf638fe31c449abe530e5acfb3bf5bcd66eab8e835514691c8c5"
+        },
+        {
+          "file": "variants/bear-128.png",
+          "size": 128,
+          "bytes": 21045,
+          "rgbaBytes": 65536,
+          "sha256": "b1be5f42d3d45570da21572fb6eb9009d90fa11454a8ef5615fe952e981d3866"
+        },
+        {
+          "file": "variants/bear-256.png",
+          "size": 256,
+          "bytes": 72635,
+          "rgbaBytes": 262144,
+          "sha256": "f1ed38b38fa1f015771b751fc2dd98660e01e9738e81f19942b4ce42e8c18599"
+        },
+        {
+          "file": "variants/bear-512.png",
+          "size": 512,
+          "bytes": 254441,
+          "rgbaBytes": 1048576,
+          "sha256": "33e23023c79bb56761f04ff41e145479b1ded33c5abdec05cdac902fcb7e639c"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "bee",
+      "meaningZh": "蜜蜂",
+      "audioPath": "/learning-assets/audio/learn-bee.mp3",
+      "original": "originals/bee.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#bee",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1389465,
+      "sha256": "b24f65d8ebd8f0395549f3cccbf0785e37e9e23ddc44682ed54088aa1d9b3d06",
+      "transparent": 948414,
+      "partial": 623953,
+      "contentBounds": {
+        "left": 72,
+        "top": 168,
+        "right": 1144,
+        "bottom": 1106
+      },
+      "variants": [
+        {
+          "file": "variants/bee-64.png",
+          "size": 64,
+          "bytes": 6584,
+          "rgbaBytes": 16384,
+          "sha256": "ccae3fcb28f2475b47b3bf96145702a7cfccf13996ce92b2f7450b5bb514a7db"
+        },
+        {
+          "file": "variants/bee-128.png",
+          "size": 128,
+          "bytes": 20938,
+          "rgbaBytes": 65536,
+          "sha256": "cfb3667aec79d04ba1e7ebe114426affdd026025d249350bbac801d620e89efa"
+        },
+        {
+          "file": "variants/bee-256.png",
+          "size": 256,
+          "bytes": 69752,
+          "rgbaBytes": 262144,
+          "sha256": "46a63613e23adef648ae995e1ce9bb21df82f2df821393f094a3ed87e44a20c6"
+        },
+        {
+          "file": "variants/bee-512.png",
+          "size": 512,
+          "bytes": 237580,
+          "rgbaBytes": 1048576,
+          "sha256": "5db1d40787f752d09a0c93305a850664b925d53edb65029277b0ab8712c4bba9"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "bird",
+      "meaningZh": "鸟",
+      "audioPath": "/learning-assets/audio/learn-bird.mp3",
+      "original": "../samples/originals/bird-display.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "../samples/prompts.json#bird-display",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1111007,
+      "sha256": "c77160b9fd4d9cf226e87c167c914aa60373fd784fe57b41c921243f3f693489",
+      "transparent": 1073549,
+      "partial": 498739,
+      "contentBounds": {
+        "left": 143,
+        "top": 192,
+        "right": 1109,
+        "bottom": 1102
+      },
+      "variants": [
+        {
+          "file": "variants/bird-64.png",
+          "size": 64,
+          "bytes": 5068,
+          "rgbaBytes": 16384,
+          "sha256": "6d272aad68bb1ddcdfb115c7180cc8959144d1fbda062b88bd95c63fa4d8bb3c"
+        },
+        {
+          "file": "variants/bird-128.png",
+          "size": 128,
+          "bytes": 16523,
+          "rgbaBytes": 65536,
+          "sha256": "af800b27bf2ca89a773c4238a6a79a77a8c1a153c4956d6a30403d0f6e4b76a5"
+        },
+        {
+          "file": "variants/bird-256.png",
+          "size": 256,
+          "bytes": 56374,
+          "rgbaBytes": 262144,
+          "sha256": "70a9521e27fbccccde73da70ac2c5b1ba1f1bab1c80a63f694f1ddc3f8ea7500"
+        },
+        {
+          "file": "variants/bird-512.png",
+          "size": 512,
+          "bytes": 190550,
+          "rgbaBytes": 1048576,
+          "sha256": "e400a1e1a7ec8116c98975d388805559ed50780c3aa77994bc3031b7d843a53a"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "cat",
+      "meaningZh": "猫",
+      "audioPath": "/learning-assets/audio/learn-cat.mp3",
+      "original": "originals/cat.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#cat",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1429246,
+      "sha256": "bbc12a816e7e088905d3b57636b0aa355666a26bee9eeb51e1f024811a457cd3",
+      "transparent": 956076,
+      "partial": 616386,
+      "contentBounds": {
+        "left": 178,
+        "top": 92,
+        "right": 1109,
+        "bottom": 1169
+      },
+      "variants": [
+        {
+          "file": "variants/cat-64.png",
+          "size": 64,
+          "bytes": 5999,
+          "rgbaBytes": 16384,
+          "sha256": "6d3aefbf49b6e074e9f7ab868f3f8516b0def1d36b148ce85da4c9cc25631e61"
+        },
+        {
+          "file": "variants/cat-128.png",
+          "size": 128,
+          "bytes": 19341,
+          "rgbaBytes": 65536,
+          "sha256": "473bc9638a86b507bf0bcc2a7d8cd0375450e897a4c724a02f95686688ce4668"
+        },
+        {
+          "file": "variants/cat-256.png",
+          "size": 256,
+          "bytes": 64805,
+          "rgbaBytes": 262144,
+          "sha256": "1637d788f9588a9b862f39cdbcd878697259b47956b5fa7073009e349accc106"
+        },
+        {
+          "file": "variants/cat-512.png",
+          "size": 512,
+          "bytes": 222574,
+          "rgbaBytes": 1048576,
+          "sha256": "cccfa833a5bf69d30217545cb90db30a4047322c7ecb43f4ebe830fca9ea3c12"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "chicken",
+      "meaningZh": "鸡",
+      "audioPath": "/learning-assets/audio/learn-chicken.mp3",
+      "original": "originals/chicken.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#chicken",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1222326,
+      "sha256": "79c80db300120dd97239a52a9a2d6e12c47ef639611dcf0f7e660a63f34871e9",
+      "transparent": 1042823,
+      "partial": 529447,
+      "contentBounds": {
+        "left": 188,
+        "top": 79,
+        "right": 998,
+        "bottom": 1182
+      },
+      "variants": [
+        {
+          "file": "variants/chicken-64.png",
+          "size": 64,
+          "bytes": 5471,
+          "rgbaBytes": 16384,
+          "sha256": "958ad78d55756592e6f6e8583fe582acb09594acc64a46c96490d8f18483d5e8"
+        },
+        {
+          "file": "variants/chicken-128.png",
+          "size": 128,
+          "bytes": 17637,
+          "rgbaBytes": 65536,
+          "sha256": "98da7ebd8b904f84301f2e07d4e6ff8d9dba190f233b8585e5c7d37fbaa37797"
+        },
+        {
+          "file": "variants/chicken-256.png",
+          "size": 256,
+          "bytes": 58576,
+          "rgbaBytes": 262144,
+          "sha256": "6cb2c34a3513a90ee3128437d83840b0a50cc2b94f8381a7033eccd6fb7c1af5"
+        },
+        {
+          "file": "variants/chicken-512.png",
+          "size": 512,
+          "bytes": 199869,
+          "rgbaBytes": 1048576,
+          "sha256": "376cf840146203c41819211e1a4d9863b41e8d6ecba47268689442b8e33548be"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "cow",
+      "meaningZh": "牛",
+      "audioPath": "/learning-assets/audio/learn-cow.mp3",
+      "original": "originals/cow.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#cow",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1358984,
+      "sha256": "b9c5fb8ab4b52cb354df08ce7edb9a097452c632768aad99be00d2995f782491",
+      "transparent": 917562,
+      "partial": 654568,
+      "contentBounds": {
+        "left": 96,
+        "top": 75,
+        "right": 1165,
+        "bottom": 1183
+      },
+      "variants": [
+        {
+          "file": "variants/cow-64.png",
+          "size": 64,
+          "bytes": 6859,
+          "rgbaBytes": 16384,
+          "sha256": "a07391bc4872db7612a3c637cea7f4ce07953bfe019bf50084837f831400e106"
+        },
+        {
+          "file": "variants/cow-128.png",
+          "size": 128,
+          "bytes": 21391,
+          "rgbaBytes": 65536,
+          "sha256": "95c68d9d0b2ef5f5c589d058fa15fd32f26559fb6a3ae982a9eb8b7ae9661e4c"
+        },
+        {
+          "file": "variants/cow-256.png",
+          "size": 256,
+          "bytes": 67846,
+          "rgbaBytes": 262144,
+          "sha256": "81ce0f58b4084c3a16f6f0254c17af63687c3017d99e64dd66f232c97f7dbc7f"
+        },
+        {
+          "file": "variants/cow-512.png",
+          "size": 512,
+          "bytes": 226015,
+          "rgbaBytes": 1048576,
+          "sha256": "4c5cda1e56c8c223afa6a6835c02aaa36f8f13651603231d47b2d7aa892a4750"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "dog",
+      "meaningZh": "狗",
+      "audioPath": "/learning-assets/audio/learn-dog.mp3",
+      "original": "originals/dog.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#dog",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1406845,
+      "sha256": "6667ef9010dc1981db41eed0cdb859d6222d6c2009b0d358227fa48bdeccfef2",
+      "transparent": 913787,
+      "partial": 658624,
+      "contentBounds": {
+        "left": 111,
+        "top": 103,
+        "right": 1075,
+        "bottom": 1161
+      },
+      "variants": [
+        {
+          "file": "variants/dog-64.png",
+          "size": 64,
+          "bytes": 6067,
+          "rgbaBytes": 16384,
+          "sha256": "1c949ebd71cbe8e56e60151338068ff48cc51b3185b4b63f8a3f127ada8d114a"
+        },
+        {
+          "file": "variants/dog-128.png",
+          "size": 128,
+          "bytes": 20026,
+          "rgbaBytes": 65536,
+          "sha256": "b2100c215152337a55ff5135cbe303fa4c8b9ce31b6ea900092909672d6263a3"
+        },
+        {
+          "file": "variants/dog-256.png",
+          "size": 256,
+          "bytes": 67738,
+          "rgbaBytes": 262144,
+          "sha256": "1bf683b474507e8866a072a5133b2d1212d40c65910b422a6f0266d97f9dbf66"
+        },
+        {
+          "file": "variants/dog-512.png",
+          "size": 512,
+          "bytes": 231440,
+          "rgbaBytes": 1048576,
+          "sha256": "2b97a8de3d48e5fa66b1ccfdf07149cdfaca925dcdde9ccca1f85014f6b84856"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "duck",
+      "meaningZh": "鸭",
+      "audioPath": "/learning-assets/audio/learn-duck.mp3",
+      "original": "originals/duck-clean.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#duck",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 969484,
+      "sha256": "38ffb9a4fb582e3cc49c90846c74be9488d2f063a4328525be6b2c85343a6a68",
+      "transparent": 1088624,
+      "partial": 483704,
+      "contentBounds": {
+        "left": 208,
+        "top": 95,
+        "right": 987,
+        "bottom": 1171
+      },
+      "variants": [
+        {
+          "file": "variants/duck-64.png",
+          "size": 64,
+          "bytes": 4793,
+          "rgbaBytes": 16384,
+          "sha256": "c90889a7c5f7ebb47b6f4d626c8dcb306f6e8826cb2a3d68e9aa066d3aed2de2"
+        },
+        {
+          "file": "variants/duck-128.png",
+          "size": 128,
+          "bytes": 15283,
+          "rgbaBytes": 65536,
+          "sha256": "8da47e4ce803dd146427bbb81887ea179ad1a08f06086da2f578283e738c2b01"
+        },
+        {
+          "file": "variants/duck-256.png",
+          "size": 256,
+          "bytes": 50144,
+          "rgbaBytes": 262144,
+          "sha256": "d103a50126f920bd4cb0e673939bdea701a3ff9ab932ee949e5492c51e98d161"
+        },
+        {
+          "file": "variants/duck-512.png",
+          "size": 512,
+          "bytes": 168606,
+          "rgbaBytes": 1048576,
+          "sha256": "198d384942c4d707bc00a7b03ac1bd8d4c518c7937e21c7a9ee5f17600462c55"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "elephant",
+      "meaningZh": "大象",
+      "audioPath": "/learning-assets/audio/learn-elephant.mp3",
+      "original": "originals/elephant.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#elephant",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1576211,
+      "sha256": "ad78618a39248c2e4c63da1d8b0274fd5daa7df799a8c167cb0df0787b8a2b26",
+      "transparent": 856746,
+      "partial": 715450,
+      "contentBounds": {
+        "left": 89,
+        "top": 117,
+        "right": 1148,
+        "bottom": 1148
+      },
+      "variants": [
+        {
+          "file": "variants/elephant-64.png",
+          "size": 64,
+          "bytes": 6439,
+          "rgbaBytes": 16384,
+          "sha256": "9f778ceb4a57fbded21f3da19bf67ab64b0f769391a98054312e1918c5ecc02b"
+        },
+        {
+          "file": "variants/elephant-128.png",
+          "size": 128,
+          "bytes": 20844,
+          "rgbaBytes": 65536,
+          "sha256": "150525e51b9a5fed5c4c2e7f7aee2ee683cbe94fd7246e0ee484f83b41ba2a63"
+        },
+        {
+          "file": "variants/elephant-256.png",
+          "size": 256,
+          "bytes": 69949,
+          "rgbaBytes": 262144,
+          "sha256": "02dc0fda5fd1d634422f8c878c4b8baa96a686177c7071fa287ecb9a4dbf8b4d"
+        },
+        {
+          "file": "variants/elephant-512.png",
+          "size": 512,
+          "bytes": 240662,
+          "rgbaBytes": 1048576,
+          "sha256": "168ba9cea43fe927c5ef84d1ce52d4d80d048ca243ab670a5681181dcfe46759"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "fish",
+      "meaningZh": "鱼",
+      "audioPath": "/learning-assets/audio/learn-fish.mp3",
+      "original": "originals/fish-corrected.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#fish",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1073590,
+      "sha256": "2171b5144bbcb4a680467ae7dd9e5c995bd94d206f8a627a18f70f39b5fca3b5",
+      "transparent": 1040128,
+      "partial": 531977,
+      "contentBounds": {
+        "left": 84,
+        "top": 194,
+        "right": 1144,
+        "bottom": 1005
+      },
+      "variants": [
+        {
+          "file": "variants/fish-64.png",
+          "size": 64,
+          "bytes": 5172,
+          "rgbaBytes": 16384,
+          "sha256": "a8b57f8d0448be5d614baac0413e3670ec829a8dd574c239ce88f743693e0cd3"
+        },
+        {
+          "file": "variants/fish-128.png",
+          "size": 128,
+          "bytes": 16904,
+          "rgbaBytes": 65536,
+          "sha256": "dbbcd7c176e2bf45a44154b8832826f7aed7228154bc8ad30256352da36ddc26"
+        },
+        {
+          "file": "variants/fish-256.png",
+          "size": 256,
+          "bytes": 57038,
+          "rgbaBytes": 262144,
+          "sha256": "1fb6a78c72845d360bc7918146af84ef9a38831eabc9604ca80768b12bba1a58"
+        },
+        {
+          "file": "variants/fish-512.png",
+          "size": 512,
+          "bytes": 192548,
+          "rgbaBytes": 1048576,
+          "sha256": "243c1e1590685269cbd5047446ce04d699e284a2d427c47572d713c5664a5131"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "panda",
+      "meaningZh": "熊猫",
+      "audioPath": "/learning-assets/audio/learn-panda.mp3",
+      "original": "originals/panda.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#panda",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1657374,
+      "sha256": "c82a9e1408084f67150f4ee44c7d69fdbf921073a33581d4b66548336f049ae7",
+      "transparent": 808370,
+      "partial": 764104,
+      "contentBounds": {
+        "left": 177,
+        "top": 55,
+        "right": 1104,
+        "bottom": 1208
+      },
+      "variants": [
+        {
+          "file": "variants/panda-64.png",
+          "size": 64,
+          "bytes": 6729,
+          "rgbaBytes": 16384,
+          "sha256": "dd6cef51a6420ec08c48d70cb8d338fac59dada19c475cf87844d0b003500e7e"
+        },
+        {
+          "file": "variants/panda-128.png",
+          "size": 128,
+          "bytes": 21357,
+          "rgbaBytes": 65536,
+          "sha256": "ce1173d9b92ec54e0bcdb00c3f40a892a3d05a2f5dc3ab98b7088569d6061969"
+        },
+        {
+          "file": "variants/panda-256.png",
+          "size": 256,
+          "bytes": 72701,
+          "rgbaBytes": 262144,
+          "sha256": "ae45540d85caf94250573c65daca4de30023a42c92819e9c214b90fae2cc88e6"
+        },
+        {
+          "file": "variants/panda-512.png",
+          "size": 512,
+          "bytes": 255412,
+          "rgbaBytes": 1048576,
+          "sha256": "bee479c706cd1472ea567c41e288f10f42f0fb5d7856b5f3e5f2f6508e7f274b"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "rabbit",
+      "meaningZh": "兔子",
+      "audioPath": "/learning-assets/audio/learn-rabbit.mp3",
+      "original": "../samples/originals/rabbit-display.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "../samples/prompts.json#rabbit-display",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1346476,
+      "sha256": "1bb1232458801f0090f4fa5add1c2acb0382446c14f3fdcaffe90de6eb9ab9e0",
+      "transparent": 970662,
+      "partial": 601740,
+      "contentBounds": {
+        "left": 171,
+        "top": 76,
+        "right": 1140,
+        "bottom": 1160
+      },
+      "variants": [
+        {
+          "file": "variants/rabbit-64.png",
+          "size": 64,
+          "bytes": 5781,
+          "rgbaBytes": 16384,
+          "sha256": "0e0cb02ccd09ce66afcb032dd65903dedf4651742a911cfb3f79af17bbe2db9e"
+        },
+        {
+          "file": "variants/rabbit-128.png",
+          "size": 128,
+          "bytes": 18823,
+          "rgbaBytes": 65536,
+          "sha256": "66414ad5c28884ffe9b921749c972c3939a61c4b14dc30cb4bd655732d68e85f"
+        },
+        {
+          "file": "variants/rabbit-256.png",
+          "size": 256,
+          "bytes": 64446,
+          "rgbaBytes": 262144,
+          "sha256": "25b27cb69ef039a4ae38fd9fcb668eb6bf1716bb46fb6e06dea9e5afca032906"
+        },
+        {
+          "file": "variants/rabbit-512.png",
+          "size": 512,
+          "bytes": 221262,
+          "rgbaBytes": 1048576,
+          "sha256": "a532b0f0d404bce8c598c5dc57f91f2ec3fcce3e3631fe2d5c96f1912a41a495"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "sheep",
+      "meaningZh": "羊",
+      "audioPath": "/learning-assets/audio/learn-sheep.mp3",
+      "original": "originals/sheep.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#sheep",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1293806,
+      "sha256": "1f1d2cb1e5cec3f46de16d225cd5b148884bb14064ef0db1b5eb624b07014b54",
+      "transparent": 950347,
+      "partial": 621946,
+      "contentBounds": {
+        "left": 157,
+        "top": 88,
+        "right": 1120,
+        "bottom": 1161
+      },
+      "variants": [
+        {
+          "file": "variants/sheep-64.png",
+          "size": 64,
+          "bytes": 5909,
+          "rgbaBytes": 16384,
+          "sha256": "8f2c3895e5e053988cfcc35801e9375bade1e927eb17407c430031217561e0a0"
+        },
+        {
+          "file": "variants/sheep-128.png",
+          "size": 128,
+          "bytes": 18998,
+          "rgbaBytes": 65536,
+          "sha256": "4ee1aaa3345a0fff3e0700518c6ddd84fee14fc3d5f2d7e2f1b6a87fa461604d"
+        },
+        {
+          "file": "variants/sheep-256.png",
+          "size": 256,
+          "bytes": 62425,
+          "rgbaBytes": 262144,
+          "sha256": "da37fb740435afd283a405c9a4427f08b8fd89cdd2dc59b48fc8232aff2e1a24"
+        },
+        {
+          "file": "variants/sheep-512.png",
+          "size": 512,
+          "bytes": 211392,
+          "rgbaBytes": 1048576,
+          "sha256": "f4413bfb4f17e93f6187b8748711db2e33f37fd57ffb6590b792186c48865d27"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "tiger",
+      "meaningZh": "老虎",
+      "audioPath": "/learning-assets/audio/learn-tiger.mp3",
+      "original": "originals/tiger.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#tiger",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1729467,
+      "sha256": "f5c4730a00c9ee2ed34e7e040dc8ba5e0a8d1dbb50d13ff460ec906409756597",
+      "transparent": 849839,
+      "partial": 722627,
+      "contentBounds": {
+        "left": 163,
+        "top": 80,
+        "right": 1137,
+        "bottom": 1151
+      },
+      "variants": [
+        {
+          "file": "variants/tiger-64.png",
+          "size": 64,
+          "bytes": 7082,
+          "rgbaBytes": 16384,
+          "sha256": "64cf3a52bb5d6ae83d879e8aab1263ce70f9e2efda53568b8e5bd28b501c36c3"
+        },
+        {
+          "file": "variants/tiger-128.png",
+          "size": 128,
+          "bytes": 22996,
+          "rgbaBytes": 65536,
+          "sha256": "f755bdd71b67fb8de69b6e61529bc29118d5cac54333aee6b3877b8d9911d24f"
+        },
+        {
+          "file": "variants/tiger-256.png",
+          "size": 256,
+          "bytes": 78536,
+          "rgbaBytes": 262144,
+          "sha256": "4e8a9e57c08ffeeed4af4d677c978dd5776187875203dc1e418fd4b9cbbaee39"
+        },
+        {
+          "file": "variants/tiger-512.png",
+          "size": 512,
+          "bytes": 278860,
+          "rgbaBytes": 1048576,
+          "sha256": "74c1064a267202e9f58b11d5fd7fbe2268c912dd4dc60a5a1e159d64bef610af"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    }
+  ]
+}

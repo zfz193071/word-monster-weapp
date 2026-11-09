@@ -1,0 +1,8 @@
+{
+  "duck": {
+    "prompt": "Use case: background-extraction. Edit the attached duck asset. Preserve ONLY the complete yellow duck, its feathers, face, orange bill and orange webbed feet exactly. Remove ALL background pixels including the white/gray wash across the top edge and the broad white halo surrounding the duck. Outside the duck silhouette must be truly fully transparent alpha=0, including all four canvas edges. Preserve fine feather tips with clean alpha. No new shadow or glow, no checkerboard painted into the image. Preserve the existing square canvas, pose, anatomy, colors, lighting, size and full uncropped subject.",
+    "input": "originals/duck.png",
+    "output": "originals/duck-clean.png",
+    "reason": "Original had broad white/grey background touching canvas edge; excluded from candidates."
+  }
+}

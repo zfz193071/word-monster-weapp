@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-09",
+  "tool": "built-in image_gen",
+  "missing": [
+    "horse",
+    "lion"
+  ],
+  "entries": [
+    {
+      "id": "bee",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-bf193d4c-79aa-4b4f-aabb-cdb80e1d668d.png"
+    },
+    {
+      "id": "cat",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-bbd239d8-8ae2-40db-a9d6-b4f3c939309c.png"
+    },
+    {
+      "id": "chicken",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-cc16d8ea-374d-413e-9c55-0ebe52c89654.png"
+    },
+    {
+      "id": "cow",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-f8849f47-36ac-4ee8-8a28-198d505b8a93.png"
+    },
+    {
+      "id": "dog",
+      "status": "generated",
+      "attempts": 2,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID e17eb492-0ef0-4004-a3c6-eae9555fc2a3.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-376361ca-308a-40d3-a8b3-9ede8cdaeb7e.png"
+    },
+    {
+      "id": "duck",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-0a0170cc-1219-4667-9a4f-feeface88732.png"
+    },
+    {
+      "id": "elephant",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-49c13b44-e505-44d4-a74c-2d771e09c37a.png"
+    },
+    {
+      "id": "fish",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-3d3a616c-7b23-45a8-8178-2c2c125f1744.png"
+    },
+    {
+      "id": "horse",
+      "status": "blocked",
+      "attempts": 2,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f37bf35e-11e9-4354-8f1a-54b7d99e5a16.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")"
+    },
+    {
+      "id": "lion",
+      "status": "blocked",
+      "attempts": 2,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID e656855d-e9eb-47b8-a835-2b34024d1513.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "retryError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID c362f965-e98f-4ecc-9ccf-70c9f5bc7867.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")"
+    },
+    {
+      "id": "panda",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-8528ea33-fab4-4330-ba81-9b9ecc8ff079.png"
+    },
+    {
+      "id": "sheep",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-cd168520-4714-484b-80a2-8d50d6c0d973.png"
+    },
+    {
+      "id": "tiger",
+      "status": "generated",
+      "attempts": 1,
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c0cf-812f-7293-b946-b72823b61717/exec-4993cbd0-9ed7-4035-9fed-42626c548213.png"
+    },
+    {
+      "id": "bear",
+      "status": "generated",
+      "attempts": 1
+    },
+    {
+      "id": "rabbit",
+      "status": "reused"
+    },
+    {
+      "id": "bird",
+      "status": "reused"
+    }
+  ],
+  "horseRetry": "moderation_blocked at output, category other; request ccd547f2-c1c4-46d4-85f3-61d0d0936b20; unchanged prompt",
+  "refinements": {
+    "duck": "originals/duck-clean.png removes invalid broad background",
+    "fish": "originals/fish-corrected.png removes mammalian nose/muzzle; keeps fish anatomy"
+  }
+}
