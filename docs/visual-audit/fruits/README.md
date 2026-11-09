@@ -43,3 +43,9 @@ WM_CANVAS_MODULE=/tmp/wm-render-tools/node_modules/@napi-rs/canvas node --import
 展示与战斗候选不是最终统一规格。24 CSS像素小图用于接近普通帽标尺寸的辨识检查；Boss放大、不同DPR、完整战场和动态/微信真机仍需后续验收。源码字节不等于微信编译包体或驻留内存，候选不能全部直接装入现有图片分包。
 
 本工单只制作资源；正式替换由#87/#88承接，分包由#86承接，整套视觉及设备验收由#84/#89保留。未通过整套审查前不修改运行时入口。
+
+## 2026-11-09 水果帽接入
+
+用户要求苹果戴苹果帽、梨戴梨帽，依次类推，并与本轮展示图片一致。正式11张水果资源已使用本套母版的256px候选，帽标、两类Boss及学习入口共用原有词图映射；此前“未替换运行时”描述为历史阶段。256档整套700.2KiB，128档用于离屏比较，不另放入运行包。设备与动态验收仍未完成。
+
+[战场/Boss审样页](scenes/review.html)和[11词Boss总览](scenes/boss-contact-sheet.png)使用正式绘制函数，包含23张人工静态夹具。重建：`WM_CANVAS_MODULE=/tmp/wm-render-tools/node_modules/@napi-rs/canvas node --import tsx scripts/render-fruit-art-scenes.mts`。目视检查未见帽标裁切或被头盔遮挡；细纹理在普通帽标尺寸弱化，现有僵尸/背景质感仍待全局美术协调。这些不代表自然刷怪、动态或真机验收。
