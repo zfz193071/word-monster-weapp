@@ -1,10 +1,12 @@
+import { houseForLevel } from '../houses/catalog';
+import { weaponAppearance, weaponMaterial } from '../weapons/appearance';
 import type { StrengthTarget } from '../services/strength-guide';
 import type { PetAppearance } from '../pets/catalog';
 import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
-interface Face { readonly actor?: boolean; readonly pet?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
-interface ProjectedFace { readonly actor?: boolean; readonly pet?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
+interface Face { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
+interface ProjectedFace { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
 const LIGHT: Point3 = [-.35, .85, .4];
@@ -69,7 +71,8 @@ function floorEllipse(faces:Face[],x:number,z:number,rx:number,rz:number,y:numbe
   const points:Point3[]=Array.from({length:40},(_,i)=>[x+rx*Math.cos(i*Math.PI/20),y,z+rz*Math.sin(i*Math.PI/20)]);
   faces.push({points,color,normal:[0,1,0],opacity,layer:2});
 }
-function room():Face[]{
+function room(level=1):Face[]{
+  houseForLevel(level);
   const f:Face[]=[];
   box(f,0,-.20,0,6.3,.4,6.3,'#d4b88b');
   box(f,0,-.035,0,6.4,.10,6.4,'#f2d7a5');
@@ -78,13 +81,53 @@ function room():Face[]{
   }
   const floorEnd=f.length;
   // Two solid walls, open front; trim makes their thickness visible.
-  box(f,-3.1,1.55,0,.2,3.1,6.3,'#b5c998');
-  box(f,0,1.55,-3.1,6.3,3.1,.2,'#e9e6cc');
+  box(f,-3.1,1.55,0,.2,3.1,6.3,level>=3?'#8eaaa9':'#c39b6e');
+  box(f,0,1.55,-3.1,6.3,3.1,.2,level>=3?'#b4c6bf':'#e2c599');
   box(f,-3.1,3.13,0,.27,.10,6.4,'#fff2d0');box(f,0,3.13,-3.1,6.4,.10,.27,'#fff2d0');
   box(f,-2.97,.15,0,.06,.25,6.1,'#e9e3bd');box(f,0,.15,-2.97,6.1,.25,.06,'#f7edcb');
   const wallsEnd=f.length;
   for(let i=floorEnd;i<wallsEnd;i++) {
     f[i]={...f[i],wall:Math.floor((i-floorEnd)/5)%2===0 ? 'x' : 'z'};
+  }
+  // Structural upgrades stay on the two cutaway walls so the room remains playable.
+  const structuralBox=(axis:'x'|'z',along:number,y:number,w:number,h:number,d:number,color:string)=>{
+    const start=f.length;
+    if(axis==='x')box(f,-3.04,y,along,d,h,w,color);else box(f,along,y,-3.04,w,h,d,color);
+    for(let i=start;i<f.length;i++)f[i]={...f[i],wall:axis,layer:1};
+  };
+  for(const axis of ['x','z'] as const){
+    if(level<=2){
+      // Horizontal timber courses and a projecting roof edge.
+      for(let y=.45;y<3;y+=.45)structuralBox(axis,0,y,6.2,.055,.24,'#ad8157');
+      structuralBox(axis,0,3.22,6.55,.16,.55,'#9b6949');
+      structuralBox(axis,0,3.36,6.45,.14,.40,'#bd8253');
+    }
+    if(level>=2){
+      for(const along of [-2.85,0,2.85])structuralBox(axis,along,1.6,.22,3.2,.36,level>=3?'#718c8c':'#805c40');
+      structuralBox(axis,0,.25,6.4,.35,.36,level>=3?'#718c8c':'#805c40');
+    }
+    if(level>=3){
+      for(let row=0;row<6;row++)for(let col=0;col<6;col++){
+        const along=-2.6+col*1.04;
+        structuralBox(axis,along,.48+row*.45,.99,.40,.25,(row+col)%2?'#b0c2bb':'#9ab1ad');
+      }
+      structuralBox(axis,0,3.22,6.6,.24,.5,'#d0d7c6');
+    }
+    if(level>=4){
+      for(let i=0;i<7;i++)structuralBox(axis,-2.8+i*.93,3.48,.52,.42,.54,'#9caaa5');
+      for(const along of [-2.9,2.9]){
+        structuralBox(axis,along,1.75,.65,3.5,.65,level===5?'#617e87':'#96aaa7');
+        structuralBox(axis,along,3.55,.88,.25,.88,'#ced5c8');
+        for(const offset of [-.3,.3])structuralBox(axis,along+offset,3.8,.22,.38,.85,level===5?'#d0ad61':'#a4b7af');
+      }
+    }
+    if(level===5){
+      for(const along of [-1.9,-.9,.9,1.9]){
+        structuralBox(axis,along,1.65,.68,2.65,.42,'#597582');
+        for(const y of [.5,1.65,2.8])structuralBox(axis,along,y,.18,.14,.48,'#e1bc69');
+      }
+      structuralBox(axis,0,3.18,6.6,.14,.6,'#d4b15f');
+    }
   }
   // Recessed window with bright sill and panes.
   box(f,1.1,2.03,-2.965,1.75,1.56,.05,'#91b8b9');
@@ -116,7 +159,7 @@ function room():Face[]{
   floorEllipse(f,-.5,1.08,1.68,1.30,.075,'#ba9b6a');floorEllipse(f,-.5,1.08,1.56,1.19,.078,'#f0dfb4');
   // Gentle contact shadow on the rug.
   floorEllipse(f,-.48,1.02,.62,.43,.085,'#7f8969',.25);
-  return f.map((face,index)=>({...face,layer:index<floorEnd?0:index<wallsEnd?1:face.layer??3}));
+  return f.map((face,index)=>({...face,house:true,layer:index<floorEnd?0:index<wallsEnd?1:face.layer??3}));
 }
 function hero(seconds:number,level=1):Face[]{
   const f:Face[]=[];const pose=homeHeroPose(seconds);
@@ -136,16 +179,19 @@ function hero(seconds:number,level=1):Face[]{
   // Eyes face the open room; the entire model turns slightly in world space.
   for(const x of [-.14,.14])box(f,x,1.46,.315,.065,.055,.025,'#4b5a45');
   box(f,0,1.33,.314,.13,.025,.022,'#b68863');
-  // Original chunky shoulder-carried guardian rifle. Levels change only its appearance.
-  const weapon=weaponForLevel(level);
-  box(f,.50,1.20,.20,.23,.60,.26,weapon.color);
-  box(f,.50,1.70,.20,.12,.48+level*.025,.13,'#53685f');
-  box(f,.50,1.48,.20,.25,.10,.27,weapon.color);
-  box(f,.50,.82,.20,.25,.22,.28,'#687c68');
-  box(f,.50,1.12,.39,.15,.12,.18,'#53685f');
-  for(let i=0;i<level;i++)box(f,.625,1.02+i*.055,.20,.025,.025,.20,'#fff2ce');
-  if(level>=3)box(f,.50,1.36,.40,.13,.24,.12,weapon.color);
-  if(level>=5)box(f,.50,1.63,.20,.19,.12,.20,weapon.color);
+  // The same seven silhouettes used in the upgrade card and battle sprite.
+  const weapon=weaponForLevel(level), design=weaponAppearance(level);
+  for(const part of design.parts){
+    const x=.50+(150-part.y-part.h/2)*.0026;
+    const y=.72+(part.x+part.w/2)*.0022;
+    const color=weaponMaterial(part,weapon.color,design.light);
+    box(f,x,y,.24,part.h*.0026,part.w*.0022,part.material==='light'?.29:.23,color);
+  }
+  // Small orbiting energy motes; animation follows the existing room clock.
+  if(level>=4)for(let i=0;i<level-3;i++){
+    const angle=seconds*1.8+i*Math.PI*2/(level-3);
+    box(f,.50+Math.cos(angle)*.28,1.45+Math.sin(angle)*.30,.28,.035,.06,.035,design.light);
+  }
   ellipsoid(f,.48,1.0,.40,.14,.14,.14,skin);
   const sin=Math.sin(pose.yaw),cos=Math.cos(pose.yaw);
   const transform=(p:Point3):Point3=>{
@@ -195,7 +241,7 @@ function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
     const p=face.points.map(point=>projectRoomPoint(point,yaw));
     // A near solid wall must occlude the room, rather than remain behind actors.
     const layer=face.wall ? (view[face.wall==='x'?0:2]<0 ? 4 : 1) : face.layer??3;
-    return { actor:face.actor, pet:face.pet, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
+    return { house:face.house, actor:face.actor, pet:face.pet, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
 }
@@ -205,7 +251,8 @@ export class HomeRoomScene {
   private guide:StrengthTarget='';
   private pet:PetAppearance|null=null;
   private drawnFaces:ProjectedFace[]=[];
-  private readonly roomFaces=room();
+  private houseLevel=1;
+  private roomFaces=room();
   private staticFaces:ProjectedFace[];
   private yaw:number;
   private shadow:readonly (readonly [number,number])[];
@@ -225,13 +272,19 @@ export class HomeRoomScene {
   setWeaponLevel(level:number){
     weaponForLevel(level);this.weaponLevel=level;if(!this.active&&!this.disposed)this.draw();
   }
+  setHouseLevel(level:number){
+    houseForLevel(level);if(level===this.houseLevel||this.disposed)return;
+    this.houseLevel=level;this.roomFaces=room(level);this.staticFaces=projectFaces(this.roomFaces,this.yaw);
+    if(!this.active)this.draw();
+  }
+  hitHouse(x:number,y:number):boolean{return this.hitActor(x,y,'house');}
   setGuide(target:StrengthTarget){this.guide=target;if(!this.disposed&&!this.active)this.draw();}
   setPet(pet:PetAppearance|null){this.pet=pet;if(!this.disposed&&!this.active)this.draw();}
   hitHero(x:number,y:number):boolean{return this.hitActor(x,y,'actor');}
   hitPet(x:number,y:number):boolean{return this.hitActor(x,y,'pet');}
-  private hitActor(x:number,y:number,target:'actor'|'pet'):boolean{
+  private hitActor(x:number,y:number,target:'actor'|'pet'|'house'):boolean{
     if(this.disposed||!Number.isFinite(x)||!Number.isFinite(y))return false;
-    const scale=Math.min(this.width/9.6,this.height/9.2);
+    const scale=Math.min(this.width/(this.houseLevel>=4?10.8:9.6),this.height/(this.houseLevel>=4?10:9.2));
     const px=(x-this.width/2)/scale,py=(y-this.height*.56)/scale;
     // Walk the rendered faces front-to-back: opaque furniture/walls block hidden targets.
     for(let i=this.drawnFaces.length-1;i>=0;i--){
@@ -253,7 +306,7 @@ export class HomeRoomScene {
   }
   resize(width:number,height:number,dpr:number){
     if(this.disposed)return;
-    this.width=width;this.height=height;this.dpr=Math.min(2,dpr);
+    this.width=width;this.height=height;this.dpr=Number.isFinite(dpr)&&dpr>0?dpr:1;
     this.canvas.width=Math.round(width*this.dpr);this.canvas.height=Math.round(height*this.dpr);this.draw();
   }
   setActive(active:boolean,afterDraw?:()=>void){
@@ -280,7 +333,7 @@ export class HomeRoomScene {
     });
   }
   private draw(){
-    const c=this.context;const scale=Math.min(this.width/9.6,this.height/9.2);
+    const c=this.context;const scale=Math.min(this.width/(this.houseLevel>=4?10.8:9.6),this.height/(this.houseLevel>=4?10:9.2));
     c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,this.width,this.height);
     c.save();c.translate(this.width/2,this.height*.56);
     const shadowCenter=this.shadow.reduce((center,p)=>[center[0]+p[0]/this.shadow.length,center[1]+p[1]/this.shadow.length],[0,0]);

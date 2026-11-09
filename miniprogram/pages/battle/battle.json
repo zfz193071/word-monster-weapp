@@ -2,7 +2,8 @@
   "navigationBarTitleText": "",
   "usingComponents": {
     "fortress-scene": "/components/fortress-scene/fortress-scene",
-    "fortress-choice": "/components/fortress-choice/fortress-choice"
+    "fortress-choice": "/components/fortress-choice/fortress-choice",
+    "loading-progress": "/components/loading-progress/loading-progress"
   },
   "disableScroll": true
 }

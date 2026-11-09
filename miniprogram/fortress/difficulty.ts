@@ -1,9 +1,9 @@
 export type DifficultyId = 'easy' | 'normal' | 'hard' | 'nightmare';
 export const DIFFICULTIES = Object.freeze({
-  easy: { label: '简单', hp: .6, damage: .5, speed: .8 },
-  normal: { label: '普通', hp: 1, damage: 1, speed: 1 },
-  hard: { label: '困难', hp: 1.5, damage: 1.3, speed: 1.1 },
-  nightmare: { label: '噩梦', hp: 2, damage: 1.6, speed: 1.2 },
+  easy: { label: '简单', hp: .4, damage: .35, speed: .8, bossHp: 10 },
+  normal: { label: '普通', hp: 1, damage: 1, speed: 1, bossHp: 20 },
+  hard: { label: '困难', hp: 1.5, damage: 1.3, speed: 1.1, bossHp: 20 },
+  nightmare: { label: '噩梦', hp: 1.7, damage: 1.4, speed: 1.2, bossHp: 15 },
 });
 export function difficultyFor(id: DifficultyId = 'normal') {
   if (!Object.prototype.hasOwnProperty.call(DIFFICULTIES, id)) throw new Error('无效难度');

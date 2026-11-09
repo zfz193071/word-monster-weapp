@@ -1,3 +1,4 @@
+import { houseForLevel } from '../houses/catalog';
 import { coinRulesFor, difficultyFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
 import { createSeededRandom } from './plans';
@@ -24,7 +25,7 @@ export function monsterStats(levelId: number, heroLevel: number, boss: boolean |
   const tier = heroLevel < 6 ? 0 : heroLevel < 10 ? 1 : heroLevel < 15 ? 2 : heroLevel < 20 ? 3 : 4;
   const hp = Math.ceil(8 * (1 + .15 * (levelId - 1)) * (1 + tier * .25)) * 10;
   const damage = Math.round(10 * (1 + .1 * (levelId - 1)) * (1 + tier * .1));
-  return { hp: Math.ceil(hp * (boss === 'grand' ? 20 : boss ? 8 : 1) * multipliers.hp), attackDamage: Math.ceil(Math.round(damage * (boss === 'grand' ? 2 : boss ? 1.5 : 1)) * multipliers.damage), ...(boss === 'grand' ? { shockwaveDamage: Math.ceil(damage * 3 * multipliers.damage) } : {}) };
+  return { hp: Math.ceil(hp * (boss === 'grand' ? multipliers.bossHp : boss ? 8 : 1) * multipliers.hp), attackDamage: Math.ceil(Math.round(damage * (boss === 'grand' ? 2 : boss ? 1.5 : 1)) * multipliers.damage), ...(boss === 'grand' ? { shockwaveDamage: Math.ceil(damage * 3 * multipliers.damage) } : {}) };
 }
 
 export function monsterDropCoins(monsterId: string, boss = false, difficulty: DifficultyId = 'normal'): number {
@@ -44,9 +45,9 @@ export function bossChargePhase(elapsedSinceSpawnMs: number): 'normal' | 'warnin
   return phase < 1000 ? 'warning' : phase < 3000 ? 'charging' : 'normal';
 }
 
-export function fortressMaxHp(levelId: number): number {
+export function fortressMaxHp(levelId: number, houseLevel = 1): number {
   if (!Number.isInteger(levelId) || levelId < 1 || levelId > 8) throw new Error('堡垒关卡无效');
-  return 1000 + (levelId - 1) * 200;
+  return (1000 + (levelId - 1) * 200) * houseForLevel(houseLevel).hpMultiplier;
 }
 
 export function grandBossWindingUp(elapsedMs: number): boolean {

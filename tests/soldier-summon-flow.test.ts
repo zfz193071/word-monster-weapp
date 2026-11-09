@@ -24,6 +24,7 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
     get snapshot(){return this.runner.snapshot;}
     async present(){return true;}async load(){this.options.onHud({hp:this.snapshot!.base.hp,maxHp:this.snapshot!.base.maxHp,status:this.snapshot!.status});return true;}
     setPaused(paused:boolean){if(paused)this.runner.pause();else if(this.snapshot)this.runner.resume(0,this.snapshot.context.generation+1);}
+    releaseFrost(){const released=this.runner.releaseFrost();if(released)this.options.onHud({hp:this.snapshot!.base.hp,maxHp:this.snapshot!.base.maxHp,status:this.snapshot!.status,frostEnergy:this.snapshot!.frostEnergy,frostTarget:true});return released;}
     summonSoldier(id:string,debit:()=>boolean){return this.runner.summonSoldier(id,debit);}
     captureFrame(){return 'frame';} applyPet(){} applySkills(){} showCoinDrop(){}
     dispose(){this.disposed=true;this.runner.dispose();}
@@ -40,11 +41,21 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
     },
   });
   async function mount(){
-    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
+    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();if(patch.entryFrame)queueMicrotask(()=>this.entryFrameLoaded({currentTarget:{dataset:{epoch:patch.entryFrameEpoch}}}));},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
     for(const [key,fn]of Object.entries(definition.methods))host[key]=(fn as Function).bind(host);
     definition.lifetimes.attached.call(host);host.mount();await new Promise(resolve => setImmediate(resolve));return host;
   }
   const host=await mount();const event=()=>({currentTarget:{dataset:{revision:host.data.soldierRevision}}});
+  current.runner=new CombatRunner({...current.snapshot,frostEnergy:30});
+  for(const [field,value] of [['ready',false],['error','broken'],['upgradeOffer',{}],['skillQuiz',{}],['waveRequest',{}],['completed',true],['failed',true],['reviveOpen',true],['inputUnavailable',true]]){
+    const previous=host.data[field as string];host.data[field as string]=value;host.releaseFrost();host.data[field as string]=previous;
+    assert.equal(current.snapshot.frostEnergy,30,`冰冻门控 ${field}`);
+  }
+  definition.pageLifetimes.hide.call(host);host.releaseFrost();assert.equal(current.snapshot.frostEnergy,30);
+  definition.pageLifetimes.show.call(host);host.releaseFrost();host.releaseFrost();
+  assert.equal(current.snapshot.frostEnergy,0);assert.equal(host.data.frostEnergy,0);
+  assert(current.snapshot.monsters.filter((m:any)=>m.status!=='waiting').every((m:any)=>m.frozenUntilTick===300));
+
   for(const [field,value] of [['ready',false],['error','broken'],['upgradeOffer',{}],['waveRequest',{}],['completed',true],['failed',true],['soldierBusy',true]]){
     const previous=host.data[field as string];host.data[field as string]=value;host.summonSoldier(event());host.data[field as string]=previous;
     assert.equal(daily.soldierInventory().count,5, String(field));

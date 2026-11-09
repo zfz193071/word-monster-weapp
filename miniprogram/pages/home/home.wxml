@@ -1,9 +1,11 @@
-<view class="home {{!homeVisible ? 'sky-paused' : ''}}">
+<wxs module="coinFormat" src="../../utils/coin-format.wxs" />
+<view wx:if="{{imagesReady}}" class="home {{!homeVisible ? 'sky-paused' : ''}}">
   <view class="cloud cloud-one"></view><view class="cloud cloud-two"></view>
   <view wx:for="{{upperClouds}}" wx:key="id" class="upper-cloud" style="{{item.style}}" aria-hidden="true"><view class="cloud" style="{{item.scale}}"></view></view>
   <button class="info-button" bindtap="toggleCredits" aria-label="素材集合">i</button>
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
-  <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinBalance}}</text></view>
+  <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view>
+  <button wx:if="{{victoryRewardError}}" class="pending-victory-reward" bindtap="retryVictoryRewards">通关奖励待恢复，点击重试</button>
   <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view></button>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
   <button class="difficulty-button" bindtap="openDifficulty" aria-label="游戏难度，当前{{difficultyLabel}}"><difficulty-icon class="difficulty-mark" kind="{{difficulty}}" compact="{{true}}" /><text>{{difficultyLabel}}</text></button>
@@ -12,25 +14,27 @@
       <view class="checkin-heading">每日签到<button class="close-button" bindtap="closeCheckin" aria-label="关闭签到">×</button></view>
       <scroll-view scroll-y class="checkin-scroll">
         <view class="checkin-body">
-          <text class="checkin-subtitle">每天来看看，收下一份惊喜</text>
-          <text class="checkin-rule">7天一轮 · 漏签不重置 · 每日0点更新</text>
+          <text class="checkin-rule">7天奖励 · 漏签不重置</text>
           <view wx:if="{{checkinBusy}}" class="checkin-notice">正在准备奖励…</view>
           <view wx:elif="{{checkinError}}" class="checkin-notice checkin-error">{{checkinError}}<button bindtap="refreshCheckin">重试</button></view>
           <block wx:elif="{{checkinView}}">
-            <scroll-view scroll-x class="checkin-days" scroll-into-view="checkin-day-{{checkinView.day}}">
+            <view class="checkin-days">
               <view class="checkin-row">
                 <button wx:for="{{checkinView.cards}}" wx:key="day" id="checkin-day-{{item.day}}" class="checkin-card {{item.status}}" disabled="{{item.status !== 'available' || !homeVisible}}" data-date="{{item.date}}" bindtap="claimCheckin" aria-label="第{{item.day}}天 {{item.label}} {{item.amount ? '乘' + item.amount : ''}} {{item.status === 'claimed' ? '已领取' : item.status === 'available' ? '点击签到' : '未到期'}}">
                   <text class="checkin-day">第{{item.day}}天</text>
-                  <view class="reward-icon {{item.kind}}">{{item.symbol}}</view>
-                  <text class="reward-name">{{item.label}}</text><text class="reward-amount">{{item.amount ? '×' + item.amount : '？'}}</text>
-                  <text class="reward-status">{{item.status === 'claimed' ? '已领取' : item.status === 'available' ? '点击签到' : '待揭晓'}}</text>
+                  <image class="reward-icon" src="/assets/images/checkin/{{item.kind || 'mystery'}}.png" mode="aspectFit" aria-hidden="true" />
+                  <text class="reward-amount">{{item.amount ? '×' + item.amount : '？'}}</text>
+                  <text wx:if="{{item.status === 'claimed'}}" class="reward-check" aria-hidden="true">✓</text>
                 </button>
               </view>
-            </scroll-view>
+            </view>
             <view class="checkin-progress"><view style="width:{{(checkinView.day - (checkinView.claimed ? 0 : 1)) / 7 * 100}}%"></view></view>
-            <text class="checkin-message" aria-live="polite">{{checkinMessage || (checkinView.claimed ? '今天已签到，明天再来吧' : '点击今日奖励，直接领取')}}</text>
-            <view class="checkin-inventory"><text>宠物粮 ×{{petError ? '—' : petView.food}}</text><text>士兵 ×{{checkinView.soldiers}}</text><text>复活旗帜 ×{{checkinView.flags}}</text></view>
-            <text class="checkin-rule">士兵可在战斗中召唤，旗帜可复活战死伙伴</text>
+            <text class="checkin-message" aria-live="polite">{{checkinMessage || (checkinView.claimed ? '明天再来' : '点击领取')}}</text>
+            <view class="checkin-inventory">
+              <view aria-label="宠物粮 {{petError ? '暂不可用' : petView.food}}"><image src="/assets/images/checkin/food.png" mode="aspectFit" /><text>×{{petError ? '—' : petView.food}}</text></view>
+              <view aria-label="士兵 {{checkinView.soldiers}}"><image src="/assets/images/checkin/soldier.png" mode="aspectFit" /><text>×{{checkinView.soldiers}}</text></view>
+              <view aria-label="复活旗帜 {{checkinView.flags}}"><image src="/assets/images/checkin/flag.png" mode="aspectFit" /><text>×{{checkinView.flags}}</text></view>
+            </view>
           </block>
         </view>
       </scroll-view>
@@ -39,35 +43,60 @@
   <view wx:if="{{showDifficulty}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <difficulty-panel class="home-difficulty-panel" selected="{{difficulty}}" error="{{difficultyError}}" bindselect="selectDifficulty" bindclose="closeDifficulty" />
   </view>
-  <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><loading-progress progress="{{entryProgress}}" /></view>
+  <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><text>正在准备关卡…</text></view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty || showCheckin}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
+    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty || showCheckin || showHouse}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" house-level="{{houseLevel}}" bindhousetap="openHouse" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
   </view>
-  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty && !showCheckin}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
+  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty && !showCheckin && !showHouse}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
   <view class="start-dock">
     <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>
   </view>
+  <view wx:if="{{showHouse}}" class="modal-backdrop" catchtouchmove="stopScroll">
+    <view class="house-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="房屋升级">
+      <button class="close-button" bindtap="closeHouse" aria-label="关闭房屋升级">×</button>
+      <view wx:if="{{houseError}}" class="house-error">{{houseError}}<button bindtap="refreshHouse">重试</button></view>
+      <block wx:elif="{{houseView}}">
+        <view class="house-title">{{houseView.name}} · Lv.{{houseLevel}}</view>
+        <image class="house-preview" src="/assets/images/houses/house-{{houseLevel}}.png" mode="aspectFit" aria-label="{{houseView.name}}外观" />
+        <view class="house-stat">堡垒生命 +{{houseView.hpBonus}}%<text wx:if="{{houseView.nextCost !== null}}"> → +{{houseView.hpBonus + 25}}%</text></view>
+        <button class="house-upgrade" bindtap="upgradeHouse" data-level="{{houseLevel}}" disabled="{{!homeVisible || houseView.nextCost === null || houseView.balance < houseView.nextCost}}">{{houseView.nextCost === null ? '已满级' : '升级 · ' + houseView.nextCost + ' 金币'}}</button>
+        <text class="house-balance">金币 {{coinFormat.format(houseView.balance)}}{{houseView.nextCost !== null && houseView.balance < houseView.nextCost ? ' · 金币不足' : ''}}</text>
+        <text wx:if="{{houseMessage}}" class="house-message" aria-live="polite">{{houseMessage}}</text>
+      </block>
+    </view>
+  </view>
   <view wx:if="{{showPet}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="pet-modal" role="dialog" aria-label="小雷狐伙伴">
       <button class="close-button" bindtap="closePet" aria-label="关闭">×</button>
-      <text class="pet-title">小雷狐</text><text class="pet-subtitle">一起长大，自动参战守护小屋</text>
+      <view class="pet-heading"><text class="pet-title">小雷狐</text><view class="pet-wallet"><image src="/assets/images/checkin/coins.png" mode="aspectFit"/><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view></view>
       <scroll-view scroll-y class="pet-scroll">
         <view wx:if="{{petError}}" class="pet-error">{{petError}}<button bindtap="refreshPet">重试</button></view>
         <block wx:elif="{{petView}}">
           <view wx:if="{{!petView.owned}}" class="pet-empty">首次击败铁桶队长，小雷狐就会来到你的身边</view>
           <block wx:else>
-            <view class="pet-stage">{{petView.stage}} · Lv. {{petView.level}}</view>
-            <view class="pet-progress"><view style="width:{{petView.required ? petView.experience / petView.required * 100 : 100}}%" /></view>
-            <text class="pet-caption">{{petView.level === 10 ? '已经长大啦！' : petView.experience + ' / ' + petView.required + ' 经验'}}</text>
-            <view class="pet-supplies"><text>宠物粮 ×{{petView.food}}</text><text>宠物蛋 ×{{petView.eggs}}</text></view>
-            <view class="pet-actions"><button bindtap="petAction" data-action="feed" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.food || petView.level === 10}}">喂一份 · +10经验</button><button bindtap="petAction" data-action="hatch" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.eggs}}">免费孵化</button></view>
+            <view class="pet-portrait {{petCelebrating ? 'pet-celebrating' : ''}}" bindtap="dismissPetCelebration" aria-label="{{petCelebrating ? '升级啦，点击跳过庆祝' : petView.stage + '小雷狐'}}">
+              <view class="pet-halo"/><view class="pet-spark pet-spark-one">✦</view><view class="pet-spark pet-spark-two">✧</view><view class="pet-spark pet-spark-three">✦</view>
+              <image class="pet-hero pet-age-{{petView.level >= 7 ? 'adult' : petView.level >= 4 ? 'young' : 'baby'}}" src="/assets/images/pets/fox.png" mode="aspectFit"/>
+              <text wx:if="{{petCelebrating}}" class="pet-celebration-title" aria-live="polite">升级啦！</text>
+              <view class="pet-level">Lv. {{petView.level}}<text>{{petView.stage}}</text></view>
+            </view>
+            <view class="pet-progress" aria-label="经验 {{petView.experience}} / {{petView.required}}"><view style="width:{{petView.required ? petView.experience / petView.required * 100 : 100}}%" /></view>
+            <text class="pet-caption">{{petView.level === petView.maxLevel ? '已满级' : petView.experience + ' / ' + petView.required}}</text>
+            <view class="pet-actions">
+              <button bindtap="petAction" data-action="feed" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.food || petView.level === petView.maxLevel}}" aria-label="喂一份宠物粮，增加10经验，剩余{{petView.food}}份"><image src="/assets/images/checkin/food.png" mode="aspectFit"/><text>喂养</text><text class="pet-action-count">×{{petView.food}}</text></button>
+              <button bindtap="petAction" data-action="hatch" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !petView.eggs}}" aria-label="免费孵化，宠物蛋{{petView.eggs}}个"><image src="/assets/images/pets/egg.png" mode="aspectFit"/><text>孵化</text><text class="pet-action-count">×{{petView.eggs}}</text></button>
+              <button class="pet-upgrade" bindtap="petAction" data-action="upgrade" data-revision="{{petView.revision}}" disabled="{{!homeVisible || coinError || petView.level === petView.maxLevel || coinBalance < petView.level * 100}}" aria-label="金币升级，费用{{petView.level * 100}}金币"><image src="/assets/images/checkin/coins.png" mode="aspectFit"/><text>{{petView.level === petView.maxLevel ? '满级' : '升级'}}</text><text class="pet-action-count">{{petView.level === petView.maxLevel ? 'MAX' : coinFormat.format(petView.level * 100)}}</text></button>
+            </view>
+            <text wx:if="{{petView.level !== petView.maxLevel && coinBalance < petView.level * 100}}" class="pet-caption">金币不足</text>
+            <view class="pet-section-row"><text class="pet-section">伙伴技能</text><view class="pet-stones" aria-label="技能星石{{petView.stones}}颗"><image src="/assets/images/pets/stone.png" mode="aspectFit"/><text>×{{petView.stones}}</text></view></view>
+            <button class="pet-skill" bindtap="togglePetDetails" aria-label="雷击，查看技能详情" aria-expanded="{{petDetails}}"><image src="/assets/images/pets/lightning.png" mode="aspectFit"/><view class="pet-skill-info"><text class="pet-skill-name">雷击</text><text class="pet-skill-stats">{{10 + 2 * (petView.level - 1)}} 伤害 · 2秒</text><text class="pet-skill-hint">自动施放　{{petDetails ? '⌃' : '⌄'}}</text></view></button>
+            <view wx:if="{{petDetails}}" class="pet-details">每2秒自动雷击，造成{{10 + 2 * (petView.level - 1)}}点伤害。站在堡垒上守护，不受伤、不掉血。<text>喂养 +10经验；金币升级 +1级并保留经验，最高40级。装扮只改变外观。</text></view>
             <text class="pet-section">我的装扮</text>
-            <view wx:for="{{petView.equipmentItems}}" wx:key="id" class="pet-gear"><text class="pet-gear-symbol">{{item.symbol}}</text><text>{{item.name}}</text><button bindtap="petAction" data-action="equip" data-gear="{{item.id}}" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !item.owned}}">{{!item.owned ? '未获得' : item.equipped ? '取下' : '穿戴'}}</button></view>
-            <text class="pet-caption">生命 {{100 + 20 * (petView.level - 1)}} · 每2秒雷击 · 伤害 {{10 + 2 * (petView.level - 1)}}</text><text class="pet-caption">士兵之后替堡垒挡伤 · 新关卡满血恢复</text><text class="pet-caption">装扮只改变外观，不影响战斗</text>
+            <view class="pet-gear-grid"><button wx:for="{{petView.equipmentItems}}" wx:key="id" class="pet-gear {{item.equipped ? 'pet-gear-equipped' : ''}}" bindtap="petAction" data-action="equip" data-gear="{{item.id}}" data-revision="{{petView.revision}}" disabled="{{!homeVisible || !item.owned}}" aria-label="{{item.name}}，{{!item.owned ? '未获得' : item.equipped ? '点击取下' : '点击穿戴'}}"><image src="/assets/images/pets/{{item.id}}.png" mode="aspectFit"/><text>{{item.name}}</text><text class="pet-gear-status">{{!item.owned ? '未获得' : item.equipped ? '✓ 已穿戴' : '穿戴'}}</text></button></view>
           </block>
-          <text wx:if="{{petMessage}}" class="pet-message" aria-live="polite">{{petMessage}}</text>
+          <text wx:if="{{petMessage && !petCelebrating}}" class="pet-message" aria-live="polite">{{petMessage}}</text>
         </block>
       </scroll-view>
     </view>
@@ -80,13 +109,12 @@
       <view wx:if="{{choiceComplete && sceneCoverReady}}" class="entry-status">
         <view wx:if="{{navigationError}}">暂时没能进入战场</view>
         <button wx:if="{{navigationError}}" class="retry-entry" bindtap="enterBattle">重试</button>
-        <loading-progress wx:else progress="{{entryProgress}}" />
       </view>
     </view>
   </view>
   <view wx:if="{{showLevels}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="levels-modal" role="dialog" aria-label="选择关卡">
-      <view class="levels-title"><loading-progress wx:if="{{preparingLevel}}" progress="{{entryProgress}}" /><text wx:else>冒险地图</text></view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
+      <view class="levels-title"><text wx:if="{{preparingLevel}}">正在准备关卡…</text><text wx:else>冒险地图</text></view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
       <view wx:if="{{entryError}}" class="level-load-error">{{entryError}}</view>
       <view wx:if="{{progressError}}" class="progress-error">进度暂时无法读取<button bindtap="refreshLevels">重试</button></view>
       <scroll-view wx:else scroll-y class="levels-scroll"><view class="levels-grid">
@@ -117,4 +145,9 @@
       </scroll-view>
     </view>
   </view>
+</view>
+
+<view wx:else class="image-startup" role="status">
+  <text>{{imagesError ? '图片加载失败，请检查网络后重试' : '正在准备游戏画面…'}}</text>
+  <button wx:if="{{imagesError}}" bindtap="prepareImages">重试</button>
 </view>

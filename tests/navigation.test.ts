@@ -1,3 +1,5 @@
+import { createPlayerStorage } from '../miniprogram/services/player-storage';
+import { createPetUpgrade } from '../miniprogram/services/pet-upgrade';
 import { createDailyCheckin, beijingDate } from '../miniprogram/services/daily-checkin';
 import { createDifficultyStore } from '../miniprogram/services/difficulty-store';
 import { DIFFICULTIES } from '../miniprogram/fortress/difficulty';
@@ -22,10 +24,12 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
   const difficultyStore = createDifficultyStore({getStorageSync:()=>savedDifficulty,setStorageSync:(_key,value)=>{savedDifficulty=value;}});
   const strengthGuide=createStrengthGuide();
   const sessionStore = createSessionStore();
-  let saved: unknown = { version: 1, balance: 300, rewardedSessions: [] };
-  const wallet = createCoinWallet({ getStorageSync: () => saved, setStorageSync: (_key, value) => { saved = value; } });
+  const playerValues = new Map<string, unknown>([['word-monster:coin-wallet:v1', {version:1,balance:300,rewardedSessions:[]}]]);
+  const playerStorage=createPlayerStorage({getStorageSync:key=>structuredClone(playerValues.get(key)),setStorageSync:(key,value)=>{playerValues.set(key,structuredClone(value));}});
+  const wallet = createCoinWallet(playerStorage);
   const fortressEntryStore = createFortressEntryStore(id => wallet.canEnter(id), ()=>wallet.equipment().level, ()=>difficultyStore.read());
-  let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
+  const petStore=createPetStore(playerStorage);
+  const petUpgrade=createPetUpgrade(playerStorage);
   let checkinSaved: unknown;
   const dailyCheckin = createDailyCheckin({coins: wallet, pets: petStore, storage: {getStorageSync: () => checkinSaved, setStorageSync: (_key, value) => {checkinSaved=structuredClone(value);}}});
   let page: any;
@@ -40,6 +44,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
   runInNewContext(outputText, {
     exports: {},
     require(name: string) {
+      if (name === '../../services/victory-rewards') return {victoryRewards: {recover(){}}};
       if (name === '../../services/daily-checkin') return {dailyCheckin, beijingDate};
       if (name === '../../services/difficulty-store') return {difficultyStore};
       if (name === '../../fortress/difficulty') return {DIFFICULTIES};
@@ -47,8 +52,10 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
       if (name === '../../services/battle-assets') return {battleAudioPaths: () => [], loadBattleAssets: prepare ?? ((_art:unknown, callbacks:any) => {callbacks.onProgress(100);callbacks.onReady();return ()=>{};})};
       if (name === '../../fortress/battle-background') return {battleBackgroundCover: (levelId:number) => `/assets/images/battle-backgrounds/level-${levelId}.png`};
       if (name === '../../services/strength-guide') return {strengthGuide,strengthTarget};
+      if (name === '../../services/pet-upgrade') return {petUpgrade};
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
+      if (name === '../../services/image-assets') return { loadImageAssets: async () => {} };
       if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
       if (name === '../../services/coin-wallet') return { coinWallet: wallet };
       if (name === '../../fortress/collection') return { collectionWords };
@@ -93,21 +100,6 @@ test('首页点击仅开三选一弹窗，选对后导航一次，返回后重�
   h.page.openBattle(); assert.notEqual(h.page.data.request.plan.sessionId, first.plan.sessionId);
   assert.equal(h.navigationCount, 1);
 });
-test('进入战斗前预载当前关卡全部波次可能出现的怪物素材', () => {
-  let art: ReturnType<typeof openingArt> | undefined;
-  const h = homeHarness(undefined, (value, callbacks) => {
-    art = value as ReturnType<typeof openingArt>;
-    callbacks.onProgress(100); callbacks.onReady(); return () => {};
-  });
-  h.page.openBattle();
-  const plan = h.page.data.request.plan;
-  correct(h.page);
-  const wordIds = new Set(plan.waves.flatMap((wave: {spawnPlan: {wordId: string}[]}) => wave.spawnPlan.map(monster => monster.wordId)));
-  for (const id of wordIds) {
-    assert.ok(art?.outfitBodies?.[id], `缺少 ${id} 的僵尸素材`);
-    assert.ok(art?.fruitHats?.[id], `缺少 ${id} 的头饰素材`);
-  }
-});
 test('导航失败可重试，旧失败回调不能解除新导航锁', () => {
   const h = homeHarness(); h.page.openBattle(); correct(h.page);
   const oldFail = h.navigation.fail; oldFail();
@@ -148,8 +140,7 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
   const sessionStore = createSessionStore();
   let redirects = 0;
   function loadPage() {
-    let petSaved:unknown;const petStore=createPetStore({getStorageSync:()=>petSaved,setStorageSync:(_key,value)=>{petSaved=structuredClone(value);}});
-  let page: any;
+    let page: any;
     const source = readFileSync(new URL('../miniprogram/pages/battle/battle.ts', import.meta.url), 'utf8');
     runInNewContext(ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.CommonJS },
@@ -232,23 +223,23 @@ test('失败后一次性引导主角，点击打开武器面板后清除指引',
  const h=homeHarness();h.strengthGuide.request();h.page.onShow();assert.equal(h.page.data.strengthTarget,'weapon');
  h.page.openWeapon();assert.equal(h.page.data.showWeapon,true);assert.equal(h.page.data.strengthTarget,'');
  h.page.closeWeapon();h.page.onShow();assert.equal(h.page.data.strengthTarget,'','普通返回不重复出现');
- assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
+ assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'pet');assert.equal(strengthTarget(7,{owned:true,level:40}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
 });
 
-test('首页图片就绪后显示50%并交由战斗页继续加载，失败重试和过期回调不误改当前状态', () => {
+test('首页立即导航，失败重试和过期回调不误改当前状态', () => {
   const h = homeHarness(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
   const oldSuccess = h.navigation.success;
   h.navigation.fail();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
   h.page.enterBattle(); oldSuccess();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
   h.navigation.success();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
   h.page.onShow(); h.page.openBattle(); correct(h.page);
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
   h.page.onUnload(); h.navigation.success();
-  assert.equal(h.page.data.entryProgress, 50);
+  assert.equal(h.page.data.entryProgress, 0);
 });
 
 test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', () => {
@@ -298,16 +289,14 @@ test('仅切到后台再回首页，尚未进入战斗的听词题保持原题',
 });
 
 
-test('战斗图片逐张加载时更新圆环，完成前不导航，失败可重试且取消后无迟到跳转', () => {
-  const jobs:any[]=[];
-  const h=homeHarness(undefined,(_art,callbacks)=>{const job={callbacks,cancelled:false};jobs.push(job);callbacks.onProgress(0);return()=>{job.cancelled=true;};});
-  h.page.openBattle();correct(h.page);assert.equal(h.navigationCount,0);assert.equal(h.page.data.entryProgress,0);
-  jobs[0].callbacks.onProgress(37);assert.equal(h.page.data.entryProgress,18);assert.equal(h.navigationCount,0);
-  jobs[0].callbacks.onError();assert.equal(h.page.data.navigationError,true);assert.equal(h.page.data.opening,false);
-  h.page.enterBattle();assert.equal(h.page.data.entryProgress,0);assert.equal(jobs[0].cancelled,true);
-  jobs[0].callbacks.onReady();assert.equal(h.navigationCount,0);
-  jobs[1].callbacks.onProgress(100);jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);
-  h.page.onUnload();jobs[1].callbacks.onReady();assert.equal(h.navigationCount,1);assert.equal(jobs[1].cancelled,true);
+test('首页答对后立即导航，资源加载由战斗页负责', () => {
+  let loads = 0;
+  const h = homeHarness(undefined, () => { loads++; return () => {}; });
+  h.page.openBattle(); correct(h.page);
+  assert.equal(h.navigationCount, 1);
+  assert.equal(loads, 0);
+  h.page.enterBattle();
+  assert.equal(h.navigationCount, 1);
 });
 
 test('关卡资源准备失败后退出0%等待并解除按钮锁，重试可以进入听词',async()=>{
@@ -332,3 +321,12 @@ test('首页难度选择保存后自动关闭，开战携带难度，已有听�
  h.page.openDifficulty();assert.equal(h.page.data.showDifficulty,false);
  h.page.selectDifficulty({detail:{id:'easy'}});assert.equal(h.page.data.difficulty,'nightmare');
 });
+
+ test('宠物面板金币升级刷新余额和等级，旧事件不重复扣费，后台不升级',()=>{
+  const h=homeHarness();h.petStore.rewardBoss('pet','pet:wave:1:zombie:1');h.page.onShow();h.page.openPet();
+  const event={currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}};
+  h.page.petAction(event);assert.equal(h.page.data.petView.level,2);assert.equal(h.page.data.coinBalance,200);
+  h.page.petAction(event);assert.equal(h.page.data.petView.level,2);assert.equal(h.page.data.coinBalance,200);
+  h.page.onHide();h.page.petAction({currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}});assert.equal(h.petStore.view().level,2);
+  h.page.onShow();h.page.petAction({currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}});assert.equal(h.page.data.petView.level,3);assert.equal(h.page.data.coinBalance,0);
+ });

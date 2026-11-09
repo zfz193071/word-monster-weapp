@@ -1,3 +1,6 @@
+import {createVictoryRewards} from '../miniprogram/services/victory-rewards';
+import {createPetStore} from '../miniprogram/services/pet-store';
+import {createDailyCheckin} from '../miniprogram/services/daily-checkin';
 import { skillQuizAnswer } from './helpers/skill-quiz';
 import * as invasion from '../miniprogram/fortress/stage-invasion';
 import assert from 'node:assert/strict';
@@ -5,6 +8,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
+import * as combos from '../miniprogram/fortress/skill-combos';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
 import * as quality from '../miniprogram/fortress/skill-quality';
 import * as opening from '../miniprogram/fortress/opening-encounter';
@@ -27,10 +31,12 @@ async function setup(stage=1, full=false){
  const wallet=createCoinWallet({getStorageSync:()=>saved,setStorageSync:(_k,v)=>{saved=structuredClone(v);}});
  const audio={get busy(){return busy;},setActive(v:boolean){active=v;},setVolume(){},playCoin(){},dispose(){},handle(){busy=true;}};
  class FakeScene {snapshot:CombatState;paused=false;options:any;constructor(_n:any,o:any){this.snapshot=o.initial;this.options=o;scene=this;}async present(){return true;}async load(){return true;}dispose(){}captureFrame(){return'frame';}showCoinDrop(){}setPaused(v:boolean){this.paused=v;}applySkills(skills:SkillLevels,skillCollection:quality.SkillCollection){this.snapshot={...this.snapshot,skills,skillCollection};}}
- const modules:Record<string,any>={'stage-invasion':invasion,'quality-skills':full?{...qualitySkills,bossSkillOffer:(...args:Parameters<typeof qualitySkills.bossSkillOffer>)=>({...qualitySkills.bossSkillOffer(...args),cards:[]})}:qualitySkills,'skill-quality':quality,'opening-encounter':opening,experience,'upgrade-choice':choices,levels,'fruit-catalog':fruits,content,plans:{createSeededRandom},'battle-drops':drops,'coin-wallet':{coinWallet:wallet,victoryCoinsForLevel},'pet-store':{petStore:{view:()=>({owned:false})}},'pet-drops':{createPetDrops:()=>({handle(){},dispose(){}})},'battle-audio':{createBattleAudio:()=>audio},'battle-assets':{battleAudioPaths:()=>[],loadBattleAssets(_art:unknown,callbacks:any){callbacks.onReady();return()=>{};}},'battle-background':{battleBackgroundCover:(levelId:number)=>`/assets/images/battle-backgrounds/level-${levelId}.png`,battleBackgroundColor:()=> '#a1b777'},'defeat-audio':{createDefeatAudio:()=>({setActive(){},dispose(){}})},'canvas-scene':{CanvasScene:FakeScene}};
+ const values=new Map<string,unknown>();const storage={getStorageSync:(k:string)=>values.get(k),setStorageSync:(k:string,v:unknown)=>{values.set(k,structuredClone(v));}};
+ const pets=createPetStore(storage),supplies=createDailyCheckin({storage,coins:wallet,pets});const victoryRewards=createVictoryRewards({storage,coins:wallet,pets,supplies});
+ const modules:Record<string,any>={'skill-combos':combos,'victory-rewards':{victoryRewards},'stage-invasion':invasion,'quality-skills':full?{...qualitySkills,bossSkillOffer:(...args:Parameters<typeof qualitySkills.bossSkillOffer>)=>({...qualitySkills.bossSkillOffer(...args),cards:[]})}:qualitySkills,'skill-quality':quality,'opening-encounter':opening,experience,'upgrade-choice':choices,levels,'fruit-catalog':fruits,content,plans:{createSeededRandom},'battle-drops':drops,'coin-wallet':{coinWallet:wallet,victoryCoinsForLevel},'pet-store':{petStore:{view:()=>({owned:false})}},'pet-drops':{createPetDrops:()=>({handle(){},dispose(){}})},'battle-audio':{createBattleAudio:()=>audio},'battle-assets':{battleAudioPaths:()=>[],loadBattleAssets(_art:unknown,callbacks:any){callbacks.onReady();return()=>{};}},'battle-background':{battleBackgroundCover:(levelId:number)=>`/assets/images/battle-backgrounds/level-${levelId}.png`,battleBackgroundColor:()=> '#a1b777'},'defeat-audio':{createDefeatAudio:()=>({setActive(){},dispose(){}})},'canvas-scene':{CanvasScene:FakeScene}};
  const source=readFileSync(new URL('../miniprogram/components/fortress-scene/fortress-scene.ts',import.meta.url),'utf8');
  runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{exports:{},Component(v:any){definition=v;},wx:{getWindowInfo:()=>({pixelRatio:1})},require:(name:string)=>modules[name.split('/').at(-1)!]??{}});
- const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan,generation:1}},setData(v:any,done?:()=>void){Object.assign(this.data,v);done?.();},triggerEvent(){},createSelectorQuery(){return{select(){return{fields(_f:any,callback:Function){return{exec(){callback({node:{},width:360,height:560});}};}};}};}};
+ const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan,generation:1}},setData(v:any,done?:()=>void){Object.assign(this.data,v);done?.();if(v.entryFrame)queueMicrotask(()=>this.entryFrameLoaded({currentTarget:{dataset:{epoch:v.entryFrameEpoch}}}));},triggerEvent(){},createSelectorQuery(){return{select(){return{fields(_f:any,callback:Function){return{exec(){callback({node:{},width:360,height:560});}};}};}};}};
  for(const [key,method]of Object.entries(definition.methods))host[key]=(method as Function).bind(host);
  definition.lifetimes.attached.call(host);definition.lifetimes.ready.call(host);await new Promise(resolve => setImmediate(resolve));assert.equal(host.data.error,'');
  function kill(m:MonsterSpawn):CombatEvent{return{type:'monsterDefeated',context:scene.snapshot.context,tick:1,monsterId:m.monsterId,wordId:m.wordId};}

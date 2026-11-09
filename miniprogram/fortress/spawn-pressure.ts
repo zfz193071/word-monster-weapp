@@ -4,7 +4,7 @@ import type { Point } from './types';
 import type { DifficultyId } from './difficulty';
 
 export const INVASION_BATCH_LIMITS: Readonly<Record<DifficultyId, number>> = Object.freeze({
-  easy: 5, normal: 8, hard: 10, nightmare: 12,
+  easy: 3, normal: 8, hard: 10, nightmare: 8,
 });
 
 // Only active simulation time counts; skill selection/background pauses do not age pressure.
@@ -16,11 +16,12 @@ export function invasionBatchSize(elapsedMs: number, limit: number): number {
 
 // Randomise a batch inside the existing upper entry strip. Stable IDs make
 // retries/replays deterministic without keeping mutable random state in combat.
-export function invasionBatchPositions(ids: readonly string[], startY: number): readonly Point[] {
+export function invasionBatchPositions(ids: readonly string[], startY: number, arenaWidth = FORTRESS_RULES.arena.width): readonly Point[] {
   let seed = 2166136261;
   for (const char of ids.join('|')) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619);
   const random = createSeededRandom(seed >>> 0);
-  const {spawnMinX, spawnMaxX} = FORTRESS_RULES.monster;
+  const {spawnMinX} = FORTRESS_RULES.monster;
+  const spawnMaxX = arenaWidth - spawnMinX;
   const positions: Point[] = [];
   // Wider batches need more offscreen depth. The old 64px strip squeezed
   // 10–12 full-size monsters into nearly one visible row despite random x.

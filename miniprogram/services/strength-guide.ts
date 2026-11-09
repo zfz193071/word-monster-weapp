@@ -1,7 +1,8 @@
+import { PET_MAX_LEVEL } from '../pets/catalog';
 export type StrengthTarget = '' | 'weapon' | 'pet';
 export function strengthTarget(weaponLevel: number, pet: { owned: boolean; level: number } | null): StrengthTarget {
   if (weaponLevel < 7) return 'weapon';
-  return pet?.owned && pet.level < 10 ? 'pet' : '';
+  return pet?.owned && pet.level < PET_MAX_LEVEL ? 'pet' : '';
 }
 // One-shot navigation intent, independent of rewards or persistent progress.
 export function createStrengthGuide() {

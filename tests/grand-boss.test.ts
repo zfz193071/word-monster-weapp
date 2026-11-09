@@ -31,7 +31,7 @@ test('8关×19轮×四档：末轮最后一批唯一大Boss、本关词汇、总
   assert.equal(boss.bossKind,'grand');assert(getLevel(stage).words.some(w=>w.id===boss.wordId));assert.equal(boss.spawnAtMs,Math.max(...wave.spawnPlan.map(m=>m.spawnAtMs!)));
   const state=createOpeningEncounter(plan.sessionId,wave.targetWordId,0,18,undefined,undefined,plan.waves.slice(0,18).map(w=>w.targetWordId),stage,1,[],difficulty);
   const actual=state.monsters.at(-1)!;const ordinary=monsterStats(stage,19);const mode=difficultyFor(difficulty);
-  assert.equal(actual.hp,Math.ceil(ordinary.hp*20*mode.hp));assert.equal(actual.attackDamage,Math.ceil(ordinary.attackDamage*2*mode.damage));assert.equal(actual.shockwaveDamage,Math.ceil(ordinary.attackDamage*3*mode.damage));
+  assert.equal(actual.hp,Math.ceil(ordinary.hp*mode.bossHp*mode.hp));assert.equal(actual.attackDamage,Math.ceil(ordinary.attackDamage*2*mode.damage));assert.equal(actual.shockwaveDamage,Math.ceil(ordinary.attackDamage*3*mode.damage));
   assert.equal(actual.attackIntervalMs,stage===3?1500:2000);assert.equal(actual.dropCoins,0);assert.equal(actual.soldierDropCount,undefined);
   const normal=state.monsters.find(m=>!m.boss&&m.wordId===actual.wordId)!;assert.equal(actual.hitbox.width,normal.hitbox.width*2);assert.equal(actual.hitbox.height,normal.hitbox.height*2);
   assert.equal(actual.id,boss.monsterId);assert.equal(actual.wordId,boss.wordId);

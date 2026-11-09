@@ -5,7 +5,7 @@ import { HomeRoomScene } from '../../home/room-scene';
 interface State { coverTimer?: ReturnType<typeof setTimeout>; orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
 const states=new WeakMap<object,State>();
 Component({
-  properties:{ guide:{type:String,value:'',observer(){this.updateGuide();}},pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
+  properties:{houseLevel:{type:Number,value:1,observer(){states.get(this)?.scene?.setHouseLevel(this.properties.houseLevel);}}, guide:{type:String,value:'',observer(){this.updateGuide();}},pet:{type:Object,value:null,observer(){states.get(this)?.scene?.setPet(this.properties.pet as PetAppearance|null);}},weaponLevel:{type:Number,value:1,observer(){const state=states.get(this);state?.scene?.setWeaponLevel(this.properties.weaponLevel);}},paused:{type:Boolean,value:false,observer(){this.synchronize();}},covered:{type:Boolean,value:false,observer(){this.synchronize();}} },
   data:{error:false,canvasCovered:false,frozenFrames:[] as {id:number;src:string}[]},
   lifetimes:{
     attached(){states.set(this,{orbit:new RoomOrbit(),width:0,left:0,top:0,visible:true,alive:true,epoch:0,covered:false,captureId:0});},
@@ -33,6 +33,7 @@ Component({
           if(!result?.node||!result.width||!result.height)throw new Error('场景节点尚未就绪');
           state.width=result.width;state.left=result.left??0;state.top=result.top??0;
           state.scene=new HomeRoomScene(result.node,result.width,result.height,wx.getWindowInfo().pixelRatio,state.orbit.yaw);
+          state.scene.setHouseLevel(this.properties.houseLevel);
           state.scene.setWeaponLevel(this.properties.weaponLevel);
           state.scene.setPet(this.properties.pet as PetAppearance|null);
           this.updateGuide();
@@ -103,6 +104,7 @@ Component({
         const x=touch.clientX-state.left,y=touch.clientY-state.top;
         if(state.scene.hitPet(x,y))this.triggerEvent('pettap');
         else if(state.scene.hitHero(x,y))this.triggerEvent('herotap');
+        else if(state.scene.hitHouse(x,y))this.triggerEvent('housetap');
       }
     },
     touchCancel(){const state=states.get(this);if(state){state.tap=undefined;state.orbit.cancel();}},

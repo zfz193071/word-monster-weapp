@@ -10,9 +10,9 @@ function ready(): CombatState {
 function hit(elements: Partial<Record<ElementId,number>>): CombatState {
  const state=ready();return {...state,tick:500,shotRemainingMs:500,projectiles:[{id:'hit',position:{x:180,y:210},previousPosition:{x:180,y:210},width:2,height:2,damage:1,elements}]};
 }
-test('每波5秒蓄能，双发仅一颗附加多个元素，发射后重计5秒',()=>{
+test('每波5秒蓄能，双发火焰组合生效，冰雷仍仅第一颗，发射后重计5秒',()=>{
  const initial=ready();const before=stepCombat({...initial,tick:498}).state;assert.ok(before.projectiles.every(p=>!p.elements));
- const fired=stepCombat(initial).state;assert.equal(fired.projectiles.length,2);assert.equal(fired.projectiles.filter(p=>p.elements).length,1);assert.equal(fired.elementReadyTick,1000);
+ const fired=stepCombat(initial).state;assert.equal(fired.projectiles.length,2);assert.equal(fired.projectiles.filter(p=>p.elements?.flame).length,2);assert.equal(fired.projectiles.filter(p=>p.elements?.frost).length,1);assert.equal(fired.elementReadyTick,1000);
  const again=stepCombat({...fired,shotRemainingMs:0,projectiles:[]}).state;assert.ok(again.projectiles.every(p=>!p.elements));
  const noTarget=stepCombat({...initial,monsters:initial.monsters.map(m=>({...m,position:{...m.position,y:-20}}))}).state;assert.equal(noTarget.projectiles.length,0);assert.equal(noTarget.elementReadyTick,500);
 });

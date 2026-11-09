@@ -17,7 +17,7 @@ async function bounded(promise, label, ms = 15000) {
     return await Promise.race([promise, new Promise((_, reject) => {
       timer = setTimeout(() => reject(Error(`${label}: timeout`)), ms);
     })]);
-  } finally { clearTimeout(timer); }
+  } catch (error) { throw new Error(`${label}: ${error.message}`, { cause: error }); } finally { clearTimeout(timer); }
 }
 
 async function selectCorrectWord(home) {
@@ -46,6 +46,7 @@ async function selectCorrectWord(home) {
     report.simulator = Object.fromEntries(['model', 'platform', 'SDKVersion', 'windowWidth', 'windowHeight'].map(key => [key, info[key]]));
     const home = await bounded(mini.reLaunch('/pages/home/home'), 'home');
     await wait(700);
+    assert.equal(await bounded(home.$('loading-progress'), 'home progress absent'), null, '首页不应显示战斗进度条');
     await bounded((await bounded(home.$('.start-button'), 'start button')).tap(), 'start battle');
     report.word = await selectCorrectWord(home);
     let capturedLoading = false;
@@ -56,25 +57,41 @@ async function selectCorrectWord(home) {
       const current = await bounded(mini.currentPage(), 'current page');
       if (current.path === 'pages/battle/battle') {
         page = current;
+        const entry = await bounded(page.data(), 'battle entry state');
+        report.observations.push({ page: 'battle-entry', loading: entry.entryLoading, progress: entry.entryProgress, assetsReady: entry.assetsReady, error: entry.entryError });
+        if (entry.entryLoading) {
+          const music = await bounded(mini.evaluate(() => {
+            const pages = getCurrentPages();
+            return pages[pages.length - 1].loadingMusic?.view;
+          }), 'loading music state');
+          report.observations.push({page: 'loading-music', ...music});
+        }
+        if (entry.entryError) throw Error(entry.entryError);
+        assert(entry.entryLoading || entry.entryProgress === 100, '进场尚未就绪却没有加载层');
+        if (entry.entryLoading) {
+          const overlay = await bounded(page.$('.entry-loading'), 'entry progress overlay');
+          if (!overlay) assert.equal((await bounded(page.data(), 'loading handoff race')).entryLoading, false, '加载未完成却缺少进度层');
+          assert.equal(await bounded(page.$('.entry-cover'), 'obsolete entry cover'), null, '加载期间不能显示战场底图');
+          if (overlay && !capturedLoading && !process.env.WM_QA_LIVE_HANDOFF) {
+            await bounded(mini.screenshot({ path: join(output, 'entry-loading.png') }), 'entry animation screenshot');
+            capturedLoading = true;
+          }
+        }
         scene = await bounded(page.$('.fortress-preview'), 'battle scene');
         if (scene) break;
       } else {
         const state = await bounded(home.data(), 'home loading state');
         report.observations.push({ page: 'home', progress: state.entryProgress, opening: state.opening });
-        if (state.opening && !capturedLoading) {
-          await bounded(mini.screenshot({ path: join(output, 'entry-loading.png') }), 'entry animation screenshot');
-          capturedLoading = true;
-        }
       }
       await wait(150);
     }
     assert(page && scene, '听词答对后未进入战斗页');
     const first = await bounded(scene.data(), 'first battle state');
-    report.firstBattle = { ready: first.ready, progress: first.loadingProgress, cover: first.stageCover, background: !!first.loadingBackground, color: first.stageLoadingColor, error: first.error };
-    assert(first.ready || first.stageCover || first.loadingBackground, '首个战斗状态既无画面又未就绪');
+    report.firstBattle = { ready: first.ready, progress: first.loadingProgress, color: first.stageLoadingColor, error: first.error };
+    assert(first.ready || first.stageLoadingColor, '加载中缺少纯色背景');
     if (!first.ready) assert(first.loadingProgress < 100, '首帧未就绪时进度已到100%');
-    await bounded(mini.screenshot({ path: join(output, 'battle-first.png') }), 'first battle screenshot');
-    report.checks.push('首页正常听词后进入战斗；首个战斗状态已有背景或战斗画面');
+    // Capture after readiness: taking a simulator screenshot during Canvas decoding can time out.
+    report.checks.push('首页正常听词后进入战斗；加载层使用纯色背景');
 
     for (let attempt = 0; attempt < 120; attempt++) {
       const state = await bounded(scene.data(), 'battle loading state');
@@ -82,13 +99,30 @@ async function selectCorrectWord(home) {
       if (state.error) throw Error(`战场资源加载失败：${state.error}`);
       if (state.ready) {
         assert.equal(state.loadingProgress, 100);
-        break;
+        const entry = await bounded(page.data(), 'entry handoff');
+        if (!entry.entryLoading) { assert.equal(entry.entryProgress, 100); assert.ok(state.entryFrame, '进度消失时缺少完整首帧兜底'); break; }
       }
       await wait(150);
     }
     assert((await bounded(scene.data(), 'ready state')).ready, '战斗页一直未就绪');
+    assert.equal((await bounded(page.data(), 'completed handoff')).entryLoading, false);
+    // Observe the unpaused handoff, not just a screenshot several seconds after pausing.
+    report.handoffFrames = [];
+    const handoffAt = Date.now();
+    for (let index = 0; index < 4; index++) {
+      const startedMs = Date.now() - handoffAt;
+      const file = `handoff-${index}.png`;
+      await bounded(mini.screenshot({ path: join(output, file) }), `live handoff frame ${index}`);
+      const state = await bounded(scene.data(), 'live scene state');
+      assert.equal(state.ready, true); assert.ok(state.entryFrame);
+      report.handoffFrames.push({file, startedMs, completedMs: Date.now() - handoffAt});
+      if (index < 3) await wait(250);
+    }
+    await bounded((await bounded(page.$('.pause-button'), 'pause control')).tap(), 'pause ready battlefield');
     await bounded(mini.screenshot({ path: join(output, 'battle-ready.png') }), 'ready battle screenshot');
-    report.checks.push('进度达到100%时场景已就绪，可见战斗画面');
+    report.checks.push('进度达到100%时场景已就绪；battle-ready.png 保留交接后暂停的角色画面，需视觉核对');
+    assert.equal((await bounded(page.data(), 'entry paused state')).previewPaused, true);
+    await bounded((await bounded(page.$('.pause-button'), 'pause control')).tap(), 'resume combat after first frame capture');
 
     const battleData = await bounded(page.data(), 'battle toolbar state');
     assert.equal(battleData.musicVolume, 22);

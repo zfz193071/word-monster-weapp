@@ -48,7 +48,7 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 
 ## 战斗音频追加（2026-11-01）
 
-`battle-loop.mp3`（17.78秒循环）与 `battle-hit.mp3`（0.14秒）由本项目合成，无外部采样；可用 `scripts/create-battle-audio.py` 重建。
+`battle-loop.mp3`（2026-11-08 更新为 33.10 秒循环）与 `battle-hit.mp3`（0.14秒）由本项目合成，无外部采样；可用 `scripts/create-battle-audio.py` 重建。
 
 `zombie-apple.mp3`、`zombie-banana.mp3`、`zombie-orange.mp3`、`zombie-grape.mp3`、`zombie-watermelon.mp3` 是上述原始水果录音的变声衍生物，非游戏音频采样。处理包括降低音高、轻微减速、喉音颤动、软饱和、短混响与响度调整；原始教学录音未修改。由 `scripts/create-zombie-voices.py` 重建。
 
@@ -89,3 +89,16 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 - 生成脚本：`scripts/create-level-assets.cjs`（需要Resvg与OpenMoji SVG目录）、`scripts/create-level-voices.py`（需要Piper模型与ffmpeg），审校后运行 `scripts/sync-level-manifest.cjs` 同步首页署名清单。没有把模型文件放进小程序。
 
 `base-hit.mp3` 为本项目原创合成的0.24秒堡垒敲击声，无外部采样；生成脚本为 `scripts/create-base-hit-audio.py`。与子弹命中音使用独立通道，读词时降音，暂停和卸载时停止。
+
+## 2026-11-08 首页与战斗背景音乐更换
+
+两首均为项目原创程序合成器乐，无人声、无外部采样，沿用资源路径及现有播放控制。
+
+- 首页 `home-garden.mp3`：136 BPM、16 小节、28.24 秒。明亮大调和弦、号角式主旋律、八分音符贝斯和鼓点，方向为有激情的冒险开场。运行 `python3 scripts/create-home-music.py` 重建。
+- 战斗 `battle-loop.mp3`：116 BPM、16 小节、33.10 秒。低音持续音、半音与减和弦制造阴森感，跳跃拨弦、低音簧管式音色和滑音提供少量滑稽感。运行 `python3 scripts/create-battle-audio.py` 重建。
+
+共用 `scripts/music-synth.py`，仅依赖 Python 标准库与 ffmpeg；输出 22.05 kHz 单声道、64 kbps MP3，音符尾音和短混响按循环边界回绕。保留背景音乐音量及战斗词语播放时的自动压低行为。技术验证不代表主观试听通过，最终情绪与真机循环听感待试听确认。
+
+## 2026-11-08 大图无损编码优化
+
+菠萝、猕猴桃、香蕉、梨、旧葡萄怪物共5张PNG重新选择压缩滤波与压缩级别，只替换IDAT数据，保留尺寸、透明通道及全部其他PNG块。逐张解码为RGBA并核对SHA-256完全一致；无视觉或颜色元数据变化。总计590343字节降为542521字节，减少47822字节（约46.7KiB）。同步资源清单文件大小与哈希；原件备份和验证报告位于 `/tmp/wm-resource-encoding/`。图片分包源码预算由1238.5降至1191.8KiB；本轮仅验证体积与像素一致性，不宣称加载时间按比例减少。

@@ -56,7 +56,7 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
     fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true },
     hero: original(`hero-back-weapon-${weaponLevel}`), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
 }
-export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp: number | undefined = undefined, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = [], difficulty: DifficultyId = 'normal', skillCollection?: SkillCollection) {
+export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp: number | undefined = undefined, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = [], difficulty: DifficultyId = 'normal', skillCollection?: SkillCollection, houseLevel = 1) {
   const multipliers = difficultyFor(difficulty);
   if (!Number.isInteger(waveIndex) || waveIndex < 0 || waveIndex >= OPENING_WAVE_COUNT) throw new Error('无效波次');
   const words = getLevel(levelId).words;
@@ -99,7 +99,7 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     const boss = waveIndex === bossWave && index === spawns.length - 1;
     return { ...spawn, ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
   });
-  return createEncounterCombat({ difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId),
+  return createEncounterCombat({ houseLevel, difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId, houseLevel),
     playerX: 180, skills, skillCollection, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     monsterHitboxes: Object.fromEntries([...new Set(fruitIds)].map(id => {
       const art = openingArt(id); return [id, logicalHitbox(art.monsterVisual, art.monsterWidth)];

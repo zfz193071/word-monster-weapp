@@ -6,7 +6,7 @@ interface LoadCallbacks {
   onReady(): void;
   onError(): void;
 }
-interface LoadOptions { readonly audioPaths?: readonly string[]; readonly imagePaths?: readonly string[] }
+interface LoadOptions { readonly sceneDecodesImages?: boolean; readonly audioPaths?: readonly string[]; readonly imagePaths?: readonly string[] }
 
 const BATTLE_AUDIO = [
   '/assets/audio/battle-loop.mp3', '/assets/audio/battle-hit.mp3', '/assets/audio/base-hit.mp3',
@@ -23,30 +23,26 @@ export function battleAudioPaths(wordIds: readonly string[]): string[] {
   })])];
 }
 
-// Gate navigation on actual image decoding and audio canplay, never a guessed timer.
+// Gate scene creation on actual image decoding and audio canplay, never a guessed timer.
 export function loadBattleAssets(art: SceneArt, callbacks: LoadCallbacks, options: LoadOptions = {}): () => void {
   const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet,
     ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []),
     ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {})];
-  const paths = [...new Set([...assets.map(asset => asset.path), ...(options.imagePaths ?? [])])];
+  const paths = [...new Set([...(options.sceneDecodesImages ? [] : assets.map(asset => asset.path)), ...(options.imagePaths ?? [])])];
   const audioPaths = [...new Set(options.audioPaths ?? [])];
   const total = paths.length + audioPaths.length;
   const completed = new Set<string>();
   let active = true;
-  let currentAudio: Pick<WechatMiniprogram.InnerAudioContext, 'offCanplay' | 'offError' | 'destroy'> | undefined;
-  let currentReady: (() => void) | undefined, currentError: (() => void) | undefined;
-  const clearAudio = () => {
-    const channel = currentAudio; currentAudio = undefined;
-    if (!channel) return;
-    try { channel.offCanplay(currentReady); } catch {}
-    try { channel.offError(currentError); } catch {}
-    try { channel.destroy(); } catch {}
-    currentReady = currentError = undefined;
+  const audioLoads = new Map<WechatMiniprogram.InnerAudioContext, () => void>();
+  const stop = () => {
+    active = false;
+    clearTimeout(timeout);
+    for (const dispose of [...audioLoads.values()]) dispose();
   };
-  const stop = () => { active = false; clearTimeout(timeout); clearAudio(); };
   const fail = () => { if (active) { stop(); callbacks.onError(); } };
   const timeout = setTimeout(fail, 30000);
   callbacks.onProgress(0);
+  if (!total) { stop(); callbacks.onProgress(100); callbacks.onReady(); return stop; }
   const mark = (key: string) => {
     if (!active || completed.has(key)) return;
     completed.add(key);
@@ -61,19 +57,34 @@ export function loadBattleAssets(art: SceneArt, callbacks: LoadCallbacks, option
       }, fail });
     } catch { fail(); }
   }
-  let audioIndex = 0;
-  const nextAudio = () => {
-    if (!active || audioIndex >= audioPaths.length) return;
-    const src = audioPaths[audioIndex++];
+  let audioIndex = 0, pumping = false;
+  // Bound decoder/context pressure while avoiding one canplay round-trip per file.
+  const fillAudioSlots = () => {
+    if (pumping) return;
+    pumping = true;
     try {
-      const channel = wx.createInnerAudioContext();
-      currentAudio = channel;
-      currentReady = () => { if (!active || currentAudio !== channel) return; clearAudio(); mark(`audio:${src}`); nextAudio(); };
-      currentError = () => { if (active && currentAudio === channel) fail(); };
-      channel.autoplay = false; channel.loop = false; channel.obeyMuteSwitch = true;
-      channel.onCanplay(currentReady); channel.onError(currentError); channel.src = src;
-    } catch { fail(); }
+      while (active && audioLoads.size < 4 && audioIndex < audioPaths.length) {
+        const src = audioPaths[audioIndex++];
+        try {
+          const channel = wx.createInnerAudioContext();
+          const dispose = () => {
+            if (!audioLoads.delete(channel)) return;
+            try { channel.offCanplay(onReady); } catch {}
+            try { channel.offError(onError); } catch {}
+            try { channel.destroy(); } catch {}
+          };
+          const onReady = () => {
+            if (!active || !audioLoads.has(channel)) return;
+            dispose(); mark(`audio:${src}`); fillAudioSlots();
+          };
+          const onError = () => { if (active && audioLoads.has(channel)) fail(); };
+          audioLoads.set(channel, dispose);
+          channel.autoplay = false; channel.loop = false; channel.obeyMuteSwitch = true;
+          channel.onCanplay(onReady); channel.onError(onError); channel.src = src;
+        } catch { fail(); }
+      }
+    } finally { pumping = false; }
   };
-  nextAudio();
+  fillAudioSlots();
   return stop;
 }

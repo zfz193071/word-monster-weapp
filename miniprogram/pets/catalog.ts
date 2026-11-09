@@ -1,3 +1,4 @@
+export const PET_MAX_LEVEL = 40;
 export const PET_EQUIPMENT = [
   { id: 'collar', name: '星光项圈', symbol: '✦' },
   { id: 'hat', name: '探险帽', symbol: '▲' },

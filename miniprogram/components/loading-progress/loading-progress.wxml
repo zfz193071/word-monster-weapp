@@ -11,5 +11,4 @@
   </view>
   <view class="progress-track"><view class="progress-fill" style="width: {{percent}}%"></view></view>
   <view class="loading-caption"><text>正在集结，准备开战</text><text class="percent">{{percent}}%</text></view>
-  <text class="loading-tip">追上僵尸！狐狸的魔法已就位</text>
 </view>

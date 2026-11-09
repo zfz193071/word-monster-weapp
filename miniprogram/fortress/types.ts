@@ -101,6 +101,7 @@ export interface WavePlan {
 }
 export interface SessionPlan {
   readonly difficulty?: DifficultyId;
+  readonly houseLevel?: number;
   readonly weaponLevel?: number;
   readonly kind?: 'fruit-defense';
   readonly levelId?: number;
@@ -137,6 +138,9 @@ export interface MonsterState {
   readonly attackSequence: number;
 }
 export interface SupportSoldierState {
+  readonly lastShotTick?: number;
+  readonly shotCombatId?: string;
+  readonly shotTarget?: Point;
   readonly id: string;
   readonly slot: number;
   readonly position: Point;
@@ -145,6 +149,7 @@ export interface SupportSoldierState {
   readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
+  readonly flameVolleyId?: string;
   readonly hitMonsterIds?: readonly string[];
   readonly remainingPenetrations?: number;
   readonly expiresAtTick?: number;
@@ -156,15 +161,21 @@ export interface ProjectileState {
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
-export interface ElementImpact { readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
+export interface ElementImpact { readonly iceChain?: boolean; readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  /** Logical battle width; omitted by legacy 360-wide plans. */
+  readonly arenaWidth?: number;
+  readonly frostEnergy?: number;
+  readonly flameVolleyHits?: Readonly<Record<string, readonly string[]>>;
+  readonly flameFanUntilTick?: number;
   // Scheduled arrivals share the stage clock; never participate in collisions before arrival.
   readonly incomingMonsters?: readonly MonsterState[];
   // Planned wave boundaries identify queued monsters; admission may occur later at the alive limit.
   readonly waveStartTimesMs?: readonly number[];
-  readonly invasion?: Readonly<{ nextAtMs: number; waveNumber: number; batchLimit?: number; aliveLimits?: readonly number[] }>;
+  readonly invasion?: Readonly<{ nextAtMs: number; waveNumber: number; batchLimit?: number; batchLimits?: readonly number[]; aliveLimits?: readonly number[] }>;
   readonly skillCollection?: SkillCollection;
   readonly pet?: BattlePet;
+  readonly houseLevel?: number;
   readonly weaponLevel?: number;
   readonly elementReadyTick?: number;
   readonly firepowerUntilTick?: number;

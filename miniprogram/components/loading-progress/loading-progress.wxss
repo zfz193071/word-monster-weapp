@@ -1,6 +1,6 @@
 :host { display: block; width: 100%; }
-.loading-chase { box-sizing: border-box; width: 600rpx; max-width: 100%; margin: 0 auto; padding: 28rpx 24rpx 24rpx; border: 2rpx solid #f5db92; border-radius: 26rpx; background: #fff1c9; box-shadow: 0 12rpx 36rpx #253c3828; color: #344841; }
-.chase-scene { position: relative; height: 210rpx; overflow: hidden; background: radial-gradient(ellipse at 65% 80%, #ffd87d99, #fff1c900 68%); }
+.loading-chase { box-sizing: border-box; width: 600rpx; max-width: 100%; margin: 0 auto; padding: 28rpx 24rpx 24rpx; background: transparent; color: #344841; }
+.chase-scene { position: relative; height: 210rpx; overflow: hidden; background: transparent; }
 .runner { position: absolute; bottom: 12rpx; width: 174rpx; height: 194rpx; animation: run .28s ease-in-out infinite alternate; }
 .runner image { position: absolute; inset: 0; width: 100%; height: 100%; animation: stride .36s steps(1, end) infinite; }
 .runner .step-second { animation-delay: -.18s; }
@@ -21,9 +21,8 @@
 .line-two { top: 166rpx; right: 35%; animation-delay: -.35s; }
 .progress-track { height: 14rpx; margin-top: 16rpx; border-radius: 12rpx; background: #dbc999; overflow: hidden; }
 .progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #729c64, #a1c373); transition: width .18s ease-out; }
-.loading-caption { display: flex; justify-content: space-between; align-items: center; margin-top: 18rpx; font-size: 26rpx; font-weight: bold; }
-.percent { font-variant-numeric: tabular-nums; color: #50734d; }
-.loading-tip { display: block; margin-top: 10rpx; text-align: center; color: #88764d; font-size: 20rpx; }
+.loading-caption { display: flex; justify-content: space-between; align-items: center; margin-top: 18rpx; font-size: 26rpx; font-weight: bold; color: #fff; }
+.percent { font-variant-numeric: tabular-nums; }
 @keyframes run { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-9rpx) rotate(3deg); } }
 @keyframes road { to { background-position: -44rpx 0; } }
 @keyframes flash { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }

@@ -11,12 +11,14 @@
     "release:check": "node scripts/release-upload.mjs --check-only",
     "typecheck": "tsc --noEmit",
     "check:project": "node scripts/check-project.mjs",
-    "check": "npm run typecheck && npm run check:project && npm run check:content && npm run check:fortress",
+    "check": "npm run typecheck && npm run check:project && npm run check:content && npm run check:fortress && npm run check:package",
     "test": "tsx --test tests/*.test.ts",
     "check:content": "node --import tsx scripts/check-content.ts",
     "check:assets": "node --import tsx scripts/check-content.ts --assets",
     "check:fortress": "node --import tsx scripts/check-fortress.ts",
-    "check:fortress:assets": "node --import tsx scripts/check-fortress.ts --assets"
+    "check:fortress:assets": "node --import tsx scripts/check-fortress.ts --assets",
+    "check:package": "node scripts/check-package-size.mjs",
+    "preview:save": "node --import tsx scripts/preview-with-save.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

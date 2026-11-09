@@ -23,6 +23,10 @@ try {
   if (values.help) {
     console.log('检查：npm run release:check\n上传：npm run release:upload -- --version 1.0.0 --desc "首次发布"\n可用 WECHAT_DEVTOOLS_CLI 指定开发者工具 CLI 绝对路径。');
   } else {
+    const previewSeed = await readFile(resolve(root, 'miniprogram/preview/save-seed.ts'), 'utf8');
+    if (!/export const previewSave: PreviewSave \| null = null;/.test(previewSeed)) {
+      throw new Error('预览迁移存档尚未移除，禁止正式上传。请先恢复 save-seed.ts 的空存档。');
+    }
     const project = JSON.parse(await readFile(resolve(root, 'project.config.json'), 'utf8'));
     if (project.compileType !== 'miniprogram' || !/^wx[0-9a-f]{16}$/.test(project.appid)) {
       throw new Error('project.config.json 必须配置真实小程序 AppID。');

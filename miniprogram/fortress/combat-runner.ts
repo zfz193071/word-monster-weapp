@@ -1,6 +1,6 @@
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
-import { reviveCompanion, summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
+import { resizeCombatArena, releaseFrostBurst, reviveCompanion, summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
 
@@ -49,9 +49,16 @@ export class CombatRunner {
     if (this.current.status !== 'fighting') this.remainderMs = 0;
     return { state: this.current, events: Object.freeze(events), steps, droppedMs };
   }
+  resizeArena(width: number): void { if (this.current) this.current = resizeCombatArena(this.current, width); }
   setSpeed(value: number): void {
     if (value !== 1 && value !== 1.5 && value !== 2 && value !== 2.5) throw new RangeError('无效战斗倍率');
     this.speed = value;
+  }
+  releaseFrost(): boolean {
+    if (!this.current || this.paused) return false;
+    const next = releaseFrostBurst(this.current);
+    if (!next) return false;
+    this.current = next; return true;
   }
   summonSoldier(id: string, debit: () => boolean): boolean {
     if (!this.current || this.paused) return false;

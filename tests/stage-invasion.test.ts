@@ -25,7 +25,7 @@ test('8关四难度19轮同一时钟，数量/30%混编/Boss保留，开局单�
   const endpoints={easy:[2500,1000],normal:[2080,800],hard:[1670,650],nightmare:[1390,500]}[difficulty];
   assert.equal(gaps[0],endpoints[0]);assert.equal(gaps.at(-1),endpoints[1]);
   assert(gaps.every((gap,i)=>gap>0&&(i===0||gap<=gaps[i-1])));
-  if(difficulty==='easy'){assert.equal(state.invasion!.aliveLimits![0],3);assert.equal(state.invasion!.aliveLimits!.at(-1),15);}
+  if(difficulty==='easy'){assert.equal(state.invasion!.aliveLimits![0],3);assert.equal(state.invasion!.aliveLimits!.at(-1),6);}
   const grand=all.filter(m=>m.bossKind==='grand');assert.equal(grand.length,1);assert.equal(grand[0].spawnAtMs,all.at(-1)!.spawnAtMs);assert(all.filter(m=>m.bossKind==='iron').length<=1);
  }
 });
@@ -36,7 +36,7 @@ test('上一轮活怪仍在时新轮到点加入，保留宠物/士兵伤势、�
  state={...state,incomingMonsters:state.incomingMonsters!.filter(m=>m.spawnAtMs!>=boundary)};
  const old=state.monsters[0],next=stepCombat(state);
  assert(next.state.monsters.some(m=>m.id===old.id&&m.hp===old.hp));assert(next.state.monsters.some(m=>m.id.includes(':wave:2:')));assert(next.events.some(e=>e.type==='waveStarted'&&e.waveNumber===2));
- assert.equal(next.state.pet!.hp,25);assert.equal(next.state.pet!.attackRemainingMs,990);assert.equal(next.state.supportSoldiers![0].hp,9);assert.equal(next.state.fallenSoldiers![0].id,'dead');assert(next.state.projectiles.some(p=>p.id==='flying'));assert.equal(next.state.context.combatId,state.context.combatId);
+ assert.equal(next.state.pet!.hp,next.state.pet!.maxHp);assert.equal(next.state.pet!.attackRemainingMs,990);assert.equal(next.state.supportSoldiers![0].hp,9);assert.equal(next.state.fallenSoldiers![0].id,'dead');assert(next.state.projectiles.some(p=>p.id==='flying'));assert.equal(next.state.context.combatId,state.context.combatId);
  const runner=new CombatRunner(next.state);runner.pause();assert.equal(runner.frame(999999).steps,0);assert.equal(runner.snapshot,next.state);runner.resume(1000000,2);runner.frame(1000010);assert.equal(runner.snapshot!.tick,next.state.tick+1);runner.dispose();assert.equal(runner.frame(1000100).state,null);
 });
 test('当前怪全死但待出场时不提前通关，最后一批全死后才清场；死亡清空待出场队列',()=>{
@@ -58,23 +58,23 @@ test('简单模式满员延迟、死亡后按空位补充，暂停不出怪，�
  assert.equal(state.monsters.length,3);assert.equal(state.incomingMonsters,pending);assert.equal(state.invasion!.waveNumber,1);
  const runner=new CombatRunner(state);runner.pause();assert.equal(runner.frame(1e9).steps,0);assert.equal(runner.snapshot,state);runner.dispose();
  state={...state,monsters:state.monsters.map(m=>({...m,hp:0,status:'defeated' as const})),defeatedMonsterIds:state.monsters.map(m=>m.id)};
- state=stepCombat(state).state;assert.equal(state.monsters.length,6);assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
- state=stepCombat(state).state;assert.equal(state.monsters.length,6,'积压不能追赶式爆发');
+ state=stepCombat(state).state;assert.equal(state.monsters.length,4);assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
+ state=stepCombat(state).state;assert.equal(state.monsters.length,4,'积压不能追赶式爆发');
  const grand=state.incomingMonsters!.find(m=>m.bossKind==='grand')!;
  const result=stepCombat({...state,tick:10000000,incomingMonsters:[grand]});
  assert.equal(result.state.monsters.at(-1)!.spawnAtMs,result.state.tick*COMBAT_STEP_MS);
  assert(result.events.some(e=>e.type==='waveStarted'&&e.waveNumber===19));
 });
 
-test('按实际战斗时间从1→2→3→5递增至各难度批量上限，同批同时入场且不重叠',()=>{
- for(const [mode,limit] of [['easy',5],['normal',8],['hard',10],['nightmare',12]] as const){
+test('简单按波次、其他难度按时间递增至批量上限，同批同时入场且不重叠',()=>{
+ for(const [mode,limit] of [['easy',3],['normal',8],['hard',10],['nightmare',8]] as const){
   const initial=createStageInvasion(plan(1,mode),1);
   // The final wave has enough remaining monsters and the largest easy alive limit.
   const pending=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:19:'));
   for(const [elapsed,size] of [[19990,1],[20000,2],[59990,2],[60000,3],[119990,3],[120000,5],[180000,8],[240000,10],[300000,12]]){
    const state={...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
     tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}};
-   const result=stepCombat(state);const expected=Math.min(size,limit);
+   const result=stepCombat(state);const expected=mode==='easy'?3:Math.min(size,limit);
    assert.equal(result.state.monsters.length,expected,`${mode} @ ${elapsed}`);
    assert(result.state.monsters.every(m=>m.spawnAtMs===elapsed));
    assert.equal(new Set(result.state.monsters.map(m=>`${m.position.x}:${m.position.y}`)).size,expected);
@@ -94,7 +94,7 @@ test('批次不越过轮次边界，剩余不足补足，下一批保留原存�
  assert(next.state.monsters.some(m=>m.id===initial.monsters[0].id&&m.hp>0));
 });
 
-test('噩梦双怪批次不固定左右两端，后期12只不排成整齐横排', () => {
+test('噩梦双怪批次不固定左右两端，后期8只不排成整齐横排', () => {
  const initial=createStageInvasion(plan(1,'nightmare'),1);
  const pending=initial.incomingMonsters!.filter(m=>m.id.includes(':wave:19:'));
  const spawn=(elapsed:number)=>stepCombat({...initial,monsters:[],incomingMonsters:pending,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
@@ -103,8 +103,8 @@ test('噩梦双怪批次不固定左右两端，后期12只不排成整齐横排
  assert.equal(pair.length,2);
  assert(pair.some(m=>m.position.x>80&&m.position.x<280),'双怪批次必须能出现在中间，而非固定48/312');
  const late=spawn(300000);
- assert.equal(late.length,12);
- assert(Math.max(...late.map(m=>m.position.y))-Math.min(...late.map(m=>m.position.y))>105,'后期大批次应拉开纵向入场深度，避免挤成一排');
+ assert.equal(late.length,8);
+ assert(Math.max(...late.map(m=>m.position.y))-Math.min(...late.map(m=>m.position.y))>55,'后期大批次应拉开纵向入场深度，避免挤成一排');
  assert(late.every(m=>m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-216));
  assert.deepEqual(spawn(300000).map(m=>m.position),late.map(m=>m.position),'同状态回放不重抽位置');
 });
@@ -118,14 +118,14 @@ test('噩梦后期连续批次覆盖左中右，位置可重放且不修改原�
  const groups:number[][]=[]; const bands=new Set<number>();
  for (let batch=0;batch<3;batch++) {
   const before=state;const result=stepCombat(before);const fresh=result.state.monsters.slice(before.monsters.length);
-  assert.equal(fresh.length,12);
+  assert.equal(fresh.length,8);
   assert.deepEqual(stepCombat(before).state.monsters,result.state.monsters);
-  assert(Math.max(...fresh.map(m=>m.position.y))-Math.min(...fresh.map(m=>m.position.y))>100,'后期连续批次应有纵向错落');
+  assert(Math.max(...fresh.map(m=>m.position.y))-Math.min(...fresh.map(m=>m.position.y))>55,'后期连续批次应有纵向错落');
   for(const m of fresh){assert(m.position.x>=48&&m.position.x<=312&&m.position.y<=-32&&m.position.y>=-216);bands.add(Math.min(2,Math.floor((m.position.x-48)/88)));}
   groups.push(fresh.map(m=>m.position.x));
-  const interval=before.incomingMonsters[12].spawnAtMs!-before.incomingMonsters[11].spawnAtMs!;
+  const interval=before.incomingMonsters[8].spawnAtMs!-before.incomingMonsters[7].spawnAtMs!;
   assert.equal(result.state.invasion!.nextAtMs,result.state.tick*COMBAT_STEP_MS+interval);
-  state={...result.state,monsters:[...result.state.monsters],incomingMonsters:[...result.state.incomingMonsters!],automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
+  state={...result.state,monsters:[],incomingMonsters:[...result.state.incomingMonsters!],automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
    tick:Math.ceil(result.state.invasion!.nextAtMs/COMBAT_STEP_MS)-1,invasion:result.state.invasion!};
  }
  assert.equal(bands.size,3);assert.notDeepEqual(groups[0],groups[1]);assert.notDeepEqual(groups[1],groups[2]);
@@ -157,7 +157,7 @@ test('四种难度在早中后关卡的入场覆盖上方区域，不集中于�
  }
 });
 
-test('四种难度的单只入场也使用连续随机位置，不局限于五条固定窄通道', () => {
+test('四种难度跨轮入场也使用连续随机位置，不局限于五条固定窄通道', () => {
  const fixedLanes=[56,118,180,242,304];
  for(const difficulty of ['easy','normal','hard','nightmare'] as const){
   const initial=createStageInvasion(plan(3,difficulty),1);
@@ -168,7 +168,7 @@ test('四种难度的单只入场也使用连续随机位置，不局限于五�
    const elapsed=10000;
    const state=stepCombat({...initial,monsters:[],incomingMonsters:incoming,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,
     tick:elapsed/COMBAT_STEP_MS-1,invasion:{...initial.invasion!,nextAtMs:elapsed}}).state;
-   assert.equal(state.monsters.length,1);
+   assert.equal(state.monsters.length,difficulty==='easy'?1+Math.floor(2*(wave-1)/18):1);
    positions.push(state.monsters[0].position.x);
   }
   assert(positions.some(x=>fixedLanes.every(lane=>Math.abs(x-lane)>10)),`${difficulty} remains confined to fixed lanes`);

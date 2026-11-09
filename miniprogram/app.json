@@ -19,6 +19,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "assets/images",
+      "name": "scene-images",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

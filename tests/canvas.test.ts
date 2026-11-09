@@ -37,6 +37,32 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('静态背景缓存保持原生DPR、每帧复用，尺寸改变重建，离屏不可用仍可绘制', async () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, 'wx');
+  const caches: ReturnType<typeof fakeCanvas>[] = [];
+  Object.defineProperty(globalThis, 'wx', { configurable: true, value: { createOffscreenCanvas({width, height}: {width: number; height: number}) {
+    const cache = fakeCanvas(); cache.canvas.width = width; cache.canvas.height = height; caches.push(cache); return cache.canvas;
+  } } });
+  const h = harness();
+  try {
+    await h.scene.load(); h.frame(0); h.frame(16);
+    assert.equal(caches.length, 1);
+    assert.equal(caches[0].canvas.width, 720); assert.equal(caches[0].canvas.height, 1120);
+    const painted = caches[0].commands.length;
+    h.frame(32); assert.equal(caches[0].commands.length, painted);
+    assert.ok(h.commands.filter(c => c.method === 'drawImage' && c.args[0] === caches[0].canvas).length >= 3);
+    h.scene.resize(360, 560, 3, 0);
+    assert.equal(caches.length, 2); assert.equal(caches[1].canvas.width, 1080); assert.equal(caches[1].canvas.height, 1680);
+    assert.deepEqual(h.errors, []);
+    Object.defineProperty(globalThis, 'wx', {configurable: true, value: {createOffscreenCanvas() {throw Error('unavailable');}}});
+    h.scene.resize(180, 280, 3, 0); h.frame(48);
+    assert.deepEqual(h.errors, []); assert.equal(h.callbacks.size, 1);
+  } finally {
+    h.scene.dispose();
+    if (original) Object.defineProperty(globalThis, 'wx', original); else Reflect.deleteProperty(globalThis, 'wx');
+  }
+});
+
 test('画布就绪且恢复第一帧后才能召唤；保存失败不添实体，下一帧绘制成功召唤', async () => {
   const h = harness(); let debits = 0;
   const debit = () => {debits++; return true;};
@@ -168,7 +194,7 @@ test('HUD 读真实基地血量；失败停止循环；诊断样本有界且不�
   for (let time = 10; time <= 23000; time += 10) h.frame(time);
   assert.equal(h.scene.snapshot!.status, 'baseDestroyed'); assert.equal(h.scene.snapshot!.base.hp, 0);
   assert.equal(h.callbacks.size, 0); assert.equal(h.hud.length, 6);
-  assert.deepEqual(h.hud.at(-1), { hp: 0, maxHp: 50, status: 'baseDestroyed' });
+  assert.deepEqual(h.hud.at(-1), { hp: 0, maxHp: 50, status: 'baseDestroyed', frostEnergy:0, frostTarget:true });
   assert.equal(h.scene.diagnostics.recentFrameGapsMs.length, 120); assert.ok(h.scene.diagnostics.peakProjectiles > 0);
   h.scene.touchStart([{ identifier: 1, clientX: 200 }]); h.frame(30000); assert.equal(h.scene.snapshot!.player.x, 24); h.scene.dispose();
 });
@@ -233,14 +259,14 @@ for (const levelId of [1, 3, 8]) for (const status of ['fighting', 'cleared'] as
     const state = { ...createOpeningEncounter(`repair-${levelId}`, word, 1, 0, ZERO_SKILLS, 20, [], levelId, 1, [], 'normal', {}), status };
     const h = harness(true, undefined, { initial: state });
     await h.scene.load();
-    assert.deepEqual(h.hud.at(-1), { hp: 20, maxHp: state.base.maxHp, status });
+    assert.deepEqual(h.hud.at(-1), { hp: 20, maxHp: state.base.maxHp, status, frostEnergy:0, frostTarget:true });
     const stale = [...h.callbacks.values()][0];
     h.scene.setPaused(true);
     const tick = h.scene.snapshot!.tick;
     const draws = h.commands.length;
     h.scene.restoreBase();
     assert.equal(h.scene.snapshot!.base.hp, state.base.maxHp);
-    assert.deepEqual(h.hud.at(-1), { hp: state.base.maxHp, maxHp: state.base.maxHp, status });
+    assert.deepEqual(h.hud.at(-1), { hp: state.base.maxHp, maxHp: state.base.maxHp, status, frostEnergy:0, frostTarget:true });
     assert(h.commands.length > draws, '无需动画帧就重新绘制修复状态');
     assert.equal(h.scene.snapshot!.tick, tick);
     assert.equal(h.callbacks.size, 0);
@@ -289,19 +315,20 @@ test('战场进度包含实际Canvas图片解码，只有首帧绘制完成才�
   h.scene.dispose();
 });
 
-test('八关加载图片前先绘制本关背景，背景与加载后的战场一致且不提前开战', async () => {
+test('八关加载时只绘制纯色，解码完成后才绘制战场与角色', async () => {
   for (let levelId = 1; levelId <= 8; levelId++) {
     const art = artFixture();
     const h = harness(false, {...art, fruitHat: art.monster}, {levelId});
     const pending = h.scene.load();
     const background = h.commands.slice();
     assert.ok(background.some(command => command.method === 'fillRect'));
-    assert.ok(background.some(command => command.method === 'arc' || command.method === 'fill'));
+    assert.equal(background.some(command => command.method === 'arc' || command.method === 'fill'), false);
     assert.equal(background.some(command => command.method === 'drawImage'), false);
     assert.equal(h.callbacks.size, 0);
     for (const image of h.images) image.onload();
     assert.equal(await pending, true);
-    assert.deepEqual(h.commands.slice(background.length, background.length * 2), background);
+    assert.ok(h.commands.slice(background.length).some(command => command.method === 'arc'));
+    assert.ok(h.commands.slice(background.length).some(command => command.method === 'drawImage' && (command.args[0] as {src: string}).src === art.hero.path));
     h.scene.dispose();
   }
 });
@@ -319,4 +346,102 @@ test('入场必须等待完整画面跨过呈现帧，取消入场不能继续�
   h.frame(16); assert.equal(await presenting, true);
   const cancelled = h.scene.present(); h.scene.dispose();
   assert.equal(await cancelled, false);
+});
+
+// Use production plans/art and PNG dimensions; readiness alone cannot prove actors drew.
+test('八关入场呈现前已绘制主角、宠物和首只怪物，暂停期间也不依赖开战补画', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { createOpeningPlan } = await import('../miniprogram/fortress/opening-plan');
+  const { createStageInvasion } = await import('../miniprogram/fortress/stage-invasion');
+  const { openingArt } = await import('../miniprogram/fortress/opening-encounter');
+  const { createSeededRandom } = await import('../miniprogram/fortress/plans');
+  const { createBattlePet, battlePetPosition } = await import('../miniprogram/pets/battle');
+  for (let levelId = 1; levelId <= 8; levelId++) {
+    const initial = createStageInvasion(createOpeningPlan(`first-frame-${levelId}`, createSeededRandom(41), levelId), 1);
+    const art = openingArt(initial.monsters[0].wordId, [...initial.monsters, ...initial.incomingMonsters!].map(monster => monster.wordId));
+    const h = harness(false, art, { initial, levelId });
+    h.scene.setPaused(true);
+    h.scene.applyPet(createBattlePet({ level: 1, equipped: [] }));
+    const loading = h.scene.load();
+    for (const image of h.images) {
+      const png = readFileSync(new URL(`../miniprogram${image.src}`, import.meta.url));
+      image.width = png.readUInt32BE(16); image.height = png.readUInt32BE(20); image.onload();
+    }
+    assert.equal(await loading, true, `关卡${levelId}: ${h.errors.join(',')}`);
+    h.commands.length = 0;
+    const presented = h.scene.present();
+    h.frame(0); h.frame(16);
+    assert.equal(await presented, true);
+    assert.equal(h.scene.snapshot!.tick, 0);
+    assert.ok(h.commands.some(command => command.method === 'drawImage' && (command.args[0] as {src: string}).src === art.hero.path), `关卡${levelId}: 未绘制主角`);
+    const pet = battlePetPosition(initial.player);
+    assert.ok(h.commands.some(command => command.method === 'translate' && command.args[0] === pet.x && command.args[1] === pet.y), `关卡${levelId}: 未绘制宠物`);
+    assert.ok(!h.commands.some(command => command.method === 'fillText' && command.args[0] === '100/100'), '无敌宠物不再显示血条数值');
+    const monster = initial.monsters[0];
+    assert.ok(h.commands.some(command => command.method === 'translate' && command.args[0] === monster.position.x && command.args[1] === monster.position.y), `关卡${levelId}: 未绘制怪物`);
+    assert.ok(monster.position.y + monster.hitbox.y >= 0, '首只怪物不应在画面之外');
+    assert.deepEqual(h.errors, []);
+    h.scene.dispose();
+  }
+});
+
+test('冰冻大招：加载、暂停、恢复首帧前和销毁拒绝，释放立即同步能量HUD且不重复', async () => {
+  const state=initial();
+  const h=harness(true,undefined,{initial:{...state,frostEnergy:30,monsters:state.monsters.map(m=>({...m,status:'alive',spawnAtMs:0,position:{x:180,y:200}}))}});
+  assert.equal(h.scene.releaseFrost(),false);await h.scene.load();
+  h.scene.setPaused(true);assert.equal(h.scene.releaseFrost(),false);
+  h.scene.setPaused(false);assert.equal(h.scene.releaseFrost(),false);h.frame(1000);
+  assert.equal(h.scene.releaseFrost(),true);assert.equal(h.scene.releaseFrost(),false);
+  assert.equal((h.hud.at(-1) as {frostEnergy:number}).frostEnergy,0);
+  const frozen=h.scene.snapshot!.monsters[0].position;h.frame(1010);assert.deepEqual(h.scene.snapshot!.monsters[0].position,frozen);
+  assert.deepEqual(h.errors,[]);h.scene.dispose();assert.equal(h.scene.releaseFrost(),false);
+});
+
+test('正式自动战斗将全宽视口接入模拟器，重测尺寸保留时钟与实体', async () => {
+  const h = harness(true, undefined, {initial: {...initial(), automatic: true}, width: 1024, height: 580});
+  await h.scene.load();
+  const before = h.scene.snapshot!;
+  assert.ok(before.arenaWidth! > 900);
+  assert.ok(h.commands.some(c => c.method === 'fillRect' && c.args[0] === 0 && c.args[1] === 0 && c.args[2] === before.arenaWidth && c.args[3] === 560));
+  h.frame(0); h.frame(100);
+  const tick = h.scene.snapshot!.tick;
+  const ids = h.scene.snapshot!.monsters.map(m => m.id);
+  h.scene.resize(390, 620, 3, 0);
+  assert.equal(h.scene.snapshot!.tick, tick);
+  assert.deepEqual(h.scene.snapshot!.monsters.map(m => m.id), ids);
+  assert.ok(Math.abs(h.scene.snapshot!.arenaWidth! - 390 / (620 / 560)) < 1e-8);
+  assert.equal(h.canvas.width, 1170); assert.equal(h.canvas.height, 1860);
+  assert.deepEqual(h.errors, []);
+  h.scene.dispose();
+});
+
+test('首页房屋逐级升级后，正式战斗堡垒的绘制随本局等级变化', async () => {
+  const drawings: unknown[] = [];
+  for (let houseLevel = 1; houseLevel <= 5; houseLevel++) {
+    const h = harness(false, artFixture(), { initial: { ...initial(), houseLevel } });
+    const loading = h.scene.load();
+    h.images.forEach(image => image.onload());
+    await loading;
+    drawings.push(JSON.parse(JSON.stringify(h.commands)));
+    h.scene.dispose();
+  }
+  for (let i = 1; i < drawings.length; i++) {
+    assert.notDeepEqual(drawings[i], drawings[i - 1], `房屋${i}→${i + 1}级后战斗堡垒仍相同`);
+  }
+});
+
+test('房屋外观兼容旧快照，五级堡垒摧毁后仍使用废墟', async () => {
+  const render = async (houseLevel: number | undefined, destroyed = false) => {
+    const state = initial();
+    const h = harness(false, artFixture(), { initial: { ...state, houseLevel,
+      ...(destroyed ? { base: { ...state.base, hp: 0 }, status: 'baseDestroyed' as const } : {}) } });
+    const loading = h.scene.load(); h.images.forEach(image => image.onload()); await loading;
+    const commands = JSON.parse(JSON.stringify(h.commands));
+    h.scene.dispose(); return commands as {method: string; args: any[]}[];
+  };
+  assert.deepEqual(await render(undefined), await render(1));
+  for (let level = 1; level <= 5; level++) {
+    const commands = await render(level, true);
+    assert.ok(commands.some(command => command.method === 'drawImage' && command.args[0]?.src === artFixture().destroyedBase.path));
+  }
 });

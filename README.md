@@ -80,3 +80,15 @@ npm test
 #11 继续完善奖励演出，#12/#14 负责结果保存与面板。当前升级仅显示文字过渡，完成仅显示结束提示，不宣称这些后续工单已完成。控制器提供 onCompleted(result) 接口供后续保存接入，当前页面尚未保存结果。
 
 本轮素材来源与改动见 [五种水果角色](docs/monster-assets.md)。#22 已接入击败后的残影、词音、普通水果对照及失败重试，接口与边界见 [退场接入说明](docs/fortress-retirement.md)。
+
+## 带开发者工具存档的真机预览
+
+先让本项目的开发者工具自动化服务运行于 9420 端口，再运行：
+
+```sh
+WM_AUTOMATOR_MODULE=/path/to/node_modules/miniprogram-automator npm run preview:save
+```
+
+脚本检查 AppID，读取金币、武器、房屋、通关、宠物、签到道具、难度和奖励记录，备份至 `artifacts/preview-*/save.json`，随后生成同目录的 `qrcode.png`。手机扫码首次启动会覆盖原有游戏存档；旧档保存在手机 `word-monster:preview-backup:v1`。同一二维码的存档只导入一次，再次打开保留手机后续进度。重新执行脚本会创建新的导入批次，再次覆盖。
+
+仅开发版真机导入，模拟器、体验版、正式版不导入。脚本结束会恢复空的 `miniprogram/preview/save-seed.ts`；若进程被强制终止，请确认该文件的 `previewSave` 为 `null` 后再发布。发布脚本也会检查这一点。直接点击开发者工具“预览”不会自动携带存档，请使用上述命令生成带存档的二维码。

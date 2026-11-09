@@ -3,9 +3,10 @@
     <button class="weapon-close" bindtap="close" aria-label="关闭">×</button>
     <view class="weapon-title">我的武器</view>
     <view class="weapon-level" style="border-color:{{glowColor}}">Lv.{{weapon.level}} · {{weapon.name}}</view>
+    <view class="weapon-design">{{weapon.appearance}}</view>
     <view class="weapon-carousel">
       <button class="weapon-nav" disabled="{{previewLevel <= 1}}" bindtap="previousWeapon" aria-label="查看上一级武器">‹</button>
-      <view class="weapon-stage {{previewLevel === maxWeaponLevel ? 'weapon-stage-ultimate' : ''}}" style="background:radial-gradient(ellipse, {{glowColor}}99, transparent 70%)"><image class="weapon-image {{previewLevel === maxWeaponLevel ? 'weapon-image-ultimate' : ''}}" src="{{weapon.image}}" mode="aspectFit" /></view>
+      <view class="weapon-stage weapon-stage-level-{{previewLevel}} {{previewLevel === maxWeaponLevel ? 'weapon-stage-ultimate' : ''}}" style="background:radial-gradient(ellipse, {{glowColor}}99, transparent 70%)"><view wx:if="{{previewLevel >= 4}}" class="energy-orbit" style="border-color:{{weapon.energyColor}}"></view><view wx:if="{{previewLevel >= 6}}" class="energy-orbit energy-orbit-second" style="border-color:{{weapon.energyColor}}"></view><image class="weapon-image {{previewLevel === maxWeaponLevel ? 'weapon-image-ultimate' : ''}}" src="{{weapon.image}}" mode="aspectFit" /></view>
       <button class="weapon-nav" disabled="{{previewLevel >= maxWeaponLevel}}" bindtap="nextWeapon" aria-label="查看下一级武器">›</button>
     </view>
     <view class="weapon-damage"><text class="weapon-damage-label">单发伤害</text><text class="weapon-damage-value">{{weapon.damage}}</text></view>

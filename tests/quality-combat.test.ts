@@ -11,10 +11,10 @@ function initial(skills:SkillCollection) {
  const state=createOpeningEncounter('quality','apple',0,0,skillLevels(skills),20,[],1,1,[],'normal',skills);
  return {...state,monsters:state.monsters.map((m,i)=>({...m,status:'alive' as const,spawnAtMs:0,position:{x:180+i*20,y:200},hitbox:{x:-5,y:-5,width:10,height:10}}))};
 }
-test('五级稀有参数实际发射，齐射仅一发携带元素，伤害向上取整',()=>{
+test('五级稀有参数实际发射，齐射最多三发携带火焰，伤害向上取整',()=>{
  const skills:SkillCollection={doubleShot:{level:5,quality:'rare'},fireRate:{level:5,quality:'rare'},bulletWidth:{level:5,quality:'rare'},homing:{level:5,quality:'rare'},firepower:{level:5,quality:'rare'},flame:{level:5,quality:'rare'}};
  const state=stepCombat({...initial(skills),tick:499,elementReadyTick:500,firepowerUntilTick:1000,shotRemainingMs:0}).state;
- assert.equal(state.projectiles.length,6);assert.equal(state.projectiles.filter(p=>p.elements).length,1);
+ assert.equal(state.projectiles.length,6);assert.equal(state.projectiles.filter(p=>p.elements).length,3);
  assert.equal(state.projectiles[0].width,37.800000000000004);assert.equal(state.projectiles[0].damage,26);
  assert(Math.abs(state.shotRemainingMs-220)<1e-8); // 230ms interval minus elapsed 10ms
  const changed=applyCombatSkills(state,{...ZERO_SKILLS},skills);assert.equal(changed.skills.doubleShot,5);

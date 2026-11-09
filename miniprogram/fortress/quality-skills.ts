@@ -1,6 +1,6 @@
 import { applySkillReward, rollUpgradeCandidates, SKILL_QUALITIES, qualityRank, SKILL_IDS, canImproveSkill } from './skill-quality';
 import type { SkillCollection } from './skill-quality';
-import type { BattleSkillId, RandomSource, SkillLevels } from './types';
+import type { BattleSkillId, RandomSource, SessionPlan, SkillLevels } from './types';
 import type { UpgradeOffer } from './upgrade-choice';
 
 export function skillLevels(skills: SkillCollection): SkillLevels {
@@ -34,18 +34,19 @@ const number = (value: number) => Math.round(value * 100) / 100;
 export function qualityDescription(id: BattleSkillId, skills: SkillCollection): string {
   const effect = qualityEffects(skills);
   switch (id) {
-    case 'doubleShot': return `每次齐射${effect.count}发；元素仅附于其中一发`;
+    case 'doubleShot': return `每次齐射${effect.count}发；${skills.flame ? '充能时最多3发半伤火焰，同轮爆炸不重复命中；其他元素仅一发' : '元素仅附于其中一发'}`;
     case 'fireRate': return `自动射击间隔${number(effect.intervalMs)}毫秒`;
     case 'bulletWidth': return `弹丸宽度${number(effect.width)}${effect.widthDamageBonus ? `；普通子弹伤害增加${number(effect.widthDamageBonus * 100)}%` : ''}`;
-    case 'flame': return `每5秒充能，半径${effect.flameRadius}内造成${effect.flameDamage}火焰伤害${effect.burnRatio ? `；灼烧2秒，每秒${Math.ceil(effect.flameDamage * effect.burnRatio)}伤害` : ''}`;
+    case 'flame': return `每5秒充能，半径${effect.flameRadius}内造成${skills.doubleShot ? Math.ceil(effect.flameDamage * .5) : effect.flameDamage}火焰伤害${skills.doubleShot ? '（最多3发，同轮爆炸不重复）' : ''}${effect.burnRatio ? `；灼烧2秒，每秒${Math.ceil((skills.doubleShot ? Math.ceil(effect.flameDamage * .5) : effect.flameDamage) * effect.burnRatio)}伤害` : ''}`;
     case 'frost': return `每5秒充能，减速${number(effect.frostSlow * 100)}%，持续2秒${effect.freezeTicks ? `（含冻结${effect.freezeTicks / 100}秒）` : ''}；Boss免冻、最多减速35%`;
     case 'lightning': return `每5秒充能，额外命中${effect.lightningTargets}个目标，每个${effect.lightningDamage}伤害，范围${effect.lightningRange}`;
     case 'firepower': return `开场及每20秒触发，普通子弹伤害增加${number(effect.firepowerBonus * 100)}%，持续${effect.firepowerTicks / 100}秒`;
     case 'homing': return `自动追踪并重新锁定，普通子弹伤害增加${number(.02 * skills.homing!.level * SKILL_QUALITIES[qualityRank(skills.homing!.quality)].multiplier * 100)}%${effect.homingPenetrations ? `；额外穿透${effect.homingPenetrations}个目标，逐次保留70%伤害` : ''}；最多飞行4秒`;
   }
 }
-export function qualitySkillOffer(sessionId: string, level: number, skills: SkillCollection, base: {hp:number;maxHp:number}, random: RandomSource): UpgradeOffer {
-  const cards = rollUpgradeCandidates(skills, level, base, random).map(candidate => {
+export function qualitySkillOffer(sessionId: string, level: number, skills: SkillCollection, base: {hp:number;maxHp:number}, random: RandomSource, plan?: Pick<SessionPlan, 'difficulty' | 'levelId'>): UpgradeOffer {
+  const ensureOffense = plan?.difficulty === 'easy' && plan.levelId === 1 && level <= 4;
+  const cards = rollUpgradeCandidates(skills, level, base, random, ensureOffense).map(candidate => {
     if (candidate.id === 'repair') return {id:'repair',icon:'repair' as const,label:'堡垒修复',description:'立即恢复堡垒全部生命值'};
     const next = applySkillReward(skills, candidate);
     const owned = next[candidate.id]!;

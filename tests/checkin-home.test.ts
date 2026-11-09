@@ -55,3 +55,21 @@ test('从已覆盖画布的素材弹框切入签到，保留就绪状态，不�
   f.host.openCheckin(); assert.equal(f.host.data.showCredits,false); assert.equal(f.host.data.sceneCoverReady,true);
   f.host.closeCheckin();
 });
+
+test('房屋弹窗升级立即更新外观等级与余额，重复请求不扣费且拦截其他入口',async()=>{
+ const f=fixture();for(let i=0;i<3;i++)f.coins.rewardVictory(`house-${i}`);
+ f.host.openHouse();assert.equal(f.host.data.showHouse,true);assert.equal(f.host.data.houseView.level,1);
+ for(const action of ['openCheckin','openPet','openWeapon','openDifficulty','toggleCredits','toggleLevels'])f.host[action]();
+ await f.host.beginLevel(1);assert.equal(f.host.data.request,null);assert.equal(f.host.data.showCheckin,false);
+ const event={currentTarget:{dataset:{level:1}}};f.host.upgradeHouse(event);f.host.upgradeHouse(event);
+ assert.equal(f.host.data.houseLevel,2);assert.equal(f.host.data.coinBalance,0);assert.equal(f.coins.house().level,2);
+ f.host.onHide();f.host.upgradeHouse({currentTarget:{dataset:{level:2}}});assert.equal(f.coins.house().level,2);
+ f.host.closeHouse();assert.equal(f.host.data.showHouse,false);
+});
+test('房屋升级写入失败可重试恢复，未成功保存不改变首页外观',()=>{
+ const f=fixture();for(let i=0;i<3;i++)f.coins.rewardVictory(`house-${i}`);
+ f.host.openHouse();f.setFail(true);f.host.upgradeHouse({currentTarget:{dataset:{level:1}}});
+ assert(f.host.data.houseError);assert.equal(f.host.data.houseLevel,1);assert.equal(f.coins.balance(),300);
+ f.setFail(false);f.host.refreshHouse();assert.equal(f.host.data.houseError,'');
+ f.host.upgradeHouse({currentTarget:{dataset:{level:1}}});assert.equal(f.host.data.houseLevel,2);assert.equal(f.coins.balance(),0);
+});

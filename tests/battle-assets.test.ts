@@ -55,7 +55,7 @@ test('图片全部解码后仍等待音频可播放；失败、取消及旧回�
   assert.ok(images.some(image=>image.src==='/assets/images/battle-backgrounds/level-1.png'));
   for(const image of images)image.success();
   assert.equal(ready,0);assert.ok(progress.at(-1)!<100);
-  assert.equal(channels.length,1);channels[0].ready();
+  assert.equal(channels.length,2);channels[0].ready();
   assert.equal(ready,0);assert.equal(channels[0].destroyed,1);
   const stale=channels[0].ready;stale();assert.equal(channels.length,2);
   channels[1].ready();assert.equal(ready,1);assert.equal(progress.at(-1),100);
@@ -64,4 +64,66 @@ test('图片全部解码后仍等待音频可播放；失败、取消及旧回�
   assert.equal(ready,1);
   exports.loadBattleAssets(openingArt('pear'),callbacks,{audioPaths:['/a.mp3']});channels.at(-1).failed();
   assert.equal(errors,1);assert.equal(ready,1);
+  for (const mode of ['cancel', 'error', 'timeout']) {
+    const firstChannel = channels.length;
+    const cancelBatch = exports.loadBattleAssets(openingArt('apple'), callbacks,
+      {audioPaths: Array.from({length: 8}, (_, i) => `/batch-${i}.mp3`)});
+    const batch = channels.slice(firstChannel);
+    assert.equal(batch.length, 4);
+    const lateCallbacks = batch.map(channel => channel.ready);
+    if (mode === 'cancel') cancelBatch();
+    else if (mode === 'error') batch[2].failed();
+    else for (const fn of [...timers.values()]) fn();
+    for (const channel of batch) assert.equal(channel.destroyed, 1);
+    for (const callback of lateCallbacks) callback();
+    assert.equal(channels.length, firstChannel + 4, '停止后不得继续创建排队音频');
+    assert.equal(ready, 1);
+    assert.equal(timers.size, 0);
+  }
+  assert.equal(errors, 3);
+});
+
+test('12段音频以最多4路预载，100ms可播放延迟在300ms内完成且释放全部通道', () => {
+  let now = 0, live = 0, peak = 0, ready = 0, timerId = 0;
+  const tasks = new Map<number, { at: number; run: () => void }>();
+  const schedule = (run: () => void, delay: number) => { tasks.set(++timerId, { at: now + delay, run }); return timerId; };
+  const exports: any = {};
+  const source = readFileSync(new URL('../miniprogram/services/battle-assets.ts', import.meta.url), 'utf8');
+  runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020}}).outputText, {
+    exports, require() { return {ALL_BATTLE_WORDS: [], defeatAudioPath: () => ''}; },
+    setTimeout: schedule, clearTimeout(id: number) { tasks.delete(id); },
+    wx: {
+      getImageInfo(options: any) { options.success(); },
+      createInnerAudioContext() {
+        live++; peak = Math.max(peak, live);
+        let callback = () => {}, destroyed = false;
+        return { set src(_value: string) { schedule(() => callback(), 100); },
+          onCanplay(fn: () => void) { callback = fn; }, offCanplay() {}, onError() {}, offError() {},
+          destroy() { assert.equal(destroyed, false); destroyed = true; live--; },
+        };
+      },
+    },
+  });
+  exports.loadBattleAssets(openingArt('apple'), {onProgress() {}, onReady() { ready++; }, onError() { assert.fail('加载不应失败'); }},
+    {audioPaths: Array.from({length: 12}, (_, i) => `/audio-${i}.mp3`)});
+  while (tasks.size) {
+    const [id, task] = [...tasks.entries()].sort((a, b) => a[1].at - b[1].at)[0];
+    tasks.delete(id); now = task.at; task.run();
+  }
+  assert.equal(ready, 1); assert.equal(live, 0); assert.ok(peak <= 4);
+  assert.ok(now <= 300, `音频预载累计等待${now}ms，应不超过300ms`);
+});
+
+test('Canvas负责解码时不重复预检角色图片，仍核验单独的加载封面', () => {
+  const images: any[] = []; let ready = false;
+  const exports: any = {};
+  const source = readFileSync(new URL('../miniprogram/services/battle-assets.ts', import.meta.url), 'utf8');
+  runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020}}).outputText, {
+    exports, require() { return {ALL_BATTLE_WORDS: [], defeatAudioPath: () => ''}; },
+    wx: {getImageInfo(options: any) { images.push(options); }}, setTimeout() {return 1;}, clearTimeout() {},
+  });
+  exports.loadBattleAssets(openingArt('apple'), {onProgress() {}, onReady() {ready = true;}, onError() {assert.fail();}},
+    {sceneDecodesImages: true, imagePaths: ['/cover.png']});
+  assert.deepEqual(images.map(image => image.src), ['/cover.png']);
+  assert.equal(ready, false); images[0].success(); assert.equal(ready, true);
 });

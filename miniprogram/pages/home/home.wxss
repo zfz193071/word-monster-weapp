@@ -73,11 +73,7 @@ button::after { border: 0; }
 .collection-card .collection-play.playing { background: #658c62; color: #fffbe7; }
 .collection-audio-error { color: #9a5643; font-size: 23rpx; text-align: center; padding: 12rpx; }
 
-.pet-modal { position:relative; box-sizing:border-box; width:100%; max-width:650rpx; padding:36rpx 28rpx; border:6rpx solid #fff9e4; border-radius:36rpx; background:#fff8e7; color:#456452; }
-.pet-title { display:block; font-size:40rpx; font-weight:bold; }.pet-subtitle { display:block; margin:10rpx 0 24rpx; font-size:23rpx; color:#81917a; }.pet-scroll { max-height:65vh; height:650rpx; }
-.pet-stage { margin:18rpx 0; font-size:32rpx; font-weight:bold; }.pet-progress { height:16rpx; border-radius:12rpx; overflow:hidden; background:#e3e6d2; }.pet-progress view { height:100%; background:#80b8c4; }.pet-caption { display:block; text-align:center; font-size:22rpx; color:#7c8974; margin:12rpx 0; }
-.pet-supplies { display:flex; justify-content:space-around; padding:26rpx 0; font-size:27rpx; }.pet-actions { display:flex; gap:12rpx; }.pet-actions button { flex:1; margin:0; padding:12rpx 6rpx; font-size:23rpx; line-height:1.6; border-radius:20rpx; background:#658c62; color:#fff8e7; }.pet-actions button[disabled] { background:#e3e6d2; color:#a1aa94; }
-.pet-section { display:block; margin:30rpx 0 16rpx; font-size:28rpx; font-weight:bold; }.pet-gear { display:flex; align-items:center; gap:14rpx; margin-bottom:12rpx; padding:12rpx; background:#f2ecd9; border-radius:20rpx; font-size:26rpx; }.pet-gear-symbol { width:40rpx; text-align:center; color:#ad8b45; font-size:32rpx; }.pet-gear button { margin:0 0 0 auto; font-size:23rpx; line-height:1.8; border-radius:16rpx; color:#456452; background:#fffdf4; }.pet-empty { padding:80rpx 16rpx; text-align:center; line-height:1.8; }.pet-message { display:block; text-align:center; margin-top:20rpx; color:#568158; font-size:24rpx; }.pet-error { padding:30rpx 12rpx; color:#9a5643; text-align:center; }
+
 
 .strength-hint { position:absolute; bottom:26%; left:12%; right:12%; z-index:4; padding:16rpx 20rpx; border-radius:24rpx; text-align:center; background:#fff3d5ed; color:#4e684e; font-size:27rpx; pointer-events:none; }
 
@@ -85,12 +81,59 @@ button::after { border: 0; }
 
 .difficulty-button { position:absolute; left:26rpx; top: 289rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; padding:8rpx 0; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; color:#fff4db; font-size:19rpx; line-height:1.3; }
 .difficulty-mark { display:block; width:44rpx; height:38rpx; margin:0 auto; }
+.home-difficulty-panel { display:block; flex:0 1 680rpx; width:100%; min-width:0; max-width:680rpx; }
 
 .checkin-button { position:absolute; left:26rpx; top:65rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; height:76rpx; padding:0; display:flex; align-items:center; justify-content:center; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; }
 .calendar-icon { width:42rpx; height:42rpx; border-radius:8rpx; background:#fff4c5; color:#638458; line-height:33rpx; font-size:32rpx; font-weight:700; overflow:hidden; }.calendar-icon view { height:9rpx; background:#eacb70; }
 .checkin-modal { width:100%; max-width:700rpx; border:5rpx solid #fff9e4; border-radius:30rpx; background:#fff3dd; overflow:hidden; box-shadow:0 12rpx 0 #243d3d33; }
 .checkin-heading { position:relative; padding:24rpx 80rpx; background:linear-gradient(#a8d45d,#78ac48); border-bottom:4rpx solid #5c8c3c; text-align:center; color:#fffce5; font-size:40rpx; font-weight:800; text-shadow:0 3rpx #57783d; }.checkin-heading .close-button { color:#fffce5; top:18rpx; }
 .checkin-scroll { max-height:70vh; }.checkin-body { padding:28rpx 20rpx 30rpx; text-align:center; color:#5c6144; }.checkin-subtitle { display:block; font-size:29rpx; font-weight:700; }.checkin-rule { display:block; font-size:22rpx; line-height:1.6; margin-top:12rpx; color:#7b8065; }
-.checkin-days { width:100%; margin-top:28rpx; white-space:nowrap; }.checkin-row { display:inline-flex; gap:12rpx; padding:4rpx 2rpx 14rpx; }.checkin-card { flex:none; display:flex; flex-direction:column; align-items:center; width:138rpx; min-width:138rpx; max-width:138rpx; margin:0; padding:12rpx 4rpx; border:3rpx solid #dbcda9; border-radius:18rpx; background:#fff9e8; color:#657153; font-size:23rpx; line-height:1.5; }.checkin-card.available { border-color:#79a94c; background:#f2f9d6; box-shadow:0 5rpx 0 #93b063; }.checkin-card.claimed { background:#e8efd8; color:#658355; }.checkin-card.future { background:#eee9dc; color:#969b88; }.checkin-day { font-weight:700; }.reward-icon { display:flex; align-items:center; justify-content:center; margin:14rpx 0 10rpx; width:70rpx; height:70rpx; border-radius:22rpx; background:#dfdfce; color:#a4a78c; font-size:48rpx; }.reward-icon.coins { background:#ffe3a1; color:#d9a231; border-radius:50%; border:4rpx solid #e6b752; box-sizing:border-box; }.reward-icon.food { background:#ead5ab; color:#b4814c; }.reward-icon.soldier { background:#d2dfbb; color:#617b4d; }.reward-icon.flag { background:#f0cab7; color:#ba705a; }.reward-name { font-size:23rpx; }.reward-amount { font-weight:800; font-size:27rpx; }.reward-status { margin-top:12rpx; font-size:21rpx; }.available .reward-status { color:#598c35; font-weight:700; }
+.checkin-days { width:100%; margin-top:24rpx; }
+.checkin-row { display:flex; gap:6rpx; padding:8rpx 0 14rpx; }
+.checkin-card { position:relative; flex:1; min-width:0; margin:0; padding:12rpx 0; display:flex; flex-direction:column; align-items:center; border:2rpx solid #dbcda9; border-radius:14rpx; background:#fff9e8; color:#657153; line-height:1.4; }
+.checkin-card::after { border:0; }
+.checkin-card.available { border-color:#79a94c; background:#f2f9d6; box-shadow:0 5rpx 0 #93b063; }
+.checkin-day { font-size:21rpx; font-weight:700; white-space:nowrap; }
+.reward-icon { display:block; width:68rpx; height:68rpx; margin:12rpx 0 4rpx; }
+.reward-amount { font-weight:800; font-size:24rpx; }
+.reward-check { position:absolute; top:27rpx; right:0; color:#4b9b37; font-size:36rpx; font-weight:800; text-shadow:0 2rpx #fff; }
+.checkin-inventory view { display:flex; align-items:center; gap:6rpx; }
+.checkin-inventory image { width:48rpx; height:48rpx; }
+
 .checkin-progress { height:12rpx; margin:18rpx 4rpx 0; border-radius:12rpx; background:#ded8be; overflow:hidden; }.checkin-progress view { height:100%; background:#8cbc5f; border-radius:12rpx; }.checkin-message { display:block; font-size:25rpx; color:#5c8b43; padding:24rpx 0; }.checkin-inventory { display:flex; flex-wrap:wrap; justify-content:center; gap:12rpx 20rpx; padding:18rpx 6rpx; border-radius:16rpx; background:#e9dfc7; font-size:23rpx; }.checkin-notice { padding:48rpx 10rpx; font-size:26rpx; }.checkin-error { color:#995c43; }.checkin-notice button { margin-top:18rpx; width:180rpx; background:#dce9c7; color:#5b7546; }
 .checkin-card.claimed[disabled] { background:#e8efd8; color:#527544; border-color:#a5be85; }.checkin-card.future[disabled] { background:#eee9dc; color:#7c826f; }.checkin-card.available[disabled] { background:#f2f9d6; color:#657153; }
+
+.pending-victory-reward { position: fixed; top: 100rpx; left: 20%; width: 60%; z-index: 20; font-size: 22rpx; color: #634519; background: #ffe49a; }
+.pet-supplies { flex-wrap: wrap; }
+
+.image-startup { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24rpx; background: #fff8ec; color: #59452d; }
+
+.house-modal { position:relative; width:100%; max-width:620rpx; padding:36rpx 28rpx; box-sizing:border-box; border:5rpx solid #fff9e4; border-radius:30rpx; background:#fff3dd; text-align:center; color:#365b49; box-shadow:0 12rpx 0 #243d3d33; }
+.house-title { font-size:34rpx; font-weight:800; padding:8rpx 50rpx; }
+.house-preview { display:block; width:100%; height:360rpx; margin:8rpx auto; }
+.house-stat { font-size:28rpx; font-weight:700; margin-bottom:26rpx; }.house-stat text { color:#699d3d; }
+.house-upgrade { background:#7faa50; color:#fffbea; border-radius:22rpx; font-weight:700; font-size:30rpx; }.house-upgrade[disabled] { background:#d9dcc5; color:#818975; }
+.house-balance,.house-message { display:block; font-size:24rpx; margin-top:16rpx; }.house-message { color:#62913e; }.house-error { padding:48rpx 0; color:#995c43; }
+
+/* Image-led companion studio. Scroll remains usable on short landscape screens. */
+.pet-modal { position:relative; box-sizing:border-box; width:100%; max-width:660rpx; padding:26rpx; border:4rpx solid #fffaf0; border-radius:38rpx; background:linear-gradient(160deg,#f6fcfa,#fff6e7); color:#3e6170; box-shadow:0 24rpx 80rpx #203f4b35; }
+.pet-heading { display:flex; align-items:center; gap:20rpx; padding-right:60rpx; }
+.pet-title { font-size:32rpx; font-weight:bold; }.pet-wallet { display:flex; align-items:center; gap:6rpx; margin-left:auto; font-size:24rpx; }.pet-wallet image { width:38rpx; height:38rpx; }
+.pet-scroll { height:70vh; max-height:1040rpx; margin-top:8rpx; }
+.pet-portrait { position:relative; height:350rpx; overflow:hidden; border-radius:28rpx; background:radial-gradient(ellipse at 50% 60%,#e0f3ef 0%,#eaf5f100 70%); }
+.pet-halo { position:absolute; width:300rpx; height:300rpx; left:50%; top:16rpx; margin-left:-150rpx; border:2rpx solid #ffffffb0; border-radius:50%; box-shadow:0 0 0 24rpx #ffffff30,0 0 0 48rpx #ffffff20; }
+.pet-hero { position:absolute; width:360rpx; height:360rpx; left:50%; bottom:0; margin-left:-180rpx; transform-origin:50% 85%; }.pet-age-baby { transform:scale(.8); }.pet-age-young { transform:scale(.9); }
+.pet-level { position:absolute; bottom:8rpx; left:50%; transform:translateX(-50%); padding:8rpx 22rpx; border:3rpx solid #fff; border-radius:26rpx; background:#537d91; color:#fff; font-size:28rpx; font-weight:bold; box-shadow:0 5rpx 12rpx #42677d22; white-space:nowrap; }.pet-level text { font-size:20rpx; margin-left:12rpx; font-weight:normal; color:#e2f4ef; }
+.pet-spark { position:absolute; color:#e3bb62; font-size:38rpx; }.pet-spark-one { left:15%; top:22%; }.pet-spark-two { right:12%; top:46%; }.pet-spark-three { left:23%; bottom:16%; font-size:22rpx; }
+.pet-progress { height:10rpx; margin:18rpx 48rpx 0; border-radius:10rpx; overflow:hidden; background:#dce8e5; }.pet-progress view { height:100%; border-radius:10rpx; background:linear-gradient(90deg,#82b9bd,#99d3ba); transition:width .3s; }
+.pet-caption { display:block; text-align:center; margin:8rpx 0 12rpx; color:#758f93; font-size:20rpx; }
+.pet-actions { display:flex; gap:14rpx; margin-top:14rpx; }.pet-actions button { display:flex; flex:1; flex-direction:column; align-items:center; margin:0; padding:10rpx 4rpx 14rpx; line-height:1.4; background:#e9f0e6; border-radius:24rpx; color:#446b61; font-size:24rpx; }.pet-actions image { width:74rpx; height:66rpx; }.pet-actions .pet-upgrade { background:#f7deb0; color:#785b30; }.pet-action-count { font-size:21rpx; opacity:.75; }.pet-actions button[disabled] { opacity:.5; }
+.pet-section-row { display:flex; align-items:center; justify-content:space-between; }.pet-section { display:block; margin:24rpx 0 12rpx; font-size:24rpx; font-weight:bold; }.pet-stones { display:flex; align-items:center; font-size:20rpx; }.pet-stones image { width:38rpx; height:38rpx; }
+.pet-skill { display:flex; align-items:center; gap:22rpx; margin:0; padding:12rpx; border-radius:26rpx; background:linear-gradient(115deg,#e4edf8,#eeeafa); text-align:left; line-height:1.4; color:#425c7d; }.pet-skill>image { width:138rpx; height:138rpx; flex-shrink:0; }.pet-skill-info text { display:block; }.pet-skill-name { font-size:28rpx; font-weight:bold; }.pet-skill-stats { margin:10rpx 0; font-size:23rpx; }.pet-skill-hint { font-size:20rpx; color:#7c8da4; }.pet-details { margin-top:12rpx; padding:18rpx; font-size:23rpx; line-height:1.7; background:#ffffff88; border-radius:18rpx; }.pet-details text { display:block; margin-top:10rpx; }
+.pet-gear-grid { display:flex; gap:12rpx; }.pet-gear { flex:1; min-width:0; margin:0; padding:12rpx 4rpx; border:2rpx solid transparent; border-radius:22rpx; background:#f1eddf; color:#6c786e; line-height:1.5; font-size:20rpx; }.pet-gear image { display:block; width:90rpx; height:80rpx; margin:auto; }.pet-gear text { display:block; }.pet-gear .pet-gear-status { font-size:18rpx; opacity:.75; }.pet-gear[disabled] { opacity:.48; }.pet-gear-equipped { border-color:#89b7a2; background:#e6f3e8; }.pet-gear::after,.pet-actions button::after,.pet-skill::after { border:0; }
+.pet-message { display:block; text-align:center; margin:16rpx 0; color:#568158; font-size:23rpx; }.pet-error,.pet-empty { padding:40rpx 12rpx; text-align:center; font-size:26rpx; }
+.pet-celebration-title { position:absolute; top:8rpx; left:0; right:0; text-align:center; color:#aa792e; font-size:34rpx; font-weight:bold; text-shadow:0 2rpx #fff; }
+.pet-celebrating .pet-hero { animation:pet-cheer .8s ease-in-out; }.pet-celebrating .pet-halo { animation:pet-glow 1.6s ease-out; }.pet-celebrating .pet-spark { animation:pet-sparkle .8s ease-in-out 2; }
+@keyframes pet-cheer { 0%,100% { bottom:0; } 45% { bottom:28rpx; } 70% { bottom:8rpx; } }
+@keyframes pet-glow { 0% { transform:scale(.6); opacity:.2; } 45% { box-shadow:0 0 50rpx 24rpx #ffe6a0; } 100% { transform:scale(1.2); opacity:0; } }
+@keyframes pet-sparkle { 50% { transform:scale(1.5) rotate(30deg); opacity:.4; } }

@@ -13,7 +13,7 @@ test('场景单帧循环，覆盖/隐藏停止动画，迟到旧帧不能复活�
   const context=new Proxy({}, {get(_target,key){if(key==='clearRect')return ()=>draws++;return ()=>{};},set(){return true;}});
   const canvas={width:0,height:0,getContext:()=>context,requestAnimationFrame(callback:(time:number)=>void){const id=++sequence;frames.set(id,callback);return id;},cancelAnimationFrame(id:number){frames.delete(id);},toDataURL:()=> 'data:image/png;base64,frame'};
   const scene=new HomeRoomScene(canvas as unknown as WechatMiniprogram.Canvas,360,400,3);
-  assert.equal(canvas.width,720);scene.setActive(true);scene.setActive(true);assert.equal(frames.size,1);
+  assert.equal(canvas.width,1080);assert.equal(canvas.height,1200);scene.setActive(true);scene.setActive(true);assert.equal(frames.size,1);
   const stale=[...frames.values()][0];scene.setActive(false);assert.equal(frames.size,0);
   const count=draws;stale(100);assert.equal(draws,count);scene.setActive(true);stale(200);assert.equal(frames.size,1);
   scene.dispose();assert.equal(frames.size,0);stale(300);assert.equal(draws,count);
@@ -59,4 +59,23 @@ test('小雷狐成长和装扮参与原房间深度绘制，宠物点击与主�
  }
  scene.setPet(null);assert.equal(scene.hitPet(...pixel([.85,.9,1.85])),false);
  scene.dispose();
+});
+
+test('五级房屋结构不同，升级保持视角，房屋点击与角色点击分开',()=>{
+ let draws=0,paths=0;
+ const context=new Proxy({}, {get(_target,key){return key==='clearRect'?()=>{draws++;paths=0;}:key==='beginPath'?()=>paths++:()=>{};},set(){return true;}});
+ const scene=new HomeRoomScene({getContext:()=>context} as unknown as WechatMiniprogram.Canvas,480,550,1);
+ const counts:number[]=[];
+ for(let level=1;level<=5;level++){
+   scene.setHouseLevel(level);counts.push(paths);
+   const scale=Math.min(480/(level>=4?10.8:9.6),550/(level>=4?10:9.2));
+   const p=projectRoomPoint([2.7,.06,2.7]);
+   assert.equal(scene.hitHouse(240+p.x*scale,308+p.y*scale),true,'地板可打开房屋升级');
+   assert.equal(scene.hitHero(240+p.x*scale,308+p.y*scale),false);
+   assert.equal(scene.hitHouse(0,0),false,'天空不能误触');
+ }
+ assert.equal(new Set(counts).size,5,'每级都有不同结构而非仅换色');
+ scene.setYaw(1.2);const yaw=scene.viewYaw;scene.setHouseLevel(3);assert.equal(scene.viewYaw,yaw);
+ const before=draws;scene.setHouseLevel(3);assert.equal(draws,before);
+ assert.throws(()=>scene.setHouseLevel(6));scene.dispose();assert.equal(scene.hitHouse(240,400),false);
 });

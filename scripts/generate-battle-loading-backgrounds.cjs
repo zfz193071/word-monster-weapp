@@ -29,20 +29,17 @@ const output = 'miniprogram/assets/images/battle-backgrounds';
 fs.mkdirSync(output, { recursive: true });
 for (let level = 1; level <= palettes.length; level++) {
   const [ground, road, seam, accent] = palettes[level-1];
-  let art = rect(0,0,360,560,ground);
-  art += `<path d="M48 0 L312 0 L326 480 L30 480 Z" fill="${road}"/>`;
-  for (let row = 0; row < 8; row++) {
-    const y = row * 64;
-    art += line(48,y,312,y,seam);
-    for (let col = 0; col < 4; col++) {
-      const x = 65 + col * 66 + row % 2 * 12;
-      art += line(x,y,x-2,y+64,seam);
-    }
+  let art = rect(0,0,360,560,road);
+  for (let row = 0; row < 9; row++) for (let col = -1; col < 6; col++) {
+    const x = col * 72 + (row % 2) * 36; const y = row * 60;
+    art += rect(x+2,y+2,68,56,(row+col)%3===0?'rgba(255,251,226,.12)':'rgba(53,76,54,.035)');
+    art += `<path d="M${x+2} ${y+57}V${y+2}H${x+69}" fill="none" stroke="${seam}" stroke-width=".8"/>`;
+    art += `<path d="M${x+3} ${y+58}H${x+70}V${y+3}" fill="none" stroke="rgba(56,76,51,.12)" stroke-width=".8"/>`;
   }
   for (let side = 0; side < 2; side++) for (let i = 0; i < 6; i++) {
-    const x = side ? 346 : 14;
+    const x = side ? 360 : 0;
     const rotate = level === 4 ? ` rotate(${side ? -6.875 : 6.875})` : '';
-    art += `<g transform="translate(${x} ${32+i*78})${rotate}">${scenery(level,ground,accent)}</g>`;
+    art += `<g transform="translate(${x} ${32+i*78}) scale(.65)${rotate}">${scenery(level,ground,accent)}</g>`;
   }
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="560" viewBox="0 0 360 560">${art}</svg>`;
   fs.writeFileSync(`${output}/level-${level}.png`, new Resvg(svg, {font:{loadSystemFonts:false}}).render().asPng());

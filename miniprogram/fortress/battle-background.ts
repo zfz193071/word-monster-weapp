@@ -1,5 +1,5 @@
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
-// Original canvas scenery; decorations stay outside the fighting lanes.
+// Original open courtyard; edge decoration does not imply a narrow fighting lane.
 const palettes = [
   ['#a1b777', '#c6c397', '#ded8b3', '#789858'], // orchard
   ['#c6badb', '#e4d8e8', '#f5edf4', '#9982bc'], // colour garden
@@ -17,25 +17,25 @@ export function battleBackgroundCover(levelId = 1): string {
   const id = Number.isInteger(levelId) && levelId >= 1 && levelId <= palettes.length ? levelId : 1;
   return `/assets/images/battle-backgrounds/level-${id}.png`;
 }
-export function drawBattleBackground(c: Context, levelId = 1): void {
+export function drawBattleBackground(c: Context, levelId = 1, width = 360): void {
   const [ground, road, line, accent] = palettes[levelId - 1] ?? palettes[0];
-  c.fillStyle = ground; c.fillRect(0, 0, 360, 560);
-  c.fillStyle = road; c.beginPath(); c.moveTo(48, 0); c.lineTo(312, 0); c.lineTo(326, 480); c.lineTo(30, 480); c.closePath(); c.fill();
-  c.strokeStyle = line; c.lineWidth = 2;
-  for (let row = 0; row < 8; row++) {
-    const y = row * 64;
-    c.beginPath(); c.moveTo(48, y); c.lineTo(312, y); c.stroke();
-    for (let col = 0; col < 4; col++) {
-      const x = 65 + col * 66 + row % 2 * 12;
-      c.beginPath(); c.moveTo(x, y); c.lineTo(x - 2, y + 64); c.stroke();
-    }
+  c.fillStyle = road; c.fillRect(0, 0, width, 560);
+  // Broad, softly bevelled paving replaces the high-contrast central corridor.
+  for (let row = 0; row < 9; row++) for (let col = -1; col < Math.ceil(width / 72); col++) {
+    const x = col * 72 + (row % 2) * 36; const y = row * 60;
+    c.fillStyle = (row + col) % 3 === 0 ? 'rgba(255,251,226,.12)' : 'rgba(53,76,54,.035)';
+    c.fillRect(x + 2, y + 2, 68, 56);
+    c.strokeStyle = line; c.lineWidth = .8;
+    c.beginPath(); c.moveTo(x + 2, y + 57); c.lineTo(x + 2, y + 2); c.lineTo(x + 69, y + 2); c.stroke();
+    c.strokeStyle = 'rgba(56,76,51,.12)';
+    c.beginPath(); c.moveTo(x + 3, y + 58); c.lineTo(x + 70, y + 58); c.lineTo(x + 70, y + 3); c.stroke();
   }
   const circle = (x: number, y: number, r: number, color: string) => {
     c.fillStyle = color; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
   };
   for (let side = 0; side < 2; side++) for (let i = 0; i < 6; i++) {
-    const x = side ? 346 : 14; const y = 32 + i * 78;
-    c.save(); c.translate(x, y);
+    const x = side ? width : 0; const y = 32 + i * 78;
+    c.save(); c.translate(x, y); c.scale(.65, .65);
     c.fillStyle = accent; c.strokeStyle = accent; c.lineWidth = 3;
     if (levelId === 1 || levelId === 3) {
       c.fillRect(-3, 0, 6, 26); circle(0, -5, 19, accent); circle(6, -12, 12, ground);

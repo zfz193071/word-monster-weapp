@@ -1,0 +1,2073 @@
+{
+  "schemaVersion": 1,
+  "evidence": "Local source scan, not WeChat compiled sizes or resident GPU memory",
+  "packages": [
+    {
+      "root": "",
+      "name": "main",
+      "bytes": 1729839
+    },
+    {
+      "root": "learning-assets",
+      "name": "learning-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 1135877
+    },
+    {
+      "root": "assets/images",
+      "name": "scene-images",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 1708035
+    }
+  ],
+  "words": [
+    {
+      "id": "apple",
+      "meaning": "苹果",
+      "category": "fruits",
+      "path": "assets/images/apple.png",
+      "bytes": 9919,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-apple.png + shared legs + learning badge",
+      "bossBadge": "assets/images/apple.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "banana",
+      "meaning": "香蕉",
+      "category": "fruits",
+      "path": "assets/images/banana.png",
+      "bytes": 71640,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-banana.png + shared legs + learning badge",
+      "bossBadge": "assets/images/banana.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "orange",
+      "meaning": "橙子",
+      "category": "fruits",
+      "path": "assets/images/orange.png",
+      "bytes": 9726,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-orange.png + shared legs + learning badge",
+      "bossBadge": "assets/images/orange.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "grape",
+      "meaning": "葡萄",
+      "category": "fruits",
+      "path": "assets/images/grape.png",
+      "bytes": 15017,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-grape.png + shared legs + learning badge",
+      "bossBadge": "assets/images/grape.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "watermelon",
+      "meaning": "西瓜",
+      "category": "fruits",
+      "path": "assets/images/watermelon.png",
+      "bytes": 10682,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-watermelon.png + shared legs + learning badge",
+      "bossBadge": "assets/images/watermelon.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "pear",
+      "meaning": "梨",
+      "category": "fruits",
+      "path": "assets/images/pear.png",
+      "bytes": 72767,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-pear.png + shared legs + learning badge",
+      "bossBadge": "assets/images/pear.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "strawberry",
+      "meaning": "草莓",
+      "category": "fruits",
+      "path": "assets/images/strawberry.png",
+      "bytes": 12094,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-strawberry.png + shared legs + learning badge",
+      "bossBadge": "assets/images/strawberry.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "cherry",
+      "meaning": "樱桃",
+      "category": "fruits",
+      "path": "assets/images/cherry.png",
+      "bytes": 11628,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-cherry.png + shared legs + learning badge",
+      "bossBadge": "assets/images/cherry.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "pineapple",
+      "meaning": "菠萝",
+      "category": "fruits",
+      "path": "assets/images/pineapple.png",
+      "bytes": 238041,
+      "width": 512,
+      "height": 512,
+      "decodedRgbaBytes": 1048576,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-pineapple.png + shared legs + learning badge",
+      "bossBadge": "assets/images/pineapple.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "kiwi",
+      "meaning": "猕猴桃",
+      "category": "fruits",
+      "path": "assets/images/kiwi.png",
+      "bytes": 127714,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-kiwi.png + shared legs + learning badge",
+      "bossBadge": "assets/images/kiwi.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "peach",
+      "meaning": "桃子",
+      "category": "fruits",
+      "path": "assets/images/peach.png",
+      "bytes": 12998,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images",
+      "owner": 84,
+      "battle": "assets/images/fortress/zombie-body-peach.png + shared legs + learning badge",
+      "bossBadge": "assets/images/peach.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "bear",
+      "meaning": "熊",
+      "category": "animals-plants",
+      "path": "learning-assets/images/bear.png",
+      "bytes": 8399,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(bear)",
+      "bossBadge": "learning-assets/images/bear.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "bee",
+      "meaning": "蜜蜂",
+      "category": "animals-plants",
+      "path": "learning-assets/images/bee.png",
+      "bytes": 6004,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(bee)",
+      "bossBadge": "learning-assets/images/bee.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "bird",
+      "meaning": "鸟",
+      "category": "animals-plants",
+      "path": "learning-assets/images/bird.png",
+      "bytes": 5043,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(bird)",
+      "bossBadge": "learning-assets/images/bird.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "cat",
+      "meaning": "猫",
+      "category": "animals-plants",
+      "path": "learning-assets/images/cat.png",
+      "bytes": 6508,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(cat)",
+      "bossBadge": "learning-assets/images/cat.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "chicken",
+      "meaning": "鸡",
+      "category": "animals-plants",
+      "path": "learning-assets/images/chicken.png",
+      "bytes": 5889,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(chicken)",
+      "bossBadge": "learning-assets/images/chicken.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "cow",
+      "meaning": "牛",
+      "category": "animals-plants",
+      "path": "learning-assets/images/cow.png",
+      "bytes": 6408,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(cow)",
+      "bossBadge": "learning-assets/images/cow.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "dog",
+      "meaning": "狗",
+      "category": "animals-plants",
+      "path": "learning-assets/images/dog.png",
+      "bytes": 7321,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(dog)",
+      "bossBadge": "learning-assets/images/dog.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "duck",
+      "meaning": "鸭",
+      "category": "animals-plants",
+      "path": "learning-assets/images/duck.png",
+      "bytes": 5881,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(duck)",
+      "bossBadge": "learning-assets/images/duck.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "elephant",
+      "meaning": "大象",
+      "category": "animals-plants",
+      "path": "learning-assets/images/elephant.png",
+      "bytes": 6678,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(elephant)",
+      "bossBadge": "learning-assets/images/elephant.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "fish",
+      "meaning": "鱼",
+      "category": "animals-plants",
+      "path": "learning-assets/images/fish.png",
+      "bytes": 4972,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(fish)",
+      "bossBadge": "learning-assets/images/fish.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "horse",
+      "meaning": "马",
+      "category": "animals-plants",
+      "path": "learning-assets/images/horse.png",
+      "bytes": 7829,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(horse)",
+      "bossBadge": "learning-assets/images/horse.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "lion",
+      "meaning": "狮子",
+      "category": "animals-plants",
+      "path": "learning-assets/images/lion.png",
+      "bytes": 10514,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(lion)",
+      "bossBadge": "learning-assets/images/lion.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "panda",
+      "meaning": "熊猫",
+      "category": "animals-plants",
+      "path": "learning-assets/images/panda.png",
+      "bytes": 8117,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(panda)",
+      "bossBadge": "learning-assets/images/panda.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "rabbit",
+      "meaning": "兔子",
+      "category": "animals-plants",
+      "path": "learning-assets/images/rabbit.png",
+      "bytes": 6258,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(rabbit)",
+      "bossBadge": "learning-assets/images/rabbit.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "sheep",
+      "meaning": "羊",
+      "category": "animals-plants",
+      "path": "learning-assets/images/sheep.png",
+      "bytes": 6377,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(sheep)",
+      "bossBadge": "learning-assets/images/sheep.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    },
+    {
+      "id": "tiger",
+      "meaning": "老虎",
+      "category": "animals-plants",
+      "path": "learning-assets/images/tiger.png",
+      "bytes": 7851,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets",
+      "owner": 85,
+      "battle": "fortress/canvas-scene.ts::drawAnimal(tiger)",
+      "bossBadge": "learning-assets/images/tiger.png",
+      "entryPoints": [
+        "home vocabulary gallery",
+        "fortress-choice listening/skill quiz",
+        "battle mixed waves and Boss badge",
+        "retirement word",
+        "victory word particles"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/images/apple.png",
+      "bytes": 9919,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/banana.png",
+      "bytes": 71640,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-1.png",
+      "bytes": 16808,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-2.png",
+      "bytes": 16264,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-3.png",
+      "bytes": 15840,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-4.png",
+      "bytes": 16829,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-5.png",
+      "bytes": 15341,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-6.png",
+      "bytes": 12608,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-7.png",
+      "bytes": 15683,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/battle-backgrounds/level-8.png",
+      "bytes": 12382,
+      "width": 360,
+      "height": 560,
+      "decodedRgbaBytes": 806400,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/checkin/coins.png",
+      "bytes": 4858,
+      "width": 128,
+      "height": 128,
+      "decodedRgbaBytes": 65536,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/checkin/flag.png",
+      "bytes": 2327,
+      "width": 128,
+      "height": 128,
+      "decodedRgbaBytes": 65536,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/checkin/food.png",
+      "bytes": 3467,
+      "width": 128,
+      "height": 128,
+      "decodedRgbaBytes": 65536,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/checkin/mystery.png",
+      "bytes": 3113,
+      "width": 128,
+      "height": 128,
+      "decodedRgbaBytes": 65536,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/checkin/soldier.png",
+      "bytes": 3268,
+      "width": 128,
+      "height": 128,
+      "decodedRgbaBytes": 65536,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/cherry.png",
+      "bytes": 11628,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/base.png",
+      "bytes": 2869,
+      "width": 720,
+      "height": 160,
+      "decodedRgbaBytes": 460800,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/bullet.png",
+      "bytes": 641,
+      "width": 24,
+      "height": 48,
+      "decodedRgbaBytes": 4608,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/destroyed-base.png",
+      "bytes": 5183,
+      "width": 720,
+      "height": 160,
+      "decodedRgbaBytes": 460800,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-1.png",
+      "bytes": 9720,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-2.png",
+      "bytes": 10142,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-3.png",
+      "bytes": 10349,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-4.png",
+      "bytes": 10378,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-5.png",
+      "bytes": 10969,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-6.png",
+      "bytes": 10618,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back-weapon-7.png",
+      "bytes": 11110,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero-back.png",
+      "bytes": 9068,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/hero.png",
+      "bytes": 11712,
+      "width": 160,
+      "height": 200,
+      "decodedRgbaBytes": 128000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/weapon.png",
+      "bytes": 908,
+      "width": 32,
+      "height": 56,
+      "decodedRgbaBytes": 7168,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-apple.png",
+      "bytes": 15198,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-banana.png",
+      "bytes": 15368,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-black.png",
+      "bytes": 15084,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-blue.png",
+      "bytes": 15337,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-brown.png",
+      "bytes": 15207,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-cherry.png",
+      "bytes": 15049,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-grape.png",
+      "bytes": 15289,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-green.png",
+      "bytes": 15059,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-kiwi.png",
+      "bytes": 15282,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-orange.png",
+      "bytes": 15493,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-peach.png",
+      "bytes": 15468,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-pear.png",
+      "bytes": 15504,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-pineapple.png",
+      "bytes": 15317,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-pink.png",
+      "bytes": 15628,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-red.png",
+      "bytes": 15198,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-strawberry.png",
+      "bytes": 15287,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-watermelon.png",
+      "bytes": 14923,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-white.png",
+      "bytes": 15257,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body-yellow.png",
+      "bytes": 15368,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-body.png",
+      "bytes": 15221,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-leg-left.png",
+      "bytes": 1563,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie-leg-right.png",
+      "bytes": 1572,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/fortress/zombie.png",
+      "bytes": 9205,
+      "width": 128,
+      "height": 160,
+      "decodedRgbaBytes": 81920,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/grape.png",
+      "bytes": 15017,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/houses/house-1.png",
+      "bytes": 36757,
+      "width": 480,
+      "height": 460,
+      "decodedRgbaBytes": 883200,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/houses/house-2.png",
+      "bytes": 38702,
+      "width": 480,
+      "height": 460,
+      "decodedRgbaBytes": 883200,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/houses/house-3.png",
+      "bytes": 39365,
+      "width": 480,
+      "height": 460,
+      "decodedRgbaBytes": 883200,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/houses/house-4.png",
+      "bytes": 40395,
+      "width": 480,
+      "height": 460,
+      "decodedRgbaBytes": 883200,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/houses/house-5.png",
+      "bytes": 41450,
+      "width": 480,
+      "height": 460,
+      "decodedRgbaBytes": 883200,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/kiwi.png",
+      "bytes": 127714,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-1.png",
+      "bytes": 8336,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-2.png",
+      "bytes": 9797,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-3.png",
+      "bytes": 15871,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-4.png",
+      "bytes": 6861,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-5.png",
+      "bytes": 6653,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-6.png",
+      "bytes": 12810,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-7.png",
+      "bytes": 16249,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/levels/cover-8.png",
+      "bytes": 10035,
+      "width": 320,
+      "height": 200,
+      "decodedRgbaBytes": 256000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/fox-stride.png",
+      "bytes": 19981,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/fox.png",
+      "bytes": 20492,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/hero-stride.png",
+      "bytes": 17363,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/hero.png",
+      "bytes": 17847,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/zombie-stride.png",
+      "bytes": 20054,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/loading-chase/zombie.png",
+      "bytes": 20975,
+      "width": 360,
+      "height": 400,
+      "decodedRgbaBytes": 576000,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/monsters/apple.png",
+      "bytes": 386,
+      "width": 32,
+      "height": 32,
+      "decodedRgbaBytes": 4096,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/monsters/banana.png",
+      "bytes": 12168,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/monsters/grape.png",
+      "bytes": 32359,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/monsters/orange.png",
+      "bytes": 364,
+      "width": 32,
+      "height": 32,
+      "decodedRgbaBytes": 4096,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/monsters/watermelon.png",
+      "bytes": 437,
+      "width": 32,
+      "height": 32,
+      "decodedRgbaBytes": 4096,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/orange.png",
+      "bytes": 9726,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/peach.png",
+      "bytes": 12998,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pear.png",
+      "bytes": 72767,
+      "width": 256,
+      "height": 256,
+      "decodedRgbaBytes": 262144,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/charm.png",
+      "bytes": 4287,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/collar.png",
+      "bytes": 5173,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/egg.png",
+      "bytes": 6030,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/fox.png",
+      "bytes": 54883,
+      "width": 480,
+      "height": 480,
+      "decodedRgbaBytes": 921600,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/hat.png",
+      "bytes": 3753,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/lightning.png",
+      "bytes": 24941,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pets/stone.png",
+      "bytes": 10540,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/pineapple.png",
+      "bytes": 238041,
+      "width": 512,
+      "height": 512,
+      "decodedRgbaBytes": 1048576,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/strawberry.png",
+      "bytes": 12094,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/images/watermelon.png",
+      "bytes": 10682,
+      "width": 618,
+      "height": 618,
+      "decodedRgbaBytes": 1527696,
+      "package": "scene-images"
+    },
+    {
+      "path": "assets/weapons/weapon-1.png",
+      "bytes": 5461,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-1.svg",
+      "bytes": 1045,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-2.png",
+      "bytes": 6111,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-2.svg",
+      "bytes": 1317,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-3.png",
+      "bytes": 6633,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-3.svg",
+      "bytes": 1544,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-4.png",
+      "bytes": 14140,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-4.svg",
+      "bytes": 1522,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-5.png",
+      "bytes": 15433,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-5.svg",
+      "bytes": 2004,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-6.png",
+      "bytes": 12951,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-6.svg",
+      "bytes": 1789,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-7.png",
+      "bytes": 15090,
+      "width": 640,
+      "height": 320,
+      "decodedRgbaBytes": 819200,
+      "package": "main"
+    },
+    {
+      "path": "assets/weapons/weapon-7.svg",
+      "bytes": 2434,
+      "package": "main"
+    },
+    {
+      "path": "learning-assets/images/air.png",
+      "bytes": 2670,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/arm.png",
+      "bytes": 7236,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bag.png",
+      "bytes": 3210,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bear.png",
+      "bytes": 8399,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bed.png",
+      "bytes": 2206,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bee.png",
+      "bytes": 6004,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bike.png",
+      "bytes": 6572,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bird.png",
+      "bytes": 5043,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/black.png",
+      "bytes": 4649,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/blackboard.png",
+      "bytes": 2387,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/blue.png",
+      "bytes": 4619,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/boat.png",
+      "bytes": 4907,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/body.png",
+      "bytes": 5546,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/book.png",
+      "bytes": 2612,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/bread.png",
+      "bytes": 2359,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/brown.png",
+      "bytes": 4632,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/cake.png",
+      "bytes": 5166,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/candle.png",
+      "bytes": 2240,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/candy.png",
+      "bytes": 6233,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/cat.png",
+      "bytes": 6508,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/ceiling.png",
+      "bytes": 3463,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/chair.png",
+      "bytes": 4384,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/chicken.png",
+      "bytes": 5889,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/clock.png",
+      "bytes": 3838,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/clothes.png",
+      "bytes": 4953,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/computer.png",
+      "bytes": 3913,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/cow.png",
+      "bytes": 6408,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/cup.png",
+      "bytes": 3979,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/desk.png",
+      "bytes": 2367,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/dog.png",
+      "bytes": 7321,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/doll.png",
+      "bytes": 6025,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/door.png",
+      "bytes": 2286,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/duck.png",
+      "bytes": 5881,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/earth.png",
+      "bytes": 8147,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/elephant.png",
+      "bytes": 6678,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/eraser.png",
+      "bytes": 3370,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/fire.png",
+      "bytes": 6267,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/fish.png",
+      "bytes": 4972,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/floor.png",
+      "bytes": 3210,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/forehead.png",
+      "bytes": 3090,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/gift.png",
+      "bytes": 3508,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/glass.png",
+      "bytes": 3426,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/glue.png",
+      "bytes": 2217,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/green.png",
+      "bytes": 4528,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/hand.png",
+      "bytes": 3983,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/head.png",
+      "bytes": 2847,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/home.png",
+      "bytes": 2209,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/horse.png",
+      "bytes": 7829,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/juice.png",
+      "bytes": 3710,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/kite.png",
+      "bytes": 4838,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/leg.png",
+      "bytes": 4832,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/lion.png",
+      "bytes": 10514,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/moon.png",
+      "bytes": 6203,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/notebook.png",
+      "bytes": 2882,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/palm.png",
+      "bytes": 6394,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/panda.png",
+      "bytes": 8117,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/paper.png",
+      "bytes": 1538,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/pen.png",
+      "bytes": 3928,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/pencil.png",
+      "bytes": 3110,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/pink.png",
+      "bytes": 4542,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/rabbit.png",
+      "bytes": 6258,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/rain.png",
+      "bytes": 5134,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/red.png",
+      "bytes": 4600,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/ruler.png",
+      "bytes": 5569,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/scissors.png",
+      "bytes": 7180,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/sea.png",
+      "bytes": 6322,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/season.png",
+      "bytes": 6700,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/sharpener.png",
+      "bytes": 2799,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/sheep.png",
+      "bytes": 6377,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/snow.png",
+      "bytes": 4467,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/star.png",
+      "bytes": 3734,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/sun.png",
+      "bytes": 7010,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/tape.png",
+      "bytes": 3396,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/tiger.png",
+      "bytes": 7851,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/towel.png",
+      "bytes": 1811,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/toy.png",
+      "bytes": 11040,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/wall.png",
+      "bytes": 3105,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/weather.png",
+      "bytes": 3297,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/white.png",
+      "bytes": 4023,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/wind.png",
+      "bytes": 5492,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/window.png",
+      "bytes": 2467,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    },
+    {
+      "path": "learning-assets/images/yellow.png",
+      "bytes": 4568,
+      "width": 192,
+      "height": 192,
+      "decodedRgbaBytes": 147456,
+      "package": "learning-assets"
+    }
+  ]
+}

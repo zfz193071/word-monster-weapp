@@ -24,3 +24,12 @@ button::after { border:0; }
 .weapon-damage { width:72%; min-height:64rpx; margin:0 auto 20rpx; display:flex; align-items:center; justify-content:space-between; }
 .weapon-damage-label { color:#53664e; font-size:27rpx; }
 .weapon-damage-value { color:#db8b24; font-size:42rpx; line-height:1; font-weight:800; text-shadow:0 2rpx 0 #ffe5a3; }
+
+.weapon-design { margin-top:12rpx; color:#687e80; font-size:24rpx; letter-spacing:4rpx; }
+.weapon-stage { position:relative; }
+.weapon-image { position:relative; z-index:1; }
+.energy-orbit { position:absolute; width:82%; height:48%; border:2rpx solid; border-left-color:transparent !important; border-right-color:transparent !important; border-radius:50%; opacity:.7; transform:rotate(-18deg); animation:weapon-orbit 5s linear infinite; }
+.energy-orbit-second { width:70%; height:70%; animation-direction:reverse; animation-duration:7s; }
+.weapon-stage-level-4 .weapon-image, .weapon-stage-level-5 .weapon-image, .weapon-stage-level-6 .weapon-image { animation:weapon-hover 2.8s ease-in-out infinite alternate; }
+@keyframes weapon-orbit { to { transform:rotate(342deg); } }
+@keyframes weapon-hover { to { transform:translateY(-8rpx); } }

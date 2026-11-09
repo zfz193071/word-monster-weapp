@@ -41,7 +41,7 @@ test('复活面板暂停、取消、后台拦截、保存失败和重复点击�
     },
   });
   async function mount(){
-    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
+    const host:any={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,previewRequest:{plan:createOpeningPlan('summon-ui',createSeededRandom(1)),generation:1}},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();if(patch.entryFrame)queueMicrotask(()=>this.entryFrameLoaded({currentTarget:{dataset:{epoch:patch.entryFrameEpoch}}}));},triggerEvent(){},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:560})})})})};
     for(const [key,fn]of Object.entries(definition.methods))host[key]=(fn as Function).bind(host);
     definition.lifetimes.attached.call(host);host.mount();await new Promise(resolve => setImmediate(resolve));return host;
   }

@@ -1,10 +1,16 @@
 <view class="scene {{inputUnavailable ? 'scene-paused' : ''}} {{opening ? 'opening-scene' : ''}}">
   <view wx:if="{{opening && !completed && !failed}}" class="soldier-control">
+    <button class="frost-burst {{frostEnergy >= 30 ? 'frost-ready' : ''}}" bindtap="releaseFrost" disabled="{{frostEnergy < 30 || !frostTarget || reviveOpen || inputUnavailable || !ready || !!error || !!upgradeOffer || !!skillQuiz || !!waveRequest || hud.status !== 'fighting'}}" aria-label="冰冻大招，能量{{frostEnergy}}/30，满能量点击释放">
+      <view class="frost-ring" style="background:conic-gradient(#9ff4ff {{frostPercent}}%, #456776 0)"><text>❄</text></view><view><text>冰冻</text><text class="frost-count">{{frostEnergy >= 30 ? '点击释放' : frostEnergy + '/30'}}</text></view>
+    </button>
     <button wx:if="{{soldierStockError}}" class="soldier-retry" bindtap="refreshSoldierStock" disabled="{{inputUnavailable}}">士兵库存读取失败 · 重试</button>
     <button wx:else class="soldier-summon" bindtap="summonSoldier" data-revision="{{soldierRevision}}" disabled="{{reviveOpen || soldierBusy || !soldierStock || soldiersInBattle >= 3 || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}" aria-label="召唤士兵，库存{{soldierStock}}，在场{{soldiersInBattle}}名，最多3名"><text>召唤士兵 ×{{soldierStock}}</text></button>
     <button wx:if="{{flagStockError}}" class="soldier-retry" bindtap="refreshFlags" disabled="{{inputUnavailable}}">旗帜读取失败 · 重试</button>
     <button wx:else class="soldier-summon" bindtap="openRevive" disabled="{{reviveOpen || !flagStock || !reviveTargets.length || inputUnavailable || !ready || !!error || !!upgradeOffer || !!waveRequest || hud.status !== 'fighting'}}"><text>⚑ 复活 ×{{flagStock}}</text></button>
     <text wx:if="{{soldierSummonError}}" class="soldier-error">{{soldierSummonError}}</text>
+  </view>
+  <view wx:if="{{opening && ready && !completed && !failed && !upgradeOffer && !waveRequest}}" class="combo-progress">
+    <view wx:for="{{combos}}" wx:key="id" class="combo-chip combo-{{item.status}}" aria-label="{{item.label}}，{{item.hint}}"><text class="{{item.firstOwned ? 'owned' : ''}}">{{item.first}}</text><text>＋</text><text class="{{item.secondOwned ? 'owned' : ''}}">{{item.second}}</text><text class="combo-caption">{{item.label}} · {{item.hint}}</text></view>
   </view>
   <view wx:if="{{reviveOpen}}" class="revive-overlay" role="dialog" aria-label="复活伙伴">
     <view class="revive-dialog"><text class="revive-title">复活伙伴</text><text>每次消耗 1 面旗帜 · 库存 {{flagStock}}</text>
@@ -22,10 +28,13 @@
     <view class="victory-particles" aria-hidden="true"><view wx:for="{{victoryParticles}}" wx:key="id" class="victory-particle" style="left: {{item.left}}%; background: {{item.color}}; animation-delay: {{item.delay}}ms; animation-duration: {{item.duration}}ms;" /></view>
     <view class="victory-content">
       <view class="victory-medal" aria-hidden="true"><view class="medal-ribbon ribbon-left" /><view class="medal-ribbon ribbon-right" /><view class="medal-face"><text class="medal-star">★</text><text class="medal-level">Lv. {{level}}</text></view></view>
-      <text class="victory-title">挑战成功</text>
+      <text class="victory-title">通关成功</text>
       <text class="victory-subtitle">小屋守住了！</text>
       <view class="victory-results"><view><text class="result-number">{{waveCount}}</text><text>波全部完成</text></view><view><text class="result-number">{{experience}}</text><text>本局经验</text></view></view>
-      <view class="victory-reward"><view class="reward-coin">●</view><text wx:if="{{rewardSaved}}">＋{{rewardCoins}} 金币</text><button wx:elif="{{rewardError}}" bindtap="claimVictoryReward">奖励暂未保存，点击重试</button><text wx:else>金币奖励到账中…</text></view>
+      <view class="victory-reward">
+        <text wx:if="{{rewardSaved}}">奖励已到账</text><button wx:elif="{{rewardError}}" bindtap="claimVictoryReward" disabled="{{inputUnavailable}}">奖励暂未保存，点击重试</button><text wx:else>奖励到账中…</text>
+      </view>
+      <view wx:if="{{rewardSaved}}" class="clear-rewards"><view wx:for="{{rewardCards}}" wx:key="id" class="clear-reward {{item.surprise ? 'surprise' : ''}}"><text class="clear-symbol">{{item.symbol}}</text><text>{{item.name}}</text><text class="clear-amount">×{{item.amount}}</text><text wx:if="{{item.surprise}}" class="surprise-label">惊喜奖品</text></view></view>
       <view class="victory-collection"><text class="collection-title">本局练习 · {{victoryFruits.length}} 个单词</text><view class="victory-fruits"><view wx:for="{{victoryFruits}}" wx:key="id" class="victory-fruit" style="animation-delay: {{item.delay}}ms"><image src="{{item.image}}" mode="aspectFit" /></view></view></view>
       <loading-progress wx:if="{{continueBusy}}" progress="{{continueProgress}}" />
       <button wx:if="{{canContinue}}" class="victory-continue" bindtap="continueStage" disabled="{{!rewardSaved || dropError || petDropError || continueBusy || inputUnavailable}}">{{continueBusy ? '准备下一关…' : continueError ? '资源加载失败，重试下一关' : '继续下一关'}}</button>
@@ -40,7 +49,7 @@
     <text>堡垒基地</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text>{{hud.hp}} / {{hud.maxHp}}</text>
   </view>
   <view wx:if="{{error}}" class="scene-status"><text>战场暂时无法打开</text><text class="error-detail">{{error}}</text><button bindtap="retry">重试</button></view>
-  <view wx:elif="{{!ready}}" class="scene-status battle-loading"><loading-progress wx:if="{{opening}}" progress="{{loadingProgress}}" /><text wx:else>正在准备战场…</text></view>
+  <view wx:elif="{{!ready && !managedLoading}}" class="scene-status battle-loading" style="background-color: {{stageLoadingColor || loadingColor}}"><loading-progress wx:if="{{opening}}" progress="{{loadingProgress}}" /><text wx:else>正在准备战场…</text></view>
   <view wx:elif="{{retirement}}" class="scene-status retirement">
     <view class="retirement-word"><image src="{{retirement.fruitImagePath}}" mode="aspectFit" /><text>{{retirement.word}}</text></view>
     <text wx:if="{{paused}}">已暂停</text>
@@ -62,8 +71,9 @@
     <view class="crying-hero" aria-hidden="true"><view class="crying-helmet" /><view class="crying-eye left-eye" /><view class="crying-eye right-eye" /><view class="crying-mouth" /><view class="crying-tear left-tear" /><view class="crying-tear right-tear" /></view>
     <text class="defeat-title">这次没能守住小屋</text><text class="defeat-subtitle">变强一点，下次再来！</text>
     <button class="strengthen-button" bindtap="becomeStronger" disabled="{{inputUnavailable}}">我要变强</button>
+    <button class="restart-battle-button" bindtap="restartBattle" disabled="{{inputUnavailable}}">重新战斗</button>
   </view>
-  <view class="canvas-stage" style="background-color: {{stageLoadingColor || loadingColor}}"><image wx:if="{{!ready && !loadingBackground && (stageCover || loadingCover)}}" class="frozen-frame" src="{{stageCover || loadingCover}}" mode="aspectFit" /><image wx:if="{{!ready && loadingBackground}}" class="frozen-frame" src="{{loadingBackground}}" mode="scaleToFill" /><image wx:if="{{volumeOpen && volumeFrame}}" class="frozen-frame" src="{{volumeFrame}}" mode="scaleToFill" /><image wx:if="{{(reviveOpen || upgradeOffer || waveRequest || completed || failed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{volumeOpen || reviveOpen || !!upgradeOffer || completed || failed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /></view>
+  <view class="canvas-stage" style="background-color: {{stageLoadingColor || loadingColor}}"><image wx:if="{{volumeOpen && volumeFrame}}" class="frozen-frame" src="{{volumeFrame}}" mode="scaleToFill" /><image wx:if="{{(reviveOpen || upgradeOffer || waveRequest || completed || failed) && frozenFrame}}" class="frozen-frame" src="{{frozenFrame}}" mode="scaleToFill" /><canvas wx:if="{{!waveRequest}}" hidden="{{volumeOpen || reviveOpen || !!upgradeOffer || completed || failed || !!error}}" type="2d" id="battle-canvas" class="battle-canvas" /><image wx:if="{{entryFrame}}" class="entry-frame" src="{{entryFrame}}" mode="scaleToFill" data-epoch="{{entryFrameEpoch}}" bindload="entryFrameLoaded" binderror="entryFrameFailed" /></view>
   <view wx:if="{{opening}}" class="battle-footer"><text>Lv. {{level}}</text><view class="health-track"><view class="health-fill" style="width: {{hpPercent}}%"></view></view><text wx:if="{{level >= 20}}" class="experience-cap" aria-label="已满级，经验上限无限，清空剩余僵尸即可通关">经验 {{xpCurrent}} / ∞ · 清场</text><view wx:else class="level-experience" aria-label="当前等级经验 {{xpCurrent}} / {{xpRequired}}"><text class="experience-value">经验 {{xpCurrent}} / {{xpRequired}}</text><view class="experience-track" role="progressbar" aria-valuemin="0" aria-valuemax="{{xpRequired}}" aria-valuenow="{{xpCurrent}}"><view style="width: {{xpPercent}}%"></view></view></view><text class="drop-coins" aria-label="本局击杀已获得{{dropCoins}}金币">● {{dropCoins}}</text></view>
   <view wx:if="{{!opening}}" class="control {{paused || !ready || hud.status !== 'fighting' ? 'disabled' : ''}}"
     catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">

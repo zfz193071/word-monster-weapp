@@ -1,7 +1,10 @@
+import { drawHouseFortress } from '../houses/battle-art';
+import { drawSoldier } from './soldier-art';
+import { weaponAppearance } from '../weapons/appearance';
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
 import { drawBattlePet } from '../pets/battle-art';
-import { drawBattleBackground } from './battle-background';
+import { battleBackgroundColor, drawBattleBackground } from './battle-background';
 import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
@@ -34,7 +37,7 @@ export interface SceneArt extends MonsterArt {
   readonly weapon: SpriteAsset;
   readonly bullet: SpriteAsset;
 }
-export interface SceneHud { readonly hp: number; readonly maxHp: number; readonly status: CombatState['status'] }
+export interface SceneHud { readonly hp: number; readonly maxHp: number; readonly status: CombatState['status']; readonly frostEnergy: number; readonly frostTarget: boolean }
 export interface SceneOptions {
   readonly levelId?: number;
   readonly initial: CombatState;
@@ -67,6 +70,8 @@ export class CanvasScene {
   private images = new Map<string, Image>();
   private cancelLoads: (() => void)[] = [];
   private loadVersion = 0;
+  private backgroundCache?: WechatMiniprogram.OffscreenCanvas;
+  private backgroundCacheUnavailable = false;
   private ready = false;
   private disposed = false;
   private paused = false;
@@ -91,7 +96,7 @@ export class CanvasScene {
     this.runner = new CombatRunner(options.initial);
     this.lastHp = options.initial.base.hp;
     for (const monster of options.initial.monsters) this.lastMonsterHp.set(monster.id, monster.hp);
-    this.viewport = createViewport(options.width, options.height, options.dpr);
+    this.viewport = createViewport(options.width, options.height, options.dpr, !!options.initial.automatic);
     this.control = new HorizontalControl(this.viewport, options.clientLeft);
     this.resize(options.width, options.height, options.dpr, options.clientLeft);
   }
@@ -100,8 +105,8 @@ export class CanvasScene {
     try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
   }
   private cancelPresentation?: () => void;
-  // Decoding and drawImage only submit work. Keep the loading cover until a
-  // complete frame has crossed the Canvas presentation boundary.
+  // Submit a full frame and yield another Canvas frame. This alone is not a
+  // view-layer readiness signal; the host also waits for the captured image to load.
   present(): Promise<boolean> {
     this.cancelPresentation?.();
     if (!this.ready || this.disposed) return Promise.resolve(false);
@@ -130,6 +135,11 @@ export class CanvasScene {
   }
   applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  releaseFrost(): boolean {
+    if (!this.ready || this.disposed || this.paused || this.needsResume) return false;
+    if (!this.runner.releaseFrost()) return false;
+    this.publishHud(this.runner.snapshot!); return true;
+  }
   summonSoldier(id: string, debit: () => boolean): boolean {
     if (!this.ready || this.disposed || this.paused || this.needsResume) return false;
     // The existing animation loop draws the committed state on its next frame.
@@ -152,7 +162,13 @@ export class CanvasScene {
   }
   resize(width: number, height: number, dpr: number, clientLeft: number): void {
     if (this.disposed) return;
-    this.viewport = createViewport(width, height, dpr);
+    this.backgroundCache = undefined;
+    const previousWidth = this.viewport.worldWidth;
+    this.viewport = createViewport(width, height, dpr, !!this.options.initial.automatic);
+    this.runner.resizeArena(this.viewport.worldWidth);
+    const ratio = this.viewport.worldWidth / previousWidth;
+    this.damageNumbers.resize(ratio);
+    this.coinEffects = this.coinEffects.map(effect => ({...effect, position: {...effect.position, x: effect.position.x * ratio}}));
     this.control.resize(this.viewport, clientLeft);
     this.canvas.width = Math.round(width * dpr); this.canvas.height = Math.round(height * dpr);
     if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot);
@@ -233,8 +249,8 @@ export class CanvasScene {
   }
   private cancelPendingLoads(): void { for (const cancel of this.cancelLoads) cancel(); this.cancelLoads = []; }
   private publishHud(state: CombatState): void {
-    const hud = { hp: state.base.hp, maxHp: state.base.maxHp, status: state.status };
-    const key = `${hud.hp}:${hud.maxHp}:${hud.status}`;
+    const hud = { hp: state.base.hp, maxHp: state.base.maxHp, status: state.status, frostEnergy: state.frostEnergy ?? 0, frostTarget: state.monsters.some(m => m.hp > 0 && m.status !== 'waiting' && m.status !== 'retiring') };
+    const key = `${hud.hp}:${hud.maxHp}:${hud.status}:${hud.frostEnergy}:${hud.frostTarget}`;
     if (key !== this.lastHud) { this.lastHud = key; this.options.onHud(hud); }
   }
   private schedule(): void {
@@ -301,18 +317,48 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.cancelPresentation?.(); this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.backgroundCache = undefined; this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
   }
   private drawBackground(): void {
     const c = this.context; const v = this.viewport;
     c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, this.canvas.width, this.canvas.height);
     c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
+    if (!this.ready) {
+      c.fillStyle = battleBackgroundColor(this.options.levelId); c.fillRect(0, 0, this.viewport.worldWidth, 560);
+      return;
+    }
+    // Rasterize scenery once at native backing-store size, never at a reduced
+    // resolution. Unsupported devices retain the vector rendering path.
+    if (!this.backgroundCache && !this.backgroundCacheUnavailable) {
+      try {
+        if (typeof wx === 'undefined' || typeof wx.createOffscreenCanvas !== 'function') throw new Error('offscreen unavailable');
+        const cache = wx.createOffscreenCanvas({ type: '2d', width: this.canvas.width, height: this.canvas.height });
+        const context = cache.getContext('2d') as Context;
+        context.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
+        this.paintBackground(context);
+        this.backgroundCache = cache;
+      } catch { this.backgroundCacheUnavailable = true; }
+    }
+    if (this.backgroundCache) {
+      try {
+        c.setTransform(1, 0, 0, 1, 0, 0);
+        c.drawImage(this.backgroundCache, 0, 0);
+        c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
+        return;
+      } catch {
+        this.backgroundCache = undefined; this.backgroundCacheUnavailable = true;
+        c.setTransform(v.scale * v.dpr, 0, 0, v.scale * v.dpr, v.left * v.dpr, v.top * v.dpr);
+      }
+    }
+    this.paintBackground(c);
+  }
+  private paintBackground(c: Context): void {
     if (this.options.art?.fruitHat) {
-      drawBattleBackground(c, this.options.levelId);
+      drawBattleBackground(c, this.options.levelId, this.viewport.worldWidth);
     } else {
-      c.fillStyle = '#112c36'; c.fillRect(0, 0, 360, 560);
+      c.fillStyle = '#112c36'; c.fillRect(0, 0, this.viewport.worldWidth, 560);
       c.fillStyle = '#21434a';
-      for (let y = 32; y < 480; y += 64) for (let x = 24; x < 360; x += 48) c.fillRect(x, y, 2, 2);
+      for (let y = 32; y < 480; y += 64) for (let x = 24; x < this.viewport.worldWidth; x += 48) c.fillRect(x, y, 2, 2);
     }
   }
   private draw(state: CombatState): void {
@@ -325,17 +371,35 @@ export class CanvasScene {
       this.lastMonsterHp.set(monster.id, monster.hp);
     }
     const art = this.options.art;
+    if (art?.fruitHat) this.drawAtmosphere(state.tick);
     if (this.options.preview) {
-      c.fillStyle = state.base.hp === 0 ? '#55636a' : '#789697'; c.fillRect(0, 480, 360, 80);
-      c.fillStyle = '#bdd5c1'; for (let x = 0; x < 360; x += 36) c.fillRect(x, 468, 24, 18);
+      c.fillStyle = state.base.hp === 0 ? '#55636a' : '#789697'; c.fillRect(0, 480, this.viewport.worldWidth, 80);
+      c.fillStyle = '#bdd5c1'; for (let x = 0; x < this.viewport.worldWidth; x += 36) c.fillRect(x, 468, 24, 18);
       c.fillStyle = '#69d7be'; c.fillRect(state.player.x - 15, state.player.y - 15, 30, 30);
       c.fillStyle = '#fbd777'; c.fillRect(state.player.x - 5, state.player.y - 30, 10, 22);
     } else if (art) {
-      this.sprite(state.base.hp === 0 ? art.destroyedBase : art.base, 0, 480, 360, 80);
+      if (state.base.hp === 0) {
+        for (let x = 0; x < this.viewport.worldWidth; x += 360) this.sprite(art.destroyedBase, x, 480, 360, 80);
+      } else {
+        drawHouseFortress(c, state.houseLevel ?? 1, this.viewport.worldWidth);
+      }
       if (art.fruitHat) {
         c.save(); c.translate(state.player.x, state.player.y);
         c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
-        this.sprite(art.hero, -24, -35, 48, 60); c.restore();
+        this.sprite(art.hero, -24, -35, 48, 60);
+        const weaponLevel=state.weaponLevel ?? 1;
+        if(weaponLevel>=4 && state.base.hp>0){
+          const design=weaponAppearance(weaponLevel);
+          c.fillStyle=design.light;
+          // Cosmetic energy sparks use simulation time, so pause freezes them too.
+          for(let i=0;i<weaponLevel-3;i++){
+            const phase=state.tick*.06+i*2.1;
+            c.globalAlpha=.45+.35*(1+Math.sin(phase))*.5;
+            c.fillRect(17+Math.cos(phase)*5,-21+Math.sin(phase)*9,1.5,3);
+          }
+          c.globalAlpha=1;
+        }
+        c.restore();
       }
       else {
         this.sprite(art.hero, state.player.x - 20, state.player.y - 20, 40, 40);
@@ -346,24 +410,39 @@ export class CanvasScene {
       if (monster.status === 'waiting' || monster.hp <= 0) continue;
       c.globalAlpha = 1;
       const attackPose = baseAttackPose(monster);
+      const motionSeed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
       c.save(); c.translate(0, attackPose.lunge * 9);
       if (monster.boss) {
         c.translate(monster.position.x, monster.position.y); c.scale(monster.bossKind === 'grand' ? 2 : 1.5, monster.bossKind === 'grand' ? 2 : 1.5); c.translate(-monster.position.x, -monster.position.y);
       }
       const monsterArt = this.monsterArt;
+      if (monsterArt && (monster.status === 'entering' || monster.status === 'alive') && (monster.frozenUntilTick ?? -1) < state.tick
+        && !['bee', 'bird', 'fish'].includes(monster.wordId)) {
+        const step = ((state.tick + motionSeed) % 44) / 44;
+        c.save(); c.globalAlpha = (1 - step) * .2; c.fillStyle = '#fff0c9';
+        for (const side of [-1, 1]) {
+          c.beginPath(); c.ellipse(monster.position.x + side * (9 + step * 7), monster.position.y + 24 - step * 3, 2 + step * 3, 1.2, 0, 0, Math.PI * 2); c.fill();
+        }
+        c.restore();
+      }
       if (!monsterArt && this.options.preview) {
         c.fillStyle = state.tick < (this.monsterFlashes.get(monster.id) ?? 0) ? '#ffffff' : '#c2a0f0';
         c.beginPath(); c.arc(monster.position.x, monster.position.y, 32, 0, Math.PI * 2); c.fill();
         c.fillStyle = '#21313e'; c.fillRect(monster.position.x - 14, monster.position.y - 6, 8, 10); c.fillRect(monster.position.x + 6, monster.position.y - 6, 8, 10);
       } else if (monsterArt) {
         const scale = monsterArt.monsterWidth / monsterArt.monsterVisual.sourceSize.width;
-        if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) c.globalAlpha *= 0.55;
+        if (monster.hp > 0 && state.tick < (this.monsterFlashes.get(monster.id) ?? 0)) {
+          // A short impact halo keeps the character readable instead of blinking it away.
+          const hit = ((this.monsterFlashes.get(monster.id) ?? 0) - state.tick) / 12;
+          c.save(); c.globalAlpha = hit * .7; c.strokeStyle = '#fff2b7'; c.lineWidth = 2;
+          c.beginPath(); c.ellipse(monster.position.x, monster.position.y, 23 + (1 - hit) * 9, 27 + (1 - hit) * 7, 0, 0, Math.PI * 2); c.stroke(); c.restore();
+        }
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
         if (monsterArt.animalIds?.includes(monster.wordId)) {
-          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick : 0);
+          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0);
         } else if (monsterArt.walkParts) {
           const walking = monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
-          const seed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+          const seed = motionSeed;
           const stride = walking ? Math.sin(state.tick * .07 + seed) : 0;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
           c.fillStyle = 'rgba(37,62,56,.16)'; c.beginPath(); c.ellipse(0, 69, 40, 7, 0, 0, Math.PI * 2); c.fill();
@@ -389,7 +468,8 @@ export class CanvasScene {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
           // White badge keeps each ordinary fruit legible at game scale.
-          c.fillStyle = '#fff7df'; c.beginPath(); c.arc(0, -44, 20, 0, Math.PI * 2); c.fill();
+          c.fillStyle = 'rgba(30,52,40,.2)'; c.beginPath(); c.ellipse(1, -40, 21, 20, 0, 0, Math.PI * 2); c.fill();
+          c.fillStyle = '#fff7df'; c.strokeStyle = '#c5ab71'; c.lineWidth = 1.5; c.beginPath(); c.arc(0, -44, 20, 0, Math.PI * 2); c.fill(); c.stroke();
           this.sprite(monsterArt.fruitHats?.[monster.wordId] ?? monsterArt.fruitHat, -17, -61, 34, 34);
           c.fillStyle = '#4c5e43'; c.fillRect(-18, 41, 36, 4);
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
@@ -442,8 +522,8 @@ export class CanvasScene {
         if (elapsed >= 11000 && phase >= 1000 && phase < 1400) {
           c.save(); c.globalAlpha = 1 - (phase - 1000) / 400;
           c.strokeStyle = '#ff514c'; c.lineWidth = 5;
-          c.beginPath(); c.moveTo(monster.position.x, monster.position.y); c.lineTo(180, 480); c.stroke();
-          c.beginPath(); c.ellipse(180, 480, 30 + (phase - 1000) / 3, 14, 0, 0, Math.PI * 2); c.stroke(); c.restore();
+          c.beginPath(); c.moveTo(monster.position.x, monster.position.y); c.lineTo(state.player.x, 480); c.stroke();
+          c.beginPath(); c.ellipse(state.player.x, 480, 30 + (phase - 1000) / 3, 14, 0, 0, Math.PI * 2); c.stroke(); c.restore();
         }
       }
       if (attackPose.impact > 0) {
@@ -475,22 +555,13 @@ export class CanvasScene {
       c.globalAlpha = 1;
     }
     drawBattlePet(c, state);
-    for (const soldier of state.supportSoldiers ?? []) {
-      const bob = Math.sin(state.tick * .08 + soldier.slot) * 1.5;
-      c.save(); c.translate(soldier.position.x, soldier.position.y + bob);
-      c.fillStyle = 'rgba(31,50,42,.2)'; c.beginPath(); c.ellipse(0, 10, 8, 2.5, 0, 0, Math.PI * 2); c.fill();
-      c.fillStyle = '#315a50'; c.fillRect(-5, -2, 10, 9);
-      c.fillStyle = '#5f8d64'; c.fillRect(-4, -9, 8, 8);
-      c.fillStyle = '#b8d86e'; c.fillRect(-4, -15, 8, 6);
-      c.fillStyle = '#243f3a'; c.fillRect(-2, -13, 1.5, 1.5); c.fillRect(2, -13, 1.5, 1.5);
-      c.fillStyle = '#a8d4e2'; c.fillRect(-5, -17, 10, 3); c.fillRect(-3, -19, 6, 2);
-      c.fillStyle = '#3a4546'; c.fillRect(4, -6, 2, 8); c.fillRect(3, -8, 4, 2);
-      c.fillStyle = '#243a35'; c.fillRect(-4, 6, 3, 4); c.fillRect(1, 6, 3, 4);
-      if (soldier.hp < soldier.maxHp) {
-        c.fillStyle = '#33423a'; c.fillRect(-8, -25, 16, 2);
-        c.fillStyle = '#84e3a5'; c.fillRect(-8, -25, 16 * soldier.hp / soldier.maxHp, 2);
-      }
-      c.restore();
+    for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId);
+    if ((state.flameFanUntilTick ?? 0) > state.tick) {
+      c.save(); c.translate(state.player.x, state.player.y);
+      c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
+      c.globalAlpha = Math.min(.6, ((state.flameFanUntilTick ?? 0) - state.tick) / 25);
+      c.fillStyle = '#ff8a3a'; c.beginPath(); c.moveTo(16.8, -34.4);
+      c.arc(16.8, -34.4, 52, -Math.PI * .72, -Math.PI * .28); c.closePath(); c.fill(); c.restore();
     }
     for (const bullet of state.projectiles) {
       if (this.options.preview) { c.fillStyle = '#ffe68e'; c.fillRect(bullet.position.x - bullet.width / 2, bullet.position.y - bullet.height / 2, bullet.width, bullet.height); }
@@ -516,22 +587,22 @@ export class CanvasScene {
         for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }
       } else if (impact.target) {
         const dx = impact.target.x - impact.position.x; const dy = impact.target.y - impact.position.y;
-        c.strokeStyle = '#e0d1ff'; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
+        c.strokeStyle = impact.iceChain ? '#8df5ff' : '#e0d1ff'; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
       }
       c.restore();
     }
-    for (const number of this.damageNumbers.sample(this.effectTime)) {
+    for (const number of this.damageNumbers.sample(this.effectTime, this.viewport.worldWidth)) {
       c.save(); c.translate(number.position.x, number.position.y); c.scale(number.scale, number.scale);
       c.globalAlpha = number.opacity; c.font = 'bold 18px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
       c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = '#435343'; c.fillStyle = number.color;
       c.strokeText(number.text, 0, 0); c.fillText(number.text, 0, 0); c.restore();
     }
-    if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, 360, 80); }
+    if (state.tick < this.baseFlashUntil) { c.fillStyle = 'rgba(255,110,96,0.45)'; c.fillRect(0, 480, this.viewport.worldWidth, 80); }
     this.coinEffects = this.coinEffects.filter(effect => this.effectTime - effect.started < 750);
     for (const effect of this.coinEffects) {
       const progress = Math.min(1, (this.effectTime - effect.started) / 750);
       const travel = Math.max(0, (progress - .25) / .75);
-      const x = effect.position.x + (330 - effect.position.x) * travel * travel;
+      const x = effect.position.x + (this.viewport.worldWidth - 30 - effect.position.x) * travel * travel;
       const y = effect.position.y + (560 - effect.position.y) * travel * travel - Math.sin(progress * Math.PI) * 36;
       c.save(); c.translate(x, y); c.globalAlpha = 1 - travel * .7;
       c.fillStyle = '#ffe184'; c.strokeStyle = '#bc812d'; c.lineWidth = 2;
@@ -541,6 +612,21 @@ export class CanvasScene {
       c.restore();
     }
   }
+  private drawAtmosphere(tick: number): void {
+    const c = this.context;
+    // A fixed handful of drifting motes, driven by simulation time. Pause and
+    // speed changes share the same clock as walking and hit feedback.
+    c.save();
+    for (let i = 0; i < 7; i++) {
+      const phase = tick * .0007 + i * 1.37;
+      const x = ((i * .173 + tick * .000025) % 1) * this.viewport.worldWidth;
+      const y = 30 + ((i * 61 + tick * .035) % 400);
+      c.globalAlpha = .16 + (1 + Math.sin(phase)) * .08;
+      c.fillStyle = i % 2 ? '#fff5c6' : '#e9d092';
+      c.beginPath(); c.ellipse(x, y, 2.5, 1.1, phase, 0, Math.PI * 2); c.fill();
+    }
+    c.restore();
+  }
   // Original animal silhouettes with sunken red eyes, fangs and stitched patches.
   private drawAnimal(id: string, x: number, y: number, tick: number): void {
     const c = this.context;
@@ -548,7 +634,7 @@ export class CanvasScene {
     const colors: Record<string, string> = { bear: '#9b704b', bee: '#e6bd38', bird: '#69a8bc', cat: '#77859a', chicken: '#dfd1a5', cow: '#e5e0cb', dog: '#b99770', duck: '#77a96f', elephant: '#87a9a8', fish: '#54acb8', horse: '#ad7657', lion: '#d2aa52', panda: '#e1e2d2', rabbit: '#b8a9ca', sheep: '#e5e4cc', tiger: '#de9749' };
     c.save(); c.translate(x, y);
     c.fillStyle = 'rgba(37,62,56,.18)'; c.beginPath(); c.ellipse(0, 22, 18, 4, 0, 0, Math.PI * 2); c.fill();
-    const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); };
+    const oval = (px: number, py: number, rx: number, ry: number, color: string, angle = 0) => { c.fillStyle = color; c.beginPath(); c.ellipse(px, py, rx, ry, angle, 0, Math.PI * 2); c.fill(); if (rx > 6 && ry > 6) { c.strokeStyle = 'rgba(34,52,46,.36)'; c.lineWidth = 1; c.stroke(); } };
     const line = (points: number[], color: string, width = 2) => { c.strokeStyle = color; c.lineWidth = width; c.beginPath(); c.moveTo(points[0], points[1]); for (let i = 2; i < points.length; i += 2) c.lineTo(points[i], points[i + 1]); c.stroke(); };
     const body = colors[id];
     if (id === 'bee' || id === 'bird' || id === 'chicken' || id === 'duck') {
@@ -571,6 +657,7 @@ export class CanvasScene {
     if (id === 'lion') oval(0, -7, 20, 19, '#a6733e');
     if (id === 'sheep') for (let i = 0; i < 10; i++) oval(Math.cos(i * Math.PI / 5) * 12, Math.sin(i * Math.PI / 5) * 10, 7, 7, '#f5f0da');
     oval(0, 4, id === 'fish' ? 19 : 14, id === 'fish' ? 12 : 13, body);
+    oval(-4, 0, id === 'fish' ? 10 : 8, 5, 'rgba(255,248,219,.16)', -.3);
     if (id === 'cow') { oval(-8, 2, 5, 5, '#556269'); oval(8, 11, 5, 4, '#556269'); }
     if (id === 'bee') { line([-9, 3, 9, 3], '#596357', 4); line([-8, 10, 8, 10], '#596357', 4); line([-5, -12, -10, -22], '#596357'); line([5, -12, 10, -22], '#596357'); }
     if (id === 'tiger') for (const side of [-1, 1]) { line([side * 12, 1, side * 7, 4], '#5d6651', 3); line([side * 12, 8, side * 8, 10], '#5d6651', 3); }
@@ -585,6 +672,7 @@ export class CanvasScene {
       else if (['bear', 'panda', 'lion', 'sheep'].includes(id)) { oval(-10, -17, 5, 5, id === 'panda' ? '#53685e' : body); oval(10, -17, 5, 5, id === 'panda' ? '#53685e' : body); }
       oval(0, -7, id === 'horse' ? 9 : 12, id === 'horse' ? 14 : 11, body);
     }
+    if (id !== 'fish' && id !== 'bee') oval(-3, -12, 6, 3, 'rgba(255,248,219,.22)', -.25);
     if (id === 'panda') { oval(-6, -8, 5, 6, '#53685e', -.4); oval(6, -8, 5, 6, '#53685e', .4); }
     if (id === 'bear') oval(0, 1, 10, 7, '#c99a69');
     if (id === 'cat') { oval(-7, -2, 5, 4, '#a4b0bf'); oval(7, -2, 5, 4, '#a4b0bf'); }

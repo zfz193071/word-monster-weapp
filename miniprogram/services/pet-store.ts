@@ -1,8 +1,10 @@
+import { PET_MAX_LEVEL } from '../pets/catalog';
+import { playerStorage } from './player-storage';
 import { stableBattleRandom } from '../fortress/battle-progression';
 import { PET_EQUIPMENT, petStage } from '../pets/catalog';
 import type { PetEquipment } from '../pets/catalog';
 export const PET_STORE_KEY = 'word-monster:pets:v1';
-interface PetSave { version: 1; revision: number; owned: boolean; level: number; experience: number; food: number; eggs: number; equipment: PetEquipment[]; equipped: PetEquipment[]; receipts: string[] }
+interface PetSave { version: 1; revision: number; owned: boolean; level: number; experience: number; food: number; stones?: number; eggs: number; equipment: PetEquipment[]; equipped: PetEquipment[]; receipts: string[] }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
 const empty = (): PetSave => ({ version: 1, revision: 0, owned: false, level: 1, experience: 0, food: 0, eggs: 0, equipment: [], equipped: [], receipts: [] });
 const validCount = (value: number) => Number.isSafeInteger(value) && value >= 0;
@@ -18,24 +20,30 @@ export function createPetStore(storage: Storage) {
     const raw = storage.getStorageSync(PET_STORE_KEY);
     if (raw === '' || raw === null || raw === undefined) return empty();
     const p = raw as PetSave;
-    if (!p || p.version !== 1 || typeof p.owned !== 'boolean' || !validCount(p.revision) || !validCount(p.food) || !validCount(p.eggs)
-      || !Number.isInteger(p.level) || p.level < 1 || p.level > 10 || !validCount(p.experience) || p.experience >= p.level * 20 || (p.level === 10 && p.experience !== 0)
+    if (!p || p.version !== 1 || typeof p.owned !== 'boolean' || !validCount(p.revision) || !validCount(p.stones ?? 0) || !validCount(p.food) || !validCount(p.eggs)
+      || !Number.isInteger(p.level) || p.level < 1 || p.level > PET_MAX_LEVEL || !validCount(p.experience) || p.experience >= p.level * 20 || (p.level === PET_MAX_LEVEL && p.experience !== 0)
       || !validGear(p.equipment) || !validGear(p.equipped) || p.equipped.some(id => !p.equipment.includes(id))
       || !Array.isArray(p.receipts) || p.receipts.some(id => typeof id !== 'string' || !id.trim()) || new Set(p.receipts).size !== p.receipts.length
       || (!p.owned && (p.level !== 1 || p.experience !== 0 || p.equipped.length > 0))) throw new Error('宠物记录暂时无法读取，请重试');
     return { ...p, equipment: [...p.equipment], equipped: [...p.equipped], receipts: [...p.receipts] };
   }
   function save(p: PetSave) {
-    if (![p.food, p.eggs, p.revision + 1].every(validCount)) throw new Error('宠物物品数量超出范围');
+    if (![p.food, p.stones ?? 0, p.eggs, p.revision + 1].every(validCount)) throw new Error('宠物物品数量超出范围');
     storage.setStorageSync(PET_STORE_KEY, { ...p, revision: p.revision + 1 });
   }
   function view() {
     const p = read();
-    return { ...p, stage: petStage(p.level), required: p.level === 10 ? 0 : p.level * 20,
+    return { ...p, stones: p.stones ?? 0, maxLevel: PET_MAX_LEVEL, stage: petStage(p.level), required: p.level === PET_MAX_LEVEL ? 0 : p.level * 20,
       equipmentItems: PET_EQUIPMENT.map(item => ({ ...item, owned: p.equipment.includes(item.id), equipped: p.equipped.includes(item.id) })) };
   }
   return {
     view,
+    rewardClear(receipt: string, food: number, stones: number, eggs: number) {
+      if (!receipt.startsWith('clear:') || ![food, stones, eggs].every(validCount)) throw new Error('通关宠物奖励无效');
+      const p = read(); if (p.receipts.includes(receipt)) return;
+      p.food += food; p.stones = (p.stones ?? 0) + stones; p.eggs += eggs;
+      p.receipts.push(receipt); save(p);
+    },
     rewardCheckin(receipt: string) {
       if (!/^checkin:\d{4}-\d{2}-\d{2}$/.test(receipt)) throw new Error('签到标识无效');
       const p = read();
@@ -57,12 +65,19 @@ export function createPetStore(storage: Storage) {
       }
       p.receipts.push(monsterId); save(p); return message;
     },
+    upgradeLevel(revision: number) {
+      const p = read();
+      if (p.revision !== revision || !p.owned || p.level === PET_MAX_LEVEL) return false;
+      p.level++;
+      if (p.level === PET_MAX_LEVEL) p.experience = 0;
+      save(p); return true;
+    },
     feed(revision: number) {
       const p = read();
-      if (p.revision !== revision || !p.owned || p.food === 0 || p.level === 10) return false;
+      if (p.revision !== revision || !p.owned || p.food === 0 || p.level === PET_MAX_LEVEL) return false;
       p.food--; p.experience += 10;
       if (p.experience >= p.level * 20) { p.experience -= p.level * 20; p.level++; }
-      if (p.level === 10) p.experience = 0;
+      if (p.level === PET_MAX_LEVEL) p.experience = 0;
       save(p); return true;
     },
     hatch(revision: number) {
@@ -79,5 +94,5 @@ export function createPetStore(storage: Storage) {
     },
   };
 }
-export const petStore = createPetStore({ getStorageSync: key => wx.getStorageSync(key), setStorageSync: (key, value) => wx.setStorageSync(key, value) });
+export const petStore = createPetStore(playerStorage);
 export type PetView = ReturnType<ReturnType<typeof createPetStore>['view']>;

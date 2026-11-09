@@ -25,14 +25,14 @@ test('首次Boss必得小雷狐，固定额外奖励互斥、重复装备转粮�
   h.fail=false;s.rewardBoss('retry',idFor('food','retry'));assert.equal(s.view().food,9);s.rewardBoss('retry',idFor('food','retry'));assert.equal(s.view().food,9);
   const restored=createPetStore({getStorageSync:()=>h.saved,setStorageSync:()=>{}});assert.deepEqual(restored.view(),s.view(),'退出重建后库存与凭据保留');
 });
-test('喂粮成长、三级形态、10级停喂不扣粮，孵化转换和穿脱均保存后生效',()=>{
+test('喂粮成长、三级形态、40级停喂不扣粮，孵化转换和穿脱均保存后生效',()=>{
   const h=harness(),s=h.store;s.rewardBoss('first','first:wave:1:zombie:1');
-  for(let i=0;i<40;i++)s.rewardBoss(`food-${i}`,idFor('food',`food-${i}`));
+  for(let i=0;i<530;i++)s.rewardBoss(`food-${i}`,idFor('food',`food-${i}`));
   let revision=s.view().revision;assert.equal(s.feed(revision),true);assert.equal(s.feed(revision),false,'旧按钮事件不重复扣粮');
   assert.equal(s.view().experience,10);s.feed(s.view().revision);assert.equal(s.view().level,2);
   while(s.view().level<4)s.feed(s.view().revision);assert.equal(s.view().stage,'少年');
   while(s.view().level<7)s.feed(s.view().revision);assert.equal(s.view().stage,'成年');
-  while(s.view().level<10)s.feed(s.view().revision);assert.equal(s.view().food,30);assert.equal(s.view().experience,0);
+  while(s.view().level<40)s.feed(s.view().revision);assert.equal(s.view().food,30);assert.equal(s.view().experience,0);
   assert.equal(s.feed(s.view().revision),false);assert.equal(s.view().food,30);
   s.rewardBoss('egg',idFor('egg','egg'));revision=s.view().revision;assert.match(s.hatch(revision),/×10/);assert.equal(s.hatch(revision),'');assert.equal(s.view().food,40);assert.equal(s.view().eggs,0);
   assert.equal(s.toggleEquipment('hat',s.view().revision),false);

@@ -1,6 +1,7 @@
 import { SKILL_QUALITIES } from './skill-quality';
 import type { SkillQuality } from './skill-quality';
 export interface UpgradeCard {
+  readonly comboHint?: string;
   readonly quality?: SkillQuality;
   readonly resultingQuality?: SkillQuality;
   readonly qualityLabel?: string;

@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-09",
+  "tool": "built-in image_gen",
+  "file": "style-study-01.png",
+  "prompt": "prompt.txt",
+  "sha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6",
+  "bytes": 2586789,
+  "width": 1536,
+  "height": 1024,
+  "decodedRgbaBytes": 6291456,
+  "status": "pending-user-style-review",
+  "purpose": "Concept board only, outside runtime packages",
+  "source": "Original AI generation without input reference images",
+  "limitations": [
+    "Not transparent production sprites",
+    "Not actual-size runtime or device evidence",
+    "Fox health bar in generated tablet vignette is incorrect: pet remains invulnerable with no HP bar",
+    "Building proportions, unit positions and generated UI are not approved gameplay changes"
+  ]
+}

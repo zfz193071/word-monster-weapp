@@ -11,7 +11,7 @@ export function createStageInvasion(plan: SessionPlan, generation: number, colle
   validateOpeningPlan(plan);
   const difficulty = plan.difficulty ?? 'normal';
   const waves = plan.waves.map((wave, index) => createOpeningEncounter(plan.sessionId, wave.targetWordId, generation, index,
-    skillLevels(collection), undefined, plan.waves.slice(0, index).map(previous => previous.targetWordId), plan.levelId, plan.weaponLevel, [], difficulty, collection));
+    skillLevels(collection), undefined, plan.waves.slice(0, index).map(previous => previous.targetWordId), plan.levelId, plan.weaponLevel, [], difficulty, collection, plan.houseLevel));
   const monsters: MonsterState[] = [], starts: number[] = [];
   // Queue timestamps define ordering and batch intervals; runtime pressure determines batch size.
   const intervals = {easy:[2500,1000], normal:[2080,800], hard:[1670,650], nightmare:[1390,500]}[difficulty];
@@ -25,10 +25,14 @@ export function createStageInvasion(plan: SessionPlan, generation: number, colle
       offset += Math.round(intervals[0] + (intervals[1] - intervals[0]) * (monsters.length - 1) / Math.max(1, total - 2));
     }
   }
+  // The first enemy is visible in the ready frame; later arrivals retain offscreen entry.
   const first = waves[0];
   return Object.freeze({...first, context:Object.freeze({...first.context, combatId:`${plan.sessionId}:stage`}),
-    monsters:Object.freeze(monsters.filter(monster => monster.spawnAtMs === 0).map(monster => Object.freeze({...monster, position:invasionBatchPositions([monster.id], monster.position.y)[0]}))),
+    monsters:Object.freeze(monsters.filter(monster => monster.spawnAtMs === 0).map(monster => Object.freeze({...monster, position:{...invasionBatchPositions([monster.id], monster.position.y)[0], y:32}}))),
     incomingMonsters:Object.freeze(monsters.slice(1)), waveStartTimesMs:Object.freeze(starts),
     invasion:Object.freeze({nextAtMs:monsters[1].spawnAtMs!, waveNumber:1, batchLimit:INVASION_BATCH_LIMITS[difficulty],
-      ...(difficulty === 'easy' ? {aliveLimits:Object.freeze(waves.map((_, index) => 3 + Math.floor(12 * index / (waves.length - 1))))} : {})})});
+      ...(difficulty === 'easy' ? {
+        aliveLimits:Object.freeze(waves.map((_, index) => 3 + Math.floor(3 * index / (waves.length - 1)))),
+        batchLimits:Object.freeze(waves.map((_, index) => 1 + Math.floor(2 * index / (waves.length - 1)))),
+      } : difficulty === 'nightmare' ? {aliveLimits:Object.freeze(waves.map(() => 18))} : {})})});
 }

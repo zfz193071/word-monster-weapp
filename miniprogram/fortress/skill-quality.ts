@@ -58,7 +58,7 @@ function draw(random: RandomSource): number {
 
 // First sample distinct eligible skills; then independently roll each card's quality.
 // At Lv.5, normalize the same weights over qualities that still improve that skill.
-export function rollUpgradeCandidates(skills: SkillCollection, heroLevel: number, base: { hp: number; maxHp: number }, random: RandomSource): readonly SkillCandidate[] {
+export function rollUpgradeCandidates(skills: SkillCollection, heroLevel: number, base: { hp: number; maxHp: number }, random: RandomSource, ensureOffense = false): readonly SkillCandidate[] {
   const weights = upgradeQualityWeights(heroLevel);
   const eligible: (BattleSkillId | 'repair')[] = SKILL_IDS.filter(id => weights.some((weight, rank) => weight > 0 && canImproveSkill(skills[id], SKILL_QUALITIES[rank].id)));
   if (base.hp > 0 && base.hp < base.maxHp * .5) eligible.push('repair');
@@ -66,7 +66,13 @@ export function rollUpgradeCandidates(skills: SkillCollection, heroLevel: number
     const j = Math.floor(draw(random) * (i + 1));
     [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
   }
-  return Object.freeze(eligible.slice(0, 3).map(id => {
+  const selected = eligible.slice(0, 3);
+  // Keep the sampled quality distribution and distinct cards; only guarantee an eligible offense choice.
+  if (ensureOffense && !selected.some(id => id === 'doubleShot' || id === 'fireRate')) {
+    const offense = eligible.find(id => id === 'doubleShot' || id === 'fireRate');
+    if (offense) selected[selected.length - 1] = offense;
+  }
+  return Object.freeze(selected.map(id => {
     if (id === 'repair') return Object.freeze({ id });
     const available = weights.map((weight, rank) => canImproveSkill(skills[id], SKILL_QUALITIES[rank].id) ? weight : 0);
     let remaining = draw(random) * available.reduce((sum, weight) => sum + weight, 0);

@@ -70,6 +70,10 @@ test('签到士兵每2秒使用当前武器伤害，替堡垒挡普通近战，�
   for(let i=0;i<199;i++)combat=stepCombat(combat).state;
   assert.equal(combat.monsters[0].hp,10000);
   const attack=stepCombat(combat);assert.equal(attack.state.monsters[0].hp,10000-weaponForLevel(3).damage);assert.equal(attack.state.supportSoldiers![0].attackRemainingMs,2000);
+  assert.equal(attack.state.supportSoldiers![0].lastShotTick, attack.state.tick);
+  assert.deepEqual(attack.state.supportSoldiers![0].shotTarget, target.position);
+  assert.equal(attack.state.supportSoldiers![0].shotCombatId, state.context.combatId);
+  assert(Object.isFrozen(attack.state.supportSoldiers![0].shotTarget));
   const hurt=stepCombat({...attack.state,monsters:[{...target,status:'attackingBase',attackRemainingMs:0,attackDamage:20}]});
   assert.equal(hurt.state.supportSoldiers![0].hp,10);assert.equal(hurt.state.base.hp,state.base.hp);
   const dead=stepCombat({...hurt.state,monsters:hurt.state.monsters.map(m=>({...m,attackRemainingMs:0}))});

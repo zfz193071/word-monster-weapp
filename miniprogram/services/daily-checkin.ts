@@ -10,7 +10,7 @@ export const CHECKIN_REWARDS = {
 } as const;
 type Kind = keyof typeof CHECKIN_REWARDS;
 interface Entry { date: string; kind: Kind; status: 'offered' | 'pending' | 'claimed' }
-interface Save { flagRevision?: number; soldierRevision?: number; version: 1; entries: Entry[]; soldiers: number; flags: number }
+interface Save { clearReceipts?: string[]; flagRevision?: number; soldierRevision?: number; version: 1; entries: Entry[]; soldiers: number; flags: number }
 interface Storage { getStorageSync(key: string): unknown; setStorageSync(key: string, value: unknown): void }
 export function beijingDate(now: number): string {
   return new Date(now + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -28,7 +28,7 @@ export function createDailyCheckin(options: {
     const raw = options.storage.getStorageSync(CHECKIN_KEY);
     if (raw === '' || raw === null || raw === undefined) return {version: 1, entries: [], soldiers: 0, flags: 0};
     const value = raw as Save;
-    if (!value || value.version !== 1 || (value.flagRevision !== undefined && (!Number.isSafeInteger(value.flagRevision) || value.flagRevision < 0)) || (value.soldierRevision !== undefined && (!Number.isSafeInteger(value.soldierRevision) || value.soldierRevision < 0)) || !Number.isSafeInteger(value.soldiers) || value.soldiers < 0
+    if (!value || (value.clearReceipts !== undefined && (!Array.isArray(value.clearReceipts) || value.clearReceipts.some(r => typeof r !== 'string' || !r.startsWith('clear:')) || new Set(value.clearReceipts).size !== value.clearReceipts.length)) || value.version !== 1 || (value.flagRevision !== undefined && (!Number.isSafeInteger(value.flagRevision) || value.flagRevision < 0)) || (value.soldierRevision !== undefined && (!Number.isSafeInteger(value.soldierRevision) || value.soldierRevision < 0)) || !Number.isSafeInteger(value.soldiers) || value.soldiers < 0
       || !Number.isSafeInteger(value.flags) || value.flags < 0 || !Array.isArray(value.entries)
       || value.entries.some((e, i) => !e || typeof e.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(e.date)
         || !Object.prototype.hasOwnProperty.call(CHECKIN_REWARDS, e.kind) || !['offered', 'pending', 'claimed'].includes(e.status)
@@ -86,6 +86,15 @@ export function createDailyCheckin(options: {
     };
   }
   return {
+    rewardClear(receipt: string, soldiers: number, flags: number) {
+      if (!receipt.startsWith('clear:') || ![soldiers, flags].every(n => Number.isSafeInteger(n) && n >= 0)) throw new Error('通关补给无效');
+      const value = read(); if (value.clearReceipts?.includes(receipt)) return;
+      value.soldiers += soldiers; value.flags += flags;
+      value.soldierRevision = (value.soldierRevision ?? 0) + (soldiers ? 1 : 0);
+      value.flagRevision = (value.flagRevision ?? 0) + (flags ? 1 : 0);
+      if (![value.soldiers, value.flags, value.soldierRevision, value.flagRevision].every(Number.isSafeInteger)) throw new Error('补给库存超出范围');
+      value.clearReceipts = [...(value.clearReceipts ?? []), receipt]; save(value);
+    },
     flagInventory() {
       const value = read(); return {count: value.flags, revision: value.flagRevision ?? 0};
     },

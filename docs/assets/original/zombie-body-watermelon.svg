@@ -1,11 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="160" viewBox="0 0 128 160"><g stroke="#374c46" stroke-width="4" stroke-linejoin="round">
-<path d="M36 64q26-12 53 0l9 51-20-4-8 7-13-7-24 4z" fill="#48865b" />
-<path d="M43 65l16 14-6 30-16-1M80 64L66 81l12 29 16 1" fill="#82b475" />
-<path d="M35 70L18 97l-3 14 17 2 18-33M88 68l22 23 4 18-17 5-19-33" fill="#48865b" />
-<path d="M15 102q-14 8-7 19l12-1 5 6 9-9-3-12M99 104q15-7 21 4l-1 16-8-1-7 5-8-12" fill="#9dc3a8" />
-<path d="M41 23q22-16 45 0l4 27q-4 29-28 28-25 0-27-24z" fill="#9dc3a8" />
-<path d="M38 25l8-14 16 5 10-7 16 12-1 11-10-8-6 7-15-7-9 12z" fill="#657d68" />
-<ellipse cx="49" cy="45" rx="10" ry="11" fill="#f5edd2" /><ellipse cx="76" cy="45" rx="10" ry="11" fill="#f5edd2" />
-<path d="M46 45h3M75 45h3" stroke="#374c46" stroke-width="6" /><path d="M51 64l25-2-4 8-18 1z" fill="#596a5b" /><path d="M58 62v7h6v-7" fill="#fff0c3" stroke-width="2" />
-<path d="M91 77l8 10M30 81l-7 11" stroke="#82b475" stroke-width="3" />
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="160" viewBox="0 0 128 160">
+<defs>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6e9b0"/><stop offset=".45" stop-color="#a9c88e"/><stop offset="1" stop-color="#658d78"/></linearGradient>
+ <linearGradient id="coat" x1="0" x2=".8" y2="1"><stop stop-color="#82b475"/><stop offset=".45" stop-color="#48865b"/><stop offset="1" stop-color="#53625c"/></linearGradient>
+ <linearGradient id="hair" x2="0" y2="1"><stop stop-color="#718d65"/><stop offset="1" stop-color="#364f4a"/></linearGradient>
+</defs>
+<g stroke="#30473f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+ <path d="M37 65Q63 54 89 65L98 115 80 111 71 119 56 111 32 115Z" fill="url(#coat)"/>
+ <path d="M53 66L73 66 80 110 52 110Z" fill="#e7dfbb"/>
+ <path d="M59 76L67 76 70 97 64 103 58 96Z" fill="#b96255" stroke-width="2"/>
+ <path d="M43 64L58 77 50 86 55 94 39 109M81 64L68 77 77 86 72 94 88 109" fill="#82b475" stroke-width="2"/>
+ <path d="M35 69L19 90 14 108 30 114 49 79M88 68L106 86 115 106 99 114 78 80" fill="url(#coat)"/>
+ <path d="M17 101L31 106M98 105L111 100" stroke="#82b475" stroke-width="5"/>
+ <path d="M15 106Q3 106 7 118L14 120 18 116 21 125 28 122 32 112M101 109Q112 100 119 110L118 122 111 121 106 127 99 119Z" fill="url(#skin)"/>
+ <path d="M12 112L14 117M24 113L25 119M112 110L112 117" fill="none" stroke="#668a6c" stroke-width="2"/>
+ <ellipse cx="35" cy="44" rx="7" ry="10" fill="url(#skin)"/><ellipse cx="90" cy="44" rx="7" ry="10" fill="url(#skin)"/>
+ <path d="M39 25Q62 11 85 26L89 49Q86 76 63 78 37 75 35 51Z" fill="url(#skin)"/>
+ <path d="M39 29Q57 17 78 27" fill="none" stroke="#e4edbd" stroke-width="3"/>
+ <path d="M36 28L42 15 53 18 61 9 69 16 79 12 89 25 87 34 77 26 70 32 57 25 46 34Z" fill="url(#hair)"/>
+ <path d="M45 22L51 23M62 17L66 21M79 19L82 23" stroke="#a6bc83" stroke-width="2"/>
+ <ellipse cx="49" cy="46" rx="12" ry="13" fill="#71896b" stroke="none"/><ellipse cx="76" cy="45" rx="12" ry="13" fill="#71896b" stroke="none"/>
+ <ellipse cx="49" cy="44" rx="10" ry="11" fill="#fff1cc" stroke-width="2"/><ellipse cx="76" cy="43" rx="10" ry="10" fill="#fff1cc" stroke-width="2"/>
+ <ellipse cx="52" cy="46" rx="4" ry="6" fill="#3c5041" stroke="none"/><ellipse cx="73" cy="45" rx="4" ry="5" fill="#3c5041" stroke="none"/>
+ <circle cx="53" cy="44" r="1.5" fill="#fff" stroke="none"/><circle cx="74" cy="43" r="1.5" fill="#fff" stroke="none"/>
+ <path d="M60 50L57 57 65 58" fill="none" stroke="#688b6e" stroke-width="2"/>
+ <path d="M48 65Q63 60 78 62L73 71Q60 76 51 70Z" fill="#405b4a" stroke-width="2"/>
+ <path d="M56 64L57 70 63 70 63 63M69 63L69 68 74 67 75 63" fill="#fff4d2" stroke-width="1.5"/>
+ <path d="M39 58L45 60M80 55L85 53" stroke="#658a6b" stroke-width="2"/>
+ <path d="M39 91L46 93 44 102 37 100Z" fill="#dbbb87" stroke-width="1.5"/>
+ <path d="M38 94L45 96M41 91L39 101" stroke="#956f50" stroke-width="1"/>
+ <circle cx="81" cy="96" r="2" fill="#edda9a" stroke-width="1"/>
+ <path d="M85 101L89 105M34 79L29 87" stroke="#e5d4aa" stroke-width="2"/>
 </g></svg>

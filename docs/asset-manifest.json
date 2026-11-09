@@ -41,10 +41,10 @@
     "wordId": "banana",
     "kind": "image",
     "path": "miniprogram/assets/images/banana.png",
-    "bytes": 82868,
-    "sha256": "b8f44891d539ba33db99e62d3c0de6b4f374708a56b299c118425047768e9b98",
+    "bytes": 71640,
+    "sha256": "0a337f2604a5f95b30f7abe049b7211b402a901b63c367fa237db81ab19b6336",
     "source": "docs/assets/original/fruit-clarity-imagegen.md",
-    "changes": "Built-in image_gen original, resized to 256px with transparent alpha",
+    "changes": "Built-in image_gen original, resized to 256px with transparent alpha; lossless PNG recompression on 2026-11-08, decoded RGBA and metadata unchanged",
     "review": "Visual inspection passed; no answer text",
     "generatedAt": "2026-11-02"
   },

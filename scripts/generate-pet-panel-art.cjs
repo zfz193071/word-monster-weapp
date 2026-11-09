@@ -1,0 +1,21 @@
+// Original vector artwork matching the blue fox's existing palette; PNGs for WeChat.
+const {mkdirSync, writeFileSync}=require('node:fs');
+const {Resvg}=require('@resvg/resvg-js');
+const {resolve}=require('node:path');
+const root=resolve(__dirname,'..');
+const defs=`<defs><linearGradient id="fur" x2=".8" y2="1"><stop stop-color="#b9eaf0"/><stop offset="1" stop-color="#5d9fbc"/></linearGradient><linearGradient id="gold" x2=".7" y2="1"><stop stop-color="#fff5bc"/><stop offset="1" stop-color="#f3b84f"/></linearGradient><radialGradient id="sky"><stop stop-color="#c2f5f4"/><stop offset="1" stop-color="#657dbb"/></radialGradient></defs>`;
+const bolt='<path d="M264 50 203 143h43l-18 74 84-110h-51l23-57Z" fill="url(#gold)" stroke="#fff6d0" stroke-width="5" stroke-linejoin="round"/>';
+const art={
+fox:`<ellipse cx="240" cy="413" rx="118" ry="18" fill="#739bac" opacity=".17"/><g stroke="#45677e" stroke-width="6" stroke-linejoin="round"><path d="M298 335Q437 365 413 208Q389 274 318 270" fill="url(#fur)"/><path d="M384 253q21-18 29-45 10 58-12 89l-33-16Z" fill="#fff3d8"/><ellipse cx="236" cy="323" rx="74" ry="79" fill="url(#fur)"/><ellipse cx="236" cy="322" rx="43" ry="56" fill="#fff3d8"/><path d="m182 369-22 34q30 20 60-1m39-33 13 34q30 11 48-8l-22-29" fill="#698fab"/><path d="M154 196 135 67l83 63q28-8 55 0l77-63-17 132" fill="url(#fur)"/><path d="m153 99 11 72 37-31Zm177 0-43 41 34 29Z" fill="#f0bbbd"/><path d="M153 173Q232 133 331 175q22 91-91 104-103-12-87-106Z" fill="url(#fur)"/><path d="M159 214q39 7 78 31 41-26 89-33-19 58-88 65-61-8-79-63Z" fill="#fff3d8"/><ellipse cx="195" cy="205" rx="9" ry="14" fill="#344e66"/><ellipse cx="281" cy="205" rx="9" ry="14" fill="#344e66"/><path d="m226 237 12 10 13-10Z" fill="#344e66"/><path d="M225 259q14 13 28-1" fill="none" stroke-width="4"/><path d="m175 297-36 28m158-29 31-29" fill="none" stroke-width="22" stroke-linecap="round"/></g><g fill="white"><ellipse cx="192" cy="201" rx="3" ry="5"/><ellipse cx="278" cy="201" rx="3" ry="5"/></g><g fill="#e9a8b0" opacity=".6"><ellipse cx="178" cy="230" rx="13" ry="6"/><ellipse cx="297" cy="230" rx="13" ry="6"/></g><path d="m241 150-17 26h15l-5 20 26-30h-16l9-16Z" fill="url(#gold)"/><path d="m362 145 8 21 22 8-22 8-8 22-8-22-22-8 22-8Z" fill="url(#gold)"/>`,
+lightning:`<rect x="20" y="20" width="440" height="440" rx="90" fill="url(#sky)"/><ellipse cx="240" cy="371" rx="137" ry="31" fill="#c4f6ff" opacity=".5"/><path d="M90 332 170 305l-16 34 95-30-12 38 120-37 30 33" fill="none" stroke="#fef1ac" stroke-width="9" stroke-linejoin="round"/><g transform="translate(-37 -26) scale(1.2)">${bolt}</g><path d="m108 109 5 16 17 5-17 6-5 16-6-16-17-6 17-5Zm253 108 6 19 19 6-19 7-6 19-7-19-19-7 19-6Z" fill="#fff5cc"/>`,
+egg:'<path d="M240 64C170 64 110 211 110 293a130 130 0 0 0 260 0C370 211 310 64 240 64Z" fill="#e0e4ff" stroke="#8396c1" stroke-width="9"/><path d="m221 171-38 65h44l-15 73 78-99h-43l21-39Z" fill="url(#gold)"/><ellipse cx="174" cy="165" rx="13" ry="27" fill="white" opacity=".8"/>',
+stone:'<path d="m240 55 45 126 135 8-105 85 34 137-109-79-110 79 35-137L60 189l135-8Z" fill="url(#gold)" stroke="#c29960" stroke-width="8"/><path d="m240 105 21 98 95 6-116 55-67 95 27-103-72-45 85-6Z" fill="#fff4c6"/>',
+collar:'<ellipse cx="240" cy="229" rx="148" ry="65" fill="none" stroke="#a393c7" stroke-width="45"/><path d="m240 245 20 40 45 7-33 32 8 45-40-21-40 21 8-45-33-32 45-7Z" fill="url(#gold)" stroke="#b39762" stroke-width="6"/>',
+hat:'<ellipse cx="240" cy="302" rx="172" ry="48" fill="#ac8761"/><path d="m122 288 25-133q95-60 186 0l25 133q-110 53-236 0Z" fill="#e8c993" stroke="#ac8761" stroke-width="8"/><path d="m131 247q112 42 218 0l7 35q-112 43-231 0Z" fill="#6e9e95"/>',
+charm:`<path d="M160 86q-46 153 75 166" fill="none" stroke="#a393c7" stroke-width="12"/><g transform="translate(-48 92) scale(1.15)">${bolt}</g>`
+};
+for(const [name,body] of Object.entries(art)){
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480">${defs}${body}</svg>`;
+ writeFileSync(resolve(root,`docs/assets/original/pets/${name}.svg`),svg);
+ writeFileSync(resolve(root,`miniprogram/assets/images/pets/${name}.png`),new Resvg(svg,{fitTo:{mode:'width',value:name==='fox'?480:192}}).render().asPng());
+}

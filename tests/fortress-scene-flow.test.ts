@@ -1,6 +1,9 @@
+import { createVictoryRewards, clearRewards } from '../miniprogram/services/victory-rewards';
+import { createDailyCheckin } from '../miniprogram/services/daily-checkin';
 import { skillQuizAnswer } from './helpers/skill-quiz';
 import * as invasion from '../miniprogram/fortress/stage-invasion';
 import * as continuation from '../miniprogram/fortress/continuation';
+import * as combos from '../miniprogram/fortress/skill-combos';
 import * as qualitySkills from '../miniprogram/fortress/quality-skills';
 import * as quality from '../miniprogram/fortress/skill-quality';
 import { coinRulesFor } from '../miniprogram/fortress/difficulty';
@@ -39,6 +42,9 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   const presentation = new Promise<void>(resolve => { reveal = resolve; });
   let loadCount=0;let loadNext=()=>Promise.resolve();
   let rewards=0;let praises=0;let praiseActive=false;let praiseDisposed=false;let audioOptions:any;let busy=false;let current:FakeScene;
+  const rewardValues=new Map<string,unknown>();const rewardStorage={getStorageSync:(k:string)=>rewardValues.get(k),setStorageSync:(k:string,v:unknown)=>{rewardValues.set(k,structuredClone(v));}};
+  const supplies=createDailyCheckin({storage:rewardStorage,coins:wallet,pets:petStore});
+  const victoryRewards=createVictoryRewards({storage:rewardStorage,coins:{...wallet,rewardVictory(sessionId:string,stage:number){rewards++;return wallet.rewardVictory(sessionId,stage);}},pets:petStore,supplies});
   let audioClock=0;let timerSequence=0;const timers=new Map<number,{run:()=>void;at:number}>();const voiceEnds:(()=>void)[]=[];
   function advanceAudio(ms:number){const end=audioClock+ms;while(true){const next=[...timers].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;audioClock=next[1].at;timers.delete(next[0]);next[1].run();}audioClock=end;}
   class FakeScene {
@@ -51,12 +57,12 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     applyPet(pet:petBattle.BattlePet){this.snapshot=attachCombatPet(this.snapshot,pet);}
     applySkills(levels:SkillLevels,collection:quality.SkillCollection){this.snapshot={...this.snapshot,skills:levels,skillCollection:collection};}
     arrive(wave:number){
-      const matches=(m:CombatState['monsters'][number])=>m.id.startsWith(`${plan.sessionId}:wave:${wave+1}:`);
+      const matches=(m:CombatState['monsters'][number])=>m.id.startsWith(`${this.snapshot.context.sessionId}:wave:${wave+1}:`);
       const incoming=this.snapshot.incomingMonsters ?? [];
       this.snapshot={...this.snapshot,tick:Math.ceil(this.snapshot.waveStartTimesMs![wave]/10),monsters:[...this.snapshot.monsters,...incoming.filter(matches)],incomingMonsters:incoming.filter(m=>!matches(m))};
       this.options.onEvents([{type:'waveStarted',context:this.snapshot.context,tick:this.snapshot.tick,waveNumber:wave+1}]);
     }
-    clear(wave:number){const targets=this.snapshot.monsters.filter(m=>m.id.startsWith(`${plan.sessionId}:wave:${wave+1}:`));const events:CombatEvent[]=targets.flatMap(m=>[
+    clear(wave:number){const targets=this.snapshot.monsters.filter(m=>m.id.startsWith(`${this.snapshot.context.sessionId}:wave:${wave+1}:`));const events:CombatEvent[]=targets.flatMap(m=>[
       {type:'monsterDefeated' as const,context:this.snapshot.context,tick:1,monsterId:m.id,wordId:m.wordId},
       ...(m.dropCoins ? [{type:'coinsDropped' as const,context:this.snapshot.context,tick:1,monsterId:m.id,amount:m.dropCoins,position:m.position}] : []),
     ]);if(realAudio){this.options.onEvents(events.slice(0,1));advanceAudio(300);}
@@ -74,9 +80,11 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       if(name.endsWith("/pets/battle"))return petBattle;
       if(name.endsWith('/pet-drops'))return {createPetDrops};
       if(name.endsWith('/pet-store'))return {petStore};
+      if(name.endsWith('/victory-rewards'))return {victoryRewards};
       if(name.endsWith('/coin-wallet'))return {victoryCoinsForLevel,coinWallet:{...wallet,rewardVictory(sessionId:string, levelId:number){assert.equal(levelId,level.id);rewards++;return wallet.rewardVictory(sessionId,levelId);}}};
       if(name.endsWith('/battle-drops'))return drops;
       if(name.endsWith('/victory-audio'))return {createVictoryAudio(){let started=false;return{setActive(active:boolean){praiseActive=active;if(active&&!started){started=true;praises++;}},dispose(){praiseDisposed=true;}};}};
+      if(name.endsWith('/skill-combos'))return combos;
       if(name.endsWith('/quality-skills'))return qualitySkills;
       if(name.endsWith('/skill-quality'))return quality;
       if(name.endsWith('/plans'))return {createSeededRandom};
@@ -96,9 +104,9 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       return{};
     },
   });
-  const updates:any[]=[];
-  host={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,musicVolume:22,combatSpeed:2,previewRequest:{plan,generation:1}},
-    setData(patch:any,done?:()=>void){updates.push(patch);Object.assign(this.data,patch);done?.();},triggerEvent(){},
+  const updates:any[]=[]; let autoEntryFrames = false;
+  host={data:structuredClone(definition.data),properties:{opening:true,preview:false,paused:false,managedLoading:true,musicVolume:22,combatSpeed:2,previewRequest:{plan,generation:1}},
+    setData(patch:any,done?:()=>void){updates.push(patch);Object.assign(this.data,patch);done?.();if(autoEntryFrames && patch.entryFrame)queueMicrotask(()=>this.entryFrameLoaded({currentTarget:{dataset:{epoch:patch.entryFrameEpoch}}}));},triggerEvent(){},
     createSelectorQuery(){return{select(){return{fields(_fields:any,callback:Function){return{exec(){callback({node:{},width:360,height:560,left:0});}};}};}};},
   };
   for(const [name,method]of Object.entries(definition.methods))host[name]=(method as Function).bind(host);
@@ -106,6 +114,17 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   assert.equal(host.data.ready,false,'图片已解码但画面未呈现时，必须继续显示加载层');
   assert.ok(host.data.loadingProgress<100);
   reveal();await new Promise(resolve => setImmediate(resolve));
+  assert.equal(host.data.ready,false,'Canvas回调结束不等于视图层首帧图片已显示，不能撤掉进度层');
+  assert.equal(current!.paused,true,'首帧实际显示前不能在遮罩后开战');
+  host.entryFrameLoaded({currentTarget:{dataset:{epoch:host.data.entryFrameEpoch-1}}});
+  assert.equal(host.data.ready,false,'旧画面的load事件不能放行');
+  await host.entryFrameLoaded({currentTarget:{dataset:{epoch:host.data.entryFrameEpoch}}});
+  assert.equal(host.data.ready,true);
+  assert.equal(current!.paused,true,'页面进度遮罩仍在时不能开战');
+  assert.equal(host.data.entryFrame,'frame','保留完整首帧作为原生画布交接底图');
+  host.properties.managedLoading=false;definition.properties.managedLoading.observer.call(host);
+  autoEntryFrames = true;
+  await new Promise(resolve => setImmediate(resolve));
   assert.equal(host.data.loadingProgress,100);
   assert.ok(updates.filter(patch=>patch.loadingProgress===100).every(patch=>patch.ready===true),'100%仅随战斗首帧就绪发布');
   assert.equal(current!.speed,2);
@@ -161,7 +180,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(current!.paused,false,'选完技能立即继续同一轮');
     assert.equal(host.data.waveRequest,null,'整关过程中不弹轮间听词');
     }
-    if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,pet:{...current!.snapshot.pet,hp:0,defeatedPosition:{x:250,y:480}},fallenSoldiers:[{id:'fallen-guard',slot:0,hp:0,maxHp:30,position:{x:150,y:500},attackRemainingMs:0}]};
+    if(level.id===2 && current!.snapshot.pet)current!.snapshot={...current!.snapshot,fallenSoldiers:[{id:'fallen-guard',slot:0,hp:0,maxHp:30,position:{x:150,y:500},attackRemainingMs:0}]};
     current!.clear(wave);consumeBossOffers();assert.equal(!!current!.snapshot.pet,petStore.view().owned,'首次获得宠物立即加入当前场景');assert.equal(host.data.coinBalance,wallet.balance(),'金币掉落保存后同步刷新战斗页余额');assert.equal(host.data.level,1+opening.OPENING_EXPERIENCE.levelThresholds.filter(n=>n<=host.data.experience).length);assert.equal(host.data.upgradeOffer,null);assert.equal(host.data.waveRequest,null);
     assert.equal(host.data.completed,false);host.advanceWave();assert.equal(host.data.completed,false);
     if(realAudio){
@@ -172,10 +191,12 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     }else{busy=false;audioOptions.onDrained();}
     if(repair && current!.snapshot.base.hp===current!.snapshot.base.maxHp)repairs++;
     if(wave<18){assert.equal(host.data.waveRequest,null);assert.equal(current!.disposed,false);assert.equal(current!.snapshot.status,'fighting');
-      if(level.id===2){assert.equal(current!.snapshot.pet?.hp,0);assert.equal(current!.snapshot.fallenSoldiers?.[0].id,'fallen-guard');}
+      if(level.id===2){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.fallenSoldiers?.[0].id,'fallen-guard');}
     }else{assert.equal(host.data.completed,true);assert.equal(host.data.frozenFrame,'frame');assert.equal(host.data.victoryFruits.length,level.words.length);assert.equal(host.data.waveRequest,null);}
   }
-  assert.equal(petStore.view().receipts.length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
+  assert.equal(petStore.view().receipts.filter(id=>!id.startsWith('clear:')).length,plan.waves.flatMap(w=>w.spawnPlan).filter(m=>m.boss && m.bossKind!=='grand').length+(level.id===2?1:0),'真实Boss事件发宠物奖励且重复事件不重复领取');
+  assert.deepEqual(JSON.parse(JSON.stringify(host.data.rewardCards)),clearRewards(plan.sessionId,level.id).cards);
+  assert.equal(petStore.view().stones,clearRewards(plan.sessionId,level.id).stones);
   if(repair)assert(repairs>0 && repairs<19);
   const expectedDrops=(level.id===3?60:20)+Math.min(coinRulesFor(plan.difficulty).limit,plan.waves.flatMap(w=>w.spawnPlan).reduce((sum,m)=>sum+(m.dropCoins??0),0));
   assert.ok(expectedDrops>0);assert.equal(host.data.dropCoins,expectedDrops);assert.equal(host.data.dropError,false);
@@ -213,6 +234,32 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     if(pet){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.pet?.defeatedPosition,undefined);}assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));
     assert.equal(current!.snapshot.monsters[0].hp,monsterStats(level.id+1,1,false,plan.difficulty).hp);
     const preserved=current!.snapshot;definition.observers.previewRequest.call(host,host.properties.previewRequest);assert.equal(current!.snapshot,preserved,'父页面重复传入最初入口不能重置连续关卡');definition.pageLifetimes.hide.call(host);definition.pageLifetimes.show.call(host);assert.equal(current!.snapshot,preserved,'后台恢复不创建新局或清技能');
+    if (!repair && !realAudio && !bossChain) {
+      assert.equal(host.data.rewardSaved,false,'下一关重置领奖状态');
+      assert.equal(host.data.rewardCards.length,0);
+      const previousStones=petStore.view().stones;
+      for(let wave=0;wave<19;wave++) {
+        current!.arrive(wave); current!.clear(wave);
+        const beforeSettlement=wallet.balance();
+        busy=false; audioOptions.onDrained();
+        let choices=0;
+        while(host.data.upgradeOffer) {
+          assert(++choices<50,'升级奖励队列应可完成');
+          const offer=host.data.upgradeOffer;
+          if(host.data.skillQuiz)host.finishSkillQuiz({detail:skillQuizAnswer(host.data.skillQuiz)});
+          host.chooseUpgrade({detail:{offerId:offer.id,cardId:offer.cards[0].id}});
+        }
+        if(wave===18)assert.equal(wallet.balance()-beforeSettlement,victoryCoinsForLevel(level.id+1),'继续后的关卡胜利立即发金币');
+      }
+      assert.equal(host.data.completed,true);assert.equal(host.data.rewardSaved,true);assert.equal(rewards,2);
+      const expected=clearRewards(next.plan.sessionId,level.id+1);
+      assert.deepEqual(JSON.parse(JSON.stringify(host.data.rewardCards)),expected.cards);
+      assert.equal(petStore.view().stones,previousStones+expected.stones);
+      assert(petStore.view().receipts.includes(`clear:${next.plan.sessionId}`));
+      assert.equal(host.data.coinBalance,wallet.balance());
+      const paid=wallet.balance();host.claimVictoryReward();host.advanceWave();
+      assert.equal(wallet.balance(),paid);assert.equal(rewards,2,'两关各发一次，重复回调不重发');
+    }
   }else{assert.equal(host.data.canContinue,false);await host.continueStage();assert.equal(loadCount,0);}
   if(level.id===1 && !repair && !realAudio){
     const oldScene=current!;
