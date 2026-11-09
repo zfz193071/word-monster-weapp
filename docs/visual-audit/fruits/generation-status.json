@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-09",
+  "tool": "built-in image_gen",
+  "reference": "../samples/originals/apple-display.png",
+  "results": [
+    {
+      "id": "banana",
+      "status": "fulfilled"
+    },
+    {
+      "id": "cherry",
+      "status": "fulfilled"
+    },
+    {
+      "id": "grape",
+      "status": "rejected",
+      "error": "image generation failed: network error: error sending request for url (https://chatgpt.com/backend-api/codex/images/edits)",
+      "retryError": "image generation failed: network error: error sending request for url (https://chatgpt.com/backend-api/codex/images/edits)"
+    },
+    {
+      "id": "kiwi",
+      "status": "fulfilled"
+    },
+    {
+      "id": "orange",
+      "status": "fulfilled"
+    },
+    {
+      "id": "peach",
+      "status": "fulfilled"
+    },
+    {
+      "id": "pear",
+      "status": "fulfilled"
+    },
+    {
+      "id": "pineapple",
+      "status": "fulfilled"
+    },
+    {
+      "id": "strawberry",
+      "status": "fulfilled"
+    },
+    {
+      "id": "watermelon",
+      "status": "rejected",
+      "error": "image generation failed: network error: error sending request for url (https://chatgpt.com/backend-api/codex/images/edits)",
+      "retryError": "image generation failed: connection failed: error sending request"
+    }
+  ]
+}

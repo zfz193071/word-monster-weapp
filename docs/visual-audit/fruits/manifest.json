@@ -1,0 +1,461 @@
+{
+  "date": "2026-11-09",
+  "issue": 84,
+  "source": "Built-in image_gen; project apple sample used as style reference; no third-party images introduced.",
+  "rights": "AI-generated project assets; not a claim of exclusive copyright.",
+  "processing": "Original alpha preserved; aspect-preserving high-quality resize and lossless PNG encoding; no quantization.",
+  "status": "Incomplete batch; missing originals; not integrated",
+  "missing": [
+    "grape",
+    "watermelon"
+  ],
+  "totals": {
+    "64": 49546,
+    "128": 164197,
+    "256": 569263,
+    "512": 2017335
+  },
+  "entries": [
+    {
+      "wordId": "apple",
+      "meaningZh": "苹果",
+      "audioPath": "/assets/audio/learn-apple.mp3",
+      "original": "../samples/originals/apple-display.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1495699,
+      "sha256": "33729ff2acb8dc8f98bfd6922c07321b37e65aae9330b058811e3e4daf1bfca9",
+      "transparent": 840519,
+      "partial": 731463,
+      "contentBounds": {
+        "left": 146,
+        "top": 87,
+        "right": 1111,
+        "bottom": 1147
+      },
+      "variants": [
+        {
+          "file": "variants/apple-64.png",
+          "size": 64,
+          "bytes": 5959,
+          "rgbaBytes": 16384,
+          "sha256": "b8b92998c9943a9b47100ef3da902bc1eaa2283b302332774c37e182babec119"
+        },
+        {
+          "file": "variants/apple-128.png",
+          "size": 128,
+          "bytes": 20017,
+          "rgbaBytes": 65536,
+          "sha256": "4439872e3eed114ee9681c66912e713efae18eb2635750e46fb19f312e814f01"
+        },
+        {
+          "file": "variants/apple-256.png",
+          "size": 256,
+          "bytes": 69777,
+          "rgbaBytes": 262144,
+          "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e"
+        },
+        {
+          "file": "variants/apple-512.png",
+          "size": 512,
+          "bytes": 246761,
+          "rgbaBytes": 1048576,
+          "sha256": "f6bdc742662dbff98db226a272a18fff1e804f6a383620dfd87760d583fd36bb"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "banana",
+      "meaningZh": "香蕉",
+      "audioPath": "/assets/audio/learn-banana.mp3",
+      "original": "originals/banana.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1165784,
+      "sha256": "c519fe0f54f96f5cfec807eae7c26bfda04aa4f19d5caa39b1d5571b73b2ef7c",
+      "transparent": 933041,
+      "partial": 638206,
+      "contentBounds": {
+        "left": 91,
+        "top": 135,
+        "right": 1151,
+        "bottom": 1150
+      },
+      "variants": [
+        {
+          "file": "variants/banana-64.png",
+          "size": 64,
+          "bytes": 5426,
+          "rgbaBytes": 16384,
+          "sha256": "5989eb4648735dc9d1945c08742d87f0ff5e53de2c6f8572e9713bfba3427a27"
+        },
+        {
+          "file": "variants/banana-128.png",
+          "size": 128,
+          "bytes": 17020,
+          "rgbaBytes": 65536,
+          "sha256": "21d9aeccfa51f8061b4faa60494105fbd247ed8b0b323f100df3843b276f2be0"
+        },
+        {
+          "file": "variants/banana-256.png",
+          "size": 256,
+          "bytes": 55837,
+          "rgbaBytes": 262144,
+          "sha256": "aa371e9356894810ce62c33d36f71619fb14d1efa5b7e974bb89cd97d0bcb929"
+        },
+        {
+          "file": "variants/banana-512.png",
+          "size": 512,
+          "bytes": 190214,
+          "rgbaBytes": 1048576,
+          "sha256": "9d890d9cd4fc154e91cfc0b3c40cba79755342001c79aa6cbd46aa050382d5cc"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "orange",
+      "meaningZh": "橙子",
+      "audioPath": "/assets/audio/learn-orange.mp3",
+      "original": "originals/orange.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1300172,
+      "sha256": "be9d2de57ef46d75f99d33000c5bfc36a25cd4fec2c2d3b4511afda8c8460af3",
+      "transparent": 903291,
+      "partial": 668708,
+      "contentBounds": {
+        "left": 166,
+        "top": 111,
+        "right": 1058,
+        "bottom": 1135
+      },
+      "variants": [
+        {
+          "file": "variants/orange-64.png",
+          "size": 64,
+          "bytes": 5010,
+          "rgbaBytes": 16384,
+          "sha256": "0203ae594cdd036950c385a97db736aa4a884464bad9783dd3bec394b27738f1"
+        },
+        {
+          "file": "variants/orange-128.png",
+          "size": 128,
+          "bytes": 17700,
+          "rgbaBytes": 65536,
+          "sha256": "ca65fd160dbe7b198afe2bcd1556094c6089bfb91ebb6da419740107ac3cc57f"
+        },
+        {
+          "file": "variants/orange-256.png",
+          "size": 256,
+          "bytes": 63854,
+          "rgbaBytes": 262144,
+          "sha256": "21938c668a36d0c73faa7ebcd79890128b7c6ea588136618995e7f0c2c856840"
+        },
+        {
+          "file": "variants/orange-512.png",
+          "size": 512,
+          "bytes": 225599,
+          "rgbaBytes": 1048576,
+          "sha256": "a2eed85b170b5886a7fa50b626c414e49ca67f80ffb2f0e8ff8af90119e5844d"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "pear",
+      "meaningZh": "梨",
+      "audioPath": "/assets/audio/learn-pear.mp3",
+      "original": "originals/pear.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1027243,
+      "sha256": "5f97c44c1999c9a58bfaf3ebcf9332d26d2ed8ded5d9aacd7783a829e2928580",
+      "transparent": 1040685,
+      "partial": 531056,
+      "contentBounds": {
+        "left": 254,
+        "top": 81,
+        "right": 1014,
+        "bottom": 1194
+      },
+      "variants": [
+        {
+          "file": "variants/pear-64.png",
+          "size": 64,
+          "bytes": 4789,
+          "rgbaBytes": 16384,
+          "sha256": "fdc225b0c5b871945f4a6f6b6b97cdfc6953c5dfdaf722c7f707365764f02944"
+        },
+        {
+          "file": "variants/pear-128.png",
+          "size": 128,
+          "bytes": 15186,
+          "rgbaBytes": 65536,
+          "sha256": "ae95e52cd1ad17dfdd77fd8fd7b000ed2c5c2803f2c0fd80bd815e06a258b224"
+        },
+        {
+          "file": "variants/pear-256.png",
+          "size": 256,
+          "bytes": 50489,
+          "rgbaBytes": 262144,
+          "sha256": "0af7503c6553691eba055585ebc20bc3bfb328d376ba2aae3b39617885a1bd5b"
+        },
+        {
+          "file": "variants/pear-512.png",
+          "size": 512,
+          "bytes": 175090,
+          "rgbaBytes": 1048576,
+          "sha256": "f249202cd9383e269bb82ff756a943123a7be53a2e2a0e1b43b4b93bb02daf01"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "strawberry",
+      "meaningZh": "草莓",
+      "audioPath": "/assets/audio/learn-strawberry.mp3",
+      "original": "originals/strawberry.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1281953,
+      "sha256": "569da88f8cf1aa4c43f4495d13aba7696e807ac55df01835f2755555d365417b",
+      "transparent": 972053,
+      "partial": 600060,
+      "contentBounds": {
+        "left": 203,
+        "top": 92,
+        "right": 1029,
+        "bottom": 1176
+      },
+      "variants": [
+        {
+          "file": "variants/strawberry-64.png",
+          "size": 64,
+          "bytes": 5488,
+          "rgbaBytes": 16384,
+          "sha256": "d058d67cd32ce462935aec312888ef493931666d63716cdd5fb6836206052124"
+        },
+        {
+          "file": "variants/strawberry-128.png",
+          "size": 128,
+          "bytes": 17896,
+          "rgbaBytes": 65536,
+          "sha256": "626f8b6260cd9c3d3869945626dea82d4a84ca5de37a5ec936e5ff06119424e2"
+        },
+        {
+          "file": "variants/strawberry-256.png",
+          "size": 256,
+          "bytes": 60885,
+          "rgbaBytes": 262144,
+          "sha256": "c23308f840d5d2714c33fa0a77d0e45d70ee5841cdf089a23bf7a1ac5cc90f9f"
+        },
+        {
+          "file": "variants/strawberry-512.png",
+          "size": 512,
+          "bytes": 214155,
+          "rgbaBytes": 1048576,
+          "sha256": "d042075e2431c9ae8a1aa5a2787d0a6ed801c714b5e5b6d6cd03d42aa0de6ba1"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "cherry",
+      "meaningZh": "樱桃",
+      "audioPath": "/assets/audio/learn-cherry.mp3",
+      "original": "originals/cherry.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1097933,
+      "sha256": "2fdfca148a47b0aec7e8467f6933d1a13f748debd7261cc545dc742b24bd711b",
+      "transparent": 1036306,
+      "partial": 536012,
+      "contentBounds": {
+        "left": 140,
+        "top": 124,
+        "right": 1105,
+        "bottom": 1123
+      },
+      "variants": [
+        {
+          "file": "variants/cherry-64.png",
+          "size": 64,
+          "bytes": 5211,
+          "rgbaBytes": 16384,
+          "sha256": "4931735d29bbac9657813db23a42158b28ad58cc4837ffd12b089f0842631d5d"
+        },
+        {
+          "file": "variants/cherry-128.png",
+          "size": 128,
+          "bytes": 16209,
+          "rgbaBytes": 65536,
+          "sha256": "c7d3685e990d03206c485b82d68162ac294bb5f17914b4dcbc1ebc361b49d1af"
+        },
+        {
+          "file": "variants/cherry-256.png",
+          "size": 256,
+          "bytes": 53361,
+          "rgbaBytes": 262144,
+          "sha256": "da2c94898c19a48c1fc9d88188b1f5552b6804d72c31eac0c854765c048432ac"
+        },
+        {
+          "file": "variants/cherry-512.png",
+          "size": 512,
+          "bytes": 183469,
+          "rgbaBytes": 1048576,
+          "sha256": "a7ae14b702c23bb1b6792796acd156953bb680fef8f0682193bf446db17a9edc"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "pineapple",
+      "meaningZh": "菠萝",
+      "audioPath": "/assets/audio/learn-pineapple.mp3",
+      "original": "originals/pineapple.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1240746,
+      "sha256": "a8dba1e801524b7f651380344f32e99951616b4d285baf765fea37aa5fe6a219",
+      "transparent": 1041510,
+      "partial": 529935,
+      "contentBounds": {
+        "left": 296,
+        "top": 50,
+        "right": 925,
+        "bottom": 1203
+      },
+      "variants": [
+        {
+          "file": "variants/pineapple-64.png",
+          "size": 64,
+          "bytes": 5582,
+          "rgbaBytes": 16384,
+          "sha256": "5ae52bb9b515cbbb0ad588d882c431af5def93f70cfe5a644d9911ca8888dbe9"
+        },
+        {
+          "file": "variants/pineapple-128.png",
+          "size": 128,
+          "bytes": 18644,
+          "rgbaBytes": 65536,
+          "sha256": "b6406b3a054672ddf1c568f6da4e60226a1b02fbe653dc4502acc0b98ed4d531"
+        },
+        {
+          "file": "variants/pineapple-256.png",
+          "size": 256,
+          "bytes": 62522,
+          "rgbaBytes": 262144,
+          "sha256": "e436b86ccc8b67d5dc5dc5e124c89bc4f97e525401e3b9156d187641ee123ac3"
+        },
+        {
+          "file": "variants/pineapple-512.png",
+          "size": 512,
+          "bytes": 214113,
+          "rgbaBytes": 1048576,
+          "sha256": "f14734af830176d41bc10a694c65b4a22cbfb6f09cb56c5332a12e1b4f4c5b03"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "kiwi",
+      "meaningZh": "猕猴桃",
+      "audioPath": "/assets/audio/learn-kiwi.mp3",
+      "original": "originals/kiwi.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 2025868,
+      "sha256": "6e1dda79b9b58fb3706c24b9d01df0f7a08872d2bd0434fd964f527147c16b14",
+      "transparent": 784890,
+      "partial": 787509,
+      "contentBounds": {
+        "left": 79,
+        "top": 141,
+        "right": 1169,
+        "bottom": 1135
+      },
+      "variants": [
+        {
+          "file": "variants/kiwi-64.png",
+          "size": 64,
+          "bytes": 6503,
+          "rgbaBytes": 16384,
+          "sha256": "5a0c4b1ca98a13a35819107b1e2b361f0b1f67c734f339c9144f4d8b90ef58f9"
+        },
+        {
+          "file": "variants/kiwi-128.png",
+          "size": 128,
+          "bytes": 23114,
+          "rgbaBytes": 65536,
+          "sha256": "2b9a4a11c845628c33877a1a1ee08aa42fecaebf08ef091ab7c23b8228e592ce"
+        },
+        {
+          "file": "variants/kiwi-256.png",
+          "size": 256,
+          "bytes": 87844,
+          "rgbaBytes": 262144,
+          "sha256": "3c70b28e9fbe39495b7185e79b16672c86373fe2ad8a87fcd246cb5957de3548"
+        },
+        {
+          "file": "variants/kiwi-512.png",
+          "size": 512,
+          "bytes": 329817,
+          "rgbaBytes": 1048576,
+          "sha256": "56d92a4d3d45652770061540243673d44f86435add669fc9793bf51cc8ea69c1"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "peach",
+      "meaningZh": "桃子",
+      "audioPath": "/assets/audio/learn-peach.mp3",
+      "original": "originals/peach.png",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1569585,
+      "sha256": "45bbfb05f693579d55b9f7d2e9ea7c1408182f9dca5eb511764ffe8f20a3d1b3",
+      "transparent": 878979,
+      "partial": 693313,
+      "contentBounds": {
+        "left": 162,
+        "top": 96,
+        "right": 1066,
+        "bottom": 1149
+      },
+      "variants": [
+        {
+          "file": "variants/peach-64.png",
+          "size": 64,
+          "bytes": 5578,
+          "rgbaBytes": 16384,
+          "sha256": "009fe8997a7c2bb7d59eadf17b4037c32381b6eb6e279f476745061c9b4b7ce3"
+        },
+        {
+          "file": "variants/peach-128.png",
+          "size": 128,
+          "bytes": 18411,
+          "rgbaBytes": 65536,
+          "sha256": "885daf391a540c697eaf91d39050d1cda47b8c02ed1be0fee127c1edb768f975"
+        },
+        {
+          "file": "variants/peach-256.png",
+          "size": 256,
+          "bytes": 64694,
+          "rgbaBytes": 262144,
+          "sha256": "b10fd20c6fe79d6085a50c83482ecdfdfd072710ee1764d7a3327ae4c5bd187f"
+        },
+        {
+          "file": "variants/peach-512.png",
+          "size": 512,
+          "bytes": 238117,
+          "rgbaBytes": 1048576,
+          "sha256": "a1f0caeeec271cb8c81b50c89b95db708bda487cc9caff99ab2ae0ff776de114"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    }
+  ]
+}
