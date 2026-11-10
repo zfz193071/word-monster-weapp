@@ -13,7 +13,7 @@ export function catPaw(distance: number, offset: number, hind: boolean) {
   const ease = t * t * (3 - 2 * t);
   return { forward: -reach + 2 * reach * ease, height: Math.sin(Math.PI * t) * (hind ? 9 : 7), planted: false };
 }
-function joint(a: Point, b: Point, lengthA: number, lengthB: number, bend: number): Point {
+export function articulatedJoint(a: Point, b: Point, lengthA: number, lengthB: number, bend: number): Point {
   const dx=b.x-a.x, dy=b.y-a.y, d=Math.max(.001,Math.hypot(dx,dy));
   const reach=Math.min(d,lengthA+lengthB-.01);
   const along=(lengthA*lengthA-lengthB*lengthB+reach*reach)/(2*reach);
@@ -39,7 +39,7 @@ export function drawCatRun(c: Context, distance: number, seed: number): void {
     const root2={x:root.forward,y:root.height};
     const tip={x:(hind?-10:10)+paw.forward,y:paw.height};
     // Solve joints in the vertical travel plane, then project; bones do not stretch.
-    const knee=joint(root2,tip,hind?10:11,hind?12:11,hind?1:-1);
+    const knee=articulatedJoint(root2,tip,hind?10:11,hind?12:11,hind?1:-1);
     const points=[project(lateral,root2.x,root2.y),project(lateral,knee.x,knee.y),project(lateral-paw.forward*.23,tip.x,tip.y)];
     stroke(points,'#52657c',hind?5.4:4.2);
     stroke(points,'#9cabbc',hind?3.4:2.5);

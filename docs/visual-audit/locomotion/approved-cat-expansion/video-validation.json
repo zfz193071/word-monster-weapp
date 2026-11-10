@@ -1,0 +1,200 @@
+[
+  {
+    "file": "phone-bear.mp4",
+    "sha256": "0da07f661ee037b5f406fd0692dedd78f8c568a90084df8b71c8c48e6bd576b0",
+    "bytes": 4322381,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-cat.mp4",
+    "sha256": "6138aea208e2b16e3839eb29467912eb9264c01e9c249df084e2d3b2bd3c9e2b",
+    "bytes": 4541649,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-cow.mp4",
+    "sha256": "1b2a382c1915b83abf91ed30d2ea17ff88b85c66b25ea460e209513345265a95",
+    "bytes": 4825257,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-dog.mp4",
+    "sha256": "badf52cd852f247e4d205a16fe8fce563b3dc82370ca5eb2b3c534386a2cd0f7",
+    "bytes": 4553631,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-elephant.mp4",
+    "sha256": "668e88f278df2ac5165106eea84d68c5ec11a7692d0fa487ee74408b530f085c",
+    "bytes": 4353075,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-horse.mp4",
+    "sha256": "ee0704c0690d9d19fc6566ee82e7b98d3274d8a7301e333876a03a93e1ceea91",
+    "bytes": 4605779,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-lion.mp4",
+    "sha256": "1b22c7e41320c6256d2fb32b4a43d69f626c9814b94fb0f187e7458f7f6a60f5",
+    "bytes": 4611396,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-panda.mp4",
+    "sha256": "b9d9d1d10aa009a2d63bf21a1cde6c5a8e2e778a479c1ddb28aba0f902f09462",
+    "bytes": 4509230,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-rabbit.mp4",
+    "sha256": "cb4135f5219772c5ba92471074f61cf9d36958fff6618644914f7149d00a5829",
+    "bytes": 4144982,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-sheep.mp4",
+    "sha256": "413e210e791d21cbe2b1c41d4a1950eebb962c0a94b8751d9f41b6b1da85ec5c",
+    "bytes": 4507973,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "phone-tiger.mp4",
+    "sha256": "15b5f87a963de2a0712f2c8e41ab178db9c735b4000131bf4d9896a125b536e3",
+    "bytes": 5106095,
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-bear.mp4",
+    "sha256": "ab1ad63999ce0db5cbbf322315f7034fa75ad5445685afadc3ccb65eb1252969",
+    "bytes": 5439182,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-cat.mp4",
+    "sha256": "61c2acbb51b4990e457d29058346d5bc35b79ea9fe2ddb181dde276674c540b0",
+    "bytes": 5648406,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-cow.mp4",
+    "sha256": "6a77be409509f5cf2f62f88025953149c9c0fc86e5c5bbbc70e6430784bb7a61",
+    "bytes": 5961264,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-dog.mp4",
+    "sha256": "af3b57d6c8e803a6ff58b16158ed30ca431be4cebcf111d0ba96f7184a04e09d",
+    "bytes": 5649888,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-elephant.mp4",
+    "sha256": "c8714821feb6e0fecf4aa2dbe8eb115a7117eb8be34948485dfd887464c25385",
+    "bytes": 5493185,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-horse.mp4",
+    "sha256": "96d14cd5db9aab67ed4fad49f06ae3c10099feabaaf8aa9054f9f8c9191e6d11",
+    "bytes": 5818429,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-lion.mp4",
+    "sha256": "80151b27b875c7496315e7f8bfb020c6ca82898e61e24cd5f3146de557049fc7",
+    "bytes": 5758697,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-panda.mp4",
+    "sha256": "80a3ce739e70151f5b346efa5454589de0bec5f21bf00966ba4518dd90310c24",
+    "bytes": 5630976,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-rabbit.mp4",
+    "sha256": "9987acf65100d03a90bd21f4339e1420ae76ca7c849b977d6a17f043623aafd9",
+    "bytes": 5189334,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-sheep.mp4",
+    "sha256": "06e833b3f0dd1062c94cc83d7321ba7c9578ba15901f43af2e8abb408eda419c",
+    "bytes": 5618086,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  },
+  {
+    "file": "ipad-tiger.mp4",
+    "sha256": "a0757cc678d23a702b2588d3ebf11d6f90240716b8bed9b81e7b04df7fe2c26e",
+    "bytes": 6274734,
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "nb_frames": "360"
+  }
+]

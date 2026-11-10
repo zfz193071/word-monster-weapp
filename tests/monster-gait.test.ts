@@ -81,3 +81,29 @@ test('猫的支撑脚在世界坐标固定，回摆抬脚且首尾连续', async
     assert.ok(Math.abs(end.height-start.height)<1e-5);
   }
 });
+
+
+test('全部四足动物支撑脚抵消世界位移，恢复抬脚且落地与循环连续', async () => {
+  const {QUADRUPED_SHAPES, QUADRUPED_DEPTH, quadrupedPose}=await import('../miniprogram/fortress/quadruped-art');
+  for(const [id, shape] of Object.entries(QUADRUPED_SHAPES)) {
+    const contacts=[0,0,0,0], lifts=[false,false,false,false];
+    for(let step=0;step<1000;step++) {
+      const distance=shape.stride*step/1000, delta=shape.stride/1000;
+      const a=quadrupedPose(id,distance,17),b=quadrupedPose(id,distance+delta,17);
+      a.feet.forEach((foot,index)=>{
+        lifts[index] ||= foot.height>0;
+        const next=b.feet[index];
+        // Ignore contact across the cycle reset, when recovery ends and a new stance starts.
+        if(foot.planted && next.planted && next.forward<=foot.forward) {
+          contacts[index]++;
+          assert.ok(Math.abs(distance+foot.forward*QUADRUPED_DEPTH-(distance+delta+next.forward*QUADRUPED_DEPTH))<1e-8,`${id} planted paw ${index}`);
+          assert.equal(foot.height,0);
+        }
+        assert.ok(Math.abs(foot.forward-next.forward)<.15,`${id} continuous stride`);
+        assert.ok(Math.abs(foot.height-next.height)<.1,`${id} continuous lift`);
+      });
+    }
+    assert.ok(contacts.every(count=>count>200),id);
+    assert.ok(lifts.every(Boolean),id);
+  }
+});

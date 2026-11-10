@@ -13,5 +13,5 @@ for(const [row,id] of ids.entries()){
   drawQuadruped(c,id,frame*QUADRUPED_SHAPES[id].stride/8,0);c.restore();
  }
 }
-const output=resolve('docs/visual-audit/locomotion/revised');await mkdir(output,{recursive:true});
+const output=resolve(process.env.WM_GAIT_OUTPUT ?? 'docs/visual-audit/locomotion/revised');await mkdir(output,{recursive:true});
 await writeFile(resolve(output,'quadruped-poses.png'),canvas.toBuffer('image/png'));

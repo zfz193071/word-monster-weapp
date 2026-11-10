@@ -158,5 +158,23 @@
     "prompt": "prompts.json#horse (unchanged)",
     "reference": "../samples/originals/rabbit-display.png",
     "output": null
+  },
+  "horseRetry20261110AllIssues": {
+    "status": "moderation_blocked",
+    "stage": "output",
+    "category": "other",
+    "requestId": "d55d372d-8f8e-4fa8-ae2b-d6dce9bb1383",
+    "prompt": "prompts.json#horse (unchanged)",
+    "reference": "../samples/originals/rabbit-display.png",
+    "output": null
+  },
+  "horseRetry20261110Resume": {
+    "status": "moderation_blocked",
+    "stage": "output",
+    "category": "other",
+    "requestId": "ed2f4a4f-3c0b-493c-9e10-8852d04393b2",
+    "prompt": "prompts.json#horse (unchanged)",
+    "reference": "../samples/originals/rabbit-display.png",
+    "output": null
   }
 }
