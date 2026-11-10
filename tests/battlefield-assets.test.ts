@@ -4,19 +4,21 @@ import { readFileSync, existsSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
 import { openingArt } from '../miniprogram/fortress/opening-encounter';
+import type { PackageLoadMeasurement } from '../miniprogram/services/battlefield-assets';
 import type { SceneArt } from '../miniprogram/fortress/canvas-scene';
 
 function harness() {
   const calls: {path: string; resolve: () => void; reject: (error: Error) => void}[] = [];
   const timers = new Map<number, () => void>();
-  let id = 0;
-  const exports: {loadBattlefieldAssets?: (level: number, house?: number, art?: SceneArt) => Promise<void>} = {};
+  let id = 0, now = 0;
+  const exports: {battlefieldAssetMeasurements?: () => PackageLoadMeasurement[]; loadBattlefieldAssets?: (level: number, house?: number, art?: SceneArt) => Promise<void>} = {};
   const source = readFileSync(new URL('../miniprogram/services/battlefield-assets.ts', import.meta.url), 'utf8');
   runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020}}).outputText, {
+    Date: { now: () => now },
     exports, require: {async(path: string) {return new Promise<void>((resolve, reject) => calls.push({path, resolve, reject}));}},
     setTimeout(fn: () => void) {timers.set(++id, fn); return id;}, clearTimeout(key: number) {timers.delete(key);},
   });
-  return {load: exports.loadBattlefieldAssets!, calls, timers};
+  return {load: exports.loadBattlefieldAssets!, measurements: exports.battlefieldAssetMeasurements!, advance: (ms: number) => { now += ms; }, calls, timers};
 }
 
 test('八关五级堡垒只下载所需资源包，全部就绪才完成', async () => {
@@ -68,7 +70,7 @@ test('超时允许重试，旧完成不解锁新请求或覆盖缓存', async ()
 test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本', () => {
   const root = new URL('../miniprogram/', import.meta.url);
   const app = JSON.parse(readFileSync(new URL('app.json', root), 'utf8'));
-  for (const name of ['battlefield-assets', 'fortress-assets', 'character-assets', 'fruit-assets']) {
+  for (const name of ['battlefield-assets', 'fortress-assets', 'character-assets', 'fruit-assets', 'animal-assets']) {
     const pack = app.subPackages.find((p: {name: string}) => p.name === name);
     assert.equal(pack.root, name);
     assert.ok(existsSync(new URL(`${name}/ready.ts`, root)));
@@ -126,7 +128,7 @@ function characterArt(...args: Parameters<typeof openingArt>): SceneArt { return
 
 test('水果分包按实际词图加载，包含上一关混编；并发失败后仅重试水果', async () => {
   const {load, calls} = harness();
-  await load(3, 2, openingArt('cat', ['cat'], 2));
+  await load(2, 2, openingArt('red', ['red'], 2));
   assert.equal(calls.length, 0);
   const art = openingArt('red', ['red', 'banana'], 2);
   const first = load(2, 2, art), concurrent = load(2, 2, art);
@@ -166,4 +168,93 @@ test('11张水果原样迁移，清单哈希及尺寸一致且无旧运行副本
     assert.equal(data.readUInt32BE(16) * data.readUInt32BE(20) * 4, entry.rgbaBytes);
     assert.equal(existsSync(new URL(`../miniprogram${entry.oldPath}`, import.meta.url)), false);
   }
+});
+
+test('动物分包按实际词图加载，包含上一关混编；并发失败后仅重试动物', async () => {
+  const {load, calls} = harness();
+  await load(2, 2, openingArt('red', ['red'], 2));
+  assert.equal(calls.length, 0);
+  const art = openingArt('book', ['book', 'cat'], 2);
+  const first = load(2, 2, art), concurrent = load(2, 2, art);
+  assert.deepEqual(calls.map(c => c.path), ['../animal-assets/ready']);
+  const failures = Promise.all([assert.rejects(first), assert.rejects(concurrent)]);
+  calls[0].reject(Error('offline')); await failures;
+  let ready = false;
+  const retry = load(2, 2, art).then(() => {ready = true;});
+  await new Promise(resolve => setImmediate(resolve)); assert.equal(ready, false);
+  calls[1].resolve(); await retry;
+  await load(2, 2, art); assert.equal(calls.length, 2);
+});
+
+test('动物下载超时后旧完成不能解锁新加载', async () => {
+  const {load, calls, timers} = harness();
+  const art = openingArt('cat', ['cat'], 2);
+  const first = load(2, 2, art), failed = assert.rejects(first, /超时/);
+  for (const [key, fn] of [...timers]) {timers.delete(key); fn();}
+  await failed;
+  let ready = false;
+  const retry = load(2, 2, art).then(() => {ready = true;});
+  calls[0].resolve(); await new Promise(resolve => setImmediate(resolve)); assert.equal(ready, false);
+  calls[1].resolve(); await retry; assert.equal(timers.size, 0);
+});
+
+
+test('16张动物迁移保留字节、尺寸与唯一副本，覆盖第三及第四关依赖', async () => {
+  const {createHash} = await import('node:crypto');
+  const {getLevel} = await import('../miniprogram/fortress/levels');
+  const report = JSON.parse(readFileSync(new URL('../docs/visual-audit/animal-package/migration.json', import.meta.url), 'utf8'));
+  assert.equal(report.entries.length, 16);
+  for (const word of getLevel(3).words) {
+    const entry = report.entries.find((e: {wordId: string}) => e.wordId === word.id);
+    assert.equal(word.fruitImagePath, entry.path);
+    const data = readFileSync(new URL(`../miniprogram${entry.path}`, import.meta.url));
+    assert.equal(data.length, entry.bytes);
+    assert.equal(createHash('sha256').update(data).digest('hex'), entry.sha256);
+    assert.equal(data.readUInt32BE(16) * data.readUInt32BE(20) * 4, entry.rgbaBytes);
+    assert.equal(existsSync(new URL(`../miniprogram${entry.oldPath}`, import.meta.url)), false);
+    for (const level of [3, 4]) {
+      const {load, calls} = harness();
+      const pending = load(level, 2, openingArt(level === 3 ? word.id : 'book', [word.id, 'book'], 2));
+      assert.deepEqual(calls.map(c => c.path), ['../animal-assets/ready']);
+      calls[0].resolve(); await pending;
+    }
+  }
+});
+
+
+test('分包耗时区分首次等待、并发共享与成功缓存，读取诊断不改变内部记录', async () => {
+  const h = harness();
+  assert.equal(h.measurements().length, 5);
+  assert.ok(h.measurements().every(m => m.status === 'idle' && m.lastDurationMs === null));
+  const first = h.load(1, 2), shared = h.load(1, 2);
+  h.advance(125); h.calls[0].resolve(); await Promise.all([first, shared]);
+  await h.load(1, 2);
+  const measurement = h.measurements().find(m => m.name === 'battlefield-assets')!;
+  assert.equal(measurement.attempts, 1);
+  assert.equal(measurement.sharedRequests, 1);
+  assert.equal(measurement.cacheHits, 1);
+  assert.equal(measurement.lastDurationMs, 125);
+  assert.equal(measurement.status, 'ready');
+  measurement.attempts = 99;
+  assert.equal(h.measurements()[0].attempts, 1);
+  assert.ok(h.measurements().slice(1).every(m => m.status === 'idle'));
+});
+
+test('失败和超时独立计数，旧请求迟到不污染重试耗时', async () => {
+  const h = harness(), sample = () => h.measurements().find(m => m.name === 'fortress-assets')!;
+  const first = h.load(2, 1), failed = assert.rejects(first);
+  h.advance(40); h.calls[0].reject(Error('network')); await failed;
+  assert.equal(sample().status, 'failed'); assert.equal(sample().lastDurationMs, 40);
+  const second = h.load(2, 1), timedOut = assert.rejects(second, /超时/);
+  h.advance(15000);
+  for (const [key, fn] of [...h.timers]) { h.timers.delete(key); fn(); }
+  await timedOut;
+  assert.equal(sample().status, 'timed-out'); assert.equal(sample().lastDurationMs, 15000);
+  const third = h.load(2, 1);
+  h.advance(20); h.calls[1].resolve(); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(sample().status, 'loading'); assert.equal(sample().lastDurationMs, null);
+  h.advance(60); h.calls[2].resolve(); await third;
+  assert.equal(sample().status, 'ready'); assert.equal(sample().lastDurationMs, 80);
+  assert.equal(sample().attempts, 3); assert.equal(sample().failures, 1); assert.equal(sample().timeouts, 1);
+  assert.equal(h.timers.size, 0);
 });

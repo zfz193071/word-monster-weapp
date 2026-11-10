@@ -54,6 +54,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "animal-assets",
+      "name": "animal-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { loadFruitAssets } from '../../services/battlefield-assets';
+import { loadFruitAssets, loadAnimalAssets } from '../../services/battlefield-assets';
 import { houseForLevel } from '../../houses/catalog';
 import { loadImageAssets } from '../../services/image-assets';
 import { petUpgrade } from '../../services/pet-upgrade';
@@ -23,8 +23,12 @@ import type { ListeningResult } from '../../fortress/listening';
 import { fortressEntryStore } from '../../services/fortress-entry';
 import type { FruitRequest } from '../../services/fortress-entry';
 
+function collectionCards(levelId: number, revision: number) {
+  return collectionWords(levelId).map(word => ({ ...word, imageRevision: revision, imageKey: `${revision}:${word.id}` }));
+}
+
 Page({
-  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionWords(1), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionCards(1, 0), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -159,10 +163,18 @@ Page({
     this.setData({ collectionLevel: levelId, collectionItems: [], collectionLoading: true, collectionError: false, collectionScroll: this.data.collectionScroll === 0 ? 1 : 0 });
     const valid = () => !this.disposed && this.data.showCredits && revision === this.collectionRevision;
     try {
-      await (levelId === 1 ? loadFruitAssets() : loadLevelAssets());
+      await (levelId === 1 ? loadFruitAssets() : Promise.all([loadLevelAssets(), ...(levelId === 3 ? [loadAnimalAssets()] : [])]));
       if (!valid()) return;
-      this.setData({ collectionItems: collectionWords(levelId), collectionLoading: false, collectionScroll: 0 });
+      this.setData({ collectionItems: collectionCards(levelId, revision), collectionLoading: false, collectionScroll: 0 });
     } catch { if (valid()) this.setData({ collectionLoading: false, collectionError: true }); }
+  },
+  collectionImageFailed(event: WechatMiniprogram.BaseEvent) {
+    const { wordId, imageRevision } = event.currentTarget.dataset;
+    if (this.disposed || !this.data.showCredits || this.data.collectionLoading || this.data.collectionError
+      || Number(imageRevision) !== this.collectionRevision
+      || !this.data.collectionItems.some(item => item.id === wordId)) return;
+    this.stopCollectionAudio();
+    this.setData({ collectionError: true });
   },
   stopCollectionAudio() {
     this.collectionAudioRevision++;
@@ -170,7 +182,7 @@ Page({
     if (!this.disposed) { this.setData({ collectionPlaying: '', collectionAudioError: '' }); this.synchronizeMusic(); }
   },
   playCollectionWord(event: WechatMiniprogram.BaseEvent) {
-    if (this.disposed || !this.data.homeVisible || !this.data.showCredits || this.data.collectionLoading) return;
+    if (this.disposed || !this.data.homeVisible || !this.data.showCredits || this.data.collectionLoading || this.data.collectionError) return;
     const word = this.data.collectionItems.find(item => item.id === event.currentTarget.dataset.wordId);
     if (!word) return;
     this.stopCollectionAudio();
@@ -289,7 +301,7 @@ Page({
     try {
       if (!coinWallet.canEnter(levelId)) return;
       this.setData({ preparingLevel: true, entryProgress: 0, entryError: '' });
-      await (levelId === 1 ? loadFruitAssets() : loadLevelAssets());
+      await (levelId === 1 ? loadFruitAssets() : Promise.all([loadLevelAssets(), ...(levelId === 3 ? [loadAnimalAssets()] : [])]));
       if (this.disposed) return;
       this.setData({ entryProgress: 100 });
       const request = fortressEntryStore.start(Date.now(), levelId);

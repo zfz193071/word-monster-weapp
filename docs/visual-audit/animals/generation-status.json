@@ -149,5 +149,14 @@
     "prompt": "prompts.json#horse (unchanged)",
     "reference": "../samples/originals/rabbit-display.png",
     "output": null
+  },
+  "horseRetry20261110Continue": {
+    "status": "moderation_blocked",
+    "stage": "output",
+    "category": "other",
+    "requestId": "e031c703-616e-4b7e-81bb-9f798be6884b",
+    "prompt": "prompts.json#horse (unchanged)",
+    "reference": "../samples/originals/rabbit-display.png",
+    "output": null
   }
 }

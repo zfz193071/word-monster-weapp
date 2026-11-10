@@ -1,18 +1,59 @@
 import type { SceneArt } from '../fortress/canvas-scene';
 
+export interface PackageLoadMeasurement {
+  readonly name: string;
+  status: 'idle' | 'loading' | 'ready' | 'failed' | 'timed-out';
+  attempts: number;
+  sharedRequests: number;
+  cacheHits: number;
+  failures: number;
+  timeouts: number;
+  lastDurationMs: number | null;
+}
+const measurements: PackageLoadMeasurement[] = [];
+
+// Session-local diagnostics only: no player data, storage, network or unbounded log.
+// Duration covers require.async readiness, not pure download or image decoding.
+export function battlefieldAssetMeasurements(): ReadonlyArray<Readonly<PackageLoadMeasurement>> {
+  return measurements.map(measurement => ({ ...measurement }));
+}
+
 // Cache each ordinary subpackage independently so a partial failure only retries
 // the missing package. Static import paths are required by the WeChat compiler.
-function cachedPackage(importReady: () => Promise<unknown>): () => Promise<void> {
+function cachedPackage(name: string, importReady: () => Promise<unknown>): () => Promise<void> {
+  const measurement: PackageLoadMeasurement = { name, status: 'idle', attempts: 0,
+    sharedRequests: 0, cacheHits: 0, failures: 0, timeouts: 0, lastDurationMs: null };
+  measurements.push(measurement);
   let pending: Promise<void> | undefined;
   return () => {
-    if (pending) return pending;
+    if (pending) {
+      if (measurement.status === 'ready') measurement.cacheHits++;
+      else measurement.sharedRequests++;
+      return pending;
+    }
+    measurement.status = 'loading';
+    measurement.attempts++;
+    measurement.lastDurationMs = null;
+    const startedAt = Date.now();
+    let settled = false;
+    const finish = (status: 'ready' | 'failed' | 'timed-out') => {
+      // A timed-out import may settle after a retry. It must not change the new sample.
+      if (settled) return;
+      settled = true;
+      measurement.status = status;
+      measurement.lastDurationMs = Math.max(0, Date.now() - startedAt);
+      if (status === 'failed') measurement.failures++;
+      if (status === 'timed-out') measurement.timeouts++;
+    };
     const attempt = new Promise<void>((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('战场资源加载超时')), 15000);
+      const timeout = setTimeout(() => {
+        finish('timed-out'); reject(new Error('战场资源加载超时'));
+      }, 15000);
       try {
         importReady().then(() => {
-          clearTimeout(timeout); resolve();
-        }, (error: unknown) => { clearTimeout(timeout); reject(error); });
-      } catch (error) { clearTimeout(timeout); reject(error); }
+          clearTimeout(timeout); finish('ready'); resolve();
+        }, (error: unknown) => { clearTimeout(timeout); finish('failed'); reject(error); });
+      } catch (error) { clearTimeout(timeout); finish('failed'); reject(error); }
     });
     const shared = attempt.catch((error: unknown) => {
       if (pending === shared) pending = undefined;
@@ -22,12 +63,11 @@ function cachedPackage(importReady: () => Promise<unknown>): () => Promise<void>
     return shared;
   };
 }
-const loadCourtyard = cachedPackage(() => require.async('../battlefield-assets/ready'));
-const loadFortress = cachedPackage(() => require.async('../fortress-assets/ready'));
-
-const loadCharacters = cachedPackage(() => require.async('../character-assets/ready'));
-
-export const loadFruitAssets = cachedPackage(() => require.async('../fruit-assets/ready'));
+const loadCourtyard = cachedPackage('battlefield-assets', () => require.async('../battlefield-assets/ready'));
+const loadFortress = cachedPackage('fortress-assets', () => require.async('../fortress-assets/ready'));
+const loadCharacters = cachedPackage('character-assets', () => require.async('../character-assets/ready'));
+export const loadAnimalAssets = cachedPackage('animal-assets', () => require.async('../animal-assets/ready'));
+export const loadFruitAssets = cachedPackage('fruit-assets', () => require.async('../fruit-assets/ready'));
 
 export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: SceneArt): Promise<void> {
   const required: Promise<void>[] = [];
@@ -35,5 +75,6 @@ export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: Sce
   if (houseLevel === 1) required.push(loadFortress());
   if (art && [art.hero, ...Object.values(art.texturedBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/'))) required.push(loadCharacters());
   if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/fruit-assets/'))) required.push(loadFruitAssets());
+  if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/animal-assets/'))) required.push(loadAnimalAssets());
   return Promise.all(required).then(() => {});
 }

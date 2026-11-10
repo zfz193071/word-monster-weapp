@@ -5,6 +5,10 @@ import type { SessionPlan } from '../../fortress/types';
 
 interface Instance { feedback?: ReturnType<typeof createQuizFeedback>; controller?: ReturnType<typeof createListening>; ready: boolean; visible: boolean; epoch: number }
 const instances = new WeakMap<object, Instance>();
+function eventController(host: object, event: WechatMiniprogram.BaseEvent) {
+  const state = instances.get(host);
+  return state && event.currentTarget.dataset.mountEpoch === state.epoch ? state.controller : undefined;
+}
 Component({
   properties: {
     request: { type: Object, value: null, observer() { if (instances.get(this)?.ready) this.mount(); } },
@@ -54,11 +58,11 @@ Component({
       } catch { this.setData({ error: '听词挑战暂时无法准备，请重新进入' }); }
     },
     applyPause() { const state = instances.get(this); state?.controller?.setPaused(this.properties.paused || !state.visible); },
-    changeSpeed() { instances.get(this)?.controller?.cyclePlaybackRate(); },
-    choose(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; instances.get(this)?.controller?.choose(data.token, data.wordId); },
-    replay(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.replay(event.currentTarget.dataset.token); },
-    retryAudio(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.retryAudio(event.currentTarget.dataset.token); },
-    retryImages(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.retryImages(event.currentTarget.dataset.token); },
+    changeSpeed(event: WechatMiniprogram.BaseEvent) { eventController(this, event)?.cyclePlaybackRate(); },
+    choose(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; eventController(this, event)?.choose(data.token, data.wordId); },
+    replay(event: WechatMiniprogram.BaseEvent) { eventController(this, event)?.replay(event.currentTarget.dataset.token); },
+    retryAudio(event: WechatMiniprogram.BaseEvent) { eventController(this, event)?.retryAudio(event.currentTarget.dataset.token); },
+    retryImages(event: WechatMiniprogram.BaseEvent) { eventController(this, event)?.retryImages(event.currentTarget.dataset.token); },
     imageLoaded(event: WechatMiniprogram.BaseEvent) {
       const data = event.currentTarget.dataset; const state = instances.get(this);
       if (state && data.mountEpoch === state.epoch) state.controller?.imageResult(data.token, data.wordId, true);

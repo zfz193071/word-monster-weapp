@@ -19,7 +19,7 @@ import { createBattleController } from '../miniprogram/services/battle';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
-function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void, loadFruits: () => Promise<void> = async () => {}) {
+function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void, loadFruits: () => Promise<void> = async () => {}, loadAnimals: () => Promise<void> = async () => {}) {
   let savedDifficulty: unknown;
   const difficultyStore = createDifficultyStore({getStorageSync:()=>savedDifficulty,setStorageSync:(_key,value)=>{savedDifficulty=value;}});
   const strengthGuide=createStrengthGuide();
@@ -56,7 +56,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
       if (name === '../../services/image-assets') return { loadImageAssets: async () => {} };
-      if (name === '../../services/battlefield-assets') return { loadFruitAssets: loadFruits };
+      if (name === '../../services/battlefield-assets') return { loadFruitAssets: loadFruits, loadAnimalAssets: loadAnimals };
       if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
       if (name === '../../services/coin-wallet') return { coinWallet: wallet };
       if (name === '../../fortress/collection') return { collectionWords };
@@ -353,4 +353,70 @@ test('水果集合等待分包，切换分类后旧水果结果不能覆盖当�
  await h.page.selectCollection({currentTarget:{dataset:{levelId:3}}});
  ready();await new Promise(resolve => setImmediate(resolve));
  assert.equal(h.page.data.collectionLevel,3);assert.equal(h.page.data.collectionItems.length,16);
+});
+
+test('动物听词等待图片与音频，失败可重试且退出不接受迟到完成', async () => {
+  const animalLoads: {resolve: () => void; reject: (error: Error) => void}[] = [];
+  let releaseAudio!: () => void;
+  const h = homeHarness(() => new Promise<void>(resolve => {releaseAudio = resolve;}), undefined, undefined,
+    () => new Promise<void>((resolve, reject) => animalLoads.push({resolve, reject})));
+  h.wallet.rewardVictory('unlock-1', 1); h.wallet.rewardVictory('unlock-2', 2);
+  const first = h.page.beginLevel(3); await h.page.beginLevel(3);
+  assert.equal(animalLoads.length, 1);
+  releaseAudio(); await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.page.data.request, null);
+  animalLoads[0].reject(Error('offline')); await first;
+  assert.ok(h.page.data.entryError);
+  const retry = h.page.beginLevel(3); releaseAudio(); animalLoads[1].resolve(); await retry;
+  assert.equal(h.page.data.request.plan.levelId, 3);
+  h.page.closeChallenge();
+  const late = h.page.beginLevel(3); h.page.onUnload(); releaseAudio(); animalLoads[2].resolve(); await late;
+  assert.equal(h.page.data.request, null);
+});
+
+test('动物素材加载失败重试，切换分类后忽略动物的迟到完成', async () => {
+  const loads: {resolve: () => void; reject: (error: Error) => void}[] = [];
+  const h = homeHarness(undefined, undefined, undefined,
+    () => new Promise<void>((resolve, reject) => loads.push({resolve, reject})));
+  h.page.toggleCredits(); await new Promise(resolve => setImmediate(resolve));
+  const first = h.page.loadCollection(3); loads[0].reject(Error('offline')); await first;
+  assert.equal(h.page.data.collectionError, true);
+  const retry = h.page.retryCollection(); loads[1].resolve(); await retry;
+  assert.equal(h.page.data.collectionItems.length, 16);
+  assert.ok(h.page.data.collectionItems.every((word: any) => word.fruitImagePath.startsWith('/animal-assets/')));
+  const late = h.page.loadCollection(3); await h.page.loadCollection(2); loads[2].resolve(); await late;
+  assert.equal(h.page.data.collectionLevel, 2);
+  assert.equal(h.page.data.collectionItems.length, 8);
+});
+
+test('素材图片失败可重试，旧节点与关闭后的错误不污染当前分类', async () => {
+ const h = homeHarness();
+ h.page.onShow(); h.page.toggleCredits();
+ await new Promise(resolve => setImmediate(resolve));
+ const old = h.page.data.collectionItems[0];
+ const error = (item: any) => h.page.collectionImageFailed?.({currentTarget: {dataset: {wordId: item.id, imageRevision: item.imageRevision}}});
+ error(old);
+ assert.equal(h.page.data.collectionError, true, '图片节点失败应显示可重试状态');
+ await h.page.retryCollection();
+ const fresh = h.page.data.collectionItems[0];
+ assert.notEqual(fresh.imageKey, old.imageKey, '重试必须重建图片节点');
+ error(old); assert.equal(h.page.data.collectionError, false);
+ error({...fresh, id: 'not-a-word'}); assert.equal(h.page.data.collectionError, false);
+ await h.page.selectCollection({currentTarget: {dataset: {levelId: 3}}});
+ error(fresh); assert.equal(h.page.data.collectionError, false);
+ const animal = h.page.data.collectionItems[0];
+ h.page.toggleCredits(); error(animal); assert.equal(h.page.data.collectionError, false);
+ h.page.toggleCredits(); await new Promise(resolve => setImmediate(resolve));
+ const current = h.page.data.collectionItems[0];
+ h.page.playCollectionWord({currentTarget: {dataset: {wordId: current.id}}});
+ error(current); assert.equal(h.page.data.collectionError, true);
+ assert.equal(h.audioCalls[0].disposed, true);
+ h.page.playCollectionWord({currentTarget: {dataset: {wordId: current.id}}});
+ assert.equal(h.audioCalls.length, 1, '隐藏的旧按钮不能继续播放');
+ await h.page.retryCollection();
+ const beforeExit = h.page.data.collectionItems[0];
+ h.page.onUnload(); error(beforeExit); assert.equal(h.page.data.collectionError, false);
+ const markup = readFileSync(new URL('../miniprogram/pages/home/home.wxml', import.meta.url), 'utf8');
+ assert.match(markup, /wx:key="imageKey"/);
+ assert.match(markup, /binderror="collectionImageFailed"/);
 });

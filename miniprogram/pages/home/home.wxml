@@ -135,9 +135,9 @@
       <scroll-view scroll-y class="collection-scroll" scroll-top="{{collectionScroll}}">
         <view wx:if="{{collectionLoading}}" class="collection-status">正在准备图片…</view>
         <view wx:elif="{{collectionError}}" class="collection-status">图片暂时无法加载<button bindtap="retryCollection">重试</button></view>
-        <view wx:else class="collection-grid"><view wx:for="{{collectionItems}}" wx:key="id" class="collection-card {{item.long ? 'long-word' : ''}}">
+        <view wx:else class="collection-grid"><view wx:for="{{collectionItems}}" wx:key="imageKey" class="collection-card {{item.long ? 'long-word' : ''}}">
           <button class="collection-play {{collectionPlaying === item.id ? 'playing' : ''}}" data-word-id="{{item.id}}" bindtap="playCollectionWord" aria-label="播放 {{item.text}} 的发音">{{collectionPlaying === item.id ? '♪' : '▷'}}</button>
-          <image src="{{item.fruitImagePath}}" mode="aspectFit" aria-label="{{item.meaningZh}}" />
+          <image src="{{item.fruitImagePath}}" mode="aspectFit" aria-label="{{item.meaningZh}}" data-word-id="{{item.id}}" data-image-revision="{{item.imageRevision}}" binderror="collectionImageFailed" />
           <view class="collection-word-line"><text class="collection-english">{{item.text}}</text><text class="collection-phonetic">{{item.phonetic}}</text></view>
           <text class="collection-chinese">{{item.meaningZh}}</text>
         </view></view>

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { CanvasScene } from '../miniprogram/fortress/canvas-scene';
@@ -118,14 +119,17 @@ test('静态背景缓存保持原生DPR、每帧复用，尺寸改变重建，�
     await h.scene.load(); h.frame(0); h.frame(16);
     assert.equal(caches.length, 1);
     assert.equal(caches[0].canvas.width, 720); assert.equal(caches[0].canvas.height, 1120);
+    assert.deepEqual(h.scene.resourceDiagnostics.backgroundCache, {width: 720, height: 1120, estimatedRgbaBytes: 3225600});
     const painted = caches[0].commands.length;
     h.frame(32); assert.equal(caches[0].commands.length, painted);
     assert.ok(h.commands.filter(c => c.method === 'drawImage' && c.args[0] === caches[0].canvas).length >= 3);
     h.scene.resize(360, 560, 3, 0);
     assert.equal(caches.length, 2); assert.equal(caches[1].canvas.width, 1080); assert.equal(caches[1].canvas.height, 1680);
+    assert.equal(h.scene.resourceDiagnostics.backgroundCache?.estimatedRgbaBytes, 7257600);
     assert.deepEqual(h.errors, []);
     Object.defineProperty(globalThis, 'wx', {configurable: true, value: {createOffscreenCanvas() {throw Error('unavailable');}}});
     h.scene.resize(180, 280, 3, 0); h.frame(48);
+    assert.equal(h.scene.resourceDiagnostics.backgroundCache, null);
     assert.deepEqual(h.errors, []); assert.equal(h.callbacks.size, 1);
   } finally {
     h.scene.dispose();
@@ -610,4 +614,73 @@ test('一级废墟预载门控、失败重试与销毁后的迟到解码不恢�
   ruin.onload();
   assert.equal(h.callbacks.size, 0);
   assert.equal(await h.scene.load(), false);
+});
+
+
+test('八关预算报告覆盖正式Canvas实际请求，庭院JPEG计入RGBA估算', async () => {
+  const report = JSON.parse(readFileSync('docs/visual-audit/battle-resources.json', 'utf8'));
+  for (const level of report.levels) {
+    const ids = [...level.currentWordIds, ...level.previousWordIds];
+    const initial = createOpeningEncounter('resource-budget', ids[0], 0, 0, undefined, undefined, [], level.levelId);
+    const art = openingArt(initial.monsters[0].wordId, ids, 1);
+    const h = harness(false, art, { levelId: level.levelId, initial });
+    try {
+      const pending = h.scene.load();
+      const actual = h.images.map(image => image.src).sort();
+      assert.deepEqual(level.images.map((image: {path: string}) => image.path)
+        .filter((path: string) => !path.startsWith('/assets/images/battle-backgrounds/')).sort(), actual);
+      for (const image of h.images) {
+        const recorded = level.images.find((file: {path: string}) => file.path === image.src)!;
+        image.width = recorded.width;
+        image.height = recorded.height;
+        image.onload();
+      }
+      assert.equal(await pending, true, h.errors.join('; '));
+      const resources = h.scene.resourceDiagnostics;
+      const cover = level.images.find((file: {path: string}) => file.path.startsWith('/assets/images/battle-backgrounds/'));
+      assert.equal(resources.committedImageCount, actual.length);
+      assert.equal(resources.committedImageRgbaBytes, level.estimatedImageRgbaBytes - cover.rgbaBytes);
+      assert.deepEqual(resources.images.map(image => image.path).sort(), actual);
+      const grounds = level.images.filter((image: {path: string}) => image.path.endsWith('.jpg'));
+      assert.equal(grounds.length, level.levelId === 1 ? 2 : 0);
+      for (const ground of grounds) {
+        assert.equal(ground.width * ground.height, 1536 * 1024);
+        assert.equal(ground.rgbaBytes, 1536 * 1024 * 4);
+      }
+    } finally { h.scene.dispose(); }
+  }
+});
+
+test('资源快照隔离外部修改，失败重试及退出不保留已提交图片', async () => {
+  const h = harness(false, artFixture());
+  try {
+    assert.equal(h.scene.resourceDiagnostics.committedImageCount, 0);
+    const failed = h.scene.load();
+    h.images[0].onload();
+    assert.equal(h.scene.resourceDiagnostics.committedImageCount, 0, '部分解码不是已提交集合');
+    h.images[1].onerror();
+    assert.equal(await failed, false);
+    assert.equal(h.scene.resourceDiagnostics.committedImageCount, 0);
+    const offset = h.images.length;
+    const retry = h.scene.load();
+    h.images.slice(offset).forEach(image => image.onload());
+    assert.equal(await retry, true);
+    const snapshot = h.scene.resourceDiagnostics;
+    const count = snapshot.committedImageCount;
+    snapshot.images[0].path = 'changed';
+    snapshot.images.pop();
+    assert.equal(h.scene.resourceDiagnostics.images.length, count);
+    assert.ok(h.scene.resourceDiagnostics.images.every(image => image.path !== 'changed'));
+    h.scene.resize(400, 600, 3, 0);
+    assert.deepEqual(h.scene.resourceDiagnostics.canvas, {width: 1200, height: 1800, estimatedRgbaBytes: 8640000});
+    h.scene.dispose();
+    h.images.forEach(image => image.onload());
+    const disposed = h.scene.resourceDiagnostics;
+    assert.equal(disposed.disposed, true);
+    assert.equal(disposed.ready, false);
+    assert.equal(disposed.committedImageRgbaBytes, 0);
+    assert.deepEqual(disposed.images, []);
+    assert.equal(disposed.backgroundCache, null);
+    assert.equal(disposed.canvas.estimatedRgbaBytes, 8640000, '宿主持有画布不虚报已释放');
+  } finally { h.scene.dispose(); }
 });

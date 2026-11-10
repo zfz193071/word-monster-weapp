@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-10",
+  "issue": 86,
+  "entries": [
+    {
+      "wordId": "bear",
+      "oldPath": "/learning-assets/images/bear.png",
+      "path": "/animal-assets/bear.png",
+      "bytes": 72635,
+      "sha256": "f1ed38b38fa1f015771b751fc2dd98660e01e9738e81f19942b4ce42e8c18599",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "bee",
+      "oldPath": "/learning-assets/images/bee.png",
+      "path": "/animal-assets/bee.png",
+      "bytes": 69752,
+      "sha256": "46a63613e23adef648ae995e1ce9bb21df82f2df821393f094a3ed87e44a20c6",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "bird",
+      "oldPath": "/learning-assets/images/bird.png",
+      "path": "/animal-assets/bird.png",
+      "bytes": 56374,
+      "sha256": "70a9521e27fbccccde73da70ac2c5b1ba1f1bab1c80a63f694f1ddc3f8ea7500",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "cat",
+      "oldPath": "/learning-assets/images/cat.png",
+      "path": "/animal-assets/cat.png",
+      "bytes": 64805,
+      "sha256": "1637d788f9588a9b862f39cdbcd878697259b47956b5fa7073009e349accc106",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "chicken",
+      "oldPath": "/learning-assets/images/chicken.png",
+      "path": "/animal-assets/chicken.png",
+      "bytes": 58576,
+      "sha256": "6cb2c34a3513a90ee3128437d83840b0a50cc2b94f8381a7033eccd6fb7c1af5",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "cow",
+      "oldPath": "/learning-assets/images/cow.png",
+      "path": "/animal-assets/cow.png",
+      "bytes": 67846,
+      "sha256": "81ce0f58b4084c3a16f6f0254c17af63687c3017d99e64dd66f232c97f7dbc7f",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "dog",
+      "oldPath": "/learning-assets/images/dog.png",
+      "path": "/animal-assets/dog.png",
+      "bytes": 67738,
+      "sha256": "1bf683b474507e8866a072a5133b2d1212d40c65910b422a6f0266d97f9dbf66",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "duck",
+      "oldPath": "/learning-assets/images/duck.png",
+      "path": "/animal-assets/duck.png",
+      "bytes": 50144,
+      "sha256": "d103a50126f920bd4cb0e673939bdea701a3ff9ab932ee949e5492c51e98d161",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "elephant",
+      "oldPath": "/learning-assets/images/elephant.png",
+      "path": "/animal-assets/elephant.png",
+      "bytes": 69949,
+      "sha256": "02dc0fda5fd1d634422f8c878c4b8baa96a686177c7071fa287ecb9a4dbf8b4d",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "fish",
+      "oldPath": "/learning-assets/images/fish.png",
+      "path": "/animal-assets/fish.png",
+      "bytes": 57038,
+      "sha256": "1fb6a78c72845d360bc7918146af84ef9a38831eabc9604ca80768b12bba1a58",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "horse",
+      "oldPath": "/learning-assets/images/horse.png",
+      "path": "/animal-assets/horse.png",
+      "bytes": 7829,
+      "sha256": "414bc7820902fc0f2bafa2f125a7972724e01629c290744a9d6e711af86bf1c5",
+      "rgbaBytes": 147456
+    },
+    {
+      "wordId": "lion",
+      "oldPath": "/learning-assets/images/lion.png",
+      "path": "/animal-assets/lion.png",
+      "bytes": 77855,
+      "sha256": "8f1c498abe60c0446b2e36727ac7959934d9baa7ad497a629279676848066352",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "panda",
+      "oldPath": "/learning-assets/images/panda.png",
+      "path": "/animal-assets/panda.png",
+      "bytes": 72701,
+      "sha256": "ae45540d85caf94250573c65daca4de30023a42c92819e9c214b90fae2cc88e6",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "rabbit",
+      "oldPath": "/learning-assets/images/rabbit.png",
+      "path": "/animal-assets/rabbit.png",
+      "bytes": 64446,
+      "sha256": "25b27cb69ef039a4ae38fd9fcb668eb6bf1716bb46fb6e06dea9e5afca032906",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "sheep",
+      "oldPath": "/learning-assets/images/sheep.png",
+      "path": "/animal-assets/sheep.png",
+      "bytes": 62425,
+      "sha256": "da37fb740435afd283a405c9a4427f08b8fd89cdd2dc59b48fc8232aff2e1a24",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "tiger",
+      "oldPath": "/learning-assets/images/tiger.png",
+      "path": "/animal-assets/tiger.png",
+      "bytes": 78536,
+      "sha256": "4e8a9e57c08ffeeed4af4d677c978dd5776187875203dc1e418fd4b9cbbaee39",
+      "rgbaBytes": 262144
+    }
+  ],
+  "totalBytes": 998649,
+  "rgbaBytes": 4079616
+}

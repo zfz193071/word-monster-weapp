@@ -48,6 +48,15 @@ export interface SceneArt extends MonsterArt {
   readonly weapon: SpriteAsset;
   readonly bullet: SpriteAsset;
 }
+// Shared by runtime loading and offline resource budgets.
+export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
+  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
+  const courtyard = art.fruitHat && courtyardAsset(levelId);
+  // Preload both orientations so resize can switch immediately while paused or active.
+  if (courtyard) assets.push(...COURTYARD_ASSETS);
+  if (art.fruitHat && houseLevel === 1) assets.push(WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET);
+  return assets;
+}
 export interface SceneHud { readonly hp: number; readonly maxHp: number; readonly status: CombatState['status']; readonly frostEnergy: number; readonly frostTarget: boolean }
 export interface SceneOptions {
   readonly levelId?: number;
@@ -171,6 +180,27 @@ export class CanvasScene {
     return { frames: this.frames, maxFrameGapMs: this.maxFrameGap, recentFrameGapsMs: [...this.frameGaps],
       droppedSimulationMs: this.droppedMs, peakProjectiles: this.peakProjectiles };
   }
+  // On-demand snapshots of committed image references, not platform memory usage.
+  // Pending decoders, texture copies, audio and the host's captured frame are excluded.
+  get resourceDiagnostics() {
+    const images = [...this.images].map(([path, image]) => ({
+      path, width: image.width, height: image.height,
+      estimatedRgbaBytes: image.width * image.height * 4,
+    })).sort((a, b) => a.path.localeCompare(b.path));
+    const buffer = (canvas: { width: number; height: number }) => ({
+      width: canvas.width, height: canvas.height,
+      estimatedRgbaBytes: canvas.width * canvas.height * 4,
+    });
+    return {
+      ready: this.ready && !this.disposed, disposed: this.disposed,
+      committedImageCount: images.length,
+      committedImageRgbaBytes: images.reduce((total, image) => total + image.estimatedRgbaBytes, 0),
+      images,
+      // dispose releases image/cache references, but the host still owns this canvas.
+      canvas: buffer(this.canvas),
+      backgroundCache: this.backgroundCache ? buffer(this.backgroundCache) : null,
+    };
+  }
   resize(width: number, height: number, dpr: number, clientLeft: number): void {
     if (this.disposed) return;
     this.backgroundCache = undefined;
@@ -186,7 +216,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !(asset.path === WOOD_FORTRESS_ASSET.path || asset.path === WOOD_FORTRESS_RUIN_ASSET.path || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|fruit-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
+      || !(asset.path === WOOD_FORTRESS_ASSET.path || asset.path === WOOD_FORTRESS_RUIN_ASSET.path || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -203,11 +233,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
-    const courtyard = art.fruitHat && courtyardAsset(this.options.levelId);
-    // Preload both orientations so resize can switch immediately while paused or active.
-    if (courtyard) assets.push(...COURTYARD_ASSETS);
-    if (art.fruitHat && (this.options.initial.houseLevel ?? 1) === 1) assets.push(WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET);
+    const assets = sceneImageAssets(art, this.options.levelId, this.options.initial.houseLevel);
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {

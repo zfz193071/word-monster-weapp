@@ -66,7 +66,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "bear",
-    "path": "/learning-assets/images/bear.png",
+    "path": "/animal-assets/bear.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43B.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -74,7 +74,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "bee",
-    "path": "/learning-assets/images/bee.png",
+    "path": "/animal-assets/bee.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41D.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -82,7 +82,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "bird",
-    "path": "/learning-assets/images/bird.png",
+    "path": "/animal-assets/bird.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F426.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -90,7 +90,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "cat",
-    "path": "/learning-assets/images/cat.png",
+    "path": "/animal-assets/cat.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F408.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -98,7 +98,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "chicken",
-    "path": "/learning-assets/images/chicken.png",
+    "path": "/animal-assets/chicken.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F414.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -106,7 +106,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "cow",
-    "path": "/learning-assets/images/cow.png",
+    "path": "/animal-assets/cow.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F404.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -114,7 +114,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "dog",
-    "path": "/learning-assets/images/dog.png",
+    "path": "/animal-assets/dog.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F415.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -122,7 +122,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "duck",
-    "path": "/learning-assets/images/duck.png",
+    "path": "/animal-assets/duck.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F986.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -130,7 +130,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "elephant",
-    "path": "/learning-assets/images/elephant.png",
+    "path": "/animal-assets/elephant.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F418.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -138,7 +138,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "fish",
-    "path": "/learning-assets/images/fish.png",
+    "path": "/animal-assets/fish.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F41F.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -146,7 +146,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "horse",
-    "path": "/learning-assets/images/horse.png",
+    "path": "/animal-assets/horse.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F40E.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -154,7 +154,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "lion",
-    "path": "/learning-assets/images/lion.png",
+    "path": "/animal-assets/lion.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F981.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -162,7 +162,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "panda",
-    "path": "/learning-assets/images/panda.png",
+    "path": "/animal-assets/panda.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F43C.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -170,7 +170,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "rabbit",
-    "path": "/learning-assets/images/rabbit.png",
+    "path": "/animal-assets/rabbit.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F407.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -178,7 +178,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "sheep",
-    "path": "/learning-assets/images/sheep.png",
+    "path": "/animal-assets/sheep.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F411.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",
@@ -186,7 +186,7 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
   },
   {
     "wordId": "tiger",
-    "path": "/learning-assets/images/tiger.png",
+    "path": "/animal-assets/tiger.png",
     "kind": "image",
     "source": "https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/1F405.svg",
     "rights": "OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/",

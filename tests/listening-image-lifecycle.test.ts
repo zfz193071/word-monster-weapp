@@ -8,7 +8,7 @@ import { createSessionPlan, createSeededRandom } from '../miniprogram/fortress/p
 
 function mountHost() {
   let definition: any;
-  const voices: { end(): void }[] = [];
+  const voices: { end(): void; fail(): void }[] = [];
   const source = readFileSync(new URL('../miniprogram/components/fortress-choice/fortress-choice.ts', import.meta.url), 'utf8');
   runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText, {
     exports: {}, Component(value: any) { definition = value; },
@@ -19,11 +19,11 @@ function mountHost() {
         return createListening({ ...options, random: createSeededRandom(7), audio: {
           schedule: () => () => {},
           createContext: () => {
-            let ended = () => {};
+            let ended = () => {}; let failed = (_error: { errCode: number }) => {};
             const voice = { src: '', autoplay: false, loop: false, playbackRate: 1,
               play() {}, stop() {}, destroy() {}, onEnded(fn: () => void) { ended = fn; }, offEnded() {},
-              onError() {}, offError() {}, onStop() {}, offStop() {}, onPause() {}, offPause() {},
-              end() { ended(); },
+              onError(fn: (error: { errCode: number }) => void) { failed = fn; }, offError() {}, onStop() {}, offStop() {}, onPause() {}, offPause() {},
+              end() { ended(); }, fail() { failed({ errCode: 10003 }); },
             };
             voices.push(voice); return voice;
           },
@@ -43,7 +43,7 @@ function mountHost() {
   const events = () => host.data.view.cards.map((card: { id: string }) => ({ currentTarget: { dataset: {
     mountEpoch: host.data.mountEpoch, token: host.data.view.imageToken, wordId: card.id,
   } } }));
-  const choose = () => host.choose({ currentTarget: { dataset: { token: host.data.view.token, wordId: plan.waves[0].targetWordId } } });
+  const choose = () => host.choose({ currentTarget: { dataset: { mountEpoch: host.data.mountEpoch, token: host.data.view.token, wordId: plan.waves[0].targetWordId } } });
   return { host, definition, voices, results, events, choose };
 }
 
@@ -74,11 +74,47 @@ test('current mount failures still require retry and old retry callbacks cannot 
   const old = h.events();
   h.host.imageFailed(old[0]);
   assert.equal(h.host.data.view.imageFailed, true);
-  h.host.retryImages({ currentTarget: { dataset: { token: h.host.data.view.imageToken } } });
+  h.host.retryImages({ currentTarget: { dataset: { mountEpoch: h.host.data.mountEpoch, token: h.host.data.view.imageToken } } });
   for (const event of old) h.host.imageLoaded(event);
   assert.equal(h.host.data.view.canChoose, false);
   for (const event of h.events()) h.host.imageLoaded(event);
   assert.equal(h.host.data.view.canChoose, true);
   h.choose(); assert.equal(h.results.length, 1);
   h.definition.lifetimes.detached.call(h.host);
+});
+
+for (const handler of ['choose', 'replay', 'changeSpeed', 'retryImages', 'retryAudio']) test(`same-question remount ignores old ${handler} taps`, () => {
+  const h = mountHost();
+  if (handler === 'retryAudio') h.voices.at(-1)!.fail(); else h.voices.at(-1)!.end();
+  for (const event of h.events()) h.host.imageLoaded(event);
+  const old = { currentTarget: { dataset: {
+    mountEpoch: h.host.data.mountEpoch,
+    token: handler === 'retryImages' ? h.host.data.view.imageToken : h.host.data.view.token,
+    wordId: h.host.properties.request.plan.waves[0].targetWordId,
+  } } };
+  h.definition.properties.request.observer.call(h.host);
+  if (handler === 'retryAudio') h.voices.at(-1)!.fail(); else h.voices.at(-1)!.end();
+  if (handler === 'retryImages') h.host.imageFailed(h.events()[0]);
+  else for (const event of h.events()) h.host.imageLoaded(event);
+  const before = JSON.stringify(h.host.data.view);
+  const voiceCount = h.voices.length;
+  h.host[handler](old);
+  assert.equal(h.results.length, 0, '旧答题事件不能启动新实例的战斗');
+  assert.equal(JSON.stringify(h.host.data.view), before, '旧按钮不能改变新题状态');
+  assert.equal(h.voices.length, voiceCount, '旧按钮不能打断或重播新题声音');
+  const current = { currentTarget: { dataset: { ...old.currentTarget.dataset, mountEpoch: h.host.data.mountEpoch } } };
+  h.host[handler](current);
+  if (handler === 'choose') assert.equal(h.results.length, 1);
+  if (handler === 'replay' || handler === 'retryAudio') assert.equal(h.voices.length, voiceCount + 1);
+  if (handler === 'changeSpeed') assert.equal(h.host.data.view.playbackRate, 1);
+  if (handler === 'retryImages') assert.equal(h.host.data.view.imageFailed, false);
+  h.definition.lifetimes.detached.call(h.host);
+  h.host[handler](current);
+});
+
+test('听词交互节点均携带当前挂载代次', () => {
+  const markup = readFileSync(new URL('../miniprogram/components/fortress-choice/fortress-choice.wxml', import.meta.url), 'utf8');
+  const buttons = markup.match(/<button\b[^>]*>/g)!;
+  assert.equal(buttons.length, 5);
+  for (const button of buttons) assert.match(button, /data-mount-epoch="\{\{mountEpoch\}\}"/);
 });

@@ -45,18 +45,19 @@ const dir='miniprogram/learning-assets/images'; const coverDir='miniprogram/asse
 const manifest=[];
 if(process.argv.includes('--list')) { console.log(JSON.stringify([...new Set(Object.values(mapping).filter(Boolean))]));process.exit(0); }
 for(const category of categories) for(const word of category.words) {
+ const imageDir = category.id === 3 ? 'miniprogram/animal-assets' : dir; fs.mkdirSync(imageDir,{recursive:true});
  let source,rights,markup;
  if(colors[word.id]) { markup=svg(circle(50,50,34,colors[word.id])+`<circle cx="50" cy="50" r="34" fill="none" stroke="#93a095" stroke-width="2"/>`+`<path d="M28 36 Q36 23 49 24" fill="none" stroke="#ffffff88" stroke-width="6" stroke-linecap="round"/>`);source=`${originals}/${word.id}.svg`;rights='本项目原创矢量图'; }
  else if(mapping[word.id]) { markup=fs.readFileSync(path.join(process.env.OPENMOJI_DIR || '/private/tmp/wm-level-openmoji',mapping[word.id]+'.svg'),'utf8');source=`https://github.com/hfg-gmuend/openmoji/blob/17.0.0/color/svg/${mapping[word.id]}.svg`;rights='OpenMoji contributors；CC BY-SA 4.0；SVG转PNG，未改变图案；https://creativecommons.org/licenses/by-sa/4.0/'; }
  else { if(!art[word.id])throw Error('Missing art '+word.id);markup=svg(art[word.id]);source=`${originals}/${word.id}.svg`;rights='本项目原创矢量图'; }
  fs.writeFileSync(`${originals}/${word.id}.svg`,markup);
- fs.writeFileSync(`${dir}/${word.id}.png`,new Resvg(markup,{font:{loadSystemFonts:false},fitTo:{mode:'width',value:192}}).render().asPng());
- manifest.push({wordId:word.id,path:`/learning-assets/images/${word.id}.png`,kind:'image',source,rights,reviewStatus:'pending'});
+ fs.writeFileSync(`${imageDir}/${word.id}.png`,new Resvg(markup,{font:{loadSystemFonts:false},fitTo:{mode:'width',value:192}}).render().asPng());
+ manifest.push({wordId:word.id,path:`/${imageDir.replace("miniprogram/", "")}/${word.id}.png`,kind:'image',source,rights,reviewStatus:'pending'});
 }
 const covers=['apple','blue','dog','book','bed','kite','sun','hand'];
 const backgrounds=['#d7e8a9','#c5dbec','#dce7bd','#d3dfd5','#efddbd','#eed4bc','#c4dfdf','#e9cfc0'];
 for(let i=0;i<8;i++) {
- const file=i===0?'miniprogram/fruit-assets/apple.png':`${dir}/${covers[i]}.png`;
+ const file=i===0?'miniprogram/fruit-assets/apple.png':i===2?`miniprogram/animal-assets/${covers[i]}.png`:`${dir}/${covers[i]}.png`;
  const encoded=fs.readFileSync(file).toString('base64');
  const cover=`<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="${backgrounds[i]}"/><circle cx="160" cy="90" r="77" fill="#ffffff60"/><path d="M0 176 Q80 125 160 171 T320 160 V200 H0" fill="#ffffff55"/><circle cx="47" cy="44" r="7" fill="#fff6"/><circle cx="280" cy="120" r="11" fill="#fff6"/><image href="data:image/png;base64,${encoded}" x="85" y="18" width="150" height="150"/></svg>`;
  fs.writeFileSync(`${coverDir}/cover-${i+1}.png`,new Resvg(cover,{font:{loadSystemFonts:false}}).render().asPng());

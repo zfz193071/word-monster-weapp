@@ -465,7 +465,7 @@ const categories = [
 ] as const;
 export const LEVELS: readonly LevelDefinition[] = Object.freeze([
   { id: 1, title: '水果', category: 'fruits', words: BATTLE_WORDS, cover: '/assets/images/levels/cover-1.png' },
-  ...categories.map(category => ({ ...category, cover: `/assets/images/levels/cover-${category.id}.png`, words: category.words.map(word => ({ ...word, fruitImagePath: `/learning-assets/images/${word.id}.png`, audioPath: `/learning-assets/audio/learn-${word.id}.mp3` })) })),
+  ...categories.map(category => ({ ...category, cover: `/assets/images/levels/cover-${category.id}.png`, words: category.words.map(word => ({ ...word, fruitImagePath: category.id === 3 ? `/animal-assets/${word.id}.png` : `/learning-assets/images/${word.id}.png`, audioPath: `/learning-assets/audio/learn-${word.id}.mp3` })) })),
 ]);
 export function getLevel(id = 1): LevelDefinition {
   const level = LEVELS.find(level => level.id === id);

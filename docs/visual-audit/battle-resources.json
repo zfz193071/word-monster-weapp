@@ -1,7 +1,58 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "evidence": "Source dependency audit; complete current+previous category union. Not compiled package sizes, runtime residency, timing or device verification.",
-  "limits": "Per-level totals use weapon 1, include loading cover and shared art, exclude UI/home assets, audio decode memory, Canvas buffers and texture copies. Only the equipped hero variant is needed.",
+  "limits": "Per-level totals use weapon 1 and fortress 1, share the runtime preload list (including all soldier sprites, textured bodies, both first-level courtyard orientations and fortress states), and include the loading cover, exclude other UI/home assets, audio decode memory, Canvas buffers and texture copies. Only the equipped hero variant is needed.",
+  "packageBudgetBasis": "All source files including ignored files and package entrypoints, matching check:package. Required package union derives from the complete image/audio preload dependency set. Subpackage totals assume none are installed; homepage/cache may already supply them. Not compiled bytes or measured network transfer. Main is separate; no incremental cache or download-time claim.",
+  "sourcePackages": [
+    {
+      "name": "main",
+      "root": "",
+      "sourceBytes": 1809499,
+      "fileCount": 200
+    },
+    {
+      "name": "learning-assets",
+      "root": "learning-assets",
+      "sourceBytes": 1031976,
+      "fileCount": 236
+    },
+    {
+      "name": "scene-images",
+      "root": "assets/images",
+      "sourceBytes": 1191828,
+      "fileCount": 92
+    },
+    {
+      "name": "battlefield-assets",
+      "root": "battlefield-assets",
+      "sourceBytes": 605862,
+      "fileCount": 7
+    },
+    {
+      "name": "fortress-assets",
+      "root": "fortress-assets",
+      "sourceBytes": 1465245,
+      "fileCount": 7
+    },
+    {
+      "name": "character-assets",
+      "root": "character-assets",
+      "sourceBytes": 178223,
+      "fileCount": 7
+    },
+    {
+      "name": "fruit-assets",
+      "root": "fruit-assets",
+      "sourceBytes": 717153,
+      "fileCount": 16
+    },
+    {
+      "name": "animal-assets",
+      "root": "animal-assets",
+      "sourceBytes": 998809,
+      "fileCount": 21
+    }
+  ],
   "heroVariants": [
     {
       "path": "/character-assets/hero-back-weapon-1-textured.png",
@@ -62,6 +113,19 @@
   ],
   "levels": [
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "battlefield-assets",
+          "character-assets",
+          "fortress-assets",
+          "fruit-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 4158311,
+        "referencedFileBytes": 3867619
+      },
       "levelId": 1,
       "category": "fruits",
       "currentWordIds": [
@@ -80,6 +144,54 @@
       "previousWordIds": [],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-1.png",
           "package": "scene-images",
@@ -241,12 +353,52 @@
           "rgbaBytes": 81920
         },
         {
+          "path": "/battlefield-assets/courtyard-portrait-v1.jpg",
+          "package": "battlefield-assets",
+          "bytes": 313238,
+          "width": 1024,
+          "height": 1536,
+          "rgbaBytes": 6291456
+        },
+        {
+          "path": "/battlefield-assets/courtyard-v1.jpg",
+          "package": "battlefield-assets",
+          "bytes": 292472,
+          "width": 1536,
+          "height": 1024,
+          "rgbaBytes": 6291456
+        },
+        {
           "path": "/character-assets/hero-back-weapon-1-textured.png",
           "package": "character-assets",
           "bytes": 83632,
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/character-assets/zombie-apple-textured.png",
+          "package": "character-assets",
+          "bytes": 94441,
+          "width": 256,
+          "height": 320,
+          "rgbaBytes": 327680
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/fruit-assets/apple.png",
@@ -499,11 +651,24 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 1022774,
-      "estimatedImageRgbaBytes": 6419668,
+      "imageBytes": 3264040,
+      "estimatedImageRgbaBytes": 23220948,
       "audioBytes": 603579
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "character-assets",
+          "fortress-assets",
+          "fruit-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 4584425,
+        "referencedFileBytes": 3490985
+      },
       "levelId": 2,
       "category": "color-shape",
       "currentWordIds": [
@@ -531,6 +696,54 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-2.png",
           "package": "scene-images",
@@ -762,6 +975,30 @@
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/character-assets/zombie-apple-textured.png",
+          "package": "character-assets",
+          "bytes": 94441,
+          "width": 256,
+          "height": 320,
+          "rgbaBytes": 327680
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/fruit-assets/apple.png",
@@ -1158,11 +1395,24 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 1180529,
-      "estimatedImageRgbaBytes": 8254676,
+      "imageBytes": 2816085,
+      "estimatedImageRgbaBytes": 12473044,
       "audioBytes": 674900
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "animal-assets",
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 4866081,
+        "referencedFileBytes": 3433261
+      },
       "levelId": 3,
       "category": "animals-plants",
       "currentWordIds": [
@@ -1195,6 +1445,182 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/animal-assets/bear.png",
+          "package": "animal-assets",
+          "bytes": 72635,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/bee.png",
+          "package": "animal-assets",
+          "bytes": 69752,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/bird.png",
+          "package": "animal-assets",
+          "bytes": 56374,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/cat.png",
+          "package": "animal-assets",
+          "bytes": 64805,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/chicken.png",
+          "package": "animal-assets",
+          "bytes": 58576,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/cow.png",
+          "package": "animal-assets",
+          "bytes": 67846,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/dog.png",
+          "package": "animal-assets",
+          "bytes": 67738,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/duck.png",
+          "package": "animal-assets",
+          "bytes": 50144,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/elephant.png",
+          "package": "animal-assets",
+          "bytes": 69949,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/fish.png",
+          "package": "animal-assets",
+          "bytes": 57038,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/horse.png",
+          "package": "animal-assets",
+          "bytes": 7829,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/animal-assets/lion.png",
+          "package": "animal-assets",
+          "bytes": 77855,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/panda.png",
+          "package": "animal-assets",
+          "bytes": 72701,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/rabbit.png",
+          "package": "animal-assets",
+          "bytes": 64446,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/sheep.png",
+          "package": "animal-assets",
+          "bytes": 62425,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/tiger.png",
+          "package": "animal-assets",
+          "bytes": 78536,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-3.png",
           "package": "scene-images",
@@ -1340,28 +1766,20 @@
           "rgbaBytes": 567508
         },
         {
-          "path": "/learning-assets/images/bear.png",
-          "package": "learning-assets",
-          "bytes": 72635,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
         },
         {
-          "path": "/learning-assets/images/bee.png",
-          "package": "learning-assets",
-          "bytes": 69752,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/bird.png",
-          "package": "learning-assets",
-          "bytes": 56374,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/black.png",
@@ -1388,92 +1806,12 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/cat.png",
-          "package": "learning-assets",
-          "bytes": 64805,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/chicken.png",
-          "package": "learning-assets",
-          "bytes": 58576,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/cow.png",
-          "package": "learning-assets",
-          "bytes": 67846,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/dog.png",
-          "package": "learning-assets",
-          "bytes": 67738,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/duck.png",
-          "package": "learning-assets",
-          "bytes": 50144,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/elephant.png",
-          "package": "learning-assets",
-          "bytes": 69949,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/fish.png",
-          "package": "learning-assets",
-          "bytes": 57038,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/green.png",
           "package": "learning-assets",
           "bytes": 4528,
           "width": 192,
           "height": 192,
           "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/horse.png",
-          "package": "learning-assets",
-          "bytes": 7829,
-          "width": 192,
-          "height": 192,
-          "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/lion.png",
-          "package": "learning-assets",
-          "bytes": 77855,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/panda.png",
-          "package": "learning-assets",
-          "bytes": 72701,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
         },
         {
           "path": "/learning-assets/images/pink.png",
@@ -1484,36 +1822,12 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/rabbit.png",
-          "package": "learning-assets",
-          "bytes": 64446,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/red.png",
           "package": "learning-assets",
           "bytes": 4600,
           "width": 192,
           "height": 192,
           "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/sheep.png",
-          "package": "learning-assets",
-          "bytes": 62425,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/tiger.png",
-          "package": "learning-assets",
-          "bytes": 78536,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
         },
         {
           "path": "/learning-assets/images/white.png",
@@ -1824,11 +2138,24 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 1293582,
-      "estimatedImageRgbaBytes": 8549588,
+      "imageBytes": 2834697,
+      "estimatedImageRgbaBytes": 12440276,
       "audioBytes": 598564
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "animal-assets",
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 4866081,
+        "referencedFileBytes": 3388683
+      },
       "levelId": 4,
       "category": "tools",
       "currentWordIds": [
@@ -1867,6 +2194,182 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/animal-assets/bear.png",
+          "package": "animal-assets",
+          "bytes": 72635,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/bee.png",
+          "package": "animal-assets",
+          "bytes": 69752,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/bird.png",
+          "package": "animal-assets",
+          "bytes": 56374,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/cat.png",
+          "package": "animal-assets",
+          "bytes": 64805,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/chicken.png",
+          "package": "animal-assets",
+          "bytes": 58576,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/cow.png",
+          "package": "animal-assets",
+          "bytes": 67846,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/dog.png",
+          "package": "animal-assets",
+          "bytes": 67738,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/duck.png",
+          "package": "animal-assets",
+          "bytes": 50144,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/elephant.png",
+          "package": "animal-assets",
+          "bytes": 69949,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/fish.png",
+          "package": "animal-assets",
+          "bytes": 57038,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/horse.png",
+          "package": "animal-assets",
+          "bytes": 7829,
+          "width": 192,
+          "height": 192,
+          "rgbaBytes": 147456
+        },
+        {
+          "path": "/animal-assets/lion.png",
+          "package": "animal-assets",
+          "bytes": 77855,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/panda.png",
+          "package": "animal-assets",
+          "bytes": 72701,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/rabbit.png",
+          "package": "animal-assets",
+          "bytes": 64446,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/sheep.png",
+          "package": "animal-assets",
+          "bytes": 62425,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/animal-assets/tiger.png",
+          "package": "animal-assets",
+          "bytes": 78536,
+          "width": 256,
+          "height": 256,
+          "rgbaBytes": 262144
+        },
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-4.png",
           "package": "scene-images",
@@ -1948,28 +2451,20 @@
           "rgbaBytes": 567508
         },
         {
-          "path": "/learning-assets/images/bear.png",
-          "package": "learning-assets",
-          "bytes": 72635,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
         },
         {
-          "path": "/learning-assets/images/bee.png",
-          "package": "learning-assets",
-          "bytes": 69752,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/bird.png",
-          "package": "learning-assets",
-          "bytes": 56374,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/blackboard.png",
@@ -1988,22 +2483,6 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/cat.png",
-          "package": "learning-assets",
-          "bytes": 64805,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/chicken.png",
-          "package": "learning-assets",
-          "bytes": 58576,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/clock.png",
           "package": "learning-assets",
           "bytes": 3838,
@@ -2020,52 +2499,12 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/cow.png",
-          "package": "learning-assets",
-          "bytes": 67846,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/dog.png",
-          "package": "learning-assets",
-          "bytes": 67738,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/duck.png",
-          "package": "learning-assets",
-          "bytes": 50144,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
-          "path": "/learning-assets/images/elephant.png",
-          "package": "learning-assets",
-          "bytes": 69949,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/eraser.png",
           "package": "learning-assets",
           "bytes": 3370,
           "width": 192,
           "height": 192,
           "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/fish.png",
-          "package": "learning-assets",
-          "bytes": 57038,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
         },
         {
           "path": "/learning-assets/images/glue.png",
@@ -2076,36 +2515,12 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/horse.png",
-          "package": "learning-assets",
-          "bytes": 7829,
-          "width": 192,
-          "height": 192,
-          "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/lion.png",
-          "package": "learning-assets",
-          "bytes": 77855,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/notebook.png",
           "package": "learning-assets",
           "bytes": 2882,
           "width": 192,
           "height": 192,
           "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/panda.png",
-          "package": "learning-assets",
-          "bytes": 72701,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
         },
         {
           "path": "/learning-assets/images/paper.png",
@@ -2132,14 +2547,6 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/rabbit.png",
-          "package": "learning-assets",
-          "bytes": 64446,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/ruler.png",
           "package": "learning-assets",
           "bytes": 5569,
@@ -2164,28 +2571,12 @@
           "rgbaBytes": 147456
         },
         {
-          "path": "/learning-assets/images/sheep.png",
-          "package": "learning-assets",
-          "bytes": 62425,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
-        },
-        {
           "path": "/learning-assets/images/tape.png",
           "package": "learning-assets",
           "bytes": 3396,
           "width": 192,
           "height": 192,
           "rgbaBytes": 147456
-        },
-        {
-          "path": "/learning-assets/images/tiger.png",
-          "package": "learning-assets",
-          "bytes": 78536,
-          "width": 256,
-          "height": 256,
-          "rgbaBytes": 262144
         }
       ],
       "audio": [
@@ -2540,11 +2931,23 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 1185011,
-      "estimatedImageRgbaBytes": 8778964,
+      "imageBytes": 2726126,
+      "estimatedImageRgbaBytes": 12669652,
       "audioBytes": 662557
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 3867272,
+        "referencedFileBytes": 2331838
+      },
       "levelId": 5,
       "category": "home-items",
       "currentWordIds": [
@@ -2574,6 +2977,54 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-5.png",
           "package": "scene-images",
@@ -2653,6 +3104,22 @@
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/bed.png",
@@ -3085,11 +3552,23 @@
           "bytes": 5241
         }
       ],
-      "imageBytes": 205895,
-      "estimatedImageRgbaBytes": 5731540,
+      "imageBytes": 1747010,
+      "estimatedImageRgbaBytes": 9622228,
       "audioBytes": 584828
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 3867272,
+        "referencedFileBytes": 2381985
+      },
       "levelId": 6,
       "category": "daily-items",
       "currentWordIds": [
@@ -3123,6 +3602,54 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-6.png",
           "package": "scene-images",
@@ -3202,6 +3729,22 @@
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/bag.png",
@@ -3706,11 +4249,23 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 233076,
-      "estimatedImageRgbaBytes": 6321364,
+      "imageBytes": 1774191,
+      "estimatedImageRgbaBytes": 10212052,
       "audioBytes": 607794
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 3867272,
+        "referencedFileBytes": 2473119
+      },
       "levelId": 7,
       "category": "nature",
       "currentWordIds": [
@@ -3749,6 +4304,54 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-7.png",
           "package": "scene-images",
@@ -3828,6 +4431,22 @@
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/air.png",
@@ -4422,11 +5041,23 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 280573,
-      "estimatedImageRgbaBytes": 7058644,
+      "imageBytes": 1821688,
+      "estimatedImageRgbaBytes": 10949332,
       "audioBytes": 651431
     },
     {
+      "packageBudget": {
+        "requiredPackageNames": [
+          "character-assets",
+          "fortress-assets",
+          "learning-assets",
+          "main",
+          "scene-images"
+        ],
+        "mainSourceBytes": 1809499,
+        "subpackageSourceBytes": 3867272,
+        "referencedFileBytes": 2329846
+      },
       "levelId": 8,
       "category": "body-parts",
       "currentWordIds": [
@@ -4454,6 +5085,54 @@
       ],
       "checkedPlans": 12,
       "images": [
+        {
+          "path": "/assets/images/army/flamethrower.png",
+          "package": "scene-images",
+          "bytes": 11264,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/jetpack.png",
+          "package": "scene-images",
+          "bytes": 11514,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rifle.png",
+          "package": "scene-images",
+          "bytes": 9971,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/rocket.png",
+          "package": "scene-images",
+          "bytes": 11721,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/shield.png",
+          "package": "scene-images",
+          "bytes": 14631,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
+        {
+          "path": "/assets/images/army/tank.png",
+          "package": "scene-images",
+          "bytes": 16918,
+          "width": 128,
+          "height": 128,
+          "rgbaBytes": 65536
+        },
         {
           "path": "/assets/images/battle-backgrounds/level-8.png",
           "package": "scene-images",
@@ -4533,6 +5212,22 @@
           "width": 337,
           "height": 421,
           "rgbaBytes": 567508
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "package": "fortress-assets",
+          "bytes": 671930,
+          "width": 1440,
+          "height": 284,
+          "rgbaBytes": 1635840
+        },
+        {
+          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "package": "fortress-assets",
+          "bytes": 793166,
+          "width": 1536,
+          "height": 303,
+          "rgbaBytes": 1861632
         },
         {
           "path": "/learning-assets/images/air.png",
@@ -4929,8 +5624,8 @@
           "bytes": 5085
         }
       ],
-      "imageBytes": 232547,
-      "estimatedImageRgbaBytes": 5436628,
+      "imageBytes": 1773662,
+      "estimatedImageRgbaBytes": 9327316,
       "audioBytes": 556184
     }
   ]

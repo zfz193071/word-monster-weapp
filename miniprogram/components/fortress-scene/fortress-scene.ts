@@ -518,6 +518,7 @@ Component({
     continueRetirement() { instances.get(this)?.scene?.continueRetirement(); },
     restartPreview() { if (this.properties.preview) this.mount(); },
     getDiagnostics() { return instances.get(this)?.scene?.diagnostics; },
+    getResourceDiagnostics() { return instances.get(this)?.scene?.resourceDiagnostics; },
     getSnapshot() { return instances.get(this)?.scene?.snapshot; },
     measureResize() {
       const state = instances.get(this); if (!state?.scene) return;
