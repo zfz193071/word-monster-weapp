@@ -34,7 +34,10 @@
 .battle-footer .experience-value { position: absolute; left: 0; right: 0; bottom: calc(100% + 3rpx); color: #ffe49a; font-size: 19rpx; line-height: 24rpx; text-align: center; }
 .battle-footer .experience-track { width: 100%; height: 100%; }
 .battle-footer .experience-cap { flex: 1; color: #ffe49a; font-size: 20rpx; text-align: center; }
-.drop-coins { color: #ffe18c; min-width: 68rpx; text-align: right; }
+.drop-coins { display:flex; align-items:center; justify-content:flex-end; gap:6rpx; color:#ffe18c; min-width:68rpx; white-space:nowrap; }
+.drop-coins image { width:28rpx; height:28rpx; flex-shrink:0; }
+.supply-icon { width:28rpx; height:28rpx; flex-shrink:0; margin-right:6rpx; }
+.soldier-summon[disabled] .supply-icon { opacity:.5; }
 .drop-error { position: absolute; bottom: calc(90rpx + env(safe-area-inset-bottom)); left: 12%; right: 12%; z-index: 120; }
 .drop-error button { font-size: 24rpx; color: #594523; background: #ffebac; }
 .opening-scene .scene-status, .opening-scene .settlement { position: absolute; z-index: 20; top: 35%; left: 5%; width: 90%; box-sizing: border-box; border-radius: 28rpx; }
