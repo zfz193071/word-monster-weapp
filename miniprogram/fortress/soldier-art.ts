@@ -1,4 +1,5 @@
 import { soldierType } from './army';
+import { SOLDIER_MUZZLES } from './soldier-sprites';
 import type { SupportSoldierState } from './types';
 
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
@@ -10,13 +11,19 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   const target = soldier.shotTarget;
   const firing = soldier.shotCombatId === combatId && target && soldier.lastShotTick !== undefined && tick >= soldier.lastShotTick && tick - soldier.lastShotTick < 16;
   const angle = target ? Math.atan2(target.x - soldier.position.x, -(target.y - soldier.position.y)) : 0;
+  const size = type === 'tank' ? 64 : 56;
+  const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
+  const imageY = -size / 2 - 8 + hover + (firing ? 1.5 : 0);
+  const [anchorX, anchorY] = SOLDIER_MUZZLES[type];
+  // Flash and trace share the same local muzzle, including artwork motion.
+  const muzzle = image ? {x: -size / 2 + anchorX * size / 128, y: imageY + anchorY * size / 128}
+    : type === 'tank' ? {x: 0, y: -36}
+    : type === 'rocket' ? {x: 6, y: -41} : {x: 7, y: -30 + (firing ? 2 : 0)};
   c.save(); c.translate(soldier.position.x, soldier.position.y);
   c.fillStyle = 'rgba(31,50,42,.25)'; c.beginPath(); c.ellipse(0, 9, 12, 4, 0, 0, Math.PI * 2); c.fill();
   c.save(); c.rotate(angle);
   if (image) {
-    const size = type === 'tank' ? 64 : 56;
-    const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
-    c.drawImage(image, -size / 2, -size / 2 - 8 + hover + (firing ? 1.5 : 0), size, size);
+    c.drawImage(image, -size / 2, imageY, size, size);
     if (type === 'jetpack') {
       c.fillStyle = '#f6c775';
       for (const x of [-8, 8]) { c.beginPath(); c.moveTo(x - 2, 8 + hover); c.lineTo(x, 16 + hover + Math.sin(tick * .13) * 2); c.lineTo(x + 2, 8 + hover); c.closePath(); c.fill(); }
@@ -56,14 +63,13 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   }
   if (soldier.evolved) {c.fillStyle='#f1d584';c.beginPath();c.moveTo(0,-24);c.lineTo(4,-20);c.lineTo(0,-16);c.lineTo(-4,-20);c.closePath();c.fill();}
   if (firing) {
-    c.save(); if (image) c.translate(-7, -2);
-    c.fillStyle = '#fff0a8'; c.beginPath(); c.moveTo(7, -39); c.lineTo(12, -29); c.lineTo(2, -29); c.closePath(); c.fill(); c.restore();
+    c.save(); c.translate(muzzle.x, muzzle.y);
+    c.fillStyle = '#fff0a8'; c.beginPath(); c.moveTo(0, -10); c.lineTo(5, 0); c.lineTo(-5, 0); c.closePath(); c.fill(); c.restore();
   }
   c.restore();
   if (firing) {
     c.strokeStyle = type === 'flamethrower' ? 'rgba(235,153,74,.65)' : 'rgba(255,219,120,.75)'; c.lineWidth = type === 'flamethrower' ? 8 : type === 'tank' || type === 'rocket' ? 3 : 1.5;
-    const muzzleX = image ? 0 : 7, muzzleY = image ? 32 : 30;
-    c.beginPath(); c.moveTo(Math.sin(angle) * muzzleY + Math.cos(angle) * muzzleX, -Math.cos(angle) * muzzleY + Math.sin(angle) * muzzleX);
+    c.beginPath(); c.moveTo(Math.cos(angle) * muzzle.x - Math.sin(angle) * muzzle.y, Math.sin(angle) * muzzle.x + Math.cos(angle) * muzzle.y);
     c.lineTo(target.x - soldier.position.x, target.y - soldier.position.y); c.stroke();
   }
   if (soldier.hp < soldier.maxHp) {

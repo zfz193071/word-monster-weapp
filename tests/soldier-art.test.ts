@@ -36,3 +36,32 @@ test('图片兵种使用真实射击与战斗时钟，暂停保持悬停和后�
   assert.ok(!draw(216).some(c=>c[0]==='lineTo'&&c[2]===-300));
   assert.ok(!draw(200,'next').some(c=>c[0]==='lineTo'&&c[2]===-300));
 });
+
+test('图片枪口、闪光与弹道共用后坐和悬停后的坐标，旋转后仍相接', () => {
+  for (const [type, px, py] of [['rifle',64,9],['flamethrower',64,6],['rocket',72,8],['jetpack',64,6],['tank',64,5]] as const) {
+    for (const [dx,dy] of [[0,-200],[200,0],[-160,-120],[0,200]]) for(const tick of [200,207]) {
+      let matrix=[1,0,0,1,0,0], style=''; const stack:number[][]=[];
+      let path:number[][]=[], imageOrigin:number[]=[]; const flashes:number[][][]=[],traces:number[][][]=[];
+      const point=(x:number,y:number)=>[matrix[0]*x+matrix[2]*y+matrix[4],matrix[1]*x+matrix[3]*y+matrix[5]];
+      const image={} as WechatMiniprogram.Image;
+      const methods={
+        save(){stack.push([...matrix]);},restore(){matrix=stack.pop()!;},
+        translate(x:number,y:number){const p=point(x,y);matrix[4]=p[0];matrix[5]=p[1];},
+        rotate(a:number){const [m0,m1,m2,m3]=matrix,c=Math.cos(a),s=Math.sin(a);matrix[0]=m0*c+m2*s;matrix[1]=m1*c+m3*s;matrix[2]=m2*c-m0*s;matrix[3]=m3*c-m1*s;},
+        drawImage(_image:unknown,x:number,y:number,w:number,h:number){imageOrigin=point(x+w*px/128,y+h*py/128);},
+        beginPath(){path=[];},moveTo(x:number,y:number){path.push(point(x,y));},lineTo(x:number,y:number){path.push(point(x,y));},
+        fill(){if(style==='#fff0a8')flashes.push(path);},stroke(){if(path.length===2)traces.push(path);},
+      };
+      const context=new Proxy(methods,{get:(target,name)=>target[name as keyof typeof methods]??(()=>{}),set:(_target,name,value)=>{if(name==='fillStyle')style=value;return true;}});
+      drawSoldier(context as unknown as WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D,
+        {id:type,slot:0,soldierType:type,hp:30,maxHp:30,position:{x:150,y:400},attackRemainingMs:0,lastShotTick:200,shotCombatId:'battle',shotTarget:{x:150+dx,y:400+dy}},tick,'battle',image);
+      const trace=traces.at(-1)!;
+      assert.ok(trace,`${type}: committed shot has a trace`);
+      assert.ok(Math.hypot(trace[0][0]-imageOrigin[0],trace[0][1]-imageOrigin[1])<1e-8,`${type}: trace starts at rendered muzzle`);
+      assert.deepEqual(trace[1],[150+dx,400+dy]);
+      const flash=flashes[0];
+      const base=[(flash[1][0]+flash[2][0])/2,(flash[1][1]+flash[2][1])/2];
+      assert.ok(Math.hypot(base[0]-imageOrigin[0],base[1]-imageOrigin[1])<1e-8,`${type}: flash base touches muzzle`);
+    }
+  }
+});
