@@ -1,7 +1,8 @@
 {
   "seed": 41,
   "completedCases": [
-    1
+    1,
+    64
   ],
   "pendingCases": [
     2,
@@ -65,11 +66,10 @@
     60,
     61,
     62,
-    63,
-    64
+    63
   ],
-  "scope": "One complete natural combat sample; case 64 interrupted under host load above 300. Not a complete matrix, device test, cross-stage UI or player win rate.",
-  "baselineCheck": "All legacy fields match balance-41.jsonl first sample exactly.",
+  "scope": "Two complete natural combat samples (cases 1 and 64). Not a complete matrix, device test, cross-stage UI or player win rate.",
+  "baselineCheck": "All legacy fields of cases 1 and 64 match the first and last samples in balance-41.jsonl respectively.",
   "results": [
     {
       "seed": 41,
@@ -89,6 +89,29 @@
       "contributions": {
         "projectile": 59245,
         "lightning": 918
+      },
+      "soldierContributions": {}
+    },
+    {
+      "seed": 41,
+      "levelId": 8,
+      "difficulty": "nightmare",
+      "width": 990,
+      "profile": "max-weapon-pet-skills",
+      "status": "cleared",
+      "combatSeconds": 328.25,
+      "hp": 2400,
+      "maxHp": 2400,
+      "level": 20,
+      "kills": 1266,
+      "remaining": 0,
+      "alive": 0,
+      "peakAlive": 18,
+      "contributions": {
+        "projectile": 631220,
+        "pet": 12848,
+        "flame": 2990,
+        "lightning": 4620
       },
       "soldierContributions": {}
     }
