@@ -4,7 +4,7 @@
   "source": "Built-in image_gen; project rabbit sample used as style reference; no third-party images introduced.",
   "rights": "AI-generated project assets; not a claim of exclusive copyright.",
   "processing": "Original alpha preserved; aspect-preserving high-quality resize and lossless PNG encoding; no quantization.",
-  "status": "Incomplete batch; missing originals; not integrated",
+  "status": "15 approved 256px learning displays integrated; horse and battle parts pending",
   "missing": [
     "horse"
   ],
@@ -65,7 +65,9 @@
           "sha256": "33e23023c79bb56761f04ff41e145479b1ded33c5abdec05cdac902fcb7e639c"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/bear.png",
+      "runtimeSha256": "f1ed38b38fa1f015771b751fc2dd98660e01e9738e81f19942b4ce42e8c18599"
     },
     {
       "wordId": "bee",
@@ -117,7 +119,9 @@
           "sha256": "5db1d40787f752d09a0c93305a850664b925d53edb65029277b0ab8712c4bba9"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/bee.png",
+      "runtimeSha256": "46a63613e23adef648ae995e1ce9bb21df82f2df821393f094a3ed87e44a20c6"
     },
     {
       "wordId": "bird",
@@ -169,7 +173,9 @@
           "sha256": "e400a1e1a7ec8116c98975d388805559ed50780c3aa77994bc3031b7d843a53a"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/bird.png",
+      "runtimeSha256": "70a9521e27fbccccde73da70ac2c5b1ba1f1bab1c80a63f694f1ddc3f8ea7500"
     },
     {
       "wordId": "cat",
@@ -221,7 +227,9 @@
           "sha256": "cccfa833a5bf69d30217545cb90db30a4047322c7ecb43f4ebe830fca9ea3c12"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/cat.png",
+      "runtimeSha256": "1637d788f9588a9b862f39cdbcd878697259b47956b5fa7073009e349accc106"
     },
     {
       "wordId": "chicken",
@@ -273,7 +281,9 @@
           "sha256": "376cf840146203c41819211e1a4d9863b41e8d6ecba47268689442b8e33548be"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/chicken.png",
+      "runtimeSha256": "6cb2c34a3513a90ee3128437d83840b0a50cc2b94f8381a7033eccd6fb7c1af5"
     },
     {
       "wordId": "cow",
@@ -325,7 +335,9 @@
           "sha256": "4c5cda1e56c8c223afa6a6835c02aaa36f8f13651603231d47b2d7aa892a4750"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/cow.png",
+      "runtimeSha256": "81ce0f58b4084c3a16f6f0254c17af63687c3017d99e64dd66f232c97f7dbc7f"
     },
     {
       "wordId": "dog",
@@ -377,7 +389,9 @@
           "sha256": "2b97a8de3d48e5fa66b1ccfdf07149cdfaca925dcdde9ccca1f85014f6b84856"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/dog.png",
+      "runtimeSha256": "1bf683b474507e8866a072a5133b2d1212d40c65910b422a6f0266d97f9dbf66"
     },
     {
       "wordId": "duck",
@@ -429,7 +443,9 @@
           "sha256": "198d384942c4d707bc00a7b03ac1bd8d4c518c7937e21c7a9ee5f17600462c55"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/duck.png",
+      "runtimeSha256": "d103a50126f920bd4cb0e673939bdea701a3ff9ab932ee949e5492c51e98d161"
     },
     {
       "wordId": "elephant",
@@ -481,7 +497,9 @@
           "sha256": "168ba9cea43fe927c5ef84d1ce52d4d80d048ca243ab670a5681181dcfe46759"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/elephant.png",
+      "runtimeSha256": "02dc0fda5fd1d634422f8c878c4b8baa96a686177c7071fa287ecb9a4dbf8b4d"
     },
     {
       "wordId": "fish",
@@ -533,7 +551,9 @@
           "sha256": "243c1e1590685269cbd5047446ce04d699e284a2d427c47572d713c5664a5131"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/fish.png",
+      "runtimeSha256": "1fb6a78c72845d360bc7918146af84ef9a38831eabc9604ca80768b12bba1a58"
     },
     {
       "wordId": "lion",
@@ -585,7 +605,9 @@
           "sha256": "647aa65c38258471844b8aadd919465c364b5dfa2a743d8999a4adc10fb10110"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/lion.png",
+      "runtimeSha256": "8f1c498abe60c0446b2e36727ac7959934d9baa7ad497a629279676848066352"
     },
     {
       "wordId": "panda",
@@ -637,7 +659,9 @@
           "sha256": "bee479c706cd1472ea567c41e288f10f42f0fb5d7856b5f3e5f2f6508e7f274b"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/panda.png",
+      "runtimeSha256": "ae45540d85caf94250573c65daca4de30023a42c92819e9c214b90fae2cc88e6"
     },
     {
       "wordId": "rabbit",
@@ -689,7 +713,9 @@
           "sha256": "a532b0f0d404bce8c598c5dc57f91f2ec3fcce3e3631fe2d5c96f1912a41a495"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/rabbit.png",
+      "runtimeSha256": "25b27cb69ef039a4ae38fd9fcb668eb6bf1716bb46fb6e06dea9e5afca032906"
     },
     {
       "wordId": "sheep",
@@ -741,7 +767,9 @@
           "sha256": "f4413bfb4f17e93f6187b8748711db2e33f37fd57ffb6590b792186c48865d27"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/sheep.png",
+      "runtimeSha256": "da37fb740435afd283a405c9a4427f08b8fd89cdd2dc59b48fc8232aff2e1a24"
     },
     {
       "wordId": "tiger",
@@ -793,7 +821,9 @@
           "sha256": "74c1064a267202e9f58b11d5fd7fbe2268c912dd4dc60a5a1e159d64bef610af"
         }
       ],
-      "reviewStatus": "pending-batch-visual-review"
+      "reviewStatus": "user-approved-learning-display-256-2026-11-10",
+      "runtimePath": "/learning-assets/images/tiger.png",
+      "runtimeSha256": "4e8a9e57c08ffeeed4af4d677c978dd5776187875203dc1e418fd4b9cbbaee39"
     }
   ]
 }

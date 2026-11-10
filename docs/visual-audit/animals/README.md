@@ -54,3 +54,7 @@ WM_CANVAS_MODULE=/tmp/wm-render-tools/node_modules/@napi-rs/canvas node --import
 开工时最新提交为 `caae7c6`，源码无待提交改动，仅未跟踪Python缓存。核对#85、#97正文与评论、当前开放工单及11月9～10日需求；#93的旧首页限制已由#97承接，没有发现新增明确冲突旧单。首页外景概念尚待视觉确认，本轮继续#85的唯一展示缺图。
 
 内置 image_gen 沿用 `prompts.json#horse` 和兔子参考图请求，输出阶段仍返回 `moderation_blocked / other`，request ID `88c4f3ba-09b4-4928-b2bd-2980837217e8`。未返回图片，未切换工具或生成服务。展示进度仍为15/16；未新增母版、尺寸候选或运行时变更。历史错误保留在generation-status.json，#85继续开放。
+
+## 2026-11-10 用户批准与正式展示接入
+
+用户明确采用现有15张256px展示图；按清单SHA256逐一核验并替换 learning-assets/images 同名图片，沿用词条和音频映射、按需加载入口。马保留原图，补齐后单独审查；现有Canvas战斗动物形态仍独立。清单记录批准状态、运行路径与哈希。
