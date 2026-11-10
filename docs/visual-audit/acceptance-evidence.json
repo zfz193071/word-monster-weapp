@@ -17,8 +17,26 @@
     {
       "asset": "hero",
       "path": "inventory.json",
-      "bytes": 96082,
-      "sha256": "2c2365505e35e9ee9e97371d296f76834ff16fe2a54848d137972e509f666c49"
+      "bytes": 98371,
+      "sha256": "3c0df5a6e0d210fb48d4cc8d647f824619052a5c4249b6b3fa903281ba79dcf6"
+    },
+    {
+      "asset": "hero",
+      "path": "hero/guardian-runtime/README.md",
+      "bytes": 2038,
+      "sha256": "f7a3cdefb663e473c10a116005b30a1cc8ca8dbf0b689ea5cf09e02b520e74c7"
+    },
+    {
+      "asset": "hero",
+      "path": "hero/guardian-runtime/review.html",
+      "bytes": 3154,
+      "sha256": "ceecbb55fe20ac80eeb7387f3d9c8e65625a36ec4194ad0508f6b5f3e51227fa"
+    },
+    {
+      "asset": "hero",
+      "path": "hero/guardian-manifest.json",
+      "bytes": 7590,
+      "sha256": "601026f479c2455060a1dedea663dcab37cd855a204f712956ea2165a1e0db19"
     },
     {
       "asset": "ordinary",
@@ -29,8 +47,8 @@
     {
       "asset": "ordinary",
       "path": "inventory.json",
-      "bytes": 96082,
-      "sha256": "2c2365505e35e9ee9e97371d296f76834ff16fe2a54848d137972e509f666c49"
+      "bytes": 98371,
+      "sha256": "3c0df5a6e0d210fb48d4cc8d647f824619052a5c4249b6b3fa903281ba79dcf6"
     },
     {
       "asset": "boss",
@@ -47,8 +65,8 @@
     {
       "asset": "soldiers",
       "path": "army/README.md",
-      "bytes": 20252,
-      "sha256": "6321cd1e935edebfd58498384ec072810fb3281758883f4e759d98940777bfda"
+      "bytes": 21602,
+      "sha256": "57c72cf47d47faf6e2dd1694d3bcaa0a196920c3ac06468a7f028b196958f61e"
     },
     {
       "asset": "soldiers",
@@ -83,8 +101,8 @@
     {
       "asset": "animals",
       "path": "inventory.json",
-      "bytes": 96082,
-      "sha256": "2c2365505e35e9ee9e97371d296f76834ff16fe2a54848d137972e509f666c49"
+      "bytes": 98371,
+      "sha256": "3c0df5a6e0d210fb48d4cc8d647f824619052a5c4249b6b3fa903281ba79dcf6"
     },
     {
       "asset": "animals",
@@ -95,8 +113,8 @@
     {
       "asset": "other",
       "path": "inventory.json",
-      "bytes": 96082,
-      "sha256": "2c2365505e35e9ee9e97371d296f76834ff16fe2a54848d137972e509f666c49"
+      "bytes": 98371,
+      "sha256": "3c0df5a6e0d210fb48d4cc8d647f824619052a5c4249b6b3fa903281ba79dcf6"
     },
     {
       "asset": "other",
@@ -107,8 +125,8 @@
     {
       "asset": "skills",
       "path": "army/README.md",
-      "bytes": 20252,
-      "sha256": "6321cd1e935edebfd58498384ec072810fb3281758883f4e759d98940777bfda"
+      "bytes": 21602,
+      "sha256": "57c72cf47d47faf6e2dd1694d3bcaa0a196920c3ac06468a7f028b196958f61e"
     },
     {
       "asset": "backgrounds",
@@ -155,8 +173,8 @@
     {
       "asset": "rewards",
       "path": "../requirements-2026-11-02-followup.md",
-      "bytes": 254056,
-      "sha256": "354508879ca359bc79068cb166792679ae1fe13c851c68720c93c6189ae47e7e"
+      "bytes": 258941,
+      "sha256": "fc4b031b6567ca987e4fc810666190e9faf5e3f4c4afa9f7a798446cd5e28260"
     },
     {
       "asset": "controls",
@@ -185,26 +203,26 @@
     {
       "asset": "loading",
       "path": "battle-resources.json",
-      "bytes": 153473,
-      "sha256": "8fddb66623fb8f4333ffad28e37fc3b50dfd2a8ab7979f9e32ce3bc4f0c5eb6f"
+      "bytes": 155208,
+      "sha256": "9c3d926e1b3bb17ab58568d58015f982498d6f32f81bc77524e21b6a29d74632"
     },
     {
       "asset": "loading",
       "path": "../requirements-2026-11-02-followup.md",
-      "bytes": 254056,
-      "sha256": "354508879ca359bc79068cb166792679ae1fe13c851c68720c93c6189ae47e7e"
+      "bytes": 258941,
+      "sha256": "fc4b031b6567ca987e4fc810666190e9faf5e3f4c4afa9f7a798446cd5e28260"
     },
     {
       "asset": "legacy",
       "path": "inventory.json",
-      "bytes": 96082,
-      "sha256": "2c2365505e35e9ee9e97371d296f76834ff16fe2a54848d137972e509f666c49"
+      "bytes": 98371,
+      "sha256": "3c0df5a6e0d210fb48d4cc8d647f824619052a5c4249b6b3fa903281ba79dcf6"
     },
     {
       "asset": "legacy",
       "path": "battle-resources.json",
-      "bytes": 153473,
-      "sha256": "8fddb66623fb8f4333ffad28e37fc3b50dfd2a8ab7979f9e32ce3bc4f0c5eb6f"
+      "bytes": 155208,
+      "sha256": "9c3d926e1b3bb17ab58568d58015f982498d6f32f81bc77524e21b6a29d74632"
     }
   ]
 }

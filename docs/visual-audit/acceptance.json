@@ -6,7 +6,7 @@
       "id": "hero",
       "name": "主角与7级武器",
       "owner": 91,
-      "status": "一级新射击图已接入并校准枪口；二至七级及首页仍用现有资源",
+      "status": "已批准钢蓝主角及七级武器新图接入战斗，逐图校准枪口与枪管方向；首页尚未统一",
       "links": [
         {
           "path": "hero/README.md",
@@ -19,9 +19,21 @@
         {
           "path": "inventory.json",
           "label": "七级当前运行图与哈希"
+        },
+        {
+          "path": "hero/guardian-runtime/README.md",
+          "label": "新主角接入范围与限制"
+        },
+        {
+          "path": "hero/guardian-runtime/review.html",
+          "label": "七级手机/平板固定场景"
+        },
+        {
+          "path": "hero/guardian-manifest.json",
+          "label": "新图枪口测量与源图哈希"
         }
       ],
-      "remaining": "七级与首页新母版待明确；新图动作、墙体遮挡、最终视觉与设备验收待完成。"
+      "remaining": "独立上肢/枪械动作、后坐力、墙体遮挡与自然站姿、首页/面板统一、完整视觉及设备验收待完成。"
     },
     {
       "id": "ordinary",

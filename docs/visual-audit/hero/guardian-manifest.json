@@ -1,0 +1,248 @@
+{
+  "encoding": "Complete approved-source variants resampled for runtime; alpha retained; not lossless",
+  "combatMuzzle": {
+    "x": 16.8,
+    "y": -34.4
+  },
+  "acceptance": "Appearance direction approved; source muzzle manually measured; full scene and devices pending",
+  "files": [
+    {
+      "level": 1,
+      "art": {
+        "path": "/character-assets/guardian-weapon-1.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/reference-studies/hero-study-02.png",
+      "muzzle": {
+        "x": 1088,
+        "y": 211
+      },
+      "barrelRear": {
+        "x": 944,
+        "y": 360
+      },
+      "rotation": -0.7683349731705552,
+      "frame": {
+        "x": -76.16000000000001,
+        "y": -14.770000000000001,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-1.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 109203,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be",
+      "sha256": "c3186983247a7752089d29843e5ffa93beeabab38abb4ab31cf7ffb0e2d18ac3"
+    },
+    {
+      "level": 2,
+      "art": {
+        "path": "/character-assets/guardian-weapon-2.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-2.png",
+      "muzzle": {
+        "x": 1157,
+        "y": 225
+      },
+      "barrelRear": {
+        "x": 1038,
+        "y": 306
+      },
+      "rotation": -0.9731601099110417,
+      "frame": {
+        "x": -80.99000000000001,
+        "y": -15.750000000000002,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-2.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 122076,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "40afa9069280bf46b60ed1481363fb60adb49513da69fd21f74f267e875a6134",
+      "sha256": "657f8da045a77ae2349a22dcc731fe03be3fc504db61521e9cd9a11892c2c8d2"
+    },
+    {
+      "level": 3,
+      "art": {
+        "path": "/character-assets/guardian-weapon-3.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-3.png",
+      "muzzle": {
+        "x": 1287,
+        "y": 186
+      },
+      "barrelRear": {
+        "x": 1121,
+        "y": 281
+      },
+      "rotation": -1.051001704208677,
+      "frame": {
+        "x": -90.09,
+        "y": -13.020000000000001,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-3.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 117135,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "ecd9c1b69beb8cbac206094e180d686536e3444666b729879edff574619f0a72",
+      "sha256": "9d7b9f9a34ff00e95b258726a049da29870e39f2b775ef738aa76e303a7550b3"
+    },
+    {
+      "level": 4,
+      "art": {
+        "path": "/character-assets/guardian-weapon-4.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-4.png",
+      "muzzle": {
+        "x": 1103,
+        "y": 239
+      },
+      "barrelRear": {
+        "x": 960,
+        "y": 339
+      },
+      "rotation": -0.9605398459392694,
+      "frame": {
+        "x": -77.21000000000001,
+        "y": -16.73,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-4.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 121183,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "b5563fa57b751fb2e362cedf68856d50cf93ba989d09dcdb354722711a0074fa",
+      "sha256": "93b3b290ab832e4bf10cdf0195b0d17dad8bdd718b92c21897f054aeeb060c12"
+    },
+    {
+      "level": 5,
+      "art": {
+        "path": "/character-assets/guardian-weapon-5.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-5.png",
+      "muzzle": {
+        "x": 1167,
+        "y": 222
+      },
+      "barrelRear": {
+        "x": 1028,
+        "y": 315
+      },
+      "rotation": -0.9811353499749147,
+      "frame": {
+        "x": -81.69000000000001,
+        "y": -15.540000000000001,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-5.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 121316,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "e8bbafc9042fbe73a42093f90941aa0b6aa1a599e27d6b476ed9e3645bbbab4d",
+      "sha256": "f08802042fb565129c0aa21969772f80f25cabbaff40e2070e4832f33b6188cb"
+    },
+    {
+      "level": 6,
+      "art": {
+        "path": "/character-assets/guardian-weapon-6.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-6.png",
+      "muzzle": {
+        "x": 1161,
+        "y": 191
+      },
+      "barrelRear": {
+        "x": 1010,
+        "y": 310
+      },
+      "rotation": -0.9033663834724924,
+      "frame": {
+        "x": -81.27000000000001,
+        "y": -13.370000000000001,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-6.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 119526,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "4e0c1a07304b6b7e96dd9a297c0b05fb46bda6267efc58bce1ee91561165b01f",
+      "sha256": "d3ff9ed0d4575b78bdd1a2a01ad441c54570ed8633fd177dcc3a20f17864ce51"
+    },
+    {
+      "level": 7,
+      "art": {
+        "path": "/character-assets/guardian-weapon-7.png",
+        "source": "docs/visual-audit/hero/guardian-manifest.json",
+        "rights": "本项目内置 image_gen 制作，2026-11-10",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/weapon-variants/hero-back-7.png",
+      "muzzle": {
+        "x": 1136,
+        "y": 244
+      },
+      "barrelRear": {
+        "x": 1001,
+        "y": 332
+      },
+      "rotation": -0.9931203785293689,
+      "frame": {
+        "x": -79.52000000000001,
+        "y": -17.080000000000002,
+        "width": 107.52000000000001,
+        "height": 71.68
+      },
+      "target": "miniprogram/character-assets/guardian-weapon-7.png",
+      "runtimeSize": {
+        "width": 576,
+        "height": 384
+      },
+      "bytes": 118119,
+      "decodedRgbaBytes": 884736,
+      "sourceSha256": "1d491a45e2e9aea08555c7ad25d358869da5a304f88c17a4328fc828fa85711f",
+      "sha256": "dd4180fc101971b25d027e8891132e859bfcba5d650e6d96f205785820cf44b4"
+    }
+  ]
+}

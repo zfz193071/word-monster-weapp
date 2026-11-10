@@ -71,7 +71,7 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
   } finally { h.scene.dispose(); }
 });
 
-test('精细主角多方向实际绘制枪口对应真实首发，其他六级保持原图框', async () => {
+test('七级新主角绘制枪口与枪管方向对应真实首发，解码前不开战', async () => {
   for (const weaponLevel of [1, 2, 3, 4, 5, 6, 7]) {
     for (const targetX of [40, 180, 320]) {
       const opening = createOpeningEncounter('hero-art', 'apple', 0, 0, undefined, undefined, [], 1, weaponLevel);
@@ -92,17 +92,26 @@ test('精细主角多方向实际绘制枪口对应真实首发，其他六级�
         const index = h.commands.findIndex(command => command.method === 'drawImage' && command.args[0] === hero);
         assert.ok(index >= 0);
         const draw = h.commands[index].args.slice(1) as number[];
-        const rotation = h.commands.slice(0, index).findLast(command => command.method === 'rotate')!.args[0] as number;
-        const translation = h.commands.slice(0, index).findLast(command => command.method === 'translate')!.args as number[];
+        const transforms = h.commands.slice(0, index);
+        const rotations = transforms.filter(command => command.method === 'rotate').slice(-2).map(c => c.args[0] as number);
+        const translations = transforms.filter(command => command.method === 'translate').slice(-2).map(c => c.args as number[]);
         const [x,y,w,height] = draw;
-        // Measured source muzzle, independent of production placement constants.
-        const localX = weaponLevel === 1 ? x + w * 770 / 1122 : 16.8;
-        const localY = weaponLevel === 1 ? y + height * 330 / 1402 : -34.4;
-        const worldX = translation[0] + localX * Math.cos(rotation) - localY * Math.sin(rotation);
-        const worldY = translation[1] + localX * Math.sin(rotation) + localY * Math.cos(rotation);
-        const bullet = fired.projectiles[0];
-        assert.ok(Math.hypot(worldX - bullet.position.x, worldY - bullet.position.y) < 1e-8);
-        if (weaponLevel > 1) assert.deepEqual(draw, [-24, -35, 48, 60]);
+        // Independent source measurements; test the actual nested Canvas transforms.
+        const [mx,my,rx,ry] = [[1088,211,944,360],[1157,225,1038,306],[1287,186,1121,281],
+          [1103,239,960,339],[1167,222,1028,315],[1161,191,1010,310],[1136,244,1001,332]][weaponLevel-1];
+        const world = (sx:number, sy:number) => {
+          const lx=x+w*sx/1536, ly=y+height*sy/1024;
+          const px=translations[1][0]+lx*Math.cos(rotations[1])-ly*Math.sin(rotations[1]);
+          const py=translations[1][1]+lx*Math.sin(rotations[1])+ly*Math.cos(rotations[1]);
+          return {x:translations[0][0]+px*Math.cos(rotations[0])-py*Math.sin(rotations[0]),
+            y:translations[0][1]+px*Math.sin(rotations[0])+py*Math.cos(rotations[0])};
+        };
+        const muzzle=world(mx,my), rear=world(rx,ry), bullet=fired.projectiles[0];
+        assert.ok(Math.hypot(muzzle.x-bullet.position.x,muzzle.y-bullet.position.y)<1e-8);
+        const length=Math.hypot(muzzle.x-rear.x,muzzle.y-rear.y);
+        assert.ok(Math.abs((muzzle.x-rear.x)/length-fired.aimDirection!.x)<1e-8);
+        assert.ok(Math.abs((muzzle.y-rear.y)/length-fired.aimDirection!.y)<1e-8);
+
       } finally { h.scene.dispose(); }
     }
   }

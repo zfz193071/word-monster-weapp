@@ -1,0 +1,18 @@
+[
+  {
+    "file": "ipad.mp4",
+    "width": 2048,
+    "height": 1160,
+    "r_frame_rate": "30/1",
+    "duration": "35.466667",
+    "nb_frames": "1064"
+  },
+  {
+    "file": "phone.mp4",
+    "width": 780,
+    "height": 1240,
+    "r_frame_rate": "30/1",
+    "duration": "34.166667",
+    "nb_frames": "1025"
+  }
+]

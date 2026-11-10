@@ -13,3 +13,5 @@
 复查：`WM_CANVAS_MODULE=<canvas模块路径> node --import tsx scripts/review-reference-art.mts --production`。
 
 验证记录：524项全量回归、63项定向回归及npm run check通过；八关96份计划的资源审计、200张运行图片清单、git diff --check通过。蓝狐部件图集新增约201.1KiB文件、约1.50MiB解码RGBA；主角/动物源图仍在docs，不计入小程序运行包。
+
+2026-11-10 接续：七级主角战斗图已完成运行包重采样与逐级枪口/枪管角度接入，详见 ../hero/guardian-runtime/README.md 与 ../hero/guardian-manifest.json。源图仍保留原貌；运行接入不代表姿势、后坐力或整场视觉批准。

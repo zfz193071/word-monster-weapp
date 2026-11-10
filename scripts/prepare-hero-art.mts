@@ -1,28 +1,26 @@
 import { createRequire } from 'node:module';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { LEVEL_ONE_HERO_FRAME } from '../miniprogram/fortress/hero-art';
+import { HERO_VARIANTS } from '../miniprogram/fortress/hero-art';
 const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
-const source = 'docs/visual-audit/hero/originals/hero-back-weapon-1-aiming.png';
-const target = 'miniprogram/character-assets/hero-back-weapon-1-textured.png';
-const image = await loadImage(source);
-if (image.width !== 1122 || image.height !== 1402) throw Error('Recalibrate source muzzle before changing image dimensions');
-// Resample the complete alpha image, without cropping or thresholding edges.
-const width = 337, height = 421;
-const canvas = createCanvas(width, height);
-canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-await writeFile(target, canvas.toBuffer('image/png'));
-const files = await Promise.all([source, target].map(async path => {
-  const bytes = await readFile(path);
-  return { path, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
-}));
-await writeFile('docs/visual-audit/hero/aiming-manifest.json', JSON.stringify({
-  tool: 'built-in image_gen', prompt: 'aiming-prompt.txt',
-  sourceSize: {width:image.width,height:image.height}, sourceMuzzle: {x:770,y:330},
-  runtimeSize: {width,height}, frame: LEVEL_ONE_HERO_FRAME,
-  encoding: 'Full RGBA image resampled for runtime; alpha preserved; not lossless',
-  decodedRgbaBytes: width * height * 4, runtimeInstalled: true,
-  visualAcceptance: 'Pending full-scene and device acceptance', files,
+const files = [];
+for (const variant of HERO_VARIANTS) {
+  const original = await readFile(variant.source), image = await loadImage(original);
+  if (image.width !== 1536 || image.height !== 1024) throw Error('Recalibrate changed hero source');
+  // Runtime packaging only: complete image, no crop, repaint or alpha threshold.
+  const width = 576, height = 384, canvas = createCanvas(width, height);
+  canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+  const encoded = canvas.toBuffer('image/png'), target = `miniprogram${variant.art.path}`;
+  await writeFile(target, encoded);
+  files.push({...variant, target, runtimeSize: {width, height}, bytes: encoded.length,
+    decodedRgbaBytes: width * height * 4,
+    sourceSha256: createHash('sha256').update(original).digest('hex'),
+    sha256: createHash('sha256').update(encoded).digest('hex')});
+}
+await writeFile('docs/visual-audit/hero/guardian-manifest.json', JSON.stringify({
+  encoding: 'Complete approved-source variants resampled for runtime; alpha retained; not lossless',
+  combatMuzzle: {x:16.8,y:-34.4},
+  acceptance: 'Appearance direction approved; source muzzle manually measured; full scene and devices pending', files,
 }, null, 2) + '\n');
-console.log(files);
+console.log(files.map(({level,bytes}) => ({level,bytes})));

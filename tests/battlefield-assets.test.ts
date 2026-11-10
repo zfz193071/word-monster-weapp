@@ -85,7 +85,7 @@ test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本',
 
 test('角色包按实际主角与混编词条加载，无需求不下载，失败后独立重试', async () => {
   const {load, calls} = harness();
-  await load(3, 2, characterArt('cat', ['cat'], 2));
+  await load(3, 2, {...characterArt('cat', ['cat'], 2), hero: legacyHero});
   assert.equal(calls.length, 0);
   const hero = load(3, 2, characterArt('cat', ['cat'], 1));
   const apple = load(2, 2, characterArt('banana', ['banana', 'apple'], 2));
@@ -127,7 +127,7 @@ test('精细角色仅在新包中保留一份运行资源', () => {
 function characterArt(...args: Parameters<typeof openingArt>): SceneArt { return {...openingArt(...args), fruitHat: undefined, fruitHats: {}}; }
 
 test('宠物预加载在旧主角场景也等待角色包，失败可重试且跨关共享', async () => {
-  const {load,calls}=harness(), art=characterArt('cat',['cat'],2);
+  const {load,calls}=harness(), art={...characterArt('cat',['cat'],2), hero: legacyHero};
   const first=load(3,2,art,true), failed=assert.rejects(first);
   assert.deepEqual(calls.map(c=>c.path),['../character-assets/ready']);
   calls[0].reject(Error('offline'));await failed;
@@ -139,9 +139,9 @@ test('宠物预加载在旧主角场景也等待角色包，失败可重试且�
 
 test('水果分包按实际词图加载，包含上一关混编；并发失败后仅重试水果', async () => {
   const {load, calls} = harness();
-  await load(2, 2, openingArt('red', ['red'], 2));
+  await load(2, 2, categoryArt('red', ['red'], 2));
   assert.equal(calls.length, 0);
-  const art = openingArt('red', ['red', 'banana'], 2);
+  const art = categoryArt('red', ['red', 'banana'], 2);
   const first = load(2, 2, art), concurrent = load(2, 2, art);
   assert.deepEqual(calls.map(c => c.path), ['../fruit-assets/ready']);
   const failures = Promise.all([assert.rejects(first), assert.rejects(concurrent)]);
@@ -155,7 +155,7 @@ test('水果分包按实际词图加载，包含上一关混编；并发失败�
 
 test('水果下载超时后旧完成不能解锁新加载', async () => {
   const {load, calls, timers} = harness();
-  const art = openingArt('banana', ['banana'], 2);
+  const art = categoryArt('banana', ['banana'], 2);
   const first = load(2, 2, art), failed = assert.rejects(first, /超时/);
   for (const [key, fn] of [...timers]) {timers.delete(key); fn();}
   await failed;
@@ -183,9 +183,9 @@ test('11张水果原样迁移，清单哈希及尺寸一致且无旧运行副本
 
 test('动物分包按实际词图加载，包含上一关混编；并发失败后仅重试动物', async () => {
   const {load, calls} = harness();
-  await load(2, 2, openingArt('red', ['red'], 2));
+  await load(2, 2, categoryArt('red', ['red'], 2));
   assert.equal(calls.length, 0);
-  const art = openingArt('book', ['book', 'cat'], 2);
+  const art = categoryArt('book', ['book', 'cat'], 2);
   const first = load(2, 2, art), concurrent = load(2, 2, art);
   assert.deepEqual(calls.map(c => c.path), ['../animal-assets/ready']);
   const failures = Promise.all([assert.rejects(first), assert.rejects(concurrent)]);
@@ -199,7 +199,7 @@ test('动物分包按实际词图加载，包含上一关混编；并发失败�
 
 test('动物下载超时后旧完成不能解锁新加载', async () => {
   const {load, calls, timers} = harness();
-  const art = openingArt('cat', ['cat'], 2);
+  const art = categoryArt('cat', ['cat'], 2);
   const first = load(2, 2, art), failed = assert.rejects(first, /超时/);
   for (const [key, fn] of [...timers]) {timers.delete(key); fn();}
   await failed;
@@ -225,7 +225,7 @@ test('16张动物迁移保留字节、尺寸与唯一副本，覆盖第三及第
     assert.equal(existsSync(new URL(`../miniprogram${entry.oldPath}`, import.meta.url)), false);
     for (const level of [3, 4]) {
       const {load, calls} = harness();
-      const pending = load(level, 2, openingArt(level === 3 ? word.id : 'book', [word.id, 'book'], 2));
+      const pending = load(level, 2, categoryArt(level === 3 ? word.id : 'book', [word.id, 'book'], 2));
       assert.deepEqual(calls.map(c => c.path), ['../animal-assets/ready']);
       calls[0].resolve(); await pending;
     }
@@ -268,4 +268,22 @@ test('失败和超时独立计数，旧请求迟到不污染重试耗时', async
   assert.equal(sample().status, 'ready'); assert.equal(sample().lastDurationMs, 80);
   assert.equal(sample().attempts, 3); assert.equal(sample().failures, 1); assert.equal(sample().timeouts, 1);
   assert.equal(h.timers.size, 0);
+});
+
+// Explicit old/custom asset fixture isolates category loaders from hero dependencies.
+const legacyHero = {path:'/assets/images/fortress/hero-back-weapon-2.png',source:'legacy fixture',rights:'test',approved:true};
+function categoryArt(...args: Parameters<typeof openingArt>): SceneArt {
+  return {...openingArt(...args), hero:legacyHero};
+}
+test('七级新主角均等待角色分包，跨关使用同一成功缓存', async () => {
+  for(let level=1;level<=7;level++) {
+    const {load,calls}=harness();
+    let ready=false;
+    const pending=load(5,2,openingArt('red',['red'],level)).then(()=>{ready=true;});
+    assert.deepEqual(calls.map(c=>c.path),['../character-assets/ready']);
+    await Promise.resolve(); assert.equal(ready,false);
+    calls[0].resolve();await pending;
+    await load(6,2,openingArt('book',['book'],level));
+    assert.equal(calls.length,1);
+  }
 });

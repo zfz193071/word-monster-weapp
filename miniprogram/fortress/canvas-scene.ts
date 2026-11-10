@@ -23,7 +23,7 @@ import { createRetirement } from './retirement';
 import type { RetirementOptions } from './retirement';
 
 type Canvas = WechatMiniprogram.Canvas;
-import { LEVEL_ONE_HERO_ART, LEVEL_ONE_HERO_FRAME } from './hero-art';
+import { heroVariantForPath } from './hero-art';
 type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 // Shared elemental identity across projectile trails, status and hit feedback.
@@ -434,9 +434,12 @@ export class CanvasScene {
       if (art.fruitHat) {
         c.save(); c.translate(state.player.x, state.player.y);
         c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
-        if (art.hero.path === LEVEL_ONE_HERO_ART.path) {
-          const frame = LEVEL_ONE_HERO_FRAME;
+        const variant = heroVariantForPath(art.hero.path);
+        if (variant) {
+          c.save(); c.translate(16.8, -34.4); c.rotate(variant.rotation);
+          const frame = variant.frame;
           this.sprite(art.hero, frame.x, frame.y, frame.width, frame.height);
+          c.restore();
         } else this.sprite(art.hero, -24, -35, 48, 60);
         const weaponLevel=state.weaponLevel ?? 1;
         if(weaponLevel>=4 && state.base.hp>0){

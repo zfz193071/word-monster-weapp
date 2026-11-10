@@ -7,7 +7,7 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1812773,
+      "sourceBytes": 1813838,
       "fileCount": 200
     },
     {
@@ -37,8 +37,8 @@
     {
       "name": "character-assets",
       "root": "character-assets",
-      "sourceBytes": 384173,
-      "fileCount": 8
+      "sourceBytes": 1212731,
+      "fileCount": 15
     },
     {
       "name": "fruit-assets",
@@ -55,60 +55,60 @@
   ],
   "heroVariants": [
     {
-      "path": "/character-assets/hero-back-weapon-1-textured.png",
+      "path": "/character-assets/guardian-weapon-1.png",
       "package": "character-assets",
-      "bytes": 83632,
-      "width": 337,
-      "height": 421,
-      "rgbaBytes": 567508
+      "bytes": 109203,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-2.png",
-      "package": "scene-images",
-      "bytes": 10142,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-2.png",
+      "package": "character-assets",
+      "bytes": 122076,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-3.png",
-      "package": "scene-images",
-      "bytes": 10349,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-3.png",
+      "package": "character-assets",
+      "bytes": 117135,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-4.png",
-      "package": "scene-images",
-      "bytes": 10378,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-4.png",
+      "package": "character-assets",
+      "bytes": 121183,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-5.png",
-      "package": "scene-images",
-      "bytes": 10969,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-5.png",
+      "package": "character-assets",
+      "bytes": 121316,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-6.png",
-      "package": "scene-images",
-      "bytes": 10618,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-6.png",
+      "package": "character-assets",
+      "bytes": 119526,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     },
     {
-      "path": "/assets/images/fortress/hero-back-weapon-7.png",
-      "package": "scene-images",
-      "bytes": 11110,
-      "width": 160,
-      "height": 200,
-      "rgbaBytes": 128000
+      "path": "/character-assets/guardian-weapon-7.png",
+      "package": "character-assets",
+      "bytes": 118119,
+      "width": 576,
+      "height": 384,
+      "rgbaBytes": 884736
     }
   ],
   "levels": [
@@ -122,9 +122,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4364261,
-        "referencedFileBytes": 4073569
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 5192819,
+        "referencedFileBytes": 4099140
       },
       "levelId": 1,
       "category": "fruits",
@@ -377,12 +377,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/character-assets/zombie-apple-textured.png",
@@ -659,8 +659,8 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 3469990,
-      "estimatedImageRgbaBytes": 24793476,
+      "imageBytes": 3495561,
+      "estimatedImageRgbaBytes": 25110704,
       "audioBytes": 603579
     },
     {
@@ -673,9 +673,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4790375,
-        "referencedFileBytes": 3696935
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 5618933,
+        "referencedFileBytes": 3722506
       },
       "levelId": 2,
       "category": "color-shape",
@@ -985,12 +985,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/character-assets/zombie-apple-textured.png",
@@ -1411,8 +1411,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3022035,
-      "estimatedImageRgbaBytes": 14045572,
+      "imageBytes": 3047606,
+      "estimatedImageRgbaBytes": 14362800,
       "audioBytes": 674900
     },
     {
@@ -1425,9 +1425,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 5072031,
-        "referencedFileBytes": 3639211
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 5900589,
+        "referencedFileBytes": 3664782
       },
       "levelId": 3,
       "category": "animals-plants",
@@ -1782,12 +1782,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -2162,8 +2162,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3040647,
-      "estimatedImageRgbaBytes": 14012804,
+      "imageBytes": 3066218,
+      "estimatedImageRgbaBytes": 14330032,
       "audioBytes": 598564
     },
     {
@@ -2176,9 +2176,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 5072031,
-        "referencedFileBytes": 3594633
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 5900589,
+        "referencedFileBytes": 3620204
       },
       "levelId": 4,
       "category": "tools",
@@ -2475,12 +2475,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -2963,8 +2963,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 2932076,
-      "estimatedImageRgbaBytes": 14242180,
+      "imageBytes": 2957647,
+      "estimatedImageRgbaBytes": 14559408,
       "audioBytes": 662557
     },
     {
@@ -2976,9 +2976,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4073222,
-        "referencedFileBytes": 2537788
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 4901780,
+        "referencedFileBytes": 2563359
       },
       "levelId": 5,
       "category": "home-items",
@@ -3138,12 +3138,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -3592,8 +3592,8 @@
           "bytes": 5241
         }
       ],
-      "imageBytes": 1952960,
-      "estimatedImageRgbaBytes": 11194756,
+      "imageBytes": 1978531,
+      "estimatedImageRgbaBytes": 11511984,
       "audioBytes": 584828
     },
     {
@@ -3605,9 +3605,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4073222,
-        "referencedFileBytes": 2587935
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 4901780,
+        "referencedFileBytes": 2613506
       },
       "levelId": 6,
       "category": "daily-items",
@@ -3771,12 +3771,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -4297,8 +4297,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 1980141,
-      "estimatedImageRgbaBytes": 11784580,
+      "imageBytes": 2005712,
+      "estimatedImageRgbaBytes": 12101808,
       "audioBytes": 607794
     },
     {
@@ -4310,9 +4310,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4073222,
-        "referencedFileBytes": 2679069
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 4901780,
+        "referencedFileBytes": 2704640
       },
       "levelId": 7,
       "category": "nature",
@@ -4481,12 +4481,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -5097,8 +5097,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2027638,
-      "estimatedImageRgbaBytes": 12521860,
+      "imageBytes": 2053209,
+      "estimatedImageRgbaBytes": 12839088,
       "audioBytes": 651431
     },
     {
@@ -5110,9 +5110,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1812773,
-        "subpackageSourceBytes": 4073222,
-        "referencedFileBytes": 2535796
+        "mainSourceBytes": 1813838,
+        "subpackageSourceBytes": 4901780,
+        "referencedFileBytes": 2561367
       },
       "levelId": 8,
       "category": "body-parts",
@@ -5270,12 +5270,12 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/hero-back-weapon-1-textured.png",
+          "path": "/character-assets/guardian-weapon-1.png",
           "package": "character-assets",
-          "bytes": 83632,
-          "width": 337,
-          "height": 421,
-          "rgbaBytes": 567508
+          "bytes": 109203,
+          "width": 576,
+          "height": 384,
+          "rgbaBytes": 884736
         },
         {
           "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
@@ -5688,8 +5688,8 @@
           "bytes": 5085
         }
       ],
-      "imageBytes": 1979612,
-      "estimatedImageRgbaBytes": 10899844,
+      "imageBytes": 2005183,
+      "estimatedImageRgbaBytes": 11217072,
       "audioBytes": 556184
     }
   ]

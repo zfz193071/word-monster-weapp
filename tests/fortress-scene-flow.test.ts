@@ -151,7 +151,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(host.data.waveNumber,wave+1);assert.equal(waveMonsters.length,openingMonsterCount(wave,level.id));
     assert.equal(current!.snapshot.monsterSpeed, (level.id === 3 ? 28 * 1.2 : 20));
     for(const monster of waveMonsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,Math.ceil(stats.hp*enemyStats(monster.enemyType).hp));assert.equal(monster.attackDamage,Math.ceil(stats.attackDamage*enemyStats(monster.enemyType).attack));}
-    assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
+    assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/guardian-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     let awardedThisWave=0;
     while(host.data.level<20 && opening.OPENING_EXPERIENCE.levelThresholds[host.data.level-1] <= host.data.experience+(waveMonsters.length-awardedThisWave)*8){
