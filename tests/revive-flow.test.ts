@@ -10,8 +10,11 @@ import {createPetStore} from '../miniprogram/services/pet-store';
 import {CombatRunner} from '../miniprogram/fortress/combat-runner';
 import {createOpeningPlan} from '../miniprogram/fortress/opening-plan';
 import {createSeededRandom} from '../miniprogram/fortress/plans';
+import {applyCombatSkills} from '../miniprogram/fortress/combat';
+import {skillLevels} from '../miniprogram/fortress/quality-skills';
+import {SUMMON_SKILLS} from '../miniprogram/fortress/summon-skills';
 
-test('复活面板暂停、取消、后台拦截、保存失败和重复点击不误扣旗帜',async()=>{
+for (const summon of [undefined, ...SUMMON_SKILLS]) test(`复活面板 ${summon ?? '旧援军'}：暂停、后台、保存失败和重复点击不误扣旗帜`,async()=>{
   const saved=new Map<string,unknown>([[CHECKIN_KEY,{version:1,entries:[],soldiers:5,flags:2}]]);let fail=false;
   const storage={getStorageSync:(key:string)=>structuredClone(saved.get(key)),setStorageSync(key:string,value:unknown){if(fail)throw Error('disk');saved.set(key,structuredClone(value));}};
   const wallet=createCoinWallet(storage),pets=createPetStore(storage);
@@ -47,7 +50,11 @@ test('复活面板暂停、取消、后台拦截、保存失败和重复点击�
   }
   const host=await mount();
   host.openRevive();assert.equal(host.data.reviveOpen,false,'没有死亡目标不开面板');
-  current.runner=new CombatRunner({...current.snapshot,fallenSoldiers:[{id:'fallen',slot:0,hp:0,maxHp:30,position:{x:1,y:1},attackRemainingMs:400}]});
+  const collection=summon ? {[summon]:{level:5,quality:'legendary' as const}} : {};
+  const battle=applyCombatSkills(current.snapshot,skillLevels(collection),collection);
+  const fallen=summon ? {...battle.supportSoldiers[0],hp:0} : {id:'fallen',slot:0,hp:0,maxHp:30,position:{x:1,y:1},attackRemainingMs:400};
+  current.runner=new CombatRunner({...battle,supportSoldiers:[],fallenSoldiers:[fallen]});
+  const timers=structuredClone(current.snapshot.summonRemainingMs);
   host.refreshSoldierCount();
   for(const [field,value] of [['ready',false],['error','broken'],['upgradeOffer',{}],['waveRequest',{}],['completed',true],['failed',true]]){
     const previous=host.data[field as string];host.data[field as string]=value;host.openRevive();host.data[field as string]=previous;assert.equal(host.data.reviveOpen,false);
@@ -55,12 +62,19 @@ test('复活面板暂停、取消、后台拦截、保存失败和重复点击�
   host.openRevive();assert.equal(host.data.reviveOpen,true);assert.equal(current.runner.frame(1000).steps,0);
   host.summonSoldier({currentTarget:{dataset:{revision:host.data.soldierRevision}}});assert.equal(daily.soldierInventory().count,5);
   host.closeRevive();assert.equal(daily.flagInventory().count,2);host.openRevive();
-  const event={currentTarget:{dataset:{kind:'soldier',id:'fallen',revision:host.data.flagRevision}}};
+  const event={currentTarget:{dataset:{kind:'soldier',id:fallen.id,revision:host.data.flagRevision}}};
   definition.pageLifetimes.hide.call(host);host.chooseRevive(event);assert.equal(daily.flagInventory().count,2);
   definition.pageLifetimes.show.call(host);assert.equal(host.data.reviveOpen,true);assert.equal(current.runner.frame(2000).steps,0);
   fail=true;host.chooseRevive(event);assert(host.data.reviveError);assert.equal(current.snapshot.supportSoldiers.length,0);assert.equal(daily.flagInventory().count,2);
-  fail=false;host.chooseRevive(event);assert.equal(host.data.reviveOpen,false);assert.equal(daily.flagInventory().count,1);assert.equal(current.snapshot.supportSoldiers[0].hp,30);assert.equal(current.snapshot.fallenSoldiers.length,0);
-  host.chooseRevive(event);assert.equal(daily.flagInventory().count,1);
+  fail=false;host.chooseRevive(event);assert.equal(host.data.reviveOpen,false);assert.equal(daily.flagInventory().count,1);assert.equal(current.snapshot.supportSoldiers[0].hp,fallen.maxHp);assert.equal(current.snapshot.fallenSoldiers.length,0);
+  const revived=current.snapshot.supportSoldiers[0];
+  if(summon){
+    assert.equal(revived.soldierType,battle.supportSoldiers[0].soldierType);
+    assert.equal(revived.source,'skill');assert.equal(revived.evolved,true);
+    assert.deepEqual(revived.skill,battle.supportSoldiers[0].skill);
+    assert.deepEqual(current.snapshot.summonRemainingMs,timers);
+  }
+  host.chooseRevive(event);assert.equal(daily.flagInventory().count,1);assert.equal(current.snapshot.supportSoldiers.length,1);
   host.endRun();host.chooseRevive(event);assert.equal(daily.flagInventory().count,1);
   const fresh=await mount();assert.equal(fresh.data.reviveTargets.length,0);assert.equal(fresh.data.flagStock,1);fresh.endRun();
 });

@@ -31,3 +31,29 @@ test('五档品质技能实际带入新关战斗参数，经验时钟从零、�
   assert.equal(fired.projectiles.length,effect.count);assert(fired.projectiles.every(p=>p.damage>0));assert.deepEqual(state.skillCollection,collection);
  }
 });
+
+test('六类召唤在四难度七个跨关入口保留成长并重建满血编队',async()=>{
+ const {createStageInvasion}=await import('../miniprogram/fortress/stage-invasion');
+ const {SUMMON_TYPES}=await import('../miniprogram/fortress/summon-skills');
+ for(const difficulty of ['easy','normal','hard','nightmare'] as const){
+  for(const ids of [ ['rifleSupport','shieldLine','flameSquad'], ['rocketSupport','airFormation','armorSupport'] ] as const){
+   const collection:SkillCollection=Object.fromEntries(ids.map(id=>[id,{level:5,quality:'legendary'}]));
+   let request={plan:createOpeningPlan(`army-carry-${difficulty}-${ids[0]}`,createSeededRandom(41),1,7,difficulty),waveIndex:0,generation:1};
+   for(let stage=2;stage<=8;stage++){
+    request=nextStageRequest(request);
+    const state=createStageInvasion(request.plan,request.generation,collection);
+    assert.deepEqual(state.skillCollection,collection);
+    assert.deepEqual(state.supportSoldiers!.map(s=>s.soldierType),ids.map(id=>SUMMON_TYPES[id]));
+    assert(state.supportSoldiers!.every(s=>s.hp===s.maxHp&&s.source==='skill'&&s.evolved));
+    assert.deepEqual(state.fallenSoldiers,[]);
+    assert.deepEqual(Object.values(state.summonRemainingMs!),[20000,20000,20000]);
+    assert.equal(state.tick,0);assert.equal(state.base.hp,state.base.maxHp);
+    assert.equal(state.context.sessionId,request.plan.sessionId);
+    assert.equal(state.context.generation,request.generation);
+    const advanced=stepCombat(state).state;
+    assert.equal(advanced.supportSoldiers!.length,3,'首帧不重复补兵');
+    assert.deepEqual(Object.values(advanced.summonRemainingMs!),[19990,19990,19990]);
+   }
+  }
+ }
+});
