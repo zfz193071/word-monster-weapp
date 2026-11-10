@@ -1,3 +1,4 @@
+import { isSummonSkill } from '../miniprogram/fortress/summon-skills';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createOpeningEncounter, OPENING_EXPERIENCE } from '../miniprogram/fortress/opening-encounter';
@@ -13,7 +14,7 @@ import { createBattleDrops } from '../miniprogram/services/battle-drops';
 import type { CombatState } from '../miniprogram/fortress/types';
 
 test('90秒逻辑长局：123怪、全传说满级、宠物援军并发，实体有界且最终经验金币只结算一次',t=>{
- const skills=Object.freeze(Object.fromEntries(SKILL_IDS.map(id=>[id,Object.freeze({level:5,quality:'legendary'})]))) as SkillCollection;
+ const skills=Object.freeze(Object.fromEntries(SKILL_IDS.filter(id=>!isSummonSkill(id)).map(id=>[id,Object.freeze({level:5,quality:'legendary'})]))) as SkillCollection;
  const initial=createOpeningEncounter('soak',getLevel(8).words[0].id,1,18,skillLevels(skills),undefined,[],8,7,[],'nightmare',skills);
  let state:CombatState=attachCombatPet({...initial,monsterSpeed:0,monsters:initial.monsters.map((m,i)=>({...m,spawnAtMs:0,status:'alive',position:{x:145+(i%7)*10,y:180+Math.floor(i/7)*3},hp:10000000,maxHp:10000000,dropCoins:m.boss?0:3})),supportSoldiers:[0,1,2].map(slot=>({id:`soldier-${slot}`,slot,hp:30,maxHp:30,position:{x:140+slot*40,y:510},attackRemainingMs:2000}))},{level:10,equipped:[],attackRemainingMs:2000});
  assert.equal(state.monsters.length,123);assert.equal(qualityEffects(skills).count,8);assert.equal(qualityEffects(skills).intervalMs,160);

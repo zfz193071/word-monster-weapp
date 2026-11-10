@@ -6,6 +6,8 @@
       <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
       <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.shortDescription}}</view>
+      <view wx:if="{{item.summon}}" class="combo-hint">每20秒补兵 · 共3名
+满员，空位后自动补充</view>
       <view wx:if="{{item.comboHint}}" class="combo-hint">{{item.comboHint}}</view>
       <view wx:if="{{showGuide && !item.chosen && item.id === guideCardId}}" class="skill-guide {{disabled ? 'guide-paused' : ''}}" aria-label="再选择一个技能">👆</view>
       <view class="card-select" aria-hidden="true">{{item.chosen ? '已选择 ✓' : '＋'}}</view>

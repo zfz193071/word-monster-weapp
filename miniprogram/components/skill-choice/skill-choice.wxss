@@ -33,3 +33,14 @@
 .skill-card.card-chosen .card-select { font-size: 24rpx; }
 
 .combo-hint { margin:12rpx 8rpx 0; padding:8rpx 4rpx; border-radius:10rpx; background:#d9f1e7; color:#235b52; font-size:21rpx; line-height:1.4; }
+
+/* Shared squad silhouette; distinct equipment conveys the summon role. */
+.rifleSupport view:first-child,.shieldLine view:first-child,.flameSquad view:first-child,.rocketSupport view:first-child,.airFormation view:first-child,.armorSupport view:first-child {position:absolute;width:32rpx;height:32rpx;border-radius:50%;background:#d7e6bd;left:36rpx;top:14rpx;box-shadow:0 28rpx 0 8rpx #62845b;}
+.rifleSupport view:nth-child(2),.rocketSupport view:nth-child(2),.flameSquad view:nth-child(2) {position:absolute;left:65rpx;top:34rpx;width:10rpx;height:52rpx;background:#334b56;border:3rpx solid #d2dbb0;border-radius:5rpx;transform:rotate(-20deg);}
+.rocketSupport view:nth-child(2) {width:19rpx;border-radius:14rpx 14rpx 4rpx 4rpx;}
+.flameSquad view:nth-child(3) {position:absolute;left:68rpx;top:6rpx;width:18rpx;height:35rpx;background:#eb9b4f;border-radius:90% 0 80% 40%;}
+.shieldLine view:nth-child(2) {position:absolute;left:25rpx;top:42rpx;width:55rpx;height:52rpx;background:#708f96;border:5rpx solid #e1dbab;border-radius:6rpx 6rpx 30rpx 30rpx;}
+.airFormation view:nth-child(2),.airFormation view:nth-child(3) {position:absolute;top:42rpx;left:13rpx;width:17rpx;height:37rpx;background:#739ba5;border-bottom:15rpx solid #edb968;border-radius:12rpx;}
+.airFormation view:nth-child(3) {left:77rpx;}
+.armorSupport view:first-child {left:22rpx;top:45rpx;width:68rpx;height:35rpx;border-radius:14rpx;background:#6b8b54;box-shadow:0 12rpx 0 4rpx #314a43;}
+.armorSupport view:nth-child(2) {position:absolute;left:47rpx;top:8rpx;width:15rpx;height:55rpx;border:3rpx solid #c3d0a2;background:#55734b;border-radius:5rpx;}

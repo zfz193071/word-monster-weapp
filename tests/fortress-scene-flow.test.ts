@@ -1,3 +1,4 @@
+import { isSummonSkill, SUMMON_TYPES } from '../miniprogram/fortress/summon-skills';
 import { enemyStats } from '../miniprogram/fortress/enemy-types';
 import { createVictoryRewards, clearRewards } from '../miniprogram/services/victory-rewards';
 import { createDailyCheckin } from '../miniprogram/services/daily-checkin';
@@ -229,7 +230,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     host.nextWave({detail:{context:{...context,sessionId:'stale'},attempts:[{correct:true}]}});assert.equal(host.data.waveRequest,next);
     host.nextWave({detail:{context,attempts:[{correct:true,selectedWordId:target,targetWordId:target,sessionId:context.sessionId,waveId:context.waveId}]}});await Promise.resolve();
     assert.equal(host.data.error,'');assert.equal(host.data.level,1);assert.equal(host.data.experience,0);assert.equal(host.data.waveNumber,1);assert.equal(host.data.waveRequest,null);
-    assert.equal(current!.speed,2.5,'进入下一关沿用当前倍率');assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.equal(current!.snapshot.supportSoldiers!.length,0);assert.equal(current!.snapshot.fallenSoldiers?.length ?? 0,0);
+    assert.equal(current!.speed,2.5,'进入下一关沿用当前倍率');assert.equal(current!.snapshot.base.hp,1000+200*level.id);assert.equal(current!.snapshot.base.maxHp,current!.snapshot.base.hp);assert.deepEqual(current!.snapshot.supportSoldiers!.map(s=>s.soldierType),Object.keys(carried).filter(isSummonSkill).map(id=>SUMMON_TYPES[id]));assert.equal(current!.snapshot.fallenSoldiers?.length ?? 0,0);
     assert.equal(JSON.stringify(current!.snapshot.skillCollection),JSON.stringify(carried));assert.equal(host.data.skillInventory.length,Object.keys(carried).length);assert.equal(current!.snapshot.weaponLevel,7);
     assert.equal(current!.snapshot.tick,0);assert.equal(current!.snapshot.elementReadyTick,500);if(current!.snapshot.skills.firepower)assert.equal(current!.snapshot.firepowerUntilTick,qualitySkills.qualityEffects(carried).firepowerTicks);
     if(pet){assert.equal(current!.snapshot.pet?.hp,current!.snapshot.pet?.maxHp);assert.equal(current!.snapshot.pet?.defeatedPosition,undefined);}assert.equal(current!.snapshot.pet?.level,pet?.level);assert.equal(JSON.stringify(current!.snapshot.pet?.equipped),JSON.stringify(pet?.equipped));

@@ -1,3 +1,4 @@
+import { isSummonSkill } from '../miniprogram/fortress/summon-skills';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFileSync} from 'node:fs';
@@ -10,7 +11,7 @@ test('同一技能面板保留三张卡片，第一次选中标记并禁止重�
   let definition: any;
   const source = readFileSync(new URL('../miniprogram/components/skill-choice/skill-choice.ts', import.meta.url), 'utf8');
   runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS}}).outputText, {
-    exports: {}, Component(value: any) {definition = value;}, require: () => ({validateUpgradeOffer, SKILL_QUALITIES}),
+    exports: {}, Component(value: any) {definition = value;}, require: () => ({validateUpgradeOffer, SKILL_QUALITIES, isSummonSkill}),
   });
   const choices = createUpgradeChoices();
   choices.open({id: 'group', level: 2, cards: ['doubleShot', 'fireRate', 'bulletWidth'].map(id => ({id, icon: id as 'doubleShot', label: id, description: id, quality: id === 'bulletWidth' ? 'fine' as const : 'crude' as const, resultingQuality: id === 'bulletWidth' ? 'fine' as const : 'crude' as const, qualityLabel: id === 'bulletWidth' ? '精良' : '简陋', skillLevel: 1}))}, true);

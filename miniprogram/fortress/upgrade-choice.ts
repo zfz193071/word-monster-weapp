@@ -1,3 +1,5 @@
+import { SUMMON_SKILLS } from './summon-skills';
+import type { SummonSkillId } from './summon-skills';
 import { SKILL_QUALITIES } from './skill-quality';
 import type { SkillQuality } from './skill-quality';
 export interface UpgradeCard {
@@ -9,7 +11,7 @@ export interface UpgradeCard {
   readonly id: string;
   readonly label: string;
   readonly description: string;
-  readonly icon: 'doubleShot' | 'fireRate' | 'bulletWidth' | 'flame' | 'frost' | 'lightning' | 'firepower' | 'homing' | 'repair';
+  readonly icon: SummonSkillId | 'doubleShot' | 'fireRate' | 'bulletWidth' | 'flame' | 'frost' | 'lightning' | 'firepower' | 'homing' | 'repair';
 }
 export interface UpgradeOffer {
   readonly source?: 'level' | 'elite' | 'legendary';
@@ -28,7 +30,7 @@ export function validateUpgradeOffer(offer: UpgradeOffer): void {
   if (!offer.id.trim() || !Number.isSafeInteger(offer.level) || offer.level < 2 || (offer.cards.length < 1 || offer.cards.length > 3)
     || new Set(offer.cards.map(card => card.id)).size !== offer.cards.length
     || offer.cards.some(card => !card.id.trim() || !card.label.trim() || !card.description.trim()
-      || !['doubleShot', 'fireRate', 'bulletWidth', 'flame', 'frost', 'lightning', 'firepower', 'homing', 'repair'].includes(card.icon))) throw new Error('升级必须提供一至三个不同的有效技能候选');
+      || !['doubleShot', 'fireRate', 'bulletWidth', 'flame', 'frost', 'lightning', 'firepower', 'homing', 'repair', ...SUMMON_SKILLS].includes(card.icon))) throw new Error('升级必须提供一至三个不同的有效技能候选');
 }
 
 // The coordinator supplies eligible cards after an actual level-up. No wave-based reward or implicit skill pool.

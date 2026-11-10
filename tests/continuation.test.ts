@@ -1,3 +1,4 @@
+import { isSummonSkill } from '../miniprogram/fortress/summon-skills';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { nextStageRequest } from '../miniprogram/fortress/continuation';
@@ -22,7 +23,7 @@ test('七个跨关入口保留四档难度和武器，重试身份稳定，各�
 });
 test('五档品质技能实际带入新关战斗参数，经验时钟从零、冷却重开、满血且不带士兵',()=>{
  for(const quality of SKILL_QUALITIES){
-  const collection=Object.fromEntries(SKILL_IDS.map((id,i)=>[id,{level:i%5+1,quality:quality.id}])) as SkillCollection;
+  const collection=Object.fromEntries(SKILL_IDS.filter(id=>!isSummonSkill(id)).map((id,i)=>[id,{level:i%5+1,quality:quality.id}])) as SkillCollection;
   const state=createOpeningEncounter('carry','black',1,0,skillLevels(collection),undefined,[],2,7,[],'hard',collection);
   assert.deepEqual(state.skillCollection,collection);assert.equal(state.tick,0);assert.equal(state.base.hp,1200);assert.equal(state.supportSoldiers!.length,0);assert.equal(state.elementReadyTick,500);
   const effect=qualityEffects(collection);const weapon=getWeaponParameters(state.skills,state.skillCollection);assert.equal(weapon.count,effect.count);assert.equal(weapon.intervalMs,effect.intervalMs);assert.equal(state.firepowerUntilTick,effect.firepowerTicks);assert.equal(state.firepowerReadyTick,2000);

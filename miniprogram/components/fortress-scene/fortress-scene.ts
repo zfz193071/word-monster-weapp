@@ -1,3 +1,4 @@
+import { SUMMON_LABELS } from '../../fortress/summon-skills';
 import { victoryRewards } from '../../services/victory-rewards';
 import type { RewardCard } from '../../services/victory-rewards';
 import { createOpeningPlan } from '../../fortress/opening-plan';
@@ -48,7 +49,7 @@ function previewCombat(wordId: string): CombatState {
   return createPreviewCombat(wordId, id);
 }
 function inventory(collection: SkillCollection) {
-  const labels: Record<BattleSkillId, string> = {doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪'};
+  const labels: Record<BattleSkillId, string> = {...SUMMON_LABELS,doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪'};
   return Object.entries(collection).map(([id, skill]) => ({id, quality:skill.quality, label:`${labels[id as BattleSkillId]} · ${SKILL_QUALITIES[qualityRank(skill.quality)].label} Lv.${skill.level}`, description:qualityDescription(id as BattleSkillId,collection)}));
 }
 Component({

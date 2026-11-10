@@ -1,3 +1,4 @@
+import { updateSummons } from './summoning';
 import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
 import { enemyLayer, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
@@ -74,6 +75,7 @@ function freezeState(state: CombatState): CombatState {
     ...(state.pet ? { pet: createBattlePet(state.pet, state.pet.attackRemainingMs, state.pet) } : {}),
     ...(state.aimDirection ? { aimDirection: Object.freeze({ ...state.aimDirection }) } : {}),
     ...(state.elementImpacts ? { elementImpacts: Object.freeze(state.elementImpacts.map(impact => Object.freeze({ ...impact, position: Object.freeze({ ...impact.position }), ...(impact.target ? { target: Object.freeze({ ...impact.target }) } : {}) }))) } : {}),
+    ...(state.summonRemainingMs ? {summonRemainingMs:Object.freeze({...state.summonRemainingMs})} : {}),
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
     base: Object.freeze({ ...state.base }), skills: Object.freeze({ ...state.skills }),
     monsters: Object.freeze(state.monsters.map(monster => Object.isFrozen(monster) ? monster : Object.freeze({ ...monster,
@@ -109,7 +111,7 @@ export function resizeCombatArena(state: CombatState, width: number): CombatStat
   const target = state.automatic ? findAutomaticTarget(monsters, width) : undefined;
   return freezeState({...state, arenaWidth: width, player, monsters,
     ...(state.incomingMonsters ? {incomingMonsters: Object.freeze(state.incomingMonsters.map(monster => Object.freeze({...monster, position: Object.freeze(entryPoint(monster.position))})))} : {}),
-    supportSoldiers: (state.supportSoldiers ?? []).map(soldier => ({...soldier, position: supportPosition(player, soldier.slot, state.supportSoldiers!.length, width), ...(soldier.shotTarget ? {shotTarget: point(soldier.shotTarget)} : {})})),
+    supportSoldiers: (state.supportSoldiers ?? []).map(soldier => ({...soldier, position: {...supportPosition(player, soldier.slot, state.supportSoldiers!.length, width), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}, ...(soldier.shotTarget ? {shotTarget: point(soldier.shotTarget)} : {})})),
     fallenSoldiers: (state.fallenSoldiers ?? []).map(soldier => ({...soldier, position: point(soldier.position)})),
     projectiles: state.projectiles.map(projectile => ({...projectile, position: point(projectile.position), previousPosition: point(projectile.previousPosition), ...(projectile.direction ? {direction: direction(projectile.direction)} : {})})),
     ...(state.aimDirection ? {aimDirection: target ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL) : direction(state.aimDirection)} : {}),
@@ -208,7 +210,8 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
     projectiles: [], supportSoldiers: options.supportSoldiers ?? [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [],
   };
-  return freezeState(options.automatic ? { ...state, shotRemainingMs: 0 } : { ...state, projectiles: volley(state, weapon, false, !!state.skills.firepower), nextProjectileSequence: weapon.count });
+  const ready = options.skillCollection ? updateSummons(state,options.skillCollection) : state;
+  return freezeState(options.automatic ? { ...ready, shotRemainingMs: 0 } : { ...ready, projectiles: volley(ready, weapon, false, !!ready.skills.firepower), nextProjectileSequence: weapon.count });
 }
 
 // Slab intersection in relative coordinates: expand the monster AABB by the
@@ -258,6 +261,7 @@ function advanceMonster(monster: MonsterState, speed: number, elapsedMs: number)
 // No callback/timer/image/answer event can directly kill a monster here.
 export function stepCombat(previous: CombatState, input: CombatInput = {}): CombatStep {
   if (previous.status !== 'fighting') return { state: previous, events: Object.freeze([]) };
+  if (previous.skillCollection) previous = updateSummons(previous,previous.skillCollection,COMBAT_STEP_MS);
   const player = { x: previous.automatic || input.playerX === undefined ? previous.player.x : playerX(input.playerX, previous.arenaWidth), y: RULES.arena.playerY };
   const tick = previous.tick + 1;
   const events: CombatEvent[] = [];
@@ -414,7 +418,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   }
   const supportCount = supportSoldiers.length;
   supportSoldiers = supportSoldiers.map(soldier => ({ ...soldier,
-    position: { ...supportPosition(player, soldier.slot, supportCount, previous.arenaWidth), ...(soldierType(soldier.soldierType) === 'jetpack' ? {x: supportPosition(player, soldier.slot, supportCount, previous.arenaWidth).x + Math.sin(tick * .025 + soldier.slot) * 12} : {}) },
+    position: { ...supportPosition(player, soldier.slot, supportCount, previous.arenaWidth), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {}), ...(soldierType(soldier.soldierType) === 'jetpack' ? {x: playerX(supportPosition(player, soldier.slot, supportCount, previous.arenaWidth).x + Math.sin(tick * .025 + soldier.slot) * 12, previous.arenaWidth)} : {}) },
     attackRemainingMs: Math.max(0, soldier.attackRemainingMs - COMBAT_STEP_MS),
   }));
   const supportDamage = weaponForLevel(previous.weaponLevel ?? 1).damage;
@@ -531,7 +535,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : Math.max(MAX_PROJECTILES, (Math.ceil(Math.hypot(previous.arenaWidth ?? RULES.arena.width, RULES.arena.height + RULES.projectile.height) / RULES.projectile.speed * 1000 / MIN_INTERVAL) + 1) * MAX_SHOTS))) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers, fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
+  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers: status === 'baseDestroyed' ? [] : supportSoldiers, ...(status === 'baseDestroyed' ? {summonRemainingMs:{},skillCollection:{},skills:{doubleShot:0,fireRate:0,bulletWidth:0}} : {}), fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     frostEnergy: Math.min(FROST_ENERGY_MAX, (previous.frostEnergy ?? 0) + events.filter(event => event.type === 'monsterDefeated').length),
     flameVolleyHits: Object.fromEntries([...flameHits].filter(([id]) => projectiles.some(p => p.flameVolleyId === id && !!p.elements?.flame)).map(([id, hits]) => [id, [...hits]])),
     ...(flameFanUntilTick !== undefined ? {flameFanUntilTick} : {}),
@@ -569,14 +573,14 @@ export function summonSupportSoldier(state: CombatState, id: string): CombatStat
   const current = state.supportSoldiers ?? [];
   if (state.status !== 'fighting' || state.base.hp <= 0 || !id.trim() || current.length >= 3 || current.some(soldier => soldier.id === id)) return null;
   const count = current.length + 1;
-  const soldiers = current.map((soldier, slot) => ({...soldier, slot, position: supportPosition(state.player, slot, count, state.arenaWidth)}));
+  const soldiers = current.map((soldier, slot) => ({...soldier, slot, position: {...supportPosition(state.player, slot, count, state.arenaWidth), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}}));
   soldiers.push({id, slot: current.length, position: supportPosition(state.player, current.length, count, state.arenaWidth), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000});
   return freezeState({...state, supportSoldiers: soldiers});
 }
 
 export function applyCombatSkills(state: CombatState, skills: SkillLevels, collection?: SkillCollection): CombatState {
   getWeaponParameters(skills, collection);
-  return freezeState({ ...state, skills: collection ? skillLevels(collection) : skills, ...(collection ? { skillCollection: collection } : {}) });
+  return freezeState({ ...(collection ? updateSummons(state,collection) : state), skills: collection ? skillLevels(collection) : skills });
 }
 
 
@@ -625,6 +629,6 @@ export function reviveCompanion(state: CombatState, kind: string, id: string): C
   const next = summonSupportSoldier(state, id);
   if (!next) return null;
   const stats = unitStats(fallen,weaponForLevel(state.weaponLevel ?? 1).damage);
-  return freezeState({...next, supportSoldiers: next.supportSoldiers!.map(s => s.id === id ? {...fallen,slot:s.slot,position:s.position,hp:fallen.maxHp,attackRemainingMs:stats.interval,lastShotTick:undefined,shotTarget:undefined,shotCombatId:undefined} : s),
+  return freezeState({...next, supportSoldiers: next.supportSoldiers!.map(s => s.id === id ? {...fallen,slot:s.slot,position:{...s.position,...(fallen.source === 'skill' ? {y:RULES.arena.baseTop} : {})},hp:fallen.maxHp,attackRemainingMs:stats.interval,lastShotTick:undefined,shotTarget:undefined,shotCombatId:undefined} : s),
     fallenSoldiers: state.fallenSoldiers!.filter(s => s.id !== id)});
 }

@@ -1,6 +1,7 @@
+import { SUMMON_SKILLS, isSummonSkill, canAcquireSummon } from './summon-skills';
 import type { BattleSkillId, RandomSource, SkillLevels } from './types';
 
-export const SKILL_IDS: readonly BattleSkillId[] = Object.freeze(['doubleShot', 'fireRate', 'bulletWidth', 'flame', 'frost', 'lightning', 'firepower', 'homing']);
+export const SKILL_IDS: readonly BattleSkillId[] = Object.freeze(['doubleShot', 'fireRate', 'bulletWidth', 'flame', 'frost', 'lightning', 'firepower', 'homing', ...SUMMON_SKILLS]);
 export const SKILL_QUALITIES = Object.freeze([
   { id: 'crude', label: '简陋', color: '#92989b', multiplier: 1 },
   { id: 'fine', label: '精良', color: '#599c62', multiplier: 1.15 },
@@ -38,6 +39,7 @@ export function canImproveSkill(owned: OwnedSkill | undefined, quality: SkillQua
 
 // Offer consumption/idempotence belongs to the choice coordinator, not this pure reducer.
 export function applySkillReward(skills: SkillCollection, reward: SkillReward): SkillCollection {
+  if (!SKILL_IDS.includes(reward.id) || !canAcquireSummon(skills,reward.id)) throw new Error('技能类型或召唤数量无效');
   const rank = qualityRank(reward.quality);
   const owned = skills[reward.id];
   if (!canImproveSkill(owned, reward.quality)) return skills;
@@ -60,13 +62,18 @@ function draw(random: RandomSource): number {
 // At Lv.5, normalize the same weights over qualities that still improve that skill.
 export function rollUpgradeCandidates(skills: SkillCollection, heroLevel: number, base: { hp: number; maxHp: number }, random: RandomSource, ensureOffense = false): readonly SkillCandidate[] {
   const weights = upgradeQualityWeights(heroLevel);
-  const eligible: (BattleSkillId | 'repair')[] = SKILL_IDS.filter(id => weights.some((weight, rank) => weight > 0 && canImproveSkill(skills[id], SKILL_QUALITIES[rank].id)));
+  const eligible: (BattleSkillId | 'repair')[] = SKILL_IDS.filter(id => canAcquireSummon(skills,id) && weights.some((weight, rank) => weight > 0 && canImproveSkill(skills[id], SKILL_QUALITIES[rank].id)));
   if (base.hp > 0 && base.hp < base.maxHp * .5) eligible.push('repair');
   for (let i = eligible.length - 1; i > 0; i--) {
     const j = Math.floor(draw(random) * (i + 1));
     [eligible[i], eligible[j]] = [eligible[j], eligible[i]];
   }
-  const selected = eligible.slice(0, 3);
+  let newSummonSlots = 3 - SUMMON_SKILLS.filter(id => skills[id]).length;
+  const selected = eligible.filter(id => {
+    if (!isSummonSkill(id) || skills[id]) return true;
+    if (newSummonSlots <= 0) return false;
+    newSummonSlots--; return true;
+  }).slice(0, 3);
   // Keep the sampled quality distribution and distinct cards; only guarantee an eligible offense choice.
   if (ensureOffense && !selected.some(id => id === 'doubleShot' || id === 'fireRate')) {
     const offense = eligible.find(id => id === 'doubleShot' || id === 'fireRate');

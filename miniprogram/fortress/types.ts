@@ -1,3 +1,5 @@
+import type { SummonSkillId } from './summon-skills';
+import type { SummonTimers } from './summoning';
 import type { EnemyType, SoldierType, SoldierSource, AttackCapability } from './army';
 import type { OwnedSkill, SkillCollection } from './skill-quality';
 import type { DifficultyId } from './difficulty';
@@ -5,7 +7,7 @@ import type { BattlePet } from '../pets/battle';
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
 export type SkillId = 'doubleShot' | 'fireRate' | 'bulletWidth';
 export type ElementId = 'flame' | 'frost' | 'lightning';
-export type BattleSkillId = SkillId | ElementId | 'firepower' | 'homing';
+export type BattleSkillId = SkillId | ElementId | 'firepower' | 'homing' | SummonSkillId;
 export type RandomSource = () => number;
 export interface Point { readonly x: number; readonly y: number }
 export interface Rect extends Point { readonly width: number; readonly height: number }
@@ -41,7 +43,7 @@ export interface SkillDefinition {
   // Absolute values at level 0..maxLevel; no ambiguous percentage stacking.
   readonly values: readonly number[];
 }
-export type SkillLevels = Readonly<Record<SkillId, number> & Partial<Record<ElementId | 'firepower' | 'homing', number>>>;
+export type SkillLevels = Readonly<Record<SkillId, number> & Partial<Record<ElementId | 'firepower' | 'homing' | SummonSkillId, number>>>;
 export interface FortressRules {
   readonly mode: 'fortress';
   readonly schemaVersion: 2;
@@ -172,6 +174,8 @@ export interface ProjectileState {
 }
 export interface ElementImpact { readonly iceChain?: boolean; readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
+  readonly summonRemainingMs?: SummonTimers;
+  readonly nextSummonSequence?: number;
   /** Logical battle width; omitted by legacy 360-wide plans. */
   readonly arenaWidth?: number;
   readonly frostEnergy?: number;

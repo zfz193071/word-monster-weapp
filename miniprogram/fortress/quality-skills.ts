@@ -1,3 +1,4 @@
+import { isSummonSkill, canAcquireSummon, SUMMON_LABELS } from './summon-skills';
 import { applySkillReward, rollUpgradeCandidates, SKILL_QUALITIES, qualityRank, SKILL_IDS, canImproveSkill } from './skill-quality';
 import type { SkillCollection } from './skill-quality';
 import type { BattleSkillId, RandomSource, SessionPlan, SkillLevels } from './types';
@@ -29,9 +30,10 @@ export function qualityEffects(skills: SkillCollection) {
     firepowerTicks: [500,500,500,600,800][rank('firepower')],
   });
 }
-const LABELS: Record<BattleSkillId, string> = { doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪' };
+const LABELS: Record<BattleSkillId, string> = { ...SUMMON_LABELS, doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪' };
 const number = (value: number) => Math.round(value * 100) / 100;
 export function qualityDescription(id: BattleSkillId, skills: SkillCollection): string {
+  if (isSummonSkill(id)) return '首次补充1名；每20秒在缺少该兵种且有空位时补充；全体最多3名，满员，空位后自动补充；Lv.5且精英/传说进化';
   const effect = qualityEffects(skills);
   switch (id) {
     case 'doubleShot': return `每次齐射${effect.count}发；${skills.flame ? '充能时最多3发半伤火焰，同轮爆炸不重复命中；其他元素仅一发' : '元素仅附于其中一发'}`;
@@ -58,7 +60,7 @@ export function qualitySkillOffer(sessionId: string, level: number, skills: Skil
 }
 
 export function bossSkillOffer(monsterId: string, quality: 'elite' | 'legendary', skills: SkillCollection, random: RandomSource): UpgradeOffer {
-  const eligible = SKILL_IDS.filter(id => canImproveSkill(skills[id], quality));
+  const eligible = SKILL_IDS.filter(id => canAcquireSummon(skills,id) && canImproveSkill(skills[id], quality));
   for (let i = eligible.length - 1; i > 0; i--) {
     const value = random();
     if (!Number.isFinite(value) || value < 0 || value >= 1) throw new Error('随机数无效');
