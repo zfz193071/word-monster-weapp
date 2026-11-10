@@ -99,7 +99,7 @@
       "id": "animals",
       "name": "16种动物",
       "owner": 85,
-      "status": "14/16展示图；未接入",
+      "status": "15/16展示图；未接入",
       "links": [
         {
           "path": "animals/README.md",
@@ -110,7 +110,7 @@
           "label": "候选审样"
         }
       ],
-      "remaining": "缺马、狮子；兔/鸟之外的独立战斗部件、关节与自然动作未完成。"
+      "remaining": "缺马；兔/鸟之外的独立战斗部件、关节与自然动作未完成。"
     },
     {
       "id": "other",

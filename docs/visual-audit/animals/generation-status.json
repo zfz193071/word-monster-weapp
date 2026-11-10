@@ -2,8 +2,7 @@
   "date": "2026-11-09",
   "tool": "built-in image_gen",
   "missing": [
-    "horse",
-    "lion"
+    "horse"
   ],
   "entries": [
     {
@@ -58,15 +57,29 @@
     {
       "id": "horse",
       "status": "blocked",
-      "attempts": 2,
-      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f37bf35e-11e9-4354-8f1a-54b7d99e5a16.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")"
+      "attempts": 3,
+      "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f37bf35e-11e9-4354-8f1a-54b7d99e5a16.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "latestAttemptDate": "2026-11-10",
+      "prompt": "prompts.json#horse",
+      "latestError": {
+        "code": "moderation_blocked",
+        "stage": "output",
+        "categories": [
+          "other"
+        ],
+        "requestId": "b2296027-7ea4-4165-97e2-953f6241b6c5"
+      }
     },
     {
       "id": "lion",
-      "status": "blocked",
-      "attempts": 2,
+      "status": "generated",
+      "attempts": 3,
       "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID e656855d-e9eb-47b8-a835-2b34024d1513.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
-      "retryError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID c362f965-e98f-4ecc-9ccf-70c9f5bc7867.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")"
+      "retryError": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID c362f965-e98f-4ecc-9ccf-70c9f5bc7867.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
+      "latestAttemptDate": "2026-11-10",
+      "prompt": "prompts.json#lion",
+      "sourcePath": "/Users/zhuwenfang/.codex/generated_images/01a1c347-fb7f-7ff1-8d87-2f621651bcb7/exec-142f5e8a-0f7f-4ea0-a2f3-13ef023d0865.png",
+      "savedPath": "originals/lion.png"
     },
     {
       "id": "panda",
@@ -104,5 +117,6 @@
   "refinements": {
     "duck": "originals/duck-clean.png removes invalid broad background",
     "fish": "originals/fish-corrected.png removes mammalian nose/muzzle; keeps fish anatomy"
-  }
+  },
+  "updatedAt": "2026-11-10"
 }

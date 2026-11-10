@@ -6,14 +6,13 @@
   "processing": "Original alpha preserved; aspect-preserving high-quality resize and lossless PNG encoding; no quantization.",
   "status": "Incomplete batch; missing originals; not integrated",
   "missing": [
-    "horse",
-    "lion"
+    "horse"
   ],
   "totals": {
-    "64": 84126,
-    "128": 272106,
-    "256": 912965,
-    "512": 3131211
+    "64": 91082,
+    "128": 295213,
+    "256": 990820,
+    "512": 3400161
   },
   "entries": [
     {
@@ -532,6 +531,58 @@
           "bytes": 192548,
           "rgbaBytes": 1048576,
           "sha256": "243c1e1590685269cbd5047446ce04d699e284a2d427c47572d713c5664a5131"
+        }
+      ],
+      "reviewStatus": "pending-batch-visual-review"
+    },
+    {
+      "wordId": "lion",
+      "meaningZh": "狮子",
+      "audioPath": "/learning-assets/audio/learn-lion.mp3",
+      "original": "originals/lion.png",
+      "role": "learning-display",
+      "battlePartsStatus": "not-produced-by-this-script",
+      "prompt": "prompts.json#lion",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 1713576,
+      "sha256": "530e0b407c1efe84ead9023f0c78551fd67afab8e0a961ae295e063fa65c9d4c",
+      "transparent": 827776,
+      "partial": 744557,
+      "contentBounds": {
+        "left": 130,
+        "top": 59,
+        "right": 1100,
+        "bottom": 1173
+      },
+      "variants": [
+        {
+          "file": "variants/lion-64.png",
+          "size": 64,
+          "bytes": 6956,
+          "rgbaBytes": 16384,
+          "sha256": "8041057edec1992ddfb83ba67e6888f2d2b30c1ca47988bbcb19a18f0e42c866"
+        },
+        {
+          "file": "variants/lion-128.png",
+          "size": 128,
+          "bytes": 23107,
+          "rgbaBytes": 65536,
+          "sha256": "043ec9be85653b234930ad67092ce1305900a29f023f6ffacbff1694cc51d45a"
+        },
+        {
+          "file": "variants/lion-256.png",
+          "size": 256,
+          "bytes": 77855,
+          "rgbaBytes": 262144,
+          "sha256": "8f1c498abe60c0446b2e36727ac7959934d9baa7ad497a629279676848066352"
+        },
+        {
+          "file": "variants/lion-512.png",
+          "size": 512,
+          "bytes": 268950,
+          "rgbaBytes": 1048576,
+          "sha256": "647aa65c38258471844b8aadd919465c364b5dfa2a743d8999a4adc10fb10110"
         }
       ],
       "reviewStatus": "pending-batch-visual-review"

@@ -77,14 +77,14 @@
     {
       "asset": "animals",
       "path": "animals/README.md",
-      "bytes": 3493,
-      "sha256": "aaaf135fc55e87029d5cd3484ef4a9e1e2686f3ca2f00d0ce1542dd66ea8bfdb"
+      "bytes": 4507,
+      "sha256": "91cf3d8006991e5559b1258931de537291ddaf3c0d9b5f6fd40473bf44db65c2"
     },
     {
       "asset": "animals",
       "path": "animals/review.html",
-      "bytes": 10624,
-      "sha256": "30dfb0e5cebd550ff36100a1b2499ce5439db8795e1bea5845767411148ae6ef"
+      "bytes": 11302,
+      "sha256": "09350abf17c681b94381403c44d16eb61cac602645ed84bbfc7f9224e9dc1e33"
     },
     {
       "asset": "other",
