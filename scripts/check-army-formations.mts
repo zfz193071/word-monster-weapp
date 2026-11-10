@@ -26,6 +26,7 @@ const groups: Record<string, EnemyType[]> = {
 function replay(initial: CombatState, speed: number) {
   const runner = new CombatRunner(initial), digest = createHash('sha256');
   const damage: Record<string, number> = {}, events: Record<string, number> = {};
+  const soldierContributions: Record<string, { type: string; source?: string; hits: number; damage: number; effectiveDamage: number }> = {};
   let now = 0, peakAlive = initial.monsters.length;
   runner.setSpeed(speed); runner.frame(now);
   for (let checkpoint = 0; checkpoint < 40; checkpoint++) {
@@ -35,7 +36,18 @@ function replay(initial: CombatState, speed: number) {
       for (const event of result.events) {
         digest.update(JSON.stringify(event) + '\n');
         events[event.type] = (events[event.type] ?? 0) + 1;
-        if (event.type === 'monsterDamaged') damage[event.kind] = (damage[event.kind] ?? 0) + event.damage;
+        if (event.type === 'monsterDamaged') {
+          damage[event.kind] = (damage[event.kind] ?? 0) + event.damage;
+          if (event.kind === 'soldier') {
+            assert.ok(event.soldier, 'every soldier hit must identify its attacker');
+            const { id, type, source, effectiveDamage } = event.soldier;
+            assert.ok(effectiveDamage > 0 && effectiveDamage <= event.damage);
+            const contribution = soldierContributions[id] ??= { type, source, hits: 0, damage: 0, effectiveDamage: 0 };
+            contribution.hits++;
+            contribution.damage += event.damage;
+            contribution.effectiveDamage += effectiveDamage;
+          } else assert.equal(event.soldier, undefined);
+        }
       }
       peakAlive = Math.max(peakAlive, runner.snapshot!.monsters.filter(m => m.hp > 0).length);
     }
@@ -49,10 +61,11 @@ function replay(initial: CombatState, speed: number) {
     }
   }
   const state = runner.snapshot!;
+  assert.equal(Object.values(soldierContributions).reduce((sum, unit) => sum + unit.damage, 0), damage.soldier ?? 0);
   runner.dispose();
   assert.equal(runner.frame(now + 1000).state, null);
   return { status: state.status, seconds: state.tick / 100, baseHp: state.base.hp,
-    maxHp: state.base.maxHp, peakAlive, damage, events,
+    maxHp: state.base.maxHp, peakAlive, damage, soldierContributions, events,
     remaining: state.monsters.filter(m => m.hp > 0).map(m => m.enemyType),
     resolved: state.defeatedMonsterIds.length, digest: digest.digest('hex') };
 }
@@ -82,6 +95,6 @@ for (const difficulty of ['easy', 'nightmare'] as const) for (const width of [36
 }
 await writeFile('docs/visual-audit/army/formations.json', JSON.stringify({ seed: 41,
   scope: '48 close-contact fixtures; real generated stats, six selected enemies repositioned near defense; no incoming waves, pets, consumables, upgrades or reward UI. 120 simulation seconds maximum. Not natural victory, device performance or player win rate.',
-  damage: 'Reported event damage includes overkill. Soldier damage is aggregated by formation; events do not identify individual attackers.',
+  damage: 'Event damage includes overkill. soldierContributions identifies each attacking unit, type and source; effectiveDamage excludes overkill after armor/vulnerability. Units with no hits are omitted, not missing attribution.',
   speeds: [1, 1.5, 2, 2.5], checks: 'All event streams and 3-second snapshots match; pause and dispose checked.', results }, null, 2) + '\n');
 console.log(`${results.length} fixtures × four speeds passed`);

@@ -1,7 +1,7 @@
 {
   "seed": 41,
   "scope": "48 close-contact fixtures; real generated stats, six selected enemies repositioned near defense; no incoming waves, pets, consumables, upgrades or reward UI. 120 simulation seconds maximum. Not natural victory, device performance or player win rate.",
-  "damage": "Reported event damage includes overkill. Soldier damage is aggregated by formation; events do not identify individual attackers.",
+  "damage": "Event damage includes overkill. soldierContributions identifies each attacking unit, type and source; effectiveDamage excludes overkill after armor/vulnerability. Units with no hits are omitted, not missing attribution.",
   "speeds": [
     1,
     1.5,
@@ -29,6 +29,29 @@
         "projectile": 170,
         "soldier": 210
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 40,
+          "effectiveDamage": 32
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 7,
+          "damage": 140,
+          "effectiveDamage": 140
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 26
+        }
+      },
       "events": {
         "monsterDamaged": 31,
         "monsterDefeated": 6,
@@ -36,7 +59,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "ff6c05cf83a1fb7dcbee4f60b9aff981469ffccd0571e5683a4e78424fed8e8d"
+      "digest": "f18dbf3a3a70b69b30aa323b4ee098b8ae1fd711f3d039aa91d535517606774b"
     },
     {
       "difficulty": "easy",
@@ -57,6 +80,15 @@
         "projectile": 240,
         "soldier": 60
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 6,
+          "damage": 60,
+          "effectiveDamage": 56
+        }
+      },
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -64,7 +96,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "31f58649bfc1ca996dec42dad01bff2f3361c4e0914fcbb4b4e0af991e9689ce"
+      "digest": "694e219546c748ed81915ee751425273e0987cb3f4657186499642fa63d6bee7"
     },
     {
       "difficulty": "easy",
@@ -85,6 +117,29 @@
         "projectile": 170,
         "soldier": 225
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 35,
+          "effectiveDamage": 35
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 8,
+          "damage": 160,
+          "effectiveDamage": 155
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 29
+        }
+      },
       "events": {
         "monsterDamaged": 32,
         "monsterDefeated": 6,
@@ -92,7 +147,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "5de461006712b797deff8312d223a4354e662722ec51679a0529505ae6c5e3f4"
+      "digest": "aa4f54efb79cdf7cde5e5da673c05dbea0e29be76058b7c4af7bd4eae42e29b3"
     },
     {
       "difficulty": "easy",
@@ -113,6 +168,29 @@
         "projectile": 170,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 6,
+          "damage": 40,
+          "effectiveDamage": 40
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 5,
+          "damage": 50,
+          "effectiveDamage": 48
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 200,
+          "effectiveDamage": 100
+        }
+      },
       "events": {
         "monsterDamaged": 36,
         "monsterDefeated": 6,
@@ -120,7 +198,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "730e4f0b99b4f377c11279501a19304a4dfba2412870591bd2ee6a3b637d3dc3"
+      "digest": "5390dba9e0768f07024b9f27a20b1e187ff9d3d9a0fc1b471d5b280a4c9034be"
     },
     {
       "difficulty": "easy",
@@ -141,6 +219,29 @@
         "projectile": 120,
         "soldier": 180
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 26
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 3,
+          "damage": 120,
+          "effectiveDamage": 120
+        }
+      },
       "events": {
         "monsterDamaged": 21,
         "monsterDefeated": 6,
@@ -148,7 +249,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "2824a1f46ad73f003cab04b4c0567e5e90abf9267c413c82b7644e75c2ec6aa3"
+      "digest": "1e1034647d21ccaefa3cf014de5d13a7a6c78ae2955445237cd78e11d3428102"
     },
     {
       "difficulty": "easy",
@@ -169,6 +270,29 @@
         "projectile": 180,
         "soldier": 270
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 5,
+          "damage": 40,
+          "effectiveDamage": 40
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 200,
+          "effectiveDamage": 133
+        }
+      },
       "events": {
         "monsterDamaged": 32,
         "monsterDefeated": 6,
@@ -176,7 +300,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "f454945f27f34fbca6a28254a34dfdb7ac8276411f3cd0abe96f116611fcec82"
+      "digest": "5d3dbfabef404b8f0cb6de2a20b926d17e26a19e45f3882f84d53fb566f9a6a5"
     },
     {
       "difficulty": "easy",
@@ -197,6 +321,29 @@
         "projectile": 150,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 4,
+          "damage": 160,
+          "effectiveDamage": 100
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 78
+        }
+      },
       "events": {
         "monsterDamaged": 25,
         "monsterDefeated": 6,
@@ -204,7 +351,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "fcf6c3041d23231088fd891efb464f93f734d540d2b5c451a933a09f7794f808"
+      "digest": "8396982ca7d6eb446ab635b564264221d8dbdce133ad93b1b7742b0b2fdafd00"
     },
     {
       "difficulty": "easy",
@@ -225,6 +372,15 @@
         "projectile": 170,
         "soldier": 160
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 4,
+          "damage": 160,
+          "effectiveDamage": 128
+        }
+      },
       "events": {
         "monsterDamaged": 21,
         "monsterDefeated": 6,
@@ -232,7 +388,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "18cc99d307fc6af62334d1f955886f18db676cbfc45678a59d28c7a89f4995b9"
+      "digest": "ea6d6dc97aae393017e95f39ef7d6fd47185b22ae5985efd2a50131790673ee8"
     },
     {
       "difficulty": "easy",
@@ -253,6 +409,29 @@
         "projectile": 160,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 20,
+          "effectiveDamage": 19
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 3,
+          "damage": 120,
+          "effectiveDamage": 66
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 3,
+          "damage": 150,
+          "effectiveDamage": 138
+        }
+      },
       "events": {
         "monsterDamaged": 24,
         "monsterDefeated": 6,
@@ -261,7 +440,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "c0a3c8d3d02137886eab97e1478a760462f9e51cad4651c40bc3e04d3ee2d445"
+      "digest": "405d6c0575688a083596b821b6af56e8517699941cea65bbe6c1299f3b3dfe06"
     },
     {
       "difficulty": "easy",
@@ -282,6 +461,29 @@
         "projectile": 160,
         "soldier": 250
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 6,
+          "damage": 120,
+          "effectiveDamage": 106
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 22
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 78
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "monsterDefeated": 6,
@@ -289,7 +491,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "4785b20f1f1db21c50b346c6f9993d61946cde15aafa0fdadc70fa6acbf41a91"
+      "digest": "95d2e1156f3d02e72dff2dc558f7af213417091dd54a25026911c14537601cce"
     },
     {
       "difficulty": "easy",
@@ -309,6 +511,7 @@
       "damage": {
         "projectile": 300
       },
+      "soldierContributions": {},
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -337,6 +540,29 @@
         "projectile": 160,
         "soldier": 260
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 7,
+          "damage": 140,
+          "effectiveDamage": 139
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 20,
+          "effectiveDamage": 8
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 70
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "monsterDefeated": 6,
@@ -344,7 +570,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "d20df9f9782e9e2336bdae3a34bb3dac514cc1b9c9ad2099be8447997a987006"
+      "digest": "f05f99cb106e954ecdf3e08da668eba67c8687fae18f4f42ba408db9792be4cb"
     },
     {
       "difficulty": "easy",
@@ -365,6 +591,29 @@
         "projectile": 170,
         "soldier": 210
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 40,
+          "effectiveDamage": 32
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 7,
+          "damage": 140,
+          "effectiveDamage": 140
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 26
+        }
+      },
       "events": {
         "monsterDamaged": 31,
         "monsterDefeated": 6,
@@ -372,7 +621,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "23a8acd38d3c44009c143305d27c8c19d1ed60247182f6cb374aa493bfd02e0b"
+      "digest": "a98a4ca44fabc43da50aeb45890206c1d6cee6796b64d5f9cee38b67de115a79"
     },
     {
       "difficulty": "easy",
@@ -393,6 +642,15 @@
         "projectile": 240,
         "soldier": 60
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 6,
+          "damage": 60,
+          "effectiveDamage": 56
+        }
+      },
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -400,7 +658,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "06cc4d1a6d4b508efc0272f421fbf16c49c47b932dff609c39ea5c3a54bb39ec"
+      "digest": "8a0cb8bf07b47169e1ae179c992a206aab95df8a90ba401d6f0f42f897ef403c"
     },
     {
       "difficulty": "easy",
@@ -421,6 +679,29 @@
         "projectile": 170,
         "soldier": 225
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 35,
+          "effectiveDamage": 35
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 8,
+          "damage": 160,
+          "effectiveDamage": 155
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 29
+        }
+      },
       "events": {
         "monsterDamaged": 32,
         "monsterDefeated": 6,
@@ -428,7 +709,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "cb314414ab0d3b805cb18743e441ba981c7f03623cfca8efa777ee9bbc97b390"
+      "digest": "9698bb961bf70216d232c3aff3015b6e04012656eafa26f1f2b42bac88a63a0f"
     },
     {
       "difficulty": "easy",
@@ -449,6 +730,29 @@
         "projectile": 170,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 6,
+          "damage": 40,
+          "effectiveDamage": 40
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 5,
+          "damage": 50,
+          "effectiveDamage": 48
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 200,
+          "effectiveDamage": 100
+        }
+      },
       "events": {
         "monsterDamaged": 36,
         "monsterDefeated": 6,
@@ -456,7 +760,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "b0757d2350512043e13faeb18b6029492c0909f9f980ad3cd438e49dfda38131"
+      "digest": "64f5c968133b161979e48a0bd2ce5667608cfa49339d22e598a01728c8358b3c"
     },
     {
       "difficulty": "easy",
@@ -477,6 +781,29 @@
         "projectile": 120,
         "soldier": 180
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 26
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 3,
+          "damage": 120,
+          "effectiveDamage": 120
+        }
+      },
       "events": {
         "monsterDamaged": 21,
         "monsterDefeated": 6,
@@ -484,7 +811,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "c32b8106d64ae20340e8373428a0279b560bdae5e787d196c4b1292cb27a1520"
+      "digest": "b4ba62130169bb330e32311242e0d45e15f0193831ca9c31d4b304fd85692a98"
     },
     {
       "difficulty": "easy",
@@ -505,6 +832,29 @@
         "projectile": 180,
         "soldier": 270
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 5,
+          "damage": 40,
+          "effectiveDamage": 40
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 200,
+          "effectiveDamage": 133
+        }
+      },
       "events": {
         "monsterDamaged": 32,
         "monsterDefeated": 6,
@@ -512,7 +862,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "3a7b9abf800951422c134ba7e1f958a3552029f8fb8859965709e4e016d499d2"
+      "digest": "e49fd7cfae7392272ae806089449bd36af4197f89c19c7c17fa2ad0cdcb8bbed"
     },
     {
       "difficulty": "easy",
@@ -533,6 +883,29 @@
         "projectile": 150,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 30
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 4,
+          "damage": 160,
+          "effectiveDamage": 100
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 78
+        }
+      },
       "events": {
         "monsterDamaged": 25,
         "monsterDefeated": 6,
@@ -540,7 +913,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "9b7aa5a48683c41f543e3f0490360ccc64cfc3aedfd1c25ac5efd7184d7ea1da"
+      "digest": "5fe0a62516b50072e194f795398ae767252e7c80048a220e75f5bb6c248e4162"
     },
     {
       "difficulty": "easy",
@@ -561,6 +934,15 @@
         "projectile": 170,
         "soldier": 160
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 4,
+          "damage": 160,
+          "effectiveDamage": 128
+        }
+      },
       "events": {
         "monsterDamaged": 21,
         "monsterDefeated": 6,
@@ -568,7 +950,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "4c722eba88c05e511f715f123138368af5c555d2c09f01cf767ea8c61eb8cf32"
+      "digest": "b448e4e7dea72122dbecb6e853fbd12d73012a38baffe2c9f027b32234085069"
     },
     {
       "difficulty": "easy",
@@ -589,6 +971,29 @@
         "projectile": 160,
         "soldier": 290
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 20,
+          "effectiveDamage": 19
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 3,
+          "damage": 120,
+          "effectiveDamage": 66
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 3,
+          "damage": 150,
+          "effectiveDamage": 138
+        }
+      },
       "events": {
         "monsterDamaged": 24,
         "monsterDefeated": 6,
@@ -597,7 +1002,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "ae6ab7b206a137b39021509fe8a0a4bd606e95058d9919c8f24db1741bee898b"
+      "digest": "f450c255d21234517b1cc77e65f109b7fae6daa5371d151f4b6e302696c1929b"
     },
     {
       "difficulty": "easy",
@@ -618,6 +1023,29 @@
         "projectile": 160,
         "soldier": 250
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 6,
+          "damage": 120,
+          "effectiveDamage": 106
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 30,
+          "effectiveDamage": 22
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 78
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "monsterDefeated": 6,
@@ -625,7 +1053,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "55ef1dd817470eba9258eecba0b85ae79436419708a141d5500ad3ddd3254d78"
+      "digest": "625ada74f72ccbdf75a4dc8ffa69129d7e932a334c34c5381c6d9d5670e70b24"
     },
     {
       "difficulty": "easy",
@@ -645,6 +1073,7 @@
       "damage": {
         "projectile": 300
       },
+      "soldierContributions": {},
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -673,6 +1102,29 @@
         "projectile": 160,
         "soldier": 260
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 7,
+          "damage": 140,
+          "effectiveDamage": 139
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 20,
+          "effectiveDamage": 8
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 100,
+          "effectiveDamage": 70
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "monsterDefeated": 6,
@@ -680,7 +1132,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "1c400c5be9797e7afe5dee8728b1354502d1baa1652105ba54a7efc9a81e19f9"
+      "digest": "1742ad61b26fc43de23a550978256eecdc3401a12fd082276f47b8b97263d252"
     },
     {
       "difficulty": "nightmare",
@@ -701,6 +1153,29 @@
         "projectile": 560,
         "soldier": 2971
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 5,
+          "damage": 395,
+          "effectiveDamage": 381
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 10,
+          "damage": 2240,
+          "effectiveDamage": 2037
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 219
+        }
+      },
       "events": {
         "monsterDamaged": 33,
         "monsterDefeated": 6,
@@ -708,7 +1183,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "1b2b330bdf6ff58c082c5740b1d4314c993cea683b2243017c69fa12930bf3ef"
+      "digest": "571e248fed6a2c77ebf8509e6f5aff4709e2d65240593f2d45b4c06cbea278f8"
     },
     {
       "difficulty": "nightmare",
@@ -729,6 +1204,15 @@
         "projectile": 1440,
         "soldier": 1264
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 16,
+          "damage": 1264,
+          "effectiveDamage": 1153
+        }
+      },
       "events": {
         "monsterDamaged": 52,
         "baseDamaged": 28,
@@ -736,7 +1220,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "78974b7cee85913cf7cfcee979f4dedd6a66641a375ad40bc936760c5b4d8f9d"
+      "digest": "626e1d33d735440e94a7821d376f179c1382a7e64e31c99097c0eb178f95da19"
     },
     {
       "difficulty": "nightmare",
@@ -757,6 +1241,29 @@
         "projectile": 640,
         "soldier": 2760
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 8,
+          "damage": 632,
+          "effectiveDamage": 619
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 8,
+          "damage": 1792,
+          "effectiveDamage": 1788
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 312
+        }
+      },
       "events": {
         "monsterDamaged": 35,
         "monsterDefeated": 6,
@@ -765,7 +1272,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "8da2a2bf9ea05a0c47cdeb5a044a6b2eb72595aa1449b83556eeb40cf7427a0b"
+      "digest": "7a166d0944fc512093dcfb0cddbd5e63a4bd08d6da1d4b94bebbcdf47d38c7eb"
     },
     {
       "difficulty": "nightmare",
@@ -786,6 +1293,29 @@
         "projectile": 480,
         "soldier": 3452
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 5,
+          "damage": 448,
+          "effectiveDamage": 424
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 316,
+          "effectiveDamage": 316
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 1765
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "supportSoldierDamaged": 3,
@@ -795,7 +1325,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "bf5273fa844309575ab7fbd6788a7acbc4e8a7b5f2554d88ba153a3714e5279f"
+      "digest": "2693bc6946a773f92d93ecc2fba256306023ad72412f133f2d129644e06e1925"
     },
     {
       "difficulty": "nightmare",
@@ -816,13 +1346,36 @@
         "projectile": 240,
         "soldier": 3070
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 2,
+          "damage": 224,
+          "effectiveDamage": 224
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 2,
+          "damage": 158,
+          "effectiveDamage": 158
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 1928
+        }
+      },
       "events": {
         "monsterDamaged": 16,
         "monsterDefeated": 6
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "0ab1bdffdaaa26f0e47125a6cefaab89da5a5a7600ac93dd06c96e9534403fcb"
+      "digest": "a788d1b455e04ac40120ace534d31a4cb8e01cb264c7f6b4a4c6a114d9e94fd0"
     },
     {
       "difficulty": "nightmare",
@@ -843,6 +1396,29 @@
         "projectile": 480,
         "soldier": 3116
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 6,
+          "damage": 560,
+          "effectiveDamage": 511
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 316,
+          "effectiveDamage": 305
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 2240,
+          "effectiveDamage": 1785
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "supportSoldierDamaged": 4,
@@ -852,7 +1428,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "c8ae6d932ea8f48cad6266034c117113cbd6603dad5b04dcd529b61977c36905"
+      "digest": "1af7ab52ed2d796c0c443873ea46aefc38ca8998ba5002d5ddc02880e9b6b928"
     },
     {
       "difficulty": "nightmare",
@@ -873,6 +1449,29 @@
         "projectile": 600,
         "soldier": 3472
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 224,
+          "effectiveDamage": 224
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 2074
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 1,
+          "damage": 560,
+          "effectiveDamage": 88
+        }
+      },
       "events": {
         "monsterDamaged": 24,
         "supportSoldierDamaged": 4,
@@ -881,7 +1480,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "57aecc0b487369568e1f49a49d8b1cc6a58b50bdbecd20c3796eb3d3b32923d2"
+      "digest": "38ebdaaae4b14358cedf7dabf6acc66049eb827eac4e6f7602c397c452a3bf04"
     },
     {
       "difficulty": "nightmare",
@@ -902,13 +1501,22 @@
         "projectile": 240,
         "soldier": 2688
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 2310
+        }
+      },
       "events": {
         "monsterDamaged": 12,
         "monsterDefeated": 6
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "d001ac5e852ed7298af97d19f837a0ab3df85d1a108e7ef21f1b938f96f3f87c"
+      "digest": "31b40c8b4b9c0756bb96c5d1fc05ca532b5d74cba359e29a04cbee790e0c39bf"
     },
     {
       "difficulty": "nightmare",
@@ -929,6 +1537,29 @@
         "projectile": 640,
         "soldier": 4032
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 1,
+          "damage": 112,
+          "effectiveDamage": 112
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 2240,
+          "effectiveDamage": 1370
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 3,
+          "damage": 1680,
+          "effectiveDamage": 959
+        }
+      },
       "events": {
         "monsterDamaged": 25,
         "supportSoldierDamaged": 4,
@@ -937,7 +1568,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "6b513e308367abad09c1697af79718bf0aaf51049b38f2c2ed82d054902e57df"
+      "digest": "154c332ab2c877825d8d0b31485baa069ee3f7df09f67ec60e0ca6b54632eb22"
     },
     {
       "difficulty": "nightmare",
@@ -958,6 +1589,29 @@
         "projectile": 640,
         "soldier": 3472
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 9,
+          "damage": 2016,
+          "effectiveDamage": 1620
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 336
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 1120,
+          "effectiveDamage": 601
+        }
+      },
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -965,7 +1619,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "9aaf6306315261920baefe0a9892c024bc4c4030d88cd15bc37d16b07c56da12"
+      "digest": "f01161cd3fe9fb0fa7e81ef77e3f520be1214656b9d5912d75d3ffbeef9bde46"
     },
     {
       "difficulty": "nightmare",
@@ -985,6 +1639,7 @@
       "damage": {
         "projectile": 2640
       },
+      "soldierContributions": {},
       "events": {
         "monsterDamaged": 66,
         "baseDamaged": 49,
@@ -1013,6 +1668,29 @@
         "projectile": 640,
         "soldier": 3248
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 9,
+          "damage": 2016,
+          "effectiveDamage": 1995
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 1,
+          "damage": 112,
+          "effectiveDamage": 65
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 1120,
+          "effectiveDamage": 648
+        }
+      },
       "events": {
         "monsterDamaged": 28,
         "monsterDefeated": 6,
@@ -1021,7 +1699,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "6efc203554fbc8ded9e80710740ecb9bf4932a7397b36c28535ef504f48ef89a"
+      "digest": "41bc0a4647ea3cb74fa2dca3620b703cddb8aeb88f294df0a5e59cc0a53b4e9f"
     },
     {
       "difficulty": "nightmare",
@@ -1042,6 +1720,29 @@
         "projectile": 560,
         "soldier": 2971
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 5,
+          "damage": 395,
+          "effectiveDamage": 381
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 10,
+          "damage": 2240,
+          "effectiveDamage": 2037
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 219
+        }
+      },
       "events": {
         "monsterDamaged": 33,
         "monsterDefeated": 6,
@@ -1049,7 +1750,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "efbf038aaba97ac83ed7057b6c9150ef311155204705e9adb8a33c7a01e71621"
+      "digest": "9b2b4babd4b72f24618345fe89fe2f52a734ebac11fe5e49c9b9d9def9fd9bce"
     },
     {
       "difficulty": "nightmare",
@@ -1070,6 +1771,15 @@
         "projectile": 1440,
         "soldier": 1264
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 16,
+          "damage": 1264,
+          "effectiveDamage": 1153
+        }
+      },
       "events": {
         "monsterDamaged": 52,
         "baseDamaged": 28,
@@ -1077,7 +1787,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "ebd00bf59ec54df42b9ad5132165581c8f9428a26a958fab9222f97b514a3e98"
+      "digest": "d69c163105e3dc72b6ce8ccfdb835d3d59f02e8f0e7e413f4a66e6f2916546db"
     },
     {
       "difficulty": "nightmare",
@@ -1098,6 +1808,29 @@
         "projectile": 640,
         "soldier": 2760
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 8,
+          "damage": 632,
+          "effectiveDamage": 619
+        },
+        "formation-41:summon:3": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 8,
+          "damage": 1792,
+          "effectiveDamage": 1788
+        },
+        "formation-41:summon:2": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 312
+        }
+      },
       "events": {
         "monsterDamaged": 35,
         "monsterDefeated": 6,
@@ -1106,7 +1839,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "a5252bebbf1c26bbc08b745a2616ba240e100a124efc2f470a49ee9d8deb705a"
+      "digest": "f83a239cd44c532e2ee059d3f7aaace7d5adcba7998e737335edd42e04be9097"
     },
     {
       "difficulty": "nightmare",
@@ -1127,6 +1860,29 @@
         "projectile": 480,
         "soldier": 3452
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 5,
+          "damage": 448,
+          "effectiveDamage": 424
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 316,
+          "effectiveDamage": 316
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 1765
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "supportSoldierDamaged": 3,
@@ -1136,7 +1892,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "58d6ac8f8a6843f799a63094a2c3228155704ad52c7d75d3691f16e0cfe01322"
+      "digest": "af5caeb79a18d8c6e3bcef8a20c6e7ed0003511f86a370bbf3ace90fcfc30333"
     },
     {
       "difficulty": "nightmare",
@@ -1157,13 +1913,36 @@
         "projectile": 240,
         "soldier": 3070
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 2,
+          "damage": 224,
+          "effectiveDamage": 224
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 2,
+          "damage": 158,
+          "effectiveDamage": 158
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 1928
+        }
+      },
       "events": {
         "monsterDamaged": 16,
         "monsterDefeated": 6
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "322b5d92ce9bd9b2bfcec8ed9d38f33d059d4f78e155e4e9fae646b0c3dcad91"
+      "digest": "3f1a4704bc0e68ef6887d912b6eb6cf1704c3d6f2317de7b72626326ba63d572"
     },
     {
       "difficulty": "nightmare",
@@ -1184,6 +1963,29 @@
         "projectile": 480,
         "soldier": 3116
       },
+      "soldierContributions": {
+        "formation-41:summon:3": {
+          "type": "jetpack",
+          "source": "skill",
+          "hits": 6,
+          "damage": 560,
+          "effectiveDamage": 511
+        },
+        "formation-41:summon:1": {
+          "type": "rifle",
+          "source": "skill",
+          "hits": 4,
+          "damage": 316,
+          "effectiveDamage": 305
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 2240,
+          "effectiveDamage": 1785
+        }
+      },
       "events": {
         "monsterDamaged": 27,
         "supportSoldierDamaged": 4,
@@ -1193,7 +1995,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "4bfb94ef3b868b5d71b7a26343bcd850a16380195c8c7e919864089f966d1a64"
+      "digest": "6f507cdfd71b42a48916f6201f6570e644b8521d315c6e298f5def6d664f8adc"
     },
     {
       "difficulty": "nightmare",
@@ -1214,6 +2016,29 @@
         "projectile": 600,
         "soldier": 3472
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 2,
+          "damage": 224,
+          "effectiveDamage": 224
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 2074
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 1,
+          "damage": 560,
+          "effectiveDamage": 88
+        }
+      },
       "events": {
         "monsterDamaged": 24,
         "supportSoldierDamaged": 4,
@@ -1222,7 +2047,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "6bb94cb016fb635ed7251941ba3a93fe5317d7be7bb5254963ae62f4f863191e"
+      "digest": "b7dac8db8c19bc7c19eab0173e898e939d9b9eef70cf2541e8e885d5842ff2b3"
     },
     {
       "difficulty": "nightmare",
@@ -1243,13 +2068,22 @@
         "projectile": 240,
         "soldier": 2688
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 6,
+          "damage": 2688,
+          "effectiveDamage": 2310
+        }
+      },
       "events": {
         "monsterDamaged": 12,
         "monsterDefeated": 6
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "d6e33ecfd671d581184dc86de3b47ba8b96039c98a507e7e3c6aa88fde4f7bbb"
+      "digest": "38f41679795f54ca11e909c9b9e6c3afbd0c1bff05a6bd1639f2fc2beef16488"
     },
     {
       "difficulty": "nightmare",
@@ -1270,6 +2104,29 @@
         "projectile": 640,
         "soldier": 4032
       },
+      "soldierContributions": {
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 1,
+          "damage": 112,
+          "effectiveDamage": 112
+        },
+        "formation-41:summon:2": {
+          "type": "rocket",
+          "source": "skill",
+          "hits": 5,
+          "damage": 2240,
+          "effectiveDamage": 1370
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 3,
+          "damage": 1680,
+          "effectiveDamage": 959
+        }
+      },
       "events": {
         "monsterDamaged": 25,
         "supportSoldierDamaged": 4,
@@ -1278,7 +2135,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "95f82f24f2731ab4e0d146b7c8118b9393b1721a9034d202827ea71477963164"
+      "digest": "8a9518edb12f25f62c318b449c09a1db3e487b752bc3579a1f2f60fe20bd4bf1"
     },
     {
       "difficulty": "nightmare",
@@ -1299,6 +2156,29 @@
         "projectile": 640,
         "soldier": 3472
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 9,
+          "damage": 2016,
+          "effectiveDamage": 1620
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 3,
+          "damage": 336,
+          "effectiveDamage": 336
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 1120,
+          "effectiveDamage": 601
+        }
+      },
       "events": {
         "monsterDamaged": 30,
         "monsterDefeated": 6,
@@ -1306,7 +2186,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "d444e3fca56f92ad3712ca110b84548d1af6457523a580e33e8656d6efa150cd"
+      "digest": "6bfa9942e4feda253536fe76c301312799700c9a47c14fc2202cacba0fb3c386"
     },
     {
       "difficulty": "nightmare",
@@ -1326,6 +2206,7 @@
       "damage": {
         "projectile": 2640
       },
+      "soldierContributions": {},
       "events": {
         "monsterDamaged": 66,
         "baseDamaged": 49,
@@ -1354,6 +2235,29 @@
         "projectile": 640,
         "soldier": 3248
       },
+      "soldierContributions": {
+        "formation-41:summon:2": {
+          "type": "flamethrower",
+          "source": "skill",
+          "hits": 9,
+          "damage": 2016,
+          "effectiveDamage": 1995
+        },
+        "formation-41:summon:1": {
+          "type": "shield",
+          "source": "skill",
+          "hits": 1,
+          "damage": 112,
+          "effectiveDamage": 65
+        },
+        "formation-41:summon:3": {
+          "type": "tank",
+          "source": "skill",
+          "hits": 2,
+          "damage": 1120,
+          "effectiveDamage": 648
+        }
+      },
       "events": {
         "monsterDamaged": 28,
         "monsterDefeated": 6,
@@ -1362,7 +2266,7 @@
       },
       "remaining": [],
       "resolved": 6,
-      "digest": "208d445205b95aa4c168b984125ae81ad8c9c9c2976b55237947c7213c28cf6d"
+      "digest": "3d7e50c0807531a7112db5ffc8c4aebcfe6445fb5722eecf5a4c037cd8e7e88b"
     }
   ]
 }

@@ -212,12 +212,19 @@ export interface CombatState {
   readonly defeatedMonsterIds: readonly string[];
   readonly processedBaseAttackIds: readonly string[];
 }
+/** Attribution only; effectiveDamage is actual HP removed after mitigation, excluding overkill. */
+export interface SoldierDamageContribution {
+  readonly id: string;
+  readonly type: SoldierType;
+  readonly source?: SoldierSource;
+  readonly effectiveDamage: number;
+}
 export type CombatEvent =
   | { readonly type: 'waveStarted'; readonly context: CombatContext; readonly tick: number; readonly waveNumber: number }
   | { readonly type: 'petDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox'; readonly hp: number }
   | { readonly type: 'petDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox' }
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
-  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly position: Point }
+  | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly soldier?: SoldierDamageContribution; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
   | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number }
   | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string }

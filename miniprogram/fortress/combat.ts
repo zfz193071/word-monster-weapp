@@ -337,14 +337,14 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   });
   contacts.sort((a, b) => a.time - b.time || a.projectileIndex - b.projectileIndex || a.monsterIndex - b.monsterIndex);
   const impacts: ElementImpact[] = (previous.elementImpacts ?? []).filter(impact => impact.untilTick > tick);
-  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet', kinetic = kind === 'projectile' || kind === 'soldier') => {
+  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet', kinetic = kind === 'projectile' || kind === 'soldier', attacker?: SupportSoldierState) => {
     const monster = monsters[index]; if (!targetable(monster)) return;
     if (!Number.isSafeInteger(damage) || !Number.isSafeInteger(monster.hp)) throw new RangeError('怪物伤害与生命值必须为整数');
     damage = armoredDamage(monster.enemyType, damage, kinetic);
     if (monster.bossKind === 'grand' && grandBossWindingUp(tick * COMBAT_STEP_MS - (monster.spawnAtMs ?? 0))) damage = Math.ceil(damage * 1.5);
     const hp = Math.max(0, monster.hp - damage);
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
-    events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, position: Object.freeze({ ...monster.position }) });
+    events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, ...(attacker ? { soldier: Object.freeze({ id: attacker.id, type: soldierType(attacker.soldierType), source: attacker.source, effectiveDamage: monster.hp - hp }) } : {}), position: Object.freeze({ ...monster.position }) });
     if (hp === 0 && !defeated.has(monster.id)) {
       defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
       if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
@@ -428,7 +428,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const targets = soldierTargets(soldier,monsters,supportDamage);
     if (!targets.length) continue;
     const stats = unitStats(soldier,supportDamage), type = soldierType(soldier.soldierType);
-    for (const target of targets) damageMonster(target, stats.shots === 2 ? Math.ceil(stats.damage * .7) : stats.damage, 'soldier', type === 'rifle' || type === 'jetpack');
+    for (const target of targets) damageMonster(target, stats.shots === 2 ? Math.ceil(stats.damage * .7) : stats.damage, 'soldier', type === 'rifle' || type === 'jetpack', soldier);
     supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: stats.interval, lastShotTick: tick, shotCombatId: previous.context.combatId, shotTarget: monsters[targets[0]].position };
   }
   let pet = previous.pet ? createBattlePet(previous.pet, previous.pet.attackRemainingMs, previous.pet) : undefined;

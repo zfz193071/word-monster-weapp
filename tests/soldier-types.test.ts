@@ -38,3 +38,32 @@ test('shield takes ordinary enemy aggro before lower-slot rifle and applies redu
  const state={...initial,shotRemainingMs:10000,monsters:[{...initial.monsters[0],status:'attackingBase' as const,attackRemainingMs:0,attackDamage:10}],supportSoldiers:[{...unit('rifle'),attackRemainingMs:10000},shield]};
  const result=stepCombat(state).state;assert.equal(result.supportSoldiers![0].hp,30);assert.equal(result.supportSoldiers![1].hp,53);assert.equal(result.base.hp,state.base.hp);
 });
+
+test('soldier hit attribution preserves all six identities and caps effective damage at remaining hp', () => {
+ for (const type of ['rifle', 'shield', 'flamethrower', 'rocket', 'jetpack', 'tank'] as const) {
+  const initial = createOpeningEncounter(`attribution-${type}`, 'apple', 1);
+  const result = stepCombat({ ...initial, shotRemainingMs: 10000,
+   monsters: [{ ...initial.monsters[0], hp: 1, status: 'alive', position: { x: 180, y: 420 } }],
+   supportSoldiers: [unit(type, true)] });
+  const hits = result.events.filter(event => event.type === 'monsterDamaged');
+  assert.equal(hits.length, 1, 'evolved double shot cannot damage an already defeated enemy');
+  assert.equal(hits[0].kind, 'soldier');
+  assert.deepEqual(hits[0].soldier, { id: type, type, source: 'skill', effectiveDamage: 1 });
+  assert.ok(hits[0].damage > 1);
+  assert.equal(result.events.filter(event => event.type === 'monsterDefeated').length, 1);
+ }
+});
+
+test('armored hits report post-mitigation contribution and preserve legacy soldier identity', () => {
+ const initial = createOpeningEncounter('attribution-armor', 'apple', 1);
+ for (const source of [undefined, 'inventory', 'boss'] as const) {
+  const result = stepCombat({ ...initial, shotRemainingMs: 10000,
+   monsters: [{ ...initial.monsters[0], hp: 100, maxHp: 100, enemyType: 'armored', status: 'alive', position: { x: 180, y: 420 } }],
+   supportSoldiers: [{ id: 'legacy-rifle', slot: 0, source, hp: 30, maxHp: 30, position: { x: 180, y: 450 }, attackRemainingMs: 0 }] });
+  const hit = result.events.find(event => event.type === 'monsterDamaged');
+  assert.ok(hit && hit.type === 'monsterDamaged');
+  assert.equal(hit.damage, 5);
+  assert.deepEqual(hit.soldier, { id: 'legacy-rifle', type: 'rifle', source, effectiveDamage: 5 });
+  assert.equal(hit.hp, 95);
+ }
+});
