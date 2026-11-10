@@ -193,5 +193,16 @@
       }
     },
     "review": "decode passed; human listening pending"
+  },
+  {
+    "path": "miniprogram/assets/images/fortress/zombie-apple-textured.png",
+    "bytes": 94441,
+    "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa",
+    "kind": "image",
+    "wordId": "apple",
+    "source": "docs/visual-audit/enemies/textured/apple-zombie-source.png",
+    "updatedAt": "2026-11-10",
+    "changes": "RGBA PNG; resampled with alpha preserved; not lossless",
+    "review": "Normal apple enemy integrated; full scene and device acceptance pending"
   }
 ]

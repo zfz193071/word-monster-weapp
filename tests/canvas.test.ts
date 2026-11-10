@@ -39,6 +39,37 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特殊兵种沿用原图', async () => {
+  const initial = createOpeningEncounter('textured-zombie', 'apple', 0);
+  const art = openingArt('apple');
+  const h = harness(false, art, { initial });
+  try {
+    const loading = h.scene.load();
+    const texture = h.images.find(image => image.src === art.texturedBodies!.apple.path)!;
+    assert.ok(texture);
+    const monsterImage = h.images.find(image => image.src === art.monster.path)!;
+    monsterImage.width = 128; monsterImage.height = 160;
+    texture.width = 256; texture.height = 320;
+    for (const image of h.images.filter(image => image !== texture)) image.onload();
+    await Promise.resolve();
+    assert.equal(h.callbacks.size, 0, '新怪物图片未就绪时不启动帧循环');
+    texture.onload(); assert.equal(await loading, true, h.errors.join('; '));
+    h.scene.setPaused(true);
+    for (const kind of ['normal', 'boss', 'runner'] as const) {
+      h.commands.length = 0;
+      const monster = { ...initial.monsters[0], status: 'alive' as const,
+        position: { x: 180, y: 240 }, boss: kind === 'boss',
+        enemyType: kind === 'runner' ? 'runner' as const : 'normal' as const };
+      const state = { ...initial, tick: 30, monsters: [monster] };
+      (h.scene as unknown as { draw(state: typeof state): void }).draw(state);
+      const parts = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === texture);
+      assert.equal(parts.length, kind === 'normal' ? 3 : 0);
+      assert.equal(state.monsters[0].position.y, 240, '绘制不改碰撞位置');
+    }
+    assert.deepEqual(openingArt('banana').texturedBodies, {}, '无苹果的局不请求代表图');
+  } finally { h.scene.dispose(); }
+});
+
 test('精细主角多方向实际绘制枪口对应真实首发，其他六级保持原图框', async () => {
   for (const weaponLevel of [1, 2, 3, 4, 5, 6, 7]) {
     for (const targetX of [40, 180, 320]) {

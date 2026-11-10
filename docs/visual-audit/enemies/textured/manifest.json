@@ -1,0 +1,34 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "prompt.txt",
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "crop": [
+    156.75,
+    39.1875,
+    940.5,
+    1175.625
+  ],
+  "runtimeSize": [
+    256,
+    320
+  ],
+  "decodedRgbaBytes": 327680,
+  "encoding": "RGBA PNG; resampled with alpha preserved; not lossless",
+  "scope": "Apple normal enemies only; bosses and special enemy types retain existing artwork",
+  "visualAcceptance": "Pending full scene and device acceptance",
+  "files": [
+    {
+      "path": "docs/visual-audit/enemies/textured/apple-zombie-source.png",
+      "bytes": 1125777,
+      "sha256": "913753524b8e37049dcaa0ddce0066b3b7a1bcec1abced3afe0e00cfdfa254d9"
+    },
+    {
+      "path": "miniprogram/assets/images/fortress/zombie-apple-textured.png",
+      "bytes": 94441,
+      "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { drawHouseFortress } from '../houses/battle-art';
+import { drawTexturedZombie } from './zombie-art';
 import { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
 import { soldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
@@ -29,6 +30,7 @@ export interface MonsterArt {
   readonly animalIds?: readonly string[];
   readonly fruitHat?: SpriteAsset;
   readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
+  readonly texturedBodies?: Readonly<Record<string, SpriteAsset>>;
   readonly outfitColors?: Readonly<Record<string, string>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
   readonly walkParts?: { readonly body: SpriteAsset; readonly left: SpriteAsset; readonly right: SpriteAsset };
@@ -198,7 +200,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
     const courtyard = art.fruitHat && courtyardAsset(this.options.levelId);
     // Preload both orientations so resize can switch immediately while paused or active.
     if (courtyard) assets.push(...COURTYARD_ASSETS);
@@ -466,6 +468,13 @@ export class CanvasScene {
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
         if (monsterArt.animalIds?.includes(monster.wordId)) {
           this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0);
+        } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal') && monsterArt.texturedBodies?.[monster.wordId]) {
+          const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
+          if (!image) throw new Error('已预载图片丢失');
+          const walking = (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
+          c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
+          drawTexturedZombie(c, image, walking ? Math.sin(state.tick * .07 + motionSeed) : 0);
+          c.restore();
         } else if (monsterArt.walkParts) {
           const walking = monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
           const seed = motionSeed;
