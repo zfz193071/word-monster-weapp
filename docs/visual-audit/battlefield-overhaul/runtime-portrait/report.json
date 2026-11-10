@@ -1,0 +1,43 @@
+{
+  "changed": [
+    "phone-level-1"
+  ],
+  "unchanged": [
+    "phone-level-2",
+    "phone-level-3",
+    "phone-level-4",
+    "phone-level-5",
+    "phone-level-6",
+    "phone-level-7",
+    "phone-level-8",
+    "ipad-level-1",
+    "ipad-level-2",
+    "ipad-level-3",
+    "ipad-level-4",
+    "ipad-level-5",
+    "ipad-level-6",
+    "ipad-level-7",
+    "ipad-level-8"
+  ],
+  "fixture": {
+    "name": "phone-level-1",
+    "width": 390,
+    "height": 620,
+    "levelId": 1,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 1586723,
+    "sha256": "ff38006236c8ae834195ace9a47ee574e0df61b135cd9c4c547243c05f66ac8c",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  "baseline": "../runtime-ground/report.json"
+}

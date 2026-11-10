@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "courtyard-source-01.png",
+  "prompt": "courtyard-portrait-prompt.txt",
+  "encoding": "@napi-rs/canvas JPEG quality 75; no resize",
+  "width": 1024,
+  "height": 1536,
+  "decodedRgbaBytes": 6291456,
+  "files": [
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/courtyard-portrait-source-01.png",
+      "bytes": 3158749,
+      "sha256": "1b1ecdefe9746c8a32c43d504c453ad60774e2d1636cfa7d138bd9c8c079eb7a"
+    },
+    {
+      "path": "miniprogram/battlefield-assets/courtyard-portrait-v1.jpg",
+      "bytes": 313238,
+      "sha256": "27c22115352f0896d4c2a2f0582226217763636c66a53a36e143edddd6ce60f5"
+    }
+  ]
+}

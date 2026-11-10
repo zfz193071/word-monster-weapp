@@ -451,25 +451,32 @@ test('房屋外观兼容旧快照，五级堡垒摧毁后仍使用废墟', async
 
 
 test('第一关庭院等待资源完成后绘制，宽窄屏等比裁切且其他关卡不加载', async () => {
-  const { COURTYARD_ASSET } = await import('../miniprogram/fortress/battle-background');
+  const { COURTYARD_ASSET, PORTRAIT_COURTYARD_ASSET } = await import('../miniprogram/fortress/battle-background');
   for (const levelId of [1, 2]) {
     const art = { ...artFixture(), fruitHat: artFixture().monster };
-    const h = harness(false, art, { levelId });
+    const h = harness(false, art, { levelId, initial: { ...initial(), automatic: true } });
     const loading = h.scene.load();
     const ground = h.images.find(image => image.src === COURTYARD_ASSET.path);
+    const portrait = h.images.find(image => image.src === PORTRAIT_COURTYARD_ASSET.path);
     assert.equal(!!ground, levelId === 1);
-    for (const image of h.images.filter(image => image !== ground)) image.onload();
+    assert.equal(!!portrait, levelId === 1);
+    for (const image of h.images.filter(image => image !== ground && image !== portrait)) image.onload();
     if (ground) {
       assert.equal(h.callbacks.size, 0);
       ground.width = 1536; ground.height = 1024; ground.onload();
+      await Promise.resolve();
+      assert.equal(h.callbacks.size, 0, 'must also wait for portrait background');
+      portrait!.width = 1024; portrait!.height = 1536; portrait!.onload();
     }
     assert.equal(await loading, true);
-    if (ground) for (const [width, height] of [[390,620], [1024,580]]) {
+    if (ground) for (const [width, height] of [[390,620], [1024,580], [390,620]]) {
       h.commands.length = 0; h.scene.resize(width, height, 2, 0);
-      const draw = h.commands.find(command => command.method === 'drawImage' && command.args[0] === ground)!;
+      const selected = width < height ? portrait! : ground;
+      const draw = h.commands.find(command => command.method === 'drawImage' && command.args[0] === selected)!;
       assert.ok(draw);
       const [, sx, sy, sw, sh, dx, dy, dw, dh] = draw.args as number[];
-      assert.ok(sx >= 0 && sy >= 0 && sx + sw <= 1536.001 && sy + sh <= 1024.001);
+      assert.ok(sx >= 0 && sy >= 0 && sx + sw <= selected.width + .001 && sy + sh <= selected.height + .001);
+      if (selected === portrait) assert.ok(sw / selected.width > .94, 'retain portrait edge decoration');
       assert.ok(Math.abs(sw / sh - dw / dh) < 1e-8);
       assert.equal(dx, 0); assert.equal(dy, 0); assert.equal(dh, 560);
     }

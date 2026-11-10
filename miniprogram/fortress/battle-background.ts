@@ -5,8 +5,14 @@ export const COURTYARD_ASSET = {
   source: 'image_gen; battlefield-overhaul/courtyard-source-01.png',
   rights: 'Project-generated artwork', approved: true,
 } as const;
-export function courtyardAsset(levelId = 1): typeof COURTYARD_ASSET | undefined {
-  return levelId === 1 ? COURTYARD_ASSET : undefined;
+export const PORTRAIT_COURTYARD_ASSET = {
+  ...COURTYARD_ASSET,
+  path: '/battlefield-assets/courtyard-portrait-v1.jpg',
+  source: 'image_gen; battlefield-overhaul/courtyard-portrait-source-01.png',
+} as const;
+export const COURTYARD_ASSETS = [COURTYARD_ASSET, PORTRAIT_COURTYARD_ASSET] as const;
+export function courtyardAsset(levelId = 1, width = 360): typeof COURTYARD_ASSETS[number] | undefined {
+  return levelId === 1 ? (width < 560 ? PORTRAIT_COURTYARD_ASSET : COURTYARD_ASSET) : undefined;
 }
 export function drawCourtyard(c: Context, image: WechatMiniprogram.Image, width: number): void {
   // Cover without stretching; center crop varies with viewport, never combat coordinates.
