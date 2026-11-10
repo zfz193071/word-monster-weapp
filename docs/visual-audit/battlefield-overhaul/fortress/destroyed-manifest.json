@@ -1,0 +1,31 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "miniprogram/battlefield-assets/fortress-level-1-v1.png",
+  "prompt": "destroyed-prompt.txt",
+  "sourceSize": {
+    "width": 2172,
+    "height": 724
+  },
+  "crop": {
+    "x": 0,
+    "y": 196,
+    "width": 2172,
+    "height": 428
+  },
+  "width": 1440,
+  "height": 284,
+  "encoding": "PNG RGBA; preserved alpha; cropped and resampled",
+  "decodedRgbaBytes": 1635840,
+  "files": [
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/fortress/level-1-destroyed-source.png",
+      "bytes": 1549738,
+      "sha256": "f5fc78f2f74cb4de144988de0cf1861f650da0119a59edd3754e291749871057"
+    },
+    {
+      "path": "miniprogram/battlefield-assets/fortress-level-1-destroyed-v1.png",
+      "bytes": 671930,
+      "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { drawHouseFortress } from '../houses/battle-art';
-import { WOOD_FORTRESS_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
+import { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
 import { soldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
 import { drawSoldier, drawFallenSoldier } from './soldier-art';
@@ -180,7 +180,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !(asset.path === WOOD_FORTRESS_ASSET.path || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
+      || !(asset.path === WOOD_FORTRESS_ASSET.path || asset.path === WOOD_FORTRESS_RUIN_ASSET.path || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -201,7 +201,7 @@ export class CanvasScene {
     const courtyard = art.fruitHat && courtyardAsset(this.options.levelId);
     // Preload both orientations so resize can switch immediately while paused or active.
     if (courtyard) assets.push(...COURTYARD_ASSETS);
-    if (art.fruitHat && (this.options.initial.houseLevel ?? 1) === 1) assets.push(WOOD_FORTRESS_ASSET);
+    if (art.fruitHat && (this.options.initial.houseLevel ?? 1) === 1) assets.push(WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET);
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -391,7 +391,9 @@ export class CanvasScene {
       c.fillStyle = '#fbd777'; c.fillRect(state.player.x - 5, state.player.y - 30, 10, 22);
     } else if (art) {
       if (state.base.hp === 0) {
-        for (let x = 0; x < this.viewport.worldWidth; x += 360) this.sprite(art.destroyedBase, x, 480, 360, 80);
+        const ruin = art.fruitHat && (state.houseLevel ?? 1) === 1 && this.images.get(WOOD_FORTRESS_RUIN_ASSET.path);
+        if (ruin) drawWoodFortress(c, ruin, this.viewport.worldWidth);
+        else for (let x = 0; x < this.viewport.worldWidth; x += 360) this.sprite(art.destroyedBase, x, 480, 360, 80);
       } else {
         const wall = art.fruitHat && (state.houseLevel ?? 1) === 1 && this.images.get(WOOD_FORTRESS_ASSET.path);
         if (wall) drawWoodFortress(c, wall, this.viewport.worldWidth);

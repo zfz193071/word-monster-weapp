@@ -6,6 +6,12 @@ export const WOOD_FORTRESS_ASSET = {
   rights: 'Project-generated artwork', approved: true,
 } as const;
 
+export const WOOD_FORTRESS_RUIN_ASSET = {
+  path: '/battlefield-assets/fortress-level-1-destroyed-v1.png',
+  source: 'image_gen; battlefield-overhaul/fortress/level-1-destroyed-source.png',
+  rights: 'Project-generated artwork', approved: true,
+} as const;
+
 /** Keep one centered gate and extend with banner bays, at the same physical scale. */
 export function drawWoodFortress(c: Context, image: WechatMiniprogram.Image, width: number): void {
   const scale = 80 / image.height;

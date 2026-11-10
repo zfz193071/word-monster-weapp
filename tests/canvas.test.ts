@@ -485,7 +485,7 @@ test('第一关庭院等待资源完成后绘制，宽窄屏等比裁切且其�
 });
 
 test('一级木石堡垒等待解码、跨关加载、旋转等比绘制，升级与摧毁不沿用完整墙体', async () => {
-  const { WOOD_FORTRESS_ASSET } = await import('../miniprogram/houses/fortress-sprite');
+  const { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET } = await import('../miniprogram/houses/fortress-sprite');
   for (const houseLevel of [undefined, 1, 2, 5]) {
     const art = { ...artFixture(), fruitHat: artFixture().monster };
     const h = harness(false, art, { levelId: 8, initial: { ...initial(), houseLevel, automatic: true } });
@@ -513,9 +513,31 @@ test('一级木石堡垒等待解码、跨关加载、旋转等比绘制，升�
       const ready = destroyed.scene.load(); destroyed.images.forEach(image => image.onload()); await ready;
       const sprites = destroyed.commands.filter(command => command.method === 'drawImage').map(command => (command.args[0] as {src?:string})?.src);
       assert.ok(!sprites.includes(WOOD_FORTRESS_ASSET.path));
-      assert.ok(sprites.includes(art.destroyedBase.path));
+      assert.ok(sprites.includes(WOOD_FORTRESS_RUIN_ASSET.path));
+      assert.ok(!sprites.includes(art.destroyedBase.path));
       destroyed.scene.dispose();
     }
     h.scene.dispose();
   }
+});
+
+test('一级废墟预载门控、失败重试与销毁后的迟到解码不恢复战斗', async () => {
+  const { WOOD_FORTRESS_RUIN_ASSET } = await import('../miniprogram/houses/fortress-sprite');
+  const art = { ...artFixture(), fruitHat: artFixture().monster };
+  const h = harness(false, art, { levelId: 8, initial: { ...initial(), houseLevel: 1 } });
+  const first = h.scene.load();
+  const ruin = h.images.find(image => image.src === WOOD_FORTRESS_RUIN_ASSET.path)!;
+  h.images.filter(image => image !== ruin).forEach(image => image.onload());
+  await Promise.resolve();
+  assert.equal(h.callbacks.size, 0, '尚未解码废墟时不能进入战斗');
+  ruin.onerror();
+  assert.equal(await first, false);
+  const previousCount = h.images.length;
+  const retry = h.scene.load();
+  h.images.slice(previousCount).forEach(image => image.onload());
+  assert.equal(await retry, true);
+  h.scene.dispose();
+  ruin.onload();
+  assert.equal(h.callbacks.size, 0);
+  assert.equal(await h.scene.load(), false);
 });

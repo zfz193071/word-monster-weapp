@@ -1,0 +1,38 @@
+[
+  {
+    "name": "phone-intact",
+    "hp": 1,
+    "width": 390,
+    "height": 620,
+    "dpr": 2,
+    "sha256": "462d973a1e810d49b28c62f9a6932ab18a15d3b6f4f7b9ed8d73de32cb7966df",
+    "evidence": "Production renderer, fixed fixture, not natural gameplay or device verification"
+  },
+  {
+    "name": "phone-destroyed",
+    "hp": 0,
+    "width": 390,
+    "height": 620,
+    "dpr": 2,
+    "sha256": "9322e818c3d022f0cacd613fc6cd20f2f168427291fa85044bdbda6021082ec4",
+    "evidence": "Production renderer, fixed fixture, not natural gameplay or device verification"
+  },
+  {
+    "name": "ipad-intact",
+    "hp": 1,
+    "width": 1024,
+    "height": 580,
+    "dpr": 2,
+    "sha256": "10f4578fbd0369952f6dfec1e397bc892abc2ddcb6cb2af38812d74355f62771",
+    "evidence": "Production renderer, fixed fixture, not natural gameplay or device verification"
+  },
+  {
+    "name": "ipad-destroyed",
+    "hp": 0,
+    "width": 1024,
+    "height": 580,
+    "dpr": 2,
+    "sha256": "977033e0877839f48c5ec5f3171d9aab4320df20a19dac5bb643078309bb6971",
+    "evidence": "Production renderer, fixed fixture, not natural gameplay or device verification"
+  }
+]
