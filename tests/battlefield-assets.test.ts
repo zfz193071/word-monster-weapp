@@ -68,7 +68,7 @@ test('超时允许重试，旧完成不解锁新请求或覆盖缓存', async ()
 test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本', () => {
   const root = new URL('../miniprogram/', import.meta.url);
   const app = JSON.parse(readFileSync(new URL('app.json', root), 'utf8'));
-  for (const name of ['battlefield-assets', 'fortress-assets', 'character-assets']) {
+  for (const name of ['battlefield-assets', 'fortress-assets', 'character-assets', 'fruit-assets']) {
     const pack = app.subPackages.find((p: {name: string}) => p.name === name);
     assert.equal(pack.root, name);
     assert.ok(existsSync(new URL(`${name}/ready.ts`, root)));
@@ -83,26 +83,26 @@ test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本',
 
 test('角色包按实际主角与混编词条加载，无需求不下载，失败后独立重试', async () => {
   const {load, calls} = harness();
-  await load(3, 2, openingArt('cat', ['cat'], 2));
+  await load(3, 2, characterArt('cat', ['cat'], 2));
   assert.equal(calls.length, 0);
-  const hero = load(3, 2, openingArt('cat', ['cat'], 1));
-  const apple = load(2, 2, openingArt('banana', ['banana', 'apple'], 2));
+  const hero = load(3, 2, characterArt('cat', ['cat'], 1));
+  const apple = load(2, 2, characterArt('banana', ['banana', 'apple'], 2));
   assert.equal(calls.length, 1);
   assert.equal(calls[0].path, '../character-assets/ready');
   const failures = Promise.all([assert.rejects(hero), assert.rejects(apple)]);
   calls[0].reject(Error('network')); await failures;
   let ready = false;
-  const retry = load(2, 2, openingArt('apple', ['apple'], 2)).then(() => { ready = true; });
+  const retry = load(2, 2, characterArt('apple', ['apple'], 2)).then(() => { ready = true; });
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(ready, false);
   calls[1].resolve(); await retry;
-  await load(3, 2, openingArt('cat', ['cat'], 1));
+  await load(3, 2, characterArt('cat', ['cat'], 1));
   assert.equal(calls.length, 2);
 });
 
 test('角色包超时后的迟到成功不能提前完成重试', async () => {
   const {load, calls, timers} = harness();
-  const art = openingArt('apple');
+  const art = characterArt('apple');
   const first = load(2, 2, art), failed = assert.rejects(first, /超时/);
   for (const [key, fn] of [...timers]) { timers.delete(key); fn(); }
   await failed;
@@ -119,5 +119,51 @@ test('精细角色仅在新包中保留一份运行资源', () => {
   for (const name of ['hero-back-weapon-1-textured.png', 'zombie-apple-textured.png']) {
     assert.ok(existsSync(new URL(`character-assets/${name}`, root)));
     assert.equal(existsSync(new URL(`assets/images/fortress/${name}`, root)), false);
+  }
+});
+
+function characterArt(...args: Parameters<typeof openingArt>): SceneArt { return {...openingArt(...args), fruitHat: undefined, fruitHats: {}}; }
+
+test('水果分包按实际词图加载，包含上一关混编；并发失败后仅重试水果', async () => {
+  const {load, calls} = harness();
+  await load(3, 2, openingArt('cat', ['cat'], 2));
+  assert.equal(calls.length, 0);
+  const art = openingArt('red', ['red', 'banana'], 2);
+  const first = load(2, 2, art), concurrent = load(2, 2, art);
+  assert.deepEqual(calls.map(c => c.path), ['../fruit-assets/ready']);
+  const failures = Promise.all([assert.rejects(first), assert.rejects(concurrent)]);
+  calls[0].reject(Error('offline')); await failures;
+  let ready = false;
+  const retry = load(2, 2, art).then(() => {ready = true;});
+  await new Promise(resolve => setImmediate(resolve)); assert.equal(ready, false);
+  calls[1].resolve(); await retry;
+  await load(2, 2, art); assert.equal(calls.length, 2);
+});
+
+test('水果下载超时后旧完成不能解锁新加载', async () => {
+  const {load, calls, timers} = harness();
+  const art = openingArt('banana', ['banana'], 2);
+  const first = load(2, 2, art), failed = assert.rejects(first, /超时/);
+  for (const [key, fn] of [...timers]) {timers.delete(key); fn();}
+  await failed;
+  let ready = false;
+  const retry = load(2, 2, art).then(() => {ready = true;});
+  calls[0].resolve(); await new Promise(resolve => setImmediate(resolve)); assert.equal(ready, false);
+  calls[1].resolve(); await retry; assert.equal(timers.size, 0);
+});
+
+test('11张水果原样迁移，清单哈希及尺寸一致且无旧运行副本', async () => {
+  const {createHash} = await import('node:crypto');
+  const {BATTLE_WORDS} = await import('../miniprogram/fortress/fruit-catalog');
+  const report = JSON.parse(readFileSync(new URL('../docs/visual-audit/fruit-package/migration.json', import.meta.url), 'utf8'));
+  assert.equal(report.entries.length, 11);
+  for (const word of BATTLE_WORDS) {
+    const entry = report.entries.find((e: {wordId: string}) => e.wordId === word.id);
+    assert.equal(word.fruitImagePath, entry.path);
+    const data = readFileSync(new URL(`../miniprogram${entry.path}`, import.meta.url));
+    assert.equal(data.length, entry.bytes);
+    assert.equal(createHash('sha256').update(data).digest('hex'), entry.sha256);
+    assert.equal(data.readUInt32BE(16) * data.readUInt32BE(20) * 4, entry.rgbaBytes);
+    assert.equal(existsSync(new URL(`../miniprogram${entry.oldPath}`, import.meta.url)), false);
   }
 });

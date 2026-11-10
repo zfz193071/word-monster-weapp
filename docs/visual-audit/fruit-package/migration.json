@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-10",
+  "issue": 86,
+  "entries": [
+    {
+      "wordId": "apple",
+      "oldPath": "/assets/images/apple.png",
+      "path": "/fruit-assets/apple.png",
+      "bytes": 69777,
+      "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "banana",
+      "oldPath": "/assets/images/banana.png",
+      "path": "/fruit-assets/banana.png",
+      "bytes": 55837,
+      "sha256": "aa371e9356894810ce62c33d36f71619fb14d1efa5b7e974bb89cd97d0bcb929",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "orange",
+      "oldPath": "/assets/images/orange.png",
+      "path": "/fruit-assets/orange.png",
+      "bytes": 63854,
+      "sha256": "21938c668a36d0c73faa7ebcd79890128b7c6ea588136618995e7f0c2c856840",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "grape",
+      "oldPath": "/assets/images/grape.png",
+      "path": "/fruit-assets/grape.png",
+      "bytes": 62229,
+      "sha256": "96f48c341ca2e1cc4d600417e003549ed69c0a6f74ee7a48c6f8afafe727080e",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "watermelon",
+      "oldPath": "/assets/images/watermelon.png",
+      "path": "/fruit-assets/watermelon.png",
+      "bytes": 85502,
+      "sha256": "62542597df81c21c95a10d5a23b17cb41204987ea0087da980e119e4db687cf6",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "pear",
+      "oldPath": "/assets/images/pear.png",
+      "path": "/fruit-assets/pear.png",
+      "bytes": 50489,
+      "sha256": "0af7503c6553691eba055585ebc20bc3bfb328d376ba2aae3b39617885a1bd5b",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "strawberry",
+      "oldPath": "/assets/images/strawberry.png",
+      "path": "/fruit-assets/strawberry.png",
+      "bytes": 60885,
+      "sha256": "c23308f840d5d2714c33fa0a77d0e45d70ee5841cdf089a23bf7a1ac5cc90f9f",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "cherry",
+      "oldPath": "/assets/images/cherry.png",
+      "path": "/fruit-assets/cherry.png",
+      "bytes": 53361,
+      "sha256": "da2c94898c19a48c1fc9d88188b1f5552b6804d72c31eac0c854765c048432ac",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "pineapple",
+      "oldPath": "/assets/images/pineapple.png",
+      "path": "/fruit-assets/pineapple.png",
+      "bytes": 62522,
+      "sha256": "e436b86ccc8b67d5dc5dc5e124c89bc4f97e525401e3b9156d187641ee123ac3",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "kiwi",
+      "oldPath": "/assets/images/kiwi.png",
+      "path": "/fruit-assets/kiwi.png",
+      "bytes": 87844,
+      "sha256": "3c70b28e9fbe39495b7185e79b16672c86373fe2ad8a87fcd246cb5957de3548",
+      "rgbaBytes": 262144
+    },
+    {
+      "wordId": "peach",
+      "oldPath": "/assets/images/peach.png",
+      "path": "/fruit-assets/peach.png",
+      "bytes": 64694,
+      "sha256": "b10fd20c6fe79d6085a50c83482ecdfdfd072710ee1764d7a3327ae4c5bd187f",
+      "rgbaBytes": 262144
+    }
+  ],
+  "totalBytes": 716994,
+  "rgbaBytes": 2883584
+}

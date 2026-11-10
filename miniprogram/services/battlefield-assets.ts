@@ -27,10 +27,13 @@ const loadFortress = cachedPackage(() => require.async('../fortress-assets/ready
 
 const loadCharacters = cachedPackage(() => require.async('../character-assets/ready'));
 
+export const loadFruitAssets = cachedPackage(() => require.async('../fruit-assets/ready'));
+
 export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: SceneArt): Promise<void> {
   const required: Promise<void>[] = [];
   if (levelId === 1) required.push(loadCourtyard());
   if (houseLevel === 1) required.push(loadFortress());
   if (art && [art.hero, ...Object.values(art.texturedBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/'))) required.push(loadCharacters());
+  if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/fruit-assets/'))) required.push(loadFruitAssets());
   return Promise.all(required).then(() => {});
 }

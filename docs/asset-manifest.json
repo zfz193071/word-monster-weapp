@@ -2,7 +2,7 @@
   {
     "wordId": "apple",
     "kind": "image",
-    "path": "miniprogram/assets/images/apple.png",
+    "path": "miniprogram/fruit-assets/apple.png",
     "bytes": 69777,
     "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e",
     "downloadedAt": "2026-10-30",
@@ -41,7 +41,7 @@
   {
     "wordId": "banana",
     "kind": "image",
-    "path": "miniprogram/assets/images/banana.png",
+    "path": "miniprogram/fruit-assets/banana.png",
     "bytes": 55837,
     "sha256": "aa371e9356894810ce62c33d36f71619fb14d1efa5b7e974bb89cd97d0bcb929",
     "source": "docs/visual-audit/fruits/manifest.json",
@@ -80,7 +80,7 @@
   {
     "wordId": "orange",
     "kind": "image",
-    "path": "miniprogram/assets/images/orange.png",
+    "path": "miniprogram/fruit-assets/orange.png",
     "bytes": 63854,
     "sha256": "21938c668a36d0c73faa7ebcd79890128b7c6ea588136618995e7f0c2c856840",
     "downloadedAt": "2026-10-30",
@@ -119,7 +119,7 @@
   {
     "wordId": "grape",
     "kind": "image",
-    "path": "miniprogram/assets/images/grape.png",
+    "path": "miniprogram/fruit-assets/grape.png",
     "bytes": 62229,
     "sha256": "96f48c341ca2e1cc4d600417e003549ed69c0a6f74ee7a48c6f8afafe727080e",
     "downloadedAt": "2026-10-30",
@@ -158,7 +158,7 @@
   {
     "wordId": "watermelon",
     "kind": "image",
-    "path": "miniprogram/assets/images/watermelon.png",
+    "path": "miniprogram/fruit-assets/watermelon.png",
     "bytes": 85502,
     "sha256": "62542597df81c21c95a10d5a23b17cb41204987ea0087da980e119e4db687cf6",
     "downloadedAt": "2026-10-30",

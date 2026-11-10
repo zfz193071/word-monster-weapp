@@ -30,7 +30,7 @@ test('五词从已提交击败事实读词，对照图与完整上下文一致�
   for (const word of ['apple', 'banana', 'orange', 'grape', 'watermelon']) {
     const state = cleared(word); const h = setup(state); h.retirement.start(); h.retirement.start();
     assert.equal(h.voices.length, 1); assert.equal(h.voices[0].src, `/assets/audio/${word}.mp3`);
-    assert.equal(h.retirement.view.fruitImagePath, `/assets/images/${word}.png`);
+    assert.equal(h.retirement.view.fruitImagePath, `/fruit-assets/${word}.png`);
     assert.deepEqual(h.retirement.view.context, { ...state.context, monsterId: state.monsters[0].id, wordId: word });
     h.retirement.dispose();
   }

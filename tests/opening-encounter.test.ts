@@ -12,7 +12,7 @@ test('首批八只不同实体使用同一目标水果，战场素材碰撞区�
     const state = createOpeningEncounter(`run-${word}`, word, 1); const art = openingArt(word);
     assert.equal(state.monsters.length, 8); assert.equal(new Set(state.monsters.map(m => m.id)).size, 8);
     assert.ok(state.monsters.every(m => m.wordId === word));
-    assert.equal(art.fruitHat?.path, `/assets/images/${word}.png`);
+    assert.equal(art.fruitHat?.path, `/fruit-assets/${word}.png`);
     assert.deepEqual(state.monsters[0].hitbox, logicalHitbox(art.monsterVisual, art.monsterWidth));
   }
 });

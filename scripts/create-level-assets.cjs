@@ -56,7 +56,7 @@ for(const category of categories) for(const word of category.words) {
 const covers=['apple','blue','dog','book','bed','kite','sun','hand'];
 const backgrounds=['#d7e8a9','#c5dbec','#dce7bd','#d3dfd5','#efddbd','#eed4bc','#c4dfdf','#e9cfc0'];
 for(let i=0;i<8;i++) {
- const file=i===0?'miniprogram/assets/images/apple.png':`${dir}/${covers[i]}.png`;
+ const file=i===0?'miniprogram/fruit-assets/apple.png':`${dir}/${covers[i]}.png`;
  const encoded=fs.readFileSync(file).toString('base64');
  const cover=`<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200"><rect width="320" height="200" fill="${backgrounds[i]}"/><circle cx="160" cy="90" r="77" fill="#ffffff60"/><path d="M0 176 Q80 125 160 171 T320 160 V200 H0" fill="#ffffff55"/><circle cx="47" cy="44" r="7" fill="#fff6"/><circle cx="280" cy="120" r="11" fill="#fff6"/><image href="data:image/png;base64,${encoded}" x="85" y="18" width="150" height="150"/></svg>`;
  fs.writeFileSync(`${coverDir}/cover-${i+1}.png`,new Resvg(cover,{font:{loadSystemFonts:false}}).render().asPng());

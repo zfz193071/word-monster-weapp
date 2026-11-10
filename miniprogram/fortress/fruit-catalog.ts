@@ -11,10 +11,10 @@ export const EXTRA_FRUITS = [
 ] as const;
 export const BATTLE_WORDS: readonly FortressWord[] = Object.freeze([
   ...WORDS.map(word => ({ id: word.id, text: word.text, meaningZh: word.meaningZh, fruitImagePath: word.imagePath, audioPath: word.audioPath })),
-  ...EXTRA_FRUITS.map(word => ({ id: word.id, text: word.id, meaningZh: word.meaningZh, fruitImagePath: `/assets/images/${word.id}.png`, audioPath: `/assets/audio/${word.id}.mp3` })),
+  ...EXTRA_FRUITS.map(word => ({ id: word.id, text: word.id, meaningZh: word.meaningZh, fruitImagePath: `/fruit-assets/${word.id}.png`, audioPath: `/assets/audio/${word.id}.mp3` })),
 ].map(word => Object.freeze({ ...word, audioPath: `/assets/audio/learn-${word.id}.mp3` })));
 export const EXTRA_IMAGE_ASSETS: readonly VisualAsset[] = EXTRA_FRUITS.map(word => ({
-  path: `/assets/images/${word.id}.png`, wordId: word.id, kind: 'image',
+  path: `/fruit-assets/${word.id}.png`, wordId: word.id, kind: 'image',
   source: 'docs/assets/original/fruit-batch-imagegen.md',
   rights: '项目内置 image_gen 生成，2026-11-09；参考项目苹果样张，保留alpha缩放至256px；非独占版权声明', reviewStatus: 'approved',
 }));

@@ -37,7 +37,7 @@ export function validateFortressRules(value: unknown): FortressIssue[] {
   compare(value, FORTRESS_RULES, 'rules');
   return issues;
 }
-const IMAGE = /^\/assets\/images\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.(png|jpg|webp)$/;
+const IMAGE = /^\/(?:assets\/images|fruit-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.(png|jpg|webp)$/;
 const AUDIO = /^\/assets\/audio\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.(mp3|wav)$/;
 const positive = (n: number): boolean => Number.isFinite(n) && n > 0;
 const within = (n: number, min: number, max: number): boolean => Number.isFinite(n) && n >= min && n <= max;

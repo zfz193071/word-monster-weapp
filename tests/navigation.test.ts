@@ -19,7 +19,7 @@ import { createBattleController } from '../miniprogram/services/battle';
 import { createFortressEntryStore } from '../miniprogram/services/fortress-entry';
 
 // 在微信运行时之外验证导航行为，也为后续纯逻辑测试保留 Node 测试入口。
-function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void) {
+function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?: (art:unknown, callbacks:any)=>()=>void, loadFruits: () => Promise<void> = async () => {}) {
   let savedDifficulty: unknown;
   const difficultyStore = createDifficultyStore({getStorageSync:()=>savedDifficulty,setStorageSync:(_key,value)=>{savedDifficulty=value;}});
   const strengthGuide=createStrengthGuide();
@@ -56,6 +56,7 @@ function homeHarness(loadAssets: () => Promise<void> = async () => {}, prepare?:
       if (name === '../../services/pet-store') return {petStore};
       if (name === '../../services/audio') return { createAudioAdapter: () => { const call:any = { disposed: false }; audioCalls.push(call); return { dispose() { call.disposed = true; }, playReveal(path:string, _context:unknown, done:Function) { call.path = path; call.done = done; } }; } };
       if (name === '../../services/image-assets') return { loadImageAssets: async () => {} };
+      if (name === '../../services/battlefield-assets') return { loadFruitAssets: loadFruits };
       if (name === '../../services/level-assets') return { loadLevelAssets: loadAssets };
       if (name === '../../services/coin-wallet') return { coinWallet: wallet };
       if (name === '../../fortress/collection') return { collectionWords };
@@ -87,39 +88,39 @@ function correct(page: any) {
       selectedWordId: wave.targetWordId, correct: true, taskKind: 'listeningChoice', attemptIndex: 1, replayCount: 0, hintUsed: false }],
   } });
 }
-test('首页点击仅开三选一弹窗，选对后导航一次，返回后重新听词', () => {
+test('首页点击仅开三选一弹窗，选对后导航一次，返回后重新听词', async () => {
   const h = homeHarness(); h.page.onShow();
-  h.page.openBattle(); const first = h.page.data.request;
-  h.page.openBattle(); assert.equal(h.navigationCount, 0); assert.equal(h.page.data.request, first);
+  await h.page.openBattle(); const first = h.page.data.request;
+  await h.page.openBattle(); assert.equal(h.navigationCount, 0); assert.equal(h.page.data.request, first);
   assert.equal(first.variant, 'fruit');
   correct(h.page); correct(h.page);
   assert.equal(h.navigationCount, 1);
   assert.equal(h.navigation.url, `/pages/battle/battle?mode=fortress&entry=${first.plan.sessionId}`);
   h.navigation.success(); h.page.onShow();
   assert.equal(h.page.data.request, null);
-  h.page.openBattle(); assert.notEqual(h.page.data.request.plan.sessionId, first.plan.sessionId);
+  await h.page.openBattle(); assert.notEqual(h.page.data.request.plan.sessionId, first.plan.sessionId);
   assert.equal(h.navigationCount, 1);
 });
-test('导航失败可重试，旧失败回调不能解除新导航锁', () => {
-  const h = homeHarness(); h.page.openBattle(); correct(h.page);
+test('导航失败可重试，旧失败回调不能解除新导航锁', async () => {
+  const h = homeHarness(); await h.page.openBattle(); correct(h.page);
   const oldFail = h.navigation.fail; oldFail();
   assert.equal(h.page.data.navigationError, true);
   h.page.enterBattle(); oldFail();
   assert.equal(h.page.data.opening, true); assert.equal(h.navigationCount, 2);
   h.page.closeChallenge(); assert.ok(h.page.data.request);
 });
-test('取消重开丢弃旧听词结果，卸载后回调不得导航或更新页面', () => {
-  const h = homeHarness(); h.page.openBattle();
+test('取消重开丢弃旧听词结果，卸载后回调不得导航或更新页面', async () => {
+  const h = homeHarness(); await h.page.openBattle();
   const oldRequest = h.page.data.request;
-  h.page.closeChallenge(); h.page.openBattle(); const current = h.page.data.request;
+  h.page.closeChallenge(); await h.page.openBattle(); const current = h.page.data.request;
   h.page.data.request = oldRequest; correct(h.page); h.page.data.request = current;
   assert.equal(h.navigationCount, 0);
   correct(h.page); h.page.onUnload();
-  h.navigation.fail(); h.navigation.success(); h.page.openBattle();
+  h.navigation.fail(); h.navigation.success(); await h.page.openBattle();
   assert.equal(h.navigationCount, 1); assert.equal(h.toastCount, 0);
 });
 
-test('会话仅在内存中保存，释放后新局重置，旧释放不能影响新局', () => {
+test('会话仅在内存中保存，释放后新局重置，旧释放不能影响新局', async () => {
   const store = createSessionStore();
   const first = store.start();
   assert.equal(store.start(), first);
@@ -136,7 +137,7 @@ test('会话仅在内存中保存，释放后新局重置，旧释放不能影�
   assert.equal(createSessionStore().claim(second.sessionId), undefined);
 });
 
-test('战斗页只领取一次合法会话，卸载释放，缺失或失效入口返回首页', () => {
+test('战斗页只领取一次合法会话，卸载释放，缺失或失效入口返回首页', async () => {
   const sessionStore = createSessionStore();
   let redirects = 0;
   function loadPage() {
@@ -178,36 +179,36 @@ test('战斗页只领取一次合法会话，卸载释放，缺失或失效入�
 test('首页关卡锁定、通关刷新和默认进入首个未完成关卡', async () => {
  const h = homeHarness(); h.page.onShow(); h.page.toggleLevels();
  assert.equal(h.page.data.levels.length, 8); assert.equal(h.page.data.levels.filter((l:any)=>!l.locked).length,1);
- h.page.selectLevel({currentTarget:{dataset:{levelId:2}}}); assert.equal(h.page.data.request,null);
+ await h.page.selectLevel({currentTarget:{dataset:{levelId:2}}}); assert.equal(h.page.data.request,null);
  h.wallet.rewardVictory('first',1); h.page.onShow(); assert.equal(h.page.data.levels[1].locked,false);
  await h.page.openBattle(); assert.equal(h.page.data.request.plan.levelId,2); h.page.closeChallenge();
- h.page.selectLevel({currentTarget:{dataset:{levelId:1}}}); assert.equal(h.page.data.request.plan.levelId,1);
+ await h.page.selectLevel({currentTarget:{dataset:{levelId:1}}}); assert.equal(h.page.data.request.plan.levelId,1);
 });
 
 test('素材集合默认水果、全部分类可浏览，快速切换和关闭不接受旧加载结果', async () => {
  const pending: (()=>void)[]=[];const h=homeHarness(()=>new Promise<void>(resolve=>pending.push(resolve)));
- h.page.toggleCredits();assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
+ h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
  const colors=h.page.selectCollection({currentTarget:{dataset:{levelId:2}}});
  const animals=h.page.selectCollection({currentTarget:{dataset:{levelId:3}}});
  pending[1]();await animals;assert.equal(h.page.data.collectionItems.length,16);
  pending[0]();await colors;assert.equal(h.page.data.collectionLevel,3);assert.equal(h.page.data.collectionItems.length,16);
- const tools=h.page.selectCollection({currentTarget:{dataset:{levelId:4}}});h.page.toggleCredits();pending[2]();await tools;assert.equal(h.page.data.showCredits,false);
- h.page.toggleCredits();assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
+ const tools=h.page.selectCollection({currentTarget:{dataset:{levelId:4}}});h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));pending[2]();await tools;assert.equal(h.page.data.showCredits,false);
+ h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));assert.equal(h.page.data.collectionLevel,1);assert.equal(h.page.data.collectionItems.length,11);
  for(const level of LEVELS)assert.ok(collectionWords(level.id).every(word=>word.phonetic.startsWith('/')&&!word.phonetic.includes('undefined')));
 });
 
-test('集合播放对应标准音频，连续点击不重叠，旧回调与关闭/后台不残留声音', () => {
- const h=homeHarness();h.page.onShow();h.page.toggleCredits();
+test('集合播放对应标准音频，连续点击不重叠，旧回调与关闭/后台不残留声音', async () => {
+ const h=homeHarness();h.page.onShow();h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));
  const tap=(wordId:string)=>h.page.playCollectionWord({currentTarget:{dataset:{wordId}}});
  tap('apple');assert.equal(h.audioCalls[0].path,'/assets/audio/learn-apple.mp3');assert.equal(h.page.data.collectionPlaying,'apple');
  tap('banana');assert.equal(h.audioCalls[0].disposed,true);h.audioCalls[0].done(true);assert.equal(h.page.data.collectionPlaying,'banana');
  h.audioCalls[1].done(false);assert.equal(h.page.data.collectionAudioError,'banana');tap('banana');assert.equal(h.page.data.collectionAudioError,'');
- h.page.toggleCredits();assert.equal(h.audioCalls[2].disposed,true);assert.equal(h.page.data.collectionPlaying,'');
- h.page.toggleCredits();tap('apple');h.page.onHide();assert.equal(h.audioCalls[3].disposed,true);tap('banana');assert.equal(h.audioCalls.length,4);
+ h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));assert.equal(h.audioCalls[2].disposed,true);assert.equal(h.page.data.collectionPlaying,'');
+ h.page.toggleCredits();await new Promise(resolve => setImmediate(resolve));tap('apple');h.page.onHide();assert.equal(h.audioCalls[3].disposed,true);tap('banana');assert.equal(h.audioCalls.length,4);
  h.page.onUnload();h.audioCalls[3].done(false);assert.equal(h.page.data.collectionAudioError,'');
 });
 
-test('伙伴面板打开暂停场景覆盖，喂养和换装读写真实存档，后台拒绝操作',()=>{
+test('伙伴面板打开暂停场景覆盖，喂养和换装读写真实存档，后台拒绝操作',async ()=>{
  const h=homeHarness();h.petStore.rewardBoss('pet','pet:wave:1:zombie:1');
  let i=0;while(h.petStore.view().food===0){const session=`food-${i++}`;h.petStore.rewardBoss(session,`${session}:wave:1:zombie:1`);}
  h.page.onShow();h.page.openPet();assert.equal(h.page.data.showPet,true);assert.equal(h.page.data.petView.owned,true);
@@ -219,15 +220,15 @@ test('伙伴面板打开暂停场景覆盖，喂养和换装读写真实存档�
 });
 
 
-test('失败后一次性引导主角，点击打开武器面板后清除指引',()=>{
+test('失败后一次性引导主角，点击打开武器面板后清除指引',async ()=>{
  const h=homeHarness();h.strengthGuide.request();h.page.onShow();assert.equal(h.page.data.strengthTarget,'weapon');
  h.page.openWeapon();assert.equal(h.page.data.showWeapon,true);assert.equal(h.page.data.strengthTarget,'');
  h.page.closeWeapon();h.page.onShow();assert.equal(h.page.data.strengthTarget,'','普通返回不重复出现');
  assert.equal(strengthTarget(7,{owned:true,level:9}),'pet');assert.equal(strengthTarget(7,{owned:true,level:10}),'pet');assert.equal(strengthTarget(7,{owned:true,level:40}),'');assert.equal(strengthTarget(7,{owned:false,level:1}),'');
 });
 
-test('首页立即导航，失败重试和过期回调不误改当前状态', () => {
-  const h = homeHarness(); h.page.openBattle(); correct(h.page);
+test('首页立即导航，失败重试和过期回调不误改当前状态', async () => {
+  const h = homeHarness(); await h.page.openBattle(); correct(h.page);
   assert.equal(h.page.data.entryProgress, 0);
   const oldSuccess = h.navigation.success;
   h.navigation.fail();
@@ -236,14 +237,14 @@ test('首页立即导航，失败重试和过期回调不误改当前状态', ()
   assert.equal(h.page.data.entryProgress, 0);
   h.navigation.success();
   assert.equal(h.page.data.entryProgress, 0);
-  h.page.onShow(); h.page.openBattle(); correct(h.page);
+  h.page.onShow(); await h.page.openBattle(); correct(h.page);
   assert.equal(h.page.data.entryProgress, 0);
   h.page.onUnload(); h.navigation.success();
   assert.equal(h.page.data.entryProgress, 0);
 });
 
-test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', () => {
-  const h = homeHarness(); h.page.onShow(); h.page.openBattle(); correct(h.page);
+test('我要变强返回时无论导航成功标记是否保留都清除入口弹窗并展示指引', async () => {
+  const h = homeHarness(); h.page.onShow(); await h.page.openBattle(); correct(h.page);
   h.page.onHide();
   h.strengthGuide.request(); h.page.onShow();
   assert.equal(h.page.data.request, null);
@@ -254,12 +255,12 @@ test('我要变强返回时无论导航成功标记是否保留都清除入口�
 });
 
 
-test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪标记', () => {
-  const h=homeHarness();h.page.openBattle();
+test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪标记', async () => {
+  const h=homeHarness();await h.page.openBattle();
   assert.equal(h.page.data.sceneCoverReady,false);
   h.page.sceneCoverChanged({detail:{ready:true}});
   assert.equal(h.page.data.sceneCoverReady,true);
-  h.page.closeChallenge();h.page.openBattle();
+  h.page.closeChallenge();await h.page.openBattle();
   assert.equal(h.page.data.sceneCoverReady,false);
   const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
   assert.match(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
@@ -267,8 +268,8 @@ test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪�
 });
 
 
-for (const releasedBeforeShow of [false,true]) test(`普通战斗返回清理进度圆环，不依赖导航成功回调（先释放=${releasedBeforeShow}）`, () => {
-  const h=homeHarness();h.page.onShow();h.page.openBattle();correct(h.page);
+for (const releasedBeforeShow of [false,true]) test(`普通战斗返回清理进度圆环，不依赖导航成功回调（先释放=${releasedBeforeShow}）`, async () => {
+  const h=homeHarness();h.page.onShow();await h.page.openBattle();correct(h.page);
   const id=h.page.data.request.plan.sessionId;
   h.page.onHide();assert.ok(h.fortressEntryStore.claim(id));
   if(releasedBeforeShow)h.fortressEntryStore.release(id);
@@ -279,20 +280,20 @@ for (const releasedBeforeShow of [false,true]) test(`普通战斗返回清理进
   h.navigation.success();h.navigation.fail();
   assert.equal(h.page.data.request,null);assert.equal(h.page.data.entryProgress,0);
   assert.equal(h.page.enteredBattle,false);
-  h.page.openBattle();assert.notEqual(h.page.data.request.plan.sessionId,id);
+  await h.page.openBattle();assert.notEqual(h.page.data.request.plan.sessionId,id);
 });
 
-test('仅切到后台再回首页，尚未进入战斗的听词题保持原题', () => {
-  const h=homeHarness();h.page.onShow();h.page.openBattle();
+test('仅切到后台再回首页，尚未进入战斗的听词题保持原题', async () => {
+  const h=homeHarness();h.page.onShow();await h.page.openBattle();
   const request=h.page.data.request;h.page.onHide();h.page.onShow();
   assert.equal(h.page.data.request,request);
 });
 
 
-test('首页答对后立即导航，资源加载由战斗页负责', () => {
+test('首页答对后立即导航，资源加载由战斗页负责', async () => {
   let loads = 0;
   const h = homeHarness(undefined, () => { loads++; return () => {}; });
-  h.page.openBattle(); correct(h.page);
+  await h.page.openBattle(); correct(h.page);
   assert.equal(h.navigationCount, 1);
   assert.equal(loads, 0);
   h.page.enterBattle();
@@ -322,7 +323,7 @@ test('首页难度选择保存后自动关闭，开战携带难度，已有听�
  h.page.selectDifficulty({detail:{id:'easy'}});assert.equal(h.page.data.difficulty,'nightmare');
 });
 
- test('宠物面板金币升级刷新余额和等级，旧事件不重复扣费，后台不升级',()=>{
+ test('宠物面板金币升级刷新余额和等级，旧事件不重复扣费，后台不升级',async ()=>{
   const h=homeHarness();h.petStore.rewardBoss('pet','pet:wave:1:zombie:1');h.page.onShow();h.page.openPet();
   const event={currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}};
   h.page.petAction(event);assert.equal(h.page.data.petView.level,2);assert.equal(h.page.data.coinBalance,200);
@@ -330,3 +331,26 @@ test('首页难度选择保存后自动关闭，开战携带难度，已有听�
   h.page.onHide();h.page.petAction({currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}});assert.equal(h.petStore.view().level,2);
   h.page.onShow();h.page.petAction({currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}});assert.equal(h.page.data.petView.level,3);assert.equal(h.page.data.coinBalance,0);
  });
+
+test('水果首局等待下载，失败可重试且不会重复开局，卸载后迟到完成无效', async () => {
+ const pending: {resolve:()=>void;reject:(e:Error)=>void}[]=[];
+ const h=homeHarness(undefined, undefined, () => new Promise<void>((resolve,reject)=>pending.push({resolve,reject})));
+ const first=h.page.openBattle();
+ assert.equal(h.page.data.request,null); assert.equal(h.page.data.preparingLevel,true);
+ await h.page.openBattle(); assert.equal(pending.length,1);
+ pending[0].reject(Error('offline'));await first;
+ assert.equal(h.page.data.request,null);assert.ok(h.page.data.entryError);
+ const retry=h.page.openBattle();pending[1].resolve();await retry;
+ assert.equal(h.page.data.request.plan.levelId,1);
+ h.page.closeChallenge();const last=h.page.openBattle();h.page.onUnload();pending[2].resolve();await last;
+ assert.equal(h.page.data.request,null);
+});
+
+test('水果集合等待分包，切换分类后旧水果结果不能覆盖当前分类', async () => {
+ let ready:()=>void=()=>{};
+ const h=homeHarness(undefined,undefined,()=>new Promise<void>(resolve=>{ready=resolve;}));
+ h.page.toggleCredits();assert.equal(h.page.data.collectionLoading,true);assert.equal(h.page.data.collectionItems.length,0);
+ await h.page.selectCollection({currentTarget:{dataset:{levelId:3}}});
+ ready();await new Promise(resolve => setImmediate(resolve));
+ assert.equal(h.page.data.collectionLevel,3);assert.equal(h.page.data.collectionItems.length,16);
+});

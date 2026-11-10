@@ -12,7 +12,7 @@ export class ContentValidationError extends Error {
 
 const PHASES: readonly Phase[] = ['intro', 'practice', 'boss'];
 const ID = /^[a-z][a-z0-9-]*$/;
-const ASSET_PATH = /^\/assets\/(images|audio)\/[a-z0-9-]+\.(png|jpg|webp|mp3|wav)$/;
+const ASSET_PATH = /^\/(?:assets\/(images|audio)|fruit-assets)\/[a-z0-9-]+\.(png|jpg|webp|mp3|wav)$/;
 
 // 对编译期类型约束下的配置做语义校验；本地存储的 unknown 解码由进度适配器负责。
 export function validateContent(
@@ -32,7 +32,7 @@ export function validateContent(
     for (const kind of ['image', 'audio'] as const) {
       const field = kind === 'image' ? 'imagePath' : 'audioPath';
       const value = word[field];
-      if (!ASSET_PATH.test(value)) add(`${path}.${field}`, '必须引用 assets 内的本地资源');
+      if (!ASSET_PATH.test(value)) add(`${path}.${field}`, '必须引用已登记的本地资源');
       const entries = assets.filter((asset) => asset.path === value);
       if (entries.length !== 1) add(`${path}.${field}`, '资源清单必须且仅登记一次此路径');
       else if (entries[0].kind !== kind || entries[0].wordId !== word.id) {
@@ -47,7 +47,7 @@ export function validateContent(
     seenPaths.add(asset.path);
     const word = words.find((candidate) => candidate.id === asset.wordId);
     const isImage = asset.kind === 'image';
-    const pattern = isImage ? /^\/assets\/images\/[a-z0-9-]+\.(png|jpg|webp)$/ : /^\/assets\/audio\/[a-z0-9-]+\.(mp3|wav)$/;
+    const pattern = isImage ? /^\/(?:assets\/images|fruit-assets)\/[a-z0-9-]+\.(png|jpg|webp)$/ : /^\/assets\/audio\/[a-z0-9-]+\.(mp3|wav)$/;
     if (!pattern.test(asset.path)) add(`${path}.path`, '资源目录或后缀与类型不符');
     if (!word || (isImage ? word.imagePath : word.audioPath) !== asset.path) {
       add(`${path}.wordId`, '资源没有对应的词条引用');

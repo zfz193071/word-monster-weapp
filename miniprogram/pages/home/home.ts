@@ -1,3 +1,4 @@
+import { loadFruitAssets } from '../../services/battlefield-assets';
 import { houseForLevel } from '../../houses/catalog';
 import { loadImageAssets } from '../../services/image-assets';
 import { petUpgrade } from '../../services/pet-upgrade';
@@ -155,10 +156,10 @@ Page({
     if (!level || this.disposed || !this.data.showCredits) return;
     this.stopCollectionAudio();
     const revision = ++this.collectionRevision;
-    this.setData({ collectionLevel: levelId, collectionItems: [], collectionLoading: levelId > 1, collectionError: false, collectionScroll: this.data.collectionScroll === 0 ? 1 : 0 });
+    this.setData({ collectionLevel: levelId, collectionItems: [], collectionLoading: true, collectionError: false, collectionScroll: this.data.collectionScroll === 0 ? 1 : 0 });
     const valid = () => !this.disposed && this.data.showCredits && revision === this.collectionRevision;
     try {
-      if (levelId > 1) await loadLevelAssets();
+      await (levelId === 1 ? loadFruitAssets() : loadLevelAssets());
       if (!valid()) return;
       this.setData({ collectionItems: collectionWords(levelId), collectionLoading: false, collectionScroll: 0 });
     } catch { if (valid()) this.setData({ collectionLoading: false, collectionError: true }); }
@@ -287,12 +288,10 @@ Page({
     if (this.disposed || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showPet || this.data.showDifficulty || this.data.showCheckin || this.data.showHouse) return;
     try {
       if (!coinWallet.canEnter(levelId)) return;
-      if (levelId > 1) {
-        this.setData({ preparingLevel: true, entryProgress: 0, entryError: '' });
-        await loadLevelAssets();
-        if (this.disposed) return;
-        this.setData({ entryProgress: 100 });
-      }
+      this.setData({ preparingLevel: true, entryProgress: 0, entryError: '' });
+      await (levelId === 1 ? loadFruitAssets() : loadLevelAssets());
+      if (this.disposed) return;
+      this.setData({ entryProgress: 100 });
       const request = fortressEntryStore.start(Date.now(), levelId);
       this.stopCollectionAudio(); this.music?.setActive(false);
       this.setData({ sceneCoverReady: this.data.sceneCoverReady && (this.data.showLevels || this.data.showCredits), strengthTarget: '', request, showLevels: false, showCredits: false, entryError: '', choiceComplete: false, navigationError: false });

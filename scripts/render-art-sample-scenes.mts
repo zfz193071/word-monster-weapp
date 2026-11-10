@@ -22,7 +22,7 @@ for (const [device, width, height] of [['phone',390,620], ['ipad',1024,580]] as 
   initial={...initial,pet:createBattlePet({level:1,equipped:[]}),monsters:Array.from({length:count},(_,i)=>({...initial.monsters[0],id:`sample-${i}`,wordId:['apple','rabbit','bird'][i%3],status:'alive',position:{x:40+(i%6)*56,y:90+Math.floor(i/6)*115+(i%2)*30}}))};
   const canvas=createCanvas(width*2,height*2);
   canvas.requestAnimationFrame=()=>1;canvas.cancelAnimationFrame=()=>{};
-  canvas.createImage=()=>{const im=new Image();const prop=Object.getOwnPropertyDescriptor(Image.prototype,'src')!;Object.defineProperty(im,'src',{set(value:string){prop.set!.call(im,value==='/assets/images/apple.png'?resolve(samples,'variants/apple-battle-128.png'):resolve(root,'miniprogram',value.replace(/^\//,'')))},get(){return prop.get!.call(im)}});return im};
+  canvas.createImage=()=>{const im=new Image();const prop=Object.getOwnPropertyDescriptor(Image.prototype,'src')!;Object.defineProperty(im,'src',{set(value:string){prop.set!.call(im,value==='/fruit-assets/apple.png'?resolve(samples,'variants/apple-battle-128.png'):resolve(root,'miniprogram',value.replace(/^\//,'')))},get(){return prop.get!.call(im)}});return im};
   (globalThis as any).wx={createOffscreenCanvas:({width,height}:any)=>createCanvas(width,height)};
   const scene=new CanvasScene(canvas,{initial,width,height,dpr:2,clientLeft:0,preview:false,art:openingArt('apple',['apple','rabbit','bird']),onHud(){},onEvents(){},onError(e){throw Error(e)}});
   // Review-only appearance substitution; no runtime code or hitboxes are changed.

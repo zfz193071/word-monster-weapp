@@ -47,6 +47,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "fruit-assets",
+      "name": "fruit-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }
