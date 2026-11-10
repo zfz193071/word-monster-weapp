@@ -1,6 +1,6 @@
 {
   "generator": "built-in image_gen",
-  "status": "composition-candidate-awaiting-review",
+  "status": "composition-and-zombie-style-approved",
   "runtimeIntegrated": false,
   "output": {
     "path": "docs/visual-audit/battlefield-overhaul/interior-study/interior-01.png",
@@ -23,5 +23,11 @@
       "bytes": 1492272,
       "sha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be"
     }
+  ],
+  "approval": "用户：可以；随后强调堡垒必须随房屋类型和等级变化",
+  "constraints": [
+    "Stone wall in study is not a universal five-level fortress material",
+    "Preserve existing five-level house-to-fortress mapping",
+    "Runtime integration and device acceptance pending"
   ]
 }
