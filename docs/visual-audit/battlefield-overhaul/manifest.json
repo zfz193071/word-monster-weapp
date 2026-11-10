@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-10",
+  "issue": 98,
+  "reference": "../concepts/style-study-01.png",
+  "images": [
+    {
+      "file": "phone-concept-01.png",
+      "width": 994,
+      "height": 1582,
+      "bytes": 2753193,
+      "sha256": "d8ade5a196fc9e49e50ac033e42ce064100574929a7ac5f616650c7fe9e210fa",
+      "prompt": "phone-prompt.txt",
+      "tool": "built-in image_gen",
+      "status": "review-candidate",
+      "runtime": false
+    },
+    {
+      "file": "tablet-concept-01.png",
+      "width": 1664,
+      "height": 945,
+      "bytes": 2950487,
+      "sha256": "e0e01cb3d46927956b58669af45b0c9212bdd732c5c8fc112ca577a9022e0d26",
+      "prompt": "tablet-prompt.txt",
+      "tool": "built-in image_gen",
+      "status": "review-candidate",
+      "runtime": false
+    }
+  ],
+  "limitations": [
+    "Concept only, not gameplay or device evidence",
+    "Phone helmet grey instead of olive green",
+    "Tablet 16 enemies instead of requested 18",
+    "Foreground scale requires review"
+  ]
+}
