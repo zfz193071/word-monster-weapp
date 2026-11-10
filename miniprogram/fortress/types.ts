@@ -148,6 +148,8 @@ export interface SupportSoldierState {
   readonly skill?: OwnedSkill;
   readonly source?: SoldierSource;
   readonly evolved?: boolean;
+  readonly lastHitTick?: number;
+  readonly hitCombatId?: string;
   readonly lastShotTick?: number;
   readonly shotCombatId?: string;
   readonly shotTarget?: Point;

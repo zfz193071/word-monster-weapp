@@ -473,8 +473,8 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       if (soldierLayer(soldier) !== 'ground' || Math.hypot(soldier.position.x - monster.position.x, soldier.position.y - monster.position.y) > 60) return [soldier];
       const hp = Math.max(0, soldier.hp - damage);
       events.push({type:'supportSoldierDamaged',context:previous.context,tick,attackId,monsterId:monster.id,soldierId:soldier.id,hp});
-      if (hp > 0) return [{...soldier,hp}];
-      fallenSoldiers.push({...soldier,hp:0});
+      if (hp > 0) return [{...soldier,hp,lastHitTick:tick,hitCombatId:previous.context.combatId}];
+      fallenSoldiers.push({...soldier,hp:0,lastHitTick:tick,hitCombatId:previous.context.combatId});
       events.push({type:'supportSoldierDefeated',context:previous.context,tick,attackId,monsterId:monster.id,soldierId:soldier.id});
       return [];
     });
@@ -498,8 +498,8 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     if (soldierIndex >= 0) {
       const soldier = supportSoldiers[soldierIndex];
       const hp = Math.max(0, soldier.hp - receivedSoldierDamage(soldier, monster.attackDamage ?? RULES.monster.attackDamage));
-      if (hp === 0) { supportSoldiers.splice(soldierIndex, 1); if (!fallenSoldiers.some(s => s.id === soldier.id)) fallenSoldiers.push({...soldier, hp: 0}); }
-      else supportSoldiers[soldierIndex] = { ...soldier, hp };
+      if (hp === 0) { supportSoldiers.splice(soldierIndex, 1); if (!fallenSoldiers.some(s => s.id === soldier.id)) fallenSoldiers.push({...soldier, hp: 0,lastHitTick:tick,hitCombatId:previous.context.combatId}); }
+      else supportSoldiers[soldierIndex] = { ...soldier, hp, lastHitTick:tick,hitCombatId:previous.context.combatId };
       events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
       if (hp === 0) events.push({ type: 'supportSoldierDefeated', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id });
       return;
@@ -629,6 +629,6 @@ export function reviveCompanion(state: CombatState, kind: string, id: string): C
   const next = summonSupportSoldier(state, id);
   if (!next) return null;
   const stats = unitStats(fallen,weaponForLevel(state.weaponLevel ?? 1).damage);
-  return freezeState({...next, supportSoldiers: next.supportSoldiers!.map(s => s.id === id ? {...fallen,slot:s.slot,position:{...s.position,...(fallen.source === 'skill' ? {y:RULES.arena.baseTop} : {})},hp:fallen.maxHp,attackRemainingMs:stats.interval,lastShotTick:undefined,shotTarget:undefined,shotCombatId:undefined} : s),
+  return freezeState({...next, supportSoldiers: next.supportSoldiers!.map(s => s.id === id ? {...fallen,slot:s.slot,position:{...s.position,...(fallen.source === 'skill' ? {y:RULES.arena.baseTop} : {})},hp:fallen.maxHp,attackRemainingMs:stats.interval,lastHitTick:undefined,hitCombatId:undefined,lastShotTick:undefined,shotTarget:undefined,shotCombatId:undefined} : s),
     fallenSoldiers: state.fallenSoldiers!.filter(s => s.id !== id)});
 }

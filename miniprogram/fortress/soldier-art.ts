@@ -9,7 +9,7 @@ type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D
 export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: number, combatId: string, image?: WechatMiniprogram.Image): void {
   const type = soldierType(soldier.soldierType);
   const target = soldier.shotTarget;
-  const firing = soldier.shotCombatId === combatId && target && soldier.lastShotTick !== undefined && tick >= soldier.lastShotTick && tick - soldier.lastShotTick < 16;
+  const firing = soldier.hp > 0 && soldier.shotCombatId === combatId && target && soldier.lastShotTick !== undefined && tick >= soldier.lastShotTick && tick - soldier.lastShotTick < 16;
   const angle = target ? Math.atan2(target.x - soldier.position.x, -(target.y - soldier.position.y)) : 0;
   const size = type === 'tank' ? 64 : 56;
   const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
@@ -24,7 +24,7 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   c.save(); c.rotate(angle);
   if (image) {
     c.drawImage(image, -size / 2, imageY, size, size);
-    if (type === 'jetpack') {
+    if (type === 'jetpack' && soldier.hp > 0) {
       c.fillStyle = '#f6c775';
       for (const x of [-8, 8]) { c.beginPath(); c.moveTo(x - 2, 8 + hover); c.lineTo(x, 16 + hover + Math.sin(tick * .13) * 2); c.lineTo(x + 2, 8 + hover); c.closePath(); c.fill(); }
     }
@@ -58,7 +58,7 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   } else if (type === 'jetpack' || type === 'flamethrower') {
     c.fillStyle=type==='jetpack'?'#729fa9':'#b58a4c';
     for(const x of [-17,10]) {c.fillRect(x,-12,7,22);c.beginPath();c.arc(x+3.5,-12,3.5,Math.PI,Math.PI*2);c.fill();}
-    if(type==='jetpack'){c.fillStyle='#eac27c';for(const x of [-14,13]){c.beginPath();c.moveTo(x-3,10);c.lineTo(x,18+3*Math.sin(tick*.13));c.lineTo(x+3,10);c.closePath();c.fill();}}
+    if(type==='jetpack' && soldier.hp > 0){c.fillStyle='#eac27c';for(const x of [-14,13]){c.beginPath();c.moveTo(x-3,10);c.lineTo(x,18+3*Math.sin(tick*.13));c.lineTo(x+3,10);c.closePath();c.fill();}}
   }
   }
   if (soldier.evolved) {c.fillStyle='#f1d584';c.beginPath();c.moveTo(0,-24);c.lineTo(4,-20);c.lineTo(0,-16);c.lineTo(-4,-20);c.closePath();c.fill();}
@@ -72,9 +72,34 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
     c.beginPath(); c.moveTo(Math.cos(angle) * muzzle.x - Math.sin(angle) * muzzle.y, Math.sin(angle) * muzzle.x + Math.cos(angle) * muzzle.y);
     c.lineTo(target.x - soldier.position.x, target.y - soldier.position.y); c.stroke();
   }
-  if (soldier.hp < soldier.maxHp) {
+  // Cosmetic marks use the committed damage tick; no timers or damage callbacks.
+  if (soldier.hp > 0 && soldier.hitCombatId === combatId && soldier.lastHitTick !== undefined
+    && tick >= soldier.lastHitTick && tick - soldier.lastHitTick < 18) {
+    const progress = (tick - soldier.lastHitTick) / 18;
+    c.save(); c.globalAlpha = 1 - progress; c.strokeStyle = '#f2ad72'; c.lineWidth = 2;
+    const radius = size / 2 + progress * 5;
+    for (const [x, y] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      c.beginPath(); c.moveTo(x * radius * .65, -8 + y * radius * .65);
+      c.lineTo(x * (radius * .65 + 5), -8 + y * (radius * .65 + 5)); c.stroke();
+    }
+    c.restore();
+  }
+  if (soldier.hp > 0 && soldier.hp < soldier.maxHp) {
     c.fillStyle = '#33423a'; c.fillRect(-10, 15, 20, 3);
     c.fillStyle = '#84e3a5'; c.fillRect(-10, 15, 20 * soldier.hp / soldier.maxHp, 3);
   }
+  c.restore();
+}
+
+// Fallen inventory remains available for revival; only its brief visual fades.
+export function drawFallenSoldier(c: Context, soldier: SupportSoldierState, tick: number, combatId: string, image?: WechatMiniprogram.Image): void {
+  if (soldier.hp > 0 || soldier.hitCombatId !== combatId || soldier.lastHitTick === undefined) return;
+  const elapsed = tick - soldier.lastHitTick;
+  if (elapsed < 0 || elapsed >= 36) return;
+  const progress = elapsed / 36;
+  c.save(); c.globalAlpha = 1 - progress;
+  c.translate(soldier.position.x, soldier.position.y + progress * 6);
+  c.rotate(progress * (soldierType(soldier.soldierType) === 'tank' ? .12 : .45));
+  drawSoldier(c, {...soldier, position: {x: 0, y: 0}}, soldier.lastHitTick, combatId, image);
   c.restore();
 }

@@ -1,7 +1,7 @@
 import { drawHouseFortress } from '../houses/battle-art';
 import { soldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
-import { drawSoldier } from './soldier-art';
+import { drawSoldier, drawFallenSoldier } from './soldier-art';
 import { weaponAppearance } from '../weapons/appearance';
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
@@ -565,6 +565,7 @@ export class CanvasScene {
       c.globalAlpha = 1;
     }
     drawBattlePet(c, state);
+    for (const soldier of state.fallenSoldiers ?? []) drawFallenSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     if ((state.flameFanUntilTick ?? 0) > state.tick) {
       c.save(); c.translate(state.player.x, state.player.y);
