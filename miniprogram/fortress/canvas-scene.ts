@@ -6,7 +6,7 @@ import { weaponAppearance } from '../weapons/appearance';
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
 import { drawBattlePet } from '../pets/battle-art';
-import { battleBackgroundColor, drawBattleBackground } from './battle-background';
+import { battleBackgroundColor, drawBattleBackground, courtyardAsset, COURTYARD_ASSET, drawCourtyard } from './battle-background';
 import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
@@ -179,7 +179,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !/^\/(?:assets\/images|learning-assets\/images)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path))) throw new Error('战场素材尚未通过审校');
+      || !(asset.path === COURTYARD_ASSET.path || /^\/(?:assets\/images|learning-assets\/images)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -197,6 +197,8 @@ export class CanvasScene {
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
     const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
+    const courtyard = art.fruitHat && courtyardAsset(this.options.levelId);
+    if (courtyard) assets.push(courtyard);
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -358,7 +360,10 @@ export class CanvasScene {
   }
   private paintBackground(c: Context): void {
     if (this.options.art?.fruitHat) {
-      drawBattleBackground(c, this.options.levelId, this.viewport.worldWidth);
+      const asset = courtyardAsset(this.options.levelId);
+      const image = asset && this.images.get(asset.path);
+      if (image) drawCourtyard(c, image, this.viewport.worldWidth);
+      else drawBattleBackground(c, this.options.levelId, this.viewport.worldWidth);
     } else {
       c.fillStyle = '#112c36'; c.fillRect(0, 0, this.viewport.worldWidth, 560);
       c.fillStyle = '#21434a';

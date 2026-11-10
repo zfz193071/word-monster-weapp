@@ -1,4 +1,20 @@
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
+// First approved scene direction; the remaining themed levels retain their assets.
+export const COURTYARD_ASSET = {
+  path: '/assets/battle-art/courtyard-v1.jpg',
+  source: 'image_gen; battlefield-overhaul/courtyard-source-01.png',
+  rights: 'Project-generated artwork', approved: true,
+} as const;
+export function courtyardAsset(levelId = 1): typeof COURTYARD_ASSET | undefined {
+  return levelId === 1 ? COURTYARD_ASSET : undefined;
+}
+export function drawCourtyard(c: Context, image: WechatMiniprogram.Image, width: number): void {
+  // Cover without stretching; center crop varies with viewport, never combat coordinates.
+  const scale = Math.max(width / image.width, 560 / image.height);
+  const sourceWidth = width / scale, sourceHeight = 560 / scale;
+  c.drawImage(image, (image.width - sourceWidth) / 2, (image.height - sourceHeight) / 2,
+    sourceWidth, sourceHeight, 0, 0, width, 560);
+}
 // Original open courtyard; edge decoration does not imply a narrow fighting lane.
 const palettes = [
   ['#a1b777', '#c6c397', '#ded8b3', '#789858'], // orchard

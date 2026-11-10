@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "tablet-concept-01.png",
+  "prompt": "courtyard-prompt.txt",
+  "source": "/Users/zhuwenfang/.codex/generated_images/01a1c4ab-4bc1-7c80-8809-9516090f0e9b/exec-e63682e0-ea9a-47ea-b331-6304b0b225a2.png",
+  "encoding": "@napi-rs/canvas JPEG quality 75; no resize",
+  "width": 1536,
+  "height": 1024,
+  "decodedRgbaBytes": 6291456,
+  "files": [
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/courtyard-source-01.png",
+      "bytes": 3085672,
+      "sha256": "4ec67a9d0065801be2ffe1d7b3a2da5c7fe34bed9e8816ff22a749e185c87c29"
+    },
+    {
+      "path": "miniprogram/assets/battle-art/courtyard-v1.jpg",
+      "bytes": 292472,
+      "sha256": "c8d48a21c19d60a6458d5d7645ba1bdb8e28db4f196cca48ff7c231b19f5dfe9"
+    }
+  ]
+}

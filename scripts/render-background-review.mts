@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve, relative } from 'node:path';
 import { createHash } from 'node:crypto';
 import { CanvasScene } from '../miniprogram/fortress/canvas-scene';
 import { createOpeningEncounter, openingArt } from '../miniprogram/fortress/opening-encounter';
@@ -11,7 +11,7 @@ import { createBattlePet } from '../miniprogram/pets/battle';
 const require = createRequire(import.meta.url);
 const { createCanvas, Image, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = resolve(root, 'docs/visual-audit/scenes');
+const output = resolve(root, process.env.WM_SCENE_OUTPUT ?? 'docs/visual-audit/scenes');
 await mkdir(output, { recursive: true });
 const report: any[] = [];
 const dpr = 2;
@@ -75,5 +75,5 @@ for (const device of ['phone', 'ipad']) {
   await writeFile(resolve(output, `${device}-overview.png`), sheet.toBuffer('image/png'));
 }
 const cards = report.map(entry => `<figure><figcaption>${entry.name} · ${entry.width}×${entry.height} CSS px · DPR 2</figcaption><img loading="lazy" src="${entry.name}.png" width="${entry.width}" height="${entry.height}"></figure>`).join('');
-await writeFile(resolve(output, 'review.html'), `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>八关场景对照</title><style>body{font:16px system-ui;background:#f6f1e7;color:#263d38;margin:24px}figure{background:white;padding:16px;overflow:auto;margin:24px 0}figcaption{margin-bottom:12px}img{display:block;max-width:none}p{max-width:900px;line-height:1.8}</style><h1>八关背景 · 手机与平板</h1><p>正式CanvasScene绘制器，固定第一关苹果怪/两类Boss、一级武器/房屋/蓝狐，逐关仅切换背景以控制对比变量。并非各关自然刷怪、微信截图、真实设备或动态验收。首页及五级房屋沿用此前基线。</p><a href="report.json">尺寸与哈希</a> · <a href="../current-scenes/review.html">五级房屋与首页基线</a>${cards}</html>`);
+await writeFile(resolve(output, 'review.html'), `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>八关场景对照</title><style>body{font:16px system-ui;background:#f6f1e7;color:#263d38;margin:24px}figure{background:white;padding:16px;overflow:auto;margin:24px 0}figcaption{margin-bottom:12px}img{display:block;max-width:none}p{max-width:900px;line-height:1.8}</style><h1>八关背景 · 手机与平板</h1><p>正式CanvasScene绘制器，固定第一关苹果怪/两类Boss、一级武器/房屋/蓝狐，逐关仅切换背景以控制对比变量。并非各关自然刷怪、微信截图、真实设备或动态验收。首页及五级房屋沿用此前基线。</p><a href="report.json">尺寸与哈希</a> · <a href="${relative(output, resolve(root, 'docs/visual-audit/current-scenes/review.html'))}">五级房屋与首页基线</a>${cards}</html>`);
 console.log(`Rendered ${report.length} scene comparison fixtures.`);

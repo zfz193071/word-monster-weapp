@@ -365,7 +365,10 @@ test('八关入场呈现前已绘制主角、宠物和首只怪物，暂停期�
     const loading = h.scene.load();
     for (const image of h.images) {
       const png = readFileSync(new URL(`../miniprogram${image.src}`, import.meta.url));
-      image.width = png.readUInt32BE(16); image.height = png.readUInt32BE(20); image.onload();
+      if (image.src.endsWith('.jpg')) {
+        assert.equal(png.readUInt16BE(0), 0xffd8); image.width = 1536; image.height = 1024;
+      } else { image.width = png.readUInt32BE(16); image.height = png.readUInt32BE(20); }
+      image.onload();
     }
     assert.equal(await loading, true, `关卡${levelId}: ${h.errors.join(',')}`);
     h.commands.length = 0;
@@ -443,5 +446,33 @@ test('房屋外观兼容旧快照，五级堡垒摧毁后仍使用废墟', async
   for (let level = 1; level <= 5; level++) {
     const commands = await render(level, true);
     assert.ok(commands.some(command => command.method === 'drawImage' && command.args[0]?.src === artFixture().destroyedBase.path));
+  }
+});
+
+
+test('第一关庭院等待资源完成后绘制，宽窄屏等比裁切且其他关卡不加载', async () => {
+  const { COURTYARD_ASSET } = await import('../miniprogram/fortress/battle-background');
+  for (const levelId of [1, 2]) {
+    const art = { ...artFixture(), fruitHat: artFixture().monster };
+    const h = harness(false, art, { levelId });
+    const loading = h.scene.load();
+    const ground = h.images.find(image => image.src === COURTYARD_ASSET.path);
+    assert.equal(!!ground, levelId === 1);
+    for (const image of h.images.filter(image => image !== ground)) image.onload();
+    if (ground) {
+      assert.equal(h.callbacks.size, 0);
+      ground.width = 1536; ground.height = 1024; ground.onload();
+    }
+    assert.equal(await loading, true);
+    if (ground) for (const [width, height] of [[390,620], [1024,580]]) {
+      h.commands.length = 0; h.scene.resize(width, height, 2, 0);
+      const draw = h.commands.find(command => command.method === 'drawImage' && command.args[0] === ground)!;
+      assert.ok(draw);
+      const [, sx, sy, sw, sh, dx, dy, dw, dh] = draw.args as number[];
+      assert.ok(sx >= 0 && sy >= 0 && sx + sw <= 1536.001 && sy + sh <= 1024.001);
+      assert.ok(Math.abs(sw / sh - dw / dh) < 1e-8);
+      assert.equal(dx, 0); assert.equal(dy, 0); assert.equal(dh, 560);
+    }
+    h.scene.dispose();
   }
 });
