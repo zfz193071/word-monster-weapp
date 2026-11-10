@@ -176,5 +176,14 @@
     "prompt": "prompts.json#horse (unchanged)",
     "reference": "../samples/originals/rabbit-display.png",
     "output": null
+  },
+  "horseRetry20261110NewReferenceSession": {
+    "status": "moderation_blocked",
+    "stage": "output",
+    "category": "other",
+    "requestId": "7a28a254-6eb0-4e99-b424-0a5a49610d20",
+    "prompt": "prompts.json#horse (unchanged)",
+    "reference": "../samples/originals/rabbit-display.png",
+    "output": null
   }
 }

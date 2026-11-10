@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-10",
+  "referenceApproved": "style-study-01; representative studies only",
+  "images": [
+    {
+      "id": "fox-01",
+      "title": "蓝狐初稿",
+      "path": "pets/originals/blue-fox-study-01.png",
+      "prompt": "pets/prompt-01.txt",
+      "reference": "concepts/style-study-01.png",
+      "status": "pending-user-review",
+      "generator": "built-in image_gen",
+      "bytes": 1695043,
+      "sha256": "7644052ceab3fc6ed33c4b8711e9574ec0a31549120a0b029881a0be32372527",
+      "referenceSha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6",
+      "width": 1536,
+      "height": 1024,
+      "transparent": 1112760,
+      "partial": 460104,
+      "opaque": 0,
+      "boundsAlphaOver8": [
+        366,
+        52,
+        1173,
+        922
+      ],
+      "marginsAlphaOver8": [
+        0.23828125,
+        0.05078125,
+        0.23567708333333334,
+        0.0986328125
+      ],
+      "meets12PercentMargin": false,
+      "note": "Alpha>8 bounds only; not a claim that all faint pixels are cleared. Originals unchanged; not runtime assets or device evidence."
+    },
+    {
+      "id": "fox-02",
+      "title": "蓝狐边缘修订",
+      "path": "pets/originals/blue-fox-study-02.png",
+      "prompt": "pets/prompt-02.txt",
+      "reference": "pets/originals/blue-fox-study-01.png",
+      "status": "pending-user-review",
+      "generator": "built-in image_gen",
+      "bytes": 1770584,
+      "sha256": "4b96484a667280054a22731768185ded2080a39850dc29c6189a02c6a5607fb7",
+      "referenceSha256": "7644052ceab3fc6ed33c4b8711e9574ec0a31549120a0b029881a0be32372527",
+      "width": 1536,
+      "height": 1024,
+      "transparent": 1069081,
+      "partial": 503783,
+      "opaque": 0,
+      "boundsAlphaOver8": [
+        368,
+        56,
+        1176,
+        925
+      ],
+      "marginsAlphaOver8": [
+        0.23958333333333334,
+        0.0546875,
+        0.23372395833333334,
+        0.095703125
+      ],
+      "meets12PercentMargin": false,
+      "note": "Alpha>8 bounds only; not a claim that all faint pixels are cleared. Originals unchanged; not runtime assets or device evidence."
+    },
+    {
+      "id": "hero-01",
+      "title": "主角初稿（火光待移除）",
+      "path": "hero/reference-studies/hero-study-01.png",
+      "prompt": "hero/reference-studies/prompt-01.txt",
+      "reference": "concepts/style-study-01.png",
+      "status": "pending-user-review",
+      "generator": "built-in image_gen",
+      "bytes": 1716062,
+      "sha256": "9e50b17896f8f52b9d6ebef7316bc841752eb67abb8376377dc0a23aec618a5a",
+      "referenceSha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6",
+      "width": 1536,
+      "height": 1024,
+      "transparent": 1165872,
+      "partial": 406992,
+      "opaque": 0,
+      "boundsAlphaOver8": [
+        336,
+        70,
+        1249,
+        988
+      ],
+      "marginsAlphaOver8": [
+        0.21875,
+        0.068359375,
+        0.18619791666666666,
+        0.0341796875
+      ],
+      "meets12PercentMargin": false,
+      "note": "Alpha>8 bounds only; not a claim that all faint pixels are cleared. Originals unchanged; not runtime assets or device evidence."
+    },
+    {
+      "id": "hero-02",
+      "title": "主角修订（已移除火光）",
+      "path": "hero/reference-studies/hero-study-02.png",
+      "prompt": "hero/reference-studies/prompt-02.txt",
+      "reference": "hero/reference-studies/hero-study-01.png",
+      "status": "pending-user-review",
+      "generator": "built-in image_gen",
+      "bytes": 1492272,
+      "sha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be",
+      "referenceSha256": "9e50b17896f8f52b9d6ebef7316bc841752eb67abb8376377dc0a23aec618a5a",
+      "width": 1536,
+      "height": 1024,
+      "transparent": 1279019,
+      "partial": 293845,
+      "opaque": 0,
+      "boundsAlphaOver8": [
+        396,
+        128,
+        1104,
+        917
+      ],
+      "marginsAlphaOver8": [
+        0.2578125,
+        0.125,
+        0.2805989583333333,
+        0.103515625
+      ],
+      "meets12PercentMargin": false,
+      "note": "Alpha>8 bounds only; not a claim that all faint pixels are cleared. Originals unchanged; not runtime assets or device evidence."
+    },
+    {
+      "id": "rabbit-existing",
+      "title": "兔子战斗代表图（复用已有新画风样张）",
+      "path": "samples/originals/rabbit-battle.png",
+      "prompt": "samples/prompts.json",
+      "reference": "concepts/style-study-01.png",
+      "status": "pending-user-review",
+      "generator": "built-in image_gen",
+      "bytes": 1548641,
+      "sha256": "0f62ffe65e2d5c912a615c85e11c070da1f0e000e73ec91e24072fa77a4191ff",
+      "referenceSha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6",
+      "width": 1254,
+      "height": 1254,
+      "transparent": 897334,
+      "partial": 674728,
+      "opaque": 454,
+      "boundsAlphaOver8": [
+        109,
+        83,
+        1169,
+        1155
+      ],
+      "marginsAlphaOver8": [
+        0.08692185007974482,
+        0.06618819776714513,
+        0.06698564593301436,
+        0.07814992025518341
+      ],
+      "meets12PercentMargin": false,
+      "note": "Alpha>8 bounds only; not a claim that all faint pixels are cleared. Originals unchanged; not runtime assets or device evidence."
+    }
+  ]
+}
