@@ -1,0 +1,5 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>蓝狐部件连接检查</title><style>body{background:#f5f0e5;font:16px system-ui;color:#243641}canvas{background:#ddd;max-width:100%}</style><h1>蓝狐后视部件连接</h1><p>新批准造型的独立躯干与尾巴，左为实际约55px体高，右为4倍连接检查。仅离线组装预览，非设备或战斗验收。</p><canvas width="800" height="380"></canvas><script>
+const image=new Image(),c=document.querySelector('canvas').getContext('2d');image.src='../../../miniprogram/character-assets/blue-fox-parts.png';
+function draw(x,y,z,t){c.save();c.translate(x,y);c.scale(z,z);c.save();c.translate(7,-20);c.rotate(Math.sin(t*.025)*.12);c.drawImage(image,543,0,543,362,-29.92,-42.4,86.88,57.92);c.restore();c.drawImage(image,0,0,543,362,-44.8,-56.88,86.88,57.92);c.restore()}
+function frame(ms){c.clearRect(0,0,800,380);draw(140,240,1,ms/16.667);draw(440,320,4,ms/16.667);requestAnimationFrame(frame)}image.onload=()=>requestAnimationFrame(frame);
+</script></html>

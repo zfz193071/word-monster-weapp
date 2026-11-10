@@ -11,7 +11,7 @@ function harness() {
   const calls: {path: string; resolve: () => void; reject: (error: Error) => void}[] = [];
   const timers = new Map<number, () => void>();
   let id = 0, now = 0;
-  const exports: {battlefieldAssetMeasurements?: () => PackageLoadMeasurement[]; loadBattlefieldAssets?: (level: number, house?: number, art?: SceneArt) => Promise<void>} = {};
+  const exports: {battlefieldAssetMeasurements?: () => PackageLoadMeasurement[]; loadBattlefieldAssets?: (level: number, house?: number, art?: SceneArt, preloadPet?: boolean) => Promise<void>} = {};
   const source = readFileSync(new URL('../miniprogram/services/battlefield-assets.ts', import.meta.url), 'utf8');
   runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020}}).outputText, {
     Date: { now: () => now },
@@ -125,6 +125,17 @@ test('精细角色仅在新包中保留一份运行资源', () => {
 });
 
 function characterArt(...args: Parameters<typeof openingArt>): SceneArt { return {...openingArt(...args), fruitHat: undefined, fruitHats: {}}; }
+
+test('宠物预加载在旧主角场景也等待角色包，失败可重试且跨关共享', async () => {
+  const {load,calls}=harness(), art=characterArt('cat',['cat'],2);
+  const first=load(3,2,art,true), failed=assert.rejects(first);
+  assert.deepEqual(calls.map(c=>c.path),['../character-assets/ready']);
+  calls[0].reject(Error('offline'));await failed;
+  let ready=false;const retry=load(3,2,art,true).then(()=>{ready=true;});
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(ready,false);
+  calls[1].resolve();await retry;await load(4,2,art,true);
+  assert.equal(calls.length,2);
+});
 
 test('水果分包按实际词图加载，包含上一关混编；并发失败后仅重试水果', async () => {
   const {load, calls} = harness();

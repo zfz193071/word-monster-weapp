@@ -75,3 +75,20 @@ test('宠物绘制固定在堡垒顶部，不绘制血条或倒地文字', async
  assert.equal(calls.filter(call=>call.method==='fillText').length,0);
  assert.ok(!calls.some(call=>call.method==='fillRect'&&call.args[2]===48),'不绘制宠物血条');
 });
+
+test('新蓝狐图集分别绘制躯干和尾巴，同一逻辑tick保持相同姿态', async()=>{
+ const {drawBattlePet}=await import('../miniprogram/pets/battle-art');
+ const image={} as WechatMiniprogram.Image;
+ const render=(state:ReturnType<typeof fixture>)=>{
+  const calls:{method:string;args:unknown[]}[]=[];
+  const context=new Proxy({}, {get:(_target,key)=>(...args:unknown[])=>calls.push({method:String(key),args}),set:()=>true});
+  drawBattlePet(context as WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D,state,image);
+  return calls;
+ };
+ const state=fixture(),calls=render(state),images=calls.filter(x=>x.method==='drawImage');
+ assert.equal(images.length,2);
+ assert.deepEqual(images.map(x=>x.args.slice(1,5)),[[543,0,543,362],[0,0,543,362]]);
+ assert.deepEqual(render(state),calls,'暂停或重复绘制不产生额外动画时间');
+ assert.notDeepEqual(render({...state,tick:state.tick+20}).filter(x=>x.method==='rotate'),calls.filter(x=>x.method==='rotate'));
+ assert.equal(render({...state,pet:undefined}).length,0);
+});

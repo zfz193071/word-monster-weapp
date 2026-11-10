@@ -1,0 +1,21 @@
+{
+  "generator": "built-in image_gen",
+  "prompt": "blue-fox-parts-prompt.txt",
+  "reference": "originals/blue-fox-back.png",
+  "source": "docs/visual-audit/pets/blue-fox-parts.png",
+  "target": "miniprogram/character-assets/blue-fox-parts.png",
+  "sourceSize": [
+    2172,
+    724
+  ],
+  "runtimeSize": [
+    1086,
+    362
+  ],
+  "encoding": "Full atlas resampled to half dimensions; original alpha retained, not lossless",
+  "sourceSha256": "4b7175c6fcd910b1c16972b36c60b3fb1505cf767fe4245dc464e848f53f843f",
+  "runtimeSha256": "71f416bfe906d0fc83519341535a8496000132f6afe9b7a524d7517f3fb71a5d",
+  "runtimeBytes": 205950,
+  "decodedRgbaBytes": 1572528,
+  "acceptance": "Appearance master approved; tail assembly, accessories, animation and devices pending"
+}

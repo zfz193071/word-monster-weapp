@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-10",
+  "page": "review.html",
+  "browser": "Chrome DevTools background task tab",
+  "imageElements": 60,
+  "allImagesLoaded": true,
+  "horizontalOverflow": false,
+  "petAssembly": "../pets/assembly-review.html",
+  "scope": "Original source transparency and readability; pet body-tail assembly at 1x and 4x. Not device or full battle acceptance."
+}

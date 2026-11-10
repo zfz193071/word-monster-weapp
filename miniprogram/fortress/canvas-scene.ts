@@ -10,7 +10,7 @@ import { drawSoldier, drawFallenSoldier } from './soldier-art';
 import { weaponAppearance } from '../weapons/appearance';
 import type { SkillCollection } from './skill-quality';
 import type { BattlePet } from '../pets/battle';
-import { drawBattlePet } from '../pets/battle-art';
+import { drawBattlePet, BATTLE_PET_ART } from '../pets/battle-art';
 import { battleBackgroundColor, drawBattleBackground, courtyardAsset, COURTYARD_ASSETS, drawCourtyard } from './battle-background';
 import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DamageNumbers } from './damage-numbers';
@@ -50,7 +50,7 @@ export interface SceneArt extends MonsterArt {
 }
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
-  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
+  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
   const courtyard = art.fruitHat && courtyardAsset(levelId);
   // Preload both orientations so resize can switch immediately while paused or active.
   if (courtyard) assets.push(...COURTYARD_ASSETS);
@@ -615,7 +615,7 @@ export class CanvasScene {
       }
       c.globalAlpha = 1;
     }
-    drawBattlePet(c, state);
+    drawBattlePet(c, state, this.images.get(BATTLE_PET_ART.path));
     for (const soldier of state.fallenSoldiers ?? []) drawFallenSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     if ((state.flameFanUntilTick ?? 0) > state.tick) {
