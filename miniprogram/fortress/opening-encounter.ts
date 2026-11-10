@@ -1,4 +1,5 @@
 import { drawEnemyType } from './enemy-types';
+import { LEVEL_ONE_HERO_ART } from './hero-art';
 import type { SkillCollection } from './skill-quality';
 import { difficultyFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
@@ -55,7 +56,7 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
       sourceSize: { width: 128, height: 160 }, anchor: { x: 64, y: 80 }, hitbox: ANIMAL_IDS.includes(wordId) ? { x: 10, y: 25, width: 108, height: 110 } : { x: 25, y: 16, width: 78, height: 135 } },
     fruitHats: Object.fromEntries([...new Set(wordIds)].map(id => { const fruit = BATTLE_WORDS.find(word => word.id === id); if (!fruit) throw new Error('未知单词'); return [id, { path: fruit.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true }]; })),
     fruitHat: { path: word.fruitImagePath, source: 'docs/content-assets.md', rights: '沿用已登记选词图授权', approved: true },
-    hero: original(`hero-back-weapon-${weaponLevel}`), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
+    hero: weaponLevel === 1 ? LEVEL_ONE_HERO_ART : original(`hero-back-weapon-${weaponLevel}`), weapon: original('weapon'), bullet: original('bullet'), base: original('base'), destroyedBase: original('destroyed-base') };
 }
 export function createOpeningEncounter(sessionId: string, wordId: string, generation: number, waveIndex = 0, skills: SkillLevels = ZERO_SKILLS, baseHp: number | undefined = undefined, previousWordIds: readonly string[] = [], levelId = 1, weaponLevel = 1, supportSoldiers: readonly SupportSoldierState[] = [], difficulty: DifficultyId = 'normal', skillCollection?: SkillCollection, houseLevel = 1) {
   const multipliers = difficultyFor(difficulty);

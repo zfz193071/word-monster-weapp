@@ -1,0 +1,38 @@
+{
+  "tool": "built-in image_gen",
+  "prompt": "aiming-prompt.txt",
+  "sourceSize": {
+    "width": 1122,
+    "height": 1402
+  },
+  "sourceMuzzle": {
+    "x": 770,
+    "y": 330
+  },
+  "runtimeSize": {
+    "width": 337,
+    "height": 421
+  },
+  "frame": {
+    "x": -29.399999999999995,
+    "y": -54.2,
+    "width": 67.32,
+    "height": 84.11999999999999
+  },
+  "encoding": "Full RGBA image resampled for runtime; alpha preserved; not lossless",
+  "decodedRgbaBytes": 567508,
+  "runtimeInstalled": true,
+  "visualAcceptance": "Pending full-scene and device acceptance",
+  "files": [
+    {
+      "path": "docs/visual-audit/hero/originals/hero-back-weapon-1-aiming.png",
+      "bytes": 800337,
+      "sha256": "f4c5ffcd354c6000ef459989611e2819b26ba94571735f031884db5516a4ae6c"
+    },
+    {
+      "path": "miniprogram/assets/images/fortress/hero-back-weapon-1-textured.png",
+      "bytes": 83632,
+      "sha256": "11f19ee846f5e5d245b0aebe408a877c99971c1362729c16e5b1ff71539a4fac"
+    }
+  ]
+}

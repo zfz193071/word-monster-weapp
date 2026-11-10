@@ -1,0 +1,322 @@
+[
+  {
+    "name": "phone-level-1",
+    "width": 390,
+    "height": 620,
+    "levelId": 1,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 1850466,
+    "sha256": "a2995b5d595b3cf43c4335c90d20c66debe5790c035bb533c8adafcc4f571ed2",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-2",
+    "width": 390,
+    "height": 620,
+    "levelId": 2,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 359097,
+    "sha256": "f394dd80b42d73152c29caa1e7488a02446e704963daba1b7a8d5c37b357b1eb",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-3",
+    "width": 390,
+    "height": 620,
+    "levelId": 3,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 358416,
+    "sha256": "6705b14729fb7953c78306e07c72385db0fbe2b44a97f1ad7173d11789b0f0cd",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-4",
+    "width": 390,
+    "height": 620,
+    "levelId": 4,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 358044,
+    "sha256": "a0383c521677baed8689645fd19e4d43c05226071e98d6bdc8e378e814e0da88",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-5",
+    "width": 390,
+    "height": 620,
+    "levelId": 5,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 351047,
+    "sha256": "44970db519b2ddc08bf8c40a8d8632c649d639d4c0c2185f075777e83d80c770",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-6",
+    "width": 390,
+    "height": 620,
+    "levelId": 6,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 350566,
+    "sha256": "c6bc3a4e5ec85dee2cbc1e7ef337a3ba50f342df7e87713a7c69870cf80ef659",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-7",
+    "width": 390,
+    "height": 620,
+    "levelId": 7,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 358892,
+    "sha256": "7957d3c275592d3cfd31384238a57d63d8865a1f4ba96d18a89413790f19ab80",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-level-8",
+    "width": 390,
+    "height": 620,
+    "levelId": 8,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 350738,
+    "sha256": "34bc972c14a1c23862ee9570646d5f5e291ca7a838863a9b0fd85ab29f6869e4",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-1",
+    "width": 1024,
+    "height": 580,
+    "levelId": 1,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 3683575,
+    "sha256": "a3b40ec396dbae36a70dfbc6cc417f69ddfd799c46b7c643cc6def83750a4a19",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-2",
+    "width": 1024,
+    "height": 580,
+    "levelId": 2,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 708048,
+    "sha256": "0de8da7d817c38c857ec47431ecfa5697d15e832315e89be6e67b463b51054f7",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-3",
+    "width": 1024,
+    "height": 580,
+    "levelId": 3,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 708667,
+    "sha256": "2d242c9c70263e55be0895d4c509d377e67a81369542d4a04bf79292edf9a38b",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-4",
+    "width": 1024,
+    "height": 580,
+    "levelId": 4,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 708415,
+    "sha256": "b0895229b74abd06839ae55bd709def4451ef7b627a18e218458fe43e4e74521",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-5",
+    "width": 1024,
+    "height": 580,
+    "levelId": 5,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 700544,
+    "sha256": "c0dc71f9319ef83c2c47fc22ed772aa2c0ed3cb4f2c620cac922f5e39e002cd2",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-6",
+    "width": 1024,
+    "height": 580,
+    "levelId": 6,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 700447,
+    "sha256": "bf8b2df98ea9851a3988d4119367ac92ff350012033978c01b78389daee916ce",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-7",
+    "width": 1024,
+    "height": 580,
+    "levelId": 7,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 709323,
+    "sha256": "4c6559dbf6c58e4a855900ebcd192a7c8451e621f50f28478bceca94fa6dcc89",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-level-8",
+    "width": 1024,
+    "height": 580,
+    "levelId": 8,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 1,
+    "dpr": 2,
+    "bytes": 700419,
+    "sha256": "26a46ce64167aae834668f6d90b4b3c2d15545a6c041c334fe143b13df1193ca",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  }
+]

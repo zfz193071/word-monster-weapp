@@ -3,6 +3,8 @@ import { test } from 'node:test';
 import { CanvasScene } from '../miniprogram/fortress/canvas-scene';
 import type { SceneArt, SceneOptions } from '../miniprogram/fortress/canvas-scene';
 import { createCombat } from '../miniprogram/fortress/combat';
+import { stepCombat } from '../miniprogram/fortress/combat';
+import { createOpeningEncounter, openingArt } from '../miniprogram/fortress/opening-encounter';
 import { createSessionPlan } from '../miniprogram/fortress/plans';
 import { createViewport, HorizontalControl, logicalHitbox } from '../miniprogram/fortress/viewport';
 
@@ -36,6 +38,43 @@ function artFixture(): SceneArt {
     monsterWidth: 64, monsterVisual: { wordId: word, portraitPath: asset('monster').path, spritePath: asset('monster').path,
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
+
+test('精细主角多方向实际绘制枪口对应真实首发，其他六级保持原图框', async () => {
+  for (const weaponLevel of [1, 2, 3, 4, 5, 6, 7]) {
+    for (const targetX of [40, 180, 320]) {
+      const opening = createOpeningEncounter('hero-art', 'apple', 0, 0, undefined, undefined, [], 1, weaponLevel);
+      const target = { ...opening.monsters[0], status: 'alive' as const, spawnAtMs: 0, position: {x: targetX, y: 280} };
+      const fired = stepCombat({...opening, shotRemainingMs: 0, monsters: [target]}).state;
+      const art = openingArt('apple', ['apple'], weaponLevel);
+      const h = harness(false, art, {initial: fired});
+      try {
+        const loading = h.scene.load();
+        const hero = h.images.find(image => image.src === art.hero.path)!;
+        const monster = h.images.find(image => image.src === art.monster.path)!;
+        monster.width = art.monsterVisual.sourceSize.width;
+        monster.height = art.monsterVisual.sourceSize.height;
+        for (const image of h.images.filter(image => image !== hero)) image.onload();
+        await Promise.resolve();
+        assert.equal(h.callbacks.size, 0, '等待主角解码，不提前开战');
+        hero.onload(); assert.equal(await loading, true, h.errors.join("; "));
+        const index = h.commands.findIndex(command => command.method === 'drawImage' && command.args[0] === hero);
+        assert.ok(index >= 0);
+        const draw = h.commands[index].args.slice(1) as number[];
+        const rotation = h.commands.slice(0, index).findLast(command => command.method === 'rotate')!.args[0] as number;
+        const translation = h.commands.slice(0, index).findLast(command => command.method === 'translate')!.args as number[];
+        const [x,y,w,height] = draw;
+        // Measured source muzzle, independent of production placement constants.
+        const localX = weaponLevel === 1 ? x + w * 770 / 1122 : 16.8;
+        const localY = weaponLevel === 1 ? y + height * 330 / 1402 : -34.4;
+        const worldX = translation[0] + localX * Math.cos(rotation) - localY * Math.sin(rotation);
+        const worldY = translation[1] + localX * Math.sin(rotation) + localY * Math.cos(rotation);
+        const bullet = fired.projectiles[0];
+        assert.ok(Math.hypot(worldX - bullet.position.x, worldY - bullet.position.y) < 1e-8);
+        if (weaponLevel > 1) assert.deepEqual(draw, [-24, -35, 48, 60]);
+      } finally { h.scene.dispose(); }
+    }
+  }
+});
 
 test('静态背景缓存保持原生DPR、每帧复用，尺寸改变重建，离屏不可用仍可绘制', async () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, 'wx');
