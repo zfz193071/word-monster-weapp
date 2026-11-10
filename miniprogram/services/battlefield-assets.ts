@@ -1,8 +1,8 @@
 // The asynchronous module import downloads its ordinary miniprogram subpackage.
 // Share successful loads, but never cache an unresolved import forever.
 let pending: Promise<void> | undefined;
-export function loadBattlefieldAssets(levelId: number): Promise<void> {
-  if (levelId !== 1) return Promise.resolve();
+export function loadBattlefieldAssets(levelId: number, houseLevel = 1): Promise<void> {
+  if (levelId !== 1 && houseLevel !== 1) return Promise.resolve();
   if (pending) return pending;
   const attempt = new Promise<void>((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('战场资源加载超时')), 15000);

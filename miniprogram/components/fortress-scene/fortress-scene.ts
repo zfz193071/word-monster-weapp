@@ -273,7 +273,7 @@ Component({
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();
-          const resources = this.properties.opening ? loadBattlefieldAssets(loadingLevel) : Promise.resolve();
+          const resources = this.properties.opening ? loadBattlefieldAssets(loadingLevel, initial.houseLevel ?? 1) : Promise.resolve();
           void resources.then(() => valid() ? scene.load() : false).then(async loaded => {
             if (!valid() || !loaded || !await scene.present() || !valid()) return;
             // A RAF callback confirms command submission, not visible pixels. Export the
