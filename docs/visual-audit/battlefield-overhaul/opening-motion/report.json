@@ -1,0 +1,2748 @@
+[
+  {
+    "device": "phone",
+    "width": 390,
+    "height": 620,
+    "dpr": 2,
+    "fps": 30,
+    "frameCount": 1025,
+    "durationSeconds": 34.166666666666664,
+    "sessionId": "opening-art-review-2026-11-10",
+    "levelId": 1,
+    "waveIndex": 0,
+    "difficulty": "normal",
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "pet": null,
+    "skills": {
+      "doubleShot": 0,
+      "fireRate": 0,
+      "bulletWidth": 0,
+      "firepower": 0,
+      "homing": 0
+    },
+    "plannedMonsters": 8,
+    "admitted": 8,
+    "source": "Unmodified production opening encounter and CanvasScene frame loop, deterministic clock; offscreen, not WeChat or device evidence. No audio, quiz, upgrade or subsequent waves.",
+    "final": {
+      "status": "cleared",
+      "baseHp": 940,
+      "incoming": 0
+    },
+    "checks": {
+      "naturalDamage": true,
+      "allEnemiesAdmitted": true,
+      "lateDisposeCallback": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 64,
+      "monsterDefeated": 8,
+      "baseDamaged": 6,
+      "coinsDropped": 1
+    },
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": -32
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": -32
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": -32
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": -17.80000000000005
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 2.19999999999992
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 500,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 294.4492828563904,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 22.199999999999875
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 600,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 88.00000000000063
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 88.00000000000063
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 42.19999999999998
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 700,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 108.00000000000091
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 108.00000000000091
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 62.200000000000266
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 800,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 128.0000000000012
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 128.0000000000012
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 82.20000000000054
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 900,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 148.00000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 148.00000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 102.20000000000083
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 10,
+        "tick": 1000,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 239.0675362086557,
+            "y": 167.99999999999892
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 167.99999999999892
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 122.20000000000111
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 11,
+        "tick": 1100,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 187.99999999999778
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 142.2000000000004
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 12,
+        "tick": 1200,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 207.99999999999665
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 162.19999999999925
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 13,
+        "tick": 1300,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 227.9999999999955
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 182.1999999999981
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 14,
+        "tick": 1400,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 171.05862758016417,
+            "y": 247.99999999999437
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 202.19999999999698
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 15,
+        "tick": 1500,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 222.19999999999584
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 16,
+        "tick": 1600,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 242.1999999999947
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 17,
+        "tick": 1700,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 299.5925417903106,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 262.19999999999357
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 18,
+        "tick": 1800,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 282.19999999999243
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 19,
+        "tick": 1900,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 302.1999999999913
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 20,
+        "tick": 2000,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 322.19999999999015
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 21,
+        "tick": 2100,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 120.71343462230348,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 342.199999999989
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 22,
+        "tick": 2200,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 378.19999999998697
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 378.19999999998697
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 362.1999999999879
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 23,
+        "tick": 2300,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 398.19999999998583
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 398.19999999998583
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 382.19999999998674
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 24,
+        "tick": 2400,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 418.1999999999847
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 418.1999999999847
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 402.1999999999856
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 25,
+        "tick": 2500,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 438.19999999998356
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 438.19999999998356
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 422.19999999998447
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 26,
+        "tick": 2600,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 442.19999999998333
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 27,
+        "tick": 2700,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 28,
+        "tick": 2800,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 980
+      },
+      {
+        "second": 29,
+        "tick": 2900,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 58.350208729633906,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 118.66376545849663,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 970
+      },
+      {
+        "second": 30,
+        "tick": 3000,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 950
+      },
+      {
+        "second": 31,
+        "tick": 3100,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 950
+      },
+      {
+        "second": 32,
+        "tick": 3200,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 940
+      },
+      {
+        "second": 33,
+        "tick": 3300,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 233.27854427756998,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 940
+      },
+      {
+        "second": 34,
+        "tick": 3313,
+        "status": "cleared",
+        "alive": 0,
+        "incoming": 0,
+        "positions": [],
+        "projectiles": 0,
+        "baseHp": 940
+      }
+    ],
+    "captures": [
+      "phone-0s.png",
+      "phone-3s.png",
+      "phone-8s.png",
+      "phone-15s.png",
+      "phone-25s.png"
+    ],
+    "assets": [
+      {
+        "path": "/assets/images/fortress/zombie.png",
+        "sha256": "ba110a34cf75ecdcc402f8211d77654a198685c35c6cc3649e373a6525962fe0"
+      },
+      {
+        "path": "/assets/images/fortress/base.png",
+        "sha256": "6deee7b29732ca0557800923c1e968052cdb44f82de370f126504084eb9c0e4f"
+      },
+      {
+        "path": "/assets/images/fortress/destroyed-base.png",
+        "sha256": "695ba807412ec88f9f7e0469c7c4e959e36a7fdec4b02d7eb40b93458940cf76"
+      },
+      {
+        "path": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+        "sha256": "11f19ee846f5e5d245b0aebe408a877c99971c1362729c16e5b1ff71539a4fac"
+      },
+      {
+        "path": "/assets/images/fortress/weapon.png",
+        "sha256": "2895c7b00343d20275273445462518fdc2d990f7df6e1abb0e0d11d4fd586c07"
+      },
+      {
+        "path": "/assets/images/fortress/bullet.png",
+        "sha256": "e3e6c2e11656b2dfdcda6f3f2c5b9ff892f0e012868e2b5911220ab6fa9fdc83"
+      },
+      {
+        "path": "/assets/images/apple.png",
+        "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-body.png",
+        "sha256": "e17cb4052ae80b78f4b80717212014891b51a213123366e4d62fa01220f08057"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-leg-left.png",
+        "sha256": "461a5fcc3ca7ec68d6923b22e602c89d6ca7719bae70e63116474a5aa9b06c33"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-leg-right.png",
+        "sha256": "7e8e0d402f3d07d5deca7ba121cd2f23ee679097f1586ea96c016aff57924df5"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-body-apple.png",
+        "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
+      },
+      {
+        "path": "/assets/images/army/rifle.png",
+        "sha256": "ceec3810308deb95043204b63692605c26e50841abed2d4360c81eba3658fb43"
+      },
+      {
+        "path": "/assets/images/army/shield.png",
+        "sha256": "96fccca682113b8c4c4fd06aba5fc8f056ed330f33782a999ce7582c753282b8"
+      },
+      {
+        "path": "/assets/images/army/flamethrower.png",
+        "sha256": "12771a96e40b101308f98e2fd4fbba82963d4901939d609e40a2388abeee6f23"
+      },
+      {
+        "path": "/assets/images/army/rocket.png",
+        "sha256": "9cd746e78bcee8947652074d047dc26bd7ffff51ee801cffef765c32053ae065"
+      },
+      {
+        "path": "/assets/images/army/jetpack.png",
+        "sha256": "4fa1063bad7a33e817e43cdb6297106a8bca13c57cdfd1e8d695f74ae212c82e"
+      },
+      {
+        "path": "/assets/images/army/tank.png",
+        "sha256": "ee6557d041f780b0ad3c44ceccce6f5d738d5887d7a38f526dd250fb86dc009a"
+      },
+      {
+        "path": "/battlefield-assets/courtyard-v1.jpg",
+        "sha256": "c8d48a21c19d60a6458d5d7645ba1bdb8e28db4f196cca48ff7c231b19f5dfe9"
+      },
+      {
+        "path": "/battlefield-assets/courtyard-portrait-v1.jpg",
+        "sha256": "27c22115352f0896d4c2a2f0582226217763636c66a53a36e143edddd6ce60f5"
+      },
+      {
+        "path": "/fortress-assets/fortress-level-1-v1.png",
+        "sha256": "7b82015db76dcb69d7e9058fea1b045830d488e8a78b1ad9a482f0becc73fd0c"
+      },
+      {
+        "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+        "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6"
+      }
+    ],
+    "file": "phone.mp4",
+    "bytes": 5642094,
+    "sha256": "2067698513df3589cf17a704a4538dbd8f5b5322f93d7bea6bf04785a9dfc005"
+  },
+  {
+    "device": "ipad",
+    "width": 1024,
+    "height": 580,
+    "dpr": 2,
+    "fps": 30,
+    "frameCount": 1064,
+    "durationSeconds": 35.46666666666667,
+    "sessionId": "opening-art-review-2026-11-10",
+    "levelId": 1,
+    "waveIndex": 0,
+    "difficulty": "normal",
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "pet": null,
+    "skills": {
+      "doubleShot": 0,
+      "fireRate": 0,
+      "bulletWidth": 0,
+      "firepower": 0,
+      "homing": 0
+    },
+    "plannedMonsters": 8,
+    "admitted": 8,
+    "source": "Unmodified production opening encounter and CanvasScene frame loop, deterministic clock; offscreen, not WeChat or device evidence. No audio, quiz, upgrade or subsequent waves.",
+    "final": {
+      "status": "cleared",
+      "baseHp": 930,
+      "incoming": 0
+    },
+    "checks": {
+      "naturalDamage": true,
+      "allEnemiesAdmitted": true,
+      "lateDisposeCallback": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 64,
+      "monsterDefeated": 8,
+      "baseDamaged": 7,
+      "coinsDropped": 1
+    },
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": -32
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": -12.000000000000071
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": -32
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": -32
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 7.9999999999999245
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": -21.800000000000036
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": -32
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 27.999999999999854
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": -1.80000000000008
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": -17.80000000000005
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 48.000000000000064
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 18.19999999999989
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 2.19999999999992
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 500,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 68.00000000000034
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 38.199999999999925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 22.199999999999875
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 600,
+        "status": "fighting",
+        "alive": 8,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:1",
+            "x": 906.5202020704122,
+            "y": 88.00000000000063
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 88.00000000000063
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 88.00000000000063
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 58.20000000000021
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 42.19999999999998
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 700,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 108.00000000000091
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 108.00000000000091
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 78.20000000000049
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 62.200000000000266
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 800,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 128.0000000000012
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 128.0000000000012
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 98.20000000000077
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 82.20000000000054
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 900,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 148.00000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 148.00000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 118.20000000000105
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 102.20000000000083
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 10,
+        "tick": 1000,
+        "status": "fighting",
+        "alive": 7,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:2",
+            "x": 713.594713418325,
+            "y": 167.99999999999892
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 167.99999999999892
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 138.2000000000006
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 122.20000000000111
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 11,
+        "tick": 1100,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 187.99999999999778
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 158.19999999999948
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 142.2000000000004
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 12,
+        "tick": 1200,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 207.99999999999665
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 178.19999999999834
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 162.19999999999925
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 13,
+        "tick": 1300,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 227.9999999999955
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 198.1999999999972
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 182.1999999999981
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 14,
+        "tick": 1400,
+        "status": "fighting",
+        "alive": 6,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:3",
+            "x": 476.6817822805066,
+            "y": 247.99999999999437
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 218.19999999999607
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 202.19999999999698
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 15,
+        "tick": 1500,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 238.19999999999493
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 222.19999999999584
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 16,
+        "tick": 1600,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 258.1999999999938
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 242.1999999999947
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 17,
+        "tick": 1700,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 278.19999999999266
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 262.19999999999357
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 18,
+        "tick": 1800,
+        "status": "fighting",
+        "alive": 5,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:4",
+            "x": 924.4370393525991,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 298.1999999999915
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 282.19999999999243
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 19,
+        "tick": 1900,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 318.1999999999904
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 302.1999999999913
+          }
+        ],
+        "projectiles": 2,
+        "baseHp": 1000
+      },
+      {
+        "second": 20,
+        "tick": 2000,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 338.19999999998925
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 322.19999999999015
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 21,
+        "tick": 2100,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 358.1999999999881
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 342.199999999989
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 22,
+        "tick": 2200,
+        "status": "fighting",
+        "alive": 4,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:5",
+            "x": 301.3014170771607,
+            "y": 378.19999999998697
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 378.19999999998697
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 378.19999999998697
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 362.1999999999879
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 23,
+        "tick": 2300,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 398.19999999998583
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 398.19999999998583
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 382.19999999998674
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 24,
+        "tick": 2400,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 418.1999999999847
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 418.1999999999847
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 402.1999999999856
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 25,
+        "tick": 2500,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 438.19999999998356
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 438.19999999998356
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 422.19999999998447
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 1000
+      },
+      {
+        "second": 26,
+        "tick": 2600,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 442.19999999998333
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 27,
+        "tick": 2700,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 28,
+        "tick": 2800,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 980
+      },
+      {
+        "second": 29,
+        "tick": 2900,
+        "status": "fighting",
+        "alive": 3,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:8",
+            "x": 294.1612770682553,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 970
+      },
+      {
+        "second": 30,
+        "tick": 3000,
+        "status": "fighting",
+        "alive": 2,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:6",
+            "x": 84.05554533187328,
+            "y": 448
+          },
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 950
+      },
+      {
+        "second": 31,
+        "tick": 3100,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          }
+        ],
+        "projectiles": 1,
+        "baseHp": 950
+      },
+      {
+        "second": 32,
+        "tick": 3200,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 940
+      },
+      {
+        "second": 33,
+        "tick": 3300,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 940
+      },
+      {
+        "second": 34,
+        "tick": 3400,
+        "status": "fighting",
+        "alive": 1,
+        "incoming": 0,
+        "positions": [
+          {
+            "id": "opening-art-review-2026-11-10:wave:1:zombie:7",
+            "x": 693.4284282303264,
+            "y": 448
+          }
+        ],
+        "projectiles": 0,
+        "baseHp": 930
+      },
+      {
+        "second": 35,
+        "tick": 3442,
+        "status": "cleared",
+        "alive": 0,
+        "incoming": 0,
+        "positions": [],
+        "projectiles": 0,
+        "baseHp": 930
+      }
+    ],
+    "captures": [
+      "ipad-0s.png",
+      "ipad-3s.png",
+      "ipad-8s.png",
+      "ipad-15s.png",
+      "ipad-25s.png"
+    ],
+    "assets": [
+      {
+        "path": "/assets/images/fortress/zombie.png",
+        "sha256": "ba110a34cf75ecdcc402f8211d77654a198685c35c6cc3649e373a6525962fe0"
+      },
+      {
+        "path": "/assets/images/fortress/base.png",
+        "sha256": "6deee7b29732ca0557800923c1e968052cdb44f82de370f126504084eb9c0e4f"
+      },
+      {
+        "path": "/assets/images/fortress/destroyed-base.png",
+        "sha256": "695ba807412ec88f9f7e0469c7c4e959e36a7fdec4b02d7eb40b93458940cf76"
+      },
+      {
+        "path": "/assets/images/fortress/hero-back-weapon-1-textured.png",
+        "sha256": "11f19ee846f5e5d245b0aebe408a877c99971c1362729c16e5b1ff71539a4fac"
+      },
+      {
+        "path": "/assets/images/fortress/weapon.png",
+        "sha256": "2895c7b00343d20275273445462518fdc2d990f7df6e1abb0e0d11d4fd586c07"
+      },
+      {
+        "path": "/assets/images/fortress/bullet.png",
+        "sha256": "e3e6c2e11656b2dfdcda6f3f2c5b9ff892f0e012868e2b5911220ab6fa9fdc83"
+      },
+      {
+        "path": "/assets/images/apple.png",
+        "sha256": "f01b5e37977faa5a65dca66113400801411b6766db0b0daa28364825e023446e"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-body.png",
+        "sha256": "e17cb4052ae80b78f4b80717212014891b51a213123366e4d62fa01220f08057"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-leg-left.png",
+        "sha256": "461a5fcc3ca7ec68d6923b22e602c89d6ca7719bae70e63116474a5aa9b06c33"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-leg-right.png",
+        "sha256": "7e8e0d402f3d07d5deca7ba121cd2f23ee679097f1586ea96c016aff57924df5"
+      },
+      {
+        "path": "/assets/images/fortress/zombie-body-apple.png",
+        "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
+      },
+      {
+        "path": "/assets/images/army/rifle.png",
+        "sha256": "ceec3810308deb95043204b63692605c26e50841abed2d4360c81eba3658fb43"
+      },
+      {
+        "path": "/assets/images/army/shield.png",
+        "sha256": "96fccca682113b8c4c4fd06aba5fc8f056ed330f33782a999ce7582c753282b8"
+      },
+      {
+        "path": "/assets/images/army/flamethrower.png",
+        "sha256": "12771a96e40b101308f98e2fd4fbba82963d4901939d609e40a2388abeee6f23"
+      },
+      {
+        "path": "/assets/images/army/rocket.png",
+        "sha256": "9cd746e78bcee8947652074d047dc26bd7ffff51ee801cffef765c32053ae065"
+      },
+      {
+        "path": "/assets/images/army/jetpack.png",
+        "sha256": "4fa1063bad7a33e817e43cdb6297106a8bca13c57cdfd1e8d695f74ae212c82e"
+      },
+      {
+        "path": "/assets/images/army/tank.png",
+        "sha256": "ee6557d041f780b0ad3c44ceccce6f5d738d5887d7a38f526dd250fb86dc009a"
+      },
+      {
+        "path": "/battlefield-assets/courtyard-v1.jpg",
+        "sha256": "c8d48a21c19d60a6458d5d7645ba1bdb8e28db4f196cca48ff7c231b19f5dfe9"
+      },
+      {
+        "path": "/battlefield-assets/courtyard-portrait-v1.jpg",
+        "sha256": "27c22115352f0896d4c2a2f0582226217763636c66a53a36e143edddd6ce60f5"
+      },
+      {
+        "path": "/fortress-assets/fortress-level-1-v1.png",
+        "sha256": "7b82015db76dcb69d7e9058fea1b045830d488e8a78b1ad9a482f0becc73fd0c"
+      },
+      {
+        "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+        "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6"
+      }
+    ],
+    "file": "ipad.mp4",
+    "bytes": 6951551,
+    "sha256": "5a759947c54796fc4455259f74282355d8af8107147921d87e5df2e38d94025e"
+  }
+]
