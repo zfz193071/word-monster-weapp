@@ -1,0 +1,52 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "issue": 92,
+  "status": "pending-visual-review",
+  "selected": null,
+  "runtimeInstalled": false,
+  "prompts": [
+    "prompt.txt",
+    "refinement-prompt.txt"
+  ],
+  "images": [
+    {
+      "file": "originals/zombie-ordinary-refined.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1589782,
+      "sha256": "b91e8bcbb92151f9387b025ef2708b343c350802346c21d50fb50e1f9657c497",
+      "transparentPixels": 1241409,
+      "semiTransparentPixels": 331455,
+      "contentBounds": [
+        41,
+        20,
+        1460,
+        981
+      ],
+      "edgeClear": true
+    },
+    {
+      "file": "originals/zombie-ordinary.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1563815,
+      "sha256": "a255a5afd432211d697a843df26d47104afd433c979d8e7612d8a1a705fd4a81",
+      "transparentPixels": 1246591,
+      "semiTransparentPixels": 326273,
+      "contentBounds": [
+        105,
+        39,
+        1506,
+        947
+      ],
+      "edgeClear": true
+    }
+  ],
+  "reviewCandidate": "originals/zombie-ordinary-refined.png",
+  "alphaCompositeReview": "edge-review.png",
+  "notes": [
+    "Light/dark alpha composites inspected: no broad external halo; raw preview RGB is not alpha-composited evidence.",
+    "No runtime installation, animation, boss variants or device acceptance."
+  ]
+}
