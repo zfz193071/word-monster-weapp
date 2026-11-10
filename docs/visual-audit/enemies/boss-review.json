@@ -1,0 +1,94 @@
+{
+  "status": "pending-visual-review",
+  "tool": "built-in image_gen",
+  "runtimeInstalled": false,
+  "prompts": [
+    "prompt.txt",
+    "refinement-prompt.txt",
+    "boss-prompts.json",
+    "bucket-refinement-prompt.txt",
+    "grand-refinement-prompt.txt"
+  ],
+  "framing": "alpha >= 128 bounds for review sizing only; full originals composited without pixel removal",
+  "evidence": "Static alpha composites only, not runtime mapping, collision, animation or device acceptance",
+  "images": [
+    {
+      "id": "ordinary",
+      "file": "originals/zombie-ordinary-refined.png",
+      "scale": 1,
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1589782,
+      "sha256": "b91e8bcbb92151f9387b025ef2708b343c350802346c21d50fb50e1f9657c497",
+      "transparentPixels": 1241409,
+      "semiTransparentPixels": 331455,
+      "maxAlpha": 254,
+      "contentBounds": [
+        41,
+        20,
+        1460,
+        981
+      ],
+      "visibleBoundsAlpha128": [
+        435,
+        85,
+        1094,
+        943
+      ],
+      "edgeClear": true,
+      "rgbaBytes": 6291456
+    },
+    {
+      "id": "bucket",
+      "file": "originals/zombie-bucket-refined.png",
+      "scale": 1.5,
+      "width": 1536,
+      "height": 1024,
+      "bytes": 1571221,
+      "sha256": "5b1e1b1fedb77af6e0ac7185544abea5151a15687cce17ecaf90b04d8a0ee936",
+      "transparentPixels": 1246118,
+      "semiTransparentPixels": 326746,
+      "maxAlpha": 254,
+      "contentBounds": [
+        33,
+        45,
+        1500,
+        998
+      ],
+      "visibleBoundsAlpha128": [
+        380,
+        162,
+        1147,
+        867
+      ],
+      "edgeClear": true,
+      "rgbaBytes": 6291456
+    },
+    {
+      "id": "grand",
+      "file": "originals/zombie-grand-refined.png",
+      "scale": 2,
+      "width": 1312,
+      "height": 1199,
+      "bytes": 963214,
+      "sha256": "af4689668a63125c870a786657511384fcdd1952a40fec8efa51a061e99c69bf",
+      "transparentPixels": 1179546,
+      "semiTransparentPixels": 393142,
+      "maxAlpha": 255,
+      "contentBounds": [
+        87,
+        85,
+        1274,
+        1183
+      ],
+      "visibleBoundsAlpha128": [
+        272,
+        164,
+        1035,
+        1012
+      ],
+      "edgeClear": true,
+      "rgbaBytes": 6292352
+    }
+  ]
+}
