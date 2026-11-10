@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-10",
+  "issue": 79,
+  "tool": "built-in image_gen",
+  "prompt": "concept-prompt.txt",
+  "file": "concept-01.png",
+  "bytes": 1992407,
+  "sha256": "422b9bf898fd00f33e1e2088867d98bf32e2a0d5a3b89eb8b17e32c115c31534",
+  "source": "AI-generated project concept; no external reference input",
+  "rights": "AI-generated project concept; not a claim of exclusive copyright",
+  "status": "pending-user-style-review",
+  "runtimeIntegrated": false,
+  "review": "Six friendly silhouettes and tank driver present, equipment visually distinct; nontransparent composite, camera leans toward side view and must be corrected for battle. Not sprites, animation, actual-size or device acceptance."
+}

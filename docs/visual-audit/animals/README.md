@@ -58,3 +58,7 @@ WM_CANVAS_MODULE=/tmp/wm-render-tools/node_modules/@napi-rs/canvas node --import
 ## 2026-11-10 用户批准与正式展示接入
 
 用户明确采用现有15张256px展示图；按清单SHA256逐一核验并替换 learning-assets/images 同名图片，沿用词条和音频映射、按需加载入口。马保留原图，补齐后单独审查；现有Canvas战斗动物形态仍独立。清单记录批准状态、运行路径与哈希。
+
+## 2026-11-10 接续会话补图
+
+内置image_gen沿用原马图提示词及兔子风格参考，再次返回输出阶段 moderation_blocked / other，request ID `20bb9827-74c2-4e7f-9be8-09fcc5469796`。没有生成图片，没有改用其他服务。15张展示图已获批准并接入；马仍保留旧图、待补齐后单独审查。

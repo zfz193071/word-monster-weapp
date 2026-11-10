@@ -140,5 +140,14 @@
     "duck": "originals/duck-clean.png removes invalid broad background",
     "fish": "originals/fish-corrected.png removes mammalian nose/muzzle; keeps fish anatomy"
   },
-  "updatedAt": "2026-11-10"
+  "updatedAt": "2026-11-10",
+  "horseRetry20261110Handoff": {
+    "status": "moderation_blocked",
+    "stage": "output",
+    "category": "other",
+    "requestId": "20bb9827-74c2-4e7f-9be8-09fcc5469796",
+    "prompt": "prompts.json#horse (unchanged)",
+    "reference": "../samples/originals/rabbit-display.png",
+    "output": null
+  }
 }

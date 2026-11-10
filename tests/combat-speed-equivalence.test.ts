@@ -82,3 +82,13 @@ for (const difficulty of ['easy', 'normal', 'hard', 'nightmare'] as const) {
     for (const speed of [1.5, 2, 2.5]) assert.deepEqual(replay(fixture, speed), baseline);
   });
 }
+
+test('six enemy types and summoned tank/air/shield retain identical damage, respawn and pause across speeds',()=>{
+ const collection:SkillCollection={armorSupport:{level:5,quality:'elite'},airFormation:{level:5,quality:'elite'},shieldLine:{level:5,quality:'elite'}};
+ const initial=createStageInvasion(createOpeningPlan('army-speed',createSeededRandom(71),1,1,'normal'),1,collection);
+ const types=['normal','runner','armored','flying','exploder','giant'] as const;
+ const fixture:CombatState={...initial,incomingMonsters:[],base:{hp:1000000,maxHp:1000000},monsters:types.map((enemyType,i)=>({...initial.monsters[0],id:`type-${i}`,enemyType,hp:1000000,maxHp:1000000,status:'alive',position:{x:120+i*20,y:330}}))};
+ const baseline=replay(fixture,1);
+ assert(baseline.events.some(e=>e.type==='monsterDamaged'&&e.kind==='soldier'));
+ for(const speed of [1.5,2,2.5])assert.deepEqual(replay(fixture,speed),baseline);
+});

@@ -1,0 +1,4 @@
+{"seed":41,"difficulty":"easy","width":360,"status":"cleared","combatSeconds":1448.86,"hp":1000,"maxHp":1000,"level":20,"kills":1007,"remaining":0,"peakAlive":6,"contributions":{"projectile":59245,"lightning":918}}
+{"seed":41,"difficulty":"easy","width":990,"status":"cleared","combatSeconds":1507.33,"hp":1000,"maxHp":1000,"level":20,"kills":1007,"remaining":0,"peakAlive":6,"contributions":{"projectile":59882,"lightning":396}}
+{"seed":41,"difficulty":"nightmare","width":360,"status":"cleared","combatSeconds":328.91,"hp":2400,"maxHp":2400,"level":20,"kills":1266,"remaining":0,"peakAlive":18,"contributions":{"projectile":620431,"pet":11792,"flame":8060,"lightning":11620}}
+{"seed":41,"difficulty":"nightmare","width":990,"status":"cleared","combatSeconds":328.25,"hp":2400,"maxHp":2400,"level":20,"kills":1266,"remaining":0,"peakAlive":18,"contributions":{"projectile":631220,"pet":12848,"flame":2990,"lightning":4620}}

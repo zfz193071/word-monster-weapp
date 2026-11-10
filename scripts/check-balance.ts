@@ -1,3 +1,4 @@
+import { isSummonSkill } from '../miniprogram/fortress/summon-skills';
 // Deterministic headless combat samples; not device playtests or measured player win rates.
 import {createOpeningPlan} from '../miniprogram/fortress/opening-plan';
 import {createStageInvasion} from '../miniprogram/fortress/stage-invasion';
@@ -13,14 +14,15 @@ import {OPENING_EXPERIENCE} from '../miniprogram/fortress/opening-encounter';
 for (const difficulty of ['easy','nightmare'] as const) for (const width of [360,990]) {
  const seed=Number(process.argv[2] ?? 41);
  const plan=createOpeningPlan(`balance-${seed}`,createSeededRandom(seed),difficulty==='easy'?1:8,difficulty==='easy'?1:7,difficulty);
- let collection:SkillCollection=difficulty==='easy'?{}:Object.fromEntries(SKILL_IDS.map(id=>[id,{level:5,quality:'legendary'}]));
+ let collection:SkillCollection=difficulty==='easy'?{}:Object.fromEntries(SKILL_IDS.filter(id=>!isSummonSkill(id)||['shieldLine','rocketSupport','airFormation'].includes(id)).map(id=>[id,{level:5,quality:'legendary'}]));
  let state=resizeCombatArena(createStageInvasion(plan,1,collection),width);
  if(difficulty==='nightmare')state=attachCombatPet(state,createBattlePet({level:40,equipped:[]}));
  const xp=createExperience(plan.sessionId,OPENING_EXPERIENCE);
- let peakAlive=0;
+ let peakAlive=0;const contributions:Record<string,number>={};
  while(state.status==='fighting'&&state.tick<240000){
   const result=stepCombat(state);state=result.state;
   peakAlive=Math.max(peakAlive,state.monsters.filter(m=>m.hp>0).length);
+  for(const event of result.events)if(event.type==='monsterDamaged')contributions[event.kind]=(contributions[event.kind]??0)+event.damage;
   for(const level of xp.record(result.events).upgrades){
    const offer=qualitySkillOffer(plan.sessionId,level,collection,state.base,createSeededRandom(seed*100+level),plan);
    // One pick per level (wrong-answer path), no consumables or manual frost burst.
@@ -30,6 +32,6 @@ for (const difficulty of ['easy','nightmare'] as const) for (const width of [360
    else {collection=applySkillReward(collection,{id:card.id,quality:card.quality!});state=applyCombatSkills(state,skillLevels(collection),collection);}
   }
  }
- console.log(JSON.stringify({seed,difficulty,width,status:state.status,combatSeconds:state.tick/100,hp:state.base.hp,maxHp:state.base.maxHp,level:xp.view.level,kills:state.defeatedMonsterIds.length,remaining:state.incomingMonsters?.length,peakAlive}));
+ console.log(JSON.stringify({seed,difficulty,width,status:state.status,combatSeconds:state.tick/100,hp:state.base.hp,maxHp:state.base.maxHp,level:xp.view.level,kills:state.defeatedMonsterIds.length,remaining:state.incomingMonsters?.length,peakAlive,contributions}));
  if(state.status!=='cleared')process.exitCode=1;
 }
