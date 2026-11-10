@@ -120,8 +120,10 @@
 
 ## #96 全局验收汇总（2026-11-10）
 
-新增[全局验收索引](acceptance.html)，逐项覆盖上方16类资产及首页→听词→加载→战斗→技能选择→奖励结算→连续下一关7个阶段。状态来源为[acceptance.json](acceptance.json)，29个本地证据链接的文件字节和SHA256见[acceptance-evidence.json](acceptance-evidence.json)。
+新增[全局验收索引](acceptance.html)，逐项覆盖上方16类资产及首页→听词→加载→战斗→技能选择→奖励结算→连续下一关7个阶段。状态来源为[acceptance.json](acceptance.json)，30个本地证据链接的文件字节和SHA256见[acceptance-evidence.json](acceptance-evidence.json)。
 
 重建命令：`node --import tsx scripts/build-global-art-review.mts`。脚本核对分组数量、重复ID、必填状态、证据路径与文件存在性；不把文件存在当作视觉通过。修改证据后需重建哈希。本索引无运行时接入或新素材批准含义。
 
 主角底边、马/狮子缺图、动物战斗部件、新兵种规则依赖、跨入口真实截图及自然动态缺口均保留到责任工单。手机/iPad、横竖屏、冷/热加载、长局、前后台、微信编译包体和性能数据尚未完成；#96继续开放。
+
+#91后续：一级背面第二轮边缘候选已通过非零alpha不触边检查；12%透明边带仍未达，未接入运行时。详见[主角复修记录](hero/README.md)和[三版对照](hero/edge-review.html)。

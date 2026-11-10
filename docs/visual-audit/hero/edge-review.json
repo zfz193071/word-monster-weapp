@@ -1,0 +1,92 @@
+{
+  "status": "pending-visual-review",
+  "tool": "built-in image_gen",
+  "runtimeInstalled": false,
+  "prompts": [
+    "refinement-prompt.txt",
+    "edge-refinement-prompt.txt",
+    "edge-refinement-v2-prompt.txt"
+  ],
+  "framing": "alpha >= 128 bounds for review sizing only; full originals composited without pixel removal",
+  "evidence": "Static alpha composites only, not runtime mapping, collision, animation or device acceptance",
+  "images": [
+    {
+      "id": "before",
+      "file": "originals/hero-back-weapon-1-refined.png",
+      "scale": 1,
+      "width": 1122,
+      "height": 1402,
+      "bytes": 921291,
+      "sha256": "e2060cd75c1122553171003a4e893415c3995a1d8b6fdc3f079d22899ea45be0",
+      "transparentPixels": 1136351,
+      "semiTransparentPixels": 435952,
+      "maxAlpha": 255,
+      "contentBounds": [
+        41,
+        23,
+        1092,
+        1402
+      ],
+      "visibleBoundsAlpha128": [
+        300,
+        184,
+        902,
+        1198
+      ],
+      "edgeClear": false,
+      "rgbaBytes": 6292176
+    },
+    {
+      "id": "edge-v1",
+      "file": "originals/hero-back-weapon-1-edge-refined.png",
+      "scale": 1,
+      "width": 1122,
+      "height": 1402,
+      "bytes": 868030,
+      "sha256": "353b6716f7ffd3ed14e32064fedb075daf1233f969f3ec7fbea0f6c261b922ec",
+      "transparentPixels": 1142939,
+      "semiTransparentPixels": 429825,
+      "maxAlpha": 255,
+      "contentBounds": [
+        0,
+        25,
+        1052,
+        1362
+      ],
+      "visibleBoundsAlpha128": [
+        298,
+        186,
+        887,
+        1197
+      ],
+      "edgeClear": false,
+      "rgbaBytes": 6292176
+    },
+    {
+      "id": "edge-v2",
+      "file": "originals/hero-back-weapon-1-edge-refined-v2.png",
+      "scale": 1,
+      "width": 1122,
+      "height": 1402,
+      "bytes": 832116,
+      "sha256": "1b393464ef82f580121202f8478cab069a010d5db8106baf60f35d37e6f7552e",
+      "transparentPixels": 1160378,
+      "semiTransparentPixels": 411799,
+      "maxAlpha": 255,
+      "contentBounds": [
+        97,
+        20,
+        1064,
+        1328
+      ],
+      "visibleBoundsAlpha128": [
+        301,
+        196,
+        878,
+        1194
+      ],
+      "edgeClear": true,
+      "rgbaBytes": 6292176
+    }
+  ]
+}

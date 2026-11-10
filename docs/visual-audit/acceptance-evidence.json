@@ -5,14 +5,20 @@
     {
       "asset": "hero",
       "path": "hero/README.md",
-      "bytes": 1419,
-      "sha256": "acfd325b82fd3ee1faf7b0e89f4e42c8421a4cf5e0ae3f96cd2699ee1fe1869c"
+      "bytes": 3428,
+      "sha256": "307972aa9261bd614201d7105d65fd1f469eba79f1bd5046efaaa5c810af384f"
     },
     {
       "asset": "hero",
       "path": "current-scenes/review.html",
       "bytes": 7926,
       "sha256": "f93db422d424ff7255515badadc92da04593f2d6e9d58a618c2aab477cd0e9a3"
+    },
+    {
+      "asset": "hero",
+      "path": "hero/edge-review.html",
+      "bytes": 1267,
+      "sha256": "f7a3bd4b8160e248649c4e3cf11bb72ed5235617f39bcbb2ff44e95031c7e12c"
     },
     {
       "asset": "ordinary",
@@ -47,8 +53,8 @@
     {
       "asset": "soldiers",
       "path": "README.md",
-      "bytes": 16951,
-      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+      "bytes": 17169,
+      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
     },
     {
       "asset": "fruits",
@@ -95,8 +101,8 @@
     {
       "asset": "skills",
       "path": "README.md",
-      "bytes": 16951,
-      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+      "bytes": 17169,
+      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
     },
     {
       "asset": "backgrounds",
@@ -137,14 +143,14 @@
     {
       "asset": "rewards",
       "path": "../requirements-2026-11-02-followup.md",
-      "bytes": 184669,
-      "sha256": "298b51192239d447683c5a429d49849cb01c20692e5c17c6ce527cc43c832de9"
+      "bytes": 185737,
+      "sha256": "3c7d226b18414d8402314d6a523bf52ad8d86a1a5da11c84a9182150a545fd97"
     },
     {
       "asset": "controls",
       "path": "README.md",
-      "bytes": 16951,
-      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+      "bytes": 17169,
+      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
     },
     {
       "asset": "effects",

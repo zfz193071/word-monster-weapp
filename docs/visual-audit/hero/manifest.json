@@ -1,11 +1,13 @@
 {
   "tool": "built-in image_gen",
-  "status": "needs-alpha-and-border-refinement",
+  "status": "edge-clear-candidate-pending-visual-review",
   "selected": null,
   "runtimeInstalled": false,
   "prompts": [
     "prompt.txt",
-    "refinement-prompt.txt"
+    "refinement-prompt.txt",
+    "edge-refinement-prompt.txt",
+    "edge-refinement-v2-prompt.txt"
   ],
   "images": [
     {
@@ -52,5 +54,7 @@
         1362
       ]
     }
-  ]
+  ],
+  "reviewCandidate": "originals/hero-back-weapon-1-edge-refined-v2.png",
+  "edgeReview": "edge-review.json"
 }

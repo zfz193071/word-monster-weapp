@@ -6,7 +6,7 @@
       "id": "hero",
       "name": "主角与7级武器",
       "owner": 91,
-      "status": "一级背面候选；未接入",
+      "status": "一级背面第二轮边缘候选不触边；未接入",
       "links": [
         {
           "path": "hero/README.md",
@@ -15,9 +15,13 @@
         {
           "path": "current-scenes/review.html",
           "label": "现行七级对照"
+        },
+        {
+          "path": "hero/edge-review.html",
+          "label": "三版边缘与小尺寸对照"
         }
       ],
-      "remaining": "候选底边触边；枪口/脚底锚点、首页正面、七级系列、持枪动作及用户审样待完成。"
+      "remaining": "12%透明边带未达；枪口/脚底锚点、双手姿势、首页正面、七级系列、动作及用户审样待完成。"
     },
     {
       "id": "ordinary",
