@@ -33,6 +33,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "fortress-assets",
+      "name": "fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

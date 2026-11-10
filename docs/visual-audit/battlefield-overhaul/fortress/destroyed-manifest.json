@@ -1,6 +1,6 @@
 {
   "tool": "built-in image_gen",
-  "reference": "miniprogram/battlefield-assets/fortress-level-1-v1.png",
+  "reference": "miniprogram/fortress-assets/fortress-level-1-v1.png",
   "prompt": "destroyed-prompt.txt",
   "sourceSize": {
     "width": 2172,
@@ -23,7 +23,7 @@
       "sha256": "f5fc78f2f74cb4de144988de0cf1861f650da0119a59edd3754e291749871057"
     },
     {
-      "path": "miniprogram/battlefield-assets/fortress-level-1-destroyed-v1.png",
+      "path": "miniprogram/fortress-assets/fortress-level-1-destroyed-v1.png",
       "bytes": 671930,
       "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6"
     }

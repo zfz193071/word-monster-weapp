@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "b3b706a",
+  "files": [
+    {
+      "previousPath": "miniprogram/battlefield-assets/fortress-level-1-v1.png",
+      "path": "miniprogram/fortress-assets/fortress-level-1-v1.png",
+      "bytes": 793166,
+      "sha256": "7b82015db76dcb69d7e9058fea1b045830d488e8a78b1ad9a482f0becc73fd0c",
+      "identical": true
+    },
+    {
+      "previousPath": "miniprogram/battlefield-assets/fortress-level-1-destroyed-v1.png",
+      "path": "miniprogram/fortress-assets/fortress-level-1-destroyed-v1.png",
+      "bytes": 671930,
+      "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6",
+      "identical": true
+    }
+  ],
+  "sourceKiB": {
+    "main": 1744.7,
+    "learning": 1977.0,
+    "images": 1864.1,
+    "courtyard": 591.7,
+    "fortress": 1430.9
+  },
+  "loading": "levelId=1: courtyard; houseLevel=1 (including default): fortress; wait for all required packages",
+  "runtimeFixtureComparison": {
+    "report": "docs/visual-audit/battlefield-overhaul/fortress/destroyed-runtime/report.json",
+    "count": 4,
+    "identical": true
+  },
+  "limitations": "Source budgets and fixed offscreen fixtures only; no WeChat compiled package or device download/memory measurements. Pixel dimensions and decoded RGBA sizes unchanged."
+}

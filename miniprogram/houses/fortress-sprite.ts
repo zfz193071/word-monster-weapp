@@ -1,13 +1,13 @@
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 
 export const WOOD_FORTRESS_ASSET = {
-  path: '/battlefield-assets/fortress-level-1-v1.png',
+  path: '/fortress-assets/fortress-level-1-v1.png',
   source: 'image_gen; battlefield-overhaul/fortress/level-1-source.png',
   rights: 'Project-generated artwork', approved: true,
 } as const;
 
 export const WOOD_FORTRESS_RUIN_ASSET = {
-  path: '/battlefield-assets/fortress-level-1-destroyed-v1.png',
+  path: '/fortress-assets/fortress-level-1-destroyed-v1.png',
   source: 'image_gen; battlefield-overhaul/fortress/level-1-destroyed-source.png',
   rights: 'Project-generated artwork', approved: true,
 } as const;

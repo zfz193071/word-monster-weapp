@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const source = 'docs/visual-audit/battlefield-overhaul/fortress/level-1-source.png';
-const target = 'miniprogram/battlefield-assets/fortress-level-1-v1.png';
+const target = 'miniprogram/fortress-assets/fortress-level-1-v1.png';
 const image = await loadImage(source);
 // Pack the transparent sprite; retain alpha and enough pixels for >3x native wall size.
 const crop = { x: 20, y: 150, width: 2132, height: 420 };
