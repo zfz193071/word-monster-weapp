@@ -5,7 +5,7 @@ import type { PetAppearance } from '../pets/catalog';
 import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
-interface Face { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly wall?: 'x' | 'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
+interface Face { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
 interface ProjectedFace { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
@@ -20,11 +20,11 @@ export function projectRoomPoint(point: Point3, yaw=0) {
   const p=rotateRoomPoint(point,yaw);
   return { x: (p[0]-p[2]) * .7071, y: (p[0]+p[2]) * .35355-p[1]*.866, depth: dot(p,VIEW) };
 }
-// Project the slab and the two tall walls onto the ground along a fixed world light.
+// Project the courtyard, roof ridge and chimney along the same world light.
 export function roomShadowPolygon(yaw:number):readonly (readonly [number,number])[] {
   const ground=-.48;
   const corners:Point3[]=[[-3.2,0,-3.2],[-3.2,0,3.2],[3.2,0,-3.2],[3.2,0,3.2],
-    [-3.2,3.2,-3.2],[-3.2,3.2,3.2],[3.2,3.2,-3.2]];
+    [0,3.24,-3.1],[0,3.24,-.2],[1.26,3.49,-2.43]];
   const points=corners.map(([x,y,z])=>{
     const distance=(y-ground)/LIGHT[1];
     const projected=projectRoomPoint([x-LIGHT[0]*distance,ground,z-LIGHT[2]*distance],yaw);
@@ -71,95 +71,85 @@ function floorEllipse(faces:Face[],x:number,z:number,rx:number,rz:number,y:numbe
   const points:Point3[]=Array.from({length:40},(_,i)=>[x+rx*Math.cos(i*Math.PI/20),y,z+rz*Math.sin(i*Math.PI/20)]);
   faces.push({points,color,normal:[0,1,0],opacity,layer:2});
 }
+// The exterior is world geometry: orbit, lighting and picking use the same faces.
 function room(level=1):Face[]{
   houseForLevel(level);
   const f:Face[]=[];
-  box(f,0,-.20,0,6.3,.4,6.3,'#d4b88b');
-  box(f,0,-.035,0,6.4,.10,6.4,'#f2d7a5');
-  for(let row=0;row<8;row++)for(let col=0;col<4;col++){
-    box(f,-2.36+col*1.575,.025,-2.75+row*.785,1.55,.06,.76,(row+col)%3?'#dfcba6':'#ead8b5');
+  const stone=level>=5?'#77949c':level>=3?'#a6b7ad':'#bcbba3';
+  const trim=level===5?'#dfbd70':'#e0d4b4';
+  box(f,0,-.20,0,6.4,.4,6.4,'#b4a789');
+  box(f,0,.015,0,6.4,.08,6.4,'#a7b587');
+  // Courtyard paving and a path from the door to the open front gate.
+  for(let row=0;row<5;row++)for(let col=0;col<4;col++){
+    box(f,-1.2+col*.8,.07,.1+row*.62,.76,.06,.58,(row+col)%2?'#e5d8b8':'#d6c9aa');
   }
-  const floorEnd=f.length;
-  // Two solid walls, open front; trim makes their thickness visible.
-  box(f,-3.1,1.55,0,.2,3.1,6.3,level>=3?'#8eaaa9':'#c39b6e');
-  box(f,0,1.55,-3.1,6.3,3.1,.2,level>=3?'#b4c6bf':'#e2c599');
-  box(f,-3.1,3.13,0,.27,.10,6.4,'#fff2d0');box(f,0,3.13,-3.1,6.4,.10,.27,'#fff2d0');
-  box(f,-2.97,.15,0,.06,.25,6.1,'#e9e3bd');box(f,0,.15,-2.97,6.1,.25,.06,'#f7edcb');
-  const wallsEnd=f.length;
-  for(let i=floorEnd;i<wallsEnd;i++) {
-    f[i]={...f[i],wall:Math.floor((i-floorEnd)/5)%2===0 ? 'x' : 'z'};
+  const groundEnd=f.length;
+  // A compact closed house behind the actors, with complete front/back gables.
+  box(f,0,.18,-1.65,3.65,.28,2.55,stone);
+  box(f,0,1.12,-1.65,3.35,1.75,2.25,level>=3?'#d5d9c0':'#e6c78e');
+  for(const x of [-1.62,0,1.62])box(f,x,1.16,-.48,.14,1.85,.14,'#8e6b48');
+  for(const z of [-2.81,-.49])box(f,0,1.97,z,3.5,.18,.18,'#8e6b48');
+  box(f,0,.74,-.45,.65,1.15,.10,'#786146');
+  box(f,.20,.72,-.38,.06,.06,.04,trim);
+  for(const x of [-1.06,1.06]){
+    box(f,x,1.22,-.43,.61,.70,.12,trim);
+    box(f,x,1.22,-.35,.46,.55,.05,'#82b9bd');
+    box(f,x,1.22,-.31,.045,.56,.04,'#fff1ca');
+    box(f,x,1.22,-.31,.47,.045,.04,'#fff1ca');
+    box(f,x,.83,-.35,.74,.10,.28,trim);
   }
-  // Structural upgrades stay on the two cutaway walls so the room remains playable.
-  const structuralBox=(axis:'x'|'z',along:number,y:number,w:number,h:number,d:number,color:string)=>{
-    const start=f.length;
-    if(axis==='x')box(f,-3.04,y,along,d,h,w,color);else box(f,along,y,-3.04,w,h,d,color);
-    for(let i=start;i<f.length;i++)f[i]={...f[i],wall:axis,layer:1};
+  const roofColor=level>=4?'#718c8b':'#b77b51';
+  for(const z of [-3.04,-.24]){
+    f.push({points:[[-2,2.06,z],[2,2.06,z],[0,3.16,z]],normal:[0,0,z< -1?-1:1],color:'#cfb281'});
+  }
+  // Tile strips subdivide roof depth, avoiding one giant painter-sorted face.
+  for(const side of [-1,1])for(let row=0;row<5;row++)for(let col=0;col<8;col++){
+    const x0=side*row*.4,x1=side*(row+1)*.4;
+    const y0=3.16-row*.22,y1=3.16-(row+1)*.22;
+    const z=-3.04+col*.35;
+    f.push({points:[[x0,y0,z],[x1,y1,z],[x1,y1,z+.35],[x0,y0,z+.35]],normal:normalize([side*.55,1,0]),color:(row+col)%3?roofColor:level>=4?'#819e99':'#c38a5c'});
+  }
+  box(f,0,3.17,-1.65,.16,.13,2.9,trim);
+  box(f,1,2.88,-2.15,.40,1.05,.43,stone);
+  box(f,1,3.43,-2.15,.52,.12,.55,trim);
+  if(level>=2){
+    for(const x of [-1.69,1.69])for(const z of [-2.8,-.5])box(f,x,1.12,z,.23,1.95,.23,stone);
+    box(f,0,.24,-.16,1.1,.16,.45,trim);
+  }
+  if(level>=3){
+    for(const side of [-1,1])for(let row=0;row<4;row++)for(let col=0;col<4;col++){
+      box(f,side*1.70,.48+row*.4,-2.5+col*.55,.09,.33,.50,(row+col)%2?stone:'#bac6b8');
+    }
+  }
+  // Low perimeter walls leave the courtyard visible; the entrance is an actual gap.
+  const wall=(x:number,z:number,w:number,d:number)=>{
+    box(f,x,.35,z,w,.62,d,stone);
+    box(f,x,.68,z,w+.04,.12,d+.04,trim);
+    const count=Math.max(1,Math.round(Math.max(w,d)/.60));
+    for(let i=0;i<count;i++){
+      const along=(i-(count-1)/2)*.60;
+      box(f,x+(w>d?along:0),.86,z+(d>w?along:0),w>d?.30:.28,.25,d>w?.30:.28,stone);
+    }
   };
-  for(const axis of ['x','z'] as const){
-    if(level<=2){
-      // Horizontal timber courses and a projecting roof edge.
-      for(let y=.45;y<3;y+=.45)structuralBox(axis,0,y,6.2,.055,.24,'#ad8157');
-      structuralBox(axis,0,3.22,6.55,.16,.55,'#9b6949');
-      structuralBox(axis,0,3.36,6.45,.14,.40,'#bd8253');
-    }
-    if(level>=2){
-      for(const along of [-2.85,0,2.85])structuralBox(axis,along,1.6,.22,3.2,.36,level>=3?'#718c8c':'#805c40');
-      structuralBox(axis,0,.25,6.4,.35,.36,level>=3?'#718c8c':'#805c40');
-    }
-    if(level>=3){
-      for(let row=0;row<6;row++)for(let col=0;col<6;col++){
-        const along=-2.6+col*1.04;
-        structuralBox(axis,along,.48+row*.45,.99,.40,.25,(row+col)%2?'#b0c2bb':'#9ab1ad');
-      }
-      structuralBox(axis,0,3.22,6.6,.24,.5,'#d0d7c6');
-    }
-    if(level>=4){
-      for(let i=0;i<7;i++)structuralBox(axis,-2.8+i*.93,3.48,.52,.42,.54,'#9caaa5');
-      for(const along of [-2.9,2.9]){
-        structuralBox(axis,along,1.75,.65,3.5,.65,level===5?'#617e87':'#96aaa7');
-        structuralBox(axis,along,3.55,.88,.25,.88,'#ced5c8');
-        for(const offset of [-.3,.3])structuralBox(axis,along+offset,3.8,.22,.38,.85,level===5?'#d0ad61':'#a4b7af');
-      }
-    }
-    if(level===5){
-      for(const along of [-1.9,-.9,.9,1.9]){
-        structuralBox(axis,along,1.65,.68,2.65,.42,'#597582');
-        for(const y of [.5,1.65,2.8])structuralBox(axis,along,y,.18,.14,.48,'#e1bc69');
-      }
-      structuralBox(axis,0,3.18,6.6,.14,.6,'#d4b15f');
-    }
+  wall(-3.04,0,.24,5.9);wall(3.04,0,.24,5.9);wall(0,-3.04,5.9,.24);
+  wall(-1.96,3.04,2.16,.24);wall(1.96,3.04,2.16,.24);
+  for(const x of [-3.02,3.02])for(const z of [-3.02,3.02]){
+    const height=level>=4?1.23:.92;
+    box(f,x,height/2,z,.54,height,.54,stone);
+    box(f,x,height,z,.68,.16,.68,trim);
+    if(level>=4)for(const dx of [-.23,.23])for(const dz of [-.23,.23])box(f,x+dx,height+.2,z+dz,.20,.28,.20,stone);
+    if(level===5)box(f,x,height+.05,z,.15,.68,.15,'#dfbd70');
   }
-  // Recessed window with bright sill and panes.
-  box(f,1.1,2.03,-2.965,1.75,1.56,.05,'#91b8b9');
-  for(const x of [.20,2.0])box(f,x,2.03,-2.87,.12,1.74,.18,'#fff7df');
-  for(const y of [1.20,2.87])box(f,1.1,y,-2.87,1.94,.12,.18,'#fff7df');
-  box(f,1.1,2.03,-2.83,.07,1.56,.10,'#fff7df');box(f,1.1,2.03,-2.83,1.75,.07,.10,'#fff7df');
-  box(f,1.1,1.10,-2.68,2.08,.12,.52,'#e7d4ac');
-  // Curtains are pleated volumes rather than a flat printed texture.
-  for(const x of [-.10,2.28])for(let i=0;i<3;i++)box(f,x+i*.075,2.02,-2.76,.08,1.76,.16+(i%2)*.07,'#c7d499');
-  box(f,1.1,2.99,-2.67,2.6,.055,.055,'#8c7659');
-  // Framed botanical print on the left wall.
-  box(f,-2.94,2.02,-.75,.08,1.03,.82,'#fff2d0');box(f,-2.88,2.02,-.75,.045,.80,.62,'#e3dcb3');
-  ellipsoid(f,-2.84,2.04,-.75,.04,.25,.16,'#7f9d65');
-  // Wooden bed and thick mattress along the back-right side.
-  for(const x of [.9,2.35])for(const z of [-2.25,.20])box(f,x,.30,z,.14,.60,.14,'#8e8665');
-  box(f,1.63,.58,-1.02,1.75,.22,2.85,'#b3ba94');
-  box(f,1.63,.78,-1.02,1.72,.22,2.78,'#fff3d7');
-  box(f,1.63,.93,-.62,1.75,.14,1.94,'#a6bf8e');
-  box(f,1.63,1.0,-1.93,1.30,.24,.68,'#e5ebc9');
-  box(f,1.63,1.0,-2.47,1.88,1.15,.10,'#e5e9cd');
-  for(const x of [.68,2.58]){box(f,x,.78,.40,.13,1.25,.13,'#e5e9cd');ellipsoid(f,x,1.44,.40,.09,.09,.09,'#f8f2d8');}
-  box(f,1.63,1.20,.40,1.95,.10,.10,'#e5e9cd');box(f,1.63,.83,.40,1.95,.09,.10,'#e5e9cd');
-  for(let i=0;i<5;i++)box(f,.90+i*.36,1.0,.40,.055,.36,.06,'#e5e9cd');
-  // Plant stand and rounded leaves, behind the hero.
-  box(f,-2.18,.53,-1.95,.78,1.0,.76,'#baa47c');box(f,-2.18,1.06,-1.95,.90,.12,.86,'#dfc99b');
-  ellipsoid(f,-2.18,1.30,-1.95,.28,.30,.28,'#d9a77c');
-  box(f,-2.18,1.67,-1.95,.04,.55,.04,'#688459');
-  ellipsoid(f,-2.32,1.78,-1.93,.23,.36,.15,'#7c9d66');ellipsoid(f,-2.0,1.92,-1.95,.21,.38,.15,'#a0bb78');
-  floorEllipse(f,-.5,1.08,1.68,1.30,.075,'#ba9b6a');floorEllipse(f,-.5,1.08,1.56,1.19,.078,'#f0dfb4');
-  // Gentle contact shadow on the rug.
-  floorEllipse(f,-.48,1.02,.62,.43,.085,'#7f8969',.25);
-  return f.map((face,index)=>({...face,house:true,layer:index<floorEnd?0:index<wallsEnd?1:face.layer??3}));
+  if(level===5){
+    for(const x of [-1.4,1.4])box(f,x,1.51,-.33,.22,.54,.08,'#637f90');
+  }
+  floorEllipse(f,-.5,1.08,.62,.43,.13,'#647457',.22);
+  return f.map((face,index)=>({...face,house:true,layer:index<groundEnd?0:face.layer??3}));
+}
+// Fixed framing across levels and yaw prevents zoom jumps during orbit/upgrades.
+// Bounds include the roof, corner towers and projected ground shadow.
+export function homeRoomViewport(width:number,height:number){
+  return {scale:Math.min(width/11.8,height/10.4),x:width/2,y:height*.53};
 }
 function hero(seconds:number,level=1):Face[]{
   const f:Face[]=[];const pose=homeHeroPose(seconds);
@@ -176,7 +166,7 @@ function hero(seconds:number,level=1):Face[]{
   ellipsoid(f,0,1.48,.03,.34,.37,.30,skin);
   ellipsoid(f,0,1.70,-.015,.40,.29,.37,'#a3b67a');
   box(f,0,1.63,.10,.82,.08,.55,'#c2ce94');box(f,0,1.84,.02,.12,.06,.50,'#cad6a0');
-  // Eyes face the open room; the entire model turns slightly in world space.
+  // Eyes face the courtyard; the entire model turns slightly in world space.
   for(const x of [-.14,.14])box(f,x,1.46,.315,.065,.055,.025,'#4b5a45');
   box(f,0,1.33,.314,.13,.025,.022,'#b68863');
   // The same seven silhouettes used in the upgrade card and battle sprite.
@@ -239,8 +229,7 @@ function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
   const view=rotateRoomPoint(VIEW,-yaw);
   return faces.filter(face=>dot(face.normal,view)>0.001).map(face=>{
     const p=face.points.map(point=>projectRoomPoint(point,yaw));
-    // A near solid wall must occlude the room, rather than remain behind actors.
-    const layer=face.wall ? (view[face.wall==='x'?0:2]<0 ? 4 : 1) : face.layer??3;
+    const layer=face.layer??3;
     return { house:face.house, actor:face.actor, pet:face.pet, layer, points:p.map(point=>[point.x,point.y] as const),depth:p.reduce((sum,point)=>sum+point.depth,0)/p.length,
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
@@ -284,9 +273,9 @@ export class HomeRoomScene {
   hitPet(x:number,y:number):boolean{return this.hitActor(x,y,'pet');}
   private hitActor(x:number,y:number,target:'actor'|'pet'|'house'):boolean{
     if(this.disposed||!Number.isFinite(x)||!Number.isFinite(y))return false;
-    const scale=Math.min(this.width/(this.houseLevel>=4?10.8:9.6),this.height/(this.houseLevel>=4?10:9.2));
-    const px=(x-this.width/2)/scale,py=(y-this.height*.56)/scale;
-    // Walk the rendered faces front-to-back: opaque furniture/walls block hidden targets.
+    const viewport=homeRoomViewport(this.width,this.height);
+    const px=(x-viewport.x)/viewport.scale,py=(y-viewport.y)/viewport.scale;
+    // Walk the rendered faces front-to-back: opaque house/walls block hidden targets.
     for(let i=this.drawnFaces.length-1;i>=0;i--){
       const face=this.drawnFaces[i];let inside=false;
       for(let a=0,b=face.points.length-1;a<face.points.length;b=a++){
@@ -333,9 +322,9 @@ export class HomeRoomScene {
     });
   }
   private draw(){
-    const c=this.context;const scale=Math.min(this.width/(this.houseLevel>=4?10.8:9.6),this.height/(this.houseLevel>=4?10:9.2));
+    const c=this.context;const {scale,x:originX,y:originY}=homeRoomViewport(this.width,this.height);
     c.setTransform(this.dpr,0,0,this.dpr,0,0);c.clearRect(0,0,this.width,this.height);
-    c.save();c.translate(this.width/2,this.height*.56);
+    c.save();c.translate(originX,originY);
     const shadowCenter=this.shadow.reduce((center,p)=>[center[0]+p[0]/this.shadow.length,center[1]+p[1]/this.shadow.length],[0,0]);
     for(const [spread,opacity] of [[1.10,.025],[1.05,.035],[1,.065]]){
       c.fillStyle=`rgba(77,100,73,${opacity})`;c.beginPath();
