@@ -33,7 +33,7 @@ export function qualityEffects(skills: SkillCollection) {
 const LABELS: Record<BattleSkillId, string> = { ...SUMMON_LABELS, doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪' };
 const number = (value: number) => Math.round(value * 100) / 100;
 export function qualityDescription(id: BattleSkillId, skills: SkillCollection): string {
-  if (isSummonSkill(id)) return '首次补充1名；每20秒在缺少该兵种且有空位时补充；全体最多3名，满员，空位后自动补充；Lv.5且精英/传说进化';
+  if (isSummonSkill(id)) return '最多3种召唤技能；首次补充1名；每20秒在缺少该兵种且有空位时补充；全体最多3名，满员，空位后自动补充；Lv.5且精英/传说进化';
   const effect = qualityEffects(skills);
   switch (id) {
     case 'doubleShot': return `每次齐射${effect.count}发；${skills.flame ? '充能时最多3发半伤火焰，同轮爆炸不重复命中；其他元素仅一发' : '元素仅附于其中一发'}`;
