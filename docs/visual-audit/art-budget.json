@@ -1,0 +1,1321 @@
+{
+  "schemaVersion": 1,
+  "sourceBudgetBytes": 2097152,
+  "missing": [
+    "horse",
+    "lion"
+  ],
+  "evidence": "Verified candidate PNG dimensions, bytes and SHA256. Source-only scenarios; no runtime changes or quality approval.",
+  "limits": "In-place estimates replace available display images once, retain old missing images, and exclude new battle parts. Candidate-only categories omit package wrappers, audio and shared art. Residency covers only candidate display images in current+previous categories, not runtime cache eviction, texture copies, Canvas, audio or device peak memory. No compiled package or timing measurements.",
+  "baselinePackages": [
+    {
+      "name": "main",
+      "root": "",
+      "bytes": 1735157
+    },
+    {
+      "name": "learning-assets",
+      "root": "learning-assets",
+      "bytes": 1135877
+    },
+    {
+      "name": "scene-images",
+      "root": "assets/images",
+      "bytes": 1832803
+    }
+  ],
+  "scenarios": [
+    {
+      "size": 64,
+      "complete": false,
+      "inPlacePackages": [
+        {
+          "name": "main",
+          "root": "",
+          "bytes": 1735157,
+          "baselineBytes": 1735157,
+          "remainingBytes": 361995,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "learning-assets",
+          "root": "learning-assets",
+          "bytes": 1128297,
+          "baselineBytes": 1135877,
+          "remainingBytes": 968855,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "scene-images",
+          "root": "assets/images",
+          "bytes": 1178400,
+          "baselineBytes": 1832803,
+          "remainingBytes": 918752,
+          "fitsSourceBudget": true
+        }
+      ],
+      "candidateOnlyCategories": [
+        {
+          "levelId": 1,
+          "available": 11,
+          "expected": 11,
+          "missing": [],
+          "bytes": 62591,
+          "remainingBytes": 2034561,
+          "files": [
+            {
+              "path": "docs/visual-audit/fruits/variants/apple-64.png",
+              "bytes": 5959,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/banana-64.png",
+              "bytes": 5426,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/orange-64.png",
+              "bytes": 5010,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/grape-64.png",
+              "bytes": 5777,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/watermelon-64.png",
+              "bytes": 7268,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pear-64.png",
+              "bytes": 4789,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/strawberry-64.png",
+              "bytes": 5488,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/cherry-64.png",
+              "bytes": 5211,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pineapple-64.png",
+              "bytes": 5582,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/kiwi-64.png",
+              "bytes": 6503,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/peach-64.png",
+              "bytes": 5578,
+              "rgbaBytes": 16384,
+              "size": 64
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "available": 14,
+          "expected": 16,
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 84126,
+          "remainingBytes": 2013026,
+          "files": [
+            {
+              "path": "docs/visual-audit/animals/variants/bear-64.png",
+              "bytes": 6173,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bee-64.png",
+              "bytes": 6584,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bird-64.png",
+              "bytes": 5068,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cat-64.png",
+              "bytes": 5999,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/chicken-64.png",
+              "bytes": 5471,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cow-64.png",
+              "bytes": 6859,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/dog-64.png",
+              "bytes": 6067,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/duck-64.png",
+              "bytes": 4793,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/elephant-64.png",
+              "bytes": 6439,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/fish-64.png",
+              "bytes": 5172,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/panda-64.png",
+              "bytes": 6729,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/rabbit-64.png",
+              "bytes": 5781,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/sheep-64.png",
+              "bytes": 5909,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/tiger-64.png",
+              "bytes": 7082,
+              "rgbaBytes": 16384,
+              "size": 64
+            }
+          ]
+        }
+      ],
+      "levelCandidateResidency": [
+        {
+          "levelId": 1,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 62591,
+          "rgbaBytes": 180224
+        },
+        {
+          "levelId": 2,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 62591,
+          "rgbaBytes": 180224
+        },
+        {
+          "levelId": 3,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 84126,
+          "rgbaBytes": 229376
+        },
+        {
+          "levelId": 4,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 84126,
+          "rgbaBytes": 229376
+        },
+        {
+          "levelId": 5,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 6,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 7,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 8,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        }
+      ]
+    },
+    {
+      "size": 128,
+      "complete": false,
+      "inPlacePackages": [
+        {
+          "name": "main",
+          "root": "",
+          "bytes": 1735157,
+          "baselineBytes": 1735157,
+          "remainingBytes": 361995,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "learning-assets",
+          "root": "learning-assets",
+          "bytes": 1316277,
+          "baselineBytes": 1135877,
+          "remainingBytes": 780875,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "scene-images",
+          "root": "assets/images",
+          "bytes": 1323160,
+          "baselineBytes": 1832803,
+          "remainingBytes": 773992,
+          "fitsSourceBudget": true
+        }
+      ],
+      "candidateOnlyCategories": [
+        {
+          "levelId": 1,
+          "available": 11,
+          "expected": 11,
+          "missing": [],
+          "bytes": 207351,
+          "remainingBytes": 1889801,
+          "files": [
+            {
+              "path": "docs/visual-audit/fruits/variants/apple-128.png",
+              "bytes": 20017,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/banana-128.png",
+              "bytes": 17020,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/orange-128.png",
+              "bytes": 17700,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/grape-128.png",
+              "bytes": 18797,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/watermelon-128.png",
+              "bytes": 24357,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pear-128.png",
+              "bytes": 15186,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/strawberry-128.png",
+              "bytes": 17896,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/cherry-128.png",
+              "bytes": 16209,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pineapple-128.png",
+              "bytes": 18644,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/kiwi-128.png",
+              "bytes": 23114,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/peach-128.png",
+              "bytes": 18411,
+              "rgbaBytes": 65536,
+              "size": 128
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "available": 14,
+          "expected": 16,
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 272106,
+          "remainingBytes": 1825046,
+          "files": [
+            {
+              "path": "docs/visual-audit/animals/variants/bear-128.png",
+              "bytes": 21045,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bee-128.png",
+              "bytes": 20938,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bird-128.png",
+              "bytes": 16523,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cat-128.png",
+              "bytes": 19341,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/chicken-128.png",
+              "bytes": 17637,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cow-128.png",
+              "bytes": 21391,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/dog-128.png",
+              "bytes": 20026,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/duck-128.png",
+              "bytes": 15283,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/elephant-128.png",
+              "bytes": 20844,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/fish-128.png",
+              "bytes": 16904,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/panda-128.png",
+              "bytes": 21357,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/rabbit-128.png",
+              "bytes": 18823,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/sheep-128.png",
+              "bytes": 18998,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/tiger-128.png",
+              "bytes": 22996,
+              "rgbaBytes": 65536,
+              "size": 128
+            }
+          ]
+        }
+      ],
+      "levelCandidateResidency": [
+        {
+          "levelId": 1,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 207351,
+          "rgbaBytes": 720896
+        },
+        {
+          "levelId": 2,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 207351,
+          "rgbaBytes": 720896
+        },
+        {
+          "levelId": 3,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 272106,
+          "rgbaBytes": 917504
+        },
+        {
+          "levelId": 4,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 272106,
+          "rgbaBytes": 917504
+        },
+        {
+          "levelId": 5,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 6,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 7,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 8,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        }
+      ]
+    },
+    {
+      "size": 256,
+      "complete": false,
+      "inPlacePackages": [
+        {
+          "name": "main",
+          "root": "",
+          "bytes": 1735157,
+          "baselineBytes": 1735157,
+          "remainingBytes": 361995,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "learning-assets",
+          "root": "learning-assets",
+          "bytes": 1957136,
+          "baselineBytes": 1135877,
+          "remainingBytes": 140016,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "scene-images",
+          "root": "assets/images",
+          "bytes": 1832803,
+          "baselineBytes": 1832803,
+          "remainingBytes": 264349,
+          "fitsSourceBudget": true
+        }
+      ],
+      "candidateOnlyCategories": [
+        {
+          "levelId": 1,
+          "available": 11,
+          "expected": 11,
+          "missing": [],
+          "bytes": 716994,
+          "remainingBytes": 1380158,
+          "files": [
+            {
+              "path": "docs/visual-audit/fruits/variants/apple-256.png",
+              "bytes": 69777,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/banana-256.png",
+              "bytes": 55837,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/orange-256.png",
+              "bytes": 63854,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/grape-256.png",
+              "bytes": 62229,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/watermelon-256.png",
+              "bytes": 85502,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pear-256.png",
+              "bytes": 50489,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/strawberry-256.png",
+              "bytes": 60885,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/cherry-256.png",
+              "bytes": 53361,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pineapple-256.png",
+              "bytes": 62522,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/kiwi-256.png",
+              "bytes": 87844,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/peach-256.png",
+              "bytes": 64694,
+              "rgbaBytes": 262144,
+              "size": 256
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "available": 14,
+          "expected": 16,
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 912965,
+          "remainingBytes": 1184187,
+          "files": [
+            {
+              "path": "docs/visual-audit/animals/variants/bear-256.png",
+              "bytes": 72635,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bee-256.png",
+              "bytes": 69752,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bird-256.png",
+              "bytes": 56374,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cat-256.png",
+              "bytes": 64805,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/chicken-256.png",
+              "bytes": 58576,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cow-256.png",
+              "bytes": 67846,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/dog-256.png",
+              "bytes": 67738,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/duck-256.png",
+              "bytes": 50144,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/elephant-256.png",
+              "bytes": 69949,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/fish-256.png",
+              "bytes": 57038,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/panda-256.png",
+              "bytes": 72701,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/rabbit-256.png",
+              "bytes": 64446,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/sheep-256.png",
+              "bytes": 62425,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/tiger-256.png",
+              "bytes": 78536,
+              "rgbaBytes": 262144,
+              "size": 256
+            }
+          ]
+        }
+      ],
+      "levelCandidateResidency": [
+        {
+          "levelId": 1,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 716994,
+          "rgbaBytes": 2883584
+        },
+        {
+          "levelId": 2,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 716994,
+          "rgbaBytes": 2883584
+        },
+        {
+          "levelId": 3,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 912965,
+          "rgbaBytes": 3670016
+        },
+        {
+          "levelId": 4,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 912965,
+          "rgbaBytes": 3670016
+        },
+        {
+          "levelId": 5,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 6,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 7,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 8,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        }
+      ]
+    },
+    {
+      "size": 512,
+      "complete": false,
+      "inPlacePackages": [
+        {
+          "name": "main",
+          "root": "",
+          "bytes": 1735157,
+          "baselineBytes": 1735157,
+          "remainingBytes": 361995,
+          "fitsSourceBudget": true
+        },
+        {
+          "name": "learning-assets",
+          "root": "learning-assets",
+          "bytes": 4175382,
+          "baselineBytes": 1135877,
+          "remainingBytes": -2078230,
+          "fitsSourceBudget": false
+        },
+        {
+          "name": "scene-images",
+          "root": "assets/images",
+          "bytes": 3649353,
+          "baselineBytes": 1832803,
+          "remainingBytes": -1552201,
+          "fitsSourceBudget": false
+        }
+      ],
+      "candidateOnlyCategories": [
+        {
+          "levelId": 1,
+          "available": 11,
+          "expected": 11,
+          "missing": [],
+          "bytes": 2533544,
+          "remainingBytes": -436392,
+          "files": [
+            {
+              "path": "docs/visual-audit/fruits/variants/apple-512.png",
+              "bytes": 246761,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/banana-512.png",
+              "bytes": 190214,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/orange-512.png",
+              "bytes": 225599,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/grape-512.png",
+              "bytes": 211529,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/watermelon-512.png",
+              "bytes": 304680,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pear-512.png",
+              "bytes": 175090,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/strawberry-512.png",
+              "bytes": 214155,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/cherry-512.png",
+              "bytes": 183469,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/pineapple-512.png",
+              "bytes": 214113,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/kiwi-512.png",
+              "bytes": 329817,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/fruits/variants/peach-512.png",
+              "bytes": 238117,
+              "rgbaBytes": 1048576,
+              "size": 512
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "available": 14,
+          "expected": 16,
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 3131211,
+          "remainingBytes": -1034059,
+          "files": [
+            {
+              "path": "docs/visual-audit/animals/variants/bear-512.png",
+              "bytes": 254441,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bee-512.png",
+              "bytes": 237580,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/bird-512.png",
+              "bytes": 190550,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cat-512.png",
+              "bytes": 222574,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/chicken-512.png",
+              "bytes": 199869,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/cow-512.png",
+              "bytes": 226015,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/dog-512.png",
+              "bytes": 231440,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/duck-512.png",
+              "bytes": 168606,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/elephant-512.png",
+              "bytes": 240662,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/fish-512.png",
+              "bytes": 192548,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/panda-512.png",
+              "bytes": 255412,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/rabbit-512.png",
+              "bytes": 221262,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/sheep-512.png",
+              "bytes": 211392,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/tiger-512.png",
+              "bytes": 278860,
+              "rgbaBytes": 1048576,
+              "size": 512
+            }
+          ]
+        }
+      ],
+      "levelCandidateResidency": [
+        {
+          "levelId": 1,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 2533544,
+          "rgbaBytes": 11534336
+        },
+        {
+          "levelId": 2,
+          "wordIds": [
+            "apple",
+            "banana",
+            "orange",
+            "grape",
+            "watermelon",
+            "pear",
+            "strawberry",
+            "cherry",
+            "pineapple",
+            "kiwi",
+            "peach"
+          ],
+          "missing": [],
+          "bytes": 2533544,
+          "rgbaBytes": 11534336
+        },
+        {
+          "levelId": 3,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 3131211,
+          "rgbaBytes": 14680064
+        },
+        {
+          "levelId": 4,
+          "wordIds": [
+            "bear",
+            "bee",
+            "bird",
+            "cat",
+            "chicken",
+            "cow",
+            "dog",
+            "duck",
+            "elephant",
+            "fish",
+            "panda",
+            "rabbit",
+            "sheep",
+            "tiger"
+          ],
+          "missing": [
+            "horse",
+            "lion"
+          ],
+          "bytes": 3131211,
+          "rgbaBytes": 14680064
+        },
+        {
+          "levelId": 5,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 6,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 7,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        },
+        {
+          "levelId": 8,
+          "wordIds": [],
+          "missing": [],
+          "bytes": 0,
+          "rgbaBytes": 0
+        }
+      ]
+    }
+  ]
+}
