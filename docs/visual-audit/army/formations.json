@@ -1,0 +1,1368 @@
+{
+  "seed": 41,
+  "scope": "48 close-contact fixtures; real generated stats, six selected enemies repositioned near defense; no incoming waves, pets, consumables, upgrades or reward UI. 120 simulation seconds maximum. Not natural victory, device performance or player win rate.",
+  "damage": "Reported event damage includes overkill. Soldier damage is aggregated by formation; events do not identify individual attackers.",
+  "speeds": [
+    1,
+    1.5,
+    2,
+    2.5
+  ],
+  "checks": "All event streams and 3-second snapshots match; pause and dispose checked.",
+  "results": [
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "defense",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 210
+      },
+      "events": {
+        "monsterDamaged": 31,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "ff6c05cf83a1fb7dcbee4f60b9aff981469ffccd0571e5683a4e78424fed8e8d"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "defense",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 12,
+      "baseHp": 940,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 60
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "baseDamaged": 12
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "31f58649bfc1ca996dec42dad01bff2f3361c4e0914fcbb4b4e0af991e9689ce"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "defense",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 225
+      },
+      "events": {
+        "monsterDamaged": 32,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "5de461006712b797deff8312d223a4354e662722ec51679a0529505ae6c5e3f4"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "air",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 10,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 36,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 3
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "730e4f0b99b4f377c11279501a19304a4dfba2412870591bd2ee6a3b637d3dc3"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "air",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 120,
+        "soldier": 180
+      },
+      "events": {
+        "monsterDamaged": 21,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 3
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "2824a1f46ad73f003cab04b4c0567e5e90abf9267c413c82b7644e75c2ec6aa3"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "air",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 9,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 180,
+        "soldier": 270
+      },
+      "events": {
+        "monsterDamaged": 32,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "f454945f27f34fbca6a28254a34dfdb7ac8276411f3cd0abe96f116611fcec82"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "heavy",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 150,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 25,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "fcf6c3041d23231088fd891efb464f93f734d540d2b5c451a933a09f7794f808"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "heavy",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 975,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 160
+      },
+      "events": {
+        "monsterDamaged": 21,
+        "monsterDefeated": 6,
+        "baseDamaged": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "18cc99d307fc6af62334d1f955886f18db676cbfc45678a59d28c7a89f4995b9"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "heavy",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 990,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 24,
+        "monsterDefeated": 6,
+        "baseDamaged": 2,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "c0a3c8d3d02137886eab97e1478a760462f9e51cad4651c40bc3e04d3ee2d445"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 250
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "4785b20f1f1db21c50b346c6f9993d61946cde15aafa0fdadc70fa6acbf41a91"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 14.51,
+      "baseHp": 920,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 300
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "baseDamaged": 16
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "60815c42f065accda2eab67058b8e6af87a70e3e41e9f7b9e43a1081dbac82b8"
+    },
+    {
+      "difficulty": "easy",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 7.51,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 260
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "d20df9f9782e9e2336bdae3a34bb3dac514cc1b9c9ad2099be8447997a987006"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "defense",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 210
+      },
+      "events": {
+        "monsterDamaged": 31,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "23a8acd38d3c44009c143305d27c8c19d1ed60247182f6cb374aa493bfd02e0b"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "defense",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 12,
+      "baseHp": 940,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 60
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "baseDamaged": 12
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "06cc4d1a6d4b508efc0272f421fbf16c49c47b932dff609c39ea5c3a54bb39ec"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "defense",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 225
+      },
+      "events": {
+        "monsterDamaged": 32,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "cb314414ab0d3b805cb18743e441ba981c7f03623cfca8efa777ee9bbc97b390"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "air",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 10,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 36,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 3
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "b0757d2350512043e13faeb18b6029492c0909f9f980ad3cd438e49dfda38131"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "air",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 120,
+        "soldier": 180
+      },
+      "events": {
+        "monsterDamaged": 21,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 3
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "c32b8106d64ae20340e8373428a0279b560bdae5e787d196c4b1292cb27a1520"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "air",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 9,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 180,
+        "soldier": 270
+      },
+      "events": {
+        "monsterDamaged": 32,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "3a7b9abf800951422c134ba7e1f958a3552029f8fb8859965709e4e016d499d2"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "heavy",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 150,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 25,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "9b7aa5a48683c41f543e3f0490360ccc64cfc3aedfd1c25ac5efd7184d7ea1da"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "heavy",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8.01,
+      "baseHp": 975,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 170,
+        "soldier": 160
+      },
+      "events": {
+        "monsterDamaged": 21,
+        "monsterDefeated": 6,
+        "baseDamaged": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "4c722eba88c05e511f715f123138368af5c555d2c09f01cf767ea8c61eb8cf32"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "heavy",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 990,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 290
+      },
+      "events": {
+        "monsterDamaged": 24,
+        "monsterDefeated": 6,
+        "baseDamaged": 2,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "ae6ab7b206a137b39021509fe8a0a4bd606e95058d9919c8f24db1741bee898b"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 250
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "55ef1dd817470eba9258eecba0b85ae79436419708a141d5500ad3ddd3254d78"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 14.51,
+      "baseHp": 920,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 300
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "baseDamaged": 16
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "b8916a96c415ac77c4ba5db0f21b99e5b411da3148bd99b0e58e709b9c533cc9"
+    },
+    {
+      "difficulty": "easy",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 7.51,
+      "baseHp": 1000,
+      "maxHp": 1000,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 160,
+        "soldier": 260
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "1c400c5be9797e7afe5dee8728b1354502d1baa1652105ba54a7efc9a81e19f9"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "defense",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 7.5,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 560,
+        "soldier": 2971
+      },
+      "events": {
+        "monsterDamaged": 33,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "1b2b330bdf6ff58c082c5740b1d4314c993cea683b2243017c69fa12930bf3ef"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "defense",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 18,
+      "baseHp": 1616,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 1440,
+        "soldier": 1264
+      },
+      "events": {
+        "monsterDamaged": 52,
+        "baseDamaged": 28,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "78974b7cee85913cf7cfcee979f4dedd6a66641a375ad40bc936760c5b4d8f9d"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "defense",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2372,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 2760
+      },
+      "events": {
+        "monsterDamaged": 35,
+        "monsterDefeated": 6,
+        "baseDamaged": 1,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "8da2a2bf9ea05a0c47cdeb5a044a6b2eb72595aa1449b83556eeb40cf7427a0b"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "air",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 480,
+        "soldier": 3452
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "supportSoldierDamaged": 3,
+        "baseDamaged": 1,
+        "monsterDefeated": 5,
+        "supportSoldierDefeated": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "bf5273fa844309575ab7fbd6788a7acbc4e8a7b5f2554d88ba153a3714e5279f"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "air",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 3,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 3070
+      },
+      "events": {
+        "monsterDamaged": 16,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "0ab1bdffdaaa26f0e47125a6cefaab89da5a5a7600ac93dd06c96e9534403fcb"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "air",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 480,
+        "soldier": 3116
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 1,
+        "monsterDefeated": 5,
+        "supportSoldierDefeated": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "c8ae6d932ea8f48cad6266034c117113cbd6603dad5b04dcd529b61977c36905"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "heavy",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 7.01,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 600,
+        "soldier": 3472
+      },
+      "events": {
+        "monsterDamaged": 24,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 1,
+        "monsterDefeated": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "57aecc0b487369568e1f49a49d8b1cc6a58b50bdbecd20c3796eb3d3b32923d2"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "heavy",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 3,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 2688
+      },
+      "events": {
+        "monsterDamaged": 12,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "d001ac5e852ed7298af97d19f837a0ab3df85d1a108e7ef21f1b938f96f3f87c"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "heavy",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2288,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 4032
+      },
+      "events": {
+        "monsterDamaged": 25,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 3,
+        "monsterDefeated": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "6b513e308367abad09c1697af79718bf0aaf51049b38f2c2ed82d054902e57df"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 3472
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "9aaf6306315261920baefe0a9892c024bc4c4030d88cd15bc37d16b07c56da12"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 32.51,
+      "baseHp": 1028,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 2640
+      },
+      "events": {
+        "monsterDamaged": 66,
+        "baseDamaged": 49,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "73be7e737d102743a3299536e11ddfaf6eef51b9b221243107ca80025acdaac5"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 360,
+      "formation": "groundOnly",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 3248
+      },
+      "events": {
+        "monsterDamaged": 28,
+        "monsterDefeated": 6,
+        "baseDamaged": 2,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "6efc203554fbc8ded9e80710740ecb9bf4932a7397b36c28535ef504f48ef89a"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "defense",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 7.5,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 560,
+        "soldier": 2971
+      },
+      "events": {
+        "monsterDamaged": 33,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "efbf038aaba97ac83ed7057b6c9150ef311155204705e9adb8a33c7a01e71621"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "defense",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 18,
+      "baseHp": 1616,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 1440,
+        "soldier": 1264
+      },
+      "events": {
+        "monsterDamaged": 52,
+        "baseDamaged": 28,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "ebd00bf59ec54df42b9ad5132165581c8f9428a26a958fab9222f97b514a3e98"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "defense",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "shieldLine",
+        "flameSquad"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2372,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 2760
+      },
+      "events": {
+        "monsterDamaged": 35,
+        "monsterDefeated": 6,
+        "baseDamaged": 1,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "a5252bebbf1c26bbc08b745a2616ba240e100a124efc2f470a49ee9d8deb705a"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "air",
+      "group": "ground",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 480,
+        "soldier": 3452
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "supportSoldierDamaged": 3,
+        "baseDamaged": 1,
+        "monsterDefeated": 5,
+        "supportSoldierDefeated": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "58d6ac8f8a6843f799a63094a2c3228155704ad52c7d75d3691f16e0cfe01322"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "air",
+      "group": "air",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 3,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 3070
+      },
+      "events": {
+        "monsterDamaged": 16,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "322b5d92ce9bd9b2bfcec8ed9d38f33d059d4f78e155e4e9fae646b0c3dcad91"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "air",
+      "group": "mixed",
+      "skills": [
+        "rifleSupport",
+        "rocketSupport",
+        "airFormation"
+      ],
+      "status": "cleared",
+      "seconds": 6,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 480,
+        "soldier": 3116
+      },
+      "events": {
+        "monsterDamaged": 27,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 1,
+        "monsterDefeated": 5,
+        "supportSoldierDefeated": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "4bfb94ef3b868b5d71b7a26343bcd850a16380195c8c7e919864089f966d1a64"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "heavy",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 7.01,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 600,
+        "soldier": 3472
+      },
+      "events": {
+        "monsterDamaged": 24,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 1,
+        "monsterDefeated": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "6bb94cb016fb635ed7251941ba3a93fe5317d7be7bb5254963ae62f4f863191e"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "heavy",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 3,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 240,
+        "soldier": 2688
+      },
+      "events": {
+        "monsterDamaged": 12,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "d6e33ecfd671d581184dc86de3b47ba8b96039c98a507e7e3c6aa88fde4f7bbb"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "heavy",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "rocketSupport",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2288,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 4032
+      },
+      "events": {
+        "monsterDamaged": 25,
+        "supportSoldierDamaged": 4,
+        "baseDamaged": 3,
+        "monsterDefeated": 5
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "95f82f24f2731ab4e0d146b7c8118b9393b1721a9034d202827ea71477963164"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "ground",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2400,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 3472
+      },
+      "events": {
+        "monsterDamaged": 30,
+        "monsterDefeated": 6,
+        "supportSoldierDamaged": 2
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "d444e3fca56f92ad3712ca110b84548d1af6457523a580e33e8656d6efa150cd"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "air",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 32.51,
+      "baseHp": 1028,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 2640
+      },
+      "events": {
+        "monsterDamaged": 66,
+        "baseDamaged": 49,
+        "monsterDefeated": 6
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "15a47b95dcfbbced50cef9ae4685797ec1e84d392d7ccaf11fc41241498a0aa3"
+    },
+    {
+      "difficulty": "nightmare",
+      "width": 990,
+      "formation": "groundOnly",
+      "group": "mixed",
+      "skills": [
+        "shieldLine",
+        "flameSquad",
+        "armorSupport"
+      ],
+      "status": "cleared",
+      "seconds": 8,
+      "baseHp": 2344,
+      "maxHp": 2400,
+      "peakAlive": 6,
+      "damage": {
+        "projectile": 640,
+        "soldier": 3248
+      },
+      "events": {
+        "monsterDamaged": 28,
+        "monsterDefeated": 6,
+        "baseDamaged": 2,
+        "supportSoldierDamaged": 1
+      },
+      "remaining": [],
+      "resolved": 6,
+      "digest": "208d445205b95aa4c168b984125ae81ad8c9c9c2976b55237947c7213c28cf6d"
+    }
+  ]
+}
