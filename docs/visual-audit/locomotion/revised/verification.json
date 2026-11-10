@@ -1,0 +1,112 @@
+[
+  {
+    "name": "phone-apple",
+    "video": {
+      "width": 780,
+      "height": 1240,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "43a87931dbdc0ff6ad252f843ed8d836847db5316e23ba229da653adce301211",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "phone-cat",
+    "video": {
+      "width": 780,
+      "height": 1240,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "5083c488031d830c29cb896d976db865ea958bb343368967c25bdd605c9066bf",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "phone-chicken",
+    "video": {
+      "width": 780,
+      "height": 1240,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "0766905058b1f1e69d2209f19c0d0bbd5c46ba4bfba3fe32b0de2850eeddfbc0",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "phone-rabbit",
+    "video": {
+      "width": 780,
+      "height": 1240,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "16aad5b2ac1fc1f772e6c3ed308cdf2a84cbd6d1a383a04831a6badecf065c99",
+    "matchesPriorSamples": false
+  },
+  {
+    "name": "phone-elephant",
+    "video": {
+      "width": 780,
+      "height": 1240,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "34a1b70dd08f5c9f2d0d01364ce0b59356d28e30f5ff0a3e0b67ea4af373aec4",
+    "matchesPriorSamples": false
+  },
+  {
+    "name": "ipad-apple",
+    "video": {
+      "width": 2048,
+      "height": 1160,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "0a97be3bde9a5fb29e4cc01c135ab599e498a05a2e6ad99062a04bd2ad3870ea",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "ipad-cat",
+    "video": {
+      "width": 2048,
+      "height": 1160,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "322e3d3433f2714c385a99ebfbe6caeebd9a017be66039d6011011878be2e1cf",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "ipad-chicken",
+    "video": {
+      "width": 2048,
+      "height": 1160,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "9116867432daedc5248d1817429e4441352a1043b6a0f4ae44887ae508120da0",
+    "matchesPriorSamples": true
+  },
+  {
+    "name": "ipad-rabbit",
+    "video": {
+      "width": 2048,
+      "height": 1160,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "86d8d87c7f5fe812e716dff4043ef24a878fabbe1c4f82ce2db63d39afe079f6",
+    "matchesPriorSamples": false
+  },
+  {
+    "name": "ipad-elephant",
+    "video": {
+      "width": 2048,
+      "height": 1160,
+      "r_frame_rate": "30/1",
+      "nb_frames": "360"
+    },
+    "sha256": "be58fe93033f88f86700216d30115a5ea7e393741f3a44c9337f7b3a18f17743",
+    "matchesPriorSamples": false
+  }
+]

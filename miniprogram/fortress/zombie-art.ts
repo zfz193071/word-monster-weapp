@@ -1,3 +1,4 @@
+import type { GaitPose } from './monster-gait';
 import type { SpriteAsset } from './canvas-scene';
 
 export const TEXTURED_APPLE_ZOMBIE: SpriteAsset = {
@@ -10,15 +11,18 @@ export const TEXTURED_APPLE_ZOMBIE: SpriteAsset = {
 /** Split below the shorts; the torso overlaps the moving leg roots. */
 export function drawTexturedZombie(
   c: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D,
-  image: WechatMiniprogram.Image, stride: number,
+  image: WechatMiniprogram.Image, gait: GaitPose,
 ): void {
   c.fillStyle = 'rgba(37,62,56,.16)';
   c.beginPath(); c.ellipse(0, 69, 40, 7, 0, 0, Math.PI * 2); c.fill();
   for (const side of [-1, 1]) {
     const x = side < 0 ? 0 : 128;
-    c.save(); c.translate(side * 20, 38); c.rotate(side * stride * .08);
-    c.drawImage(image, x, 232, 128, 88, -64 + x / 2 - side * 20, -2, 64, 44);
+    const foot = gait.feet[side < 0 ? 0 : 1];
+    c.save(); c.translate(side * 20, 36);
+    // Keep the hip attached; flex/compress the leg during swing and extend in stance.
+    c.rotate(side * foot.lift * .045);
+    c.drawImage(image, x, 232, 128, 88, -64 + x / 2 - side * 20, 0, 64, 44 + foot.travel * 5 - foot.lift * 9);
     c.restore();
   }
-  c.drawImage(image, 0, 0, 256, 236, -64, -80 - Math.abs(stride), 128, 118);
+  c.drawImage(image, 0, 0, 256, 236, -64 + gait.sway, -80 + gait.bob, 128, 118);
 }

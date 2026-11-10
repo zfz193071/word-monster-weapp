@@ -1,0 +1,1640 @@
+{
+  "mapping": {
+    "bear": "quadruped",
+    "cat": "quadruped",
+    "cow": "quadruped",
+    "dog": "quadruped",
+    "elephant": "quadruped",
+    "horse": "quadruped",
+    "lion": "quadruped",
+    "panda": "quadruped",
+    "rabbit": "quadruped",
+    "sheep": "quadruped",
+    "tiger": "quadruped",
+    "chicken": "biped",
+    "duck": "biped",
+    "bee": "flying",
+    "bird": "flying",
+    "fish": "swimming"
+  },
+  "runs": [
+    {
+      "name": "phone-cat",
+      "width": 390,
+      "height": 620,
+      "dpr": 2,
+      "frames": 360,
+      "seconds": 12,
+      "words": [
+        "black",
+        "yellow",
+        "cat",
+        "blue"
+      ],
+      "samples": [
+        {
+          "second": 0,
+          "tick": 0,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 1,
+          "tick": 100,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 2,
+          "tick": 200,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 3,
+          "tick": 300,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            }
+          ]
+        },
+        {
+          "second": 4,
+          "tick": 400,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 5,
+          "tick": 500,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 6,
+          "tick": 600,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 7,
+          "tick": 700,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 157.5600000000006,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 164.00000000000063,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 164.00000000000063,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 8,
+          "tick": 800,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 157.5600000000006,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 192.00000000000074,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 192.00000000000074,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 9,
+          "tick": 900,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 157.5600000000006,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 220.00000000000085,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 220.00000000000085,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 10,
+          "tick": 1000,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 157.5600000000006,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 248.00000000000097,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 248.00000000000097,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 11,
+          "tick": 1100,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 157.5600000000006,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 275.99999999999903,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 275.99999999999903,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            }
+          ]
+        }
+      ],
+      "source": "Unmodified opening encounter and production frame loop; offscreen first 12 seconds, not full-wave/device acceptance"
+    },
+    {
+      "name": "ipad-cat",
+      "width": 1024,
+      "height": 580,
+      "dpr": 2,
+      "frames": 360,
+      "seconds": 12,
+      "words": [
+        "black",
+        "yellow",
+        "cat",
+        "blue"
+      ],
+      "samples": [
+        {
+          "second": 0,
+          "tick": 0,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": -32,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 1,
+          "tick": 100,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": -3.9999999999999494,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 2,
+          "tick": 200,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 24.00000000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": -17.719999999999942,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -32,
+              "status": "waiting"
+            }
+          ]
+        },
+        {
+          "second": 3,
+          "tick": 300,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 52.000000000000185,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 10.280000000000053,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": -12.119999999999944,
+              "status": "entering"
+            }
+          ]
+        },
+        {
+          "second": 4,
+          "tick": 400,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 80.0000000000003,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 38.28000000000013,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 15.88000000000004,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 5,
+          "tick": 500,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 108.00000000000041,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 66.28000000000024,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 43.88000000000015,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 6,
+          "tick": 600,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 136.0000000000005,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 94.28000000000036,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 71.88000000000027,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 7,
+          "tick": 700,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 164.00000000000063,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 164.00000000000063,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 164.00000000000063,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 122.28000000000047,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 99.88000000000038,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 8,
+          "tick": 800,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 168.20000000000064,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 192.00000000000074,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 192.00000000000074,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 150.28000000000057,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 127.88000000000049,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 9,
+          "tick": 900,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 168.20000000000064,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 220.00000000000085,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 220.00000000000085,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 178.28000000000068,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 155.8800000000006,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 10,
+          "tick": 1000,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 168.20000000000064,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 248.00000000000097,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 248.00000000000097,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 206.2800000000008,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 183.8800000000007,
+              "status": "alive"
+            }
+          ]
+        },
+        {
+          "second": 11,
+          "tick": 1100,
+          "monsters": [
+            {
+              "id": "gait-natural-99:wave:1:zombie:1",
+              "word": "black",
+              "y": 168.20000000000064,
+              "status": "defeated"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:2",
+              "word": "yellow",
+              "y": 275.99999999999903,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:3",
+              "word": "cat",
+              "y": 275.99999999999903,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:4",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:5",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:6",
+              "word": "cat",
+              "y": 234.2800000000009,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:7",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:8",
+              "word": "blue",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:9",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            },
+            {
+              "id": "gait-natural-99:wave:1:zombie:10",
+              "word": "cat",
+              "y": 211.88000000000082,
+              "status": "alive"
+            }
+          ]
+        }
+      ],
+      "source": "Unmodified opening encounter and production frame loop; offscreen first 12 seconds, not full-wave/device acceptance"
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 import { drawHouseFortress } from '../houses/battle-art';
 import { drawTexturedZombie } from './zombie-art';
+import { ANIMAL_LOCOMOTION, monsterGait } from './monster-gait';
+import { drawQuadruped } from './quadruped-art';
+import type { FootPose } from './monster-gait';
 import { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
 import { soldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
@@ -467,25 +470,22 @@ export class CanvasScene {
         }
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
         if (monsterArt.animalIds?.includes(monster.wordId)) {
-          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0);
+          this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0, motionSeed);
         } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal') && monsterArt.texturedBodies?.[monster.wordId]) {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
           if (!image) throw new Error('已预载图片丢失');
-          const walking = (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
-          drawTexturedZombie(c, image, walking ? Math.sin(state.tick * .07 + motionSeed) : 0);
+          drawTexturedZombie(c, image, monsterGait(monster.position.y, motionSeed));
           c.restore();
         } else if (monsterArt.walkParts) {
-          const walking = monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'entering' || monster.status === 'alive');
-          const seed = motionSeed;
-          const stride = walking ? Math.sin(state.tick * .07 + seed) : 0;
+          const gait = monsterGait(monster.position.y, motionSeed);
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
           c.fillStyle = 'rgba(37,62,56,.16)'; c.beginPath(); c.ellipse(0, 69, 40, 7, 0, 0, Math.PI * 2); c.fill();
           for (const side of [-1, 1]) {
             const hip = side < 0 ? 50 : 78;
-            c.save(); c.translate(hip - 64, 30 + side * stride * 5); c.rotate(side * stride * .23);
+            c.save(); c.translate(hip - 64, 30);
             const color = monsterArt.outfitColors?.[monster.wordId] ?? '#a28a6e';
-            c.translate(-hip, -110); this.drawZombieLeg(side, color); c.restore();
+            c.translate(-hip, -110); this.drawZombieLeg(side, color, gait.feet[side < 0 ? 0 : 1]); c.restore();
           }
           if (attackPose.lunge !== 0) {
             c.strokeStyle = '#89996b'; c.lineWidth = 16; c.lineCap = 'round';
@@ -493,7 +493,7 @@ export class CanvasScene {
               c.beginPath(); c.moveTo(side * 32, -2); c.lineTo(side * 42, 15 + attackPose.lunge * 30); c.stroke();
             }
           }
-          this.sprite(monsterArt.outfitBodies?.[monster.wordId] ?? monsterArt.walkParts.body, -64 + stride * 1.5, -80 - Math.abs(stride) * 2, 128, 160); c.restore();
+          this.sprite(monsterArt.outfitBodies?.[monster.wordId] ?? monsterArt.walkParts.body, -64 + gait.sway, -80 + gait.bob, 128, 160); c.restore();
         } else {
           this.sprite(monsterArt.monster, monster.position.x - monsterArt.monsterVisual.anchor.x * scale,
             monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
@@ -673,8 +673,14 @@ export class CanvasScene {
     c.restore();
   }
   // Original animal silhouettes with sunken red eyes, fangs and stitched patches.
-  private drawAnimal(id: string, x: number, y: number, tick: number): void {
+  private drawAnimal(id: string, x: number, y: number, tick: number, seed: number): void {
     const c = this.context;
+    const locomotion = ANIMAL_LOCOMOTION[id];
+    if (locomotion === 'quadruped') {
+      c.save(); c.translate(x, y); drawQuadruped(c, id, y, seed); c.restore();
+      return;
+    }
+    const gait = monsterGait(y, seed);
     const stride = tick ? Math.sin(tick * .095) : 0;
     const colors: Record<string, string> = { bear: '#9b704b', bee: '#e6bd38', bird: '#69a8bc', cat: '#77859a', chicken: '#dfd1a5', cow: '#e5e0cb', dog: '#b99770', duck: '#77a96f', elephant: '#87a9a8', fish: '#54acb8', horse: '#ad7657', lion: '#d2aa52', panda: '#e1e2d2', rabbit: '#b8a9ca', sheep: '#e5e4cc', tiger: '#de9749' };
     c.save(); c.translate(x, y);
@@ -689,15 +695,23 @@ export class CanvasScene {
       oval(16, -2 - lift, id === 'bee' ? 11 : 8, id === 'bee' ? 6 : 4, wingColor, .5);
     } else if (id === 'fish') {
       c.fillStyle = '#577f87'; c.beginPath(); c.moveTo(-13, 0); c.lineTo(-23, -10 + stride * 2); c.lineTo(-23, 10 + stride * 2); c.closePath(); c.fill();
-    } else {
-      // Four legs step in opposing diagonal pairs.
-      for (let leg = 0; leg < 4; leg++) {
-        const footX = (leg % 2 ? 1 : -1) * (leg < 2 ? 8 : 13);
-        const footY = 13 + (leg % 2 ? 1 : -1) * stride * 3;
-        oval(footX, footY, 3.5, 8, leg < 2 ? '#465746' : '#64765b');
-        for (const offset of [-1.7, 1.7]) line([footX + offset, footY + 5, footX + offset, footY + 8], '#d9d3a7', 1.3);
+    }
+    if (locomotion === 'biped') {
+      c.lineCap = 'round'; c.lineJoin = 'round';
+      for (let leg = 0; leg < gait.feet.length; leg++) {
+        const side = leg % 2 ? 1 : -1;
+        const hipX = side * 6, hipY = 8;
+        const foot = gait.feet[leg];
+        const footX = hipX + side * foot.lift * 1.2;
+        const footY = 23 + foot.travel * 3 - foot.lift * 4;
+        const kneeX = hipX + side * (2 + foot.lift * 2);
+        const kneeY = (hipY + footY) / 2 - foot.lift * 2;
+        line([hipX, hipY, kneeX, kneeY, footX, footY], '#354b43', 3.5);
+        line([hipX, hipY, kneeX, kneeY, footX, footY], '#d5a557', 2);
+        oval(footX, footY, id === 'duck' ? 4 : 3, 1.8, '#d5a557');
       }
-      line([13, 3, 22, -3, 20, -11 + stride * 2], body, 4);
+      // Body is layered over connected limb roots, never over the feet.
+      c.translate(gait.sway, gait.bob);
     }
     if (id === 'lion') oval(0, -7, 20, 19, '#a6733e');
     if (id === 'sheep') for (let i = 0; i < 10; i++) oval(Math.cos(i * Math.PI / 5) * 12, Math.sin(i * Math.PI / 5) * 10, 7, 7, '#f5f0da');
@@ -784,24 +798,19 @@ export class CanvasScene {
     if (!image) throw new Error('已预载图片丢失');
     this.context.drawImage(image, x, y, width, height);
   }
-  private drawZombieLeg(side: number, color: string): void {
-    // Color only the trouser geometry. Compositing a sprite-sized rectangle on
-    // the main canvas would also dye the background and the other leg.
+  private drawZombieLeg(side: number, color: string, foot: FootPose): void {
     const c = this.context;
-    c.strokeStyle = '#374c46'; c.lineWidth = 4; c.lineJoin = 'round';
-    c.fillStyle = color; c.beginPath();
-    if (side < 0) {
-      c.moveTo(39, 108); c.lineTo(35, 143); c.lineTo(55, 144); c.lineTo(63, 116); c.lineTo(59, 108);
-    } else {
-      c.moveTo(65, 108); c.lineTo(71, 144); c.lineTo(92, 143); c.lineTo(88, 108);
+    const hipX = side < 0 ? 50 : 78;
+    const ankleX = hipX + side * (3 + foot.lift * 2);
+    const ankleY = 141 + foot.travel * 7 - foot.lift * 10;
+    const kneeX = hipX + side * (3 + foot.lift * 4);
+    const kneeY = (110 + ankleY) / 2 - foot.lift * 4;
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    for (const [stroke, width] of [['#374c46', 20], [color, 14]] as const) {
+      c.strokeStyle = stroke; c.lineWidth = width;
+      c.beginPath(); c.moveTo(hipX, 110); c.lineTo(kneeX, kneeY); c.lineTo(ankleX, ankleY); c.stroke();
     }
-    c.closePath(); c.fill(); c.stroke();
-    c.fillStyle = '#4d5853'; c.beginPath();
-    if (side < 0) {
-      c.moveTo(35, 137); c.quadraticCurveTo(18, 143, 25, 150); c.lineTo(56, 150); c.lineTo(56, 139);
-    } else {
-      c.moveTo(72, 139); c.lineTo(72, 150); c.lineTo(103, 150); c.quadraticCurveTo(110, 141, 91, 136);
-    }
-    c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#4d5853'; c.strokeStyle = '#374c46'; c.lineWidth = 3;
+    c.beginPath(); c.ellipse(ankleX + side * 4, ankleY + 4, 14, 6, side * foot.travel * .08, 0, Math.PI * 2); c.fill(); c.stroke();
   }
 }
