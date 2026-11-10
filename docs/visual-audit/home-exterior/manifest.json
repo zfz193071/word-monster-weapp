@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-10",
+  "tool": "built-in image_gen",
+  "file": "concept-01.png",
+  "prompt": "prompt.txt",
+  "reference": "../concepts/style-study-01.png",
+  "bytes": 2263452,
+  "width": 1536,
+  "height": 1024,
+  "sha256": "9dd01f17138410c5fd7e028561cb51759725fb97d25efc184694241f38a58676",
+  "status": "concept-pending-review",
+  "runtimeIntegrated": false,
+  "source": "Original AI generation using project concept board as style reference",
+  "limitations": [
+    "Single-view concept, not interactive 3D or device evidence",
+    "Chimney smoke needs more top margin",
+    "Guardian clothing must match runtime identity and equipment",
+    "Levels, pet ownership, rotation and hit testing not implemented by this image"
+  ]
+}
