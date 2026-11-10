@@ -1,17 +1,17 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceBudgetBytes": 2097152,
   "missing": [
-    "horse",
-    "lion"
+    "horse"
   ],
   "evidence": "Verified candidate PNG dimensions, bytes and SHA256. Source-only scenarios; no runtime changes or quality approval.",
   "limits": "In-place estimates replace available display images once, retain old missing images, and exclude new battle parts. Candidate-only categories omit package wrappers, audio and shared art. Residency covers only candidate display images in current+previous categories, not runtime cache eviction, texture copies, Canvas, audio or device peak memory. No compiled package or timing measurements.",
+  "completionBudget": "missingDisplayAllowanceBytes is the combined maximum bytes for all missing display candidates in that package after removing their retained old images. Negative means it still exceeds the source budget even with zero-byte replacements. It reserves nothing for battle parts or future code. A fitting scenario does not imply quality approval, complete assets, or release readiness.",
   "baselinePackages": [
     {
       "name": "main",
       "root": "",
-      "bytes": 1735157
+      "bytes": 1742358
     },
     {
       "name": "learning-assets",
@@ -32,18 +32,30 @@
         {
           "name": "main",
           "root": "",
-          "bytes": 1735157,
-          "baselineBytes": 1735157,
-          "remainingBytes": 361995,
-          "fitsSourceBudget": true
+          "bytes": 1742358,
+          "baselineBytes": 1742358,
+          "remainingBytes": 354794,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         },
         {
           "name": "learning-assets",
           "root": "learning-assets",
-          "bytes": 1128297,
+          "bytes": 1124739,
           "baselineBytes": 1135877,
-          "remainingBytes": 968855,
-          "fitsSourceBudget": true
+          "remainingBytes": 972413,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": false,
+          "missingWordIds": [
+            "horse"
+          ],
+          "retainedMissingBytes": 7829,
+          "missingDisplayAllowanceBytes": 980242,
+          "assessment": "incomplete-display-candidates"
         },
         {
           "name": "scene-images",
@@ -51,7 +63,12 @@
           "bytes": 1178400,
           "baselineBytes": 1832803,
           "remainingBytes": 918752,
-          "fitsSourceBudget": true
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         }
       ],
       "candidateOnlyCategories": [
@@ -133,14 +150,13 @@
         },
         {
           "levelId": 3,
-          "available": 14,
+          "available": 15,
           "expected": 16,
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 84126,
-          "remainingBytes": 2013026,
+          "bytes": 91082,
+          "remainingBytes": 2006070,
           "files": [
             {
               "path": "docs/visual-audit/animals/variants/bear-64.png",
@@ -199,6 +215,12 @@
             {
               "path": "docs/visual-audit/animals/variants/fish-64.png",
               "bytes": 5172,
+              "rgbaBytes": 16384,
+              "size": 64
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/lion-64.png",
+              "bytes": 6956,
               "rgbaBytes": 16384,
               "size": 64
             },
@@ -281,17 +303,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 84126,
-          "rgbaBytes": 229376
+          "bytes": 91082,
+          "rgbaBytes": 245760
         },
         {
           "levelId": 4,
@@ -306,17 +328,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 84126,
-          "rgbaBytes": 229376
+          "bytes": 91082,
+          "rgbaBytes": 245760
         },
         {
           "levelId": 5,
@@ -355,18 +377,30 @@
         {
           "name": "main",
           "root": "",
-          "bytes": 1735157,
-          "baselineBytes": 1735157,
-          "remainingBytes": 361995,
-          "fitsSourceBudget": true
+          "bytes": 1742358,
+          "baselineBytes": 1742358,
+          "remainingBytes": 354794,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         },
         {
           "name": "learning-assets",
           "root": "learning-assets",
-          "bytes": 1316277,
+          "bytes": 1328870,
           "baselineBytes": 1135877,
-          "remainingBytes": 780875,
-          "fitsSourceBudget": true
+          "remainingBytes": 768282,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": false,
+          "missingWordIds": [
+            "horse"
+          ],
+          "retainedMissingBytes": 7829,
+          "missingDisplayAllowanceBytes": 776111,
+          "assessment": "incomplete-display-candidates"
         },
         {
           "name": "scene-images",
@@ -374,7 +408,12 @@
           "bytes": 1323160,
           "baselineBytes": 1832803,
           "remainingBytes": 773992,
-          "fitsSourceBudget": true
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         }
       ],
       "candidateOnlyCategories": [
@@ -456,14 +495,13 @@
         },
         {
           "levelId": 3,
-          "available": 14,
+          "available": 15,
           "expected": 16,
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 272106,
-          "remainingBytes": 1825046,
+          "bytes": 295213,
+          "remainingBytes": 1801939,
           "files": [
             {
               "path": "docs/visual-audit/animals/variants/bear-128.png",
@@ -522,6 +560,12 @@
             {
               "path": "docs/visual-audit/animals/variants/fish-128.png",
               "bytes": 16904,
+              "rgbaBytes": 65536,
+              "size": 128
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/lion-128.png",
+              "bytes": 23107,
               "rgbaBytes": 65536,
               "size": 128
             },
@@ -604,17 +648,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 272106,
-          "rgbaBytes": 917504
+          "bytes": 295213,
+          "rgbaBytes": 983040
         },
         {
           "levelId": 4,
@@ -629,17 +673,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 272106,
-          "rgbaBytes": 917504
+          "bytes": 295213,
+          "rgbaBytes": 983040
         },
         {
           "levelId": 5,
@@ -678,18 +722,30 @@
         {
           "name": "main",
           "root": "",
-          "bytes": 1735157,
-          "baselineBytes": 1735157,
-          "remainingBytes": 361995,
-          "fitsSourceBudget": true
+          "bytes": 1742358,
+          "baselineBytes": 1742358,
+          "remainingBytes": 354794,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         },
         {
           "name": "learning-assets",
           "root": "learning-assets",
-          "bytes": 1957136,
+          "bytes": 2024477,
           "baselineBytes": 1135877,
-          "remainingBytes": 140016,
-          "fitsSourceBudget": true
+          "remainingBytes": 72675,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": false,
+          "missingWordIds": [
+            "horse"
+          ],
+          "retainedMissingBytes": 7829,
+          "missingDisplayAllowanceBytes": 80504,
+          "assessment": "incomplete-display-candidates"
         },
         {
           "name": "scene-images",
@@ -697,7 +753,12 @@
           "bytes": 1832803,
           "baselineBytes": 1832803,
           "remainingBytes": 264349,
-          "fitsSourceBudget": true
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         }
       ],
       "candidateOnlyCategories": [
@@ -779,14 +840,13 @@
         },
         {
           "levelId": 3,
-          "available": 14,
+          "available": 15,
           "expected": 16,
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 912965,
-          "remainingBytes": 1184187,
+          "bytes": 990820,
+          "remainingBytes": 1106332,
           "files": [
             {
               "path": "docs/visual-audit/animals/variants/bear-256.png",
@@ -845,6 +905,12 @@
             {
               "path": "docs/visual-audit/animals/variants/fish-256.png",
               "bytes": 57038,
+              "rgbaBytes": 262144,
+              "size": 256
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/lion-256.png",
+              "bytes": 77855,
               "rgbaBytes": 262144,
               "size": 256
             },
@@ -927,17 +993,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 912965,
-          "rgbaBytes": 3670016
+          "bytes": 990820,
+          "rgbaBytes": 3932160
         },
         {
           "levelId": 4,
@@ -952,17 +1018,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 912965,
-          "rgbaBytes": 3670016
+          "bytes": 990820,
+          "rgbaBytes": 3932160
         },
         {
           "levelId": 5,
@@ -1001,18 +1067,30 @@
         {
           "name": "main",
           "root": "",
-          "bytes": 1735157,
-          "baselineBytes": 1735157,
-          "remainingBytes": 361995,
-          "fitsSourceBudget": true
+          "bytes": 1742358,
+          "baselineBytes": 1742358,
+          "remainingBytes": 354794,
+          "fitsSourceBudget": true,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "available-display-candidates-fit-source-budget"
         },
         {
           "name": "learning-assets",
           "root": "learning-assets",
-          "bytes": 4175382,
+          "bytes": 4433818,
           "baselineBytes": 1135877,
-          "remainingBytes": -2078230,
-          "fitsSourceBudget": false
+          "remainingBytes": -2336666,
+          "fitsSourceBudget": false,
+          "displayCandidatesComplete": false,
+          "missingWordIds": [
+            "horse"
+          ],
+          "retainedMissingBytes": 7829,
+          "missingDisplayAllowanceBytes": -2328837,
+          "assessment": "over-source-budget"
         },
         {
           "name": "scene-images",
@@ -1020,7 +1098,12 @@
           "bytes": 3649353,
           "baselineBytes": 1832803,
           "remainingBytes": -1552201,
-          "fitsSourceBudget": false
+          "fitsSourceBudget": false,
+          "displayCandidatesComplete": true,
+          "missingWordIds": [],
+          "retainedMissingBytes": 0,
+          "missingDisplayAllowanceBytes": null,
+          "assessment": "over-source-budget"
         }
       ],
       "candidateOnlyCategories": [
@@ -1102,14 +1185,13 @@
         },
         {
           "levelId": 3,
-          "available": 14,
+          "available": 15,
           "expected": 16,
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 3131211,
-          "remainingBytes": -1034059,
+          "bytes": 3400161,
+          "remainingBytes": -1303009,
           "files": [
             {
               "path": "docs/visual-audit/animals/variants/bear-512.png",
@@ -1168,6 +1250,12 @@
             {
               "path": "docs/visual-audit/animals/variants/fish-512.png",
               "bytes": 192548,
+              "rgbaBytes": 1048576,
+              "size": 512
+            },
+            {
+              "path": "docs/visual-audit/animals/variants/lion-512.png",
+              "bytes": 268950,
               "rgbaBytes": 1048576,
               "size": 512
             },
@@ -1250,17 +1338,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 3131211,
-          "rgbaBytes": 14680064
+          "bytes": 3400161,
+          "rgbaBytes": 15728640
         },
         {
           "levelId": 4,
@@ -1275,17 +1363,17 @@
             "duck",
             "elephant",
             "fish",
+            "lion",
             "panda",
             "rabbit",
             "sheep",
             "tiger"
           ],
           "missing": [
-            "horse",
-            "lion"
+            "horse"
           ],
-          "bytes": 3131211,
-          "rgbaBytes": 14680064
+          "bytes": 3400161,
+          "rgbaBytes": 15728640
         },
         {
           "levelId": 5,

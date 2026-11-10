@@ -53,8 +53,8 @@
     {
       "asset": "soldiers",
       "path": "README.md",
-      "bytes": 17169,
-      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
+      "bytes": 18866,
+      "sha256": "29ab62abe32868947445e85106546dcdc9636f205a11ad1f20223149747bfbed"
     },
     {
       "asset": "fruits",
@@ -101,8 +101,8 @@
     {
       "asset": "skills",
       "path": "README.md",
-      "bytes": 17169,
-      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
+      "bytes": 18866,
+      "sha256": "29ab62abe32868947445e85106546dcdc9636f205a11ad1f20223149747bfbed"
     },
     {
       "asset": "backgrounds",
@@ -149,8 +149,8 @@
     {
       "asset": "controls",
       "path": "README.md",
-      "bytes": 17169,
-      "sha256": "d5729b767bc151c379fb244ad152315316dbe0663efef8e4900c70f0c629ac4c"
+      "bytes": 18866,
+      "sha256": "29ab62abe32868947445e85106546dcdc9636f205a11ad1f20223149747bfbed"
     },
     {
       "asset": "effects",

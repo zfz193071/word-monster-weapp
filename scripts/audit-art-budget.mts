@@ -57,7 +57,21 @@ const scenarios = [64, 128, 256, 512].map(size => {
   }
   return {
     size, complete: missing.length === 0,
-    inPlacePackages: projected.map(p => ({ ...p, remainingBytes: budget - p.bytes, fitsSourceBudget: p.bytes <= budget })),
+    inPlacePackages: projected.map(p => {
+      const missingWords = words.filter(word => missing.includes(word.id) && owner(word.fruitImagePath.replace(/^\//, '')).name === p.name);
+      const retainedMissingBytes = missingWords.reduce((sum, word) => sum + oldFiles.get(word.id)!, 0);
+      return {
+        ...p, remainingBytes: budget - p.bytes, fitsSourceBudget: p.bytes <= budget,
+        displayCandidatesComplete: missingWords.length === 0,
+        missingWordIds: missingWords.map(word => word.id),
+        retainedMissingBytes,
+        // Shared allowance for ALL missing display files, after removing their old files.
+        // Null means no missing display files in this package; not unlimited capacity.
+        missingDisplayAllowanceBytes: missingWords.length ? budget - p.bytes + retainedMissingBytes : null,
+        assessment: p.bytes > budget ? 'over-source-budget'
+          : missingWords.length ? 'incomplete-display-candidates' : 'available-display-candidates-fit-source-budget',
+      };
+    }),
     candidateOnlyCategories: [1, 3].map(levelId => {
       const ids = getLevel(levelId).words.map(w => w.id), available = ids.flatMap(id => select(id) ?? []);
       const bytes = available.reduce((n, v) => n + v.bytes, 0);
@@ -72,10 +86,16 @@ const scenarios = [64, 128, 256, 512].map(size => {
   };
 });
 await writeFile(resolve(root, 'docs/visual-audit/art-budget.json'), JSON.stringify({
-  schemaVersion: 1, sourceBudgetBytes: budget, missing,
+  schemaVersion: 2, sourceBudgetBytes: budget, missing,
   evidence: 'Verified candidate PNG dimensions, bytes and SHA256. Source-only scenarios; no runtime changes or quality approval.',
   limits: 'In-place estimates replace available display images once, retain old missing images, and exclude new battle parts. Candidate-only categories omit package wrappers, audio and shared art. Residency covers only candidate display images in current+previous categories, not runtime cache eviction, texture copies, Canvas, audio or device peak memory. No compiled package or timing measurements.',
+  completionBudget: 'missingDisplayAllowanceBytes is the combined maximum bytes for all missing display candidates in that package after removing their retained old images. Negative means it still exceeds the source budget even with zero-byte replacements. It reserves nothing for battle parts or future code. A fitting scenario does not imply quality approval, complete assets, or release readiness.',
   baselinePackages: packs, scenarios,
 }, null, 2) + '\n');
 console.log(`Verified ${candidates.size * 4} candidates; missing: ${missing.join(', ') || 'none'}`);
-for (const s of scenarios) console.log(`${s.size}px: ${s.inPlacePackages.map(p => `${p.name} ${(p.bytes / 1024).toFixed(1)}KiB${p.fitsSourceBudget ? '' : ' OVER'}`).join('; ')}`);
+for (const s of scenarios) {
+  console.log(`${s.size}px: ${s.inPlacePackages.map(p => `${p.name} ${(p.bytes / 1024).toFixed(1)}KiB [${p.assessment}]`).join('; ')}`);
+  for (const p of s.inPlacePackages) if (p.missingDisplayAllowanceBytes !== null) {
+    console.log(`  ${p.name}: ${p.missingWordIds.join(', ')} combined replacement allowance ${(p.missingDisplayAllowanceBytes / 1024).toFixed(1)}KiB; excludes new battle parts`);
+  }
+}
