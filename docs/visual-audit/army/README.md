@@ -31,4 +31,14 @@
 
 ## #79 精细风格审样
 
-内置image_gen成功生成 [concept-01.png](concept-01.png)，准确提示词见 [concept-prompt.txt](concept-prompt.txt)，来源/哈希见 [concept-manifest.json](concept-manifest.json)。已目视核对六类：装备轮廓清楚、坦克驾驶员可见；当前偏侧后方视角，正式战斗需校正俯视和朝上方向。这是非透明六格概念图，未直接裁切接入或冒充精灵/动画。用户风格确认待回复；确认后分别制作透明资源、部件及实际尺寸审查。
+内置image_gen成功生成 [concept-01.png](concept-01.png)，准确提示词见 [concept-prompt.txt](concept-prompt.txt)，来源/哈希见 [concept-manifest.json](concept-manifest.json)。已目视核对六类：装备轮廓清楚、坦克驾驶员可见；当前偏侧后方视角，正式战斗需校正俯视和朝上方向。这是非透明六格概念图，未直接裁切接入或冒充精灵/动画。用户已于2026-11-10明确批准这套风格，授权继续制作独立战斗资源；接下来分别制作透明资源、部件及实际尺寸审查。
+
+## 2026-11-10 已批准风格的独立友军资源
+
+- 内置 image_gen 分别生成六张透明、朝上俯视的完整单位图；原图在 `originals/`，逐张准确提示词与来源路径在 `sprite-prompts.json`。未裁切概念拼图。
+- `scripts/prepare-army-sprites.mts` 检查真实 alpha，仅缩放为128px，输出到 `miniprogram/assets/images/army/`；母版和运行图哈希、体积及透明比例见 `sprites-manifest.json`。
+- 战场统一预加载六张资源，计入真实进度、失败重试和退出取消；技能卡复用相同图片。原程序绘制保留给无图片的开发预览。
+- `sprites-review.png` 调用实际绘制函数：上排基础形态1×、浅底，下排进化标记2×、深底。目视可分辨装备轮廓，坦克驾驶员和履带可见；属于离屏证据，不是设备截图。
+- 悬停/喷焰随战斗tick推进，射击反馈沿用真实命中事件并校验combatId，暂停不推进。现阶段后坐为整个单位位移，不是独立炮塔动画；完整受击、战死、进化造型与坦克部件仍待制作。六敌精细资源及手机/iPad验收继续保留，#79不关闭。
+
+本轮验证：`npm run check`通过（仍保留既有V2待审资源提示），全量448项测试通过，36项画布/士兵绘制/技能卡专项通过；源码预算主包1733.2KiB、学习包1977.0KiB、场景图片包1864.1KiB。未做微信编译、模拟器或真机验收。

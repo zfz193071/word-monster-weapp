@@ -1,4 +1,5 @@
-import { isSummonSkill } from '../../fortress/summon-skills';
+import { soldierSpritePath } from '../../fortress/soldier-sprites';
+import { SUMMON_TYPES, isSummonSkill } from '../../fortress/summon-skills';
 import { SKILL_QUALITIES } from '../../fortress/skill-quality';
 import { validateUpgradeOffer } from '../../fortress/upgrade-choice';
 import type { UpgradeCard, UpgradeOffer } from '../../fortress/upgrade-choice';
@@ -25,7 +26,7 @@ Component({
       const rank = (card: UpgradeCard) => SKILL_QUALITIES.findIndex(quality => quality.id === card.resultingQuality);
       const guideCard = valid ? value?.cards.reduce<UpgradeCard | undefined>((best, card) => !best || rank(card) > rank(best) ? card : best, undefined) : undefined;
       this.setData({ valid, guideCardId: guideCard?.id ?? '', groupId: sameGroup ? this.data.groupId : value?.id ?? '',
-        displayCards: cards.map(card => ({...card, ...value?.cards.find(candidate => candidate.id === card.id), shortDescription: SHORT_DESCRIPTIONS[card.icon], summon: isSummonSkill(card.icon), chosen: !value?.cards.some(candidate => candidate.id === card.id)})),
+        displayCards: cards.map(card => ({...card, ...value?.cards.find(candidate => candidate.id === card.id), shortDescription: SHORT_DESCRIPTIONS[card.icon], summon: isSummonSkill(card.icon), soldierImage: isSummonSkill(card.icon) ? soldierSpritePath(SUMMON_TYPES[card.icon]) : '', chosen: !value?.cards.some(candidate => candidate.id === card.id)})),
       });
     } },
     disabled: { type: Boolean, value: false },

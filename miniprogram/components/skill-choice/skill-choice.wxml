@@ -4,7 +4,8 @@
     <button wx:for="{{displayCards}}" wx:key="id" class="skill-card card-{{item.icon}} quality-{{item.resultingQuality}} {{item.chosen ? 'card-chosen' : ''}}" disabled="{{disabled || item.chosen || selectedOfferId === offer.id}}" data-offer-id="{{offer.id}}" data-card-id="{{item.id}}" bindtap="choose">
       <view class="card-top">{{item.label}}</view>
       <view wx:if="{{item.qualityLabel}}" class="quality-badge">{{item.qualityLabel}} · Lv.{{item.skillLevel}}</view>
-      <view class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
+      <image wx:if="{{item.soldierImage}}" class="soldier-image" src="{{item.soldierImage}}" mode="aspectFit" aria-hidden="true" />
+      <view wx:else class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.shortDescription}}</view>
       <view wx:if="{{item.summon}}" class="combo-hint">最多3种召唤 · 全体3名
 每20秒检查；满员，空位后自动补充</view>

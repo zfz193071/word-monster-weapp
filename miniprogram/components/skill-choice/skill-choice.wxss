@@ -44,3 +44,5 @@
 .airFormation view:nth-child(3) {left:77rpx;}
 .armorSupport view:first-child {left:22rpx;top:45rpx;width:68rpx;height:35rpx;border-radius:14rpx;background:#6b8b54;box-shadow:0 12rpx 0 4rpx #314a43;}
 .armorSupport view:nth-child(2) {position:absolute;left:47rpx;top:8rpx;width:15rpx;height:55rpx;border:3rpx solid #c3d0a2;background:#55734b;border-radius:5rpx;}
+
+.soldier-image { width: 112rpx; height: 112rpx; display: block; margin: 16rpx auto; }

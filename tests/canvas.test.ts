@@ -159,11 +159,11 @@ test('正式模式缺图/未批准/错配几何时不启动模拟，不自动回
 
 test('全部图片加载成功才开战；失败后可重试，旧加载回调无效', async () => {
   const h = harness(false, artFixture()); const first = h.scene.load();
-  assert.equal(h.images.length, 6); assert.equal(h.callbacks.size, 0);
+  assert.equal(h.images.length, 12); assert.equal(h.callbacks.size, 0);
   const stale = h.images[0].onload; h.images[0].onerror(); assert.equal(await first, false);
   assert.equal(h.callbacks.size, 0); assert.equal(h.scene.snapshot!.tick, 0);
   const retry = h.scene.load(); stale(); assert.equal(h.callbacks.size, 0);
-  for (const image of h.images.slice(6)) image.onload(); assert.equal(await retry, true); assert.equal(h.callbacks.size, 1);
+  for (const image of h.images.slice(12)) image.onload(); assert.equal(await retry, true); assert.equal(h.callbacks.size, 1);
   assert.ok(h.commands.some(command => command.method === 'drawImage')); h.scene.dispose();
 });
 

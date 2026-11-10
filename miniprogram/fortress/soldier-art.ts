@@ -5,7 +5,7 @@ type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D
 
 // Vector equipment stays sharp at the actual screen DPR. Shot effects refer to
 // committed combat hits, never a second cosmetic damage calculation.
-export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: number, combatId: string): void {
+export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: number, combatId: string, image?: WechatMiniprogram.Image): void {
   const type = soldierType(soldier.soldierType);
   const target = soldier.shotTarget;
   const firing = soldier.shotCombatId === combatId && target && soldier.lastShotTick !== undefined && tick >= soldier.lastShotTick && tick - soldier.lastShotTick < 16;
@@ -13,7 +13,15 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   c.save(); c.translate(soldier.position.x, soldier.position.y);
   c.fillStyle = 'rgba(31,50,42,.25)'; c.beginPath(); c.ellipse(0, 9, 12, 4, 0, 0, Math.PI * 2); c.fill();
   c.save(); c.rotate(angle);
-  if (type === 'tank') {
+  if (image) {
+    const size = type === 'tank' ? 64 : 56;
+    const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
+    c.drawImage(image, -size / 2, -size / 2 - 8 + hover + (firing ? 1.5 : 0), size, size);
+    if (type === 'jetpack') {
+      c.fillStyle = '#f6c775';
+      for (const x of [-8, 8]) { c.beginPath(); c.moveTo(x - 2, 8 + hover); c.lineTo(x, 16 + hover + Math.sin(tick * .13) * 2); c.lineTo(x + 2, 8 + hover); c.closePath(); c.fill(); }
+    }
+  } else if (type === 'tank') {
     c.fillStyle='#243c38'; c.fillRect(-21,-12,9,32); c.fillRect(12,-12,9,32);
     c.strokeStyle='#6e8277';c.lineWidth=2;for(let y=-9;y<20;y+=6){c.beginPath();c.moveTo(-20,y);c.lineTo(-13,y);c.moveTo(13,y);c.lineTo(20,y);c.stroke();}
     c.fillStyle='#728d54';c.fillRect(-14,-17,28,34);c.fillStyle='#a6b77d';c.fillRect(-10,-14,5,27);
@@ -48,12 +56,14 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   }
   if (soldier.evolved) {c.fillStyle='#f1d584';c.beginPath();c.moveTo(0,-24);c.lineTo(4,-20);c.lineTo(0,-16);c.lineTo(-4,-20);c.closePath();c.fill();}
   if (firing) {
-    c.fillStyle = '#fff0a8'; c.beginPath(); c.moveTo(7, -39); c.lineTo(12, -29); c.lineTo(2, -29); c.closePath(); c.fill();
+    c.save(); if (image) c.translate(-7, -2);
+    c.fillStyle = '#fff0a8'; c.beginPath(); c.moveTo(7, -39); c.lineTo(12, -29); c.lineTo(2, -29); c.closePath(); c.fill(); c.restore();
   }
   c.restore();
   if (firing) {
     c.strokeStyle = type === 'flamethrower' ? 'rgba(235,153,74,.65)' : 'rgba(255,219,120,.75)'; c.lineWidth = type === 'flamethrower' ? 8 : type === 'tank' || type === 'rocket' ? 3 : 1.5;
-    c.beginPath(); c.moveTo(Math.sin(angle) * 30 + Math.cos(angle) * 7, -Math.cos(angle) * 30 + Math.sin(angle) * 7);
+    const muzzleX = image ? 0 : 7, muzzleY = image ? 32 : 30;
+    c.beginPath(); c.moveTo(Math.sin(angle) * muzzleY + Math.cos(angle) * muzzleX, -Math.cos(angle) * muzzleY + Math.sin(angle) * muzzleX);
     c.lineTo(target.x - soldier.position.x, target.y - soldier.position.y); c.stroke();
   }
   if (soldier.hp < soldier.maxHp) {

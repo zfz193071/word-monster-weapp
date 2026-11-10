@@ -1,4 +1,6 @@
 import { drawHouseFortress } from '../houses/battle-art';
+import { soldierType } from './army';
+import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
 import { drawSoldier } from './soldier-art';
 import { weaponAppearance } from '../weapons/appearance';
 import type { SkillCollection } from './skill-quality';
@@ -194,7 +196,7 @@ export class CanvasScene {
     }
     const art = this.options.art;
     if (!art) throw new Error('战场素材尚未准备完成');
-    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {})];
+    const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES];
     this.validateSprites(assets); this.validateMonster(art); return assets;
   }
   async load(): Promise<boolean> {
@@ -563,7 +565,7 @@ export class CanvasScene {
       c.globalAlpha = 1;
     }
     drawBattlePet(c, state);
-    for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId);
+    for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     if ((state.flameFanUntilTick ?? 0) > state.tick) {
       c.save(); c.translate(state.player.x, state.player.y);
       c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));

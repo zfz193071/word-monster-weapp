@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-10",
+  "tool": "built-in image_gen",
+  "reference": "concept-01.png",
+  "rights": "AI-generated project assets; no claim of exclusive copyright",
+  "processing": "Alpha-preserving downscale only",
+  "assets": [
+    {
+      "type": "rifle",
+      "source": "docs/visual-audit/army/originals/rifle.png",
+      "path": "miniprogram/assets/images/army/rifle.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 9971,
+      "sha256": "ceec3810308deb95043204b63692605c26e50841abed2d4360c81eba3658fb43",
+      "sourceSha256": "b7c45c23beb7213b4c44bcbfbcca4abf81acedd1a7b95893e5dfdd83c7609099",
+      "transparentFraction": 0.8044662184677295
+    },
+    {
+      "type": "shield",
+      "source": "docs/visual-audit/army/originals/shield.png",
+      "path": "miniprogram/assets/images/army/shield.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 14631,
+      "sha256": "96fccca682113b8c4c4fd06aba5fc8f056ed330f33782a999ce7582c753282b8",
+      "sourceSha256": "826e8e3a44b324241b23789ec6de418860126f4df53cf116c125fd273be9aae8",
+      "transparentFraction": 0.7052125383779879
+    },
+    {
+      "type": "flamethrower",
+      "source": "docs/visual-audit/army/originals/flamethrower.png",
+      "path": "miniprogram/assets/images/army/flamethrower.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 11264,
+      "sha256": "12771a96e40b101308f98e2fd4fbba82963d4901939d609e40a2388abeee6f23",
+      "sourceSha256": "9890a9f29630437c686dbda5fdcdcbdc4d33a828697d556137e2c87bb8011c84",
+      "transparentFraction": 0.7986576925131446
+    },
+    {
+      "type": "rocket",
+      "source": "docs/visual-audit/army/originals/rocket.png",
+      "path": "miniprogram/assets/images/army/rocket.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 11721,
+      "sha256": "9cd746e78bcee8947652074d047dc26bd7ffff51ee801cffef765c32053ae065",
+      "sourceSha256": "fb89bc819dd62163d603ed43d379f6aad3192325bde231259a4564099475606a",
+      "transparentFraction": 0.7750363112362608
+    },
+    {
+      "type": "jetpack",
+      "source": "docs/visual-audit/army/originals/jetpack.png",
+      "path": "miniprogram/assets/images/army/jetpack.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 11514,
+      "sha256": "4fa1063bad7a33e817e43cdb6297106a8bca13c57cdfd1e8d695f74ae212c82e",
+      "sourceSha256": "3fab740efbe08536cea4ac563d6fda1f72d7e55de95bf718a03624fa2153e909",
+      "transparentFraction": 0.6850200570296264
+    },
+    {
+      "type": "tank",
+      "source": "docs/visual-audit/army/originals/tank.png",
+      "path": "miniprogram/assets/images/army/tank.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "size": 128,
+      "bytes": 16918,
+      "sha256": "ee6557d041f780b0ad3c44ceccce6f5d738d5887d7a38f526dd250fb86dc009a",
+      "sourceSha256": "273c66a17ffd9da2f2aef93a8765055c1ea5eca12a94dd2f0846e88631ca5176",
+      "transparentFraction": 0.6386008155083954
+    }
+  ]
+}

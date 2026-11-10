@@ -1,0 +1,32 @@
+[
+  {
+    "name": "rifle",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: rifle guard holding a small stylized rifle correctly in both hands, muzzle toward the top. Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-ff99fa26-f182-47eb-b404-35b41da4c410.png"
+  },
+  {
+    "name": "shield",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: shield guard holding a broad teal shield with brass rim in front of his body toward the top. Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-d1812196-024a-43d6-88e8-41fadb3c93f6.png"
+  },
+  {
+    "name": "flamethrower",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: flamethrower guard with two brass fuel cylinders on his back and a handheld hose nozzle pointing toward the top, no flame. Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-cba9fb1c-0543-4063-b07a-7266b0af34cf.png"
+  },
+  {
+    "name": "rocket",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: rocket guard with a short broad green shoulder launcher pointing toward the top. Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-868ac587-3f8c-4a2a-8c52-b20f5e7b76c6.png"
+  },
+  {
+    "name": "jetpack",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: jetpack guard with two blue-grey jet cylinders on his back, holding a small rifle pointing toward the top, no exhaust (animated separately). Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-24e2a1f2-2202-4fac-8271-ac75e7c1ff1d.png"
+  },
+  {
+    "name": "tank",
+    "prompt": "Use case: stylized-concept. Create ONE independent production game sprite: compact rounded green tank with two detailed tracks, one forward barrel pointing exactly toward the top, friendly helmeted driver visible in open hatch. Reference image is style reference only, use the corresponding character's approved green, warm brass, rounded dimensional cartoon style. Change camera from reference to steep overhead rear view, facing exactly 12 o'clock, symmetric vertical heading, no side-facing pose. Full complete unit centered, square canvas, 12 percent clear padding, readable at 48 pixels tall. Soft upper-left light, clean strong silhouette. Genuinely transparent background with alpha, no ground, no baked shadow, no grid, no text, no frame, no extra units, no projectiles. Calm friendly pose. Preserve refined materials and equipment identity from reference.",
+    "source": "/Users/zhuwenfang/.codex/generated_images/01a1c3ff-e5e6-7d00-be24-65186e5a1c2e/exec-e6586656-f006-4ef0-9e71-7e6ad41bb33f.png"
+  }
+]
