@@ -1,0 +1,1406 @@
+[
+  {
+    "device": "phone-defense",
+    "width": 390,
+    "height": 620,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "types": [
+      "rifle",
+      "shield",
+      "flamethrower"
+    ],
+    "fixture": {
+      "soldierHp": 12,
+      "enemyHp": 1000,
+      "enemyDamage": 6,
+      "enemyIntervalMs": 2000
+    },
+    "source": "Fixed 12 HP soldiers and 1000 HP close-contact enemies; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "2.1–3.1 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 4 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 64,
+      "supportSoldierDamaged": 7,
+      "supportSoldierDefeated": 3,
+      "baseDamaged": 32
+    },
+    "attacked": [
+      "rifle",
+      "shield",
+      "flamethrower"
+    ],
+    "damaged": [
+      "shield",
+      "rifle",
+      "flamethrower"
+    ],
+    "defeated": [
+      "shield",
+      "rifle",
+      "flamethrower"
+    ],
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12
+          },
+          {
+            "type": "shield",
+            "hp": 12
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "shield",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "shield",
+            "hp": 7,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 206,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 201
+          },
+          {
+            "type": "shield",
+            "hp": 7,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 201
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 301,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 201
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 201
+          }
+        ],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 551,
+        "soldiers": [
+          {
+            "type": "flamethrower",
+            "hp": 6,
+            "lastShotTick": 401,
+            "lastHitTick": 460
+          }
+        ],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 982
+      },
+      {
+        "second": 7,
+        "tick": 1051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 958
+      },
+      {
+        "second": 8,
+        "tick": 1301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 934
+      },
+      {
+        "second": 9,
+        "tick": 1551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 916
+      },
+      {
+        "second": 10,
+        "tick": 1801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 892
+      },
+      {
+        "second": 11,
+        "tick": 2051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 868
+      },
+      {
+        "second": 12,
+        "tick": 2301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 844
+      },
+      {
+        "second": 13,
+        "tick": 2551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 826
+      }
+    ],
+    "file": "phone-defense.mp4",
+    "bytes": 207954,
+    "sha256": "4e0e5f5f5797d5e81e70a8b23030175506119a1879edec7d22967d9268a7e232"
+  },
+  {
+    "device": "phone-heavy",
+    "width": 390,
+    "height": 620,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "types": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "fixture": {
+      "soldierHp": 12,
+      "enemyHp": 1000,
+      "enemyDamage": 6,
+      "enemyIntervalMs": 2000
+    },
+    "source": "Fixed 12 HP soldiers and 1000 HP close-contact enemies; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "2.1–3.1 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 4 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 66,
+      "supportSoldierDamaged": 6,
+      "supportSoldierDefeated": 3,
+      "baseDamaged": 33
+    },
+    "attacked": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "damaged": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "defeated": [
+      "rocket",
+      "tank",
+      "jetpack"
+    ],
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 12
+          },
+          {
+            "type": "jetpack",
+            "hp": 12
+          },
+          {
+            "type": "tank",
+            "hp": 12
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 6,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 151
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 206,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 6,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 151
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 301,
+        "soldiers": [
+          {
+            "type": "jetpack",
+            "hp": 6,
+            "lastShotTick": 301,
+            "lastHitTick": 260
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 976
+      },
+      {
+        "second": 7,
+        "tick": 1051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 952
+      },
+      {
+        "second": 8,
+        "tick": 1301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 928
+      },
+      {
+        "second": 9,
+        "tick": 1551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 910
+      },
+      {
+        "second": 10,
+        "tick": 1801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 886
+      },
+      {
+        "second": 11,
+        "tick": 2051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 862
+      },
+      {
+        "second": 12,
+        "tick": 2301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 838
+      },
+      {
+        "second": 13,
+        "tick": 2551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 820
+      }
+    ],
+    "file": "phone-heavy.mp4",
+    "bytes": 221413,
+    "sha256": "8cab3f30940c55fa603c7c3f90c7f034d7a46a9c24ed4fd3a0c5f9ae5077c3b7"
+  },
+  {
+    "device": "ipad-defense",
+    "width": 1024,
+    "height": 580,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "types": [
+      "rifle",
+      "shield",
+      "flamethrower"
+    ],
+    "fixture": {
+      "soldierHp": 12,
+      "enemyHp": 1000,
+      "enemyDamage": 6,
+      "enemyIntervalMs": 2000
+    },
+    "source": "Fixed 12 HP soldiers and 1000 HP close-contact enemies; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "2.1–3.1 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 4 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 64,
+      "supportSoldierDamaged": 7,
+      "supportSoldierDefeated": 3,
+      "baseDamaged": 32
+    },
+    "attacked": [
+      "rifle",
+      "shield",
+      "flamethrower"
+    ],
+    "damaged": [
+      "shield",
+      "rifle",
+      "flamethrower"
+    ],
+    "defeated": [
+      "shield",
+      "rifle",
+      "flamethrower"
+    ],
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12
+          },
+          {
+            "type": "shield",
+            "hp": 12
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "shield",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "shield",
+            "hp": 7,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 206,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 201
+          },
+          {
+            "type": "shield",
+            "hp": 7,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 201
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 301,
+        "soldiers": [
+          {
+            "type": "rifle",
+            "hp": 12,
+            "lastShotTick": 201
+          },
+          {
+            "type": "flamethrower",
+            "hp": 12,
+            "lastShotTick": 201
+          }
+        ],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 551,
+        "soldiers": [
+          {
+            "type": "flamethrower",
+            "hp": 6,
+            "lastShotTick": 401,
+            "lastHitTick": 460
+          }
+        ],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 982
+      },
+      {
+        "second": 7,
+        "tick": 1051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 958
+      },
+      {
+        "second": 8,
+        "tick": 1301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 934
+      },
+      {
+        "second": 9,
+        "tick": 1551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 916
+      },
+      {
+        "second": 10,
+        "tick": 1801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 892
+      },
+      {
+        "second": 11,
+        "tick": 2051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 868
+      },
+      {
+        "second": 12,
+        "tick": 2301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 844
+      },
+      {
+        "second": 13,
+        "tick": 2551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "shield",
+            "lastHitTick": 260
+          },
+          {
+            "type": "rifle",
+            "lastHitTick": 430
+          },
+          {
+            "type": "flamethrower",
+            "lastHitTick": 600
+          }
+        ],
+        "baseHp": 826
+      }
+    ],
+    "file": "ipad-defense.mp4",
+    "bytes": 220022,
+    "sha256": "69268a5db0e08b109d8bc2138e6a4d1859a092e21bf731be854e84d325efcff0"
+  },
+  {
+    "device": "ipad-heavy",
+    "width": 1024,
+    "height": 580,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "types": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "fixture": {
+      "soldierHp": 12,
+      "enemyHp": 1000,
+      "enemyDamage": 6,
+      "enemyIntervalMs": 2000
+    },
+    "source": "Fixed 12 HP soldiers and 1000 HP close-contact enemies; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "2.1–3.1 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 4 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 63,
+      "supportSoldierDamaged": 6,
+      "supportSoldierDefeated": 3,
+      "baseDamaged": 33
+    },
+    "attacked": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "damaged": [
+      "rocket",
+      "jetpack",
+      "tank"
+    ],
+    "defeated": [
+      "rocket",
+      "tank",
+      "jetpack"
+    ],
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 12
+          },
+          {
+            "type": "jetpack",
+            "hp": 12
+          },
+          {
+            "type": "tank",
+            "hp": 12
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 1
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 6,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 151
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 206,
+        "soldiers": [
+          {
+            "type": "rocket",
+            "hp": 6,
+            "lastShotTick": 1,
+            "lastHitTick": 200
+          },
+          {
+            "type": "jetpack",
+            "hp": 12,
+            "lastShotTick": 151
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [],
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 301,
+        "soldiers": [
+          {
+            "type": "jetpack",
+            "hp": 6,
+            "lastShotTick": 301,
+            "lastHitTick": 260
+          },
+          {
+            "type": "tank",
+            "hp": 12,
+            "lastShotTick": 1
+          }
+        ],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 976
+      },
+      {
+        "second": 7,
+        "tick": 1051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 952
+      },
+      {
+        "second": 8,
+        "tick": 1301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 928
+      },
+      {
+        "second": 9,
+        "tick": 1551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 910
+      },
+      {
+        "second": 10,
+        "tick": 1801,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 886
+      },
+      {
+        "second": 11,
+        "tick": 2051,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 862
+      },
+      {
+        "second": 12,
+        "tick": 2301,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 838
+      },
+      {
+        "second": 13,
+        "tick": 2551,
+        "soldiers": [],
+        "fallen": [
+          {
+            "type": "rocket",
+            "lastHitTick": 230
+          },
+          {
+            "type": "tank",
+            "lastHitTick": 430
+          },
+          {
+            "type": "jetpack",
+            "lastHitTick": 460
+          }
+        ],
+        "baseHp": 820
+      }
+    ],
+    "file": "ipad-heavy.mp4",
+    "bytes": 229608,
+    "sha256": "ce75b0958c4dfb39c8ac22c828906ff7f502522a2693d19909803de3b6593a35"
+  }
+]
