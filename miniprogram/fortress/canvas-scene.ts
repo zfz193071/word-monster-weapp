@@ -1,6 +1,6 @@
 import { drawHouseFortress } from '../houses/battle-art';
 import { drawTexturedZombie } from './zombie-art';
-import { ANIMAL_LOCOMOTION, monsterGait } from './monster-gait';
+import { ANIMAL_LOCOMOTION, monsterGait, zombieGait } from './monster-gait';
 import { drawQuadruped } from './quadruped-art';
 import type { FootPose } from './monster-gait';
 import { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
@@ -501,10 +501,10 @@ export class CanvasScene {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
           if (!image) throw new Error('已预载图片丢失');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
-          drawTexturedZombie(c, image, monsterGait(monster.position.y, motionSeed));
+          drawTexturedZombie(c, image, zombieGait(monster, motionSeed));
           c.restore();
         } else if (monsterArt.walkParts) {
-          const gait = monsterGait(monster.position.y, motionSeed);
+          const gait = zombieGait(monster, motionSeed);
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
           c.fillStyle = 'rgba(37,62,56,.16)'; c.beginPath(); c.ellipse(0, 69, 40, 7, 0, 0, Math.PI * 2); c.fill();
           for (const side of [-1, 1]) {

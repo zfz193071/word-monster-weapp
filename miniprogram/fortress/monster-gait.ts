@@ -1,3 +1,6 @@
+import { FORTRESS_RULES as RULES } from './rules';
+import type { MonsterState } from './types';
+
 /** Locomotion is presentation only. Phase follows world travel, not wall time. */
 export type AnimalLocomotion = 'quadruped' | 'biped' | 'flying' | 'swimming';
 export const ANIMAL_LOCOMOTION: Readonly<Record<string, AnimalLocomotion>> = Object.freeze({
@@ -28,5 +31,24 @@ export function monsterGait(y: number, seed: number): GaitPose {
     feet,
     bob: -Math.max(...feet.map(foot => foot.lift)) * .6,
     sway: Math.sin(phase * Math.PI * 2) * .6,
+  };
+}
+
+/** Settle a walk into planted feet using the first attack's logical countdown.
+ * No renderer history or wall clock: freezing and pausing retain the same pose.
+ */
+export function zombieGait(monster: MonsterState, seed: number): GaitPose {
+  const walking = monsterGait(monster.position.y, seed);
+  if (monster.status !== 'attackingBase') return walking;
+  const elapsed = monster.enemyType === 'exploder'
+    ? 1000 - (monster.explosionRemainingMs ?? 1000)
+    : monster.attackSequence > 0 ? 240
+      : (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) - monster.attackRemainingMs;
+  const progress = Math.max(0, Math.min(1, elapsed / 240));
+  const weight = 1 - progress * progress * (3 - 2 * progress);
+  return {
+    feet: walking.feet.map(foot => ({ travel: foot.travel * weight, lift: foot.lift * weight })),
+    bob: walking.bob * weight,
+    sway: walking.sway * weight,
   };
 }

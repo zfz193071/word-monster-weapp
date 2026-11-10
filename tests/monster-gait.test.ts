@@ -1,9 +1,54 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ANIMAL_LOCOMOTION, footCycle, monsterGait } from '../miniprogram/fortress/monster-gait';
+import { ANIMAL_LOCOMOTION, footCycle, monsterGait, zombieGait } from '../miniprogram/fortress/monster-gait';
 import { getLevel } from '../miniprogram/fortress/levels';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 import { stepCombat } from '../miniprogram/fortress/combat';
+import { FORTRESS_RULES as RULES } from '../miniprogram/fortress/rules';
+
+test('僵尸接敌从原步态连续落脚，首次攻击后不重复抬脚，自爆倒计时同样收脚', () => {
+  const initial = createOpeningEncounter('settle', 'apple', 1);
+  const monster = { ...initial.monsters[0], status: 'attackingBase' as const,
+    position: { x: 180, y: RULES.monster.attackY }, attackIntervalMs: 1800, attackRemainingMs: 1800 };
+  const walk = monsterGait(monster.position.y, 17);
+  assert.deepEqual(zombieGait(monster, 17), walk);
+  const middle = zombieGait({ ...monster, attackRemainingMs: 1680 }, 17);
+  walk.feet.forEach((foot, index) => {
+    assert.equal(middle.feet[index].lift, foot.lift / 2);
+    assert.equal(middle.feet[index].travel, foot.travel / 2);
+  });
+  for (const resting of [
+    { ...monster, attackRemainingMs: 1560 },
+    { ...monster, attackRemainingMs: 1800, attackSequence: 1 },
+    { ...monster, attackRemainingMs: 1800, attackSequence: 9 },
+    { ...monster, enemyType: 'exploder' as const, explosionRemainingMs: 760 },
+  ]) {
+    const pose = zombieGait(resting, 17);
+    assert.ok(pose.feet.every(foot => foot.lift === 0 && foot.travel === 0));
+    assert.equal(Math.abs(pose.bob), 0); assert.equal(Math.abs(pose.sway), 0);
+  }
+});
+
+test('实际接敌保留帧内余量，收脚期间冻结保持姿态且采样不改战斗状态', () => {
+  const initial = createOpeningEncounter('settle-freeze', 'apple', 1);
+  const monster = { ...initial.monsters[0], status: 'alive' as const, hp: 10000, maxHp: 10000,
+    spawnAtMs: 0, position: { x: 30, y: RULES.monster.attackY - .01 } };
+  let state = stepCombat({ ...initial, monsters: [monster] }).state;
+  assert.equal(state.monsters[0].status, 'attackingBase');
+  assert.ok(state.monsters[0].attackRemainingMs < RULES.monster.attackIntervalMs);
+  for (let i = 0; i < 10; i++) state = stepCombat(state).state;
+  state = { ...state, monsters: [{ ...state.monsters[0], frozenUntilTick: state.tick + 20 }] };
+  const frozen = zombieGait(state.monsters[0], 17);
+  for (let i = 0; i < 20; i++) {
+    state = stepCombat(state).state;
+    assert.deepEqual(zombieGait(state.monsters[0], 17), frozen);
+  }
+  state = stepCombat(state).state;
+  assert.notDeepEqual(zombieGait(state.monsters[0], 17), frozen);
+  const before = structuredClone(state);
+  zombieGait(state.monsters[0], 17);
+  assert.deepEqual(state, before);
+});
 
 test('16动物按现有战斗形态完整分流，鸡鸭双足、鸟蜂飞行、鱼游动', () => {
   assert.deepEqual(Object.keys(ANIMAL_LOCOMOTION).sort(), getLevel(3).words.map(w => w.id).sort());
