@@ -1,0 +1,27 @@
+{
+  "generator": "built-in image_gen",
+  "status": "composition-candidate-awaiting-review",
+  "runtimeIntegrated": false,
+  "output": {
+    "path": "docs/visual-audit/battlefield-overhaul/interior-study/interior-01.png",
+    "bytes": 2985699,
+    "sha256": "a5633da83af181f052985d79d613c2668a7d3248d0c8d17f3a39fb2e651024d9"
+  },
+  "prompt": {
+    "path": "docs/visual-audit/battlefield-overhaul/interior-study/prompt.txt",
+    "bytes": 1816,
+    "sha256": "fdffc148fd5d14418f35834cc719558966af4ca4f23b7adc12ebeacdf43a81da"
+  },
+  "references": [
+    {
+      "path": "docs/visual-audit/concepts/style-study-01.png",
+      "bytes": 2586789,
+      "sha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6"
+    },
+    {
+      "path": "docs/visual-audit/hero/reference-studies/hero-study-02.png",
+      "bytes": 1492272,
+      "sha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be"
+    }
+  ]
+}

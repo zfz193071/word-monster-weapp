@@ -1,0 +1,22 @@
+{
+  "generator": "built-in image_gen",
+  "status": "held-not-integrated",
+  "runtimeIntegrated": false,
+  "output": {
+    "path": "docs/visual-audit/hero/parts-study/guardian-parts-01.png",
+    "bytes": 876590,
+    "sha256": "a720e694ebdad4186c35e2bbcd5090597f71fa72d71621bd943a0de1713abe6c"
+  },
+  "prompt": {
+    "path": "docs/visual-audit/hero/parts-study/prompt.txt",
+    "bytes": 1265,
+    "sha256": "f9f26bab6075dea5f09b99169b2723b9eb348c57ccd9ff67423327c4c49aa2b4"
+  },
+  "references": [
+    {
+      "path": "docs/visual-audit/hero/reference-studies/hero-study-02.png",
+      "bytes": 1492272,
+      "sha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be"
+    }
+  ]
+}
