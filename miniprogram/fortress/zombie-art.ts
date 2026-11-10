@@ -2,7 +2,7 @@ import type { GaitPose } from './monster-gait';
 import type { SpriteAsset } from './canvas-scene';
 
 export const TEXTURED_APPLE_ZOMBIE: SpriteAsset = {
-  path: '/assets/images/fortress/zombie-apple-textured.png',
+  path: '/character-assets/zombie-apple-textured.png',
   source: 'docs/visual-audit/enemies/textured/apple-zombie-source.png',
   rights: '项目内置 image_gen 生成，2026-11-10；整体视觉及设备验收待完成',
   approved: true,

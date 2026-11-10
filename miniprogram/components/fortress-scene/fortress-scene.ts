@@ -212,11 +212,12 @@ Component({
             instance.audio.setVolume(this.properties.musicVolume / 100);
           }
           if (this.properties.preview && request?.variant !== 'fruit') instance.skills = createSkillSession(request?.plan ?? createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
+          const sceneArt = this.properties.opening ? openingArt(initial.monsters[0].wordId, [...initial.monsters, ...(initial.incomingMonsters ?? [])].map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined;
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
           const asset = MONSTER_ASSETS.find(asset => asset.wordId === initial.monsters[0].wordId);
           const scene = new CanvasScene(result.node, {
             levelId: request?.plan.levelId ?? 1, initial, width: result.width, height: result.height, dpr: wx.getWindowInfo().pixelRatio, clientLeft: result.left ?? 0,
-            preview: this.properties.preview, art: this.properties.opening ? openingArt(initial.monsters[0].wordId, [...initial.monsters, ...(initial.incomingMonsters ?? [])].map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined,
+            preview: this.properties.preview, art: sceneArt,
             previewMonster: this.properties.preview && visual && asset ? { monsterVisual: visual, monsterWidth: monsterDrawWidth(visual),
               monster: { ...asset, approved: asset.reviewStatus === 'approved' } } : undefined,
             retirement: this.properties.opening ? undefined : {
@@ -273,7 +274,7 @@ Component({
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();
-          const resources = this.properties.opening ? loadBattlefieldAssets(loadingLevel, initial.houseLevel ?? 1) : Promise.resolve();
+          const resources = this.properties.opening ? loadBattlefieldAssets(loadingLevel, initial.houseLevel ?? 1, sceneArt) : Promise.resolve();
           void resources.then(() => valid() ? scene.load() : false).then(async loaded => {
             if (!valid() || !loaded || !await scene.present() || !valid()) return;
             // A RAF callback confirms command submission, not visible pixels. Export the
@@ -464,10 +465,13 @@ Component({
           ...getLevel(next.plan.levelId).words.map(word => word.id),
           ...next.plan.waves.flatMap(wave => [wave.targetWordId, ...wave.spawnPlan.map(monster => monster.wordId)]),
         ])];
+        const nextArt = openingArt(next.plan.waves[0].targetWordId, wordIds, next.plan.weaponLevel);
+        await loadBattlefieldAssets(next.plan.levelId ?? 1, next.plan.houseLevel ?? 1, nextArt);
+        if (!state.alive || state.epoch !== epoch) return;
         await new Promise<void>((resolve, reject) => {
           let cancel = () => {}, settled = false;
           state.cancelStageLoad = () => { cancel(); if (!settled) { settled = true; reject(new Error('关卡加载已取消')); } };
-          cancel = loadBattleAssets(openingArt(next.plan.waves[0].targetWordId, wordIds, next.plan.weaponLevel), {
+          cancel = loadBattleAssets(nextArt, {
             onProgress: progress => { if (state.alive && state.epoch === epoch) this.setData({ continueProgress: progress }); },
             onReady: () => { if (!settled) { settled = true; resolve(); } },
             onError: () => { if (!settled) { settled = true; reject(new Error('关卡资源加载失败')); } },

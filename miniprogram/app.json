@@ -40,6 +40,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "character-assets",
+      "name": "character-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

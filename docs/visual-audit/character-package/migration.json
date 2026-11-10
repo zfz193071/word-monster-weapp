@@ -1,0 +1,28 @@
+{
+  "assets": [
+    {
+      "file": "hero-back-weapon-1-textured.png",
+      "bytes": 83632,
+      "sha256": "11f19ee846f5e5d245b0aebe408a877c99971c1362729c16e5b1ff71539a4fac"
+    },
+    {
+      "file": "zombie-apple-textured.png",
+      "bytes": 94441,
+      "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa"
+    }
+  ],
+  "renderComparisons": [
+    {
+      "file": "phone-cat.png",
+      "sha256": "81271e53fbeb935710a17f10723b4dff8f5772051b2dc6ad6428035169613f4f",
+      "matchesBefore": true
+    },
+    {
+      "file": "ipad-cat.png",
+      "sha256": "f7d181fbb4a05ff8c7009240d34375a22ff8b08dde54104c8a32ae7bc133b5a4",
+      "matchesBefore": true
+    }
+  ],
+  "decodedRgbaBytes": 895188,
+  "note": "Source byte and offscreen render verification only; device download, compiled size and memory acceptance pending."
+}

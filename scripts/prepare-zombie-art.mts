@@ -5,7 +5,7 @@ const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const directory = 'docs/visual-audit/enemies/textured';
 const source = `${directory}/apple-zombie-source.png`;
-const target = 'miniprogram/assets/images/fortress/zombie-apple-textured.png';
+const target = 'miniprogram/character-assets/zombie-apple-textured.png';
 const image = await loadImage(source);
 if (image.width !== 1254 || image.height !== 1254) throw Error('Recalibrate leg split for changed source');
 const canvas = createCanvas(256, 320), c = canvas.getContext('2d');

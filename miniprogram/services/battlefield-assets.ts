@@ -1,3 +1,5 @@
+import type { SceneArt } from '../fortress/canvas-scene';
+
 // Cache each ordinary subpackage independently so a partial failure only retries
 // the missing package. Static import paths are required by the WeChat compiler.
 function cachedPackage(importReady: () => Promise<unknown>): () => Promise<void> {
@@ -23,9 +25,12 @@ function cachedPackage(importReady: () => Promise<unknown>): () => Promise<void>
 const loadCourtyard = cachedPackage(() => require.async('../battlefield-assets/ready'));
 const loadFortress = cachedPackage(() => require.async('../fortress-assets/ready'));
 
-export function loadBattlefieldAssets(levelId: number, houseLevel = 1): Promise<void> {
+const loadCharacters = cachedPackage(() => require.async('../character-assets/ready'));
+
+export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: SceneArt): Promise<void> {
   const required: Promise<void>[] = [];
   if (levelId === 1) required.push(loadCourtyard());
   if (houseLevel === 1) required.push(loadFortress());
+  if (art && [art.hero, ...Object.values(art.texturedBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/'))) required.push(loadCharacters());
   return Promise.all(required).then(() => {});
 }

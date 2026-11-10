@@ -1,7 +1,7 @@
 // Source muzzle measured in the original 1122 x 1402 aiming sprite.
 // Map artwork to the existing combat muzzle; never move projectiles to fit art.
 export const LEVEL_ONE_HERO_ART = Object.freeze({
-  path: '/assets/images/fortress/hero-back-weapon-1-textured.png',
+  path: '/character-assets/hero-back-weapon-1-textured.png',
   source: 'docs/visual-audit/hero/aiming-manifest.json',
   rights: '本项目内置 image_gen 制作，2026-11-10',
   approved: true,

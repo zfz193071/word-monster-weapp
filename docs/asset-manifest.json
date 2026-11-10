@@ -195,7 +195,7 @@
     "review": "decode passed; human listening pending"
   },
   {
-    "path": "miniprogram/assets/images/fortress/zombie-apple-textured.png",
+    "path": "miniprogram/character-assets/zombie-apple-textured.png",
     "bytes": 94441,
     "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa",
     "kind": "image",

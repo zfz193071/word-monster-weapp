@@ -16,7 +16,7 @@ test('七级装备进入战斗，每颗齐射子弹使用对应伤害，怪物�
   const fired=stepCombat(initial).state;assert.equal(fired.projectiles.length,2);
   assert(fired.projectiles.every(p=>p.damage===10+(level-1)*5));
   assert.equal(fired.weaponLevel,level);assert.equal(openingArt('apple',['apple'],level).hero.path,
-   `/assets/images/fortress/hero-back-weapon-${level}${level === 1 ? '-textured' : ''}.png`);
+   level === 1 ? '/character-assets/hero-back-weapon-1-textured.png' : `/assets/images/fortress/hero-back-weapon-${level}.png`);
  }
  assert.throws(()=>ready(8));
 });

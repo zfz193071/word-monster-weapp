@@ -5,7 +5,7 @@ import { LEVEL_ONE_HERO_FRAME } from '../miniprogram/fortress/hero-art';
 const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const source = 'docs/visual-audit/hero/originals/hero-back-weapon-1-aiming.png';
-const target = 'miniprogram/assets/images/fortress/hero-back-weapon-1-textured.png';
+const target = 'miniprogram/character-assets/hero-back-weapon-1-textured.png';
 const image = await loadImage(source);
 if (image.width !== 1122 || image.height !== 1402) throw Error('Recalibrate source muzzle before changing image dimensions');
 // Resample the complete alpha image, without cropping or thresholding edges.

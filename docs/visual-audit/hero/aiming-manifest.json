@@ -30,7 +30,7 @@
       "sha256": "f4c5ffcd354c6000ef459989611e2819b26ba94571735f031884db5516a4ae6c"
     },
     {
-      "path": "miniprogram/assets/images/fortress/hero-back-weapon-1-textured.png",
+      "path": "miniprogram/character-assets/hero-back-weapon-1-textured.png",
       "bytes": 83632,
       "sha256": "11f19ee846f5e5d245b0aebe408a877c99971c1362729c16e5b1ff71539a4fac"
     }
