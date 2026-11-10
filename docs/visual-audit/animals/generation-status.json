@@ -57,7 +57,7 @@
     {
       "id": "horse",
       "status": "blocked",
-      "attempts": 4,
+      "attempts": 5,
       "error": "image generation failed: http 400 Bad Request: Some(\"{\\n  \\\"error\\\": {\\n    \\\"message\\\": \\\"Your request was rejected by the safety system. If you believe this is an error, contact us at help.openai.com and include the request ID f37bf35e-11e9-4354-8f1a-54b7d99e5a16.\\\",\\n    \\\"type\\\": \\\"image_generation_user_error\\\",\\n    \\\"param\\\": null,\\n    \\\"code\\\": \\\"moderation_blocked\\\",\\n    \\\"moderation_details\\\": {\\n      \\\"moderation_stage\\\": \\\"output\\\",\\n      \\\"categories\\\": [\\n        \\\"other\\\"\\n      ]\\n    }\\n  }\\n}\")",
       "latestAttemptDate": "2026-11-10",
       "prompt": "prompts.json#horse",
@@ -67,7 +67,7 @@
         "categories": [
           "other"
         ],
-        "requestId": "a77fb7a8-b52c-4415-96b4-e185087c0130"
+        "requestId": "88c4f3ba-09b4-4928-b2bd-2980837217e8"
       },
       "previousErrors": [
         {
@@ -79,6 +79,16 @@
             "other"
           ],
           "requestId": "b2296027-7ea4-4165-97e2-953f6241b6c5"
+        },
+        {
+          "attempt": 4,
+          "date": "2026-11-10",
+          "code": "moderation_blocked",
+          "stage": "output",
+          "categories": [
+            "other"
+          ],
+          "requestId": "a77fb7a8-b52c-4415-96b4-e185087c0130"
         }
       ]
     },
