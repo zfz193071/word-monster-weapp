@@ -14,7 +14,7 @@
 <tr><th scope="row">普通弹/元素/爆炸/命中/金币/烟花<br><a href="https://github.com/zfz193071/word-monster-weapp/issues/95">#95</a></th><td>已实施元素配色与爆炸遮挡优化</td><td><a href="effects/README.md">实施及限制</a><br><a href="effects/review.html">低/高密度前后对照</a></td><td>全过程动态、多DPR、Boss预警并发、金币/烟花及设备帧耗时待验。</td></tr>
 <tr><th scope="row">加载追逐/进度<br><a href="https://github.com/zfz193071/word-monster-weapp/issues/93">#93</a></th><td>保留真实进度与首帧门控</td><td><a href="scenes/README.md">背景与加载范围</a></td><td>真实冷/热加载、重试、退出迟到回调及新资源接入后复验待完成。</td></tr>
 <tr><th scope="row">历史V2拟人水果与占位图<br><a href="https://github.com/zfz193071/word-monster-weapp/issues/86">#86</a></th><td>保留隔离；未删除</td><td><a href="inventory.json">原始资源清单</a><br><a href="battle-resources.json">现行依赖核查</a></td><td>先查旧入口引用再决定清理；不计入新版素材完成数。</td></tr></tbody></table></div><h2>完整流程覆盖</h2><div class="scroll"><table><thead><tr><th>流程</th><th>现有证据</th><th>缺口</th></tr></thead><tbody><tr><th scope="row">首页</th><td>手机/平板尺寸七级武器、五级房屋离屏基线。</td><td>实际页面容器、面板切换、真实触控和顶部裁切复验。</td></tr>
-<tr><th scope="row">听词</th><td>11种水果正式256px图片已与帽标/Boss共享；动物仍为展示候选。</td><td>动物新图未接入；三选一实际页面与声音/图片对应待验。</td></tr>
+<tr><th scope="row">听词</th><td>11种水果正式256px图片已与帽标/Boss共享；动物仍为展示候选。 同题重挂载的旧图片成功/失败事件隔离已实现，13项相关逻辑回归通过；非设备验收。</td><td>动物新图未接入；三选一实际页面与声音/图片对应待验。</td></tr>
 <tr><th scope="row">加载</th><td>源码门控和八关背景静态基线。</td><td>冷/热加载、真实进度、失败重试和退出行为设备证据。</td></tr>
 <tr><th scope="row">战斗</th><td>固定夹具普通怪/Boss、低高密度水果及元素效果对照。</td><td>自然事件动态、动画衔接、预警遮挡、长局及帧耗时。</td></tr>
 <tr><th scope="row">技能选择</th><td>沿用现行代码；没有本轮真实页面截图。</td><td>三选一、冻结背景、品质识别与恢复战斗截图/动态。</td></tr>

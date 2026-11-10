@@ -8,7 +8,7 @@ test('答题组件自动继续使用当前令牌，切后台暂停，换题和�
  let definition:any;const controllers:any[]=[];const effects:any[]=[];
  const modules={
   '../../fortress/listening':{createListening(options:any){
-   const controller={view:{phase:'ready',paused:false,token:'start'},continued:[] as string[],disposed:false,start(){},setPaused(paused:boolean){this.view={...this.view,paused,token:paused?'paused':'resumed'};options.onChange(this.view);},continueQuiz(token:string){this.continued.push(token);},dispose(){this.disposed=true;},answer(correct:boolean){this.view={...this.view,phase:'answered',correct} as any;options.onChange(this.view);}};
+   const controller={view:{phase:'ready',paused:false,token:'start',cards:[]},continued:[] as string[],disposed:false,start(){},setPaused(paused:boolean){this.view={...this.view,paused,token:paused?'paused':'resumed'};options.onChange(this.view);},continueQuiz(token:string){this.continued.push(token);},dispose(){this.disposed=true;},answer(correct:boolean){this.view={...this.view,phase:'answered',correct} as any;options.onChange(this.view);}};
    controllers.push(controller);return controller;
   }},
   '../../services/quiz-feedback':{createQuizFeedback(correct:boolean,done:()=>void){const effect={correct,done,active:false,disposed:false,volume:1,setVolume(value:number){this.volume=value;},setActive(value:boolean){this.active=value;},dispose(){this.disposed=true;}};effects.push(effect);return effect;}}

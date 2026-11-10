@@ -8,7 +8,7 @@
   <view class="choices">
     <button wx:for="{{view.cards}}" wx:key="key" class="choice {{item.hinted ? 'hinted' : ''}}" aria-label="{{item.label}}" disabled="{{!view.canChoose}}"
       data-token="{{view.token}}" data-word-id="{{item.id}}" bindtap="choose">
-      <image src="{{item.portraitPath}}" mode="aspectFit" aria-hidden="true" data-token="{{view.imageToken}}" data-word-id="{{item.id}}" bindload="imageLoaded" binderror="imageFailed" />
+      <image src="{{item.portraitPath}}" mode="aspectFit" aria-hidden="true" data-mount-epoch="{{mountEpoch}}" data-token="{{view.imageToken}}" data-word-id="{{item.id}}" bindload="imageLoaded" binderror="imageFailed" />
       <text class="fruit-english">{{item.text}}</text>
       <text class="fruit-meaning">{{item.meaningZh}}</text>
     </button>

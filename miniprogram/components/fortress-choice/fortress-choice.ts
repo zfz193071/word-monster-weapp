@@ -11,7 +11,7 @@ Component({
     musicVolume: { type: Number, value: 22, observer(value: number) { instances.get(this)?.feedback?.setVolume(value / 100); } },
     paused: { type: Boolean, value: false, observer() { this.applyPause(); } },
   },
-  data: { view: null as ListeningView | null, error: '' },
+  data: { view: null as ListeningView | null, error: '', mountEpoch: 0 },
   lifetimes: {
     attached() { instances.set(this, { ready: false, visible: true, epoch: 0 }); },
     ready() { const state = instances.get(this)!; state.ready = true; this.mount(); },
@@ -28,14 +28,18 @@ Component({
       state.controller?.dispose(); state.controller = undefined;
       const epoch = ++state.epoch;
       const valid = () => instances.get(this) === state && state.epoch === epoch;
-      this.setData({ view: null, error: '' });
+      // Distinct keys force fresh image nodes even if setData batches a same-question remount.
+      const showView = (view: ListeningView) => this.setData({ view: {
+        ...view, cards: view.cards.map(card => ({ ...card, key: `${epoch}:${card.key}` })),
+      } });
+      this.setData({ view: null, error: '', mountEpoch: epoch });
       if (!this.properties.request) return;
       try {
         const request = this.properties.request as { plan: SessionPlan; waveIndex: number; generation: number; variant?: 'fruit'; singleAttempt?: boolean };
         state.controller = createListening({ ...request,
           onChange: view => {
             if (!valid()) return;
-            this.setData({ view });
+            showView(view);
             if (request.singleAttempt && view.phase === 'answered' && !state.feedback) {
               state.feedback = createQuizFeedback(view.correct === true, () => {
                 if (valid() && state.visible && !this.properties.paused && state.controller) state.controller.continueQuiz(state.controller.view.token);
@@ -46,7 +50,7 @@ Component({
           },
           onStartCombat: result => { if (valid()) this.triggerEvent('startcombat', result); },
         });
-        this.setData({ view: state.controller.view }); this.applyPause(); state.controller.start();
+        showView(state.controller.view); this.applyPause(); state.controller.start();
       } catch { this.setData({ error: '听词挑战暂时无法准备，请重新进入' }); }
     },
     applyPause() { const state = instances.get(this); state?.controller?.setPaused(this.properties.paused || !state.visible); },
@@ -55,7 +59,13 @@ Component({
     replay(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.replay(event.currentTarget.dataset.token); },
     retryAudio(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.retryAudio(event.currentTarget.dataset.token); },
     retryImages(event: WechatMiniprogram.BaseEvent) { instances.get(this)?.controller?.retryImages(event.currentTarget.dataset.token); },
-    imageLoaded(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; instances.get(this)?.controller?.imageResult(data.token, data.wordId, true); },
-    imageFailed(event: WechatMiniprogram.BaseEvent) { const data = event.currentTarget.dataset; instances.get(this)?.controller?.imageResult(data.token, data.wordId, false); },
+    imageLoaded(event: WechatMiniprogram.BaseEvent) {
+      const data = event.currentTarget.dataset; const state = instances.get(this);
+      if (state && data.mountEpoch === state.epoch) state.controller?.imageResult(data.token, data.wordId, true);
+    },
+    imageFailed(event: WechatMiniprogram.BaseEvent) {
+      const data = event.currentTarget.dataset; const state = instances.get(this);
+      if (state && data.mountEpoch === state.epoch) state.controller?.imageResult(data.token, data.wordId, false);
+    },
   },
 });
