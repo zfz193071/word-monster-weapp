@@ -4,7 +4,7 @@
   <view wx:for="{{upperClouds}}" wx:key="id" class="upper-cloud" style="{{item.style}}" aria-hidden="true"><view class="cloud" style="{{item.scale}}"></view></view>
   <button class="info-button" bindtap="toggleCredits" aria-label="素材集合">i</button>
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
-  <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><view class="coin-symbol">●</view><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view>
+  <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><image class="coin-symbol" src="/assets/images/checkin/coins.png" mode="aspectFit" aria-hidden="true" /><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view>
   <button wx:if="{{victoryRewardError}}" class="pending-victory-reward" bindtap="retryVictoryRewards">通关奖励待恢复，点击重试</button>
   <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view></button>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>

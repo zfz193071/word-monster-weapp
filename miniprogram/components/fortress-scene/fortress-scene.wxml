@@ -34,7 +34,7 @@
       <view class="victory-reward">
         <text wx:if="{{rewardSaved}}">奖励已到账</text><button wx:elif="{{rewardError}}" bindtap="claimVictoryReward" disabled="{{inputUnavailable}}">奖励暂未保存，点击重试</button><text wx:else>奖励到账中…</text>
       </view>
-      <view wx:if="{{rewardSaved}}" class="clear-rewards"><view wx:for="{{rewardCards}}" wx:key="id" class="clear-reward {{item.surprise ? 'surprise' : ''}}"><text class="clear-symbol">{{item.symbol}}</text><text>{{item.name}}</text><text class="clear-amount">×{{item.amount}}</text><text wx:if="{{item.surprise}}" class="surprise-label">惊喜奖品</text></view></view>
+      <view wx:if="{{rewardSaved}}" class="clear-rewards"><view wx:for="{{rewardCards}}" wx:key="id" class="clear-reward {{item.surprise ? 'surprise' : ''}}"><image class="clear-icon" src="{{item.icon}}" mode="aspectFit" aria-hidden="true" /><text>{{item.name}}</text><text class="clear-amount">×{{item.amount}}</text><text wx:if="{{item.surprise}}" class="surprise-label">惊喜奖品</text></view></view>
       <view class="victory-collection"><text class="collection-title">本局练习 · {{victoryFruits.length}} 个单词</text><view class="victory-fruits"><view wx:for="{{victoryFruits}}" wx:key="id" class="victory-fruit" style="animation-delay: {{item.delay}}ms"><image src="{{item.image}}" mode="aspectFit" /></view></view></view>
       <loading-progress wx:if="{{continueBusy}}" progress="{{continueProgress}}" />
       <button wx:if="{{canContinue}}" class="victory-continue" bindtap="continueStage" disabled="{{!rewardSaved || dropError || petDropError || continueBusy || inputUnavailable}}">{{continueBusy ? '准备下一关…' : continueError ? '资源加载失败，重试下一关' : '继续下一关'}}</button>

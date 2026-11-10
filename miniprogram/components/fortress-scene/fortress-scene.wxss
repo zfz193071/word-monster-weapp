@@ -119,9 +119,9 @@
 
 .clear-rewards { display: flex; width: 100%; gap: 10rpx; margin-top: 14rpx; }
 .clear-reward { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6rpx; padding: 12rpx 2rpx; border-radius: 18rpx; background: rgba(255,255,255,.14); color: #fff2cd; font-size: 22rpx; }
-.clear-symbol { font-size: 32rpx; color: #ffe49a; }.clear-amount { font-size: 28rpx; font-weight: bold; }.clear-reward.surprise { background: rgba(225,169,255,.22); }.surprise-label { font-size: 18rpx; color: #ead0ff; }
+.clear-icon { display: block; width: 56rpx; height: 56rpx; flex-shrink: 0; }.clear-amount { font-size: 28rpx; font-weight: bold; }.clear-reward.surprise { background: rgba(225,169,255,.22); }.surprise-label { font-size: 18rpx; color: #ead0ff; }
 .victory-overlay { overflow-y: auto; }.victory-content { margin: auto; padding: 22rpx 0; }
-@media (max-height: 650px) { .clear-reward { padding: 6rpx 2rpx; gap: 2rpx; }.clear-symbol { font-size: 26rpx; } }
+@media (max-height: 650px) { .clear-reward { padding: 6rpx 2rpx; gap: 2rpx; }.clear-icon { width: 44rpx; height: 44rpx; } }
 
 /* Keep a decoded full scene under the native Canvas throughout its handoff. */
 .entry-frame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }

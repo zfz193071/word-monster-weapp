@@ -28,7 +28,7 @@ button::after { border: 0; }
 
 .info-button,.close-button { min-width: 0; max-width: 64rpx; }.start-button { min-width: 0; max-width: 264rpx; }.retry-entry { min-width: 0; max-width: 240rpx; }
 
-.coin-balance { position: absolute; right: 28rpx; top: 32rpx; z-index: 2; display: flex; align-items: center; gap: 12rpx; padding: 8rpx 20rpx 8rpx 10rpx; border-radius: 36rpx; background: #fff8dcdd; color: #7a5422; font-size: 28rpx; font-weight: bold; }.coin-symbol { width: 42rpx; height: 42rpx; border-radius: 50%; border: 4rpx solid #e5a83b; background: #ffe08a; color: #cb8e24; font-size: 20rpx; line-height: 42rpx; text-align: center; }
+.coin-balance { position: absolute; right: 28rpx; top: 32rpx; z-index: 2; display: flex; align-items: center; gap: 12rpx; padding: 8rpx 20rpx 8rpx 10rpx; border-radius: 36rpx; background: #fff8dcdd; color: #7a5422; font-size: 28rpx; font-weight: bold; }.coin-symbol { width: 50rpx; height: 50rpx; flex-shrink: 0; }
 
 .levels-button { position: absolute; left: 26rpx; top: 177rpx; transform: translateY(-50%); z-index: 2; display: grid; grid-template-columns: repeat(2, 20rpx); gap: 6rpx; align-content: center; justify-content: center; width: 76rpx; min-width: 0; max-width: 76rpx; height: 76rpx; padding: 0; border: 3rpx solid #fff9df; border-radius: 24rpx; background: #648a72; box-shadow: 0 5rpx 0 #3f675c; }
 .map-tile { width: 20rpx; height: 20rpx; border-radius: 5rpx; background: #fff4c5; }

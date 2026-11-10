@@ -5,20 +5,20 @@ import { stableBattleRandom } from '../fortress/battle-progression';
 
 export const VICTORY_REWARDS_KEY = 'word-monster:victory-rewards:v1';
 export const PET_SKILL_UPGRADE_COSTS = [10, 20, 35, 55] as const;
-export interface RewardCard { id: string; name: string; amount: number; symbol: string; surprise?: boolean }
+export interface RewardCard { id: string; name: string; amount: number; symbol: string; icon: string; surprise?: boolean }
 export function clearRewards(sessionId: string, levelId: number) {
   const coins = victoryCoinsForLevel(levelId);
   const tier = Math.floor((levelId - 1) / 2);
   const roll = stableBattleRandom(`clear:${sessionId}:${levelId}:surprise`);
-  const bonus = roll < .4 ? {id:'food', name:'宠物粮', amount:2, symbol:'◆'}
-    : roll < .7 ? {id:'stones', name:'技能星石', amount:2, symbol:'✦'}
-    : roll < .85 ? {id:'soldier', name:'援军士兵', amount:1, symbol:'♟'}
-    : roll < .95 ? {id:'flag', name:'复活旗帜', amount:1, symbol:'⚑'}
-    : {id:'egg', name:'宠物蛋', amount:1, symbol:'◉'};
+  const bonus = roll < .4 ? {id:'food', name:'宠物粮', amount:2, symbol:'◆', icon:'/assets/images/checkin/food.png'}
+    : roll < .7 ? {id:'stones', name:'技能星石', amount:2, symbol:'✦', icon:'/assets/images/pets/stone.png'}
+    : roll < .85 ? {id:'soldier', name:'援军士兵', amount:1, symbol:'♟', icon:'/assets/images/checkin/soldier.png'}
+    : roll < .95 ? {id:'flag', name:'复活旗帜', amount:1, symbol:'⚑', icon:'/assets/images/checkin/flag.png'}
+    : {id:'egg', name:'宠物蛋', amount:1, symbol:'◉', icon:'/assets/images/pets/egg.png'};
   const cards: RewardCard[] = [
-    {id:'coins', name:'金币', amount:coins, symbol:'●'},
-    {id:'food', name:'宠物粮', amount:3+tier, symbol:'◆'},
-    {id:'stones', name:'技能星石', amount:2+tier, symbol:'✦'},
+    {id:'coins', name:'金币', amount:coins, symbol:'●', icon:'/assets/images/checkin/coins.png'},
+    {id:'food', name:'宠物粮', amount:3+tier, symbol:'◆', icon:'/assets/images/checkin/food.png'},
+    {id:'stones', name:'技能星石', amount:2+tier, symbol:'✦', icon:'/assets/images/pets/stone.png'},
     {...bonus, id:'surprise', surprise:true},
   ];
   return {cards, food:3+tier+(bonus.id==='food'?2:0), stones:2+tier+(bonus.id==='stones'?2:0),
