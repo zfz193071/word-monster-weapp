@@ -18,6 +18,8 @@ import type { RetirementOptions } from './retirement';
 type Canvas = WechatMiniprogram.Canvas;
 type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
+// Shared elemental identity across projectile trails, status and hit feedback.
+const ELEMENT_COLORS = { flame: '#ee9650', frost: '#94dce8', lightning: '#baa6ec', core: '#fff2cf' } as const;
 export interface SpriteAsset { readonly path: string; readonly source: string; readonly rights: string; readonly approved: boolean }
 export interface MonsterArt {
   readonly animalIds?: readonly string[];
@@ -541,7 +543,7 @@ export class CanvasScene {
         c.strokeRect(monster.position.x - 22, monster.position.y - 34, 44, 56);
       }
       if (monster.hp > 0 && monster.burn && monster.burn.untilTick >= state.tick) {
-        c.fillStyle = '#f8a14e';
+        c.fillStyle = ELEMENT_COLORS.flame;
         for (let flame = 0; flame < 3; flame++) {
           const x = monster.position.x - 15 + flame * 15;
           const height = 10 + 5 * Math.sin(state.tick * .12 + flame);
@@ -550,7 +552,7 @@ export class CanvasScene {
         }
       }
       if (monster.hp > 0 && (monster.slowUntilTick ?? 0) > state.tick) {
-        c.strokeStyle = '#b6f5fa'; c.lineWidth = 2; c.beginPath(); c.ellipse(monster.position.x, monster.position.y + 18, 20, 8, 0, 0, Math.PI * 2); c.stroke();
+        c.strokeStyle = ELEMENT_COLORS.frost; c.lineWidth = 2; c.beginPath(); c.ellipse(monster.position.x, monster.position.y + 18, 20, 8, 0, 0, Math.PI * 2); c.stroke();
       }
       c.globalAlpha = 1;
     }
@@ -560,7 +562,7 @@ export class CanvasScene {
       c.save(); c.translate(state.player.x, state.player.y);
       c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
       c.globalAlpha = Math.min(.6, ((state.flameFanUntilTick ?? 0) - state.tick) / 25);
-      c.fillStyle = '#ff8a3a'; c.beginPath(); c.moveTo(16.8, -34.4);
+      c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(16.8, -34.4);
       c.arc(16.8, -34.4, 52, -Math.PI * .72, -Math.PI * .28); c.closePath(); c.fill(); c.restore();
     }
     for (const bullet of state.projectiles) {
@@ -569,25 +571,34 @@ export class CanvasScene {
         c.save(); c.translate(bullet.position.x, bullet.position.y);
         c.rotate(Math.atan2(bullet.direction?.x ?? 0, -(bullet.direction?.y ?? -1)));
         if (bullet.elements) {
-          const colors = [bullet.elements.flame ? '#ff9652' : '', bullet.elements.frost ? '#9ae7f2' : '', bullet.elements.lightning ? '#c7b0ff' : ''].filter(Boolean);
+          const colors = [bullet.elements.flame ? ELEMENT_COLORS.flame : '', bullet.elements.frost ? ELEMENT_COLORS.frost : '', bullet.elements.lightning ? ELEMENT_COLORS.lightning : ''].filter(Boolean);
           colors.forEach((color, index) => { c.fillStyle = color; c.globalAlpha = .8; c.beginPath(); c.ellipse((index - (colors.length - 1) / 2) * 5, 7, 4, 15, 0, 0, Math.PI * 2); c.fill(); }); c.globalAlpha = 1;
         }
         this.sprite(art.bullet, -bullet.width / 2, -bullet.height / 2, bullet.width, bullet.height); c.restore();
       }
     }
     for (const impact of state.elementImpacts ?? []) {
+      if (impact.untilTick <= state.tick) continue;
       const progress = Math.min(1, Math.max(0, 1 - (impact.untilTick - state.tick) / 35));
       c.save(); c.globalAlpha = (1 - progress) * .85; c.translate(impact.position.x, impact.position.y);
       if (impact.kind === 'flame') {
         const radius = impact.radius ?? 45;
-        c.fillStyle = '#ffbc58'; c.beginPath(); c.arc(0, 0, radius * (.3 + .7 * progress), 0, Math.PI * 2); c.fill(); c.strokeStyle = '#ed763a'; c.lineWidth = 3; c.stroke();
-        c.fillStyle = '#fff3ab'; for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * radius * .78 * progress, Math.sin(angle) * radius * .78 * progress, 4, 0, Math.PI * 2); c.fill(); }
+        const ring = radius * (.3 + .7 * progress);
+        // A faint interior keeps the target readable even when blasts overlap.
+        c.globalAlpha = (1 - progress) * .12;
+        c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.arc(0, 0, ring, 0, Math.PI * 2); c.fill();
+        c.globalAlpha = (1 - progress) * .7;
+        c.strokeStyle = ELEMENT_COLORS.flame; c.lineWidth = 3; c.stroke();
+        c.strokeStyle = ELEMENT_COLORS.core; c.lineWidth = 1;
+        c.beginPath(); c.arc(0, 0, ring * .88, 0, Math.PI * 2); c.stroke();
+        c.fillStyle = ELEMENT_COLORS.core;
+        for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * ring, Math.sin(angle) * ring, 2 * (1 - progress), 0, Math.PI * 2); c.fill(); }
       } else if (impact.kind === 'frost') {
-        c.strokeStyle = '#d4ffff'; c.lineWidth = 3;
+        c.strokeStyle = ELEMENT_COLORS.frost; c.lineWidth = 2;
         for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }
       } else if (impact.target) {
         const dx = impact.target.x - impact.position.x; const dy = impact.target.y - impact.position.y;
-        c.strokeStyle = impact.iceChain ? '#8df5ff' : '#e0d1ff'; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
+        c.strokeStyle = impact.iceChain ? ELEMENT_COLORS.frost : ELEMENT_COLORS.lightning; c.lineWidth = 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
       }
       c.restore();
     }

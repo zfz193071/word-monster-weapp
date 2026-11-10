@@ -1,0 +1,58 @@
+[
+  {
+    "name": "phone-low",
+    "width": 390,
+    "height": 620,
+    "levelId": 1,
+    "count": 3,
+    "tick": 70,
+    "untilTick": 95,
+    "impactCount": 3,
+    "dpr": 2,
+    "bytes": 108522,
+    "sha256": "39e782b4124950b5e5fcc40a68295615d513c18213cae77c3cfa8660b2f972a5",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-high",
+    "width": 390,
+    "height": 620,
+    "levelId": 1,
+    "count": 18,
+    "tick": 70,
+    "untilTick": 95,
+    "impactCount": 18,
+    "dpr": 2,
+    "bytes": 314085,
+    "sha256": "2f324c9bebce15585f419b916e97e385f17409bd2031bfb55b1a10788362e5df",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-low",
+    "width": 1024,
+    "height": 580,
+    "levelId": 1,
+    "count": 3,
+    "tick": 70,
+    "untilTick": 95,
+    "impactCount": 3,
+    "dpr": 2,
+    "bytes": 117190,
+    "sha256": "a09a16b6902b52799dd82598cc230e816b3f06163fc7d2d674bdb83dd2aee8a8",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-high",
+    "width": 1024,
+    "height": 580,
+    "levelId": 1,
+    "count": 18,
+    "tick": 70,
+    "untilTick": 95,
+    "impactCount": 18,
+    "dpr": 2,
+    "bytes": 326217,
+    "sha256": "0cc7b712f86023bc877ede5943b1d336cba1d9bd256688dfd7bf000f6dcc5743",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  }
+]
