@@ -36,6 +36,7 @@ for (const summon of [undefined, ...SUMMON_SKILLS]) test(`复活面板 ${summon 
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},
     require(name:string){
       if(name.endsWith('/daily-checkin'))return{dailyCheckin:daily};
+      if(name.endsWith('/battlefield-assets')) return {loadBattlefieldAssets:()=>Promise.resolve()};
       if(name.endsWith('/canvas-scene'))return{CanvasScene:Scene};
       if(name.endsWith('/coin-wallet'))return{coinWallet:wallet,victoryCoinsForLevel:()=>100};
       if(name.endsWith('/pet-store'))return{petStore:pets};

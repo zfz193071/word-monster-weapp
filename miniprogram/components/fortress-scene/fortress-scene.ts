@@ -4,6 +4,7 @@ import type { RewardCard } from '../../services/victory-rewards';
 import { createOpeningPlan } from '../../fortress/opening-plan';
 import { createStageInvasion } from '../../fortress/stage-invasion';
 import { dailyCheckin } from '../../services/daily-checkin';
+import { loadBattlefieldAssets } from '../../services/battlefield-assets';
 import { loadLevelAssets } from '../../services/level-assets';
 import { battleAudioPaths, loadBattleAssets } from '../../services/battle-assets';
 import { nextStageRequest } from '../../fortress/continuation';
@@ -272,7 +273,8 @@ Component({
           instance.scene = scene;
           if (instance.pet) scene.applyPet(instance.pet);
           this.syncBattlePet(); this.applyPause();
-          void scene.load().then(async loaded => {
+          const resources = this.properties.opening ? loadBattlefieldAssets(loadingLevel) : Promise.resolve();
+          void resources.then(() => valid() ? scene.load() : false).then(async loaded => {
             if (!valid() || !loaded || !await scene.present() || !valid()) return;
             // A RAF callback confirms command submission, not visible pixels. Export the
             // complete frame and wait for the view-layer image's load acknowledgement.
@@ -283,6 +285,10 @@ Component({
             }
             instance.entryFramePending = true;
             this.setData({ entryFrame: frame, entryFrameEpoch: epoch });
+          }).catch(error => {
+            if (!valid()) return;
+            const message = error instanceof Error ? error.message : '战场资源加载失败，请重试';
+            this.triggerEvent('sceneerror', { message }); this.setData({ error: message, ready: false }); this.applyPause();
           });
         } catch (error) { if (valid()) { const message = error instanceof Error ? error.message : '战场初始化失败'; this.triggerEvent('sceneerror', { message }); this.setData({ error: message }); } }
       }).exec();

@@ -33,6 +33,7 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},
     require(name:string){
       if(name.endsWith('/daily-checkin'))return{dailyCheckin:daily};
+      if(name.endsWith('/battlefield-assets')) return {loadBattlefieldAssets:()=>Promise.resolve()};
       if(name.endsWith('/canvas-scene'))return{CanvasScene:Scene};
       if(name.endsWith('/coin-wallet'))return{coinWallet:wallet,victoryCoinsForLevel:()=>100};
       if(name.endsWith('/pet-store'))return{petStore:pets};

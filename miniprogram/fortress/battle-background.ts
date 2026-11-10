@@ -1,7 +1,7 @@
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 // First approved scene direction; the remaining themed levels retain their assets.
 export const COURTYARD_ASSET = {
-  path: '/assets/battle-art/courtyard-v1.jpg',
+  path: '/battlefield-assets/courtyard-v1.jpg',
   source: 'image_gen; battlefield-overhaul/courtyard-source-01.png',
   rights: 'Project-generated artwork', approved: true,
 } as const;

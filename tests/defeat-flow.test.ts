@@ -19,7 +19,8 @@ test('失败可变强或重开当前关卡，音效一次、暂停恢复和后�
  runInNewContext(ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
   exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},
   require(name:string){
-   if(name.endsWith('/canvas-scene'))return {CanvasScene:Scene};
+   if(name.endsWith('/battlefield-assets')) return {loadBattlefieldAssets:()=>Promise.resolve()};
+      if(name.endsWith('/canvas-scene'))return {CanvasScene:Scene};
    if(name.endsWith('/coin-wallet'))return {coinWallet:{balance:()=>0},victoryCoinsForLevel:()=>100};
    if(name.endsWith('/pet-store'))return {petStore:{view:()=>({owned:false})}};
    if(name.endsWith('/defeat-audio'))return {createDefeatAudio(){audioCount++;return{setActive(value:boolean){audioActive=value;},dispose(){disposed=true;}};}};

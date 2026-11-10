@@ -76,6 +76,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     require(name:string){
       if(name.endsWith('/stage-invasion'))return invasion;
       if(name.endsWith('/continuation'))return continuation;
+      if(name.endsWith('/battlefield-assets'))return {loadBattlefieldAssets:()=>Promise.resolve()};
       if(name.endsWith('/level-assets'))return {loadLevelAssets(){loadCount++;return loadNext();}};
       if(name.endsWith('/battle-assets'))return {battleAudioPaths:()=>[],loadBattleAssets(_art:unknown,callbacks:any){callbacks.onProgress(100);callbacks.onReady();return()=>{};}};
       if(name.endsWith('/battle-background'))return {battleBackgroundCover:(levelId:number)=>`/assets/images/battle-backgrounds/level-${levelId}.png`,battleBackgroundColor:()=> '#a1b777'};

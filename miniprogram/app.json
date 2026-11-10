@@ -26,6 +26,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "battlefield-assets",
+      "name": "battlefield-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

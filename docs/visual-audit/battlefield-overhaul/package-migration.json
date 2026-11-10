@@ -1,0 +1,45 @@
+{
+  "issue": 86,
+  "sourceBudgetOnly": true,
+  "beforeCommit": "1c1228d",
+  "beforeMainKiB": 2023.5,
+  "after": [
+    {
+      "root": "",
+      "name": "main",
+      "bytes": 1783237
+    },
+    {
+      "root": "learning-assets",
+      "name": "learning-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 2024477
+    },
+    {
+      "root": "assets/images",
+      "name": "scene-images",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 1908822
+    },
+    {
+      "root": "battlefield-assets",
+      "name": "battlefield-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 292624
+    }
+  ],
+  "courtyardSha256": "c8d48a21c19d60a6458d5d7645ba1bdb8e28db4f196cca48ff7c231b19f5dfe9",
+  "courtyardDecodedRgbaBytes": 6291456,
+  "deviceMeasured": false,
+  "renderComparison": {
+    "captures": 16,
+    "allSha256Identical": true,
+    "baseline": "runtime-ground/report.json"
+  }
+}
