@@ -1,0 +1,596 @@
+[
+  {
+    "device": "phone-low",
+    "width": 390,
+    "height": 620,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "count": 3,
+    "source": "Fixed initial HP/positions/skills; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "5–6 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 8 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "expiredImpacts": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 117,
+      "monsterDefeated": 3
+    },
+    "elementKinds": [
+      "flame",
+      "frost",
+      "lightning"
+    ],
+    "peakImpacts": 5,
+    "peakProjectiles": 9,
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 596,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 700,
+        "impacts": 0,
+        "projectiles": 6,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 950,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 10,
+        "tick": 1105,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 11,
+        "tick": 1105,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 12,
+        "tick": 1105,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 13,
+        "tick": 1105,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      }
+    ],
+    "file": "phone-low.mp4",
+    "bytes": 473035,
+    "sha256": "13a0135836c5b4a53c20b46d52651a27d1a8f5e4d9baffcae398c2db2b002e53"
+  },
+  {
+    "device": "phone-high",
+    "width": 390,
+    "height": 620,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "count": 18,
+    "source": "Fixed initial HP/positions/skills; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "5–6 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 8 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "expiredImpacts": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 238,
+      "monsterDefeated": 3,
+      "baseDamaged": 75
+    },
+    "elementKinds": [
+      "flame",
+      "frost",
+      "lightning"
+    ],
+    "peakImpacts": 5,
+    "peakProjectiles": 3,
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 596,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 17,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 700,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 16,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 950,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 12,
+        "baseHp": 990
+      },
+      {
+        "second": 10,
+        "tick": 1200,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 9,
+        "baseHp": 880
+      },
+      {
+        "second": 11,
+        "tick": 1450,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 3,
+        "baseHp": 730
+      },
+      {
+        "second": 12,
+        "tick": 1700,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 580
+      },
+      {
+        "second": 13,
+        "tick": 1950,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 0,
+        "baseHp": 410
+      }
+    ],
+    "file": "phone-high.mp4",
+    "bytes": 873848,
+    "sha256": "5e6337ca2df087e880e7ceccd311c0632baf9148a8e82cb5f5dbcca80ec1746d"
+  },
+  {
+    "device": "ipad-low",
+    "width": 1024,
+    "height": 580,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "count": 3,
+    "source": "Fixed initial HP/positions/skills; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "5–6 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 8 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "expiredImpacts": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 118,
+      "baseDamaged": 1,
+      "monsterDefeated": 3
+    },
+    "elementKinds": [
+      "flame",
+      "frost"
+    ],
+    "peakImpacts": 4,
+    "peakProjectiles": 9,
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "impacts": 0,
+        "projectiles": 8,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "impacts": 0,
+        "projectiles": 8,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "impacts": 0,
+        "projectiles": 8,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "impacts": 0,
+        "projectiles": 8,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 7,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 7,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 596,
+        "impacts": 2,
+        "projectiles": 5,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 700,
+        "impacts": 0,
+        "projectiles": 7,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 950,
+        "impacts": 0,
+        "projectiles": 5,
+        "alive": 3,
+        "baseHp": 1000
+      },
+      {
+        "second": 10,
+        "tick": 1170,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 970
+      },
+      {
+        "second": 11,
+        "tick": 1170,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 970
+      },
+      {
+        "second": 12,
+        "tick": 1170,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 970
+      },
+      {
+        "second": 13,
+        "tick": 1170,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 970
+      }
+    ],
+    "file": "ipad-low.mp4",
+    "bytes": 487886,
+    "sha256": "f1b1591d3eef22440dc95dee572e90828b384458c17a89d2e3fb2c790a2da45b"
+  },
+  {
+    "device": "ipad-high",
+    "width": 1024,
+    "height": 580,
+    "dpr": 1,
+    "fps": 30,
+    "durationSeconds": 14,
+    "count": 18,
+    "source": "Fixed initial HP/positions/skills; production combat and Canvas frame loop; offscreen, not device or natural progression.",
+    "pause": "5–6 seconds, stale callbacks and pixel/state equality checked",
+    "speed": "1x until 8 seconds, then 2.5x",
+    "checks": {
+      "pausePixels": true,
+      "pauseState": true,
+      "staleFrames": true,
+      "expiredImpacts": true,
+      "dispose": true,
+      "droppedSimulationMs": 0
+    },
+    "eventCounts": {
+      "monsterDamaged": 236,
+      "monsterDefeated": 5,
+      "baseDamaged": 64
+    },
+    "elementKinds": [
+      "flame",
+      "frost",
+      "lightning"
+    ],
+    "peakImpacts": 5,
+    "peakProjectiles": 4,
+    "samples": [
+      {
+        "second": 0,
+        "tick": 0,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 1000
+      },
+      {
+        "second": 1,
+        "tick": 100,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 2,
+        "tick": 200,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 3,
+        "tick": 300,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 18,
+        "baseHp": 1000
+      },
+      {
+        "second": 4,
+        "tick": 400,
+        "impacts": 0,
+        "projectiles": 2,
+        "alive": 17,
+        "baseHp": 1000
+      },
+      {
+        "second": 5,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 17,
+        "baseHp": 1000
+      },
+      {
+        "second": 6,
+        "tick": 496,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 17,
+        "baseHp": 1000
+      },
+      {
+        "second": 7,
+        "tick": 596,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 16,
+        "baseHp": 1000
+      },
+      {
+        "second": 8,
+        "tick": 700,
+        "impacts": 0,
+        "projectiles": 1,
+        "alive": 16,
+        "baseHp": 1000
+      },
+      {
+        "second": 9,
+        "tick": 950,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 12,
+        "baseHp": 990
+      },
+      {
+        "second": 10,
+        "tick": 1200,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 9,
+        "baseHp": 890
+      },
+      {
+        "second": 11,
+        "tick": 1450,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 3,
+        "baseHp": 780
+      },
+      {
+        "second": 12,
+        "tick": 1700,
+        "impacts": 0,
+        "projectiles": 0,
+        "alive": 0,
+        "baseHp": 650
+      },
+      {
+        "second": 13,
+        "tick": 1950,
+        "impacts": 0,
+        "projectiles": 3,
+        "alive": 0,
+        "baseHp": 500
+      }
+    ],
+    "file": "ipad-high.mp4",
+    "bytes": 785702,
+    "sha256": "cdd45d172ccff738262411a42792a764ce425d2d8b4589295db83f12f0dd3d9d"
+  }
+]
