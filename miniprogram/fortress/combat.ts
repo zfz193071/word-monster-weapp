@@ -1,5 +1,6 @@
+import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
-import { enemyLayer, soldierLayer, soldierType, soldierCapability, targetable, validateSoldierIdentity } from './army';
+import { enemyLayer, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
@@ -186,7 +187,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   spawns.forEach(enemyLayer);
   options.supportSoldiers?.forEach(validateSoldierIdentity);
   if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2
-    || !Number.isInteger(soldier.maxHp) || soldier.maxHp !== SUPPORT_SOLDIER_MAX_HP || !Number.isInteger(soldier.hp) || soldier.hp <= 0 || soldier.hp > soldier.maxHp
+    || !Number.isInteger(soldier.maxHp) || soldier.maxHp !== unitStats(soldier, weaponForLevel(weaponLevel).damage).maxHp || !Number.isInteger(soldier.hp) || soldier.hp <= 0 || soldier.hp > soldier.maxHp
     || !Number.isFinite(soldier.attackRemainingMs) || soldier.attackRemainingMs < 0)) throw new Error('援军状态无效');
   const state: CombatState = {
     houseLevel: options.houseLevel ?? 1, weaponLevel, context, monsterSpeed, frostEnergy: 0, flameVolleyHits: {}, elementReadyTick: 500, elementImpacts: [],
@@ -332,10 +333,10 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   });
   contacts.sort((a, b) => a.time - b.time || a.projectileIndex - b.projectileIndex || a.monsterIndex - b.monsterIndex);
   const impacts: ElementImpact[] = (previous.elementImpacts ?? []).filter(impact => impact.untilTick > tick);
-  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet') => {
+  const damageMonster = (index: number, damage: number, kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet', kinetic = kind === 'projectile' || kind === 'soldier') => {
     const monster = monsters[index]; if (!targetable(monster)) return;
     if (!Number.isSafeInteger(damage) || !Number.isSafeInteger(monster.hp)) throw new RangeError('怪物伤害与生命值必须为整数');
-    damage = armoredDamage(monster.enemyType, damage, kind === 'projectile' || kind === 'soldier');
+    damage = armoredDamage(monster.enemyType, damage, kinetic);
     if (monster.bossKind === 'grand' && grandBossWindingUp(tick * COMBAT_STEP_MS - (monster.spawnAtMs ?? 0))) damage = Math.ceil(damage * 1.5);
     const hp = Math.max(0, monster.hp - damage);
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
@@ -413,23 +414,18 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   }
   const supportCount = supportSoldiers.length;
   supportSoldiers = supportSoldiers.map(soldier => ({ ...soldier,
-    position: supportPosition(player, soldier.slot, supportCount, previous.arenaWidth),
+    position: { ...supportPosition(player, soldier.slot, supportCount, previous.arenaWidth), ...(soldierType(soldier.soldierType) === 'jetpack' ? {x: supportPosition(player, soldier.slot, supportCount, previous.arenaWidth).x + Math.sin(tick * .025 + soldier.slot) * 12} : {}) },
     attackRemainingMs: Math.max(0, soldier.attackRemainingMs - COMBAT_STEP_MS),
   }));
   const supportDamage = weaponForLevel(previous.weaponLevel ?? 1).damage;
   for (let soldierIndex = 0; soldierIndex < supportSoldiers.length; soldierIndex++) {
     const soldier = supportSoldiers[soldierIndex];
     if (soldier.attackRemainingMs > 0) continue;
-    let target = -1; let distance = Infinity;
-    monsters.forEach((monster, index) => {
-      if (!targetable(monster, soldierCapability(soldier))
-        || monster.position.y < 0 || monster.position.y > RULES.arena.baseTop) return;
-      const candidate = Math.hypot(monster.position.x - soldier.position.x, monster.position.y - soldier.position.y);
-      if (candidate < distance) { distance = candidate; target = index; }
-    });
-    if (target < 0) continue;
-    damageMonster(target, supportDamage, 'soldier');
-    supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: 2000, lastShotTick: tick, shotCombatId: previous.context.combatId, shotTarget: monsters[target].position };
+    const targets = soldierTargets(soldier,monsters,supportDamage);
+    if (!targets.length) continue;
+    const stats = unitStats(soldier,supportDamage), type = soldierType(soldier.soldierType);
+    for (const target of targets) damageMonster(target, stats.shots === 2 ? Math.ceil(stats.damage * .7) : stats.damage, 'soldier', type === 'rifle' || type === 'jetpack');
+    supportSoldiers[soldierIndex] = { ...soldier, attackRemainingMs: stats.interval, lastShotTick: tick, shotCombatId: previous.context.combatId, shotTarget: monsters[targets[0]].position };
   }
   let pet = previous.pet ? createBattlePet(previous.pet, previous.pet.attackRemainingMs, previous.pet) : undefined;
   if (pet && pet.hp > 0) {
@@ -497,7 +493,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const soldierIndex = monster.boss ? -1 : candidates[0]?.index ?? -1;
     if (soldierIndex >= 0) {
       const soldier = supportSoldiers[soldierIndex];
-      const hp = Math.max(0, soldier.hp - (monster.attackDamage ?? RULES.monster.attackDamage));
+      const hp = Math.max(0, soldier.hp - receivedSoldierDamage(soldier, monster.attackDamage ?? RULES.monster.attackDamage));
       if (hp === 0) { supportSoldiers.splice(soldierIndex, 1); if (!fallenSoldiers.some(s => s.id === soldier.id)) fallenSoldiers.push({...soldier, hp: 0}); }
       else supportSoldiers[soldierIndex] = { ...soldier, hp };
       events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
@@ -624,7 +620,11 @@ export function attachCombatPet(state: CombatState, pet: BattlePet): CombatState
 // Revival is prepared in full before inventory is debited by the paused runner.
 export function reviveCompanion(state: CombatState, kind: string, id: string): CombatState | null {
   if (state.status !== 'fighting' || state.base.hp <= 0) return null;
-  if (kind !== 'soldier' || !state.fallenSoldiers?.some(s => s.id === id)) return null;
+  const fallen = state.fallenSoldiers?.find(s => s.id === id);
+  if (kind !== 'soldier' || !fallen) return null;
   const next = summonSupportSoldier(state, id);
-  return next ? freezeState({...next, fallenSoldiers: state.fallenSoldiers.filter(s => s.id !== id)}) : null;
+  if (!next) return null;
+  const stats = unitStats(fallen,weaponForLevel(state.weaponLevel ?? 1).damage);
+  return freezeState({...next, supportSoldiers: next.supportSoldiers!.map(s => s.id === id ? {...fallen,slot:s.slot,position:s.position,hp:fallen.maxHp,attackRemainingMs:stats.interval,lastShotTick:undefined,shotTarget:undefined,shotCombatId:undefined} : s),
+    fallenSoldiers: state.fallenSoldiers!.filter(s => s.id !== id)});
 }

@@ -43,5 +43,6 @@ export function targetable(monster: MonsterState, capability: AttackCapability =
 export function validateSoldierIdentity(soldier: SupportSoldierState): void {
   const type = soldierType(soldier.soldierType);
   if (soldier.source !== undefined && !['inventory', 'boss', 'skill'].includes(soldier.source)) throw new Error('未知援军来源');
+  if (soldier.source === 'skill' && !soldier.skill) throw new Error('技能援军缺少成长属性');
   if (soldier.source !== 'skill' && (type !== 'rifle' || soldier.evolved)) throw new Error('旧援军只能使用普通步枪形态');
 }
