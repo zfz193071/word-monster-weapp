@@ -10,15 +10,17 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   const type = soldierType(soldier.soldierType);
   const target = soldier.shotTarget;
   const firing = soldier.hp > 0 && soldier.shotCombatId === combatId && target && soldier.lastShotTick !== undefined && tick >= soldier.lastShotTick && tick - soldier.lastShotTick < 16;
+  const shotProgress = firing ? (tick - soldier.lastShotTick!) / 16 : 1;
+  const shotStrength = (1 - shotProgress) ** 2;
   const angle = target ? Math.atan2(target.x - soldier.position.x, -(target.y - soldier.position.y)) : 0;
   const size = type === 'tank' ? 64 : 56;
   const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
-  const imageY = -size / 2 - 8 + hover + (firing ? 1.5 : 0);
+  const imageY = -size / 2 - 8 + hover + 1.5 * shotStrength;
   const [anchorX, anchorY] = SOLDIER_MUZZLES[type];
   // Flash and trace share the same local muzzle, including artwork motion.
   const muzzle = image ? {x: -size / 2 + anchorX * size / 128, y: imageY + anchorY * size / 128}
     : type === 'tank' ? {x: 0, y: -36}
-    : type === 'rocket' ? {x: 6, y: -41} : {x: 7, y: -30 + (firing ? 2 : 0)};
+    : type === 'rocket' ? {x: 6, y: -41} : {x: 7, y: -30 + 2 * shotStrength};
   c.save(); c.translate(soldier.position.x, soldier.position.y);
   c.fillStyle = 'rgba(31,50,42,.25)'; c.beginPath(); c.ellipse(0, 9, 12, 4, 0, 0, Math.PI * 2); c.fill();
   c.save(); c.rotate(angle);
@@ -42,7 +44,7 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   c.fillStyle = '#547b89'; c.fillRect(-9, -20, 18, 8);
   c.fillStyle = '#c8edf1'; c.fillRect(-7, -20, 14, 3);
   // Shoulder stock, receiver, magazine, long barrel and a bright muzzle rim.
-  const recoil = firing ? 2 : 0;
+  const recoil = 2 * shotStrength;
   c.fillStyle = '#704b35'; c.fillRect(4, -5 + recoil, 5, 11);
   c.fillStyle = '#243949'; c.fillRect(3, -20 + recoil, 8, 18); c.fillRect(1, -10 + recoil, 5, 6);
   c.fillStyle = '#91b8c9'; c.fillRect(5, -29 + recoil, 4, 12);
@@ -63,14 +65,15 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   }
   if (soldier.evolved) {c.fillStyle='#f1d584';c.beginPath();c.moveTo(0,-24);c.lineTo(4,-20);c.lineTo(0,-16);c.lineTo(-4,-20);c.closePath();c.fill();}
   if (firing) {
-    c.save(); c.translate(muzzle.x, muzzle.y);
+    c.save(); c.globalAlpha *= 1 - shotProgress; c.translate(muzzle.x, muzzle.y);
     c.fillStyle = '#fff0a8'; c.beginPath(); c.moveTo(0, -10); c.lineTo(5, 0); c.lineTo(-5, 0); c.closePath(); c.fill(); c.restore();
   }
   c.restore();
   if (firing) {
+    c.save(); c.globalAlpha *= 1 - shotProgress;
     c.strokeStyle = type === 'flamethrower' ? 'rgba(235,153,74,.65)' : 'rgba(255,219,120,.75)'; c.lineWidth = type === 'flamethrower' ? 8 : type === 'tank' || type === 'rocket' ? 3 : 1.5;
     c.beginPath(); c.moveTo(Math.cos(angle) * muzzle.x - Math.sin(angle) * muzzle.y, Math.sin(angle) * muzzle.x + Math.cos(angle) * muzzle.y);
-    c.lineTo(target.x - soldier.position.x, target.y - soldier.position.y); c.stroke();
+    c.lineTo(target.x - soldier.position.x, target.y - soldier.position.y); c.stroke(); c.restore();
   }
   // Cosmetic marks use the committed damage tick; no timers or damage callbacks.
   if (soldier.hp > 0 && soldier.hitCombatId === combatId && soldier.lastHitTick !== undefined

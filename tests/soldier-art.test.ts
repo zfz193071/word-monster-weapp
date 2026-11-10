@@ -65,3 +65,29 @@ test('图片枪口、闪光与弹道共用后坐和悬停后的坐标，旋转�
     }
   }
 });
+
+test('六类图片攻击平滑回弹，闪光弹道渐退且不修改战斗状态', () => {
+  for (const soldierType of ['rifle','shield','flamethrower','rocket','jetpack','tank'] as const) {
+    const soldier: SupportSoldierState = {id:soldierType,slot:0,soldierType,hp:30,maxHp:30,position:{x:100,y:400},attackRemainingMs:0,lastShotTick:200,shotCombatId:'battle',shotTarget:{x:100,y:100}};
+    const before=structuredClone(soldier);
+    const sample=(tick:number,active:boolean) => {
+      let alpha=1,y=0;const saved:number[]=[],effectAlpha:number[]=[];
+      const methods={save(){saved.push(alpha);},restore(){alpha=saved.pop()!;},drawImage(_image:unknown,_x:number,imageY:number){y=imageY;},stroke(){effectAlpha.push(alpha);}};
+      const context=new Proxy(methods,{get:(target,name)=>name==='globalAlpha'?alpha:target[name as keyof typeof methods]??(()=>{}),set:(_,name,value)=>{if(name==='globalAlpha')alpha=value;return true;}});
+      drawSoldier(context as unknown as WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D,soldier,tick,active?'battle':'other',{} as WechatMiniprogram.Image);
+      assert.equal(alpha,1,'effects restore caller opacity');
+      return {y,effectAlpha};
+    };
+    let previous=Infinity;
+    for(let tick=200;tick<216;tick++) {
+      const active=sample(tick,true),idle=sample(tick,false),offset=active.y-idle.y;
+      assert.ok(offset>0 && offset<previous,'each frame returns toward the resting pose, including hovering units');
+      assert.ok(active.effectAlpha[0]>0 && active.effectAlpha[0]<=1);
+      if(tick>200)assert.ok(active.effectAlpha[0]<sample(tick-1,true).effectAlpha[0]);
+      assert.deepEqual(sample(tick,true),active,'paused tick freezes motion');
+      previous=offset;
+    }
+    assert.deepEqual(sample(216,true),sample(216,false),'expiry returns to the exact idle pose');
+    assert.deepEqual(soldier,before);
+  }
+});
