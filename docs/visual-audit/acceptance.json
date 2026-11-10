@@ -1,0 +1,310 @@
+{
+  "date": "2026-11-10",
+  "boundary": "本页仅汇总仓库证据。画风方向已采用，候选素材未获整套批准。离屏固定夹具不是微信模拟器或真机截图；没有设备性能、用户最终视觉确认或全流程动态通过结论。",
+  "assets": [
+    {
+      "id": "hero",
+      "name": "主角与7级武器",
+      "owner": 91,
+      "status": "一级背面候选；未接入",
+      "links": [
+        {
+          "path": "hero/README.md",
+          "label": "候选限制"
+        },
+        {
+          "path": "current-scenes/review.html",
+          "label": "现行七级对照"
+        }
+      ],
+      "remaining": "候选底边触边；枪口/脚底锚点、首页正面、七级系列、持枪动作及用户审样待完成。"
+    },
+    {
+      "id": "ordinary",
+      "name": "普通僵尸及19套服装",
+      "owner": 92,
+      "status": "普通僵尸透明候选；未接入",
+      "links": [
+        {
+          "path": "enemies/README.md",
+          "label": "制作与透明检查"
+        },
+        {
+          "path": "enemies/boss-review.html",
+          "label": "三类同尺度对照"
+        }
+      ],
+      "remaining": "19套服装适配、肢体拆分、帽标锚点、移动和攻击动态待完成。"
+    },
+    {
+      "id": "boss",
+      "name": "铁桶Boss、最终Boss",
+      "owner": 92,
+      "status": "两类独立造型候选；未接入",
+      "links": [
+        {
+          "path": "enemies/boss-review.html",
+          "label": "轮廓与尺寸"
+        },
+        {
+          "path": "enemies/boss-review.json",
+          "label": "透明与哈希"
+        }
+      ],
+      "remaining": "词标/生命条/预警同时出现、碰撞外观与分层动作、混战及设备验收待完成。"
+    },
+    {
+      "id": "soldiers",
+      "name": "六类小兵",
+      "owner": 79,
+      "status": "概念方向；正式兵种未制作",
+      "links": [
+        {
+          "path": "concepts/manifest.json",
+          "label": "概念来源"
+        },
+        {
+          "path": "README.md",
+          "label": "现有兵种盘点"
+        }
+      ],
+      "remaining": "依赖#72规则确认及#73契约；不能把概念或旧普通援军当成六类交付。"
+    },
+    {
+      "id": "fruits",
+      "name": "11种水果",
+      "owner": 84,
+      "status": "11/11水果256px正式图已接入；44个尺寸候选留档",
+      "links": [
+        {
+          "path": "fruits/review.html",
+          "label": "全词审样"
+        },
+        {
+          "path": "fruits/scenes/review.html",
+          "label": "实际绘制器静态合成"
+        },
+        {
+          "path": "fruits/README.md",
+          "label": "11月9日正式接入记录"
+        }
+      ],
+      "remaining": "动态、微信设备、跨关与完整27词验收未完成；128档仅用于离屏比较。"
+    },
+    {
+      "id": "animals",
+      "name": "16种动物",
+      "owner": 85,
+      "status": "14/16展示图；未接入",
+      "links": [
+        {
+          "path": "animals/README.md",
+          "label": "缺项与生成记录"
+        },
+        {
+          "path": "animals/review.html",
+          "label": "候选审样"
+        }
+      ],
+      "remaining": "缺马、狮子；兔/鸟之外的独立战斗部件、关节与自然动作未完成。"
+    },
+    {
+      "id": "other",
+      "name": "颜色及其他学习类别",
+      "owner": 90,
+      "status": "保留现有语义与素材",
+      "links": [
+        {
+          "path": "inventory.json",
+          "label": "逐词路径"
+        },
+        {
+          "path": "current-assets.html",
+          "label": "素材总览"
+        }
+      ],
+      "remaining": "整场协调及实际尺寸核查；未授权批量重做这些类别。"
+    },
+    {
+      "id": "skills",
+      "name": "技能卡",
+      "owner": 79,
+      "status": "现行技能卡保留；新卡未制作",
+      "links": [
+        {
+          "path": "README.md",
+          "label": "技能卡分工"
+        }
+      ],
+      "remaining": "新兵种规则与同尺度审样待确认；基础/进化识别、真实页面冻结背景待验。"
+    },
+    {
+      "id": "backgrounds",
+      "name": "8关背景与加载图",
+      "owner": 93,
+      "status": "八关离屏对照已制作",
+      "links": [
+        {
+          "path": "scenes/README.md",
+          "label": "范围及问题"
+        },
+        {
+          "path": "scenes/review.html",
+          "label": "八关对照"
+        }
+      ],
+      "remaining": "冷/热加载、自然动态、手机/iPad截图与用户视觉确认待完成。"
+    },
+    {
+      "id": "houses",
+      "name": "5级堡垒与首页小屋",
+      "owner": 93,
+      "status": "结构保留；五级离屏对照",
+      "links": [
+        {
+          "path": "current-scenes/review.html",
+          "label": "五级首页与战场"
+        },
+        {
+          "path": "current-scenes/README.md",
+          "label": "证据边界"
+        }
+      ],
+      "remaining": "首页顶部塔楼裁切需按真实容器复验；材质协调和设备布局待验。"
+    },
+    {
+      "id": "pets",
+      "name": "宠物/装扮/升级面板",
+      "owner": 90,
+      "status": "保留近期面板与现行蓝狐",
+      "links": [
+        {
+          "path": "current-scenes/review.html",
+          "label": "现行一级蓝狐"
+        },
+        {
+          "path": "current-assets.html",
+          "label": "面板资源"
+        }
+      ],
+      "remaining": "首页/战斗/面板三处并列与成长级别覆盖未齐；宠物免伤且不显示血条。"
+    },
+    {
+      "id": "rewards",
+      "name": "金币/粮食/星石/旗帜/蛋/奖励",
+      "owner": 94,
+      "status": "已实施通关与首页图标复用",
+      "links": [
+        {
+          "path": "../requirements-2026-11-02-followup.md",
+          "label": "11月10日#94实施记录"
+        }
+      ],
+      "remaining": "跨签到/库存/结算入口真实截图、可领取/零库存/禁用状态及设备验收待完成。"
+    },
+    {
+      "id": "controls",
+      "name": "音量/暂停/返回/倍速按钮",
+      "owner": 94,
+      "status": "保留现有简洁图形",
+      "links": [
+        {
+          "path": "README.md",
+          "label": "功能图标盘点"
+        }
+      ],
+      "remaining": "描边/留白一致性、真实尺寸、点击区与状态截图待验。"
+    },
+    {
+      "id": "effects",
+      "name": "普通弹/元素/爆炸/命中/金币/烟花",
+      "owner": 95,
+      "status": "已实施元素配色与爆炸遮挡优化",
+      "links": [
+        {
+          "path": "effects/README.md",
+          "label": "实施及限制"
+        },
+        {
+          "path": "effects/review.html",
+          "label": "低/高密度前后对照"
+        }
+      ],
+      "remaining": "全过程动态、多DPR、Boss预警并发、金币/烟花及设备帧耗时待验。"
+    },
+    {
+      "id": "loading",
+      "name": "加载追逐/进度",
+      "owner": 93,
+      "status": "保留真实进度与首帧门控",
+      "links": [
+        {
+          "path": "scenes/README.md",
+          "label": "背景与加载范围"
+        }
+      ],
+      "remaining": "真实冷/热加载、重试、退出迟到回调及新资源接入后复验待完成。"
+    },
+    {
+      "id": "legacy",
+      "name": "历史V2拟人水果与占位图",
+      "owner": 86,
+      "status": "保留隔离；未删除",
+      "links": [
+        {
+          "path": "inventory.json",
+          "label": "原始资源清单"
+        },
+        {
+          "path": "battle-resources.json",
+          "label": "现行依赖核查"
+        }
+      ],
+      "remaining": "先查旧入口引用再决定清理；不计入新版素材完成数。"
+    }
+  ],
+  "journey": [
+    {
+      "stage": "首页",
+      "evidence": "手机/平板尺寸七级武器、五级房屋离屏基线。",
+      "remaining": "实际页面容器、面板切换、真实触控和顶部裁切复验。"
+    },
+    {
+      "stage": "听词",
+      "evidence": "11种水果正式256px图片已与帽标/Boss共享；动物仍为展示候选。",
+      "remaining": "动物新图未接入；三选一实际页面与声音/图片对应待验。"
+    },
+    {
+      "stage": "加载",
+      "evidence": "源码门控和八关背景静态基线。",
+      "remaining": "冷/热加载、真实进度、失败重试和退出行为设备证据。"
+    },
+    {
+      "stage": "战斗",
+      "evidence": "固定夹具普通怪/Boss、低高密度水果及元素效果对照。",
+      "remaining": "自然事件动态、动画衔接、预警遮挡、长局及帧耗时。"
+    },
+    {
+      "stage": "技能选择",
+      "evidence": "沿用现行代码；没有本轮真实页面截图。",
+      "remaining": "三选一、冻结背景、品质识别与恢复战斗截图/动态。"
+    },
+    {
+      "stage": "奖励结算",
+      "evidence": "#94复用现有奖励图片，已留实施记录。",
+      "remaining": "真实胜利画面、各奖种、数量与烟花/图标叠加核查。"
+    },
+    {
+      "stage": "连续下一关",
+      "evidence": "资源依赖报告覆盖当前及上一关词库。",
+      "remaining": "不是运行时缓存证据；跨关首帧、加载、驻留/释放及连续长局待验。"
+    }
+  ],
+  "deviceGaps": [
+    "手机/iPad × 横/竖屏 × DPR：未提供本轮真实设备验收；离屏390×620与1024×580只代表固定画布。",
+    "冷/热加载、低/高密度自然混战、长局、暂停/前后台与退出：记录设备型号、系统、微信/基础库版本和资源版本后逐项执行。",
+    "包体：art-budget.json是历史候选源码情景；当前源码以check:package重新核算，微信编译产物仍待采集。",
+    "帧耗时与内存：静态图和RGBA估算不计为设备数据；需记录采样场景、时长、峰值与异常。",
+    "所有缺陷回到资产责任工单整改；用户确认视觉后再更新对应验收项。"
+  ]
+}

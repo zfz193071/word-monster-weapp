@@ -1,0 +1,180 @@
+{
+  "date": "2026-11-10",
+  "evidenceType": "Local file existence and SHA256 only",
+  "evidence": [
+    {
+      "asset": "hero",
+      "path": "hero/README.md",
+      "bytes": 1419,
+      "sha256": "acfd325b82fd3ee1faf7b0e89f4e42c8421a4cf5e0ae3f96cd2699ee1fe1869c"
+    },
+    {
+      "asset": "hero",
+      "path": "current-scenes/review.html",
+      "bytes": 7926,
+      "sha256": "f93db422d424ff7255515badadc92da04593f2d6e9d58a618c2aab477cd0e9a3"
+    },
+    {
+      "asset": "ordinary",
+      "path": "enemies/README.md",
+      "bytes": 3965,
+      "sha256": "7207c7ac690dbc678d2883cc93118ac3b5ffa30018132e57ec03441e8e9e87a3"
+    },
+    {
+      "asset": "ordinary",
+      "path": "enemies/boss-review.html",
+      "bytes": 1315,
+      "sha256": "2ff029dc1d233d1d74fa3bf472905bf580e231edf3c23fb215e6a84706a92a56"
+    },
+    {
+      "asset": "boss",
+      "path": "enemies/boss-review.html",
+      "bytes": 1315,
+      "sha256": "2ff029dc1d233d1d74fa3bf472905bf580e231edf3c23fb215e6a84706a92a56"
+    },
+    {
+      "asset": "boss",
+      "path": "enemies/boss-review.json",
+      "bytes": 2258,
+      "sha256": "207b7adf2f9ee3e4b66432d7078731366c482281449dad6acc81b4d8befb68d1"
+    },
+    {
+      "asset": "soldiers",
+      "path": "concepts/manifest.json",
+      "bytes": 961,
+      "sha256": "504d38a372c3b79dfb6355e78cbbec2b2904010a0a41452ad40181f7008d03e6"
+    },
+    {
+      "asset": "soldiers",
+      "path": "README.md",
+      "bytes": 16951,
+      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+    },
+    {
+      "asset": "fruits",
+      "path": "fruits/review.html",
+      "bytes": 8599,
+      "sha256": "40d518551ab4a1804645ac8882348e07b8a5053e2579f974f65f0a7daafb4afe"
+    },
+    {
+      "asset": "fruits",
+      "path": "fruits/scenes/review.html",
+      "bytes": 4547,
+      "sha256": "37c4c014bb791ecf650b5db07ead97bd16aaf736189777968c3f035d3a68faae"
+    },
+    {
+      "asset": "fruits",
+      "path": "fruits/README.md",
+      "bytes": 5551,
+      "sha256": "88615b4d47dad99dad3d43297768ec465e9fa55c6c031d04160d3748cdd3f9c8"
+    },
+    {
+      "asset": "animals",
+      "path": "animals/README.md",
+      "bytes": 3493,
+      "sha256": "aaaf135fc55e87029d5cd3484ef4a9e1e2686f3ca2f00d0ce1542dd66ea8bfdb"
+    },
+    {
+      "asset": "animals",
+      "path": "animals/review.html",
+      "bytes": 10624,
+      "sha256": "30dfb0e5cebd550ff36100a1b2499ce5439db8795e1bea5845767411148ae6ef"
+    },
+    {
+      "asset": "other",
+      "path": "inventory.json",
+      "bytes": 53423,
+      "sha256": "2d5dfac0bb18e51d44ab178a37aaae59adc3b7d567dbc7a005bfc187733e576f"
+    },
+    {
+      "asset": "other",
+      "path": "current-assets.html",
+      "bytes": 8945,
+      "sha256": "29c4d5be1de5da45f89e8d584c4a0813bd82cdc58f073dd4446fe686bb275da4"
+    },
+    {
+      "asset": "skills",
+      "path": "README.md",
+      "bytes": 16951,
+      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+    },
+    {
+      "asset": "backgrounds",
+      "path": "scenes/README.md",
+      "bytes": 3903,
+      "sha256": "42a8436c8aca8e3e288dfee1e15bf278b81c07c716168c4a0cdde28b1346b0a7"
+    },
+    {
+      "asset": "backgrounds",
+      "path": "scenes/review.html",
+      "bytes": 3260,
+      "sha256": "b263305997c801999d546baa7d5b58cd512355fc8e937e1ee9239d22f719b443"
+    },
+    {
+      "asset": "houses",
+      "path": "current-scenes/review.html",
+      "bytes": 7926,
+      "sha256": "f93db422d424ff7255515badadc92da04593f2d6e9d58a618c2aab477cd0e9a3"
+    },
+    {
+      "asset": "houses",
+      "path": "current-scenes/README.md",
+      "bytes": 2281,
+      "sha256": "347be320c637099bc93d6552afa82c0d670a9df68c34d945b69b6f511fdcb632"
+    },
+    {
+      "asset": "pets",
+      "path": "current-scenes/review.html",
+      "bytes": 7926,
+      "sha256": "f93db422d424ff7255515badadc92da04593f2d6e9d58a618c2aab477cd0e9a3"
+    },
+    {
+      "asset": "pets",
+      "path": "current-assets.html",
+      "bytes": 8945,
+      "sha256": "29c4d5be1de5da45f89e8d584c4a0813bd82cdc58f073dd4446fe686bb275da4"
+    },
+    {
+      "asset": "rewards",
+      "path": "../requirements-2026-11-02-followup.md",
+      "bytes": 184669,
+      "sha256": "298b51192239d447683c5a429d49849cb01c20692e5c17c6ce527cc43c832de9"
+    },
+    {
+      "asset": "controls",
+      "path": "README.md",
+      "bytes": 16951,
+      "sha256": "6b11e3143c2e761b34f2facd00f388b29963f82426e0abab6d6aade7992f9238"
+    },
+    {
+      "asset": "effects",
+      "path": "effects/README.md",
+      "bytes": 1850,
+      "sha256": "d4ceaf2f904da1f7b6543ccc061c540bd92d3947ab3f2a9e0af182bdb1e4f45c"
+    },
+    {
+      "asset": "effects",
+      "path": "effects/review.html",
+      "bytes": 1514,
+      "sha256": "8c8cd8ebc8a916fb889c38e8e87786d7f277a76bd81c11a6f20cd0691ae5b069"
+    },
+    {
+      "asset": "loading",
+      "path": "scenes/README.md",
+      "bytes": 3903,
+      "sha256": "42a8436c8aca8e3e288dfee1e15bf278b81c07c716168c4a0cdde28b1346b0a7"
+    },
+    {
+      "asset": "legacy",
+      "path": "inventory.json",
+      "bytes": 53423,
+      "sha256": "2d5dfac0bb18e51d44ab178a37aaae59adc3b7d567dbc7a005bfc187733e576f"
+    },
+    {
+      "asset": "legacy",
+      "path": "battle-resources.json",
+      "bytes": 134428,
+      "sha256": "1686cc37ff54e33db3d388f6db888ff7cf83925ee238f3ae7e0b65c57dcb3640"
+    }
+  ]
+}
