@@ -1,3 +1,4 @@
+import { drawEnemyType } from './enemy-types';
 import type { SkillCollection } from './skill-quality';
 import { difficultyFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
@@ -94,10 +95,11 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
     [spawns[current].wordId, spawns[spawns.length - 1].wordId] = [spawns[spawns.length - 1].wordId, spawns[current].wordId];
   }
   const bossWave = bossWaveIndex(sessionId);
+  const typeRandom = createSeededRandom((seed ^ 0x73a9c251) >>> 0);
   const plannedSpawns = spawns.map((spawn, index) => {
     if (waveIndex === OPENING_WAVE_COUNT - 1 && index === spawns.length - 1) return { ...spawn, boss: true, bossKind: 'grand' as const, dropCoins: 0 };
     const boss = waveIndex === bossWave && index === spawns.length - 1;
-    return { ...spawn, ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
+    return { ...spawn, ...(!boss ? {enemyType: drawEnemyType(waveIndex + 1, index === 0, typeRandom)} : {}), ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
   });
   return createEncounterCombat({ houseLevel, difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId, houseLevel),
     playerX: 180, skills, skillCollection, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),

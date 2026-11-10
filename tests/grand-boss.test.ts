@@ -49,11 +49,11 @@ test('10秒开始蓄力1秒，易伤包含直接伤害、灼烧、士兵和宠�
  assert.equal(result.events.find(e=>e.type==='monsterDamaged'&&e.kind==='pet')?.damage,15);
  for(const tick of [899,999,1099]){const before=arena(tick);const next=stepCombat(before).state;assert(Math.abs(next.monsters[0].position.y-200-.14)<1e-8);}
 });
-test('冲击波直接扣堡垒、每周期一次，普通近战仍由士兵阻挡；当步死亡取消攻击',()=>{
+test('冲击波直接扣堡垒、每周期一次，Boss近战直击堡垒；当步死亡取消攻击',()=>{
  const before={...arena(1099),pet:createBattlePet({level:1,equipped:[]})};const result=stepCombat(before);assert.equal(result.state.pet?.hp,100);assert.equal(result.state.base.hp,before.base.hp-before.monsters[0].shockwaveDamage!);assert.equal(result.state.supportSoldiers![0].hp,30);
  assert.equal(result.events.filter(e=>e.type==='baseDamaged').length,1);assert.equal(stepCombat(result.state).state.base.hp,result.state.base.hp);
  const second=stepCombat({...result.state,tick:2099});assert.equal(second.state.base.hp,result.state.base.hp-before.monsters[0].shockwaveDamage!);
- const melee=stepCombat({...before,tick:0,monsters:[{...before.monsters[0],status:'attackingBase',attackRemainingMs:0}]});assert.equal(melee.state.base.hp,before.base.hp);assert(melee.state.supportSoldiers![0].hp<30);
+ const melee=stepCombat({...before,tick:0,monsters:[{...before.monsters[0],status:'attackingBase',attackRemainingMs:0}]});assert.equal(melee.state.base.hp,before.base.hp-before.monsters[0].attackDamage!);assert.equal(melee.state.supportSoldiers![0].hp,30);
  const killed=hit({...before,monsters:[{...before.monsters[0],hp:1}]});assert.equal(killed.state.status,'cleared');assert.equal(killed.state.base.hp,before.base.hp);assert.equal(killed.events.filter(e=>e.type==='coinsDropped').length,0);assert.equal(killed.state.supportSoldiers!.length,1);
 });
 test('暂停蓄力计时不流逝，恢复继续，退出销毁后无冲击波',()=>{

@@ -1,4 +1,5 @@
-import type { SkillCollection } from './skill-quality';
+import type { EnemyType, SoldierType, SoldierSource, AttackCapability } from './army';
+import type { OwnedSkill, SkillCollection } from './skill-quality';
 import type { DifficultyId } from './difficulty';
 import type { BattlePet } from '../pets/battle';
 // V2 contracts only. V1 game/types.ts remains historical and cannot restore these states.
@@ -82,6 +83,7 @@ export interface FortressRules {
   readonly progress: { readonly recentResultLimit: number; readonly saveFailures: boolean };
 }
 export interface MonsterSpawn {
+  readonly enemyType?: EnemyType;
   readonly boss?: boolean;
   readonly bossKind?: 'iron' | 'grand';
   readonly shockwaveDamage?: number;
@@ -118,6 +120,8 @@ export interface WaveContext {
 export interface CombatContext extends WaveContext { readonly combatId: string }
 export type MonsterStatus = 'waiting' | 'entering' | 'alive' | 'attackingBase' | 'defeated' | 'retiring';
 export interface MonsterState {
+  readonly explosionRemainingMs?: number;
+  readonly enemyType?: EnemyType;
   readonly frozenUntilTick?: number;
   readonly burn?: { readonly damage: number; readonly nextTick: number; readonly untilTick: number };
   readonly boss?: boolean;
@@ -138,6 +142,10 @@ export interface MonsterState {
   readonly attackSequence: number;
 }
 export interface SupportSoldierState {
+  readonly soldierType?: SoldierType;
+  readonly skill?: OwnedSkill;
+  readonly source?: SoldierSource;
+  readonly evolved?: boolean;
   readonly lastShotTick?: number;
   readonly shotCombatId?: string;
   readonly shotTarget?: Point;
@@ -149,6 +157,7 @@ export interface SupportSoldierState {
   readonly attackRemainingMs: number;
 }
 export interface ProjectileState {
+  readonly capability?: AttackCapability;
   readonly flameVolleyId?: string;
   readonly hitMonsterIds?: readonly string[];
   readonly remainingPenetrations?: number;

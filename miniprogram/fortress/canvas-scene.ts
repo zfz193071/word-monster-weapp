@@ -414,8 +414,14 @@ export class CanvasScene {
       const attackPose = baseAttackPose(monster);
       const motionSeed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
       c.save(); c.translate(0, attackPose.lunge * 9);
-      if (monster.boss) {
+      if (monster.boss || monster.enemyType === 'giant') {
         c.translate(monster.position.x, monster.position.y); c.scale(monster.bossKind === 'grand' ? 2 : 1.5, monster.bossKind === 'grand' ? 2 : 1.5); c.translate(-monster.position.x, -monster.position.y);
+      }
+      if (monster.enemyType === 'exploder' && monster.explosionRemainingMs !== undefined) {
+        c.save(); c.fillStyle = 'rgba(201,65,54,.14)'; c.strokeStyle = '#dc5948'; c.lineWidth = 2;
+        c.beginPath(); c.arc(monster.position.x, monster.position.y, 60, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.lineWidth = 4; c.beginPath(); c.arc(monster.position.x, monster.position.y, 60, -Math.PI / 2,
+          -Math.PI / 2 + Math.PI * 2 * (1 - monster.explosionRemainingMs / 1000)); c.stroke(); c.restore();
       }
       const monsterArt = this.monsterArt;
       if (monsterArt && (monster.status === 'entering' || monster.status === 'alive') && (monster.frozenUntilTick ?? -1) < state.tick

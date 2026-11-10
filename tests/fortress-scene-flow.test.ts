@@ -1,3 +1,4 @@
+import { enemyStats } from '../miniprogram/fortress/enemy-types';
 import { createVictoryRewards, clearRewards } from '../miniprogram/services/victory-rewards';
 import { createDailyCheckin } from '../miniprogram/services/daily-checkin';
 import { skillQuizAnswer } from './helpers/skill-quiz';
@@ -147,7 +148,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
     assert.equal(!!current!.snapshot.pet,petStore.view().owned,'拥有宠物开局/跨波自动上阵');
     assert.equal(host.data.waveNumber,wave+1);assert.equal(waveMonsters.length,openingMonsterCount(wave,level.id));
     assert.equal(current!.snapshot.monsterSpeed, (level.id === 3 ? 28 * 1.2 : 20));
-    for(const monster of waveMonsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,stats.hp);assert.equal(monster.attackDamage,stats.attackDamage);}
+    for(const monster of waveMonsters){const stats=monsterStats(level.id,wave+1,monster.bossKind==='grand'?'grand':monster.boss,plan.difficulty);assert.equal(monster.maxHp,Math.ceil(stats.hp*enemyStats(monster.enemyType).hp));assert.equal(monster.attackDamage,Math.ceil(stats.attackDamage*enemyStats(monster.enemyType).attack));}
     assert.equal(current!.snapshot.weaponLevel,7);const art=current!.options.art;assert.match(art.hero.path,/hero-back-weapon-7\.png$/);assert.ok(current!.snapshot.monsters.every(m=>art.fruitHats[m.wordId]));
     if(repair)current!.snapshot={...current!.snapshot,base:{...current!.snapshot.base,hp:2}};
     let awardedThisWave=0;

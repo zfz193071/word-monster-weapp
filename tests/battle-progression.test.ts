@@ -41,7 +41,7 @@ test('固定对局计划：前9轮无铁桶、每关至多一只铁桶及一只�
       const rebuilt = createOpeningEncounter(id, wave.targetWordId, 3, index, undefined, undefined, plan.waves.slice(0, index).map(w => w.targetWordId));
       assert.equal(rebuilt.monsters.at(-1)!.id, boss.monsterId);
       assert.equal(rebuilt.monsters.at(-1)!.maxHp, monsterStats(1, index + 1).hp * 8);
-      assert.equal(rebuilt.monsters.at(-1)!.hitbox.width, rebuilt.monsters[0].hitbox.width * 1.5);
+      assert.equal(rebuilt.monsters.at(-1)!.hitbox.width, rebuilt.monsters[0].hitbox.width / (rebuilt.monsters[0].enemyType === 'giant' ? 1.5 : 1) * 1.5);
       assert.deepEqual(rebuilt.monsters.map(m => m.dropCoins), wave.spawnPlan.map(m => m.dropCoins));
     }
   }

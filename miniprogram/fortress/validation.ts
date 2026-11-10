@@ -1,3 +1,4 @@
+import { enemyLayer } from './army';
 import { FORTRESS_RULES, FORTRESS_WORD_IDS } from './rules';
 import type { FortressWord, MonsterVisual, SessionPlan, VisualAsset } from './types';
 
@@ -119,6 +120,7 @@ export function validateSessionPlan(plan: SessionPlan): FortressIssue[] {
     if (wave.spawnPlan.length !== 1) add(`${path}.spawnPlan`, '每波只能生成一只对应怪物');
     wave.spawnPlan.forEach((spawn, spawnIndex) => {
       const at = `${path}.spawnPlan[${spawnIndex}]`;
+      try { enemyLayer(spawn); } catch { add(at, '僵尸类型或Boss组合无效'); }
       if (!spawn.monsterId || monsters.has(spawn.monsterId)) add(`${at}.monsterId`, '怪物 ID 为空或重复');
       monsters.add(spawn.monsterId);
       if (spawn.wordId !== wave.targetWordId) add(`${at}.wordId`, '怪物词必须对应听词目标');

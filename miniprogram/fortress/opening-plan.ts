@@ -1,3 +1,4 @@
+import { enemyLayer } from './army';
 import { houseForLevel } from '../houses/catalog';
 import { coinRulesFor, difficultyFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
@@ -31,7 +32,7 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
       const combat = createOpeningEncounter(sessionId, targetWordId, 0, index, undefined, undefined, targets.slice(0, index), levelId, weaponLevel, [], difficulty, undefined, houseLevel);
       return Object.freeze({ waveId: `${sessionId}:wave:${index + 1}`, index, targetWordId,
         optionWordIds: Object.freeze(shuffle([targetWordId, ...shuffle(words.filter(id => id !== targetWordId)).slice(0, 2)])),
-        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, bossKind: monster.bossKind, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
+        spawnPlan: Object.freeze(combat.monsters.map(monster => Object.freeze({ monsterId: monster.id, wordId: monster.wordId, enemyType: monster.enemyType, position: monster.position, spawnAtMs: monster.spawnAtMs, ...(monster.boss ? { boss: true, bossKind: monster.bossKind, soldierDropCount: monster.soldierDropCount } : {}), dropCoins: monster.dropCoins }))),
       });
     })) });
 }
@@ -50,6 +51,7 @@ export function validateOpeningPlan(plan: SessionPlan): void {
     const cycle = plan.waves.slice(start, start + words.length);
     if (new Set(cycle.map(wave => wave.targetWordId)).size !== cycle.length) throw new Error('词汇学习与复习顺序无效');
   }
+  plan.waves.forEach(wave => wave.spawnPlan.forEach(enemyLayer));
   const ironWaves = plan.waves.filter(wave => wave.spawnPlan.some(spawn => spawn.boss && spawn.bossKind !== 'grand'));
   if (ironWaves.length > 1 || ironWaves.some(wave => wave.index < 9 || wave.index > 17 || wave.spawnPlan.filter(spawn => spawn.boss).length !== 1)) throw new Error('铁桶出场规则不匹配');
   for (const wave of plan.waves) {
