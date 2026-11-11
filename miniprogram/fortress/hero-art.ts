@@ -1,7 +1,11 @@
 // Approved steel-blue guardian master and its seven weapon variants.
 // Measurements are in the untouched 1536 x 1024 source images.
-// Rotate the painted barrel toward local -Y and anchor its tip to the existing
-// combat muzzle. Rendering must never move projectiles or change aim rules.
+import type { Point } from './types';
+
+const FULL_HERO_SCALE = .07;
+// Measured from the approved 1536×1024 whole-body variants.  The sole anchor
+// intentionally agrees with the rigged guard's fixed platform contact point.
+const FULL_HERO_SOLE_Y = 850;
 const measurements = [
   [1088, 211, 944, 360],
   [1157, 225, 1038, 306],
@@ -33,4 +37,24 @@ export function heroVariant(level: number) {
 }
 export function heroVariantForPath(path: string) {
   return HERO_VARIANTS.find(variant => variant.art.path === path);
+}
+
+/**
+ * Whole-body variants are a ready-made firing stance, not a cut-out limb.
+ * Keep their feet on the interior platform instead of rotating the entire
+ * person around the barrel whenever auto-aim changes target.
+ */
+export function heroStandingFrame(player: Point) {
+  return Object.freeze({
+    x: player.x - 1536 * FULL_HERO_SCALE / 2,
+    y: player.y + 27 - FULL_HERO_SOLE_Y * FULL_HERO_SCALE,
+    width: 1536 * FULL_HERO_SCALE,
+    height: 1024 * FULL_HERO_SCALE,
+  });
+}
+
+/** Position of the painted muzzle for a stable whole-body firing stance. */
+export function heroStandingMuzzle(variant: typeof HERO_VARIANTS[number], player: Point) {
+  const frame = heroStandingFrame(player);
+  return Object.freeze({ x: frame.x + variant.muzzle.x * FULL_HERO_SCALE, y: frame.y + variant.muzzle.y * FULL_HERO_SCALE });
 }

@@ -155,7 +155,7 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
   } finally { h.scene.dispose(); }
 });
 
-test('四七级原主角绘制枪口与枪管方向对应真实首发，解码前不开战', async () => {
+test('四七级完整主角以双脚落地的战斗站姿绘制，解码前不开战', async () => {
   for (const weaponLevel of [4, 7]) {
     for (const targetX of [40, 180, 320]) {
       const opening = createOpeningEncounter('hero-art', 'apple', 0, 0, undefined, undefined, [], 1, weaponLevel);
@@ -178,23 +178,14 @@ test('四七级原主角绘制枪口与枪管方向对应真实首发，解码�
         const draw = h.commands[index].args.slice(1) as number[];
         const transforms = h.commands.slice(0, index);
         const rotations = transforms.filter(command => command.method === 'rotate').slice(-2).map(c => c.args[0] as number);
-        const translations = transforms.filter(command => command.method === 'translate').slice(-2).map(c => c.args as number[]);
         const [x,y,w,height] = draw;
-        // Independent source measurements; test the actual nested Canvas transforms.
-        const [mx,my,rx,ry] = [[1088,211,944,360],[1157,225,1038,306],[1287,186,1121,281],
-          [1103,239,960,339],[1167,222,1028,315],[1161,191,1010,310],[1136,244,1001,332]][weaponLevel-1];
-        const world = (sx:number, sy:number) => {
-          const lx=x+w*sx/1536, ly=y+height*sy/1024;
-          const px=translations[1][0]+lx*Math.cos(rotations[1])-ly*Math.sin(rotations[1]);
-          const py=translations[1][1]+lx*Math.sin(rotations[1])+ly*Math.cos(rotations[1]);
-          return {x:translations[0][0]+px*Math.cos(rotations[0])-py*Math.sin(rotations[0]),
-            y:translations[0][1]+px*Math.sin(rotations[0])+py*Math.cos(rotations[0])};
-        };
-        const muzzle=world(mx,my), rear=world(rx,ry), bullet=fired.projectiles[0];
-        assert.ok(Math.hypot(muzzle.x-bullet.position.x,muzzle.y-bullet.position.y)<1e-8);
-        const length=Math.hypot(muzzle.x-rear.x,muzzle.y-rear.y);
-        assert.ok(Math.abs((muzzle.x-rear.x)/length-fired.aimDirection!.x)<1e-8);
-        assert.ok(Math.abs((muzzle.y-rear.y)/length-fired.aimDirection!.y)<1e-8);
+        // These variants are whole-body illustrations.  Rotating them around
+        // the muzzle tips the feet off the platform and makes the guard appear
+        // to hang from the weapon when a target is at either side.
+        assert.equal(rotations.length, 0);
+        assert.equal(w, 1536 * .07); assert.equal(height, 1024 * .07);
+        assert.equal(x, fired.player.x - 768 * .07);
+        assert.equal(y + 850 * .07, fired.player.y + 27);
 
       } finally { h.scene.dispose(); }
     }

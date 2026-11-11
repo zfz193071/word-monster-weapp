@@ -26,7 +26,7 @@ import { createRetirement } from './retirement';
 import type { RetirementOptions } from './retirement';
 
 type Canvas = WechatMiniprogram.Canvas;
-import { heroVariantForPath } from './hero-art';
+import { heroStandingFrame, heroStandingMuzzle, heroVariantForPath } from './hero-art';
 type Image = WechatMiniprogram.Image;
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 // Shared elemental identity across projectile trails, status and hit feedback.
@@ -444,43 +444,46 @@ export class CanvasScene {
       }
       if (art.fruitHat) {
         const rig = guardianRigForPath(art.hero.path), body = this.images.get(GUARDIAN_BODY.path), arms = this.images.get(art.hero.path);
+        const variant = heroVariantForPath(art.hero.path);
         if (rig && body && arms) {
           const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
           const recoil = guardianRecoil(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
           drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1}, recoil);
         }
-        c.save(); c.translate(state.player.x, state.player.y);
-        c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
-        const variant = heroVariantForPath(art.hero.path);
         if (!rig && variant) {
-          c.save(); c.translate(16.8, -34.4); c.rotate(variant.rotation);
-          const frame = variant.frame;
+          // Levels 4 and 7 currently have complete approved figures rather
+          // than separate arm parts.  Do not pivot the entire person at the
+          // muzzle: side targets otherwise lift both feet off the platform.
+          const frame = heroStandingFrame(state.player);
           this.sprite(art.hero, frame.x, frame.y, frame.width, frame.height);
-          c.restore();
-        } else if (!rig) this.sprite(art.hero, -24, -35, 48, 60);
+        } else if (!rig) this.sprite(art.hero, state.player.x - 24, state.player.y - 35, 48, 60);
         const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
         const flash = guardianMuzzleFlash(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
         if (flash > 0) {
-          c.save(); c.globalAlpha = flash;
-          c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(16.8, -34.4);
-          c.lineTo(12.8, -39.4); c.lineTo(16.8, -47); c.lineTo(20.8, -39.4); c.closePath(); c.fill();
-          c.fillStyle = ELEMENT_COLORS.core; c.beginPath(); c.moveTo(16.8, -35);
-          c.lineTo(14.8, -39); c.lineTo(16.8, -43); c.lineTo(18.8, -39); c.closePath(); c.fill();
+          const muzzle = variant && !rig ? heroStandingMuzzle(variant, state.player) : {x: state.player.x + 16.8, y: state.player.y - 34.4};
+          c.save(); c.translate(muzzle.x, muzzle.y);
+          if (!variant || rig) c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
+          c.globalAlpha = flash;
+          c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(0, 0);
+          c.lineTo(-4, -5); c.lineTo(0, -12); c.lineTo(4, -5); c.closePath(); c.fill();
+          c.fillStyle = ELEMENT_COLORS.core; c.beginPath(); c.moveTo(0, -1);
+          c.lineTo(-2, -5); c.lineTo(0, -8); c.lineTo(2, -5); c.closePath(); c.fill();
           c.restore();
         }
         const weaponLevel=state.weaponLevel ?? 1;
         if(weaponLevel>=4 && state.base.hp>0){
           const design=weaponAppearance(weaponLevel);
+          const sparkOrigin=variant && !rig ? heroStandingMuzzle(variant,state.player) : {x:state.player.x+16.8,y:state.player.y-34.4};
+          c.save(); c.translate(sparkOrigin.x,sparkOrigin.y);
           c.fillStyle=design.light;
           // Cosmetic energy sparks use simulation time, so pause freezes them too.
           for(let i=0;i<weaponLevel-3;i++){
             const phase=state.tick*.06+i*2.1;
             c.globalAlpha=.45+.35*(1+Math.sin(phase))*.5;
-            c.fillRect(17+Math.cos(phase)*5,-21+Math.sin(phase)*9,1.5,3);
+            c.fillRect(Math.cos(phase)*5,13+Math.sin(phase)*9,1.5,3);
           }
-          c.globalAlpha=1;
+          c.globalAlpha=1; c.restore();
         }
-        c.restore();
       }
       else {
         this.sprite(art.hero, state.player.x - 20, state.player.y - 20, 40, 40);
