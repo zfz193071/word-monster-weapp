@@ -1,6 +1,7 @@
 import { GUARDIAN_BODY, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
 import { APPLE_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts, drawTexturedZombie } from './zombie-art';
+import { bossPose } from './boss-pose';
 import { ANIMAL_LOCOMOTION, monsterGait, zombieGait } from './monster-gait';
 import { drawQuadruped } from './quadruped-art';
 import type { FootPose } from './monster-gait';
@@ -510,7 +511,7 @@ export class CanvasScene {
           const image = this.images.get(bossBody.path);
           if (!image) throw new Error('已预载图片丢失');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
-          drawBossZombieParts(c, image, zombieGait(monster, motionSeed), monster.bossKind === 'grand' ? 'grand' : 'iron');
+          drawBossZombieParts(c, image, zombieGait(monster, motionSeed), monster.bossKind === 'grand' ? 'grand' : 'iron', bossPose(monster, state.tick));
           c.restore();
         } else if (monsterArt.animalIds?.includes(monster.wordId)) {
           this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0, motionSeed);

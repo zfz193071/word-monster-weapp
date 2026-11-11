@@ -1,5 +1,6 @@
 import type { GaitPose } from './monster-gait';
 import type { SpriteAsset } from './canvas-scene';
+import type { BossPose } from './boss-pose';
 
 export const APPLE_ZOMBIE_PARTS: SpriteAsset = {
   path: '/character-assets/zombie-apple-parts.png',
@@ -20,6 +21,7 @@ export const BOSS_ZOMBIE_PARTS: Readonly<Record<'iron' | 'grand', SpriteAsset>> 
 export function drawBossZombieParts(
   c: WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D,
   image: WechatMiniprogram.Image, gait: GaitPose, kind: 'iron' | 'grand',
+  pose: BossPose = {torsoY: 0, torsoScaleY: 1},
 ): void {
   const grand = kind === 'grand';
   const sx = image.width / (grand ? 1774 : 2048), sy = image.height / (grand ? 887 : 683);
@@ -35,7 +37,8 @@ export function drawBossZombieParts(
   }
   c.drawImage(image, (grand ? 100 : 10) * sx, (grand ? 50 : 0) * sy,
     (grand ? 790 : 740) * sx, (grand ? 760 : 635) * sy,
-    -64 + gait.sway, (grand ? -88 : -70) + gait.bob, 128, grand ? 123 : 110);
+    -64 + gait.sway, (grand ? -88 : -70) + gait.bob + pose.torsoY, 128,
+    (grand ? 123 : 110) * pose.torsoScaleY);
 }
 
 /** Three separate atlas parts, calibrated in normalized 2048 × 683 atlas coordinates.

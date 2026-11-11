@@ -7,8 +7,8 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1827304,
-      "fileCount": 202
+      "sourceBytes": 1828975,
+      "fileCount": 203
     },
     {
       "name": "learning-assets",
@@ -421,7 +421,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 6743984,
         "referencedFileBytes": 4938129
       },
@@ -1005,7 +1005,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 7170098,
         "referencedFileBytes": 4561495
       },
@@ -1790,7 +1790,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 7451754,
         "referencedFileBytes": 4412292
       },
@@ -2574,7 +2574,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 7451754,
         "referencedFileBytes": 4367714
       },
@@ -3407,7 +3407,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 6452945,
         "referencedFileBytes": 3310869
       },
@@ -4069,7 +4069,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 6452945,
         "referencedFileBytes": 3361016
       },
@@ -4807,7 +4807,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 6452945,
         "referencedFileBytes": 3452150
       },
@@ -5640,7 +5640,7 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1827304,
+        "mainSourceBytes": 1828975,
         "subpackageSourceBytes": 6452945,
         "referencedFileBytes": 3308877
       },
