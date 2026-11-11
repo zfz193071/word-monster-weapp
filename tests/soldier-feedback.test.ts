@@ -1,29 +1,24 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
-import { stepCombat, reviveCompanion } from '../miniprogram/fortress/combat';
+import { stepCombat } from '../miniprogram/fortress/combat';
 import { drawSoldier, drawFallenSoldier } from '../miniprogram/fortress/soldier-art';
 import { SOLDIER_TYPES } from '../miniprogram/fortress/army';
 import { FORTRESS_RULES as R } from '../miniprogram/fortress/rules';
 import type { SupportSoldierState } from '../miniprogram/fortress/types';
 
 const unit: SupportSoldierState = {id:'feedback',slot:0,hp:30,maxHp:30,position:{x:180,y:R.arena.baseTop},attackRemainingMs:10000};
-test('ordinary ground/air attacks stamp six soldier types only when actually damaged; revive clears feedback', () => {
+test('ordinary ground/air attacks never damage platform soldiers', () => {
   for (const soldierType of SOLDIER_TYPES) for (const hp of [30, 1]) {
     const initial = createOpeningEncounter(`feedback-${soldierType}-${hp}`, 'apple', 1);
     const result = stepCombat({...initial,shotRemainingMs:10000,supportSoldiers:[{...unit,soldierType,hp}],
       monsters:[{...initial.monsters[0],hp:1000,maxHp:1000,enemyType:soldierType==='jetpack'?'flying':'normal',status:'attackingBase',attackRemainingMs:0,attackDamage:10}]});
-    const soldier = (hp === 1 ? result.state.fallenSoldiers : result.state.supportSoldiers)![0];
-    assert.equal(soldier.lastHitTick, result.state.tick);
-    assert.equal(soldier.hitCombatId, initial.context.combatId);
-    assert.equal(result.events.filter(e=>e.type==='supportSoldierDamaged').length,1);
-    const next = stepCombat(result.state).state;
-    assert.equal((hp===1?next.fallenSoldiers:next.supportSoldiers)![0].lastHitTick,result.state.tick,'no new attack must not restart feedback');
-    if (hp === 1) {
-      const revived = reviveCompanion(result.state,'soldier',unit.id)!.supportSoldiers![0];
-      assert.equal(revived.lastHitTick,undefined); assert.equal(revived.hitCombatId,undefined);
-      assert.equal(revived.hp,30);
-    }
+    const soldier = result.state.supportSoldiers![0];
+    assert.equal(soldier.hp, hp);
+    assert.equal(soldier.lastHitTick, undefined);
+    assert.equal(soldier.hitCombatId, undefined);
+    assert.equal(result.events.filter(e=>e.type==='supportSoldierDamaged').length,0);
+    assert.equal(result.state.base.hp, initial.base.hp - 10);
   }
 });
 test('explosion stamps ground damage/death once and leaves airborne feedback untouched', () => {

@@ -33,10 +33,10 @@ test('revival keeps original type, skill, evolution, source and restores full at
  const restored=result.supportSoldiers![0];assert.equal(restored.soldierType,'tank');assert.equal(restored.source,'skill');assert.equal(restored.evolved,true);
  assert.equal(restored.hp,tank.maxHp);assert.equal(restored.attackRemainingMs,4000);assert.equal(result.fallenSoldiers!.length,0);
 });
-test('shield takes ordinary enemy aggro before lower-slot rifle and applies reduction once',()=>{
+test('ordinary melee enemy bypasses every platform soldier and attacks the fortress',()=>{
  const initial=createOpeningEncounter('shield','apple',1),shield={...unit('shield'),slot:1,attackRemainingMs:10000};
  const state={...initial,shotRemainingMs:10000,monsters:[{...initial.monsters[0],status:'attackingBase' as const,attackRemainingMs:0,attackDamage:10}],supportSoldiers:[{...unit('rifle'),attackRemainingMs:10000},shield]};
- const result=stepCombat(state).state;assert.equal(result.supportSoldiers![0].hp,30);assert.equal(result.supportSoldiers![1].hp,53);assert.equal(result.base.hp,state.base.hp);
+ const result=stepCombat(state).state;assert.equal(result.supportSoldiers![0].hp,30);assert.equal(result.supportSoldiers![1].hp,60);assert.equal(result.base.hp,state.base.hp-10);
 });
 
 test('soldier hit attribution preserves all six identities and caps effective damage at remaining hp', () => {

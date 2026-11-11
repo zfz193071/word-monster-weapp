@@ -43,11 +43,11 @@ test('雷击击杀复用经验/金币且宠物不承伤，暂停/跨波保留计
  runner.dispose();runner.applyPet(createBattlePet({level:1,equipped:[]}));assert.equal(runner.snapshot,null);
 });
 
-test('宠物不承伤不死亡，士兵之后由堡垒承伤，跨轮持续攻击',()=>{
+test('宠物不承伤不死亡，近战怪绕过平台小兵直接攻击堡垒',()=>{
  const initial=fixture();
  const monsters=Array.from({length:4},(_,i)=>({...initial.monsters[0],id:`attacker-${i}`,status:'attackingBase' as const,attackRemainingMs:0,attackDamage:150}));
  const result=stepCombat({...initial,monsters,supportSoldiers:[{id:'guard',slot:0,hp:30,maxHp:30,position:{x:160,y:500},attackRemainingMs:2000}]});
- assert.equal(result.state.supportSoldiers?.length,0);assert.equal(result.state.pet?.hp,100);assert.equal(result.state.base.hp,initial.base.hp-450);
+ assert.equal(result.state.supportSoldiers?.length,1);assert.equal(result.state.supportSoldiers?.[0].hp,30);assert.equal(result.state.pet?.hp,100);assert.equal(result.state.base.hp,initial.base.hp-600);
  assert.equal(result.events.filter(e=>e.type==='petDefeated'||e.type==='petDamaged').length,0);
  const wave=attachCombatPet(createOpeningEncounter('pet-fight','apple',1,1),result.state.pet!);
  assert.equal(wave.pet?.hp,100);assert.equal(wave.pet?.defeatedPosition,undefined);

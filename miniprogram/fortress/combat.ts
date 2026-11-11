@@ -1,5 +1,5 @@
 import { updateSummons } from './summoning';
-import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
+import { unitStats, soldierTargets } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
 import { enemyLayer, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
@@ -492,18 +492,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     monsters[index] = { ...monster, attackSequence, attackRemainingMs: monster.attackRemainingMs + (monster.attackIntervalMs ?? RULES.monster.attackIntervalMs) };
     if (attacks.has(attackId)) return;
     attacks.add(attackId);
-    const candidates = supportSoldiers.map((soldier,index) => ({soldier,index})).filter(({soldier}) => soldier.hp > 0 && soldierLayer(soldier) === enemyLayer(monster));
-    candidates.sort((a,b) => Number(soldierType(b.soldier.soldierType) === 'shield') - Number(soldierType(a.soldier.soldierType) === 'shield') || a.soldier.slot - b.soldier.slot);
-    const soldierIndex = monster.boss ? -1 : candidates[0]?.index ?? -1;
-    if (soldierIndex >= 0) {
-      const soldier = supportSoldiers[soldierIndex];
-      const hp = Math.max(0, soldier.hp - receivedSoldierDamage(soldier, monster.attackDamage ?? RULES.monster.attackDamage));
-      if (hp === 0) { supportSoldiers.splice(soldierIndex, 1); if (!fallenSoldiers.some(s => s.id === soldier.id)) fallenSoldiers.push({...soldier, hp: 0,lastHitTick:tick,hitCombatId:previous.context.combatId}); }
-      else supportSoldiers[soldierIndex] = { ...soldier, hp, lastHitTick:tick,hitCombatId:previous.context.combatId };
-      events.push({ type: 'supportSoldierDamaged', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id, hp });
-      if (hp === 0) events.push({ type: 'supportSoldierDefeated', context: previous.context, tick, attackId, monsterId: monster.id, soldierId: soldier.id });
-      return;
-    }
+    // Platform allies are ranged defenders, not a melee interception line.
+    // A monster that has reached the fortress always damages the fortress;
+    // ranged-enemy targeting is deliberately handled by its own future rule.
     baseHp = Math.max(0, baseHp - (monster.attackDamage ?? RULES.monster.attackDamage));
     events.push({ type: 'baseDamaged', context: previous.context, tick, attackId, monsterId: monster.id, hp: baseHp });
   });
