@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { drawGuardianRig, guardianRig } from '../miniprogram/fortress/guardian-rig';
+import { drawGuardianRig, guardianRecoil, guardianRig } from '../miniprogram/fortress/guardian-rig';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 import { stepCombat } from '../miniprogram/fortress/combat';
 
@@ -49,4 +49,32 @@ test('五套关节主角在宽屏两侧瞄准时脚底固定、枪口与真实�
     assert.equal(JSON.stringify(fired),before);
   }
   assert.equal(guardianRig(4),undefined); assert.equal(guardianRig(7),undefined);
+});
+
+test('后坐按正式射击倒计时短促回弹，暂停采样冻结且不改变身体和枪管方向', () => {
+  assert.equal(guardianRecoil(0,500,false),0);
+  assert.equal(guardianRecoil(490,500,true),0);
+  assert.equal(guardianRecoil(470,500,true),2.4);
+  assert.ok(guardianRecoil(430,500,true)>0);
+  assert.equal(guardianRecoil(380,500,true),0);
+  assert.equal(guardianRecoil(470,500,true),guardianRecoil(470,500,true),'同一暂停状态姿态稳定');
+  assert.equal(guardianRecoil(Number.NaN,500,true),0);
+
+  const image={width:720,height:360} as WechatMiniprogram.Image, rig=guardianRig(1)!;
+  for (const direction of [{x:-.8,y:-.6},{x:0,y:-1},{x:.8,y:-.6}]) {
+    const rest=recording(),kick=recording();
+    drawGuardianRig(rest.context,image,image,rig,{x:180,y:510},direction,0);
+    drawGuardianRig(kick.context,image,image,rig,{x:180,y:510},direction,2.4);
+    const restFoot=sourcePoint(rest.draws[0],560/1774*720,850/887*360);
+    const kickFoot=sourcePoint(kick.draws[0],560/1774*720,850/887*360);
+    assert.deepEqual(kickFoot,restFoot); assert.deepEqual(kick.draws[0].matrix,rest.draws[0].matrix);
+    const restMuzzle=sourcePoint(rest.draws[2],rig.muzzle.x/1774*720,rig.muzzle.y/887*360);
+    const kickMuzzle=sourcePoint(kick.draws[2],rig.muzzle.x/1774*720,rig.muzzle.y/887*360);
+    assert.ok(Math.abs((kickMuzzle.x-restMuzzle.x)+direction.x*2.4)<1e-8);
+    assert.ok(Math.abs((kickMuzzle.y-restMuzzle.y)+direction.y*2.4)<1e-8);
+    const restRear=sourcePoint(rest.draws[2],rig.barrelRear.x/1774*720,rig.barrelRear.y/887*360);
+    const kickRear=sourcePoint(kick.draws[2],rig.barrelRear.x/1774*720,rig.barrelRear.y/887*360);
+    assert.ok(Math.abs((kickMuzzle.x-kickRear.x)-(restMuzzle.x-restRear.x))<1e-8);
+    assert.ok(Math.abs((kickMuzzle.y-kickRear.y)-(restMuzzle.y-restRear.y))<1e-8);
+  }
 });

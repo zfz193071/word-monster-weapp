@@ -1,4 +1,4 @@
-import { GUARDIAN_BODY, guardianRigForPath, drawGuardianRig } from './guardian-rig';
+import { GUARDIAN_BODY, guardianRecoil, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
 import { APPLE_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts, drawTexturedZombie } from './zombie-art';
 import { bossPose } from './boss-pose';
@@ -18,6 +18,7 @@ import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DAMAGE_NUMBER_FONT, DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
+import { getWeaponParameters } from './combat';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
 import type { Finger, Viewport } from './viewport';
 import type { CombatEvent, CombatState, MonsterVisual, Point, SkillLevels } from './types';
@@ -442,7 +443,11 @@ export class CanvasScene {
       }
       if (art.fruitHat) {
         const rig = guardianRigForPath(art.hero.path), body = this.images.get(GUARDIAN_BODY.path), arms = this.images.get(art.hero.path);
-        if (rig && body && arms) drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1});
+        if (rig && body && arms) {
+          const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
+          const recoil = guardianRecoil(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
+          drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1}, recoil);
+        }
         c.save(); c.translate(state.player.x, state.player.y);
         c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
         const variant = heroVariantForPath(art.hero.path);

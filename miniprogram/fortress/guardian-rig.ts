@@ -23,13 +23,26 @@ export const GUARDIAN_RIGS = Object.freeze(measurements.map(([level, mx, my, rx,
 export function guardianRig(level: number) { return GUARDIAN_RIGS.find(rig => rig.level === level); }
 export function guardianRigForPath(path: string) { return GUARDIAN_RIGS.find(rig => rig.art.path === path); }
 
+const RECOIL_HOLD_MS = 10, RECOIL_PEAK_MS = 30, RECOIL_END_MS = 120, RECOIL_DISTANCE = 2.4;
+/** Cosmetic recoil derived only from the existing logical shot timer. */
+export function guardianRecoil(shotRemainingMs: number, intervalMs: number, hasFired: boolean): number {
+  if (!hasFired || !Number.isFinite(shotRemainingMs) || !Number.isFinite(intervalMs) || intervalMs <= 0) return 0;
+  const age = intervalMs - shotRemainingMs;
+  if (age <= RECOIL_HOLD_MS || age >= RECOIL_END_MS) return 0;
+  if (age < RECOIL_PEAK_MS) return RECOIL_DISTANCE * (age - RECOIL_HOLD_MS) / (RECOIL_PEAK_MS - RECOIL_HOLD_MS);
+  const settle = (RECOIL_END_MS - age) / (RECOIL_END_MS - RECOIL_PEAK_MS);
+  return RECOIL_DISTANCE * settle * settle;
+}
+
 /** Cosmetic joint placement only: the existing rotated combat muzzle is invariant. */
 export function drawGuardianRig(c: Context, body: Image, arms: Image,
-  rig: typeof GUARDIAN_RIGS[number], player: Point, direction: Point): void {
+  rig: typeof GUARDIAN_RIGS[number], player: Point, direction: Point, recoil = 0): void {
   const angle = Math.atan2(direction.x, -direction.y), flip = direction.x < 0 ? -1 : 1;
   const rotation = angle - Math.atan2(flip * (rig.muzzle.x - rig.barrelRear.x), rig.barrelRear.y - rig.muzzle.y);
-  const mx = 16.8 * Math.cos(angle) + 34.4 * Math.sin(angle);
-  const my = 16.8 * Math.sin(angle) - 34.4 * Math.cos(angle);
+  // Pull the complete forearm assembly back along the barrel. The first 10ms
+  // frame remains on the logical muzzle; later frames show the visible kick.
+  const mx = 16.8 * Math.cos(angle) + 34.4 * Math.sin(angle) - direction.x * recoil;
+  const my = 16.8 * Math.sin(angle) - 34.4 * Math.cos(angle) - direction.y * recoil;
   const ex = flip * (rig.elbow.x - rig.muzzle.x) * .04, ey = (rig.elbow.y - rig.muzzle.y) * .04;
   const elbowX = mx + ex * Math.cos(rotation) - ey * Math.sin(rotation);
   const elbowY = my + ex * Math.sin(rotation) + ey * Math.cos(rotation);
