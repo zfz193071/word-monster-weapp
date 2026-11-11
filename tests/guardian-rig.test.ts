@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { drawGuardianRig, guardianRecoil, guardianRig } from '../miniprogram/fortress/guardian-rig';
+import { drawGuardianRig, guardianMuzzleFlash, guardianRecoil, guardianRig } from '../miniprogram/fortress/guardian-rig';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 import { stepCombat } from '../miniprogram/fortress/combat';
 
@@ -77,4 +77,14 @@ test('后坐按正式射击倒计时短促回弹，暂停采样冻结且不改�
     assert.ok(Math.abs((kickMuzzle.x-kickRear.x)-(restMuzzle.x-restRear.x))<1e-8);
     assert.ok(Math.abs((kickMuzzle.y-kickRear.y)-(restMuzzle.y-restRear.y))<1e-8);
   }
+});
+
+test('枪口火光只在真实首发后的50ms内显示，暂停采样不产生新粒子状态', () => {
+  assert.equal(guardianMuzzleFlash(0,500,false),0);
+  assert.equal(guardianMuzzleFlash(500,500,true),1);
+  assert.equal(guardianMuzzleFlash(490,500,true),1);
+  assert.equal(guardianMuzzleFlash(470,500,true),.5);
+  assert.equal(guardianMuzzleFlash(450,500,true),0);
+  assert.equal(guardianMuzzleFlash(470,500,true),guardianMuzzleFlash(470,500,true));
+  assert.equal(guardianMuzzleFlash(Number.NaN,500,true),0);
 });

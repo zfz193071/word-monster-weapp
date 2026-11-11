@@ -1,4 +1,4 @@
-import { GUARDIAN_BODY, guardianRecoil, guardianRigForPath, drawGuardianRig } from './guardian-rig';
+import { GUARDIAN_BODY, guardianMuzzleFlash, guardianRecoil, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
 import { APPLE_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts, drawTexturedZombie } from './zombie-art';
 import { bossPose } from './boss-pose';
@@ -457,6 +457,16 @@ export class CanvasScene {
           this.sprite(art.hero, frame.x, frame.y, frame.width, frame.height);
           c.restore();
         } else if (!rig) this.sprite(art.hero, -24, -35, 48, 60);
+        const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
+        const flash = guardianMuzzleFlash(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
+        if (flash > 0) {
+          c.save(); c.globalAlpha = flash;
+          c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(16.8, -34.4);
+          c.lineTo(12.8, -39.4); c.lineTo(16.8, -47); c.lineTo(20.8, -39.4); c.closePath(); c.fill();
+          c.fillStyle = ELEMENT_COLORS.core; c.beginPath(); c.moveTo(16.8, -35);
+          c.lineTo(14.8, -39); c.lineTo(16.8, -43); c.lineTo(18.8, -39); c.closePath(); c.fill();
+          c.restore();
+        }
         const weaponLevel=state.weaponLevel ?? 1;
         if(weaponLevel>=4 && state.base.hp>0){
           const design=weaponAppearance(weaponLevel);

@@ -34,6 +34,13 @@ export function guardianRecoil(shotRemainingMs: number, intervalMs: number, hasF
   return RECOIL_DISTANCE * settle * settle;
 }
 
+/** Short muzzle flash for every approved hero variant; no particle state. */
+export function guardianMuzzleFlash(shotRemainingMs: number, intervalMs: number, hasFired: boolean): number {
+  if (!hasFired || !Number.isFinite(shotRemainingMs) || !Number.isFinite(intervalMs) || intervalMs <= 0) return 0;
+  const age = intervalMs - shotRemainingMs;
+  return age >= 0 && age < 50 ? Math.min(1, (50 - age) / 40) : 0;
+}
+
 /** Cosmetic joint placement only: the existing rotated combat muzzle is invariant. */
 export function drawGuardianRig(c: Context, body: Image, arms: Image,
   rig: typeof GUARDIAN_RIGS[number], player: Point, direction: Point, recoil = 0): void {

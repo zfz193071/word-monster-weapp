@@ -1375,8 +1375,8 @@
       }
     ],
     "file": "phone.mp4",
-    "bytes": 5305901,
-    "sha256": "4285b1ff9909c3aacd2f7006683240f7e9ac819e63e22f60980634c12c7e7de8"
+    "bytes": 5310369,
+    "sha256": "69d386e6019d8d32747c4f60d6426248a8268801fbec43f50ffae7b831de49ac"
   },
   {
     "device": "ipad",
@@ -2790,7 +2790,7 @@
       }
     ],
     "file": "ipad.mp4",
-    "bytes": 5751245,
-    "sha256": "6eb8d5adec953054177ff9621fdb8f7291e760448c381e8043b9dde6cb3238bf"
+    "bytes": 5755474,
+    "sha256": "5be9f30d04dd7d049f3cd83b3ef0e48478a1c6cdf98178c604e0a599d9e02ef6"
   }
 ]
