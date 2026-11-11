@@ -1,3 +1,4 @@
+import { GUARDIAN_BODY, guardianRigForPath } from '../miniprogram/fortress/guardian-rig';
 import { readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
@@ -101,6 +102,11 @@ for (const level of LEVELS) {
     audioBytes: audioFiles.reduce((n, f) => n + f.bytes, 0) });
 }
 const heroVariants = await Promise.all(Array.from({length: 7}, (_, i) => describe(openingArt('apple', ['apple'], i + 1).hero.path)));
+const heroDependencies = await Promise.all(Array.from({length: 7}, async (_, i) => {
+  const art = openingArt('apple', ['apple'], i + 1), rig = guardianRigForPath(art.hero.path);
+  return { weaponLevel: i + 1, renderer: rig ? 'jointed' : 'whole-body-pending-parts',
+    images: await Promise.all([art.hero, ...(rig ? [GUARDIAN_BODY] : [])].map(asset => describe(asset.path))) };
+}));
 const fortressVariants = await Promise.all([1, 2, 3, 4, 5].map(async houseLevel => ({
   houseLevel,
   images: await Promise.all(sceneImageAssets(openingArt('apple'), 1, houseLevel)
@@ -112,7 +118,7 @@ await writeFile(resolve(root, 'docs/visual-audit/battle-resources.json'), JSON.s
   evidence: 'Source dependency audit; complete current+previous category union. Not compiled package sizes, runtime residency, timing or device verification.',
   limits: 'Per-level totals use weapon 1 and fortress 1, share the runtime preload list (including all soldier sprites, textured bodies, both first-level courtyard orientations and fortress states), and include the loading cover, exclude other UI/home assets, audio decode memory, Canvas buffers and texture copies. Only the equipped hero variant is needed.',
   packageBudgetBasis: 'All source files including ignored files and package entrypoints, matching check:package. Required package union derives from the complete image/audio preload dependency set. Subpackage totals assume none are installed; homepage/cache may already supply them. Not compiled bytes or measured network transfer. Main is separate; no incremental cache or download-time claim.',
-  sourcePackages, heroVariants, fortressVariants, levels,
+  sourcePackages, heroVariants, heroDependencies, fortressVariants, levels,
 }, null, 2) + '\n');
 console.log(`Verified ${levels.length} levels, ${levels.reduce((n,l) => n+l.checkedPlans, 0)} plans, all referenced files and 7 hero variants.`);
 for (const l of levels) console.log(`Level ${l.levelId}: ${l.images.length} images, ${(l.imageBytes/1024).toFixed(1)} KiB, ${(l.estimatedImageRgbaBytes/1048576).toFixed(2)} MiB RGBA; ${l.audio.length} audio files`);

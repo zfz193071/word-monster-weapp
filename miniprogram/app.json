@@ -89,6 +89,13 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "guardian-assets",
+      "name": "guardian-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

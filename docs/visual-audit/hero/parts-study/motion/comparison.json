@@ -1,0 +1,27 @@
+{
+  "baseline": "docs/visual-audit/hero/guardian-motion/report.json",
+  "checks": [
+    {
+      "device": "phone",
+      "equalToPrior": [
+        "frameCount",
+        "final",
+        "checks",
+        "eventCounts",
+        "samples"
+      ],
+      "videoSha256": "98a3af8e4ffbd9831611b020530a46c3c69c1e82a5194b8d2343e56d2d6bc968"
+    },
+    {
+      "device": "ipad",
+      "equalToPrior": [
+        "frameCount",
+        "final",
+        "checks",
+        "eventCounts",
+        "samples"
+      ],
+      "videoSha256": "5afd9e57f6ca010b1ae2df5c56b54c33946a4f43e2a8b4c64d106e1f2c9c4238"
+    }
+  ]
+}

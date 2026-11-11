@@ -1,3 +1,4 @@
+import { GUARDIAN_BODY, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
 import { drawTexturedZombie } from './zombie-art';
 import { ANIMAL_LOCOMOTION, monsterGait, zombieGait } from './monster-gait';
@@ -51,6 +52,7 @@ export interface SceneArt extends MonsterArt {
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
   const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
+  if (guardianRigForPath(art.hero.path)) assets.push(GUARDIAN_BODY);
   const courtyard = art.fruitHat && courtyardAsset(levelId);
   // Preload both orientations so resize can switch immediately while paused or active.
   if (courtyard) assets.push(...COURTYARD_ASSETS);
@@ -217,7 +219,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !(INTERIOR_ASSETS.some(layer => layer.path === asset.path) || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
+      || !(INTERIOR_ASSETS.some(layer => layer.path === asset.path) || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|guardian-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -434,15 +436,17 @@ export class CanvasScene {
         else drawHouseFortress(c, state.houseLevel ?? 1, this.viewport.worldWidth);
       }
       if (art.fruitHat) {
+        const rig = guardianRigForPath(art.hero.path), body = this.images.get(GUARDIAN_BODY.path), arms = this.images.get(art.hero.path);
+        if (rig && body && arms) drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1});
         c.save(); c.translate(state.player.x, state.player.y);
         c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
         const variant = heroVariantForPath(art.hero.path);
-        if (variant) {
+        if (!rig && variant) {
           c.save(); c.translate(16.8, -34.4); c.rotate(variant.rotation);
           const frame = variant.frame;
           this.sprite(art.hero, frame.x, frame.y, frame.width, frame.height);
           c.restore();
-        } else this.sprite(art.hero, -24, -35, 48, 60);
+        } else if (!rig) this.sprite(art.hero, -24, -35, 48, 60);
         const weaponLevel=state.weaponLevel ?? 1;
         if(weaponLevel>=4 && state.base.hp>0){
           const design=weaponAppearance(weaponLevel);

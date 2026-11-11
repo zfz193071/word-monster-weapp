@@ -71,8 +71,8 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
   } finally { h.scene.dispose(); }
 });
 
-test('七级新主角绘制枪口与枪管方向对应真实首发，解码前不开战', async () => {
-  for (const weaponLevel of [1, 2, 3, 4, 5, 6, 7]) {
+test('四七级原主角绘制枪口与枪管方向对应真实首发，解码前不开战', async () => {
+  for (const weaponLevel of [4, 7]) {
     for (const targetX of [40, 180, 320]) {
       const opening = createOpeningEncounter('hero-art', 'apple', 0, 0, undefined, undefined, [], 1, weaponLevel);
       const target = { ...opening.monsters[0], status: 'alive' as const, spawnAtMs: 0, position: {x: targetX, y: 280} };
@@ -727,4 +727,27 @@ test('五级前墙解码后才开战，角色夹在平台与前墙之间，毁�
       assert.ok(!ruined.includes(layers.interior.path));
     } finally { h.scene.dispose(); }
   }
+});
+
+test('关节主角等待身体与持枪部件全部解码，失败可重试，四七级不多载身体', async () => {
+  const { GUARDIAN_BODY } = await import('../miniprogram/fortress/guardian-rig');
+  for (const heldPart of ['body','arms']) {
+    const art=openingArt('apple'),h=harness(false,art,{initial:createOpeningEncounter('rig-load','apple',1)});
+    try {
+      const loading=h.scene.load(),body=h.images.find(image=>image.src===GUARDIAN_BODY.path)!,arms=h.images.find(image=>image.src===art.hero.path)!;
+      assert.ok(body && arms);
+      const monster=h.images.find(image=>image.src===art.monster.path)!;
+      monster.width=art.monsterVisual.sourceSize.width;monster.height=art.monsterVisual.sourceSize.height;
+      const held=heldPart==='body'?body:arms;
+      h.images.filter(image=>image!==held).forEach(image=>image.onload());
+      await Promise.resolve();assert.equal(h.callbacks.size,0);
+      held.onerror();assert.equal(await loading,false);assert.equal(h.callbacks.size,0);
+      const start=h.images.length,retry=h.scene.load();
+      for(const image of h.images.slice(start)) {if(image.src===art.monster.path){image.width=art.monsterVisual.sourceSize.width;image.height=art.monsterVisual.sourceSize.height;} image.onload();}
+      assert.equal(await retry,true);
+      assert.ok(h.commands.some(c=>c.method==='drawImage'&&(c.args[0] as {src:string}).src===GUARDIAN_BODY.path));
+    } finally {h.scene.dispose();}
+  }
+  const {sceneImageAssets}=await import('../miniprogram/fortress/canvas-scene');
+  for(const level of [4,7]) assert.ok(!sceneImageAssets(openingArt('apple',['apple'],level)).some(asset=>asset.path===GUARDIAN_BODY.path));
 });

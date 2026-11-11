@@ -5,7 +5,7 @@
     {
       "root": "",
       "name": "main",
-      "bytes": 1818888
+      "bytes": 1823001
     },
     {
       "root": "learning-assets",
@@ -94,6 +94,14 @@
         "pages/resources/index"
       ],
       "bytes": 897720
+    },
+    {
+      "root": "guardian-assets",
+      "name": "guardian-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 778037
     }
   ],
   "words": [
@@ -1217,38 +1225,38 @@
   "heroes": [
     {
       "level": 1,
-      "path": "character-assets/guardian-weapon-1.png",
-      "bytes": 109203,
-      "sha256": "c3186983247a7752089d29843e5ffa93beeabab38abb4ab31cf7ffb0e2d18ac3",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-1.png",
+      "bytes": 121563,
+      "sha256": "177379271d521a062de0fe0538942c53f0665b39819447e4bd5e207f6382d8fc",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
       "level": 2,
-      "path": "character-assets/guardian-weapon-2.png",
-      "bytes": 122076,
-      "sha256": "657f8da045a77ae2349a22dcc731fe03be3fc504db61521e9cd9a11892c2c8d2",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-2.png",
+      "bytes": 127665,
+      "sha256": "461840fde9f5ced1256e3544108cbaf2584982ca39da6c23b0df42fc8ff04e9d",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
       "level": 3,
-      "path": "character-assets/guardian-weapon-3.png",
-      "bytes": 117135,
-      "sha256": "9d7b9f9a34ff00e95b258726a049da29870e39f2b775ef738aa76e303a7550b3",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-3.png",
+      "bytes": 121375,
+      "sha256": "cf9052486f7dc8f6ee43d80e5b504456ccb4cb12d24e7b63088f67e6401b1c91",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
@@ -1265,26 +1273,26 @@
     },
     {
       "level": 5,
-      "path": "character-assets/guardian-weapon-5.png",
-      "bytes": 121316,
-      "sha256": "f08802042fb565129c0aa21969772f80f25cabbaff40e2070e4832f33b6188cb",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-5.png",
+      "bytes": 131515,
+      "sha256": "3c34bbda283cff96654c87bb706ca5ca8db97bf18bca1d16d5d33d3f482dc404",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
       "level": 6,
-      "path": "character-assets/guardian-weapon-6.png",
-      "bytes": 119526,
-      "sha256": "d3ff9ed0d4575b78bdd1a2a01ad441c54570ed8633fd177dcc3a20f17864ce51",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-6.png",
+      "bytes": 127827,
+      "sha256": "5efa08b60df6d80a0ed8de82ee38be6b02441c7e0ef874c12ec3c93906b5c753",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
@@ -2587,6 +2595,60 @@
       "height": 256,
       "decodedRgbaBytes": 262144,
       "package": "fruit-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-body.png",
+      "bytes": 147942,
+      "sha256": "d47a4154c7a7982c207767ad63caeed311d9e42e726ac2f8bd5c4660d77882ca",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-1.png",
+      "bytes": 121563,
+      "sha256": "177379271d521a062de0fe0538942c53f0665b39819447e4bd5e207f6382d8fc",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-2.png",
+      "bytes": 127665,
+      "sha256": "461840fde9f5ced1256e3544108cbaf2584982ca39da6c23b0df42fc8ff04e9d",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-3.png",
+      "bytes": 121375,
+      "sha256": "cf9052486f7dc8f6ee43d80e5b504456ccb4cb12d24e7b63088f67e6401b1c91",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-5.png",
+      "bytes": 131515,
+      "sha256": "3c34bbda283cff96654c87bb706ca5ca8db97bf18bca1d16d5d33d3f482dc404",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-6.png",
+      "bytes": 127827,
+      "sha256": "5efa08b60df6d80a0ed8de82ee38be6b02441c7e0ef874c12ec3c93906b5c753",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
     },
     {
       "path": "learning-assets/images/air.png",

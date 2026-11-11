@@ -11,7 +11,7 @@ import { createBattlePet } from '../miniprogram/pets/battle';
 const require = createRequire(import.meta.url);
 const { createCanvas, Image } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = resolve(root, 'docs/visual-audit/hero/guardian-runtime');
+const output = resolve(root, 'docs/visual-audit/hero/parts-study/runtime');
 await mkdir(output, { recursive: true });
 const report: any[] = [];
 const dpr = 2;
@@ -64,5 +64,5 @@ for (const [device, width, height] of [['phone', 390, 620], ['ipad', 1024, 580]]
 if (report.length !== 14) throw Error('Incomplete scene coverage');
 await writeFile(resolve(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
 const cards = report.map(entry => `<figure><figcaption>${entry.name} · ${entry.width}×${entry.height} CSS px · DPR 2</figcaption><img loading="lazy" src="${entry.name}.png" width="${entry.width}" height="${entry.height}"></figure>`).join('');
-await writeFile(resolve(output, 'review.html'), `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>新主角接入检查</title><style>body{font:16px system-ui;background:#f6f1e7;color:#263d38;margin:24px}figure{background:white;padding:16px;overflow:auto;margin:24px 0}figcaption{margin-bottom:12px}img{display:block;max-width:none}p{max-width:900px;line-height:1.8}</style><h1>七级新主角 · 战斗实际尺寸</h1><p>正式首页与战场绘制器，现行素材，无候选图替换。固定普通怪/铁桶Boss/最终Boss及一级蓝狐，用于新主角接入检查。手机与平板尺寸是审查夹具，首页仅画布，不包含页面按钮和弹窗；不是微信设备截图、自然战斗或动画验收。静态图不证明枪口弹道、攻击时序或碰撞正确。</p><a href="report.json">尺寸、路径和哈希记录</a>${cards}</html>`);
+await writeFile(resolve(output, 'review.html'), `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>新主角接入检查</title><style>body{font:16px system-ui;background:#f6f1e7;color:#263d38;margin:24px}figure{background:white;padding:16px;overflow:auto;margin:24px 0}figcaption{margin-bottom:12px}img{display:block;max-width:none}p{max-width:900px;line-height:1.8}</style><h1>七级新主角 · 战斗实际尺寸</h1><p>正式战场绘制器，现行素材，无候选图替换。固定普通怪/铁桶Boss/最终Boss及一级蓝狐，用于新主角接入检查。手机与平板尺寸是审查夹具，一二三五六级为身体/上臂/持枪前臂分层，四七级仍为原整身图；不是微信设备截图、自然战斗或动画验收。静态图不证明枪口弹道、攻击时序或碰撞正确。</p><a href="report.json">尺寸、路径和哈希记录</a>${cards}</html>`);
 console.log(`Rendered ${report.length} guardian scenes.`);

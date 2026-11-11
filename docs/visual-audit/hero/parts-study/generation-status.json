@@ -1,0 +1,153 @@
+{
+  "generator": "built-in image_gen",
+  "date": "2026-11-11",
+  "entries": [
+    {
+      "level": 1,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-01-prompt.txt",
+        "sha256": "d799e0c29f39573d88837d7a624c029d4048b239ac523d2b148617d02b6d8888"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-parts-01.png",
+          "sha256": "a720e694ebdad4186c35e2bbcd5090597f71fa72d71621bd943a0de1713abe6c"
+        }
+      ],
+      "status": "generated-and-integrated",
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+        "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+      }
+    },
+    {
+      "level": 2,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-02-prompt.txt",
+        "sha256": "3da590d312ab258040825a0da8cc4efc4d3bf67ff9c62b057e071d4e7d5fcceb"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-2.png",
+          "sha256": "40afa9069280bf46b60ed1481363fb60adb49513da69fd21f74f267e875a6134"
+        }
+      ],
+      "status": "generated-and-integrated",
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-02.png",
+        "sha256": "9c0cb848783e78c946f58563dc4372b536fea81a4d651c91e52f72671040eb21"
+      }
+    },
+    {
+      "level": 3,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-03-prompt.txt",
+        "sha256": "ee260ba9a9de2b5258337eb6aef188b40ec9ff66241a224e57f10bf8a04ff07c"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-3.png",
+          "sha256": "ecd9c1b69beb8cbac206094e180d686536e3444666b729879edff574619f0a72"
+        }
+      ],
+      "status": "generated-and-integrated",
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-03.png",
+        "sha256": "e5a5fb106388d054c6804e6f52be7d7265dccc33792845e18449ab52e1c957b3"
+      }
+    },
+    {
+      "level": 4,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-04-prompt.txt",
+        "sha256": "a810b40ecc6ddfffdabe8fefe360e94b59d2b0bbead9b17fca6f1282fbb99adf"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-4.png",
+          "sha256": "b5563fa57b751fb2e362cedf68856d50cf93ba989d09dcdb354722711a0074fa"
+        }
+      ],
+      "status": "service-rejected-no-output",
+      "reason": "moderation_blocked/input/violence",
+      "requestId": "3345902a-4f9d-48db-b2f6-a88ce0375ea8"
+    },
+    {
+      "level": 5,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-05-prompt.txt",
+        "sha256": "f58c45ac73fb5655954ca8a6827ea419879ea6d7958bf4ea863b3ce0d8b19f0f"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-5.png",
+          "sha256": "e8bbafc9042fbe73a42093f90941aa0b6aa1a599e27d6b476ed9e3645bbbab4d"
+        }
+      ],
+      "status": "generated-and-integrated",
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-05.png",
+        "sha256": "a4d634bb28fee64fb431d85a3f3f3a8cbe8525d7854018a1d7b36ef6a64b2e44"
+      }
+    },
+    {
+      "level": 6,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-06-prompt.txt",
+        "sha256": "02396ddcdc81a3673202001b60aef772ea41a32b4a85a33ce132e0eb074e6aee"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-6.png",
+          "sha256": "4e0c1a07304b6b7e96dd9a297c0b05fb46bda6267efc58bce1ee91561165b01f"
+        }
+      ],
+      "status": "generated-and-integrated",
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-06.png",
+        "sha256": "bdc717e1b36aa50fb0b4321844c816d2a6953f9253debf78e1586e6c09d11372"
+      }
+    },
+    {
+      "level": 7,
+      "prompt": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-07-prompt.txt",
+        "sha256": "c33fd010ddf5bf736d539af99f52c2086b41be6b600e630794239d7370ba1387"
+      },
+      "references": [
+        {
+          "path": "docs/visual-audit/hero/parts-study/guardian-joints-01.png",
+          "sha256": "f568cfdba96a6ebe0612a5a612c61fa2928d6fa6bb1b8d463df66d214e07cca2"
+        },
+        {
+          "path": "docs/visual-audit/hero/weapon-variants/hero-back-7.png",
+          "sha256": "1d491a45e2e9aea08555c7ad25d358869da5a304f88c17a4328fc828fa85711f"
+        }
+      ],
+      "status": "service-rejected-no-output",
+      "reason": "moderation_blocked/input/violence",
+      "requestId": "98c996ab-fa08-4b75-93ad-72507bcbb867"
+    }
+  ],
+  "acceptance": "Appearance approved; joint poses and runtime scenes reviewed locally, user/device animation acceptance pending"
+}
