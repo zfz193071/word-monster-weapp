@@ -578,7 +578,10 @@ export class CanvasScene {
         if (warning) {
           c.strokeStyle = state.tick % 20 < 10 ? '#ff302f' : '#ff9583'; c.lineWidth = 3;
           c.beginPath(); c.ellipse(0, 22, 30, 10, 0, 0, Math.PI * 2); c.stroke();
-          c.fillStyle = '#ff302f'; c.fillRect(-2, -17, 4, 13); c.fillRect(-2, -1, 4, 4);
+          // Place the new Boss warning beside the silhouette, toward the arena
+          // interior, so the face, crown and learning badge remain readable.
+          const warningX = bossBody ? (monster.position.x < this.viewport.worldWidth / 2 ? 32 : -32) : 0;
+          c.fillStyle = '#ff302f'; c.fillRect(warningX - 2, -17, 4, 13); c.fillRect(warningX - 2, -1, 4, 4);
         }
         c.restore();
       }

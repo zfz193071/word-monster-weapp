@@ -40,6 +40,39 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('王冠预警位于角色内侧空隙，手机及宽屏左右边缘不遮脸和词条', async () => {
+  for (const width of [360, 1000]) {
+    const art = openingArt('apple');
+    const h = harness(false, art, {width, initial: createOpeningEncounter('warning-layout', 'apple', 0)});
+    try {
+      const pending = h.scene.load();
+      for (const image of h.images) {
+        if (image.src === art.monster.path) { image.width = 128; image.height = 160; }
+        image.onload();
+      }
+      assert.equal(await pending, true); h.scene.setPaused(true);
+      const initial = h.scene.snapshot!;
+      const arena = initial.arenaWidth ?? 360;
+      for (const x of [40, arena / 2, arena - 40]) {
+        const state = {...initial, tick: 1090, monsters: [{...initial.monsters[0], boss: true,
+          bossKind: 'grand' as const, spawnAtMs: 0, status: 'alive' as const, position: {x, y: 245}}]};
+        h.commands.length = 0;
+        (h.scene as unknown as {draw(state: typeof state): void}).draw(state);
+        const marker = h.commands.find(command => command.method === 'fillRect' && command.args[1] === -17 && command.args[2] === 4 && command.args[3] === 13)!;
+        assert.ok(marker);
+        const markerX = Number(marker.args[0]);
+        assert.equal(markerX, x < arena / 2 ? 30 : -34);
+        // Grand Boss uses the unchanged 2× outer scale; marker sits beyond its
+        // 40-logical-pixel torso half-width and inside the visible arena.
+        const left = x + markerX * 2, right = left + 8;
+        assert.ok(left >= 0 && right <= arena);
+        assert.ok(right < x - 40 || left > x + 40);
+        assert.ok(h.commands.some(command => command.method === 'drawImage' && (command.args[0] as {src:string}).src === art.fruitHat!.path));
+      }
+    } finally { h.scene.dispose(); }
+  }
+});
+
 test('两类Boss新身体解码失败可重试，水果动物词条均绘制独立Boss且保留徽章', async () => {
   for (const kind of ['iron', 'grand'] as const) {
     const art = openingArt('apple', ['apple', 'cat']);
