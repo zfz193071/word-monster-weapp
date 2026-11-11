@@ -15,7 +15,7 @@ import { createOpeningEncounter, openingArt, openingMonsterCount } from '../mini
 const require = createRequire(import.meta.url);
 const { createCanvas, Image } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = resolve(root, 'docs/visual-audit/enemies/approved-parts/boss-motion');
+const output = resolve(root, process.env.WM_BOSS_OUTPUT ?? 'docs/visual-audit/enemies/approved-parts/boss-motion');
 await mkdir(output, { recursive: true });
 (globalThis as any).wx = { createOffscreenCanvas: ({ width, height }: any) => createCanvas(width, height) };
 const fps = 30, maximumSeconds = 100, dpr = 1;

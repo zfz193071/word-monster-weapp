@@ -15,7 +15,7 @@ import type { BattlePet } from '../pets/battle';
 import { drawBattlePet, BATTLE_PET_ART } from '../pets/battle-art';
 import { battleBackgroundColor, drawBattleBackground, courtyardAsset, COURTYARD_ASSETS, drawCourtyard } from './battle-background';
 import { grandBossWindingUp, bossChargePhase } from './battle-progression';
-import { DamageNumbers } from './damage-numbers';
+import { DAMAGE_NUMBER_FONT, DamageNumbers } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
 import { createViewport, HorizontalControl, logicalHitbox } from './viewport';
@@ -326,7 +326,10 @@ export class CanvasScene {
         }
         this.lastFrameTime = now; this.droppedMs += result.droppedMs;
         this.peakProjectiles = Math.max(this.peakProjectiles, result.state.projectiles.length);
-        this.damageNumbers.add(result.events, this.effectTime);
+        this.context.save(); this.context.font = DAMAGE_NUMBER_FONT;
+        this.damageNumbers.add(result.events, this.effectTime, this.viewport.worldWidth,
+          text => this.context.measureText(text)?.width);
+        this.context.restore();
         this.draw(result.state); this.publishHud(result.state);
         if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {
           this.retirement = createRetirement(result.state, this.options.retirement);
@@ -705,7 +708,7 @@ export class CanvasScene {
     }
     for (const number of this.damageNumbers.sample(this.effectTime, this.viewport.worldWidth)) {
       c.save(); c.translate(number.position.x, number.position.y); c.scale(number.scale, number.scale);
-      c.globalAlpha = number.opacity; c.font = 'bold 18px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.globalAlpha = number.opacity; c.font = DAMAGE_NUMBER_FONT; c.textAlign = 'center'; c.textBaseline = 'middle';
       c.lineWidth = 3; c.lineJoin = 'round'; c.strokeStyle = '#435343'; c.fillStyle = number.color;
       c.strokeText(number.text, 0, 0); c.fillText(number.text, 0, 0); c.restore();
     }

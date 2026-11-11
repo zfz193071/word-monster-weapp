@@ -41,7 +41,7 @@ test('普通与元素伤害逐次记录，致命伤害不按剩余血量截断�
  assert.equal(kill.events.filter(e=>e.type==='monsterDefeated').length,1);
  const numbers=new DamageNumbers();numbers.add(result.events,100);const first=numbers.sample(100);
  assert.equal(first.length,5);assert.equal(first[0].text,'-4');assert.equal(first[1].text,'-15');assert.notEqual(first[0].color,first[2].color);
- assert.notEqual(first[0].position.x,first[2].position.x,'同一个怪物普通和火焰数字错开');
+ assert.notDeepEqual(first[0].position,first[2].position,'同一个怪物普通和火焰数字错开');
  assert.deepEqual(numbers.sample(100),first,'暂停不推进效果时间');
  const later=numbers.sample(700);assert(later[0].opacity<first[0].opacity);assert(later[0].position.y<first[0].position.y);
  assert.equal(numbers.sample(900).length,0);assert.equal(numbers.active,false);
