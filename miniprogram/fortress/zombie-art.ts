@@ -24,7 +24,7 @@ export const BOSS_ZOMBIE_PARTS: Readonly<Record<'iron' | 'grand', SpriteAsset>> 
     source: 'docs/visual-audit/enemies/approved-parts/iron-parts-01.png',
     rights: '项目内置 image_gen；已批准铁桶队长母版，运行视觉待验收', approved: true },
   grand: { path: '/character-assets/zombie-grand-parts.png',
-    source: 'docs/visual-audit/enemies/approved-parts/grand-parts-02.png',
+    source: 'docs/visual-audit/enemies/approved-parts/grand-rig-atlas-01.png',
     rights: '项目内置 image_gen；2026-11-11 已批准王冠盾甲母版，运行视觉待验收', approved: true },
 };
 
@@ -34,21 +34,30 @@ export function drawBossZombieParts(
   pose: BossPose = {torsoY: 0, torsoScaleY: 1},
 ): void {
   const grand = kind === 'grand';
-  const sx = image.width / (grand ? 1774 : 2048), sy = image.height / (grand ? 887 : 683);
+  const sx = image.width / (grand ? 2172 : 2048), sy = image.height / (grand ? 724 : 683);
   c.fillStyle = 'rgba(37,62,56,.16)';
   c.beginPath(); c.ellipse(0, 69, 46, 8, 0, 0, Math.PI * 2); c.fill();
   for (const [index, side] of [-1, 1].entries()) {
     const foot = gait.feet[index];
-    const x = grand ? (index === 0 ? 925 : 1340) : (index === 0 ? 960 : 1600);
+    const x = grand ? (index === 0 ? 1430 : 1730) : (index === 0 ? 960 : 1600);
     c.save(); c.translate(side * 22, grand ? 30 : 28); c.rotate(side * foot.lift * .035);
-    c.drawImage(image, x * sx, (grand ? 600 : 370) * sy, (grand ? 290 : 240) * sx, (grand ? 205 : 260) * sy,
+    c.drawImage(image, x * sx, (grand ? 370 : 370) * sy, (grand ? 210 : 240) * sx, (grand ? 345 : 260) * sy,
       -22, 0, 44, (grand ? 42 : 46) + foot.travel * 4 - foot.lift * 7);
     c.restore();
   }
-  c.drawImage(image, (grand ? 100 : 10) * sx, (grand ? 50 : 0) * sy,
-    (grand ? 790 : 740) * sx, (grand ? 760 : 635) * sy,
-    -64 + gait.sway, (grand ? -88 : -70) + gait.bob + pose.torsoY, 128,
-    (grand ? 123 : 110) * pose.torsoScaleY);
+  c.drawImage(image, (grand ? 120 : 10) * sx, (grand ? 0 : 0) * sy,
+    (grand ? 560 : 740) * sx, (grand ? 700 : 635) * sy,
+    -64 + gait.sway, (grand ? -92 : -70) + gait.bob + pose.torsoY, 128,
+    (grand ? 140 : 110) * pose.torsoScaleY);
+  if (grand) {
+    // The new atlas keeps the shield arm independent of the torso. Its pivot
+    // is the shoulder socket, so the wind-up can lean the whole body without
+    // creating a detached shield or a second static arm.
+    c.save(); c.translate(37 + gait.sway, -38 + gait.bob + pose.torsoY);
+    c.rotate(gait.feet[1].travel * .04);
+    c.drawImage(image, 900 * sx, 135 * sy, 430 * sx, 575 * sy, -2, -8, 66, 105 * pose.torsoScaleY);
+    c.restore();
+  }
 }
 
 /** Three separate atlas parts, calibrated in normalized 2048 × 683 atlas coordinates.

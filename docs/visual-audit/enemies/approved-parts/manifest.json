@@ -12,8 +12,78 @@
       ],
       "scope": "Rejected independent-arm study: actual-size review found duplicate arms against the complete torso; not approved or integrated into runtime",
       "source": "docs/visual-audit/enemies/approved-parts/apple-arms-study-01.png",
-      "sourceSize": [2172, 724],
+      "sourceSize": [
+        2172,
+        724
+      ],
       "sourceSha256": "0b74919bb7c0008b69737fc308d60c356e096b15cfe127ab33f0d0f13144c54d"
+    },
+    {
+      "kind": "apple-arms-rig",
+      "generator": "built-in image_gen",
+      "prompt": "apple-arms-rig-study-02-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/enemies/approved-parts/apple-parts-01.png",
+          "sha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231"
+        }
+      ],
+      "encoding": "Full atlas uniformly resampled to half size; alpha retained.",
+      "scope": "Apple zombie rig arms; runtime visual/device acceptance pending",
+      "source": "docs/visual-audit/enemies/approved-parts/apple-arms-rig-study-02.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "sourceSha256": "b7418ead36d203d067b6bde3df5c60a6c3d1720d23f85f71898c24fb74137798",
+      "target": "miniprogram/character-assets/zombie-apple-arms-rig-v1.png",
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8",
+      "bytes": 82312,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "kind": "grand-shield-arm",
+      "generator": "built-in image_gen",
+      "prompt": "grand-shield-arm-01-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/enemies/approved-parts/grand-boss-study-01.png",
+          "sha256": "9db615631e113ff25541adfd922fe6bd73ffada1ec76743f262c315e748cddf0"
+        }
+      ],
+      "scope": "Approved-master-derived action component; standalone source part only, pending pivot/canvas integration and runtime visual/device acceptance",
+      "source": "docs/visual-audit/enemies/approved-parts/grand-shield-arm-01.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "f2037397cbee947b82a19aee9f3b843b3ce61bbf1b0cf7f43338c96d6246d878",
+      "hasAlpha": true,
+      "runtimeIntegrated": false
+    },
+    {
+      "kind": "grand-torso-rig-study",
+      "generator": "built-in image_gen",
+      "prompt": "grand-torso-rig-study-01-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/enemies/approved-parts/grand-parts-02.png",
+          "sha256": "49fad2d87825b472c76abdf9aa16a45f0221827188d261374853f48deff80579"
+        }
+      ],
+      "scope": "Approved-master-derived shieldless torso source, paired with grand-shield-arm-01 for later articulated runtime integration; not a runtime asset",
+      "source": "docs/visual-audit/enemies/approved-parts/grand-torso-rig-study-01.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceSha256": "2a07fa815b71e20cd1cc16d7fbfb63bb5dc460cb0f06dd9100da207d244a2184",
+      "hasAlpha": true,
+      "runtimeIntegrated": false
     },
     {
       "kind": "apple",
@@ -44,27 +114,6 @@
       ],
       "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e",
       "bytes": 210335,
-      "decodedRgbaBytes": 1572528
-    },
-    {
-      "kind": "apple-arms-rig",
-      "generator": "built-in image_gen",
-      "prompt": "apple-arms-rig-study-02-prompt.txt",
-      "references": [
-        {
-          "path": "docs/visual-audit/enemies/approved-parts/apple-parts-01.png",
-          "sha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231"
-        }
-      ],
-      "encoding": "Full atlas uniformly resampled to half size; alpha retained.",
-      "scope": "Apple zombie rig arms; runtime visual/device acceptance pending",
-      "source": "docs/visual-audit/enemies/approved-parts/apple-arms-rig-study-02.png",
-      "sourceSize": [2172, 724],
-      "sourceSha256": "b7418ead36d203d067b6bde3df5c60a6c3d1720d23f85f71898c24fb74137798",
-      "target": "miniprogram/character-assets/zombie-apple-arms-rig-v1.png",
-      "runtimeSize": [1086, 362],
-      "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8",
-      "bytes": 82312,
       "decodedRgbaBytes": 1572528
     },
     {
@@ -101,33 +150,29 @@
     {
       "kind": "grand",
       "generator": "built-in image_gen",
-      "prompt": "grand-parts-02-prompt.txt",
+      "prompt": "grand-parts-rig-atlas-01-prompt.txt",
       "references": [
         {
           "path": "docs/visual-audit/enemies/approved-parts/grand-boss-study-01.png",
           "sha256": "9db615631e113ff25541adfd922fe6bd73ffada1ec76743f262c315e748cddf0"
-        },
-        {
-          "path": "docs/visual-audit/enemies/approved-parts/grand-parts-01.png",
-          "sha256": "c6b10542460d6f046d8317a32a59ab7cd648756762fbf12f84e9559784a11ddb"
         }
       ],
       "encoding": "Full atlas uniformly resampled to approximately half size; alpha retained, no background removal or pixel retouching",
       "scope": "Ordinary apple and two Boss identities from approved masters; runtime visual/device acceptance pending",
-      "source": "docs/visual-audit/enemies/approved-parts/grand-parts-02.png",
+      "source": "docs/visual-audit/enemies/approved-parts/grand-rig-atlas-01.png",
       "sourceSize": [
-        1774,
-        887
+        2172,
+        724
       ],
-      "sourceSha256": "49fad2d87825b472c76abdf9aa16a45f0221827188d261374853f48deff80579",
+      "sourceSha256": "a2a305e502a108417e09d0c28d119756d03abc1781390511277d68729f19acdc",
       "target": "miniprogram/character-assets/zombie-grand-parts.png",
       "runtimeSize": [
-        888,
-        444
+        1086,
+        362
       ],
-      "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-      "bytes": 309599,
-      "decodedRgbaBytes": 1577088
+      "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+      "bytes": 323519,
+      "decodedRgbaBytes": 1572528
     }
   ]
 }

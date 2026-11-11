@@ -87,7 +87,7 @@ test('两类Boss新身体解码失败可重试，水果动物词条均绘制独�
     const setSize = (image: typeof h.images[number]) => {
       if (image.src === art.monster.path) { image.width = 128; image.height = 160; }
       if (image.src === art.bossBodies![kind]!.path) {
-        image.width = kind === 'grand' ? 888 : 1086; image.height = kind === 'grand' ? 444 : 362;
+        image.width = 1086; image.height = 362;
       }
     };
     try {
@@ -108,7 +108,10 @@ test('两类Boss新身体解码失败可重试，水果动物词条均绘制独�
         const before = JSON.stringify(state);
         (h.scene as unknown as {draw(state: typeof state): void}).draw(state);
         const calls = h.commands.filter(command => command.method === 'drawImage');
-        assert.equal(calls.filter(command => command.args[0] === bossImage).length, 3);
+        // The approved Crown Boss rig has two independently stepping legs,
+        // a torso, and its own shoulder-pivoted shield arm. Iron Captain
+        // retains its three-piece atlas.
+        assert.equal(calls.filter(command => command.args[0] === bossImage).length, kind === 'grand' ? 4 : 3);
         assert.ok(calls.some(command => (command.args[0] as {src:string}).src === art.fruitHats![wordId].path));
         assert.equal(JSON.stringify(state), before, '绘制不改碰撞、血量与攻击状态');
         assert.ok(!h.commands.some(command => command.method === 'strokeRect' && command.args[0] === -22 && command.args[1] === -5), '新Boss不叠旧护肩');

@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: game runtime action part, to be placed separately over an existing animated Boss body
+Input images: the approved grand-boss-study-01.png reference for exact character identity, materials, silhouette, and rendering style.
+Primary request: Produce one isolated, transparent PNG sprite of only this Boss's shield-bearing right forearm and hand holding its existing oval shield. Keep the exact green zombie skin, brown stitched sleeve/cuff, battered bronze rim, slate-blue shield face, gold crown emblem and laurel detail from the reference. The shield must be fully visible with generous transparent margin on every edge. The shoulder must end in a clean natural sleeve cutoff suitable for a pivot joint; do not show torso, head, crown, left arm, legs, ground, background, shadow, text, or duplicate objects.
+Style/medium: polished 3D-cartoon game character part, identical to the approved reference.
+Composition/framing: upright right-hand shield arm only, centered on a transparent 1:1 canvas; clean single component.
+Constraints: actual transparent background; keep design identity faithful; no redesign and no added weapons, labels, visual effects, or watermark.

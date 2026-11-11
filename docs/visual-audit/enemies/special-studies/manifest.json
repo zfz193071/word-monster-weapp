@@ -84,6 +84,14 @@
         1254
       ],
       "status": "pending-user-review"
+    },
+    {
+      "kind": "lineup",
+      "path": "docs/visual-audit/enemies/special-studies/apple-special-enemies-study-01.png",
+      "sha256": "79aff9af0fff366ec3bbea8cb2452a14d6d274265f529d68352b303af53c82c5",
+      "size": [2172, 724],
+      "status": "pending-user-review",
+      "note": "Built-in image_gen lineup generated from style-study-01 and the approved apple-zombie reference; review-only and not a runtime asset."
     }
   ]
 }

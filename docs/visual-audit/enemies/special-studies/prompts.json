@@ -18,5 +18,9 @@
   {
     "id": "giant",
     "prompt": "Use case: stylized-concept. Asset type: one special-enemy representative for a children's vocabulary defense game, approval study only. Reference image is the approved apple zombie parts atlas: use its face, olive green skin, big amber eyes, tiny teeth, stitched cheeks, ragged brown clothes, polished warm 3D cartoon materials. Reassemble into ONE complete full-body character, not a parts sheet. Preserve a clearly readable red apple cap with stem and leaf as representative vocabulary identity. Front three-quarter view, entire body centered with generous 12% margins, square canvas, genuinely transparent background, no text, no UI, no scenery, no floor. Friendly mischievous expression, no gore. Do not add crown or bucket captain identity. Create GIANT: massive broad shoulders, heavy thick forearms and oversized hands, barrel torso, short powerful legs, a relatively smaller head still matching the reference face, stretched patched brown tunic and shorts. Clearly huge through proportions, not merely enlarged normal zombie. No armor, crown, bucket, weapon or extra characters."
+  },
+  {
+    "id": "lineup-01",
+    "prompt": "Use case: stylized-concept. Asset type: review-only horizontal lineup for five special enemy candidates. Input references: style-study-01 for overall style and the approved apple zombie parts atlas for appearance. Create separate full-body runner, armored, flying, exploder and giant apple zombies with the same stitched green face, red apple cap, torn brown clothing and warm polished toy-like 3D materials. Distinguish them only by light scarf/forward lean, rounded iron armor, patched blue cloth wings, a safe cartoon backpack canister with fuse, and oversized stone-and-wood shoulders. Genuinely transparent background, no text, UI, scenery, floor shadows, crowns, duplicated limbs or cropped bodies. Review study only; no gameplay or runtime use."
   }
 ]

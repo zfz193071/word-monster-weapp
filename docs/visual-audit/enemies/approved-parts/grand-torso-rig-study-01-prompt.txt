@@ -1,0 +1,4 @@
+Use case: precise-object-edit
+Asset type: transparent runtime torso sprite
+Input image: the approved grand Boss atlas. Match its exact character identity and polished 3D-cartoon rendering.
+Create only a clean upper-body torso sprite: crown, head, torso, waist cloth, belt, and the existing left pointing arm. Remove the entire shield, shield arm, and both legs. The image must be an RGBA PNG with a fully transparent background: every pixel outside the character must have alpha 0. No white, gray, checkerboard, studio backdrop, mist, glow, floor, cast shadow, halo, or canvas texture. Keep a clean natural empty right-sleeve/shoulder cutoff for a separately composited shield arm. Preserve all remaining original details exactly. Center the one torso component on a wide 2:1 transparent canvas with generous transparent margins. No text, no watermark, no new objects, no duplicate limbs.

@@ -1662,3 +1662,17 @@ Canvas与审计共用sceneImageAssets资源集合，报告补计精细苹果怪�
 资源依赖审计和包体检查通过；八相位浅深背景与 DPR2 实际尺寸审样见
 `docs/visual-audit/enemies/approved-parts/runtime/apple-walk-{light,dark}.png`。仍未完成
 微信编译、真机和用户视觉验收，#99 保持开放。
+
+## 2026-11-11 王冠 Boss 正式可动部件接入
+
+在用户已认可的 `grand-boss-study-01.png` 母版范围内，制作并接入
+`grand-rig-atlas-01.png`。该图集将无臂躯干、盾臂和两条腿分离；运行时按照肩部、髋部
+标定依次绘制四个部件，盾臂只随既有步态与 Boss 姿态轻摆。之前整图缩放后肩盾脱节的
+试验保持拒绝，不进入运行包；五类特殊敌人的候选仍待用户审样，未被接入。
+
+资源制备脚本改为保留既有审样清单条目并更新指定运行图集，避免覆盖失败审样的可追溯
+记录。新 Boss 运行图为 1086×362，角色分包源码预算为 2042.7KiB / 2048KiB。全量
+542项测试、`npm run check`及差异检查通过；八相位浅深底实际尺寸输出位于
+`docs/visual-audit/enemies/approved-parts/runtime/grand-walk-{light,dark}.png`。这是离屏
+审样，不代表真实 Boss 波次、微信编译、真机或最终用户视觉验收；不改 Boss 招式、计时、
+免疫、碰撞、伤害或奖励，#92/#98/#99 继续开放。
