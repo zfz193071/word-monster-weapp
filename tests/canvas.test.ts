@@ -40,7 +40,7 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
-test('王冠预警位于角色内侧空隙，手机及宽屏左右边缘不遮脸和词条', async () => {
+test('王冠预警位于角色内侧空隙，手机及宽屏左右边缘不遮脸、词条或裁切圆环', async () => {
   for (const width of [360, 1000]) {
     const art = openingArt('apple');
     const h = harness(false, art, {width, initial: createOpeningEncounter('warning-layout', 'apple', 0)});
@@ -67,6 +67,12 @@ test('王冠预警位于角色内侧空隙，手机及宽屏左右边缘不遮�
         const left = x + markerX * 2, right = left + 8;
         assert.ok(left >= 0 && right <= arena);
         assert.ok(right < x - 40 || left > x + 40);
+        const ring = h.commands.find(command => command.method === 'ellipse' && command.args[1] === 22 && command.args[2] === 30)!;
+        assert.ok(ring);
+        const ringX = Number(ring.args[0]);
+        const ringLeft = x + (ringX - 31.5) * 2, ringRight = x + (ringX + 31.5) * 2;
+        assert.ok(ringLeft >= 0 && ringRight <= arena);
+        assert.equal(ringX, x < 65 ? (65 - x) / 2 : x > arena - 65 ? (arena - 65 - x) / 2 : 0);
         assert.ok(h.commands.some(command => command.method === 'drawImage' && (command.args[0] as {src:string}).src === art.fruitHat!.path));
       }
     } finally { h.scene.dispose(); }

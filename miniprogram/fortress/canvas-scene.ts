@@ -595,7 +595,12 @@ export class CanvasScene {
         c.fillStyle = '#f16a59'; c.fillRect(-24, 29, 48 * monster.hp / monster.maxHp, 5);
         if (warning) {
           c.strokeStyle = state.tick % 20 < 10 ? '#ff302f' : '#ff9583'; c.lineWidth = 3;
-          c.beginPath(); c.ellipse(0, 22, 30, 10, 0, 0, Math.PI * 2); c.stroke();
+          // Grand Boss content is scaled 2×. Keep the 60px world-space ring
+          // inside the arena while retaining its warning footprint near the feet.
+          const ringMargin = (30 + 1.5) * 2 + 2; // radius + half stroke + anti-alias gap
+          const ringWorldX = Math.max(ringMargin, Math.min(this.viewport.worldWidth - ringMargin, monster.position.x));
+          const warningRingX = (ringWorldX - monster.position.x) / 2;
+          c.beginPath(); c.ellipse(warningRingX, 22, 30, 10, 0, 0, Math.PI * 2); c.stroke();
           // Place the new Boss warning beside the silhouette, toward the arena
           // interior, so the face, crown and learning badge remain readable.
           const warningX = bossBody ? (monster.position.x < this.viewport.worldWidth / 2 ? 32 : -32) : 0;

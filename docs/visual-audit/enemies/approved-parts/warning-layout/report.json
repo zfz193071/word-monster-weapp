@@ -10,8 +10,8 @@
     "tick": 1090,
     "warningSide": "right",
     "dpr": 2,
-    "bytes": 1954754,
-    "sha256": "ed1bcd745d94606c059a17d8deb546252bfafddf31d8033b9f636b6ca62f24bb",
+    "bytes": 1952603,
+    "sha256": "ff911a418f3914af0c2549fafe43487d7ba5b780b761328f4ff7dff1075787d0",
     "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
   },
   {
@@ -40,8 +40,8 @@
     "tick": 1090,
     "warningSide": "left",
     "dpr": 2,
-    "bytes": 1956089,
-    "sha256": "67b6f0ee86ad47ce8e7fd092425d52166813224037e8256e3b4e3e971b7544e9",
+    "bytes": 1953797,
+    "sha256": "f9e868240d8dafa2da0351f64b0ba5c7699a82e5f2709a3bcb3404683f2e76c5",
     "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
   },
   {
@@ -55,8 +55,8 @@
     "tick": 1090,
     "warningSide": "right",
     "dpr": 2,
-    "bytes": 3810286,
-    "sha256": "a2a667d6d3b94d11c620adc8d30b979201621530d11bf34d38d5fb26f393e7fb",
+    "bytes": 3808813,
+    "sha256": "2ab895590b8d72de9d57626bb16cecd6ec9696858f9bf1042320c625d4621fc3",
     "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
   },
   {
@@ -85,8 +85,8 @@
     "tick": 1090,
     "warningSide": "left",
     "dpr": 2,
-    "bytes": 3809827,
-    "sha256": "00f184ea1bb623a58d408289382d4197dfb7e77e7369724182ddc55a6e89fe89",
+    "bytes": 3806531,
+    "sha256": "7443d2ca597a88c578b828ade6aaa868f9d08ad12c9a74404b165c2671dd21a8",
     "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
   }
 ]
