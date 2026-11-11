@@ -1,0 +1,89 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "docs/visual-audit/enemies/approved-parts/apple-parts-01.png",
+  "referenceSha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231",
+  "authorization": "2026-11-11 用户：按此方向制作代表图",
+  "scope": "五类代表图审查，尚未批准正式部件或接入；玩法不变",
+  "assets": [
+    {
+      "kind": "runner",
+      "path": "docs/visual-audit/enemies/special-studies/runner-study-01.png",
+      "sha256": "1a95f1487ab9257c4df816ea31c45311d1cc04e2f4c75d4f0ad264689a20958c",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        17,
+        1234,
+        1254
+      ],
+      "status": "pending-user-review"
+    },
+    {
+      "kind": "armored",
+      "path": "docs/visual-audit/enemies/special-studies/armored-study-01.png",
+      "sha256": "80ea3471f62de5521440de19ff9edb7330c0b25b18530fe882b8008e3b154a23",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        19,
+        1245,
+        1254
+      ],
+      "status": "pending-user-review"
+    },
+    {
+      "kind": "flying",
+      "path": "docs/visual-audit/enemies/special-studies/flying-study-01.png",
+      "sha256": "89c3fde8e62b289d4a6376cdd54341ef8410054a1617d5d3caff79fe651a1037",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        27,
+        1225,
+        1254
+      ],
+      "status": "pending-user-review"
+    },
+    {
+      "kind": "exploder",
+      "path": "docs/visual-audit/enemies/special-studies/exploder-study-01.png",
+      "sha256": "795a6afab61f7e19058b94d28999f0caf8490c2160c4bbdc93a67df2a2246684",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        21,
+        1235,
+        1254
+      ],
+      "status": "pending-user-review"
+    },
+    {
+      "kind": "giant",
+      "path": "docs/visual-audit/enemies/special-studies/giant-study-01.png",
+      "sha256": "8da77d701aea5981e4096418c307c36a6699f18d3217915ad8619c0bfec4d3ea",
+      "size": [
+        1254,
+        1254
+      ],
+      "alphaBounds": [
+        0,
+        32,
+        1253,
+        1254
+      ],
+      "status": "pending-user-review"
+    }
+  ]
+}
