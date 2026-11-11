@@ -22,6 +22,16 @@ function check(numbers: ReturnType<DamageNumbers['sample']>, width: number) {
     }
   }
 }
+function checkTargets(numbers: ReturnType<DamageNumbers['sample']>, events: readonly CombatEvent[]) {
+  for (const [index, number] of numbers.entries()) {
+    const event = events[index] as Extract<CombatEvent, {type:'monsterDamaged'}>;
+    const half = (measure(number.text) + 3) * 1.18 / 2;
+    const horizontal = Math.abs(number.position.x - event.position.x) >= half + 26;
+    const vertical = number.position.y + 13 <= event.position.y - 72
+      || number.position.y - 13 >= event.position.y + 46;
+    assert.ok(horizontal || vertical, `Damage number ${number.text} hides its target`);
+  }
+}
 
 test('相邻多个敌人的逐次伤害保持数值、数量、颜色，整个上浮过程不重叠', () => {
   for (const width of [360, 980]) for (const x of [4, width / 2, width - 4]) {
@@ -38,6 +48,13 @@ test('相邻多个敌人的逐次伤害保持数值、数量、颜色，整个�
     assert.equal(JSON.stringify(events), original);
     assert.equal(numbers.sample(800).length, 0);
   }
+});
+
+test('伤害数字优先避开自身的角色、词条和血条区域', () => {
+  const events = [hit(1, 180, 240), hit(2, 186, 240), hit(3, 174, 240)];
+  const numbers = new DamageNumbers();
+  numbers.add(events, 0, 360, measure);
+  checkTargets(numbers.sample(0, 360), events);
 });
 
 test('后续命中和其他数字到期不使已出现数字跳动，暂停重复采样稳定，缩放后重新避让', () => {

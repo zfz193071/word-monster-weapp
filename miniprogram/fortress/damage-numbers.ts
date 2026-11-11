@@ -5,6 +5,10 @@ type DamageEvent = Extract<CombatEvent, { type: 'monsterDamaged' }>;
 interface NumberEffect { event: DamageEvent; started: number; origin: Point; width: number }
 export interface DamageNumber { text: string; position: Point; color: string; opacity: number; scale: number }
 const FLOAT_DISTANCE = 30, HEIGHT = 26, GAP = 4;
+// A hit number is useful only while it does not hide the unit that was hit.
+// This covers the ordinary body plus its learning badge and health bar; it is
+// intentionally a visual reservation, not another hitbox or game rule.
+const TARGET_HALF_WIDTH = 26, TARGET_TOP = 72, TARGET_BOTTOM = 46;
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 // Each real hit keeps its own value. Placement happens once at admission (or
 // resize), so later hits/expiry cannot make an existing number jump lanes.
@@ -36,7 +40,7 @@ export class DamageNumbers {
     let best = anchor, bestScore = Infinity;
     // Bounded local search. Prefer nearby clear positions, but never suppress or
     // merge actual hits when density exceeds the available screen space.
-    for (let row = 0; row < 9; row++) for (const column of [0, -1, 1, -2, 2]) {
+    for (let row = 0; row < 13; row++) for (const column of [0, -1, 1, -2, 2, -3, 3, -4, 4]) {
       const offsetY = row === 0 ? 0 : Math.ceil(row / 2) * (HEIGHT + GAP) * (row % 2 ? -1 : 1);
       const candidate = {x: clamp(anchor.x + column * (effect.width + GAP), half + 2, this.arenaWidth - half - 2),
         y: clamp(anchor.y + offsetY, HEIGHT / 2 + remaining + 2, 480 - HEIGHT / 2 - 2)};
@@ -47,11 +51,22 @@ export class DamageNumbers {
         const dy = Math.max(0, HEIGHT + GAP - Math.abs(candidate.y - p.y));
         overlap += dx * dy;
       }
-      const score = overlap * 10000 + Math.hypot(candidate.x - anchor.x, candidate.y - anchor.y);
+      const targetOverlap = this.targetOverlap(candidate, effect);
+      // Keep labels, bars and the character readable before optimizing the
+      // spacing between numbers. Dense fights still preserve every hit.
+      const score = targetOverlap * 1000000 + overlap * 10000 + Math.hypot(candidate.x - anchor.x, candidate.y - anchor.y);
       if (score < bestScore) { best = candidate; bestScore = score; }
       if (score === 0) break;
     }
     return {x: best.x, y: best.y + FLOAT_DISTANCE * progress};
+  }
+  private targetOverlap(candidate: Point, effect: NumberEffect): number {
+    const half = effect.width / 2;
+    const target = effect.event.position;
+    const dx = Math.max(0, half + TARGET_HALF_WIDTH - Math.abs(candidate.x - target.x));
+    const dy = Math.max(0, HEIGHT / 2 + (TARGET_TOP + TARGET_BOTTOM) / 2
+      - Math.abs(candidate.y - (target.y + (TARGET_BOTTOM - TARGET_TOP) / 2)));
+    return dx * dy;
   }
   private prune(now: number) { this.effects = this.effects.filter(effect => now - effect.started < DAMAGE_NUMBER_DURATION_MS); }
   get active(): boolean { return this.effects.length > 0; }
