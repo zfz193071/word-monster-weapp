@@ -18,6 +18,6 @@ for (const item of [{ source: 'docs/visual-audit/hero/parts-study/guardian-parts
 await writeFile('docs/visual-audit/hero/parts-study/rig-manifest.json', JSON.stringify({
   generator: 'built-in image_gen', generationRecord: 'docs/visual-audit/hero/parts-study/generation-status.json', encoding: 'Complete atlas uniformly resampled; original alpha retained; no pixel removal',
   acceptedScope: 'Approved guardian appearance and seven weapon identities; final animation/device acceptance pending',
-  combatMuzzle: {lateral: 16.8, forward: 34.4}, missingLevels: [4, 7], files,
+  combatMuzzle: {lateral: 16.8, forward: 34.4}, missingLevels: [], files,
 }, null, 2) + '\n');
 console.log(files.map(file => ({path: file.target, bytes: file.bytes})));

@@ -292,16 +292,16 @@ const legacyHero = {path:'/assets/images/fortress/hero-back-weapon-2.png',source
 function categoryArt(...args: Parameters<typeof openingArt>): SceneArt {
   return {...openingArt(...args), bossBodies: {}, hero:legacyHero};
 }
-test('七级新主角均等待对应角色分包，跨关使用同一成功缓存', async () => {
+test('七级关节主角均等待对应角色分包，跨关使用同一成功缓存', async () => {
   for(let level=1;level<=7;level++) {
     const {load,calls}=harness();
     let ready=false;
     const pending=load(5, 0,openingArt('red',['red'],level)).then(()=>{ready=true;});
-    assert.deepEqual(calls.map(c=>c.path),[...([4,7].includes(level) ? [] : ['../guardian-assets/ready']), '../character-assets/ready']);
+    assert.deepEqual(calls.map(c=>c.path),['../guardian-assets/ready', '../character-assets/ready']);
     await Promise.resolve(); assert.equal(ready,false);
     calls.forEach(call => call.resolve());await pending;
     await load(6, 0,openingArt('book',['book'],level));
-    assert.equal(calls.length,[4,7].includes(level) ? 1 : 2);
+    assert.equal(calls.length,2);
   }
 });
 
@@ -340,7 +340,7 @@ test('三至五级堡垒分别缓存，失败只重试当前等级且不预载�
   }
 });
 
-test('关节主角与宠物包独立重试，跨关共享，四七级不请求关节包', async () => {
+test('关节主角与宠物包独立重试，跨关共享，四七级复用关节包', async () => {
   const h=harness(), art=openingArt('red',['red'],1);
   const first=h.load(5,0,art,true),failed=assert.rejects(first,/offline/);
   assert.deepEqual(h.calls.map(c=>c.path),['../guardian-assets/ready','../character-assets/ready']);

@@ -2,9 +2,9 @@
 
 2026-11-11：沿用户已批准主角02及七级新武器变体制作，不引用旧粗糙图。原guardian-parts-01左侧身体已接入，右侧整块双臂未采用；直接旋转整块双臂会肩部脱节，现改为身体、上臂袖子和持枪前臂三层。
 
-一、二、三、五、六级已接入。身体双脚保持水平，面向左右时镜像；前臂与枪按原真实出弹点旋转，上臂连接固定肩部和前臂根部。没有改弹道起点、瞄准算法、伤害、射速或碰撞。后坐力与进一步过渡仍待完成。
+一至七级已接入。身体双脚保持水平，面向左右时镜像；前臂与装备按原真实出弹点旋转，上臂连接固定肩部和前臂根部。没有改弹道起点、瞄准算法、伤害、射速或碰撞。后坐力与进一步过渡仍待完成。
 
-四、七级新部件生成被服务拒绝（moderation_blocked/input/violence），无新图输出，继续保留各自原整身图，不借用其他级武器。准确请求、原参考SHA256、成功图与失败request ID见[generation-status.json](generation-status.json)及各guardian-joints-NN-prompt.txt。仅使用内置image_gen，没有CLI替代。
+2026-11-11：四、七级的首次生成请求被服务拒绝，后续以一级关节图集的布局和已批准各级外观为唯一参考重新生成，获得透明 `guardian-joints-04.png` 与 `guardian-joints-07.png`，并纳入运行图集。两图均为候选运行部件，仍待实际尺寸与用户视觉验收；准确请求、原参考、输出哈希和首次失败记录见 [generation-status.json](generation-status.json) 及各 `guardian-joints-NN-prompt.txt`。仅使用内置 image_gen，没有 CLI 替代。
 
 [五套×九方向浅底](runtime/joint-poses-light.png) · [深底](runtime/joint-poses-dark.png) · [七级手机/平板实际场景](runtime/review.html) · [一级首轮自然回放](motion/review.html)。
 

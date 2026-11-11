@@ -6,14 +6,15 @@ const asset = (name: string) => Object.freeze({ path: `/guardian-assets/${name}.
   source: 'docs/visual-audit/hero/parts-study/rig-manifest.json',
   rights: 'Project-generated approved guardian derivatives; built-in image_gen', approved: true });
 export const GUARDIAN_BODY = asset('guardian-body');
-// Measurements in the untouched 1774×887 source atlases. Missing levels retain
-// their corresponding whole-body variant until their own parts are available.
+// Measurements in the untouched 1774×887 source atlases.
 const measurements = [
   [1, 1634, 103, 1514, 220, 1120, 730],
   [2, 1651, 135, 1521, 243, 1120, 730],
   [3, 1690, 108, 1570, 201, 1040, 745],
+  [4, 1660, 105, 1510, 230, 1090, 740],
   [5, 1663, 135, 1531, 233, 1090, 740],
   [6, 1674, 130, 1538, 235, 1100, 735],
+  [7, 1660, 105, 1510, 230, 1090, 740],
 ] as const;
 export const GUARDIAN_RIGS = Object.freeze(measurements.map(([level, mx, my, rx, ry, ex, ey]) => Object.freeze({
   level, art: asset(`guardian-joints-${level}`),

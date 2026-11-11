@@ -1,15 +1,13 @@
 {
   "generator": "built-in image_gen",
+  "generationRecord": "docs/visual-audit/hero/parts-study/generation-status.json",
   "encoding": "Complete atlas uniformly resampled; original alpha retained; no pixel removal",
   "acceptedScope": "Approved guardian appearance and seven weapon identities; final animation/device acceptance pending",
   "combatMuzzle": {
     "lateral": 16.8,
     "forward": 34.4
   },
-  "missingLevels": [
-    4,
-    7
-  ],
+  "missingLevels": [],
   "files": [
     {
       "source": "docs/visual-audit/hero/parts-study/guardian-parts-01.png",
@@ -139,6 +137,41 @@
       "sha256": "cf9052486f7dc8f6ee43d80e5b504456ccb4cb12d24e7b63088f67e6401b1c91"
     },
     {
+      "level": 4,
+      "art": {
+        "path": "/guardian-assets/guardian-joints-4.png",
+        "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
+        "rights": "Project-generated approved guardian derivatives; built-in image_gen",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/parts-study/guardian-joints-04.png",
+      "muzzle": {
+        "x": 1660,
+        "y": 105
+      },
+      "barrelRear": {
+        "x": 1510,
+        "y": 230
+      },
+      "elbow": {
+        "x": 1090,
+        "y": 740
+      },
+      "target": "miniprogram/guardian-assets/guardian-joints-4.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "runtimeSize": [
+        720,
+        360
+      ],
+      "bytes": 135151,
+      "rgbaBytes": 1036800,
+      "sourceSha256": "59147a8dca1bdb0b3991b7d2231ff01f82295f2ffc4677a6b08ef1d8495fd3b4",
+      "sha256": "43a51795b9a8de7f06e7498dc06bdebb2238c0a377ca98833deeaf68e9e23a6d"
+    },
+    {
       "level": 5,
       "art": {
         "path": "/guardian-assets/guardian-joints-5.png",
@@ -207,7 +240,41 @@
       "rgbaBytes": 1036800,
       "sourceSha256": "bdc717e1b36aa50fb0b4321844c816d2a6953f9253debf78e1586e6c09d11372",
       "sha256": "5efa08b60df6d80a0ed8de82ee38be6b02441c7e0ef874c12ec3c93906b5c753"
+    },
+    {
+      "level": 7,
+      "art": {
+        "path": "/guardian-assets/guardian-joints-7.png",
+        "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
+        "rights": "Project-generated approved guardian derivatives; built-in image_gen",
+        "approved": true
+      },
+      "source": "docs/visual-audit/hero/parts-study/guardian-joints-07.png",
+      "muzzle": {
+        "x": 1660,
+        "y": 105
+      },
+      "barrelRear": {
+        "x": 1510,
+        "y": 230
+      },
+      "elbow": {
+        "x": 1090,
+        "y": 740
+      },
+      "target": "miniprogram/guardian-assets/guardian-joints-7.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "runtimeSize": [
+        720,
+        360
+      ],
+      "bytes": 134947,
+      "rgbaBytes": 1036800,
+      "sourceSha256": "950804ebab061f087496f26e79283bf95e07f667d04c1faa9cde3ab614b668bf",
+      "sha256": "bcc1cb2a9a840bda98a27232af7a8c91ba5712aa000a2ef6fb35d33097a3cff2"
     }
-  ],
-  "generationRecord": "docs/visual-audit/hero/parts-study/generation-status.json"
+  ]
 }

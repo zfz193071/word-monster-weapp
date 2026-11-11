@@ -155,7 +155,7 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
   } finally { h.scene.dispose(); }
 });
 
-test('四七级完整主角以双脚落地的战斗站姿绘制，解码前不开战', async () => {
+test('四七级主角使用关节图集，解码前不开战且双脚保持平台站姿', async () => {
   for (const weaponLevel of [4, 7]) {
     for (const targetX of [40, 180, 320]) {
       const opening = createOpeningEncounter('hero-art', 'apple', 0, 0, undefined, undefined, [], 1, weaponLevel);
@@ -175,17 +175,11 @@ test('四七级完整主角以双脚落地的战斗站姿绘制，解码前不�
         hero.onload(); assert.equal(await loading, true, h.errors.join("; "));
         const index = h.commands.findIndex(command => command.method === 'drawImage' && command.args[0] === hero);
         assert.ok(index >= 0);
-        const draw = h.commands[index].args.slice(1) as number[];
         const transforms = h.commands.slice(0, index);
         const rotations = transforms.filter(command => command.method === 'rotate').slice(-2).map(c => c.args[0] as number);
-        const [x,y,w,height] = draw;
-        // These variants are whole-body illustrations.  Rotating them around
-        // the muzzle tips the feet off the platform and makes the guard appear
-        // to hang from the weapon when a target is at either side.
-        assert.equal(rotations.length, 0);
-        assert.equal(w, 1536 * .07); assert.equal(height, 1024 * .07);
-        assert.equal(x, fired.player.x - 768 * .07);
-        assert.equal(y + 850 * .07, fired.player.y + 27);
+        assert.ok(rotations.length > 0, '独立前臂随目标旋转');
+        const bodyDraw = h.commands.find(command => command.method === 'drawImage' && command.args[0] !== hero && command.args.length === 9);
+        assert.ok(bodyDraw, '固定身体层存在');
 
       } finally { h.scene.dispose(); }
     }
@@ -804,7 +798,7 @@ test('五级前墙解码后才开战，角色夹在平台与前墙之间，毁�
   }
 });
 
-test('关节主角等待身体与持枪部件全部解码，失败可重试，四七级不多载身体', async () => {
+test('关节主角等待身体与持枪部件全部解码，失败可重试，七级均加载身体', async () => {
   const { GUARDIAN_BODY } = await import('../miniprogram/fortress/guardian-rig');
   for (const heldPart of ['body','arms']) {
     const art=openingArt('apple'),h=harness(false,art,{initial:createOpeningEncounter('rig-load','apple',1)});
@@ -824,7 +818,7 @@ test('关节主角等待身体与持枪部件全部解码，失败可重试，�
     } finally {h.scene.dispose();}
   }
   const {sceneImageAssets}=await import('../miniprogram/fortress/canvas-scene');
-  for(const level of [4,7]) assert.ok(!sceneImageAssets(openingArt('apple',['apple'],level)).some(asset=>asset.path===GUARDIAN_BODY.path));
+  for(const level of [4,7]) assert.ok(sceneImageAssets(openingArt('apple',['apple'],level)).some(asset=>asset.path===GUARDIAN_BODY.path));
 });
 
 test('元素弹道与命中特效保持窄而分层，且绘制不改变战斗快照', async () => {

@@ -80,9 +80,15 @@
           "sha256": "b5563fa57b751fb2e362cedf68856d50cf93ba989d09dcdb354722711a0074fa"
         }
       ],
-      "status": "service-rejected-no-output",
-      "reason": "moderation_blocked/input/violence",
-      "requestId": "3345902a-4f9d-48db-b2f6-a88ce0375ea8"
+      "status": "generated-and-integrated",
+      "initialFailure": {
+        "reason": "moderation_blocked/input/violence",
+        "requestId": "3345902a-4f9d-48db-b2f6-a88ce0375ea8"
+      },
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-04.png",
+        "sha256": "59147a8dca1bdb0b3991b7d2231ff01f82295f2ffc4677a6b08ef1d8495fd3b4"
+      }
     },
     {
       "level": 5,
@@ -144,9 +150,15 @@
           "sha256": "1d491a45e2e9aea08555c7ad25d358869da5a304f88c17a4328fc828fa85711f"
         }
       ],
-      "status": "service-rejected-no-output",
-      "reason": "moderation_blocked/input/violence",
-      "requestId": "98c996ab-fa08-4b75-93ad-72507bcbb867"
+      "status": "generated-and-integrated",
+      "initialFailure": {
+        "reason": "moderation_blocked/input/violence",
+        "requestId": "98c996ab-fa08-4b75-93ad-72507bcbb867"
+      },
+      "output": {
+        "path": "docs/visual-audit/hero/parts-study/guardian-joints-07.png",
+        "sha256": "950804ebab061f087496f26e79283bf95e07f667d04c1faa9cde3ab614b668bf"
+      }
     }
   ],
   "acceptance": "Appearance approved; joint poses and runtime scenes reviewed locally, user/device animation acceptance pending"
