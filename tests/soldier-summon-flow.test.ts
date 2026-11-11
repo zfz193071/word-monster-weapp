@@ -67,8 +67,8 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
   fail=true;host.summonSoldier(event());assert(host.data.soldierSummonError);assert.equal(current.snapshot.supportSoldiers.length,0);assert.equal(host.data.soldierStock,5);
   fail=false;const stale=event();host.summonSoldier(stale);assert.equal(host.data.soldierStock,4);assert.equal(host.data.soldiersInBattle,1);
   host.summonSoldier(stale);assert.equal(host.data.soldierStock,4);assert.equal(host.data.soldiersInBattle,1);
-  host.summonSoldier(event());host.summonSoldier(event());host.summonSoldier(event());assert.equal(host.data.soldiersInBattle,3);assert.equal(host.data.soldierStock,2);
-  host.data.completed=true;host.claimVictoryReward();assert.equal(victoryClaims,1);assert.equal(daily.soldierInventory().count,3);assert.equal(host.data.soldierStock,3,'当前战斗领取援军后立即刷新库存');host.data.completed=false;
-  host.endRun();host.summonSoldier(event());assert.equal(daily.soldierInventory().count,3);assert.equal(host.data.soldiersInBattle,0);
-  const fresh=await mount();assert.equal(fresh.data.soldiersInBattle,0);assert.equal(fresh.data.soldierStock,3);fresh.endRun();
+  host.summonSoldier(event());host.summonSoldier(event());host.summonSoldier(event());assert.equal(host.data.soldiersInBattle,4);assert.equal(host.data.soldierStock,1);
+  host.data.completed=true;host.claimVictoryReward();assert.equal(victoryClaims,1);assert.equal(daily.soldierInventory().count,2);assert.equal(host.data.soldierStock,2,'当前战斗领取援军后立即刷新库存');host.data.completed=false;
+  host.endRun();host.summonSoldier(event());assert.equal(daily.soldierInventory().count,2);assert.equal(host.data.soldiersInBattle,0);
+  const fresh=await mount();assert.equal(fresh.data.soldiersInBattle,0);assert.equal(fresh.data.soldierStock,2);fresh.endRun();
 });

@@ -20,16 +20,15 @@ function stock() {
 }
 const initial = () => createOpeningEncounter('summon','apple',1);
 
-test('每次召唤扣1库存，最多3名；旧版本事件、重复ID、满员均不扣款', () => {
+test('每次召唤扣1库存；旧版本事件、重复ID均不扣款', () => {
   const f=stock(); const runner=new CombatRunner(initial());
   const first=f.store.soldierInventory();
   assert.equal(runner.summonSoldier('summon:1',()=>f.store.consumeSoldier(first.revision)),true);
   assert.equal(runner.summonSoldier('summon:1',()=>{throw Error('不应扣款');}),false);
   assert.equal(runner.summonSoldier('stale',()=>f.store.consumeSoldier(first.revision)),false);
-  for(let i=2;i<=3;i++) assert(runner.summonSoldier(`summon:${i}`,()=>f.store.consumeSoldier(f.store.soldierInventory().revision)));
-  assert.equal(runner.summonSoldier('four',()=>{throw Error('满员不能扣款');}),false);
-  assert.equal(f.rebuild().soldierInventory().count,2);
-  assert.equal(runner.snapshot!.supportSoldiers!.length,3);
+  for(let i=2;i<=5;i++) assert(runner.summonSoldier(`summon:${i}`,()=>f.store.consumeSoldier(f.store.soldierInventory().revision)));
+  assert.equal(f.rebuild().soldierInventory().count,0);
+  assert.equal(runner.snapshot!.supportSoldiers!.length,5);
   assert(runner.snapshot!.supportSoldiers!.every(s=>s.hp===30&&s.maxHp===30&&s.attackRemainingMs===2000));
 });
 
@@ -59,7 +58,7 @@ test('召唤不治疗已有援军，空位重排不重叠，受伤与冷却跨�
   assert.notDeepEqual(two.supportSoldiers![0].position,two.supportSoldiers![1].position);
   const next=createOpeningEncounter('summon','banana',2,1,undefined,two.base.hp,['apple'],1,1,two.supportSoldiers);
   assert.deepEqual(next.supportSoldiers,two.supportSoldiers);
-  const third=summonSupportSoldier(two,'third')!;assert.equal(summonSupportSoldier(third,'fourth'),null);
+  const third=summonSupportSoldier(two,'third')!;assert(summonSupportSoldier(third,'fourth'));
 });
 
 test('签到士兵每2秒使用当前武器伤害，替堡垒挡普通近战，战死删除且不返还库存', () => {

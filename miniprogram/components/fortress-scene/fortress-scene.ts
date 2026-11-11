@@ -1,4 +1,5 @@
 import { SUMMON_LABELS } from '../../fortress/summon-skills';
+import { MAX_SUPPORT_SOLDIERS } from '../../fortress/army';
 import { victoryRewards } from '../../services/victory-rewards';
 import type { RewardCard } from '../../services/victory-rewards';
 import { createOpeningPlan } from '../../fortress/opening-plan';
@@ -107,7 +108,7 @@ Component({
     refreshReviveTargets() {
       const snapshot = instances.get(this)?.scene?.snapshot;
       const targets = snapshot?.status === 'fighting' ? [
-        ...(snapshot.fallenSoldiers ?? []).map((soldier, index) => ({kind:'soldier', id:soldier.id, label:`士兵 ${index + 1}`, disabled:(snapshot.supportSoldiers?.length ?? 0) >= 3})),
+        ...(snapshot.fallenSoldiers ?? []).map((soldier, index) => ({kind:'soldier', id:soldier.id, label:`士兵 ${index + 1}`, disabled:(snapshot.supportSoldiers?.length ?? 0) >= MAX_SUPPORT_SOLDIERS})),
       ] : [];
       const previous = this.data.reviveTargets;
       if (previous.length !== targets.length || targets.some((target, index) => target.id !== previous[index].id || target.kind !== previous[index].kind || target.disabled !== previous[index].disabled)) this.setData({reviveTargets: targets});

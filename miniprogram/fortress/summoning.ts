@@ -1,11 +1,19 @@
 import { FORTRESS_RULES } from './rules';
-import { SUMMON_INTERVAL_MS } from './army';
+import { MAX_SUPPORT_SOLDIERS, SUMMON_INTERVAL_MS } from './army';
 import { isSummonSkill, SUMMON_TYPES } from './summon-skills';
 import type { SummonSkillId } from './summon-skills';
 import type { SkillCollection } from './skill-quality';
 import { soldierStats } from './soldier-types';
 import { weaponForLevel } from '../weapons/catalog';
 import type { CombatState, SupportSoldierState } from './types';
+
+function summonPosition(state: CombatState, slot: number, count: number) {
+  const width = state.arenaWidth ?? FORTRESS_RULES.arena.width;
+  const clampX = (x: number) => Math.max(FORTRESS_RULES.arena.playerMinX, Math.min(width - FORTRESS_RULES.arena.playerMinX, x));
+  if (count <= 3) return {x: clampX(state.player.x + (count === 1 ? -30 : count === 2 ? slot ? 40 : -40 : [-50, 0, 50][slot])), y: FORTRESS_RULES.arena.baseTop};
+  const columns = 10, row = Math.floor(slot / columns), column = slot % columns;
+  return {x: clampX(state.player.x + (column - (columns - 1) / 2) * 30 + (row % 2 ? 15 : 0)), y: FORTRESS_RULES.arena.baseTop};
+}
 
 // Simulation-time reducer: no wall clock timers or permanent inventory access.
 export function updateSummons(state:CombatState, collection:SkillCollection, elapsedMs=0):CombatState {
@@ -28,11 +36,11 @@ export function updateSummons(state:CombatState, collection:SkillCollection, ela
     const remaining=(timers[id] ?? SUMMON_INTERVAL_MS)-elapsedMs;
     if(newSkill||freshStage||remaining<=0){
       // Presence is by type, including an inventory/Boss rifle.
-      if(soldiers.length<3&&(newSkill||freshStage||!soldiers.some(s=>(s.soldierType??'rifle')===type))){
-        const slot=[0,1,2].find(slot=>!soldiers.some(s=>s.slot===slot))!;
+      if(soldiers.length<MAX_SUPPORT_SOLDIERS&&(newSkill||freshStage||!soldiers.some(s=>(s.soldierType??'rifle')===type))){
+        const slot=Array.from({length:MAX_SUPPORT_SOLDIERS},(_,slot)=>slot).find(slot=>!soldiers.some(s=>s.slot===slot))!;
         const stats=soldierStats(type,skill,weaponDamage);
         const soldier:SupportSoldierState={id:`${state.context.sessionId}:summon:${++sequence}`,slot,soldierType:type,source:'skill',skill,evolved:stats.evolved,
-          position:{x:state.player.x+[-50,0,50][slot],y:FORTRESS_RULES.arena.baseTop},hp:stats.maxHp,maxHp:stats.maxHp,attackRemainingMs:stats.interval};
+          position:summonPosition(state,slot,soldiers.length + 1),hp:stats.maxHp,maxHp:stats.maxHp,attackRemainingMs:stats.interval};
         soldiers.push(soldier);
       }
       timers[id]=SUMMON_INTERVAL_MS;

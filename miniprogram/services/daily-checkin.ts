@@ -2,6 +2,7 @@ import { coinWallet } from './coin-wallet';
 import { petStore } from './pet-store';
 
 export const CHECKIN_KEY = 'word-monster:daily-checkin:v1';
+export const MAX_SOLDIER_INVENTORY = 100;
 export const CHECKIN_REWARDS = {
   coins: { label: '金币', amount: 100, symbol: '●' },
   food: { label: '宠物粮', amount: 3, symbol: '◆' },
@@ -34,7 +35,7 @@ export function createDailyCheckin(options: {
         || !Object.prototype.hasOwnProperty.call(CHECKIN_REWARDS, e.kind) || !['offered', 'pending', 'claimed'].includes(e.status)
         || (i > 0 && e.date <= value.entries[i - 1].date))
       || value.entries.filter(e => e.status === 'pending').length > 1) throw new Error('签到记录暂时无法读取，请重试');
-    return {...value, entries: value.entries.map(e => ({...e}))};
+    return {...value, soldiers: Math.min(value.soldiers, MAX_SOLDIER_INVENTORY), entries: value.entries.map(e => ({...e}))};
   }
   function save(value: Save) { options.storage.setStorageSync(CHECKIN_KEY, value); }
   function settle(value: Save): Save {
@@ -45,7 +46,7 @@ export function createDailyCheckin(options: {
     // can resume this journal without double-crediting coins or pet food.
     if (pending.kind === 'coins') options.coins.rewardCheckin(receipt);
     if (pending.kind === 'food') options.pets.rewardCheckin(receipt);
-    if (pending.kind === 'soldier') { value.soldiers++; value.soldierRevision = (value.soldierRevision ?? 0) + 1; }
+    if (pending.kind === 'soldier' && value.soldiers < MAX_SOLDIER_INVENTORY) { value.soldiers++; value.soldierRevision = (value.soldierRevision ?? 0) + 1; }
     if (pending.kind === 'flag') { value.flags++; value.flagRevision = (value.flagRevision ?? 0) + 1; }
     if (!Number.isSafeInteger(value.flagRevision ?? 0) || !Number.isSafeInteger(value.soldiers) || !Number.isSafeInteger(value.flags) || !Number.isSafeInteger(value.soldierRevision ?? 0)) throw new Error('奖励库存超出范围');
     pending.status = 'claimed'; save(value); return value;
@@ -89,8 +90,9 @@ export function createDailyCheckin(options: {
     rewardClear(receipt: string, soldiers: number, flags: number) {
       if (!receipt.startsWith('clear:') || ![soldiers, flags].every(n => Number.isSafeInteger(n) && n >= 0)) throw new Error('通关补给无效');
       const value = read(); if (value.clearReceipts?.includes(receipt)) return;
-      value.soldiers += soldiers; value.flags += flags;
-      value.soldierRevision = (value.soldierRevision ?? 0) + (soldiers ? 1 : 0);
+      const addedSoldiers = Math.min(soldiers, MAX_SOLDIER_INVENTORY - value.soldiers);
+      value.soldiers += addedSoldiers; value.flags += flags;
+      value.soldierRevision = (value.soldierRevision ?? 0) + (addedSoldiers ? 1 : 0);
       value.flagRevision = (value.flagRevision ?? 0) + (flags ? 1 : 0);
       if (![value.soldiers, value.flags, value.soldierRevision, value.flagRevision].every(Number.isSafeInteger)) throw new Error('补给库存超出范围');
       value.clearReceipts = [...(value.clearReceipts ?? []), receipt]; save(value);

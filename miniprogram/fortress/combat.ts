@@ -1,7 +1,7 @@
 import { updateSummons } from './summoning';
 import { unitStats, soldierTargets } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
-import { enemyLayer, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
+import { enemyLayer, MAX_SUPPORT_SOLDIERS, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
@@ -188,7 +188,7 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
   const weaponLevel = weaponForLevel(options.weaponLevel ?? 1).level;
   spawns.forEach(enemyLayer);
   options.supportSoldiers?.forEach(validateSoldierIdentity);
-  if ((options.supportSoldiers?.length ?? 0) > 3 || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot > 2
+  if ((options.supportSoldiers?.length ?? 0) > MAX_SUPPORT_SOLDIERS || options.supportSoldiers?.some(soldier => !soldier.id.trim() || !Number.isInteger(soldier.slot) || soldier.slot < 0 || soldier.slot >= MAX_SUPPORT_SOLDIERS
     || !Number.isInteger(soldier.maxHp) || soldier.maxHp !== unitStats(soldier, weaponForLevel(weaponLevel).damage).maxHp || !Number.isInteger(soldier.hp) || soldier.hp <= 0 || soldier.hp > soldier.maxHp
     || !Number.isFinite(soldier.attackRemainingMs) || soldier.attackRemainingMs < 0)) throw new Error('援军状态无效');
   const state: CombatState = {
@@ -349,9 +349,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
       if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
       if (monster.boss && monster.bossKind !== 'grand' && (monster.soldierDropCount ?? 0) > 0) {
-        const count = Math.min(3, supportSoldiers.length + (monster.soldierDropCount ?? 0));
+        const count = Math.min(MAX_SUPPORT_SOLDIERS, supportSoldiers.length + (monster.soldierDropCount ?? 0));
         while (supportSoldiers.length < count) {
-          const slot = [0,1,2].find(slot => !supportSoldiers.some(soldier => soldier.slot === slot))!;
+          const slot = Array.from({length: MAX_SUPPORT_SOLDIERS}, (_, slot) => slot).find(slot => !supportSoldiers.some(soldier => soldier.slot === slot))!;
           supportSoldiers.push({id: `${monster.id}:soldier:${slot + 1}`, slot, source: 'boss',
             position: supportPosition(player, slot, count, previous.arenaWidth), hp: SUPPORT_SOLDIER_MAX_HP,
             maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000});
@@ -562,7 +562,7 @@ export function rebindCombatGeneration(state: CombatState, generation: number): 
 // Build the complete next state before the caller commits the inventory debit.
 export function summonSupportSoldier(state: CombatState, id: string): CombatState | null {
   const current = state.supportSoldiers ?? [];
-  if (state.status !== 'fighting' || state.base.hp <= 0 || !id.trim() || current.length >= 3 || current.some(soldier => soldier.id === id)) return null;
+  if (state.status !== 'fighting' || state.base.hp <= 0 || !id.trim() || current.length >= MAX_SUPPORT_SOLDIERS || current.some(soldier => soldier.id === id)) return null;
   const count = current.length + 1;
   const soldiers = current.map((soldier, slot) => ({...soldier, slot, position: {...supportPosition(state.player, slot, count, state.arenaWidth), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}}));
   soldiers.push({id, slot: current.length, position: supportPosition(state.player, current.length, count, state.arenaWidth), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000});
@@ -591,8 +591,13 @@ function directionTo(from: Point, to: Point): Point {
   return distance > EPSILON ? { x: dx / distance, y: dy / distance } : { x: 0, y: -1 };
 }
 function supportPosition(player: Point, slot: number, count: number, width = RULES.arena.width): Point {
-  const offsets = count === 1 ? [-30] : count === 2 ? [-40, 40] : [-50, 0, 50];
-  return { x: playerX(player.x + (offsets[slot] ?? 0), width), y: player.y + 20 };
+  if (count <= 3) {
+    const offsets = count === 1 ? [-30] : count === 2 ? [-40, 40] : [-50, 0, 50];
+    return { x: playerX(player.x + offsets[slot], width), y: player.y + 20 };
+  }
+  // Larger squads occupy three staggered ranks across the parapet.
+  const columns = 10, row = Math.floor(slot / columns), column = slot % columns;
+  return { x: playerX(player.x + (column - (columns - 1) / 2) * 30 + (row % 2 ? 15 : 0), width), y: player.y + 4 + row * 24 };
 }
 function directionToMuzzle(from: Point, to: Point, lateral: number): Point {
   const dx = to.x - from.x; const dy = to.y - from.y;

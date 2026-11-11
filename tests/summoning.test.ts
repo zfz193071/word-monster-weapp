@@ -16,12 +16,12 @@ test('first acquisition summons once, upgrades preserve HP ratio/cooldown and do
  assert.equal(next.supportSoldiers!.length,1);assert.equal(next.supportSoldiers![0].hp,34);assert.equal(next.supportSoldiers![0].attackRemainingMs,333);assert.equal(next.summonRemainingMs!.shieldLine,1234);
 });
 test('full squads neither replace nor bank spawns; twenty second checks refill one missing type',()=>{
- let state=initial();for(let i=0;i<3;i++)state=summonSupportSoldier(state,'inventory'+i)!;
- state=updateSummons(state,{armorSupport:first});assert.equal(state.supportSoldiers!.length,3);assert(state.supportSoldiers!.every(s=>s.source!=='skill'));
- state=updateSummons(state,state.skillCollection!,20000);assert.equal(state.supportSoldiers!.length,3);
- state={...state,supportSoldiers:state.supportSoldiers!.slice(0,2)};
- state=updateSummons(state,state.skillCollection!,19990);assert.equal(state.supportSoldiers!.length,2);
- state=updateSummons(state,state.skillCollection!,10);assert.equal(state.supportSoldiers!.length,3);assert.equal(state.supportSoldiers![2].soldierType,'tank');
+ let state=initial();for(let i=0;i<30;i++)state=summonSupportSoldier(state,'inventory'+i)!;
+ state=updateSummons(state,{armorSupport:first});assert.equal(state.supportSoldiers!.length,30);assert(state.supportSoldiers!.every(s=>s.source!=='skill'));
+ state=updateSummons(state,state.skillCollection!,20000);assert.equal(state.supportSoldiers!.length,30);
+ state={...state,supportSoldiers:state.supportSoldiers!.slice(0,29)};
+ state=updateSummons(state,state.skillCollection!,19990);assert.equal(state.supportSoldiers!.length,29);
+ state=updateSummons(state,state.skillCollection!,10);assert.equal(state.supportSoldiers!.length,30);assert.equal(state.supportSoldiers![29].soldierType,'tank');
 });
 test('cross-stage collection starts fresh units in acquisition order; death does not consume unspent inventory',()=>{
  const collection={armorSupport:first,airFormation:first,shieldLine:first};

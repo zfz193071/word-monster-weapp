@@ -7,7 +7,9 @@ export type SoldierType = typeof SOLDIER_TYPES[number];
 export type CombatLayer = 'ground' | 'air';
 export type SoldierSource = 'inventory' | 'boss' | 'skill';
 export type AttackCapability = 'both' | 'ground' | 'air';
-export const MAX_SUPPORT_SOLDIERS = 3;
+// A battle can field up to thirty allied soldiers, regardless of whether they
+// came from inventory, a boss reward, or a summon skill.
+export const MAX_SUPPORT_SOLDIERS = 30;
 export const SUMMON_INTERVAL_MS = 20000;
 
 export function enemyType(value?: EnemyType): EnemyType {
