@@ -444,7 +444,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
         if (candidate < distance) { distance = candidate; target = index; }
       });
       if (target >= 0) {
-        impacts.push({ kind: 'lightning', position, target: monsters[target].position, untilTick: tick + 35 });
+        impacts.push({ kind: 'lightning', source: 'pet', position, target: monsters[target].position, untilTick: tick + 35 });
         damageMonster(target, petDamage(pet.level), 'pet');
         pet = { ...pet, attackRemainingMs: PET_ATTACK_INTERVAL_MS };
       }

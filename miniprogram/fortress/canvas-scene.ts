@@ -3,7 +3,7 @@ import { drawTexturedZombie } from './zombie-art';
 import { ANIMAL_LOCOMOTION, monsterGait, zombieGait } from './monster-gait';
 import { drawQuadruped } from './quadruped-art';
 import type { FootPose } from './monster-gait';
-import { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET, drawWoodFortress } from '../houses/fortress-sprite';
+import { fortressInterior, INTERIOR_ASSETS, drawFortressInterior, INTERIOR_PET_OFFSET_Y } from '../houses/interior-art';
 import { soldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
 import { drawSoldier, drawFallenSoldier } from './soldier-art';
@@ -54,7 +54,8 @@ export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): Sp
   const courtyard = art.fruitHat && courtyardAsset(levelId);
   // Preload both orientations so resize can switch immediately while paused or active.
   if (courtyard) assets.push(...COURTYARD_ASSETS);
-  if (art.fruitHat && houseLevel === 1) assets.push(WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET);
+  const interior = fortressInterior(houseLevel);
+  if (art.fruitHat && interior) assets.push(...Object.values(interior));
   return assets;
 }
 export interface SceneHud { readonly hp: number; readonly maxHp: number; readonly status: CombatState['status']; readonly frostEnergy: number; readonly frostTarget: boolean }
@@ -216,7 +217,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !(asset.path === WOOD_FORTRESS_ASSET.path || asset.path === WOOD_FORTRESS_RUIN_ASSET.path || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
+      || !(INTERIOR_ASSETS.some(layer => layer.path === asset.path) || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -422,13 +423,14 @@ export class CanvasScene {
       c.fillStyle = '#69d7be'; c.fillRect(state.player.x - 15, state.player.y - 15, 30, 30);
       c.fillStyle = '#fbd777'; c.fillRect(state.player.x - 5, state.player.y - 30, 10, 22);
     } else if (art) {
+      const interior = fortressInterior(state.houseLevel);
       if (state.base.hp === 0) {
-        const ruin = art.fruitHat && (state.houseLevel ?? 1) === 1 && this.images.get(WOOD_FORTRESS_RUIN_ASSET.path);
-        if (ruin) drawWoodFortress(c, ruin, this.viewport.worldWidth);
+        const ruin = art.fruitHat && interior?.ruin && this.images.get(interior.ruin.path);
+        if (ruin) drawFortressInterior(c, ruin, this.viewport.worldWidth);
         else for (let x = 0; x < this.viewport.worldWidth; x += 360) this.sprite(art.destroyedBase, x, 480, 360, 80);
       } else {
-        const wall = art.fruitHat && (state.houseLevel ?? 1) === 1 && this.images.get(WOOD_FORTRESS_ASSET.path);
-        if (wall) drawWoodFortress(c, wall, this.viewport.worldWidth);
+        const wall = art.fruitHat && interior && this.images.get(interior.interior.path);
+        if (wall) drawFortressInterior(c, wall, this.viewport.worldWidth, false, state.houseLevel);
         else drawHouseFortress(c, state.houseLevel ?? 1, this.viewport.worldWidth);
       }
       if (art.fruitHat) {
@@ -618,9 +620,17 @@ export class CanvasScene {
       }
       c.globalAlpha = 1;
     }
+    const interior = art?.fruitHat && fortressInterior(state.houseLevel);
+    c.save();
+    if (interior) c.translate(0, INTERIOR_PET_OFFSET_Y);
     drawBattlePet(c, state, this.images.get(BATTLE_PET_ART.path));
+    c.restore();
     for (const soldier of state.fallenSoldiers ?? []) drawFallenSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
     for (const soldier of state.supportSoldiers ?? []) drawSoldier(c, soldier, state.tick, state.context.combatId, this.images.get(soldierSpritePath(soldierType(soldier.soldierType))));
+    if (interior && state.base.hp > 0) {
+      const front = this.images.get(interior.front.path);
+      if (front) drawFortressInterior(c, front, this.viewport.worldWidth, true, state.houseLevel);
+    }
     if ((state.flameFanUntilTick ?? 0) > state.tick) {
       c.save(); c.translate(state.player.x, state.player.y);
       c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
@@ -643,7 +653,8 @@ export class CanvasScene {
     for (const impact of state.elementImpacts ?? []) {
       if (impact.untilTick <= state.tick) continue;
       const progress = Math.min(1, Math.max(0, 1 - (impact.untilTick - state.tick) / 35));
-      c.save(); c.globalAlpha = (1 - progress) * .85; c.translate(impact.position.x, impact.position.y);
+      const originY = impact.position.y + (interior && impact.source === 'pet' ? INTERIOR_PET_OFFSET_Y : 0);
+      c.save(); c.globalAlpha = (1 - progress) * .85; c.translate(impact.position.x, originY);
       if (impact.kind === 'flame') {
         const radius = impact.radius ?? 45;
         const ring = radius * (.3 + .7 * progress);
@@ -660,7 +671,7 @@ export class CanvasScene {
         c.strokeStyle = ELEMENT_COLORS.frost; c.lineWidth = 2;
         for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }
       } else if (impact.target) {
-        const dx = impact.target.x - impact.position.x; const dy = impact.target.y - impact.position.y;
+        const dx = impact.target.x - impact.position.x; const dy = impact.target.y - originY;
         c.strokeStyle = impact.iceChain ? ELEMENT_COLORS.frost : ELEMENT_COLORS.lightning; c.lineWidth = 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
       }
       c.restore();

@@ -61,6 +61,34 @@
       "pages": [
         "pages/resources/index"
       ]
+    },
+    {
+      "root": "reinforced-fortress-assets",
+      "name": "reinforced-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
+    },
+    {
+      "root": "stone-fortress-assets",
+      "name": "stone-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
+    },
+    {
+      "root": "castle-fortress-assets",
+      "name": "castle-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
+    },
+    {
+      "root": "armored-fortress-assets",
+      "name": "armored-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ]
     }
   ]
 }

@@ -1,0 +1,76 @@
+{
+  "generator": "built-in image_gen",
+  "references": [
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-interior-01.png",
+      "sha256": "9d574bf1024b2e9ef4f20f948b2c37d01d03dad8aca9d03d9719fb19ffbb0be5"
+    },
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-front-01.png",
+      "sha256": "3f8403d22397c3818aeef048981389a637bb58283dbc34ef6e4d451ac05c9fa9"
+    },
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/reinforced-interior-01.png",
+      "sha256": "82e556ef5e0ea807c065ab1b0f8b957f86b9be78f09d444c58aacad847675d3e"
+    }
+  ],
+  "reference": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-interior-01.png",
+  "referenceSha256": "9d574bf1024b2e9ef4f20f948b2c37d01d03dad8aca9d03d9719fb19ffbb0be5",
+  "encoding": "Whole images uniformly resampled to half size; alpha preserved, not lossless",
+  "prompts": [
+    "reinforced-interior-prompt.txt",
+    "reinforced-front-prompt.txt",
+    "reinforced-ruin-prompt.txt"
+  ],
+  "acceptance": "Approved interior direction and wood-house mapping; final runtime and device review pending",
+  "files": [
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/reinforced-interior-01.png",
+      "target": "miniprogram/reinforced-fortress-assets/reinforced-interior-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "82e556ef5e0ea807c065ab1b0f8b957f86b9be78f09d444c58aacad847675d3e",
+      "runtimeSha256": "cfb8c44a5d582a59da12830ae3a7ae9f4d13eff1283d071331850dd17ffcc2f4",
+      "bytes": 670464,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/reinforced-front-01.png",
+      "target": "miniprogram/reinforced-fortress-assets/reinforced-front-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "17a591c7790756cc37981163e5c15a1124d031ac89879c89ddc3b3bf6c94059a",
+      "runtimeSha256": "247b459f2e4f7b32a030b6c5ae5c2dd4584026f85b98637a158a5414702c44da",
+      "bytes": 328672,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/reinforced-ruin-01.png",
+      "target": "miniprogram/reinforced-fortress-assets/reinforced-ruin-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "86a3539b8c9a78c03821418c2fc2bebcb4982cbb47eecfe71a4e5d0d1081b8d8",
+      "runtimeSha256": "83716ea8e400fedc15783146cc5ce1bad152786c3cf55b29e9e141b0fc71c995",
+      "bytes": 611190,
+      "decodedRgbaBytes": 1572528
+    }
+  ]
+}

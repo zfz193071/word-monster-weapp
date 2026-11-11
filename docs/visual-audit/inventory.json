@@ -5,7 +5,7 @@
     {
       "root": "",
       "name": "main",
-      "bytes": 1813838
+      "bytes": 1818888
     },
     {
       "root": "learning-assets",
@@ -37,7 +37,7 @@
       "pages": [
         "pages/resources/index"
       ],
-      "bytes": 1465245
+      "bytes": 1480057
     },
     {
       "root": "character-assets",
@@ -62,6 +62,38 @@
         "pages/resources/index"
       ],
       "bytes": 998809
+    },
+    {
+      "root": "reinforced-fortress-assets",
+      "name": "reinforced-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 1610475
+    },
+    {
+      "root": "stone-fortress-assets",
+      "name": "stone-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 892639
+    },
+    {
+      "root": "castle-fortress-assets",
+      "name": "castle-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 808537
+    },
+    {
+      "root": "armored-fortress-assets",
+      "name": "armored-fortress-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 897720
     }
   ],
   "words": [
@@ -1414,6 +1446,24 @@
       "package": "animal-assets"
     },
     {
+      "path": "armored-fortress-assets/armored-front-v2.png",
+      "bytes": 358481,
+      "sha256": "68b491b0ca30e9d33e46a0dbcd14a928bc1e3e1d9d2c531e328f5431f0d38284",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "armored-fortress-assets"
+    },
+    {
+      "path": "armored-fortress-assets/armored-interior-v2.png",
+      "bytes": 539090,
+      "sha256": "b305a43ea7a36117b5a30ef2031378c217ba5a03e4d786c51e8954fd7fc609f8",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "armored-fortress-assets"
+    },
+    {
       "path": "assets/images/army/flamethrower.png",
       "bytes": 11264,
       "sha256": "12771a96e40b101308f98e2fd4fbba82963d4901939d609e40a2388abeee6f23",
@@ -2305,6 +2355,24 @@
       "package": "battlefield-assets"
     },
     {
+      "path": "castle-fortress-assets/castle-front-v2.png",
+      "bytes": 308659,
+      "sha256": "9f0320f8fcb11363dccc964891abec8480b2708f5599ee7d8629bfc207e71cb8",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "castle-fortress-assets"
+    },
+    {
+      "path": "castle-fortress-assets/castle-interior-v2.png",
+      "bytes": 499729,
+      "sha256": "910d86bc9292c77f29a26854adebd7a695fc17848035269b64be8c9342dbc187",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "castle-fortress-assets"
+    },
+    {
       "path": "character-assets/blue-fox-parts.png",
       "bytes": 205950,
       "sha256": "71f416bfe906d0fc83519341535a8496000132f6afe9b7a524d7517f3fb71a5d",
@@ -2395,21 +2463,30 @@
       "package": "character-assets"
     },
     {
-      "path": "fortress-assets/fortress-level-1-destroyed-v1.png",
-      "bytes": 671930,
-      "sha256": "e99bd509a332167136d5d5348a8dd80ecdc5ff2c09818b913a221cb879e171a6",
-      "width": 1440,
-      "height": 284,
-      "decodedRgbaBytes": 1635840,
+      "path": "fortress-assets/wood-front-v2.png",
+      "bytes": 236400,
+      "sha256": "f8459221c09c5de2bef0f16289be2f40c32919f6c542c734a758623e925a8148",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
       "package": "fortress-assets"
     },
     {
-      "path": "fortress-assets/fortress-level-1-v1.png",
-      "bytes": 793166,
-      "sha256": "7b82015db76dcb69d7e9058fea1b045830d488e8a78b1ad9a482f0becc73fd0c",
-      "width": 1536,
-      "height": 303,
-      "decodedRgbaBytes": 1861632,
+      "path": "fortress-assets/wood-interior-v2.png",
+      "bytes": 643684,
+      "sha256": "22f907beb7d8934349879e6ee9f277b96ef265b845857939acaca617f2741d12",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "fortress-assets"
+    },
+    {
+      "path": "fortress-assets/wood-ruin-v2.png",
+      "bytes": 599824,
+      "sha256": "703ad0627f281bad47b09fe1268bfab38b3e0726ce3851911c35f94e664b3c16",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
       "package": "fortress-assets"
     },
     {
@@ -3104,6 +3181,51 @@
       "height": 192,
       "decodedRgbaBytes": 147456,
       "package": "learning-assets"
+    },
+    {
+      "path": "reinforced-fortress-assets/reinforced-front-v2.png",
+      "bytes": 328672,
+      "sha256": "247b459f2e4f7b32a030b6c5ae5c2dd4584026f85b98637a158a5414702c44da",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "reinforced-fortress-assets"
+    },
+    {
+      "path": "reinforced-fortress-assets/reinforced-interior-v2.png",
+      "bytes": 670464,
+      "sha256": "cfb8c44a5d582a59da12830ae3a7ae9f4d13eff1283d071331850dd17ffcc2f4",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "reinforced-fortress-assets"
+    },
+    {
+      "path": "reinforced-fortress-assets/reinforced-ruin-v2.png",
+      "bytes": 611190,
+      "sha256": "83716ea8e400fedc15783146cc5ce1bad152786c3cf55b29e9e141b0fc71c995",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "reinforced-fortress-assets"
+    },
+    {
+      "path": "stone-fortress-assets/stone-front-v2.png",
+      "bytes": 251428,
+      "sha256": "0836f8187d9142ce2c557ebfd3ada4dbb46713dd3ce311778ec51332cf418cd1",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "stone-fortress-assets"
+    },
+    {
+      "path": "stone-fortress-assets/stone-interior-v2.png",
+      "bytes": 641062,
+      "sha256": "458212143d05658a3b6c6f84ee9b1a40086b8696ef9d10679c9e32fce1b9b50d",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "stone-fortress-assets"
     }
   ]
 }

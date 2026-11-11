@@ -567,36 +567,36 @@ test('第一关庭院等待资源完成后绘制，宽窄屏等比裁切且其�
   }
 });
 
-test('一级木石堡垒等待解码、跨关加载、旋转等比绘制，升级与摧毁不沿用完整墙体', async () => {
-  const { WOOD_FORTRESS_ASSET, WOOD_FORTRESS_RUIN_ASSET } = await import('../miniprogram/houses/fortress-sprite');
+test('一级木平台等待解码、跨关加载、旋转等比绘制，升级与摧毁不沿用完整墙体', async () => {
+  const { WOOD_INTERIOR } = await import('../miniprogram/houses/interior-art');
   for (const houseLevel of [undefined, 1, 2, 5]) {
     const art = { ...artFixture(), fruitHat: artFixture().monster };
     const h = harness(false, art, { levelId: 8, initial: { ...initial(), houseLevel, automatic: true } });
     const loading = h.scene.load();
-    const wall = h.images.find(image => image.src === WOOD_FORTRESS_ASSET.path);
+    const wall = h.images.find(image => image.src === WOOD_INTERIOR.interior.path);
     assert.equal(!!wall, houseLevel === undefined || houseLevel === 1);
     h.images.filter(image => image !== wall).forEach(image => image.onload());
     if (wall) {
       await Promise.resolve(); assert.equal(h.callbacks.size, 0);
-      wall.width = 1536; wall.height = 303; wall.onload();
+      wall.width = 1086; wall.height = 362; wall.onload();
     }
     assert.equal(await loading, true);
     if (wall) {
       for (const [width, height] of [[390,620], [1024,580], [390,620]]) {
         h.commands.length = 0; h.scene.resize(width, height, 3, 0);
         const draws = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === wall);
-        const center = draws.find(command => command.args.length === 5)!;
+        const center = draws.find(command => command.args.length === 9)!;
         assert.ok(center);
-        assert.equal(center.args[2], 480); assert.equal(center.args[4], 80);
-        assert.ok(Math.abs(Number(center.args[3]) / 80 - wall.width / wall.height) < 1e-8);
+        assert.equal(center.args[6], 460); assert.equal(center.args[8], 100);
+        assert.ok(Math.abs(Number(center.args[7]) / 100 - Number(center.args[3]) / Number(center.args[4])) < 1e-8);
         if (width > height) assert.ok(draws.length > 1, 'wide wall extends without stretching');
       }
       const state = initial();
       const destroyed = harness(false, art, { levelId: 8, initial: { ...state, houseLevel, base: { ...state.base, hp: 0 }, status: 'baseDestroyed' } });
       const ready = destroyed.scene.load(); destroyed.images.forEach(image => image.onload()); await ready;
       const sprites = destroyed.commands.filter(command => command.method === 'drawImage').map(command => (command.args[0] as {src?:string})?.src);
-      assert.ok(!sprites.includes(WOOD_FORTRESS_ASSET.path));
-      assert.ok(sprites.includes(WOOD_FORTRESS_RUIN_ASSET.path));
+      assert.ok(!sprites.includes(WOOD_INTERIOR.interior.path));
+      assert.ok(sprites.includes(WOOD_INTERIOR.ruin.path));
       assert.ok(!sprites.includes(art.destroyedBase.path));
       destroyed.scene.dispose();
     }
@@ -605,11 +605,11 @@ test('一级木石堡垒等待解码、跨关加载、旋转等比绘制，升�
 });
 
 test('一级废墟预载门控、失败重试与销毁后的迟到解码不恢复战斗', async () => {
-  const { WOOD_FORTRESS_RUIN_ASSET } = await import('../miniprogram/houses/fortress-sprite');
+  const { WOOD_INTERIOR } = await import('../miniprogram/houses/interior-art');
   const art = { ...artFixture(), fruitHat: artFixture().monster };
   const h = harness(false, art, { levelId: 8, initial: { ...initial(), houseLevel: 1 } });
   const first = h.scene.load();
-  const ruin = h.images.find(image => image.src === WOOD_FORTRESS_RUIN_ASSET.path)!;
+  const ruin = h.images.find(image => image.src === WOOD_INTERIOR.ruin.path)!;
   h.images.filter(image => image !== ruin).forEach(image => image.onload());
   await Promise.resolve();
   assert.equal(h.callbacks.size, 0, '尚未解码废墟时不能进入战斗');
@@ -692,4 +692,39 @@ test('资源快照隔离外部修改，失败重试及退出不保留已提交�
     assert.equal(disposed.backgroundCache, null);
     assert.equal(disposed.canvas.estimatedRgbaBytes, 8640000, '宿主持有画布不虚报已释放');
   } finally { h.scene.dispose(); }
+});
+
+test('五级前墙解码后才开战，角色夹在平台与前墙之间，毁坏不绘制前墙', async () => {
+  const { fortressInterior } = await import('../miniprogram/houses/interior-art');
+  const { createBattlePet } = await import('../miniprogram/pets/battle');
+  const { BATTLE_PET_ART } = await import('../miniprogram/pets/battle-art');
+  for (const houseLevel of [1, 2, 3, 4, 5]) {
+    const layers = fortressInterior(houseLevel)!;
+    const art = openingArt('apple');
+    const state = {...createOpeningEncounter('layers', 'apple', 1), houseLevel,
+      pet: createBattlePet({level: 7, equipped: []})};
+    const h = harness(false, art, {initial: state});
+    try {
+      const loading = h.scene.load();
+      const monsterImage = h.images.find(image => image.src === art.monster.path)!;
+      monsterImage.width = art.monsterVisual.sourceSize.width;
+      monsterImage.height = art.monsterVisual.sourceSize.height;
+      const front = h.images.find(image => image.src === layers.front.path)!;
+      assert.ok(front);
+      h.images.filter(image => image !== front).forEach(image => image.onload());
+      await Promise.resolve(); assert.equal(h.callbacks.size, 0);
+      front.onload(); assert.equal(await loading, true);
+      const paths = h.commands.filter(c => c.method === 'drawImage').map(c => (c.args[0] as {src: string}).src);
+      assert.ok(paths.indexOf(layers.interior.path) < paths.indexOf(art.hero.path));
+      assert.ok(paths.lastIndexOf(art.hero.path) < paths.indexOf(layers.front.path));
+      assert.ok(paths.indexOf(BATTLE_PET_ART.path) >= 0);
+      assert.ok(paths.lastIndexOf(BATTLE_PET_ART.path) < paths.indexOf(layers.front.path));
+      h.commands.length = 0;
+      (h.scene as unknown as {draw(s: typeof state): void}).draw({...state, base: {...state.base, hp: 0}});
+      const ruined = h.commands.filter(c => c.method === 'drawImage').map(c => (c.args[0] as {src: string}).src);
+      assert.ok(ruined.includes(layers.ruin?.path ?? art.destroyedBase.path));
+      assert.ok(!ruined.includes(layers.front.path));
+      assert.ok(!ruined.includes(layers.interior.path));
+    } finally { h.scene.dispose(); }
+  }
 });

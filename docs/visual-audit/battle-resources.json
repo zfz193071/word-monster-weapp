@@ -7,8 +7,8 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1813838,
-      "fileCount": 200
+      "sourceBytes": 1818888,
+      "fileCount": 201
     },
     {
       "name": "learning-assets",
@@ -31,8 +31,8 @@
     {
       "name": "fortress-assets",
       "root": "fortress-assets",
-      "sourceBytes": 1465245,
-      "fileCount": 7
+      "sourceBytes": 1480057,
+      "fileCount": 8
     },
     {
       "name": "character-assets",
@@ -51,6 +51,30 @@
       "root": "animal-assets",
       "sourceBytes": 998809,
       "fileCount": 21
+    },
+    {
+      "name": "reinforced-fortress-assets",
+      "root": "reinforced-fortress-assets",
+      "sourceBytes": 1610475,
+      "fileCount": 8
+    },
+    {
+      "name": "stone-fortress-assets",
+      "root": "stone-fortress-assets",
+      "sourceBytes": 892639,
+      "fileCount": 7
+    },
+    {
+      "name": "castle-fortress-assets",
+      "root": "castle-fortress-assets",
+      "sourceBytes": 808537,
+      "fileCount": 7
+    },
+    {
+      "name": "armored-fortress-assets",
+      "root": "armored-fortress-assets",
+      "sourceBytes": 897720,
+      "fileCount": 7
     }
   ],
   "heroVariants": [
@@ -111,6 +135,134 @@
       "rgbaBytes": 884736
     }
   ],
+  "fortressVariants": [
+    {
+      "houseLevel": 1,
+      "images": [
+        {
+          "path": "/fortress-assets/wood-interior-v2.png",
+          "package": "fortress-assets",
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-front-v2.png",
+          "package": "fortress-assets",
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        }
+      ],
+      "note": "Layered interior; new destroyed art deferred for levels 3–5; final visual and device acceptance pending"
+    },
+    {
+      "houseLevel": 2,
+      "images": [
+        {
+          "path": "/reinforced-fortress-assets/reinforced-interior-v2.png",
+          "package": "reinforced-fortress-assets",
+          "bytes": 670464,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/reinforced-fortress-assets/reinforced-front-v2.png",
+          "package": "reinforced-fortress-assets",
+          "bytes": 328672,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/reinforced-fortress-assets/reinforced-ruin-v2.png",
+          "package": "reinforced-fortress-assets",
+          "bytes": 611190,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        }
+      ],
+      "note": "Layered interior; new destroyed art deferred for levels 3–5; final visual and device acceptance pending"
+    },
+    {
+      "houseLevel": 3,
+      "images": [
+        {
+          "path": "/stone-fortress-assets/stone-interior-v2.png",
+          "package": "stone-fortress-assets",
+          "bytes": 641062,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/stone-fortress-assets/stone-front-v2.png",
+          "package": "stone-fortress-assets",
+          "bytes": 251428,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        }
+      ],
+      "note": "Layered interior; new destroyed art deferred for levels 3–5; final visual and device acceptance pending"
+    },
+    {
+      "houseLevel": 4,
+      "images": [
+        {
+          "path": "/castle-fortress-assets/castle-interior-v2.png",
+          "package": "castle-fortress-assets",
+          "bytes": 499729,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/castle-fortress-assets/castle-front-v2.png",
+          "package": "castle-fortress-assets",
+          "bytes": 308659,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        }
+      ],
+      "note": "Layered interior; new destroyed art deferred for levels 3–5; final visual and device acceptance pending"
+    },
+    {
+      "houseLevel": 5,
+      "images": [
+        {
+          "path": "/armored-fortress-assets/armored-interior-v2.png",
+          "package": "armored-fortress-assets",
+          "bytes": 539090,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/armored-fortress-assets/armored-front-v2.png",
+          "package": "armored-fortress-assets",
+          "bytes": 358481,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        }
+      ],
+      "note": "Layered interior; new destroyed art deferred for levels 3–5; final visual and device acceptance pending"
+    }
+  ],
   "levels": [
     {
       "packageBudget": {
@@ -122,9 +274,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 5192819,
-        "referencedFileBytes": 4099140
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 5207631,
+        "referencedFileBytes": 4113952
       },
       "levelId": 1,
       "category": "fruits",
@@ -393,20 +545,28 @@
           "rgbaBytes": 327680
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/fruit-assets/apple.png",
@@ -659,8 +819,8 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 3495561,
-      "estimatedImageRgbaBytes": 25110704,
+      "imageBytes": 3510373,
+      "estimatedImageRgbaBytes": 26330816,
       "audioBytes": 603579
     },
     {
@@ -673,9 +833,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 5618933,
-        "referencedFileBytes": 3722506
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 5633745,
+        "referencedFileBytes": 3737318
       },
       "levelId": 2,
       "category": "color-shape",
@@ -1001,20 +1161,28 @@
           "rgbaBytes": 327680
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/fruit-assets/apple.png",
@@ -1411,8 +1579,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3047606,
-      "estimatedImageRgbaBytes": 14362800,
+      "imageBytes": 3062418,
+      "estimatedImageRgbaBytes": 15582912,
       "audioBytes": 674900
     },
     {
@@ -1425,9 +1593,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 5900589,
-        "referencedFileBytes": 3664782
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 5915401,
+        "referencedFileBytes": 3679594
       },
       "levelId": 3,
       "category": "animals-plants",
@@ -1790,20 +1958,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/black.png",
@@ -2162,8 +2338,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3066218,
-      "estimatedImageRgbaBytes": 14330032,
+      "imageBytes": 3081030,
+      "estimatedImageRgbaBytes": 15550144,
       "audioBytes": 598564
     },
     {
@@ -2176,9 +2352,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 5900589,
-        "referencedFileBytes": 3620204
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 5915401,
+        "referencedFileBytes": 3635016
       },
       "levelId": 4,
       "category": "tools",
@@ -2483,20 +2659,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/blackboard.png",
@@ -2963,8 +3147,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 2957647,
-      "estimatedImageRgbaBytes": 14559408,
+      "imageBytes": 2972459,
+      "estimatedImageRgbaBytes": 15779520,
       "audioBytes": 662557
     },
     {
@@ -2976,9 +3160,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 4901780,
-        "referencedFileBytes": 2563359
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 4916592,
+        "referencedFileBytes": 2578171
       },
       "levelId": 5,
       "category": "home-items",
@@ -3146,20 +3330,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/bed.png",
@@ -3592,8 +3784,8 @@
           "bytes": 5241
         }
       ],
-      "imageBytes": 1978531,
-      "estimatedImageRgbaBytes": 11511984,
+      "imageBytes": 1993343,
+      "estimatedImageRgbaBytes": 12732096,
       "audioBytes": 584828
     },
     {
@@ -3605,9 +3797,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 4901780,
-        "referencedFileBytes": 2613506
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 4916592,
+        "referencedFileBytes": 2628318
       },
       "levelId": 6,
       "category": "daily-items",
@@ -3779,20 +3971,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/bag.png",
@@ -4297,8 +4497,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2005712,
-      "estimatedImageRgbaBytes": 12101808,
+      "imageBytes": 2020524,
+      "estimatedImageRgbaBytes": 13321920,
       "audioBytes": 607794
     },
     {
@@ -4310,9 +4510,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 4901780,
-        "referencedFileBytes": 2704640
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 4916592,
+        "referencedFileBytes": 2719452
       },
       "levelId": 7,
       "category": "nature",
@@ -4489,20 +4689,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/air.png",
@@ -5097,8 +5305,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2053209,
-      "estimatedImageRgbaBytes": 12839088,
+      "imageBytes": 2068021,
+      "estimatedImageRgbaBytes": 14059200,
       "audioBytes": 651431
     },
     {
@@ -5110,9 +5318,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1813838,
-        "subpackageSourceBytes": 4901780,
-        "referencedFileBytes": 2561367
+        "mainSourceBytes": 1818888,
+        "subpackageSourceBytes": 4916592,
+        "referencedFileBytes": 2576179
       },
       "levelId": 8,
       "category": "body-parts",
@@ -5278,20 +5486,28 @@
           "rgbaBytes": 884736
         },
         {
-          "path": "/fortress-assets/fortress-level-1-destroyed-v1.png",
+          "path": "/fortress-assets/wood-front-v2.png",
           "package": "fortress-assets",
-          "bytes": 671930,
-          "width": 1440,
-          "height": 284,
-          "rgbaBytes": 1635840
+          "bytes": 236400,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/fortress-assets/fortress-level-1-v1.png",
+          "path": "/fortress-assets/wood-interior-v2.png",
           "package": "fortress-assets",
-          "bytes": 793166,
-          "width": 1536,
-          "height": 303,
-          "rgbaBytes": 1861632
+          "bytes": 643684,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/fortress-assets/wood-ruin-v2.png",
+          "package": "fortress-assets",
+          "bytes": 599824,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/learning-assets/images/air.png",
@@ -5688,8 +5904,8 @@
           "bytes": 5085
         }
       ],
-      "imageBytes": 2005183,
-      "estimatedImageRgbaBytes": 11217072,
+      "imageBytes": 2019995,
+      "estimatedImageRgbaBytes": 12437184,
       "audioBytes": 556184
     }
   ]

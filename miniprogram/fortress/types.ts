@@ -174,7 +174,7 @@ export interface ProjectileState {
   readonly id: string; readonly position: Point; readonly previousPosition: Point;
   readonly width: number; readonly height: number; readonly damage: number;
 }
-export interface ElementImpact { readonly iceChain?: boolean; readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
+export interface ElementImpact { readonly source?: 'pet'; readonly iceChain?: boolean; readonly radius?: number; readonly kind: ElementId; readonly position: Point; readonly target?: Point; readonly untilTick: number }
 export interface CombatState {
   readonly summonRemainingMs?: SummonTimers;
   readonly nextSummonSequence?: number;

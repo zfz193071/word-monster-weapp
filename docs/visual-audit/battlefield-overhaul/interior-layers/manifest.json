@@ -1,0 +1,62 @@
+{
+  "generator": "built-in image_gen",
+  "reference": "docs/visual-audit/battlefield-overhaul/interior-study/interior-01.png",
+  "referenceSha256": "a5633da83af181f052985d79d613c2668a7d3248d0c8d17f3a39fb2e651024d9",
+  "encoding": "Whole images uniformly resampled to half size; alpha preserved, not lossless",
+  "prompts": [
+    "wood-interior-prompt.txt",
+    "wood-front-prompt.txt",
+    "wood-ruin-prompt.txt"
+  ],
+  "acceptance": "Approved interior direction and wood-house mapping; final runtime and device review pending",
+  "files": [
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-interior-01.png",
+      "target": "miniprogram/fortress-assets/wood-interior-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "9d574bf1024b2e9ef4f20f948b2c37d01d03dad8aca9d03d9719fb19ffbb0be5",
+      "runtimeSha256": "22f907beb7d8934349879e6ee9f277b96ef265b845857939acaca617f2741d12",
+      "bytes": 643684,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-front-01.png",
+      "target": "miniprogram/fortress-assets/wood-front-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "3f8403d22397c3818aeef048981389a637bb58283dbc34ef6e4d451ac05c9fa9",
+      "runtimeSha256": "f8459221c09c5de2bef0f16289be2f40c32919f6c542c734a758623e925a8148",
+      "bytes": 236400,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-ruin-01.png",
+      "target": "miniprogram/fortress-assets/wood-ruin-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "e24078893c289dd9725cb7677e9207954256125a9d116b3868f2aa9988351131",
+      "runtimeSha256": "703ad0627f281bad47b09fe1268bfab38b3e0726ce3851911c35f94e664b3c16",
+      "bytes": 599824,
+      "decodedRgbaBytes": 1572528
+    }
+  ]
+}

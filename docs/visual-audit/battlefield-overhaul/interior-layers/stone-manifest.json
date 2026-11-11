@@ -1,0 +1,60 @@
+{
+  "generator": "built-in image_gen",
+  "references": [
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-interior-01.png",
+      "sha256": "9d574bf1024b2e9ef4f20f948b2c37d01d03dad8aca9d03d9719fb19ffbb0be5"
+    },
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-front-01.png",
+      "sha256": "3f8403d22397c3818aeef048981389a637bb58283dbc34ef6e4d451ac05c9fa9"
+    },
+    {
+      "path": "docs/visual-audit/battlefield-overhaul/interior-layers/stone-interior-01.png",
+      "sha256": "7b62ba0f0950b550144be0f130932be803c82f87c3f789843b12e0aabd89a6a3"
+    }
+  ],
+  "reference": "docs/visual-audit/battlefield-overhaul/interior-layers/wood-interior-01.png",
+  "referenceSha256": "9d574bf1024b2e9ef4f20f948b2c37d01d03dad8aca9d03d9719fb19ffbb0be5",
+  "encoding": "Whole images uniformly resampled to half size; alpha preserved, not lossless",
+  "prompts": [
+    "stone-interior-prompt.txt",
+    "stone-front-prompt.txt"
+  ],
+  "acceptance": "Approved interior direction and five house materials; final runtime and device review pending",
+  "files": [
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/stone-interior-01.png",
+      "target": "miniprogram/stone-fortress-assets/stone-interior-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "7b62ba0f0950b550144be0f130932be803c82f87c3f789843b12e0aabd89a6a3",
+      "runtimeSha256": "458212143d05658a3b6c6f84ee9b1a40086b8696ef9d10679c9e32fce1b9b50d",
+      "bytes": 641062,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "source": "docs/visual-audit/battlefield-overhaul/interior-layers/stone-front-01.png",
+      "target": "miniprogram/stone-fortress-assets/stone-front-v2.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sourceSha256": "05e013d87af87f8753c335ef217587af8326777b15559e7e959115e9d8d367c5",
+      "runtimeSha256": "0836f8187d9142ce2c557ebfd3ada4dbb46713dd3ce311778ec51332cf418cd1",
+      "bytes": 251428,
+      "decodedRgbaBytes": 1572528
+    }
+  ],
+  "destroyedArtwork": "Deferred by user; existing destroyedBase rendering retained"
+}
