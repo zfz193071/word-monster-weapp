@@ -1,6 +1,6 @@
 import { GUARDIAN_BODY, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
-import { drawTexturedZombie } from './zombie-art';
+import { APPLE_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts, drawTexturedZombie } from './zombie-art';
 import { ANIMAL_LOCOMOTION, monsterGait, zombieGait } from './monster-gait';
 import { drawQuadruped } from './quadruped-art';
 import type { FootPose } from './monster-gait';
@@ -34,6 +34,7 @@ export interface MonsterArt {
   readonly animalIds?: readonly string[];
   readonly fruitHat?: SpriteAsset;
   readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
+  readonly bossBodies?: Readonly<Partial<Record<'iron' | 'grand', SpriteAsset>>>;
   readonly texturedBodies?: Readonly<Record<string, SpriteAsset>>;
   readonly outfitColors?: Readonly<Record<string, string>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
@@ -51,7 +52,7 @@ export interface SceneArt extends MonsterArt {
 }
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
-  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
+  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.bossBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
   if (guardianRigForPath(art.hero.path)) assets.push(GUARDIAN_BODY);
   const courtyard = art.fruitHat && courtyardAsset(levelId);
   // Preload both orientations so resize can switch immediately while paused or active.
@@ -482,6 +483,7 @@ export class CanvasScene {
           -Math.PI / 2 + Math.PI * 2 * (1 - monster.explosionRemainingMs / 1000)); c.stroke(); c.restore();
       }
       const monsterArt = this.monsterArt;
+      const bossBody = monster.boss && monsterArt?.bossBodies?.[monster.bossKind === 'grand' ? 'grand' : 'iron'];
       if (monsterArt && (monster.status === 'entering' || monster.status === 'alive') && (monster.frozenUntilTick ?? -1) < state.tick
         && !['bee', 'bird', 'fish'].includes(monster.wordId)) {
         const step = ((state.tick + motionSeed) % 44) / 44;
@@ -504,13 +506,21 @@ export class CanvasScene {
           c.beginPath(); c.ellipse(monster.position.x, monster.position.y, 23 + (1 - hit) * 9, 27 + (1 - hit) * 7, 0, 0, Math.PI * 2); c.stroke(); c.restore();
         }
         c.imageSmoothingEnabled = monsterArt.monsterVisual.sourceSize.width > 32;
-        if (monsterArt.animalIds?.includes(monster.wordId)) {
+        if (bossBody) {
+          const image = this.images.get(bossBody.path);
+          if (!image) throw new Error('已预载图片丢失');
+          c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
+          drawBossZombieParts(c, image, zombieGait(monster, motionSeed), monster.bossKind === 'grand' ? 'grand' : 'iron');
+          c.restore();
+        } else if (monsterArt.animalIds?.includes(monster.wordId)) {
           this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0, motionSeed);
         } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal') && monsterArt.texturedBodies?.[monster.wordId]) {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
           if (!image) throw new Error('已预载图片丢失');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
-          drawTexturedZombie(c, image, zombieGait(monster, motionSeed));
+          const drawBody = monsterArt.texturedBodies[monster.wordId].path === APPLE_ZOMBIE_PARTS.path
+            ? drawAppleZombieParts : drawTexturedZombie;
+          drawBody(c, image, zombieGait(monster, motionSeed));
           c.restore();
         } else if (monsterArt.walkParts) {
           const gait = zombieGait(monster, motionSeed);
@@ -537,10 +547,15 @@ export class CanvasScene {
         if (monsterArt.fruitHat && !monster.boss && !monsterArt.animalIds?.includes(monster.wordId)) {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
-          // White badge keeps each ordinary fruit legible at game scale.
-          c.fillStyle = 'rgba(30,52,40,.2)'; c.beginPath(); c.ellipse(1, -40, 21, 20, 0, 0, Math.PI * 2); c.fill();
-          c.fillStyle = '#fff7df'; c.strokeStyle = '#c5ab71'; c.lineWidth = 1.5; c.beginPath(); c.arc(0, -44, 20, 0, Math.PI * 2); c.fill(); c.stroke();
-          this.sprite(monsterArt.fruitHats?.[monster.wordId] ?? monsterArt.fruitHat, -17, -61, 34, 34);
+          const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')
+            && monsterArt.texturedBodies?.[monster.wordId]?.path === APPLE_ZOMBIE_PARTS.path;
+          // The integrated apple helmet already identifies the word; don't obscure it.
+          if (!appleHelmet) {
+            // White badge keeps each ordinary fruit legible at game scale.
+            c.fillStyle = 'rgba(30,52,40,.2)'; c.beginPath(); c.ellipse(1, -40, 21, 20, 0, 0, Math.PI * 2); c.fill();
+            c.fillStyle = '#fff7df'; c.strokeStyle = '#c5ab71'; c.lineWidth = 1.5; c.beginPath(); c.arc(0, -44, 20, 0, Math.PI * 2); c.fill(); c.stroke();
+            this.sprite(monsterArt.fruitHats?.[monster.wordId] ?? monsterArt.fruitHat, -17, -61, 34, 34);
+          }
           c.fillStyle = '#4c5e43'; c.fillRect(-18, 41, 36, 4);
           c.fillStyle = '#b2dc69'; c.fillRect(-18, 41, 36 * monster.hp / monster.maxHp, 4); c.restore();
         }
@@ -549,12 +564,14 @@ export class CanvasScene {
         const elapsed = state.tick * 10 - (monster.spawnAtMs ?? 0);
         const warning = grandBossWindingUp(elapsed);
         c.save(); c.translate(monster.position.x, monster.position.y);
-        c.fillStyle = '#657982'; c.strokeStyle = '#e8ba58'; c.lineWidth = 2;
-        c.beginPath(); c.moveTo(-17, -7); c.lineTo(17, -7); c.lineTo(12, 15); c.lineTo(0, 20); c.lineTo(-12, 15); c.closePath(); c.fill(); c.stroke();
-        c.fillStyle = '#f5c54f'; c.beginPath(); c.moveTo(-15, -24); c.lineTo(-17, -39); c.lineTo(-7, -32); c.lineTo(0, -44); c.lineTo(7, -32); c.lineTo(17, -39); c.lineTo(15, -24); c.closePath(); c.fill(); c.stroke();
-        c.fillStyle = '#e55257'; c.fillRect(-3, -31, 6, 5);
+        if (!bossBody) {
+          c.fillStyle = '#657982'; c.strokeStyle = '#e8ba58'; c.lineWidth = 2;
+          c.beginPath(); c.moveTo(-17, -7); c.lineTo(17, -7); c.lineTo(12, 15); c.lineTo(0, 20); c.lineTo(-12, 15); c.closePath(); c.fill(); c.stroke();
+          c.fillStyle = '#f5c54f'; c.beginPath(); c.moveTo(-15, -24); c.lineTo(-17, -39); c.lineTo(-7, -32); c.lineTo(0, -44); c.lineTo(7, -32); c.lineTo(17, -39); c.lineTo(15, -24); c.closePath(); c.fill(); c.stroke();
+          c.fillStyle = '#e55257'; c.fillRect(-3, -31, 6, 5);
+        }
         const hat = monsterArt?.fruitHats?.[monster.wordId] ?? monsterArt?.fruitHat;
-        if (hat) this.sprite(hat, -9, -66, 18, 18);
+        if (hat) this.sprite(hat, -9, bossBody ? -48 : -66, 18, 18);
         c.fillStyle = '#4a2630'; c.fillRect(-24, 29, 48, 5);
         c.fillStyle = '#f16a59'; c.fillRect(-24, 29, 48 * monster.hp / monster.maxHp, 5);
         if (warning) {
@@ -568,15 +585,17 @@ export class CanvasScene {
         const phase = bossChargePhase(state.tick * 10 - (monster.spawnAtMs ?? 0));
         const x = monster.position.x; const y = monster.position.y;
         c.save(); c.translate(x, y);
-        c.fillStyle = phase === 'warning' && state.tick % 20 < 10 ? '#ffe48a' : '#a6bbc0';
-        c.strokeStyle = '#455f6a'; c.lineWidth = 2;
-        c.beginPath(); c.moveTo(-13, -20); c.lineTo(-11, -36); c.lineTo(11, -36); c.lineTo(13, -20); c.closePath(); c.fill(); c.stroke();
-        c.fillStyle = '#dbe7df'; c.fillRect(-9, -33, 3, 10);
-        c.fillStyle = '#879da3'; c.fillRect(-22, -5, 10, 8); c.fillRect(12, -5, 10, 8);
-        c.strokeStyle = '#f3c65b'; c.lineWidth = 2; c.strokeRect(-22, -5, 10, 8); c.strokeRect(12, -5, 10, 8);
+        if (!bossBody) {
+          c.fillStyle = phase === 'warning' && state.tick % 20 < 10 ? '#ffe48a' : '#a6bbc0';
+          c.strokeStyle = '#455f6a'; c.lineWidth = 2;
+          c.beginPath(); c.moveTo(-13, -20); c.lineTo(-11, -36); c.lineTo(11, -36); c.lineTo(13, -20); c.closePath(); c.fill(); c.stroke();
+          c.fillStyle = '#dbe7df'; c.fillRect(-9, -33, 3, 10);
+          c.fillStyle = '#879da3'; c.fillRect(-22, -5, 10, 8); c.fillRect(12, -5, 10, 8);
+          c.strokeStyle = '#f3c65b'; c.lineWidth = 2; c.strokeRect(-22, -5, 10, 8); c.strokeRect(12, -5, 10, 8);
+        }
         // The word badge sits above the helmet, including for animal-category bosses.
         const hat = monsterArt?.fruitHats?.[monster.wordId] ?? monsterArt?.fruitHat;
-        if (hat) { c.fillStyle = '#fff7df'; c.beginPath(); c.arc(0, -47, 11, 0, Math.PI * 2); c.fill(); this.sprite(hat, -9, -56, 18, 18); }
+        if (hat) { c.fillStyle = '#fff7df'; c.beginPath(); c.arc(0, bossBody ? -39 : -47, 11, 0, Math.PI * 2); c.fill(); this.sprite(hat, -9, bossBody ? -48 : -56, 18, 18); }
         c.fillStyle = '#5e4634'; c.fillRect(-22, 30, 44, 4);
         c.fillStyle = '#f0bb58'; c.fillRect(-22, 30, 44 * monster.hp / monster.maxHp, 4);
         if (phase !== 'normal' && monster.status !== 'attackingBase') {

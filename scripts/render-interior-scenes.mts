@@ -11,7 +11,7 @@ import { createBattlePet } from '../miniprogram/pets/battle';
 const require = createRequire(import.meta.url);
 const { createCanvas, Image } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const output = resolve(root, 'docs/visual-audit/battlefield-overhaul/interior-layers/runtime');
+const output = resolve(root, process.env.WM_INTERIOR_OUTPUT ?? 'docs/visual-audit/battlefield-overhaul/interior-layers/runtime');
 await mkdir(output, { recursive: true });
 const report: any[] = [];
 const dpr = 2;

@@ -5,7 +5,7 @@
     {
       "root": "",
       "name": "main",
-      "bytes": 1823001
+      "bytes": 1827304
     },
     {
       "root": "learning-assets",
@@ -45,7 +45,7 @@
       "pages": [
         "pages/resources/index"
       ],
-      "bytes": 1212731
+      "bytes": 1971047
     },
     {
       "root": "fruit-assets",
@@ -119,20 +119,20 @@
       "owner": 84,
       "battle": {
         "ordinary": {
-          "renderer": "textured-split-legs",
+          "renderer": "approved-three-part-apple",
           "images": [
             {
-              "path": "character-assets/zombie-apple-textured.png",
-              "bytes": 94441,
-              "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa",
-              "width": 256,
-              "height": 320,
-              "decodedRgbaBytes": 327680,
+              "path": "character-assets/zombie-apple-parts.png",
+              "bytes": 185920,
+              "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d",
+              "width": 1086,
+              "height": 362,
+              "decodedRgbaBytes": 1572528,
               "package": "character-assets"
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -146,7 +146,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/apple.png",
       "entryPoints": [
@@ -184,7 +214,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -198,7 +228,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/banana.png",
       "entryPoints": [
@@ -236,7 +296,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -250,7 +310,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/orange.png",
       "entryPoints": [
@@ -288,7 +378,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -302,7 +392,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/grape.png",
       "entryPoints": [
@@ -340,7 +460,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -354,7 +474,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/watermelon.png",
       "entryPoints": [
@@ -392,7 +542,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -406,7 +556,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/pear.png",
       "entryPoints": [
@@ -444,7 +624,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -458,7 +638,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/strawberry.png",
       "entryPoints": [
@@ -496,7 +706,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -510,7 +720,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/cherry.png",
       "entryPoints": [
@@ -548,7 +788,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -562,7 +802,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/pineapple.png",
       "entryPoints": [
@@ -600,7 +870,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -614,7 +884,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/kiwi.png",
       "entryPoints": [
@@ -652,7 +952,7 @@
             }
           ]
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "sprite-torso-procedural-legs",
           "images": [
             {
@@ -666,7 +966,37 @@
             }
           ]
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "fruit-assets/peach.png",
       "entryPoints": [
@@ -695,12 +1025,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/bear.png",
       "entryPoints": [
@@ -729,12 +1089,42 @@
           "locomotion": "flying",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "flying",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/bee.png",
       "entryPoints": [
@@ -763,12 +1153,42 @@
           "locomotion": "flying",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "flying",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/bird.png",
       "entryPoints": [
@@ -797,12 +1217,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/cat.png",
       "entryPoints": [
@@ -831,12 +1281,42 @@
           "locomotion": "biped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "biped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/chicken.png",
       "entryPoints": [
@@ -865,12 +1345,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/cow.png",
       "entryPoints": [
@@ -899,12 +1409,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/dog.png",
       "entryPoints": [
@@ -933,12 +1473,42 @@
           "locomotion": "biped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "biped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/duck.png",
       "entryPoints": [
@@ -967,12 +1537,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/elephant.png",
       "entryPoints": [
@@ -1001,12 +1601,42 @@
           "locomotion": "swimming",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "swimming",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/fish.png",
       "entryPoints": [
@@ -1035,12 +1665,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/horse.png",
       "entryPoints": [
@@ -1069,12 +1729,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/lion.png",
       "entryPoints": [
@@ -1103,12 +1793,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/panda.png",
       "entryPoints": [
@@ -1137,12 +1857,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/rabbit.png",
       "entryPoints": [
@@ -1171,12 +1921,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/sheep.png",
       "entryPoints": [
@@ -1205,12 +1985,42 @@
           "locomotion": "quadruped",
           "images": []
         },
-        "bossAndSpecialBase": {
+        "specialBase": {
           "renderer": "procedural-animal",
           "locomotion": "quadruped",
           "images": []
         },
-        "note": "Base body only; Boss/enemy overlays and effects remain separate. Runtime presence is not visual approval or a production reference."
+        "bosses": {
+          "iron": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-iron-parts.png",
+                "bytes": 262797,
+                "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "character-assets"
+              }
+            ]
+          },
+          "grand": {
+            "renderer": "approved-boss-parts",
+            "images": [
+              {
+                "path": "character-assets/zombie-grand-parts.png",
+                "bytes": 309599,
+                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+                "width": 888,
+                "height": 444,
+                "decodedRgbaBytes": 1577088,
+                "package": "character-assets"
+              }
+            ]
+          }
+        },
+        "note": "Boss atlases include crown/bucket/armor; word badges, HP and effects remain separate. Runtime presence is not visual approval or a production reference."
       },
       "bossBadge": "animal-assets/tiger.png",
       "entryPoints": [
@@ -2462,12 +3272,39 @@
       "package": "character-assets"
     },
     {
+      "path": "character-assets/zombie-apple-parts.png",
+      "bytes": 185920,
+      "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "character-assets"
+    },
+    {
       "path": "character-assets/zombie-apple-textured.png",
       "bytes": 94441,
       "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa",
       "width": 256,
       "height": 320,
       "decodedRgbaBytes": 327680,
+      "package": "character-assets"
+    },
+    {
+      "path": "character-assets/zombie-grand-parts.png",
+      "bytes": 309599,
+      "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+      "width": 888,
+      "height": 444,
+      "decodedRgbaBytes": 1577088,
+      "package": "character-assets"
+    },
+    {
+      "path": "character-assets/zombie-iron-parts.png",
+      "bytes": 262797,
+      "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
       "package": "character-assets"
     },
     {

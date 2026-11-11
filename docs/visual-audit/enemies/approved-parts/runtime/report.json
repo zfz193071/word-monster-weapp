@@ -1,0 +1,402 @@
+[
+  {
+    "name": "phone-battle-h1-intact",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 1941111,
+    "sha256": "2113fd861060d04e17c6cfe939b518bfa4914de0f41c76245a990aea09491bb4",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h2-intact",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 2,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 1948867,
+    "sha256": "c150061d0c1eee2888c5aafaee7684167aa6b4a6191f8fc61e6c7e90423930b6",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h3-intact",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 3,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 1947516,
+    "sha256": "7e5151fa1d6800535621d806c79bd2cb820c20dd75e26a58b29d251837a585eb",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h4-intact",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 4,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 1950834,
+    "sha256": "6de00a3d435050d8a674b8ac50046968b9685c79588969799a4bc44733a1c189",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h5-intact",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 5,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 1972362,
+    "sha256": "3f976f2a3af00634a409d525b336b079c42e6cf420248f3b97319677c7b1355c",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h1-ruin",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 1901923,
+    "sha256": "c507952eb2407137599bd09b03b4251585621d28bb8575fe2f0298bdf86bb19e",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h2-ruin",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 2,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 1912765,
+    "sha256": "f880a5cd3520d96dc78802735dfff2722ea8ab28e23c655f932a418afcce9a12",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h3-ruin",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 3,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 1712843,
+    "sha256": "c289fc1fee5c8eee84e4330b20a5579fe88ca1564d0af80ffc178c0707a94ae3",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h4-ruin",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 4,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 1712843,
+    "sha256": "c289fc1fee5c8eee84e4330b20a5579fe88ca1564d0af80ffc178c0707a94ae3",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "phone-battle-h5-ruin",
+    "width": 390,
+    "height": 620,
+    "weaponLevel": 1,
+    "houseLevel": 5,
+    "arenaWidth": 352.258064516129,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 1712843,
+    "sha256": "c289fc1fee5c8eee84e4330b20a5579fe88ca1564d0af80ffc178c0707a94ae3",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h1-intact",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 3767426,
+    "sha256": "c7decaa64d1169e58503450f89c27784a9c5c5ff026c242f5cd23c6e5a62374c",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h2-intact",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 2,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 3787943,
+    "sha256": "651aea16dae5704fddc02aa3a6e3b90160f1d6197d9dc69348453cd9b8599f62",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h3-intact",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 3,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 3782607,
+    "sha256": "0eb78495bef56fd391bc3117bf622bcd913d04c6df16c1bc9f063fd41f610e12",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h4-intact",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 4,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 3779820,
+    "sha256": "75a6e53337054288d48a848700fca3a9bcac6547a9aa56cd3456d26f2c2e712b",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h5-intact",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 5,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": false,
+    "dpr": 2,
+    "bytes": 3839883,
+    "sha256": "0c50a279d6ffa4f8442f91e8b881a5d7990bef071dc060b41da175a5cd02b445",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h1-ruin",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 1,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 3678565,
+    "sha256": "058b56a52e9fb533a7e09b62e1619f022285b7c8fef0b9ec59f2a2ee010642f7",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h2-ruin",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 2,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 3706948,
+    "sha256": "2097cec79fbc006f222f6c91737f00131c1e030faa19907473e9a0defd745b9a",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h3-ruin",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 3,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 3159572,
+    "sha256": "4bb4e079fb713722b6939fc19058898b9e9e560c6864f03c942d1193dc54d98e",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h4-ruin",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 4,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 3159572,
+    "sha256": "4bb4e079fb713722b6939fc19058898b9e9e560c6864f03c942d1193dc54d98e",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  },
+  {
+    "name": "ipad-battle-h5-ruin",
+    "width": 1024,
+    "height": 580,
+    "weaponLevel": 1,
+    "houseLevel": 5,
+    "arenaWidth": 988.6896551724137,
+    "heroPath": "/guardian-assets/guardian-joints-1.png",
+    "bosses": [
+      "normal",
+      "iron",
+      "grand"
+    ],
+    "petLevel": 7,
+    "destroyed": true,
+    "dpr": 2,
+    "bytes": 3159572,
+    "sha256": "4bb4e079fb713722b6939fc19058898b9e9e560c6864f03c942d1193dc54d98e",
+    "source": "Production renderer with fixed static fixture; no asset substitution; not device or gameplay capture"
+  }
+]

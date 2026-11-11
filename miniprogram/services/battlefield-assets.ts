@@ -84,7 +84,7 @@ export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: Sce
   if (houseLevel === 5) required.push(loadArmoredFortress());
   if (art?.hero.path.startsWith('/guardian-assets/')) required.push(loadGuardian());
   // Pet art is preloaded even before a pet joins, so in-battle unlocks render immediately.
-  if (preloadPet || (art && [art.hero, ...Object.values(art.texturedBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/')))) required.push(loadCharacters());
+  if (preloadPet || (art && [art.hero, ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.bossBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/')))) required.push(loadCharacters());
   if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/fruit-assets/'))) required.push(loadFruitAssets());
   if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/animal-assets/'))) required.push(loadAnimalAssets());
   return Promise.all(required).then(() => {});

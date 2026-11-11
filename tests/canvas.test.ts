@@ -40,6 +40,44 @@ function artFixture(): SceneArt {
       sourceSize: { width: 64, height: 64 }, anchor: { x: 32, y: 32 }, hitbox: { x: 0, y: 0, width: 64, height: 64 } } };
 }
 
+test('两类Boss新身体解码失败可重试，水果动物词条均绘制独立Boss且保留徽章', async () => {
+  for (const kind of ['iron', 'grand'] as const) {
+    const art = openingArt('apple', ['apple', 'cat']);
+    const initial = createOpeningEncounter('boss-parts', 'apple', 0);
+    const h = harness(false, art, {initial});
+    const setSize = (image: typeof h.images[number]) => {
+      if (image.src === art.monster.path) { image.width = 128; image.height = 160; }
+      if (image.src === art.bossBodies![kind]!.path) {
+        image.width = kind === 'grand' ? 888 : 1086; image.height = kind === 'grand' ? 444 : 362;
+      }
+    };
+    try {
+      const pending = h.scene.load();
+      const held = h.images.find(image => image.src === art.bossBodies![kind]!.path)!;
+      assert.ok(held);
+      for (const image of h.images) { setSize(image); if (image !== held) image.onload(); }
+      await Promise.resolve(); assert.equal(h.callbacks.size, 0);
+      held.onerror(); assert.equal(await pending, false); assert.equal(h.callbacks.size, 0);
+      const start = h.images.length, retry = h.scene.load();
+      for (const image of h.images.slice(start)) { setSize(image); image.onload(); }
+      assert.equal(await retry, true); h.scene.setPaused(true);
+      const bossImage = h.images.slice(start).find(image => image.src === held.src)!;
+      for (const wordId of ['apple', 'cat']) {
+        h.commands.length = 0;
+        const state = {...initial, tick: 70, monsters: [{...initial.monsters[0], wordId,
+          boss: true, bossKind: kind, status: 'alive' as const, position: {x: 180, y: 240}}]};
+        const before = JSON.stringify(state);
+        (h.scene as unknown as {draw(state: typeof state): void}).draw(state);
+        const calls = h.commands.filter(command => command.method === 'drawImage');
+        assert.equal(calls.filter(command => command.args[0] === bossImage).length, 3);
+        assert.ok(calls.some(command => (command.args[0] as {src:string}).src === art.fruitHats![wordId].path));
+        assert.equal(JSON.stringify(state), before, '绘制不改碰撞、血量与攻击状态');
+        assert.ok(!h.commands.some(command => command.method === 'strokeRect' && command.args[0] === -22 && command.args[1] === -5), '新Boss不叠旧护肩');
+      }
+    } finally { h.scene.dispose(); }
+  }
+});
+
 test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特殊兵种沿用原图', async () => {
   const initial = createOpeningEncounter('textured-zombie', 'apple', 0);
   const art = openingArt('apple');
@@ -50,7 +88,7 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
     assert.ok(texture);
     const monsterImage = h.images.find(image => image.src === art.monster.path)!;
     monsterImage.width = 128; monsterImage.height = 160;
-    texture.width = 256; texture.height = 320;
+    texture.width = 1086; texture.height = 362;
     for (const image of h.images.filter(image => image !== texture)) image.onload();
     await Promise.resolve();
     assert.equal(h.callbacks.size, 0, '新怪物图片未就绪时不启动帧循环');
@@ -65,6 +103,10 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
       (h.scene as unknown as { draw(state: typeof state): void }).draw(state);
       const parts = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === texture);
       assert.equal(parts.length, kind === 'normal' ? 3 : 0);
+      const badge = h.images.find(image => image.src === art.fruitHat!.path)!;
+      const badgeDraws = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === badge);
+      assert.equal(badgeDraws.length, kind === 'normal' ? 0 : 1, '苹果壳身份不被重复徽章覆盖，Boss与特殊兵种仍保留词条');
+      assert.ok(h.commands.some(command => command.method === 'fillRect' && command.args[1] === (kind === 'boss' ? 30 : 41)), '保留生命条');
       assert.equal(state.monsters[0].position.y, 240, '绘制不改碰撞位置');
     }
     assert.deepEqual(openingArt('banana').texturedBodies, {}, '无苹果的局不请求代表图');

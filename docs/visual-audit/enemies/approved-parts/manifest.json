@@ -1,0 +1,97 @@
+{
+  "files": [
+    {
+      "kind": "apple",
+      "generator": "built-in image_gen",
+      "prompt": "apple-parts-01-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/battlefield-overhaul/interior-study/interior-01.png",
+          "sha256": "a5633da83af181f052985d79d613c2668a7d3248d0c8d17f3a39fb2e651024d9"
+        },
+        {
+          "path": "docs/visual-audit/concepts/style-study-01.png",
+          "sha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6"
+        }
+      ],
+      "encoding": "Full atlas uniformly resampled to approximately half size; alpha retained, no background removal or pixel retouching",
+      "scope": "Ordinary apple and two Boss identities from approved masters; runtime visual/device acceptance pending",
+      "source": "docs/visual-audit/enemies/approved-parts/apple-parts-01.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "sourceSha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231",
+      "target": "miniprogram/character-assets/zombie-apple-parts.png",
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d",
+      "bytes": 185920,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "kind": "iron",
+      "generator": "built-in image_gen",
+      "prompt": "iron-parts-01-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/battlefield-overhaul/interior-study/interior-01.png",
+          "sha256": "a5633da83af181f052985d79d613c2668a7d3248d0c8d17f3a39fb2e651024d9"
+        },
+        {
+          "path": "docs/visual-audit/concepts/style-study-01.png",
+          "sha256": "f6239c979ffdc873f5c728e7ad60e607d67b5cba1dd02be02b58ebbe05b6c9f6"
+        }
+      ],
+      "encoding": "Full atlas uniformly resampled to approximately half size; alpha retained, no background removal or pixel retouching",
+      "scope": "Ordinary apple and two Boss identities from approved masters; runtime visual/device acceptance pending",
+      "source": "docs/visual-audit/enemies/approved-parts/iron-parts-01.png",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "sourceSha256": "9ed023de84077f7a4ad5b9b92019b1425ebf2ada9d5dec079e4bcb9d4f80b8c4",
+      "target": "miniprogram/character-assets/zombie-iron-parts.png",
+      "runtimeSize": [
+        1086,
+        362
+      ],
+      "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
+      "bytes": 262797,
+      "decodedRgbaBytes": 1572528
+    },
+    {
+      "kind": "grand",
+      "generator": "built-in image_gen",
+      "prompt": "grand-parts-02-prompt.txt",
+      "references": [
+        {
+          "path": "docs/visual-audit/enemies/approved-parts/grand-boss-study-01.png",
+          "sha256": "9db615631e113ff25541adfd922fe6bd73ffada1ec76743f262c315e748cddf0"
+        },
+        {
+          "path": "docs/visual-audit/enemies/approved-parts/grand-parts-01.png",
+          "sha256": "c6b10542460d6f046d8317a32a59ab7cd648756762fbf12f84e9559784a11ddb"
+        }
+      ],
+      "encoding": "Full atlas uniformly resampled to approximately half size; alpha retained, no background removal or pixel retouching",
+      "scope": "Ordinary apple and two Boss identities from approved masters; runtime visual/device acceptance pending",
+      "source": "docs/visual-audit/enemies/approved-parts/grand-parts-02.png",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "sourceSha256": "49fad2d87825b472c76abdf9aa16a45f0221827188d261374853f48deff80579",
+      "target": "miniprogram/character-assets/zombie-grand-parts.png",
+      "runtimeSize": [
+        888,
+        444
+      ],
+      "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
+      "bytes": 309599,
+      "decodedRgbaBytes": 1577088
+    }
+  ]
+}

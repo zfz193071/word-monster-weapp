@@ -1,7 +1,7 @@
 import { guardianRig } from './guardian-rig';
 import { drawEnemyType } from './enemy-types';
 import { heroVariant } from './hero-art';
-import { TEXTURED_APPLE_ZOMBIE } from './zombie-art';
+import { APPLE_ZOMBIE_PARTS, BOSS_ZOMBIE_PARTS } from './zombie-art';
 import type { SkillCollection } from './skill-quality';
 import { difficultyFor } from './difficulty';
 import type { DifficultyId } from './difficulty';
@@ -51,7 +51,8 @@ export function openingArt(wordId: string, wordIds: readonly string[] = [wordId]
   const word = BATTLE_WORDS.find(item => item.id === wordId);
   if (!word) throw new Error('未知单词');
   return { animalIds: wordIds.filter(id => ANIMAL_IDS.includes(id)), monster: original('zombie'), monsterWidth: 40,
-    texturedBodies: wordIds.includes('apple') ? { apple: TEXTURED_APPLE_ZOMBIE } : {},
+    bossBodies: BOSS_ZOMBIE_PARTS,
+    texturedBodies: wordIds.includes('apple') ? { apple: APPLE_ZOMBIE_PARTS } : {},
     outfitBodies: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知单词'); return [id, original(getLevel(1).words.some(word => word.id === id) ? `zombie-body-${id}` : getLevel(2).words.some(word => word.id === id) ? `zombie-body-${id}` : 'zombie-body')]; })),
     outfitColors: Object.fromEntries([...new Set(wordIds)].map(id => { if (!BATTLE_WORDS.some(word => word.id === id)) throw new Error('未知单词'); return [id, OUTFIT_COLORS[id] ?? '#a28a6e']; })),
     walkParts: { body: original('zombie-body'), left: original('zombie-leg-left'), right: original('zombie-leg-right') },

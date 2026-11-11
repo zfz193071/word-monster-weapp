@@ -7,7 +7,7 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1823001,
+      "sourceBytes": 1827304,
       "fileCount": 202
     },
     {
@@ -37,8 +37,8 @@
     {
       "name": "character-assets",
       "root": "character-assets",
-      "sourceBytes": 1212731,
-      "fileCount": 15
+      "sourceBytes": 1971047,
+      "fileCount": 18
     },
     {
       "name": "fruit-assets",
@@ -421,9 +421,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 5985668,
-        "referencedFileBytes": 4274254
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 6743984,
+        "referencedFileBytes": 4938129
       },
       "levelId": 1,
       "category": "fruits",
@@ -676,12 +676,28 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-textured.png",
+          "path": "/character-assets/zombie-apple-parts.png",
           "package": "character-assets",
-          "bytes": 94441,
-          "width": 256,
-          "height": 320,
-          "rgbaBytes": 327680
+          "bytes": 185920,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/fortress-assets/wood-front-v2.png",
@@ -974,8 +990,8 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 3670675,
-      "estimatedImageRgbaBytes": 27519680,
+      "imageBytes": 4334550,
+      "estimatedImageRgbaBytes": 31914144,
       "audioBytes": 603579
     },
     {
@@ -989,9 +1005,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 6411782,
-        "referencedFileBytes": 3897620
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 7170098,
+        "referencedFileBytes": 4561495
       },
       "levelId": 2,
       "category": "color-shape",
@@ -1301,12 +1317,28 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-textured.png",
+          "path": "/character-assets/zombie-apple-parts.png",
           "package": "character-assets",
-          "bytes": 94441,
-          "width": 256,
-          "height": 320,
-          "rgbaBytes": 327680
+          "bytes": 185920,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
           "path": "/fortress-assets/wood-front-v2.png",
@@ -1743,8 +1775,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3222720,
-      "estimatedImageRgbaBytes": 16771776,
+      "imageBytes": 3886595,
+      "estimatedImageRgbaBytes": 21166240,
       "audioBytes": 674900
     },
     {
@@ -1758,9 +1790,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 6693438,
-        "referencedFileBytes": 3839896
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 7451754,
+        "referencedFileBytes": 4412292
       },
       "levelId": 3,
       "category": "animals-plants",
@@ -2110,6 +2142,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -2511,8 +2559,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3241332,
-      "estimatedImageRgbaBytes": 16739008,
+      "imageBytes": 3813728,
+      "estimatedImageRgbaBytes": 19888624,
       "audioBytes": 598564
     },
     {
@@ -2526,9 +2574,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 6693438,
-        "referencedFileBytes": 3795318
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 7451754,
+        "referencedFileBytes": 4367714
       },
       "levelId": 4,
       "category": "tools",
@@ -2820,6 +2868,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -3329,8 +3393,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3132761,
-      "estimatedImageRgbaBytes": 16968384,
+      "imageBytes": 3705157,
+      "estimatedImageRgbaBytes": 20118000,
       "audioBytes": 662557
     },
     {
@@ -3343,9 +3407,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 5694629,
-        "referencedFileBytes": 2738473
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 6452945,
+        "referencedFileBytes": 3310869
       },
       "levelId": 5,
       "category": "home-items",
@@ -3500,6 +3564,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -3975,8 +4055,8 @@
           "bytes": 5241
         }
       ],
-      "imageBytes": 2153645,
-      "estimatedImageRgbaBytes": 13920960,
+      "imageBytes": 2726041,
+      "estimatedImageRgbaBytes": 17070576,
       "audioBytes": 584828
     },
     {
@@ -3989,9 +4069,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 5694629,
-        "referencedFileBytes": 2788620
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 6452945,
+        "referencedFileBytes": 3361016
       },
       "levelId": 6,
       "category": "daily-items",
@@ -4150,6 +4230,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -4697,8 +4793,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2180826,
-      "estimatedImageRgbaBytes": 14510784,
+      "imageBytes": 2753222,
+      "estimatedImageRgbaBytes": 17660400,
       "audioBytes": 607794
     },
     {
@@ -4711,9 +4807,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 5694629,
-        "referencedFileBytes": 2879754
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 6452945,
+        "referencedFileBytes": 3452150
       },
       "levelId": 7,
       "category": "nature",
@@ -4877,6 +4973,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -5514,8 +5626,8 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2228323,
-      "estimatedImageRgbaBytes": 15248064,
+      "imageBytes": 2800719,
+      "estimatedImageRgbaBytes": 18397680,
       "audioBytes": 651431
     },
     {
@@ -5528,9 +5640,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1823001,
-        "subpackageSourceBytes": 5694629,
-        "referencedFileBytes": 2736481
+        "mainSourceBytes": 1827304,
+        "subpackageSourceBytes": 6452945,
+        "referencedFileBytes": 3308877
       },
       "levelId": 8,
       "category": "body-parts",
@@ -5683,6 +5795,22 @@
           "path": "/character-assets/blue-fox-parts.png",
           "package": "character-assets",
           "bytes": 205950,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-grand-parts.png",
+          "package": "character-assets",
+          "bytes": 309599,
+          "width": 888,
+          "height": 444,
+          "rgbaBytes": 1577088
+        },
+        {
+          "path": "/character-assets/zombie-iron-parts.png",
+          "package": "character-assets",
+          "bytes": 262797,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -6122,8 +6250,8 @@
           "bytes": 5085
         }
       ],
-      "imageBytes": 2180297,
-      "estimatedImageRgbaBytes": 13626048,
+      "imageBytes": 2752693,
+      "estimatedImageRgbaBytes": 16775664,
       "audioBytes": 556184
     }
   ]
