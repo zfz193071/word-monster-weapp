@@ -1138,9 +1138,9 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
     "wordId": "home",
     "path": "/learning-assets/audio/learn-home.mp3",
     "kind": "audio",
-    "sha256": "faf663e360456fc2977ad84f2b2f447968e004e82903930fe07358e232d0847b",
-    "source": "https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/ljspeech/medium",
-    "rights": "Piper LJSpeech synthetic US female; model MIT; LJSpeech recordings public domain; normalized",
+    "sha256": "f3e06ef1a2dc6cbeab69505c04f1d35bc3114e03fa50d631ea151bf4a8572347",
+    "source": "macOS built-in US English speech synthesis; corrective /hoʊm/ export (Samantha)",
+    "rights": "System speech synthesis output; regenerated solely for the in-game pronunciation correction; pending human listening review",
     "reviewStatus": "pending"
   },
   {
@@ -1876,9 +1876,9 @@ export const LEVEL_ASSETS: readonly (VisualAsset & { readonly sha256?: string })
     "wordId": "home",
     "path": "/learning-assets/audio/zombie-home.mp3",
     "kind": "audio",
-    "sha256": "c3470e625cc53d7c3b9ee97cf2bb9099ea027c1376538d66e6880a805c49894a",
-    "source": "https://huggingface.co/hexgrad/Kokoro-82M",
-    "rights": "Kokoro v1.0 synthetic US English male am_michael; model Apache-2.0; normalized; runtime playback 0.8; docs/defeat-voice-manifest.json",
+    "sha256": "d128f8fa2e1447489245405fa5246de2616b5afad794a900aa90a622296c7051",
+    "source": "macOS built-in US English speech synthesis; corrective /hoʊm/ export (Ralph)",
+    "rights": "System speech synthesis output; regenerated solely for the in-game pronunciation correction; pending human listening review",
     "reviewStatus": "pending"
   },
   {

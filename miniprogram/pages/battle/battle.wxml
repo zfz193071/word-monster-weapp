@@ -1,5 +1,6 @@
 <wxs module="coinFormat" src="../../utils/coin-format.wxs" />
-<view wx:if="{{entryLoading}}" class="entry-loading" style="background-color: {{sceneMounted && !entryError ? 'transparent' : loadingColor}}">
+<!-- The cover must stay opaque until the scene has acknowledged its first painted frame. -->
+<view wx:if="{{entryLoading}}" class="entry-loading" style="background-color: {{loadingColor}}">
   <view class="entry-indicator"><loading-progress wx:if="{{!entryError}}" progress="{{entryProgress}}" /><view wx:else><text>{{entryError}}</text><button bindtap="prepareEntry">重试</button><button bindtap="returnHome">返回首页</button></view></view>
 </view>
 <view wx:if="{{preview}}" class="preview-page {{fromHome ? 'opening-page' : ''}}">

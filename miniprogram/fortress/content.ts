@@ -8,6 +8,12 @@ export const FORTRESS_WORDS: readonly FortressWord[] = Object.freeze(WORDS.map(w
   id: word.id, text: word.text, meaningZh: word.meaningZh,
   fruitImagePath: word.imagePath, audioPath: word.audioPath,
 })));
+const CORRECTED_ZOMBIE_VOICE_ASSETS: Readonly<Record<string, Pick<VisualAsset, 'source' | 'rights'>>> = Object.freeze({
+  home: Object.freeze({
+    source: 'macOS built-in US English speech synthesis; corrective /hoʊm/ export (Ralph)',
+    rights: 'System speech synthesis output; regenerated solely for the in-game pronunciation correction; pending human listening review',
+  }),
+});
 export const MONSTER_ASSETS: readonly VisualAsset[] = Object.freeze(FORTRESS_WORDS.map(word => {
   const vector = word.id === 'banana' || word.id === 'grape';
   return Object.freeze({ path: `/assets/images/monsters/${word.id}.png`, wordId: word.id, kind: 'image' as const,
@@ -17,8 +23,8 @@ export const MONSTER_ASSETS: readonly VisualAsset[] = Object.freeze(FORTRESS_WOR
 }));
 export const ZOMBIE_VOICE_ASSETS: readonly VisualAsset[] = Object.freeze(BATTLE_WORDS.map(word => Object.freeze({
   path: `/assets/audio/zombie-${word.id}.mp3`, wordId: word.id, kind: 'audio' as const,
-  source: 'https://huggingface.co/hexgrad/Kokoro-82M',
-  rights: 'Kokoro v1.0 英文合成男声 am_michael；模型 Apache-2.0；响度规范化、播放速率0.8；生成记录见 docs/defeat-voice-manifest.json',
+  source: CORRECTED_ZOMBIE_VOICE_ASSETS[word.id]?.source ?? 'https://huggingface.co/hexgrad/Kokoro-82M',
+  rights: CORRECTED_ZOMBIE_VOICE_ASSETS[word.id]?.rights ?? 'Kokoro v1.0 英文合成男声 am_michael；模型 Apache-2.0；响度规范化、播放速率0.8；生成记录见 docs/defeat-voice-manifest.json',
   reviewStatus: 'pending' as const,
 })));
 export const FORTRESS_ASSETS: readonly VisualAsset[] = Object.freeze([...CONTENT_ASSETS, ...MONSTER_ASSETS, ...ZOMBIE_VOICE_ASSETS.filter(asset => FORTRESS_WORDS.some(word => word.id === asset.wordId))].map(asset => Object.freeze({ ...asset })));

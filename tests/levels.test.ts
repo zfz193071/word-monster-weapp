@@ -16,12 +16,11 @@ test('八关分类隔离、19波循环学词、复习无相邻重复，混合使
   const ids=level.words.map(w=>w.id);
   for(const [index,wave] of plan.waves.entries()){
    assert.ok(ids.includes(wave.targetWordId));assert.ok(wave.optionWordIds.every(id=>ids.includes(id)));
-   const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
    assert.equal(wave.spawnPlan.length,openingMonsterCount(index,level.id));
    const currentCount=wave.spawnPlan.length-(level.id>1?Math.round(wave.spawnPlan.length*.3):0);
-   assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(currentCount/2):currentCount);
-   const counts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);
-   if(index) {assert.notEqual(wave.targetWordId,plan.waves[index-1].targetWordId);assert.ok(Math.max(...counts)-Math.min(...counts)<=1);}
+   const reviewWords=wave.spawnPlan.filter(m=>m.wordId!==wave.targetWordId && ids.includes(m.wordId));
+   assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,reviewWords.length?Math.ceil(currentCount/2):currentCount);
+   if(index) assert.notEqual(wave.targetWordId,plan.waves[index-1].targetWordId);
   }
   for(let start=0;start<19;start+=ids.length){const cycle=plan.waves.slice(start,start+ids.length);assert.equal(new Set(cycle.map(w=>w.targetWordId)).size,cycle.length);}
  }
@@ -82,6 +81,10 @@ test('全部击杀词音与男声生成清单一致，听词音频独立，来�
   const data=await readFile(new URL('../miniprogram'+path,import.meta.url));
   assert.equal(createHash('sha256').update(data).digest('hex'),records[0].sha256,path);
   const assets=BATTLE_ASSETS.filter(asset=>asset.path===path);assert.equal(assets.length,1,path);
-  assert.equal(assets[0].source,manifest.modelSource);assert.match(assets[0].rights,/am_michael/);
+  if(records[0].source.startsWith('macOS built-in')) {
+   assert.equal(assets[0].source,records[0].source);assert.equal(assets[0].rights,records[0].rights);
+  } else {
+   assert.equal(assets[0].source,manifest.modelSource);assert.match(assets[0].rights,/am_michael/);
+  }
  }
 });

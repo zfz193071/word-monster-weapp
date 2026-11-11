@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createOpeningPlan, validateOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
-import { createOpeningEncounter, OPENING_EXPERIENCE, OPENING_MONSTER_COUNTS, openingSkillOffer, ZERO_SKILLS } from '../miniprogram/fortress/opening-encounter';
+import { createOpeningEncounter, OPENING_EXPERIENCE, OPENING_MONSTER_COUNTS, openingSkillOffer, REVIEW_WORD_COOLDOWN_WAVES, ZERO_SKILLS } from '../miniprogram/fortress/opening-encounter';
 import { createExperience } from '../miniprogram/fortress/experience';
 import { BATTLE_WORDS } from '../miniprogram/fortress/fruit-catalog';
 import { createFruitOptions } from '../miniprogram/fortress/fruit-options';
 import { stepCombat } from '../miniprogram/fortress/combat';
 import type { BattleSkillId } from '../miniprogram/fortress/types';
 
-test('19波：前11词唯一，后8词不重复复习，边界不连续同词；每波半数新目标、其余均匀覆盖历史', () => {
+test('19波：前11词唯一，后8词不重复复习，边界不连续同词；新近播报词不会立即作为复习怪重复', () => {
   for (let seed = 0; seed < 50; seed++) {
     const plan = createOpeningPlan(`plan-${seed}`, createSeededRandom(seed)); validateOpeningPlan(plan);
     assert.equal(plan.waves.length, 19);
@@ -22,10 +22,11 @@ test('19波：前11词唯一，后8词不重复复习，边界不连续同词；
       for (const spawn of wave.spawnPlan) batches.set(spawn.spawnAtMs!, (batches.get(spawn.spawnAtMs!) ?? 0) + 1);
       const sizes=[...batches.values()];
       assert.ok(sizes.every((size,index) => size >= (index===sizes.length-1 ? 1 : 3) && size <= 5), '尾批补足剩余数量，其他批次3至5只');
-      const history=[...new Set(plan.waves.slice(0,index).map(w=>w.targetWordId))].filter(id=>id!==wave.targetWordId);
-      assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,index?Math.ceil(count/2):count);
-      const oldCounts=history.map(id=>wave.spawnPlan.filter(m=>m.wordId===id).length);
-      if(index){assert.ok(Math.min(...oldCounts)>=1);assert.ok(Math.max(...oldCounts)-Math.min(...oldCounts)<=1);assert.notEqual(wave.targetWordId,plan.waves[index-1].targetWordId);}
+      const recentlyAnnounced=plan.waves.slice(Math.max(0,index-REVIEW_WORD_COOLDOWN_WAVES),index).map(w=>w.targetWordId);
+      const reviewWords=wave.spawnPlan.map(m=>m.wordId).filter(id=>id!==wave.targetWordId);
+      assert.equal(wave.spawnPlan.filter(m=>m.wordId===wave.targetWordId).length,reviewWords.length ? Math.ceil(count/2) : count);
+      assert.ok(reviewWords.every(id=>!recentlyAnnounced.includes(id)), '最近播报的词应冷却，不能立即再次播报');
+      if(index) assert.notEqual(wave.targetWordId,plan.waves[index-1].targetWordId);
       const cards=createFruitOptions(wave.targetWordId,[],createSeededRandom(seed),BATTLE_WORDS.map(w=>w.id));
       const retry=createFruitOptions(wave.targetWordId,cards,createSeededRandom(seed+1),BATTLE_WORDS.map(w=>w.id));assert.deepEqual(retry.filter(id=>cards.includes(id)),[wave.targetWordId]);
     }

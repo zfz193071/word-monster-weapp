@@ -141,6 +141,14 @@ test('首页不渲染战斗进度条，进度仅由战斗页展示', () => {
   assert.doesNotMatch(home, /<loading-progress\b/);
 });
 
+test('加载遮罩始终使用不透明关卡背景，Canvas 挂载后也不能提前透出战场', () => {
+  const battle = readFileSync(new URL('../miniprogram/pages/battle/battle.wxml', import.meta.url), 'utf8');
+  const styles = readFileSync(new URL('../miniprogram/pages/battle/battle.wxss', import.meta.url), 'utf8');
+  assert.match(battle, /class="entry-loading" style="background-color: \{\{loadingColor\}\}"/);
+  assert.doesNotMatch(battle, /sceneMounted\s*&&\s*!entryError\s*\?\s*'transparent'/);
+  assert.match(styles, /\.entry-loading[^}]*background-image:/);
+});
+
 test('战斗预载时播放背景音乐，后台暂停、重试恢复、交接和退出释放', () => {
   const {host, jobs, music} = battleEntryHarness();
   host.onLoad({mode: 'fortress', entry: 'entry'});
