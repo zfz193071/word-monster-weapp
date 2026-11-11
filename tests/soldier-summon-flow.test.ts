@@ -17,7 +17,7 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
   const wallet=createCoinWallet(storage),pets=createPetStore(storage);
   const daily=createDailyCheckin({storage,coins:wallet,pets});
   const file=new URL('../miniprogram/components/fortress-scene/fortress-scene.ts',import.meta.url),requireReal=createRequire(file);
-  let definition:any,current:any;
+  let definition:any,current:any, victoryClaims=0;
   class Scene {
     runner:CombatRunner;options:any;disposed=false;
     constructor(_node:unknown,options:any){this.options=options;this.runner=new CombatRunner(options.initial);current=this;}
@@ -33,6 +33,7 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:1})},
     require(name:string){
       if(name.endsWith('/daily-checkin'))return{dailyCheckin:daily};
+      if(name.endsWith('/victory-rewards'))return{victoryRewards:{claim(){victoryClaims++;daily.rewardClear(`clear:mounted-${victoryClaims}`,1,0);return{cards:[],balance:wallet.balance()};}}};
       if(name.endsWith('/battlefield-assets')) return {loadBattlefieldAssets:()=>Promise.resolve()};
       if(name.endsWith('/canvas-scene'))return{CanvasScene:Scene};
       if(name.endsWith('/coin-wallet'))return{coinWallet:wallet,victoryCoinsForLevel:()=>100};
@@ -67,6 +68,7 @@ test('真实组件召唤入口校验状态、刷新库存/人数，后台与退�
   fail=false;const stale=event();host.summonSoldier(stale);assert.equal(host.data.soldierStock,4);assert.equal(host.data.soldiersInBattle,1);
   host.summonSoldier(stale);assert.equal(host.data.soldierStock,4);assert.equal(host.data.soldiersInBattle,1);
   host.summonSoldier(event());host.summonSoldier(event());host.summonSoldier(event());assert.equal(host.data.soldiersInBattle,3);assert.equal(host.data.soldierStock,2);
-  host.endRun();host.summonSoldier(event());assert.equal(daily.soldierInventory().count,2);assert.equal(host.data.soldiersInBattle,0);
-  const fresh=await mount();assert.equal(fresh.data.soldiersInBattle,0);assert.equal(fresh.data.soldierStock,2);fresh.endRun();
+  host.data.completed=true;host.claimVictoryReward();assert.equal(victoryClaims,1);assert.equal(daily.soldierInventory().count,3);assert.equal(host.data.soldierStock,3,'当前战斗领取援军后立即刷新库存');host.data.completed=false;
+  host.endRun();host.summonSoldier(event());assert.equal(daily.soldierInventory().count,3);assert.equal(host.data.soldiersInBattle,0);
+  const fresh=await mount();assert.equal(fresh.data.soldiersInBattle,0);assert.equal(fresh.data.soldierStock,3);fresh.endRun();
 });

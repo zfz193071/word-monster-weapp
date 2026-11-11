@@ -448,7 +448,14 @@ Component({
       const state = instances.get(this);
       if (!this.data.completed || !state?.visible || this.data.rewardSaved) return;
       const request = state.activeRequest ?? this.properties.previewRequest as StageRequest;
-      try { const result = victoryRewards.claim(request.plan.sessionId, request.plan.levelId ?? 1); this.setData({ rewardCards: result.cards, rewardSaved: true, rewardError: false, coinBalance: result.balance }); this.triggerEvent('coinbalancechange', { balance: result.balance }); }
+      try {
+        const result = victoryRewards.claim(request.plan.sessionId, request.plan.levelId ?? 1);
+        // A surprise soldier is persisted with the victory receipt.  Keep this
+        // mounted scene in sync too, because it can continue directly to the
+        // next stage without being recreated.
+        this.refreshSoldierStock();
+        this.setData({ rewardCards: result.cards, rewardSaved: true, rewardError: false, coinBalance: result.balance }); this.triggerEvent('coinbalancechange', { balance: result.balance });
+      }
       catch { this.setData({ rewardError: true, rewardSaved: false }); }
     },
     async continueStage() {
