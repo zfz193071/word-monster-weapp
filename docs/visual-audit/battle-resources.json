@@ -7,7 +7,7 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1832031,
+      "sourceBytes": 1836502,
       "fileCount": 203
     },
     {
@@ -37,8 +37,8 @@
     {
       "name": "character-assets",
       "root": "character-assets",
-      "sourceBytes": 1971047,
-      "fileCount": 18
+      "sourceBytes": 2263694,
+      "fileCount": 20
     },
     {
       "name": "fruit-assets",
@@ -421,9 +421,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 6743984,
-        "referencedFileBytes": 4938129
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 7036631,
+        "referencedFileBytes": 5044856
       },
       "levelId": 1,
       "category": "fruits",
@@ -676,9 +676,17 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-parts.png",
+          "path": "/character-assets/zombie-apple-arms-rig-v1.png",
           "package": "character-assets",
-          "bytes": 185920,
+          "bytes": 82312,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+          "package": "character-assets",
+          "bytes": 210335,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -990,8 +998,8 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 4334550,
-      "estimatedImageRgbaBytes": 31914144,
+      "imageBytes": 4441277,
+      "estimatedImageRgbaBytes": 33486672,
       "audioBytes": 603579
     },
     {
@@ -1005,9 +1013,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 7170098,
-        "referencedFileBytes": 4561495
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 7462745,
+        "referencedFileBytes": 4668222
       },
       "levelId": 2,
       "category": "color-shape",
@@ -1317,9 +1325,17 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-parts.png",
+          "path": "/character-assets/zombie-apple-arms-rig-v1.png",
           "package": "character-assets",
-          "bytes": 185920,
+          "bytes": 82312,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
+        },
+        {
+          "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+          "package": "character-assets",
+          "bytes": 210335,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
@@ -1775,8 +1791,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3886595,
-      "estimatedImageRgbaBytes": 21166240,
+      "imageBytes": 3993322,
+      "estimatedImageRgbaBytes": 22738768,
       "audioBytes": 674900
     },
     {
@@ -1790,8 +1806,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 7451754,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 7744401,
         "referencedFileBytes": 4412292
       },
       "levelId": 3,
@@ -2574,8 +2590,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 7451754,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 7744401,
         "referencedFileBytes": 4367714
       },
       "levelId": 4,
@@ -3407,8 +3423,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 6452945,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 6745592,
         "referencedFileBytes": 3310869
       },
       "levelId": 5,
@@ -4069,8 +4085,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 6452945,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 6745592,
         "referencedFileBytes": 3361016
       },
       "levelId": 6,
@@ -4807,8 +4823,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 6452945,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 6745592,
         "referencedFileBytes": 3452150
       },
       "levelId": 7,
@@ -5640,8 +5656,8 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1832031,
-        "subpackageSourceBytes": 6452945,
+        "mainSourceBytes": 1836502,
+        "subpackageSourceBytes": 6745592,
         "referencedFileBytes": 3308877
       },
       "levelId": 8,

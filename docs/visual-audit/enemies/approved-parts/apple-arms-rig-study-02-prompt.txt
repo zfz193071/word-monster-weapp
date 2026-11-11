@@ -1,0 +1,6 @@
+Use case: stylized-concept.
+Reference: approved apple zombie atlas apple-parts-01.png. Produce exactly two
+small mirrored detached arms, each from a ragged brown sleeve cuff to a green
+three-fingered hand, scaled to attach to the armless torso. Use a transparent
+3:1 atlas with one arm in each outer third. No torso, head, legs, props, text,
+shadow, background, watermark or cropped arm edges.

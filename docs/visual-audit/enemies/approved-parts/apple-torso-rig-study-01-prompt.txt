@@ -1,0 +1,6 @@
+Use case: precise-object-edit.
+Edit target: approved apple zombie atlas apple-parts-01.png. Remove only the two
+outstretched arms and hands from the large left torso sprite; reconstruct its
+brown ragged shirt, seams and side silhouette. Preserve the helmet, face, belt,
+shorts, lighting, 3:1 atlas layout, transparent alpha, and both leg sprites.
+No arms, hands, props, text, background, crop or watermark.

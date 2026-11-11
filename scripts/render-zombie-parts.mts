@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { APPLE_ZOMBIE_PARTS, BOSS_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts } from '../miniprogram/fortress/zombie-art';
+import { APPLE_ZOMBIE_ARMS, APPLE_ZOMBIE_PARTS, BOSS_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts } from '../miniprogram/fortress/zombie-art';
 import { monsterGait } from '../miniprogram/fortress/monster-gait';
 const require = createRequire(import.meta.url);
 const { createCanvas, loadImage } = require(process.env.WM_CANVAS_MODULE ?? '@napi-rs/canvas');
@@ -9,7 +9,8 @@ await mkdir(output, {recursive:true});
 for (const kind of ['apple','iron','grand'] as const) {
 const art = kind === 'apple' ? APPLE_ZOMBIE_PARTS : BOSS_ZOMBIE_PARTS[kind];
 const image = await loadImage(`miniprogram${art.path}`);
-const draw = (c:any, gait:any) => kind === 'apple' ? drawAppleZombieParts(c,image,gait) : drawBossZombieParts(c,image,gait,kind);
+const arms = kind === 'apple' ? await loadImage(`miniprogram${APPLE_ZOMBIE_ARMS.path}`) : undefined;
+const draw = (c:any, gait:any) => kind === 'apple' ? drawAppleZombieParts(c,image,arms!,gait) : drawBossZombieParts(c,image,gait,kind);
 for (const dark of [false,true]) {
   const canvas = createCanvas(1800,650), c = canvas.getContext('2d');
   c.fillStyle = dark ? '#25302e' : '#f6eddc'; c.fillRect(0,0,1800,650);

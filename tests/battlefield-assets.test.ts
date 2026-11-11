@@ -121,7 +121,7 @@ test('角色包超时后的迟到成功不能提前完成重试', async () => {
 
 test('精细角色仅在新包中保留一份运行资源', () => {
   const root = new URL('../miniprogram/', import.meta.url);
-  for (const name of ['hero-back-weapon-1-textured.png', 'zombie-apple-textured.png', 'zombie-apple-parts.png']) {
+  for (const name of ['hero-back-weapon-1-textured.png', 'zombie-apple-textured.png', 'zombie-apple-torso-rig-v1.png', 'zombie-apple-arms-rig-v1.png']) {
     assert.ok(existsSync(new URL(`character-assets/${name}`, root)));
     assert.equal(existsSync(new URL(`assets/images/fortress/${name}`, root)), false);
   }

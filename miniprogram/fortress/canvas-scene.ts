@@ -38,6 +38,7 @@ export interface MonsterArt {
   readonly outfitBodies?: Readonly<Record<string, SpriteAsset>>;
   readonly bossBodies?: Readonly<Partial<Record<'iron' | 'grand', SpriteAsset>>>;
   readonly texturedBodies?: Readonly<Record<string, SpriteAsset>>;
+  readonly texturedArms?: Readonly<Record<string, SpriteAsset>>;
   readonly outfitColors?: Readonly<Record<string, string>>;
   readonly fruitHats?: Readonly<Record<string, SpriteAsset>>;
   readonly walkParts?: { readonly body: SpriteAsset; readonly left: SpriteAsset; readonly right: SpriteAsset };
@@ -54,7 +55,7 @@ export interface SceneArt extends MonsterArt {
 }
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
-  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.bossBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
+  const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.texturedArms ?? {}), ...Object.values(art.bossBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
   if (guardianRigForPath(art.hero.path)) assets.push(GUARDIAN_BODY);
   const courtyard = art.fruitHat && courtyardAsset(levelId);
   // Preload both orientations so resize can switch immediately while paused or active.
@@ -537,9 +538,12 @@ export class CanvasScene {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
           if (!image) throw new Error('已预载图片丢失');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
-          const drawBody = monsterArt.texturedBodies[monster.wordId].path === APPLE_ZOMBIE_PARTS.path
-            ? drawAppleZombieParts : drawTexturedZombie;
-          drawBody(c, image, zombieGait(monster, motionSeed));
+          const arms = monsterArt.texturedArms?.[monster.wordId];
+          const armImage = arms && this.images.get(arms.path);
+          if (monsterArt.texturedBodies[monster.wordId].path === APPLE_ZOMBIE_PARTS.path) {
+            if (!armImage) throw new Error('已预载图片丢失');
+            drawAppleZombieParts(c, image, armImage, zombieGait(monster, motionSeed));
+          } else drawTexturedZombie(c, image, zombieGait(monster, motionSeed));
           c.restore();
         } else if (monsterArt.walkParts) {
           const gait = zombieGait(monster, motionSeed);
