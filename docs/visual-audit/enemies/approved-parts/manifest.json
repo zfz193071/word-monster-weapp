@@ -10,7 +10,7 @@
           "sha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231"
         }
       ],
-      "scope": "Candidate independent walking arms only; not approved or integrated into runtime",
+      "scope": "Rejected independent-arm study: actual-size review found duplicate arms against the complete torso; not approved or integrated into runtime",
       "source": "docs/visual-audit/enemies/approved-parts/apple-arms-study-01.png",
       "sourceSize": [2172, 724],
       "sourceSha256": "0b74919bb7c0008b69737fc308d60c356e096b15cfe127ab33f0d0f13144c54d"
