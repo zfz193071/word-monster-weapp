@@ -1,0 +1,5 @@
+Use case: precise-object-edit
+Asset type: 2D game animation sprite sheet for an approved apple-helmet zombie
+Input image: the supplied approved apple zombie parts sheet is the sole style and character reference.
+Primary request: create a transparent-PNG sprite sheet containing exactly two separate, full zombie arms for walking animation: left arm and right arm. Match the supplied apple zombie's pale green stitched skin, rounded fingers, brown ragged sleeve cuffs, warm polished 3D cartoon materials, thickness, lighting, and outline quality. Each arm must be isolated with generous transparent padding and be fully visible from shoulder/sleeve root to hand. Arrange them horizontally on a transparent canvas, each arm roughly vertical with a slight forward reach; no torso, head, legs, apple helmet, text, UI, ground, shadow, or background.
+Constraints: genuinely transparent alpha outside the two arms; keep the character identity and approved materials; no weapons, no blood, no watermark.
