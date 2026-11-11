@@ -832,3 +832,32 @@ test('关节主角等待身体与持枪部件全部解码，失败可重试，�
   const {sceneImageAssets}=await import('../miniprogram/fortress/canvas-scene');
   for(const level of [4,7]) assert.ok(!sceneImageAssets(openingArt('apple',['apple'],level)).some(asset=>asset.path===GUARDIAN_BODY.path));
 });
+
+test('元素弹道与命中特效保持窄而分层，且绘制不改变战斗快照', async () => {
+  const art = artFixture(); const h = harness(false, art);
+  try {
+    const loading = h.scene.load(); h.images.forEach(image => image.onload());
+    assert.equal(await loading, true); h.scene.setPaused(true);
+    const state = h.scene.snapshot!;
+    h.commands.length = 0;
+    (h.scene as unknown as {draw(state: typeof state): void}).draw({...state, projectiles: [], elementImpacts: []});
+    const quietLines = h.commands.filter(command => command.method === 'lineTo').length;
+    h.commands.length = 0;
+    const charged = {...state,
+      projectiles: [{...state.projectiles[0]!, id: 'charged', position: {x: 170, y: 220}, previousPosition: {x: 170, y: 230}, width: 5, height: 12, damage: 1,
+        direction: {x: 0, y: -1}, elements: {flame: 1, frost: 1, lightning: 1}}],
+      elementImpacts: [
+        {kind: 'flame' as const, position: {x: 150, y: 210}, radius: 45, untilTick: state.tick + 30},
+        {kind: 'frost' as const, position: {x: 180, y: 210}, untilTick: state.tick + 30},
+        {kind: 'lightning' as const, position: {x: 210, y: 210}, target: {x: 240, y: 180}, untilTick: state.tick + 30},
+      ]};
+    const before = JSON.stringify(charged);
+    (h.scene as unknown as {draw(state: typeof charged): void}).draw(charged);
+    assert.equal(JSON.stringify(charged), before, '表现层不得改写弹体、命中或伤害状态');
+    const lines = h.commands.filter(command => command.method === 'lineTo').length;
+    const strokes = h.commands.filter(command => command.method === 'stroke').length;
+    assert.ok(lines >= quietLines + 27, '冰晶分支和双层雷链均保留清晰线条');
+    assert.ok(strokes >= 11, '三色窄尾迹、冰晶和两层雷链分别绘制');
+    assert.ok(h.commands.some(command => command.method === 'ellipse'), '弹道与火焰命中保留有限的圆形层次');
+  } finally { h.scene.dispose(); }
+});

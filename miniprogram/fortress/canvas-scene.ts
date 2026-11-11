@@ -699,7 +699,15 @@ export class CanvasScene {
         c.rotate(Math.atan2(bullet.direction?.x ?? 0, -(bullet.direction?.y ?? -1)));
         if (bullet.elements) {
           const colors = [bullet.elements.flame ? ELEMENT_COLORS.flame : '', bullet.elements.frost ? ELEMENT_COLORS.frost : '', bullet.elements.lightning ? ELEMENT_COLORS.lightning : ''].filter(Boolean);
-          colors.forEach((color, index) => { c.fillStyle = color; c.globalAlpha = .8; c.beginPath(); c.ellipse((index - (colors.length - 1) / 2) * 5, 7, 4, 15, 0, 0, Math.PI * 2); c.fill(); }); c.globalAlpha = 1;
+          // The trail remains narrow and points away from the muzzle.  It gives
+          // charged rounds a shared, readable silhouette without adding a
+          // particle entity or obscuring a packed group of enemies.
+          colors.forEach((color, index) => {
+            const offset = (index - (colors.length - 1) / 2) * 4;
+            c.strokeStyle = color; c.lineWidth = 2.5; c.lineCap = 'round'; c.globalAlpha = .34;
+            c.beginPath(); c.moveTo(offset, 7); c.lineTo(offset, 25); c.stroke();
+            c.fillStyle = color; c.globalAlpha = .78; c.beginPath(); c.ellipse(offset, 5, 3.5, 10, 0, 0, Math.PI * 2); c.fill();
+          }); c.globalAlpha = 1;
         }
         this.sprite(art.bullet, -bullet.width / 2, -bullet.height / 2, bullet.width, bullet.height); c.restore();
       }
@@ -722,11 +730,26 @@ export class CanvasScene {
         c.fillStyle = ELEMENT_COLORS.core;
         for (let i = 0; i < 7; i++) { const angle = i * Math.PI * 2 / 7; c.beginPath(); c.arc(Math.cos(angle) * ring, Math.sin(angle) * ring, 2 * (1 - progress), 0, Math.PI * 2); c.fill(); }
       } else if (impact.kind === 'frost') {
-        c.strokeStyle = ELEMENT_COLORS.frost; c.lineWidth = 2;
-        for (let i = 0; i < 6; i++) { const angle = i * Math.PI / 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(angle) * 28, Math.sin(angle) * 28); c.stroke(); }
+        // A small icy crystal reads as a freeze, rather than a generic radial
+        // hit.  The translucent centre deliberately leaves the target visible.
+        c.globalAlpha = (1 - progress) * .16; c.fillStyle = ELEMENT_COLORS.frost;
+        c.beginPath();
+        for (let i = 0; i < 6; i++) { const angle = -Math.PI / 2 + i * Math.PI / 3; const x = Math.cos(angle) * 22; const y = Math.sin(angle) * 22; if (i) c.lineTo(x, y); else c.moveTo(x, y); }
+        c.closePath(); c.fill();
+        c.globalAlpha = (1 - progress) * .88; c.strokeStyle = '#dffcff'; c.lineWidth = 2;
+        for (let i = 0; i < 6; i++) {
+          const angle = i * Math.PI / 3; const tipX = Math.cos(angle) * 28; const tipY = Math.sin(angle) * 28;
+          c.beginPath(); c.moveTo(0, 0); c.lineTo(tipX, tipY);
+          c.moveTo(tipX * .56, tipY * .56); c.lineTo(Math.cos(angle + .58) * 16, Math.sin(angle + .58) * 16);
+          c.moveTo(tipX * .56, tipY * .56); c.lineTo(Math.cos(angle - .58) * 16, Math.sin(angle - .58) * 16); c.stroke();
+        }
       } else if (impact.target) {
         const dx = impact.target.x - impact.position.x; const dy = impact.target.y - originY;
-        c.strokeStyle = impact.iceChain ? ELEMENT_COLORS.frost : ELEMENT_COLORS.lightning; c.lineWidth = 3; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
+        const color = impact.iceChain ? ELEMENT_COLORS.frost : ELEMENT_COLORS.lightning;
+        // Two passes retain the lightning's crisp core at phone size while the
+        // soft outer line keeps chained hits distinct from ordinary bullets.
+        c.strokeStyle = color; c.lineWidth = 5; c.globalAlpha = (1 - progress) * .32; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
+        c.strokeStyle = '#fff7e4'; c.lineWidth = 1.5; c.globalAlpha = (1 - progress) * .9; c.beginPath(); c.moveTo(0, 0); c.lineTo(dx * .3 + 7, dy * .3); c.lineTo(dx * .6 - 7, dy * .6); c.lineTo(dx, dy); c.stroke();
       }
       c.restore();
     }
