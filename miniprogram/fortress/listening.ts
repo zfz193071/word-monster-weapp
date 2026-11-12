@@ -59,7 +59,13 @@ export function createListening(options: ListeningOptions) {
   let images = optionIds.map(() => 'loading');
   const prefix = JSON.stringify([context.sessionId, context.waveId, context.generation]);
   const token = () => `${prefix}:${revision}`;
-  const imageToken = () => `${prefix}:image:${imageRevision}`;
+  const imagePrefix = `${prefix}:image:`;
+  const imageToken = () => `${imagePrefix}${imageRevision}`;
+  // Playback controls must not be dropped when the rendered view lags behind a
+  // revision bump (common on crowded battlefields). The mount epoch isolates
+  // remounts and the prefix isolates waves/generations, so the exact revision
+  // is only meaningful for answering, where a stale tap could change an answer.
+  const sameRun = (eventToken: string) => eventToken.startsWith(`${prefix}:`) && !eventToken.startsWith(imagePrefix);
   const available = () => !disposed && !paused && phase === 'ready' && images.every(status => status === 'loaded');
   function view(): ListeningView {
     return { ...(options.singleAttempt && attempts.length ? {correct:attempts[0].correct, answerText:`正确答案：${word.text} · ${word.meaningZh}`} : {}), playbackRate, token: token(), imageToken: imageToken(), phase, paused, canChoose: available(), imageFailed: images.includes('failed'),
@@ -111,8 +117,8 @@ export function createListening(options: ListeningOptions) {
       if (disposed || paused || !options.singleAttempt || phase !== 'answered' || eventToken !== token()) return;
       phase = 'started'; revision++; publish(); options.onStartCombat({context, attempts});
     },
-    replay(eventToken: string) { if (!disposed && !paused && eventToken === token() && (phase === 'ready' || phase === 'playing')) { replays++; play(); } },
-    retryAudio(eventToken: string) { if (!disposed && !paused && eventToken === token() && phase === 'audioError') play(); },
+    replay(eventToken: string) { if (!disposed && !paused && sameRun(eventToken) && (phase === 'ready' || phase === 'playing')) { replays++; play(); } },
+    retryAudio(eventToken: string) { if (!disposed && !paused && sameRun(eventToken) && phase === 'audioError') play(); },
     imageResult(eventToken: string, id: string, success: boolean) {
       if (disposed || eventToken !== imageToken() || phase === 'started') return;
       const index = optionIds.indexOf(id);

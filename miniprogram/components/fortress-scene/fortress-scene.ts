@@ -45,6 +45,10 @@ import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../f
 interface SkillQuizRequest { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit'; singleAttempt: true; offerId: string }
 interface InstanceState { entryFramePending?: boolean; quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
 const instances = new WeakMap<object, InstanceState>();
+// Escaped setData bytes grow quadratically with the frozen backdrop's pixel
+// size. A capped width keeps the last frame cheap to encode and decode even
+// when a crowded arena has to be frozen for a listening or skill dialog.
+const FROZEN_FRAME_WIDTH = 480;
 let previewSequence = 0;
 function previewCombat(wordId: string): CombatState {
   const id = `preview-${++previewSequence}`;
@@ -60,7 +64,7 @@ Component({
     combatSpeed: { type: Number, value: 1, observer(value: number) { instances.get(this)?.scene?.setSpeed?.(value); } },
     volumeOpen: { type: Boolean, value: false, observer(open: boolean) {
       const state = instances.get(this);
-      this.setData({ volumeFrame: open ? state?.scene?.captureFrame() ?? '' : '' });
+      this.setData({ volumeFrame: open ? state?.scene?.captureFrame(FROZEN_FRAME_WIDTH) ?? '' : '' });
       this.applyPause();
       if (!open) this.presentUpgrade();
     } },
@@ -119,7 +123,7 @@ Component({
       if (!this.properties.opening || !state?.alive || !state.visible || !state.scene || this.properties.paused || !this.data.ready || this.data.error || this.data.upgradeOffer || this.data.waveRequest || this.data.completed || this.data.failed || this.data.reviveOpen || state.scene.snapshot?.status !== 'fighting') return;
       this.refreshFlags(); this.refreshReviveTargets();
       if (this.data.flagStockError || !this.data.flagStock || !this.data.reviveTargets.length) return;
-      this.setData({reviveOpen:true, reviveError:'', frozenFrame:state.scene.captureFrame()}); this.applyPause();
+      this.setData({reviveOpen:true, reviveError:'', frozenFrame:state.scene.captureFrame(FROZEN_FRAME_WIDTH)}); this.applyPause();
     },
     closeRevive() {
       if (this.data.reviveBusy) return;
@@ -328,7 +332,7 @@ Component({
       state.preparedStage = undefined; state.stageCarry = undefined; state.preparingStage = false;
       state.audio?.setActive(false); state.upgradeLevels = []; state.bossRewards = []; state.awaitingWaveEnd = false;
       state.upgrades?.dispose(); state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection);
-      this.setData({ reviveOpen:false, reviveTargets:[], failed: true, canContinue: false, continueBusy: false, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, frozenFrame: state.scene.captureFrame() });
+      this.setData({ reviveOpen:false, reviveTargets:[], failed: true, canContinue: false, continueBusy: false, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, frozenFrame: state.scene.captureFrame(FROZEN_FRAME_WIDTH) });
       state.defeatAudio = createDefeatAudio(); state.defeatAudio.setVolume?.(this.properties.musicVolume / 100); this.applyPause();
     },
     restartBattle() {
@@ -384,7 +388,7 @@ Component({
       const waveIndex = Math.floor(createSeededRandom(seed >>> 0)() * request.plan.waves.length);
       state.quizSequence = (state.quizSequence ?? 0) + 1;
       const skillQuiz: SkillQuizRequest = {plan:request.plan, waveIndex, generation:state.quizSequence, variant:'fruit', singleAttempt:true, offerId:offer.id};
-      this.setData({frozenFrame:state.scene!.captureFrame(), upgradeOffer:withComboHints(offer, state.levels ?? ZERO_SKILLS, state.collection), skillQuiz, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0}); this.applyPause();
+      this.setData({frozenFrame:state.scene!.captureFrame(FROZEN_FRAME_WIDTH), upgradeOffer:withComboHints(offer, state.levels ?? ZERO_SKILLS, state.collection), skillQuiz, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0}); this.applyPause();
     },
     finishSkillQuiz(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
       const state = instances.get(this); const quiz = this.data.skillQuiz;
@@ -431,7 +435,7 @@ Component({
       if (!state?.scene || !snapshot || snapshot.status !== 'cleared' || state.audio?.busy || this.data.upgradeOffer || state.upgradeLevels?.length || state.bossRewards?.length || this.data.completed) return;
       if (this.data.level < MAX_HERO_LEVEL || snapshot.incomingMonsters?.length) return;
       const request = state.activeRequest ?? this.properties.previewRequest as StageRequest;
-      this.setData({ frozenFrame: state.scene.captureFrame(), waveNumber:OPENING_WAVE_COUNT, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, completed: true, canContinue: (request.plan.levelId ?? 1) < 8, upgradeSummary: this.data.upgradeSummary });
+      this.setData({ frozenFrame: state.scene.captureFrame(FROZEN_FRAME_WIDTH), waveNumber:OPENING_WAVE_COUNT, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, completed: true, canContinue: (request.plan.levelId ?? 1) < 8, upgradeSummary: this.data.upgradeSummary });
       if (request.plan.levelId === 8) { state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection); state.upgrades?.dispose(); this.setData({skillInventory:[]}); }
       this.applyPause(); this.claimVictoryReward();
       state.victoryAudio?.dispose(); state.victoryAudio = createVictoryAudio(); state.victoryAudio.setVolume?.(this.properties.musicVolume / 100); state.victoryAudio.setActive(state.visible && !this.properties.paused);

@@ -130,8 +130,22 @@ export class CanvasScene {
     this.resize(options.width, options.height, options.dpr, options.clientLeft);
   }
   get snapshot(): CombatState | null { return this.runner.snapshot; }
-  captureFrame(): string {
-    try { return this.canvas.toDataURL('image/png', 1); } catch { return ''; }
+  // A full-resolution PNG can exceed the view layer's setData budget while a
+  // crowded arena is on screen; modal backdrops only need enough detail to hide
+  // the native canvas hand-off, so callers may cap the encoded width.
+  captureFrame(maxWidth = 0): string {
+    try {
+      if (maxWidth <= 0 || this.canvas.width <= maxWidth) return this.canvas.toDataURL('image/png', 1);
+      try {
+        if (typeof wx === 'undefined' || typeof wx.createOffscreenCanvas !== 'function') throw new Error('offscreen unavailable');
+        const width = Math.max(1, Math.round(maxWidth));
+        const height = Math.max(1, Math.round(this.canvas.height * maxWidth / this.canvas.width));
+        const offscreen = wx.createOffscreenCanvas({ type: '2d', width, height });
+        const context = offscreen.getContext('2d') as Context;
+        context.drawImage(this.canvas as unknown as never, 0, 0, width, height);
+        return (offscreen as unknown as { toDataURL: (type: string, quality: number) => string }).toDataURL('image/png', 1);
+      } catch { return this.canvas.toDataURL('image/png', 1); }
+    } catch { return ''; }
   }
   private cancelPresentation?: () => void;
   // Submit a full frame and yield another Canvas frame. This alone is not a

@@ -62,6 +62,25 @@ test('音频失败和超时只能重试，不计答错；旧播放回调不能�
   c.retryAudio(c.view.token); h.voices[2].end(); c.choose(c.view.token,h.target);
   assert.equal(h.results.length,1); assert.equal(c.attempts[0].replayCount,0);
 });
+test('视图令牌滞后时重播仍生效，跨波次/代次的令牌不能打断本题', () => {
+  const h = setup('stale-replay'); const c = h.controller;
+  c.start(); h.load(); h.voices[0].end();
+  const lagging = c.view.token;
+  c.cyclePlaybackRate();
+  assert.equal(h.voices.length, 2);
+  // The rendered button can still carry the pre-bump token when the view layer
+  // is behind; the tap must restart audio instead of silently doing nothing.
+  c.replay(lagging);
+  assert.equal(h.voices.length, 3);
+  const other = setup('stale-replay', 1); other.controller.start();
+  c.replay(other.controller.view.token);
+  assert.equal(h.voices.length, 3);
+  const otherWave = setup('stale-replay'); otherWave.controller.start();
+  c.replay(otherWave.controller.view.imageToken);
+  assert.equal(h.voices.length, 3);
+  c.dispose(); other.controller.dispose(); otherWave.controller.dispose();
+});
+
 test('图片失败阻止选择，重试换资源代次，旧图片事件不能解除阻塞', () => {
   const h = setup(); const c = h.controller; c.start(); h.voices[0].end();
   const old = c.view.imageToken;

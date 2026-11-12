@@ -849,3 +849,39 @@ test('元素弹道与命中特效保持窄而分层，且绘制不改变战斗�
     assert.ok(h.commands.some(command => command.method === 'ellipse'), '弹道与火焰命中保留有限的圆形层次');
   } finally { h.scene.dispose(); }
 });
+
+test('冻结帧可按上限宽度缩放编码，离屏不可用或无上限时保留原图', () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, 'wx');
+  const full = 'data:image/png;base64,FULL';
+  const small = 'data:image/png;base64,SMALL';
+  let captured: { width: number; height: number } | undefined;
+  const offscreen = {
+    width: 0, height: 0,
+    getContext: () => ({ drawImage() {} }),
+    toDataURL: () => small,
+  };
+  Object.defineProperty(globalThis, 'wx', { configurable: true, value: {
+    createOffscreenCanvas({ width, height }: { width: number; height: number }) {
+      captured = { width, height }; offscreen.width = width; offscreen.height = height; return offscreen;
+    },
+  } });
+  const canvas = { width: 1170, height: 2259,
+    getContext: () => new Proxy({}, { get: () => () => {}, set: () => true }),
+    requestAnimationFrame: () => 1, cancelAnimationFrame: () => {},
+    toDataURL: () => full };
+  const scene = new CanvasScene(canvas as unknown as WechatMiniprogram.Canvas, {
+    initial: initial(), width: 360, height: 560, dpr: 2, clientLeft: 0, preview: true,
+    onHud: () => {}, onEvents: () => {}, onError: () => {},
+  });
+  try {
+    assert.equal(scene.captureFrame(), full, '未指定上限时保持原始分辨率');
+    assert.equal(scene.captureFrame(480), small);
+    assert.deepEqual(captured, { width: 480, height: Math.round(1120 * 480 / 720) }); // constructor restores the backing store
+    assert.equal(canvas.width, 720); assert.equal(canvas.height, 1120);
+    Object.defineProperty(globalThis, 'wx', { configurable: true, value: {} });
+    assert.equal(scene.captureFrame(480), full, '离屏画布不可用时回退到原图');
+  } finally {
+    scene.dispose();
+    if (original) Object.defineProperty(globalThis, 'wx', original); else Reflect.deleteProperty(globalThis, 'wx');
+  }
+});
