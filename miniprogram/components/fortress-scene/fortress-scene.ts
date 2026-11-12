@@ -247,10 +247,14 @@ Component({
               instance.petDrops?.handle(events);
               if (instance.experience && instance.upgrades) {
                 const xp = instance.experience.record(events);
-                const thresholds = [0, ...OPENING_EXPERIENCE.levelThresholds];
-                const required = xp.level < MAX_HERO_LEVEL ? thresholds[xp.level] - thresholds[xp.level - 1] : 0;
-                const current = xp.total - thresholds[xp.level - 1];
-                this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
+                // Damage events arrive almost every frame in crowded fights.
+                // Only touch the view layer when experience or level actually changed.
+                if (xp.total !== this.data.experience || xp.level !== this.data.level) {
+                  const thresholds = [0, ...OPENING_EXPERIENCE.levelThresholds];
+                  const required = xp.level < MAX_HERO_LEVEL ? thresholds[xp.level] - thresholds[xp.level - 1] : 0;
+                  const current = xp.total - thresholds[xp.level - 1];
+                  this.setData({ experience: xp.total, level: xp.level, xpCurrent: current, xpRequired: required, xpPercent: required ? current / required * 100 : 100 });
+                }
                 if (scene.snapshot?.status !== 'baseDestroyed') {
                   for (const event of events) {
                     if (event.type !== 'monsterDefeated' || event.context.sessionId !== instance.sessionId || instance.bossSeen?.has(event.monsterId)) continue;

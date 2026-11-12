@@ -2,6 +2,7 @@ import { updateSummons } from './summoning';
 import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
 import { enemyLayer, MAX_SUPPORT_SOLDIERS, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
+import type { AttackCapability } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
@@ -314,15 +315,26 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     ...(positions ? {position: positions[index]} : {})})) : batch;
   const arrivals = arrivalCount ? [...previous.monsters, ...admitted] : previous.monsters;
   const monsters = arrivals.map(monster => advanceMonster(monster, previous.monsterSpeed ?? RULES.monster.speed, tick * COMBAT_STEP_MS));
-  const activeTargets = monsters.filter(monster => targetable(monster) && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop);
+  // Targetability is invariant for the whole step until damage is applied.
+  // Cache it per attack capability so projectile × monster loops do not repeat
+  // validation, layer lookup and array scans for every pair.
+  const targetCache = new Map<AttackCapability, boolean[]>();
+  const canTarget = (index: number, capability: AttackCapability = 'both'): boolean => {
+    let flags = targetCache.get(capability);
+    if (!flags) { flags = monsters.map(monster => targetable(monster, capability)); targetCache.set(capability, flags); }
+    return flags[index];
+  };
+  const activeTargets = monsters.map((_, index) => index)
+    .filter(index => canTarget(index) && monsters[index].position.y >= 0 && monsters[index].position.y <= RULES.arena.baseTop);
   const moved = previous.projectiles.filter(projectile => (projectile.expiresAtTick ?? Infinity) > tick).map(projectile => {
     // Ordinary bullets need no target search. Homing uses one linear scan,
     // preserving the first target on ties without sorting/allocating per bullet.
     let target: MonsterState | undefined;
     if (projectile.homing) {
       let nearest = Infinity;
-      for (const monster of activeTargets) {
-        if (!targetable(monster, projectile.capability) || projectile.hitMonsterIds?.includes(monster.id)) continue;
+      for (const index of activeTargets) {
+        const monster = monsters[index];
+        if (!canTarget(index, projectile.capability) || projectile.hitMonsterIds?.includes(monster.id)) continue;
         if (monster.id === projectile.targetMonsterId) { target = monster; break; }
         const distance = (monster.position.x - projectile.position.x) ** 2 + (monster.position.y - projectile.position.y) ** 2;
         if (distance < nearest) { nearest = distance; target = monster; }
@@ -336,7 +348,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const contacts: { time: number; projectileIndex: number; monsterIndex: number }[] = [];
   moved.forEach((projectile, projectileIndex) => {
     monsters.forEach((monster, monsterIndex) => {
-      if (!targetable(monster, projectile.capability) || defeated.has(monster.id) || projectile.hitMonsterIds?.includes(monster.id)) return;
+      if (!canTarget(monsterIndex, projectile.capability) || defeated.has(monster.id) || projectile.hitMonsterIds?.includes(monster.id)) return;
       const direction = projectile.direction ?? { x: 0, y: -1 };
       const width = Math.abs(direction.y) * projectile.width + Math.abs(direction.x) * projectile.height;
       const height = Math.abs(direction.x) * projectile.width + Math.abs(direction.y) * projectile.height;

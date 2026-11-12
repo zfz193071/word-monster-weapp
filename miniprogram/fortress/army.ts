@@ -14,8 +14,11 @@ export const SUMMON_INTERVAL_MS = 20000;
 
 export function enemyType(value?: EnemyType): EnemyType {
   if (value === undefined) return 'normal';
-  if (!ENEMY_TYPES.includes(value)) throw new Error('未知僵尸类型');
-  return value;
+  // Hot path: targetability checks run per projectile × monster every step.
+  switch (value) {
+    case 'normal': case 'runner': case 'armored': case 'flying': case 'exploder': case 'giant': return value;
+    default: throw new Error('未知僵尸类型');
+  }
 }
 export function soldierType(value?: SoldierType): SoldierType {
   if (value === undefined) return 'rifle';
@@ -34,13 +37,16 @@ export function soldierCapability(soldier: Pick<SupportSoldierState, 'soldierTyp
   return ['shield', 'flamethrower', 'tank'].includes(soldierType(soldier.soldierType)) ? 'ground' : 'both';
 }
 export function canAttackLayer(capability: AttackCapability, layer: CombatLayer): boolean {
-  if (!['both', 'ground', 'air'].includes(capability) || !['ground', 'air'].includes(layer)) throw new Error('未知目标能力或空地层');
+  if (capability !== 'both' && capability !== 'ground' && capability !== 'air') throw new Error('未知目标能力或空地层');
+  if (layer !== 'ground' && layer !== 'air') throw new Error('未知目标能力或空地层');
   return capability === 'both' || capability === layer;
 }
 // Entry actors become targetable once visible. Scheduled and dead actors never do.
 export function targetable(monster: MonsterState, capability: AttackCapability = 'both'): boolean {
-  return monster.hp > 0 && !['waiting', 'defeated', 'retiring'].includes(monster.status)
-    && canAttackLayer(capability, enemyLayer(monster));
+  if (!(monster.hp > 0)) return false;
+  const status = monster.status;
+  if (status === 'waiting' || status === 'defeated' || status === 'retiring') return false;
+  return canAttackLayer(capability, enemyLayer(monster));
 }
 export function validateSoldierIdentity(soldier: SupportSoldierState): void {
   const type = soldierType(soldier.soldierType);

@@ -25,6 +25,7 @@ import type { Finger, Viewport } from './viewport';
 import type { CombatEvent, CombatState, MonsterVisual, Point, SkillLevels } from './types';
 import { createRetirement } from './retirement';
 import type { RetirementOptions } from './retirement';
+import { FORTRESS_RULES } from './rules';
 
 type Canvas = WechatMiniprogram.Canvas;
 import { heroStandingFrame, heroStandingMuzzle, heroVariantForPath } from './hero-art';
@@ -373,10 +374,14 @@ export class CanvasScene {
         }
         this.lastFrameTime = now; this.droppedMs += result.droppedMs;
         this.peakProjectiles = Math.max(this.peakProjectiles, result.state.projectiles.length);
-        this.context.save(); this.context.font = DAMAGE_NUMBER_FONT;
-        this.damageNumbers.add(result.events, this.effectTime, this.viewport.worldWidth,
-          text => this.context.measureText(text)?.width, this.uiReservations(result.state));
-        this.context.restore();
+        // Reservations mirror every live monster's bars/badges, so only build
+        // them on frames that actually add a floating hit number.
+        if (result.events.some(event => event.type === 'monsterDamaged')) {
+          this.context.save(); this.context.font = DAMAGE_NUMBER_FONT;
+          this.damageNumbers.add(result.events, this.effectTime, this.viewport.worldWidth,
+            text => this.context.measureText(text)?.width, this.uiReservations(result.state));
+          this.context.restore();
+        }
         this.draw(result.state); this.publishHud(result.state);
         if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {
           this.retirement = createRetirement(result.state, this.options.retirement);
@@ -537,6 +542,11 @@ export class CanvasScene {
     }
     for (const monster of state.monsters) {
       if (monster.status === 'waiting' || monster.hp <= 0) continue;
+      // Large spawn batches queue many enemies far above the arena. Skip the
+      // whole per-monster draw while their sprite is completely off-screen.
+      const cullScale = monster.bossKind === 'grand' ? 2 : monster.boss || monster.enemyType === 'giant' ? 1.5 : 1;
+      const cullRadius = 150 * cullScale;
+      if (monster.position.y + cullRadius < 0 || monster.position.y - cullRadius > FORTRESS_RULES.arena.height) continue;
       c.globalAlpha = 1;
       const attackPose = baseAttackPose(monster);
       const motionSeed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
