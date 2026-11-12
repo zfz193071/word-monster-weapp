@@ -1,5 +1,5 @@
 import { updateSummons } from './summoning';
-import { unitStats, soldierTargets } from './soldier-types';
+import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
 import { enemyLayer, MAX_SUPPORT_SOLDIERS, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
@@ -14,7 +14,7 @@ import { grandBossWindingUp, bossChargePhase, fortressMaxHp, monsterStats } from
 import { ALL_BATTLE_WORDS as BATTLE_WORDS } from './levels';
 import { validateSkillLevels } from './plans';
 import { FORTRESS_RULES as RULES, FORTRESS_SKILLS } from './rules';
-import type { CombatContext, CombatEvent, ElementImpact, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels, SupportSoldierState } from './types';
+import type { CombatContext, CombatEvent, ElementImpact, EnemyShotState, CombatState, MonsterSpawn, MonsterState, Point, ProjectileState, Rect, SessionPlan, SkillLevels, SupportSoldierState } from './types';
 import { assertNoFortressIssues, validateSessionPlan } from './validation';
 
 // Technical simulation cadence, not a configurable gameplay/balance value.
@@ -24,6 +24,11 @@ const EPSILON = 1e-8;
 const AUTO_MUZZLE_LATERAL = 16.8;
 const AUTO_MUZZLE_FORWARD = 34.4;
 export const SUPPORT_SOLDIER_MAX_HP = 30;
+// First ranged-enemy version: flying zombies fire at platform allies before
+// reaching the fortress. Values are frozen in the requirements doc.
+export const RANGED_ENEMY_RANGE = 220;
+export const RANGED_ENEMY_INTERVAL_MS = 1800;
+export const RANGED_ENEMY_SHOT_SPEED = 260;
 const QUALITY_PROJECTILE_LIMIT = (Math.ceil(4000 / 160) + 1) * 8; // Four-second lifetime, fastest cadence, largest volley.
 const MIN_INTERVAL = Math.min(...FORTRESS_SKILLS[1].values);
 const MAX_SHOTS = Math.max(...FORTRESS_SKILLS[0].values);
@@ -92,6 +97,9 @@ function freezeState(state: CombatState): CombatState {
     }))),
     defeatedMonsterIds: Object.freeze([...state.defeatedMonsterIds]),
     processedBaseAttackIds: Object.freeze([...state.processedBaseAttackIds]),
+    ...(state.enemyShots ? { enemyShots: Object.freeze(state.enemyShots.map(shot => Object.freeze({ ...shot,
+      from: Object.freeze({ ...shot.from }), to: Object.freeze({ ...shot.to }),
+      target: Object.freeze({ ...shot.target }) }))) } : {}),
   });
 }
 // Reflow positions, not sprite sizes or hitboxes. No time, damage, rewards or
@@ -114,6 +122,7 @@ export function resizeCombatArena(state: CombatState, width: number): CombatStat
     supportSoldiers: (state.supportSoldiers ?? []).map(soldier => ({...soldier, position: {...supportPosition(player, soldier.slot, state.supportSoldiers!.length, width), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}, ...(soldier.shotTarget ? {shotTarget: point(soldier.shotTarget)} : {})})),
     fallenSoldiers: (state.fallenSoldiers ?? []).map(soldier => ({...soldier, position: point(soldier.position)})),
     projectiles: state.projectiles.map(projectile => ({...projectile, position: point(projectile.position), previousPosition: point(projectile.previousPosition), ...(projectile.direction ? {direction: direction(projectile.direction)} : {})})),
+    ...(state.enemyShots ? {enemyShots: state.enemyShots.map(shot => ({...shot, from: point(shot.from), to: point(shot.to)}))} : {}),
     ...(state.aimDirection ? {aimDirection: target ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL) : direction(state.aimDirection)} : {}),
     ...(state.elementImpacts ? {elementImpacts: state.elementImpacts.map(impact => ({...impact, position: point(impact.position), ...(impact.target ? {target: point(impact.target)} : {})}))} : {}),
   });
@@ -206,9 +215,10 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
       ...(spawn.boss ? { boss: true, bossKind: spawn.bossKind ?? 'iron', ...(spawn.bossKind === 'grand' ? { shockwaveDamage: stats.shockwaveDamage ?? RULES.monster.attackDamage * 3 } : {}) } : {}), ...(spawn.dropCoins !== undefined ? { dropCoins: spawn.dropCoins } : {}), ...(spawn.soldierDropCount !== undefined ? { soldierDropCount: spawn.soldierDropCount } : {}), attackDamage: Math.ceil(stats.attackDamage * variant.attack),
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
       hitbox: { x: hitbox.x * size, y: hitbox.y * size, width: hitbox.width * size, height: hitbox.height * size }, hp: Math.ceil(stats.hp * variant.hp), maxHp: Math.ceil(stats.hp * variant.hp), status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
-      attackIntervalMs: interval, attackRemainingMs: interval, attackSequence: 0 }; }),
+      attackIntervalMs: interval, attackRemainingMs: interval, attackSequence: 0,
+      ...(spawn.enemyType === 'flying' ? {rangedRemainingMs: RANGED_ENEMY_INTERVAL_MS} : {}) }; }),
     projectiles: [], supportSoldiers: options.supportSoldiers ?? [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
-    defeatedMonsterIds: [], processedBaseAttackIds: [],
+    defeatedMonsterIds: [], processedBaseAttackIds: [], enemyShots: [],
   };
   const ready = options.skillCollection ? updateSummons(state,options.skillCollection) : state;
   return freezeState(options.automatic ? { ...ready, shotRemainingMs: 0 } : { ...ready, projectiles: volley(ready, weapon, false, !!ready.skills.firepower), nextProjectileSequence: weapon.count });
@@ -451,6 +461,81 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     }
   }
   let baseHp = previous.base.hp;
+  let enemyShots = [...(previous.enemyShots ?? [])];
+  // Flying zombies fire a visible bolt at the nearest platform ally before
+  // reaching the fortress. The fortress is only targeted when no living ally
+  // is available; melee arrivals still damage the fortress directly below.
+  const shootingPet = pet && pet.hp > 0 ? pet : undefined;
+  for (let index = 0; index < monsters.length; index++) {
+    const monster = monsters[index];
+    if (monster.enemyType !== 'flying' || !targetable(monster) || monster.position.y < 0
+      || monster.status === 'waiting' || monster.status === 'retiring') continue;
+    const frozen = !monster.boss && (monster.frozenUntilTick ?? -1) >= tick;
+    const remaining = Math.max(0, (monster.rangedRemainingMs ?? RANGED_ENEMY_INTERVAL_MS) - (frozen ? 0 : COMBAT_STEP_MS));
+    if (remaining > EPSILON) { monsters[index] = { ...monster, rangedRemainingMs: remaining }; continue; }
+    const from = monster.position;
+    let chosen: { kind: 'soldier' | 'pet' | 'base'; id?: string; point: Point } | undefined;
+    let nearest = Infinity;
+    for (const soldier of supportSoldiers) {
+      if (soldier.hp <= 0) continue;
+      const distance = Math.hypot(soldier.position.x - from.x, soldier.position.y - from.y);
+      if (distance <= RANGED_ENEMY_RANGE && distance < nearest) {
+        nearest = distance; chosen = { kind: 'soldier', id: soldier.id, point: soldier.position };
+      }
+    }
+    if (!chosen && shootingPet) {
+      const point = battlePetPosition(player, previous.arenaWidth);
+      if (Math.hypot(point.x - from.x, point.y - from.y) <= RANGED_ENEMY_RANGE) chosen = { kind: 'pet', point };
+    }
+    if (!chosen) {
+      const point = { x: from.x, y: RULES.arena.baseTop };
+      if (Math.hypot(point.x - from.x, point.y - from.y) <= RANGED_ENEMY_RANGE) chosen = { kind: 'base', point };
+    }
+    if (!chosen) { monsters[index] = { ...monster, rangedRemainingMs: 0 }; continue; }
+    const distance = Math.hypot(chosen.point.x - from.x, chosen.point.y - from.y);
+    const travelMs = Math.max(COMBAT_STEP_MS, Math.round(distance / RANGED_ENEMY_SHOT_SPEED * 1000));
+    enemyShots.push({ id: `${previous.context.combatId}:${monster.id}:shot:${tick}`, monsterId: monster.id,
+      from: { ...from }, to: { ...chosen.point }, target: { kind: chosen.kind, ...(chosen.id ? { id: chosen.id } : {}) },
+      damage: monster.attackDamage ?? RULES.monster.attackDamage, travelMs, remainingMs: travelMs });
+    monsters[index] = { ...monster, rangedRemainingMs: RANGED_ENEMY_INTERVAL_MS };
+  }
+  // Shot arrival is its own pass so a volley cannot double-hit the same ally
+  // and a shot aimed at an already-fallen ally dissipates harmlessly.
+  const pendingShots: EnemyShotState[] = [];
+  for (const shot of enemyShots) {
+    const remaining = shot.remainingMs - COMBAT_STEP_MS;
+    if (remaining > EPSILON) { pendingShots.push({ ...shot, remainingMs: remaining }); continue; }
+    if (attacks.has(shot.id)) continue;
+    if (shot.target.kind === 'soldier') {
+      const soldierIndex = supportSoldiers.findIndex(soldier => soldier.id === shot.target.id && soldier.hp > 0);
+      if (soldierIndex < 0) continue;
+      attacks.add(shot.id);
+      const soldier = supportSoldiers[soldierIndex];
+      const hp = Math.max(0, soldier.hp - receivedSoldierDamage(soldier, shot.damage));
+      events.push({type:'supportSoldierDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id,hp});
+      if (hp > 0) supportSoldiers[soldierIndex] = {...soldier,hp,lastHitTick:tick,hitCombatId:previous.context.combatId};
+      else {
+        fallenSoldiers.push({...soldier,hp:0,lastHitTick:tick,hitCombatId:previous.context.combatId});
+        events.push({type:'supportSoldierDefeated',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id});
+        supportSoldiers.splice(soldierIndex, 1);
+      }
+    } else if (shot.target.kind === 'pet') {
+      if (!pet || pet.hp <= 0) continue;
+      attacks.add(shot.id);
+      const hp = Math.max(0, pet.hp - shot.damage);
+      events.push({type:'petDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,petId:'thunder-fox',hp});
+      if (hp > 0) pet = { ...pet, hp };
+      else {
+        pet = { ...pet, hp: 0, defeatedPosition: battlePetPosition(player, previous.arenaWidth) };
+        events.push({type:'petDefeated',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,petId:'thunder-fox'});
+      }
+    } else {
+      if (baseHp <= 0) continue;
+      attacks.add(shot.id);
+      baseHp = Math.max(0, baseHp - shot.damage);
+      events.push({type:'baseDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,hp:baseHp});
+    }
+  }
   // Resolve shockwaves after damage: a boss killed on release cannot attack.
   monsters.forEach(monster => {
     const elapsed = tick * COMBAT_STEP_MS - (monster.spawnAtMs ?? 0);
@@ -531,6 +616,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     flameVolleyHits: Object.fromEntries([...flameHits].filter(([id]) => projectiles.some(p => p.flameVolleyId === id && !!p.elements?.flame)).map(([id, hits]) => [id, [...hits]])),
     ...(flameFanUntilTick !== undefined ? {flameFanUntilTick} : {}),
     elementReadyTick, elementImpacts: impacts, projectiles, shotRemainingMs: Math.max(0, shotRemainingMs), nextProjectileSequence,
+    enemyShots: status === 'fighting' ? pendingShots : [],
     defeatedMonsterIds: [...defeated], processedBaseAttackIds: [...attacks] });
   return { state, events: Object.freeze(events.map(event => Object.freeze(event))) };
 }
@@ -593,7 +679,10 @@ function directionTo(from: Point, to: Point): Point {
 function supportPosition(player: Point, slot: number, count: number, width = RULES.arena.width): Point {
   if (count <= 3) {
     const offsets = count === 1 ? [-30] : count === 2 ? [-40, 40] : [-50, 0, 50];
-    return { x: playerX(player.x + offsets[slot], width), y: player.y + 20 };
+    // Ranged kills can leave stale high slot numbers; close ranks instead of
+    // reading past the small-squad formation table.
+    const index = Math.min(Math.max(0, Math.floor(slot)), count - 1);
+    return { x: playerX(player.x + offsets[index], width), y: player.y + 20 };
   }
   // Larger squads occupy three staggered ranks across the parapet.
   const columns = 10, row = Math.floor(slot / columns), column = slot % columns;
@@ -620,6 +709,9 @@ export function attachCombatPet(state: CombatState, pet: BattlePet): CombatState
 // Revival is prepared in full before inventory is debited by the paused runner.
 export function reviveCompanion(state: CombatState, kind: string, id: string): CombatState | null {
   if (state.status !== 'fighting' || state.base.hp <= 0) return null;
+  if (kind === 'pet' && id === 'thunder-fox' && state.pet?.hp === 0) {
+    return freezeState({ ...state, pet: createBattlePet(state.pet, PET_ATTACK_INTERVAL_MS) });
+  }
   const fallen = state.fallenSoldiers?.find(s => s.id === id);
   if (kind !== 'soldier' || !fallen) return null;
   const next = summonSupportSoldier(state, id);

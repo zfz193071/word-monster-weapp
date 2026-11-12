@@ -109,6 +109,7 @@ Component({
       const snapshot = instances.get(this)?.scene?.snapshot;
       const targets = snapshot?.status === 'fighting' ? [
         ...(snapshot.fallenSoldiers ?? []).map((soldier, index) => ({kind:'soldier', id:soldier.id, label:`士兵 ${index + 1}`, disabled:(snapshot.supportSoldiers?.length ?? 0) >= MAX_SUPPORT_SOLDIERS})),
+        ...(snapshot.pet?.hp === 0 ? [{kind:'pet', id:'thunder-fox', label:'宠物', disabled:false}] : []),
       ] : [];
       const previous = this.data.reviveTargets;
       if (previous.length !== targets.length || targets.some((target, index) => target.id !== previous[index].id || target.kind !== previous[index].kind || target.disabled !== previous[index].disabled)) this.setData({reviveTargets: targets});

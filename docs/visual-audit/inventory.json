@@ -5,7 +5,7 @@
     {
       "root": "",
       "name": "main",
-      "bytes": 1832031
+      "bytes": 1851548
     },
     {
       "root": "learning-assets",
@@ -13,7 +13,7 @@
       "pages": [
         "pages/resources/index"
       ],
-      "bytes": 1031976
+      "bytes": 1031035
     },
     {
       "root": "assets/images",
@@ -45,7 +45,15 @@
       "pages": [
         "pages/resources/index"
       ],
-      "bytes": 1971047
+      "bytes": 1118290
+    },
+    {
+      "root": "enemy-assets",
+      "name": "enemy-assets",
+      "pages": [
+        "pages/resources/index"
+      ],
+      "bytes": 973560
     },
     {
       "root": "fruit-assets",
@@ -101,7 +109,7 @@
       "pages": [
         "pages/resources/index"
       ],
-      "bytes": 778037
+      "bytes": 1048135
     }
   ],
   "words": [
@@ -122,13 +130,13 @@
           "renderer": "approved-three-part-apple",
           "images": [
             {
-              "path": "character-assets/zombie-apple-parts.png",
-              "bytes": 185920,
-              "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d",
+              "path": "enemy-assets/zombie-apple-torso-rig-v1.png",
+              "bytes": 210335,
+              "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e",
               "width": 1086,
               "height": 362,
               "decodedRgbaBytes": 1572528,
-              "package": "character-assets"
+              "package": "enemy-assets"
             }
           ]
         },
@@ -151,13 +159,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -165,13 +173,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -233,13 +241,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -247,13 +255,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -315,13 +323,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -329,13 +337,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -397,13 +405,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -411,13 +419,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -479,13 +487,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -493,13 +501,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -561,13 +569,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -575,13 +583,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -643,13 +651,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -657,13 +665,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -725,13 +733,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -739,13 +747,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -807,13 +815,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -821,13 +829,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -889,13 +897,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -903,13 +911,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -971,13 +979,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -985,13 +993,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1035,13 +1043,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1049,13 +1057,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1099,13 +1107,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1113,13 +1121,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1163,13 +1171,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1177,13 +1185,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1227,13 +1235,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1241,13 +1249,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1291,13 +1299,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1305,13 +1313,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1355,13 +1363,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1369,13 +1377,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1419,13 +1427,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1433,13 +1441,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1483,13 +1491,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1497,13 +1505,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1547,13 +1555,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1561,13 +1569,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1611,13 +1619,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1625,13 +1633,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1675,13 +1683,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1689,13 +1697,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1739,13 +1747,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1753,13 +1761,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1803,13 +1811,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1817,13 +1825,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1867,13 +1875,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1881,13 +1889,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1931,13 +1939,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -1945,13 +1953,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -1995,13 +2003,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-iron-parts.png",
+                "path": "enemy-assets/zombie-iron-parts.png",
                 "bytes": 262797,
                 "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
                 "width": 1086,
                 "height": 362,
                 "decodedRgbaBytes": 1572528,
-                "package": "character-assets"
+                "package": "enemy-assets"
               }
             ]
           },
@@ -2009,13 +2017,13 @@
             "renderer": "approved-boss-parts",
             "images": [
               {
-                "path": "character-assets/zombie-grand-parts.png",
-                "bytes": 309599,
-                "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-                "width": 888,
-                "height": 444,
-                "decodedRgbaBytes": 1577088,
-                "package": "character-assets"
+                "path": "enemy-assets/zombie-grand-parts.png",
+                "bytes": 323519,
+                "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+                "width": 1086,
+                "height": 362,
+                "decodedRgbaBytes": 1572528,
+                "package": "enemy-assets"
               }
             ]
           }
@@ -2071,14 +2079,14 @@
     },
     {
       "level": 4,
-      "path": "character-assets/guardian-weapon-4.png",
-      "bytes": 121183,
-      "sha256": "93b3b290ab832e4bf10cdf0195b0d17dad8bdd718b92c21897f054aeeb060c12",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-4.png",
+      "bytes": 135151,
+      "sha256": "43a51795b9a8de7f06e7498dc06bdebb2238c0a377ca98833deeaf68e9e23a6d",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     },
     {
@@ -2107,14 +2115,14 @@
     },
     {
       "level": 7,
-      "path": "character-assets/guardian-weapon-7.png",
-      "bytes": 118119,
-      "sha256": "dd4180fc101971b25d027e8891132e859bfcba5d650e6d96f205785820cf44b4",
-      "width": 576,
-      "height": 384,
-      "decodedRgbaBytes": 884736,
-      "package": "character-assets",
-      "source": "docs/visual-audit/hero/guardian-manifest.json",
+      "path": "guardian-assets/guardian-joints-7.png",
+      "bytes": 134947,
+      "sha256": "bcc1cb2a9a840bda98a27232af7a8c91ba5712aa000a2ef6fb35d33097a3cff2",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets",
+      "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
       "note": "Current battle renderer only; not approval for generating new artwork."
     }
   ],
@@ -3272,40 +3280,49 @@
       "package": "character-assets"
     },
     {
-      "path": "character-assets/zombie-apple-parts.png",
-      "bytes": 185920,
-      "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d",
+      "path": "enemy-assets/zombie-apple-arms-rig-v1.png",
+      "bytes": 82312,
+      "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8",
       "width": 1086,
       "height": 362,
       "decodedRgbaBytes": 1572528,
-      "package": "character-assets"
+      "package": "enemy-assets"
     },
     {
-      "path": "character-assets/zombie-apple-textured.png",
+      "path": "enemy-assets/zombie-apple-textured.png",
       "bytes": 94441,
       "sha256": "4cc2984adb9cafa2fcb5925c2e6afb040a60b73751047a8267c0fa8c33b631fa",
       "width": 256,
       "height": 320,
       "decodedRgbaBytes": 327680,
-      "package": "character-assets"
+      "package": "enemy-assets"
     },
     {
-      "path": "character-assets/zombie-grand-parts.png",
-      "bytes": 309599,
-      "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e",
-      "width": 888,
-      "height": 444,
-      "decodedRgbaBytes": 1577088,
-      "package": "character-assets"
+      "path": "enemy-assets/zombie-apple-torso-rig-v1.png",
+      "bytes": 210335,
+      "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "enemy-assets"
     },
     {
-      "path": "character-assets/zombie-iron-parts.png",
+      "path": "enemy-assets/zombie-grand-parts.png",
+      "bytes": 323519,
+      "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc",
+      "width": 1086,
+      "height": 362,
+      "decodedRgbaBytes": 1572528,
+      "package": "enemy-assets"
+    },
+    {
+      "path": "enemy-assets/zombie-iron-parts.png",
       "bytes": 262797,
       "sha256": "c33e761a398d4fda59009f10b2a206787dce41b49350c1734e219ad1e84bb0e0",
       "width": 1086,
       "height": 362,
       "decodedRgbaBytes": 1572528,
-      "package": "character-assets"
+      "package": "enemy-assets"
     },
     {
       "path": "fortress-assets/wood-front-v2.png",
@@ -3470,6 +3487,15 @@
       "package": "guardian-assets"
     },
     {
+      "path": "guardian-assets/guardian-joints-4.png",
+      "bytes": 135151,
+      "sha256": "43a51795b9a8de7f06e7498dc06bdebb2238c0a377ca98833deeaf68e9e23a6d",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
       "path": "guardian-assets/guardian-joints-5.png",
       "bytes": 131515,
       "sha256": "3c34bbda283cff96654c87bb706ca5ca8db97bf18bca1d16d5d33d3f482dc404",
@@ -3482,6 +3508,15 @@
       "path": "guardian-assets/guardian-joints-6.png",
       "bytes": 127827,
       "sha256": "5efa08b60df6d80a0ed8de82ee38be6b02441c7e0ef874c12ec3c93906b5c753",
+      "width": 720,
+      "height": 360,
+      "decodedRgbaBytes": 1036800,
+      "package": "guardian-assets"
+    },
+    {
+      "path": "guardian-assets/guardian-joints-7.png",
+      "bytes": 134947,
+      "sha256": "bcc1cb2a9a840bda98a27232af7a8c91ba5712aa000a2ef6fb35d33097a3cff2",
       "width": 720,
       "height": 360,
       "decodedRgbaBytes": 1036800,

@@ -224,7 +224,7 @@ export class CanvasScene {
   }
   private validateSprites(assets: SpriteAsset[]): void {
     if (assets.some(asset => !asset.approved || !asset.source.trim() || !asset.rights.trim()
-      || !(INTERIOR_ASSETS.some(layer => layer.path === asset.path) || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|guardian-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
+      || !(INTERIOR_ASSETS.some(layer => layer.path === asset.path) || COURTYARD_ASSETS.some(ground => ground.path === asset.path) || /^\/(?:assets\/images|learning-assets\/images|character-assets|enemy-assets|guardian-assets|fruit-assets|animal-assets)\/(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(asset.path)))) throw new Error('战场素材尚未通过审校');
   }
   private validateMonster(art: MonsterArt): void {
     this.validateSprites([art.monster]);
@@ -759,6 +759,18 @@ export class CanvasScene {
         }
         this.sprite(art.bullet, -bullet.width / 2, -bullet.height / 2, bullet.width, bullet.height); c.restore();
       }
+    }
+    for (const shot of state.enemyShots ?? []) {
+      const progress = Math.min(1, Math.max(0, 1 - shot.remainingMs / Math.max(1, shot.travelMs)));
+      const x = shot.from.x + (shot.to.x - shot.from.x) * progress;
+      const y = shot.from.y + (shot.to.y - shot.from.y) * progress;
+      const dx = shot.to.x - shot.from.x, dy = shot.to.y - shot.from.y, length = Math.hypot(dx, dy) || 1;
+      c.save(); c.translate(x, y);
+      c.fillStyle = '#ff8a5c'; c.globalAlpha = .9;
+      c.beginPath(); c.arc(0, 0, 3.2, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = '#ffd9a8'; c.lineWidth = 1.4; c.globalAlpha = .55;
+      c.beginPath(); c.moveTo(0, 0); c.lineTo(-dx / length * 9, -dy / length * 9); c.stroke();
+      c.restore();
     }
     for (const impact of state.elementImpacts ?? []) {
       if (impact.untilTick <= state.tick) continue;

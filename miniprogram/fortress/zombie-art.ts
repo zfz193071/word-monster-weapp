@@ -3,27 +3,27 @@ import type { SpriteAsset } from './canvas-scene';
 import type { BossPose } from './boss-pose';
 
 export const APPLE_ZOMBIE_PARTS: SpriteAsset = {
-  path: '/character-assets/zombie-apple-torso-rig-v1.png',
+  path: '/enemy-assets/zombie-apple-torso-rig-v1.png',
   source: 'docs/visual-audit/enemies/approved-parts/apple-torso-rig-study-01.png',
   rights: '项目内置 image_gen，已批准苹果僵尸母版派生的无臂躯干；运行视觉及设备验收待完成',
   approved: true,
 };
 
 /** A separate atlas lets the walk use a shoulder pivot instead of baking two
- * static arms into the torso. It deliberately remains in character-assets
+ * static arms into the torso. It deliberately remains in enemy-assets
  * with the torso, so category loading and retry stay atomic. */
 export const APPLE_ZOMBIE_ARMS: SpriteAsset = {
-  path: '/character-assets/zombie-apple-arms-rig-v1.png',
+  path: '/enemy-assets/zombie-apple-arms-rig-v1.png',
   source: 'docs/visual-audit/enemies/approved-parts/apple-arms-rig-study-02.png',
   rights: '项目内置 image_gen，已批准苹果僵尸母版派生的双臂；运行视觉及设备验收待完成',
   approved: true,
 };
 
 export const BOSS_ZOMBIE_PARTS: Readonly<Record<'iron' | 'grand', SpriteAsset>> = {
-  iron: { path: '/character-assets/zombie-iron-parts.png',
+  iron: { path: '/enemy-assets/zombie-iron-parts.png',
     source: 'docs/visual-audit/enemies/approved-parts/iron-parts-01.png',
     rights: '项目内置 image_gen；已批准铁桶队长母版，运行视觉待验收', approved: true },
-  grand: { path: '/character-assets/zombie-grand-parts.png',
+  grand: { path: '/enemy-assets/zombie-grand-parts.png',
     source: 'docs/visual-audit/enemies/approved-parts/grand-rig-atlas-01.png',
     rights: '项目内置 image_gen；2026-11-11 已批准王冠盾甲母版，运行视觉待验收', approved: true },
 };
@@ -97,7 +97,7 @@ export function drawAppleZombieParts(
 }
 
 export const TEXTURED_APPLE_ZOMBIE: SpriteAsset = {
-  path: '/character-assets/zombie-apple-textured.png',
+  path: '/enemy-assets/zombie-apple-textured.png',
   source: 'docs/visual-audit/enemies/textured/apple-zombie-source.png',
   rights: '项目内置 image_gen 生成，2026-11-10；整体视觉及设备验收待完成',
   approved: true,

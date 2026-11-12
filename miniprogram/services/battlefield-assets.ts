@@ -71,6 +71,7 @@ const loadCastleFortress = cachedPackage('castle-fortress-assets', () => require
 const loadArmoredFortress = cachedPackage('armored-fortress-assets', () => require.async('../armored-fortress-assets/ready'));
 const loadGuardian = cachedPackage('guardian-assets', () => require.async('../guardian-assets/ready'));
 const loadCharacters = cachedPackage('character-assets', () => require.async('../character-assets/ready'));
+const loadEnemies = cachedPackage('enemy-assets', () => require.async('../enemy-assets/ready'));
 export const loadAnimalAssets = cachedPackage('animal-assets', () => require.async('../animal-assets/ready'));
 export const loadFruitAssets = cachedPackage('fruit-assets', () => require.async('../fruit-assets/ready'));
 
@@ -84,7 +85,8 @@ export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: Sce
   if (houseLevel === 5) required.push(loadArmoredFortress());
   if (art?.hero.path.startsWith('/guardian-assets/')) required.push(loadGuardian());
   // Pet art is preloaded even before a pet joins, so in-battle unlocks render immediately.
-  if (preloadPet || (art && [art.hero, ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.bossBodies ?? {})].some(asset => asset.path.startsWith('/character-assets/')))) required.push(loadCharacters());
+  if (preloadPet || art?.hero.path.startsWith('/character-assets/')) required.push(loadCharacters());
+  if (art && [...Object.values(art.texturedBodies ?? {}), ...Object.values(art.bossBodies ?? {})].some(asset => asset.path.startsWith('/enemy-assets/'))) required.push(loadEnemies());
   if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/fruit-assets/'))) required.push(loadFruitAssets());
   if (art && [art.fruitHat, ...Object.values(art.fruitHats ?? {})].some(asset => asset?.path.startsWith('/animal-assets/'))) required.push(loadAnimalAssets());
   return Promise.all(required).then(() => {});

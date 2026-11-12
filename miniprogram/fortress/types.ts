@@ -142,6 +142,18 @@ export interface MonsterState {
   readonly hp: number; readonly maxHp: number; readonly status: MonsterStatus;
   readonly attackRemainingMs: number;
   readonly attackSequence: number;
+  // Flying enemies keep a separate ranged cadence so melee arrival timers stay untouched.
+  readonly rangedRemainingMs?: number;
+}
+export interface EnemyShotState {
+  readonly id: string;
+  readonly monsterId: string;
+  readonly from: Point;
+  readonly to: Point;
+  readonly target: { readonly kind: 'soldier' | 'pet' | 'base'; readonly id?: string };
+  readonly damage: number;
+  readonly travelMs: number;
+  readonly remainingMs: number;
 }
 export interface SupportSoldierState {
   readonly soldierType?: SoldierType;
@@ -213,6 +225,7 @@ export interface CombatState {
   readonly nextProjectileSequence: number;
   readonly defeatedMonsterIds: readonly string[];
   readonly processedBaseAttackIds: readonly string[];
+  readonly enemyShots?: readonly EnemyShotState[];
 }
 /** Attribution only; effectiveDamage is actual HP removed after mitigation, excluding overkill. */
 export interface SoldierDamageContribution {

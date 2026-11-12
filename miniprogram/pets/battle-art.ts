@@ -8,7 +8,7 @@ export const BATTLE_PET_ART = Object.freeze({
   approved: true,
 });
 export function drawBattlePet(c: Context, state: CombatState, image?: WechatMiniprogram.Image): void {
-  const pet = state.pet; if (!pet) return;
+  const pet = state.pet; if (!pet || pet.hp <= 0) return;
   const position = battlePetPosition(state.player, state.arenaWidth), scale = pet.level >= 7 ? 1 : pet.level >= 4 ? .87 : .73;
   const oval = (x:number,y:number,rx:number,ry:number,color:string) => { c.fillStyle=color;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill(); };
   c.save();c.translate(position.x,position.y);c.scale(scale,scale);

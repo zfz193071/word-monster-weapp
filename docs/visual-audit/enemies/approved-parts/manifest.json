@@ -36,7 +36,7 @@
         724
       ],
       "sourceSha256": "b7418ead36d203d067b6bde3df5c60a6c3d1720d23f85f71898c24fb74137798",
-      "target": "miniprogram/character-assets/zombie-apple-arms-rig-v1.png",
+      "target": "miniprogram/enemy-assets/zombie-apple-arms-rig-v1.png",
       "runtimeSize": [
         1086,
         362
@@ -107,7 +107,7 @@
         724
       ],
       "sourceSha256": "812cb6af508bd4736fe01c684ee103c7fd8dbd476bf820d937a2589b2d90f751",
-      "target": "miniprogram/character-assets/zombie-apple-torso-rig-v1.png",
+      "target": "miniprogram/enemy-assets/zombie-apple-torso-rig-v1.png",
       "runtimeSize": [
         1086,
         362
@@ -138,7 +138,7 @@
         724
       ],
       "sourceSha256": "9ed023de84077f7a4ad5b9b92019b1425ebf2ada9d5dec079e4bcb9d4f80b8c4",
-      "target": "miniprogram/character-assets/zombie-iron-parts.png",
+      "target": "miniprogram/enemy-assets/zombie-iron-parts.png",
       "runtimeSize": [
         1086,
         362
@@ -165,7 +165,7 @@
         724
       ],
       "sourceSha256": "a2a305e502a108417e09d0c28d119756d03abc1781390511277d68729f19acdc",
-      "target": "miniprogram/character-assets/zombie-grand-parts.png",
+      "target": "miniprogram/enemy-assets/zombie-grand-parts.png",
       "runtimeSize": [
         1086,
         362

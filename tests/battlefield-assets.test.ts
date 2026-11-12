@@ -73,7 +73,7 @@ test('超时允许重试，旧完成不解锁新请求或覆盖缓存', async ()
 test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本', () => {
   const root = new URL('../miniprogram/', import.meta.url);
   const app = JSON.parse(readFileSync(new URL('app.json', root), 'utf8'));
-  for (const name of ['battlefield-assets', 'fortress-assets', 'reinforced-fortress-assets', 'stone-fortress-assets', 'castle-fortress-assets', 'armored-fortress-assets', 'character-assets', 'fruit-assets', 'animal-assets']) {
+  for (const name of ['battlefield-assets', 'fortress-assets', 'reinforced-fortress-assets', 'stone-fortress-assets', 'castle-fortress-assets', 'armored-fortress-assets', 'character-assets', 'enemy-assets', 'fruit-assets', 'animal-assets']) {
     const pack = app.subPackages.find((p: {name: string}) => p.name === name);
     assert.equal(pack.root, name);
     assert.ok(existsSync(new URL(`${name}/ready.ts`, root)));
@@ -86,18 +86,17 @@ test('战场和堡垒包均注册有效入口，堡垒资源没有重复副本',
 });
 
 
-test('角色包按实际主角与混编词条加载，无需求不下载，失败后独立重试', async () => {
+test('主角包按实际主角加载，无需求不下载，失败后独立重试', async () => {
   const {load, calls} = harness();
   await load(3, 0, {...characterArt('cat', ['cat'], 2), hero: legacyHero});
   assert.equal(calls.length, 0);
   const hero = load(3, 0, characterArt('cat', ['cat'], 1));
-  const apple = load(2, 0, characterArt('banana', ['banana', 'apple'], 2));
   assert.equal(calls.length, 1);
   assert.equal(calls[0].path, '../character-assets/ready');
-  const failures = Promise.all([assert.rejects(hero), assert.rejects(apple)]);
-  calls[0].reject(Error('network')); await failures;
+  const failed = assert.rejects(hero);
+  calls[0].reject(Error('network')); await failed;
   let ready = false;
-  const retry = load(2, 0, characterArt('apple', ['apple'], 2)).then(() => { ready = true; });
+  const retry = load(3, 0, characterArt('cat', ['cat'], 1)).then(() => { ready = true; });
   await new Promise(resolve => setImmediate(resolve));
   assert.equal(ready, false);
   calls[1].resolve(); await retry;
@@ -105,9 +104,27 @@ test('角色包按实际主角与混编词条加载，无需求不下载，失�
   assert.equal(calls.length, 2);
 });
 
-test('角色包超时后的迟到成功不能提前完成重试', async () => {
+test('敌人包按精细僵尸与Boss加载，无需求不下载，失败后独立重试', async () => {
+  const {load, calls} = harness();
+  await load(2, 0, {...characterArt('cat', ['cat'], 2), hero: legacyHero});
+  assert.equal(calls.length, 0);
+  const apple = load(2, 0, {...characterArt('banana', ['banana', 'apple'], 2), hero: legacyHero});
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].path, '../enemy-assets/ready');
+  const failed = assert.rejects(apple);
+  calls[0].reject(Error('network')); await failed;
+  let ready = false;
+  const retry = load(2, 0, {...characterArt('banana', ['banana', 'apple'], 2), hero: legacyHero}).then(() => { ready = true; });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(ready, false);
+  calls[1].resolve(); await retry;
+  await load(2, 0, {...characterArt('banana', ['banana', 'apple'], 2), hero: legacyHero});
+  assert.equal(calls.length, 2);
+});
+
+test('敌人包超时后的迟到成功不能提前完成重试', async () => {
   const {load, calls, timers} = harness();
-  const art = characterArt('apple');
+  const art = {...characterArt('apple'), hero: legacyHero};
   const first = load(2, 0, art), failed = assert.rejects(first, /超时/);
   for (const [key, fn] of [...timers]) { timers.delete(key); fn(); }
   await failed;
@@ -121,8 +138,12 @@ test('角色包超时后的迟到成功不能提前完成重试', async () => {
 
 test('精细角色仅在新包中保留一份运行资源', () => {
   const root = new URL('../miniprogram/', import.meta.url);
-  for (const name of ['hero-back-weapon-1-textured.png', 'zombie-apple-textured.png', 'zombie-apple-torso-rig-v1.png', 'zombie-apple-arms-rig-v1.png']) {
+  for (const name of ['hero-back-weapon-1-textured.png']) {
     assert.ok(existsSync(new URL(`character-assets/${name}`, root)));
+    assert.equal(existsSync(new URL(`assets/images/fortress/${name}`, root)), false);
+  }
+  for (const name of ['zombie-apple-textured.png', 'zombie-apple-torso-rig-v1.png', 'zombie-apple-arms-rig-v1.png', 'zombie-iron-parts.png', 'zombie-grand-parts.png']) {
+    assert.ok(existsSync(new URL(`enemy-assets/${name}`, root)));
     assert.equal(existsSync(new URL(`assets/images/fortress/${name}`, root)), false);
   }
 });
@@ -130,11 +151,11 @@ test('精细角色仅在新包中保留一份运行资源', () => {
 // Category isolation excludes Boss dependencies; the dedicated test below covers them.
 function characterArt(...args: Parameters<typeof openingArt>): SceneArt { return {...openingArt(...args), bossBodies: {}, hero: heroVariant(args[2] ?? 1).art, fruitHat: undefined, fruitHats: {}}; }
 
-test('无苹果旧主角无宠物的场景仍等待Boss角色包，失败后独立重试', async () => {
+test('无苹果旧主角无宠物的场景仍等待Boss敌人包，失败后独立重试', async () => {
   const {load, calls} = harness();
   const art = {...characterArt('cat', ['cat'], 2), hero: legacyHero, bossBodies: openingArt('cat').bossBodies};
   const failed = load(3, 0, art), failure = assert.rejects(failed);
-  assert.deepEqual(calls.map(call => call.path), ['../character-assets/ready']);
+  assert.deepEqual(calls.map(call => call.path), ['../enemy-assets/ready']);
   calls[0].reject(Error('offline')); await failure;
   let ready = false;
   const retry = load(3, 0, art).then(() => {ready = true;});
@@ -252,7 +273,7 @@ test('16张动物迁移保留字节、尺寸与唯一副本，覆盖第三及第
 
 test('分包耗时区分首次等待、并发共享与成功缓存，读取诊断不改变内部记录', async () => {
   const h = harness();
-  assert.equal(h.measurements().length, 10);
+  assert.equal(h.measurements().length, 11);
   assert.ok(h.measurements().every(m => m.status === 'idle' && m.lastDurationMs === null));
   const first = h.load(1, 0), shared = h.load(1, 0);
   h.advance(125); h.calls[0].resolve(); await Promise.all([first, shared]);
@@ -292,12 +313,12 @@ const legacyHero = {path:'/assets/images/fortress/hero-back-weapon-2.png',source
 function categoryArt(...args: Parameters<typeof openingArt>): SceneArt {
   return {...openingArt(...args), bossBodies: {}, hero:legacyHero};
 }
-test('七级关节主角均等待对应角色分包，跨关使用同一成功缓存', async () => {
+test('七级关节主角均等待对应角色与敌人分包，跨关使用同一成功缓存', async () => {
   for(let level=1;level<=7;level++) {
     const {load,calls}=harness();
     let ready=false;
     const pending=load(5, 0,openingArt('red',['red'],level)).then(()=>{ready=true;});
-    assert.deepEqual(calls.map(c=>c.path),['../guardian-assets/ready', '../character-assets/ready']);
+    assert.deepEqual(calls.map(c=>c.path),['../guardian-assets/ready', '../enemy-assets/ready']);
     await Promise.resolve(); assert.equal(ready,false);
     calls.forEach(call => call.resolve());await pending;
     await load(6, 0,openingArt('book',['book'],level));
@@ -343,11 +364,11 @@ test('三至五级堡垒分别缓存，失败只重试当前等级且不预载�
 test('关节主角与宠物包独立重试，跨关共享，四七级复用关节包', async () => {
   const h=harness(), art=openingArt('red',['red'],1);
   const first=h.load(5,0,art,true),failed=assert.rejects(first,/offline/);
-  assert.deepEqual(h.calls.map(c=>c.path),['../guardian-assets/ready','../character-assets/ready']);
-  h.calls[1].resolve();h.calls[0].reject(Error('offline'));await failed;
+  assert.deepEqual(h.calls.map(c=>c.path),['../guardian-assets/ready','../character-assets/ready','../enemy-assets/ready']);
+  h.calls[1].resolve();h.calls[2].resolve();h.calls[0].reject(Error('offline'));await failed;
   const retry=h.load(6,0,art,true),shared=h.load(8,0,openingArt('book',['book'],3),true);
-  assert.equal(h.calls.length,3);assert.equal(h.calls[2].path,'../guardian-assets/ready');
-  h.calls[2].resolve();await Promise.all([retry,shared]);
+  assert.equal(h.calls.length,4);assert.equal(h.calls[3].path,'../guardian-assets/ready');
+  h.calls[3].resolve();await Promise.all([retry,shared]);
   for(const level of [4,7]) await h.load(6,0,openingArt('red',['red'],level),true);
-  assert.equal(h.calls.length,3);
+  assert.equal(h.calls.length,4);
 });

@@ -10,7 +10,8 @@ export interface BattlePet extends PetAppearance {
 }
 export const PET_ATTACK_INTERVAL_MS = 2000;
 export function petMaxHp(level: number): number { return 100 + 20 * (level - 1); }
-// Accept legacy vitality for validation, but protected fortress pets always return at full health.
+// Ranged enemies may damage the platform pet, so vitality persists across steps
+// and waves. A defeated pet keeps its fall position until a flag revives it.
 export function createBattlePet(pet: PetAppearance, attackRemainingMs = PET_ATTACK_INTERVAL_MS, vitality?: Pick<BattlePet, 'hp' | 'defeatedPosition'>): BattlePet {
   const maxHp = petMaxHp(pet.level), hp = vitality?.hp ?? maxHp;
   const position = vitality?.defeatedPosition;
@@ -19,7 +20,8 @@ export function createBattlePet(pet: PetAppearance, attackRemainingMs = PET_ATTA
     || !Number.isInteger(attackRemainingMs) || attackRemainingMs < 0 || attackRemainingMs > PET_ATTACK_INTERVAL_MS
     || !Number.isInteger(hp) || hp < 0 || hp > maxHp
     || (position && (hp !== 0 || !Number.isFinite(position.x) || !Number.isFinite(position.y)))) throw new Error('战斗宠物状态无效');
-  return Object.freeze({ level: pet.level, equipped: Object.freeze([...pet.equipped]), attackRemainingMs, hp: maxHp, maxHp });
+  return Object.freeze({ level: pet.level, equipped: Object.freeze([...pet.equipped]), attackRemainingMs, hp, maxHp,
+    ...(hp === 0 && position ? { defeatedPosition: Object.freeze({ ...position }) } : {}) });
 }
 export function petDamage(level: number): number { return 10 + 2 * (level - 1); }
 export function battlePetPosition(_player: Point, arenaWidth = 360): Point { return { x: arenaWidth * .75, y: 480 }; }

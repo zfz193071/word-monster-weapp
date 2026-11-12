@@ -36,7 +36,7 @@ test('上一轮活怪仍在时新轮到点加入，保留宠物/士兵伤势、�
  state={...state,incomingMonsters:state.incomingMonsters!.filter(m=>m.spawnAtMs!>=boundary)};
  const old=state.monsters[0],next=stepCombat(state);
  assert(next.state.monsters.some(m=>m.id===old.id&&m.hp===old.hp));assert(next.state.monsters.some(m=>m.id.includes(':wave:2:')));assert(next.events.some(e=>e.type==='waveStarted'&&e.waveNumber===2));
- assert.equal(next.state.pet!.hp,next.state.pet!.maxHp);assert.equal(next.state.pet!.attackRemainingMs,990);assert.equal(next.state.supportSoldiers![0].hp,9);assert.equal(next.state.fallenSoldiers![0].id,'dead');assert(next.state.projectiles.some(p=>p.id==='flying'));assert.equal(next.state.context.combatId,state.context.combatId);
+ assert.equal(next.state.pet!.hp,25);assert.equal(next.state.pet!.attackRemainingMs,990);assert.equal(next.state.supportSoldiers![0].hp,9);assert.equal(next.state.fallenSoldiers![0].id,'dead');assert(next.state.projectiles.some(p=>p.id==='flying'));assert.equal(next.state.context.combatId,state.context.combatId);
  const runner=new CombatRunner(next.state);runner.pause();assert.equal(runner.frame(999999).steps,0);assert.equal(runner.snapshot,next.state);runner.resume(1000000,2);runner.frame(1000010);assert.equal(runner.snapshot!.tick,next.state.tick+1);runner.dispose();assert.equal(runner.frame(1000100).state,null);
 });
 test('当前怪全死但待出场时不提前通关，最后一批全死后才清场；死亡清空待出场队列',()=>{

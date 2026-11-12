@@ -7,13 +7,13 @@
     {
       "name": "main",
       "root": "",
-      "sourceBytes": 1836502,
+      "sourceBytes": 1851548,
       "fileCount": 203
     },
     {
       "name": "learning-assets",
       "root": "learning-assets",
-      "sourceBytes": 1031976,
+      "sourceBytes": 1031035,
       "fileCount": 236
     },
     {
@@ -37,8 +37,14 @@
     {
       "name": "character-assets",
       "root": "character-assets",
-      "sourceBytes": 2263694,
-      "fileCount": 20
+      "sourceBytes": 1118290,
+      "fileCount": 14
+    },
+    {
+      "name": "enemy-assets",
+      "root": "enemy-assets",
+      "sourceBytes": 973560,
+      "fileCount": 10
     },
     {
       "name": "fruit-assets",
@@ -79,8 +85,8 @@
     {
       "name": "guardian-assets",
       "root": "guardian-assets",
-      "sourceBytes": 778037,
-      "fileCount": 11
+      "sourceBytes": 1048135,
+      "fileCount": 13
     }
   ],
   "heroVariants": [
@@ -109,12 +115,12 @@
       "rgbaBytes": 1036800
     },
     {
-      "path": "/character-assets/guardian-weapon-4.png",
-      "package": "character-assets",
-      "bytes": 121183,
-      "width": 576,
-      "height": 384,
-      "rgbaBytes": 884736
+      "path": "/guardian-assets/guardian-joints-4.png",
+      "package": "guardian-assets",
+      "bytes": 135151,
+      "width": 720,
+      "height": 360,
+      "rgbaBytes": 1036800
     },
     {
       "path": "/guardian-assets/guardian-joints-5.png",
@@ -133,12 +139,12 @@
       "rgbaBytes": 1036800
     },
     {
-      "path": "/character-assets/guardian-weapon-7.png",
-      "package": "character-assets",
-      "bytes": 118119,
-      "width": 576,
-      "height": 384,
-      "rgbaBytes": 884736
+      "path": "/guardian-assets/guardian-joints-7.png",
+      "package": "guardian-assets",
+      "bytes": 134947,
+      "width": 720,
+      "height": 360,
+      "rgbaBytes": 1036800
     }
   ],
   "heroDependencies": [
@@ -210,15 +216,23 @@
     },
     {
       "weaponLevel": 4,
-      "renderer": "whole-body-pending-parts",
+      "renderer": "jointed",
       "images": [
         {
-          "path": "/character-assets/guardian-weapon-4.png",
-          "package": "character-assets",
-          "bytes": 121183,
-          "width": 576,
-          "height": 384,
-          "rgbaBytes": 884736
+          "path": "/guardian-assets/guardian-joints-4.png",
+          "package": "guardian-assets",
+          "bytes": 135151,
+          "width": 720,
+          "height": 360,
+          "rgbaBytes": 1036800
+        },
+        {
+          "path": "/guardian-assets/guardian-body.png",
+          "package": "guardian-assets",
+          "bytes": 147942,
+          "width": 720,
+          "height": 360,
+          "rgbaBytes": 1036800
         }
       ]
     },
@@ -268,15 +282,23 @@
     },
     {
       "weaponLevel": 7,
-      "renderer": "whole-body-pending-parts",
+      "renderer": "jointed",
       "images": [
         {
-          "path": "/character-assets/guardian-weapon-7.png",
-          "package": "character-assets",
-          "bytes": 118119,
-          "width": 576,
-          "height": 384,
-          "rgbaBytes": 884736
+          "path": "/guardian-assets/guardian-joints-7.png",
+          "package": "guardian-assets",
+          "bytes": 134947,
+          "width": 720,
+          "height": 360,
+          "rgbaBytes": 1036800
+        },
+        {
+          "path": "/guardian-assets/guardian-body.png",
+          "package": "guardian-assets",
+          "bytes": 147942,
+          "width": 720,
+          "height": 360,
+          "rgbaBytes": 1036800
         }
       ]
     }
@@ -415,15 +437,16 @@
         "requiredPackageNames": [
           "battlefield-assets",
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "fruit-assets",
           "guardian-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 7036631,
-        "referencedFileBytes": 5044856
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 7134885,
+        "referencedFileBytes": 5058776
       },
       "levelId": 1,
       "category": "fruits",
@@ -676,32 +699,32 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-arms-rig-v1.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-apple-arms-rig-v1.png",
+          "package": "enemy-assets",
           "bytes": 82312,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-torso-rig-v1.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-apple-torso-rig-v1.png",
+          "package": "enemy-assets",
           "bytes": 210335,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -998,14 +1021,15 @@
           "bytes": 14150
         }
       ],
-      "imageBytes": 4441277,
-      "estimatedImageRgbaBytes": 33486672,
+      "imageBytes": 4455197,
+      "estimatedImageRgbaBytes": 33482112,
       "audioBytes": 603579
     },
     {
       "packageBudget": {
         "requiredPackageNames": [
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "fruit-assets",
           "guardian-assets",
@@ -1013,9 +1037,9 @@
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 7462745,
-        "referencedFileBytes": 4668222
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 7560058,
+        "referencedFileBytes": 4682142
       },
       "levelId": 2,
       "category": "color-shape",
@@ -1325,32 +1349,32 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-arms-rig-v1.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-apple-arms-rig-v1.png",
+          "package": "enemy-assets",
           "bytes": 82312,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-apple-torso-rig-v1.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-apple-torso-rig-v1.png",
+          "package": "enemy-assets",
           "bytes": 210335,
           "width": 1086,
           "height": 362,
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -1791,8 +1815,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3993322,
-      "estimatedImageRgbaBytes": 22738768,
+      "imageBytes": 4007242,
+      "estimatedImageRgbaBytes": 22734208,
       "audioBytes": 674900
     },
     {
@@ -1800,15 +1824,16 @@
         "requiredPackageNames": [
           "animal-assets",
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 7744401,
-        "referencedFileBytes": 4412292
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 7841714,
+        "referencedFileBytes": 4426212
       },
       "levelId": 3,
       "category": "animals-plants",
@@ -2163,16 +2188,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -2575,8 +2600,8 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3813728,
-      "estimatedImageRgbaBytes": 19888624,
+      "imageBytes": 3827648,
+      "estimatedImageRgbaBytes": 19884064,
       "audioBytes": 598564
     },
     {
@@ -2584,15 +2609,16 @@
         "requiredPackageNames": [
           "animal-assets",
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 7744401,
-        "referencedFileBytes": 4367714
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 7841714,
+        "referencedFileBytes": 4381634
       },
       "levelId": 4,
       "category": "tools",
@@ -2889,16 +2915,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -3409,23 +3435,24 @@
           "bytes": 5398
         }
       ],
-      "imageBytes": 3705157,
-      "estimatedImageRgbaBytes": 20118000,
+      "imageBytes": 3719077,
+      "estimatedImageRgbaBytes": 20113440,
       "audioBytes": 662557
     },
     {
       "packageBudget": {
         "requiredPackageNames": [
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 6745592,
-        "referencedFileBytes": 3310869
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 6842905,
+        "referencedFileBytes": 3324789
       },
       "levelId": 5,
       "category": "home-items",
@@ -3585,16 +3612,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -4071,23 +4098,24 @@
           "bytes": 5241
         }
       ],
-      "imageBytes": 2726041,
-      "estimatedImageRgbaBytes": 17070576,
+      "imageBytes": 2739961,
+      "estimatedImageRgbaBytes": 17066016,
       "audioBytes": 584828
     },
     {
       "packageBudget": {
         "requiredPackageNames": [
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 6745592,
-        "referencedFileBytes": 3361016
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 6842905,
+        "referencedFileBytes": 3373995
       },
       "levelId": 6,
       "category": "daily-items",
@@ -4251,16 +4279,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -4776,7 +4804,7 @@
         {
           "path": "/learning-assets/audio/zombie-home.mp3",
           "package": "learning-assets",
-          "bytes": 5085
+          "bytes": 4144
         },
         {
           "path": "/learning-assets/audio/zombie-juice.mp3",
@@ -4809,23 +4837,24 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2753222,
-      "estimatedImageRgbaBytes": 17660400,
-      "audioBytes": 607794
+      "imageBytes": 2767142,
+      "estimatedImageRgbaBytes": 17655840,
+      "audioBytes": 606853
     },
     {
       "packageBudget": {
         "requiredPackageNames": [
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 6745592,
-        "referencedFileBytes": 3452150
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 6842905,
+        "referencedFileBytes": 3465129
       },
       "levelId": 7,
       "category": "nature",
@@ -4994,16 +5023,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -5569,7 +5598,7 @@
         {
           "path": "/learning-assets/audio/zombie-home.mp3",
           "package": "learning-assets",
-          "bytes": 5085
+          "bytes": 4144
         },
         {
           "path": "/learning-assets/audio/zombie-juice.mp3",
@@ -5642,23 +5671,24 @@
           "bytes": 5868
         }
       ],
-      "imageBytes": 2800719,
-      "estimatedImageRgbaBytes": 18397680,
-      "audioBytes": 651431
+      "imageBytes": 2814639,
+      "estimatedImageRgbaBytes": 18393120,
+      "audioBytes": 650490
     },
     {
       "packageBudget": {
         "requiredPackageNames": [
           "character-assets",
+          "enemy-assets",
           "fortress-assets",
           "guardian-assets",
           "learning-assets",
           "main",
           "scene-images"
         ],
-        "mainSourceBytes": 1836502,
-        "subpackageSourceBytes": 6745592,
-        "referencedFileBytes": 3308877
+        "mainSourceBytes": 1851548,
+        "subpackageSourceBytes": 6842905,
+        "referencedFileBytes": 3322797
       },
       "levelId": 8,
       "category": "body-parts",
@@ -5816,16 +5846,16 @@
           "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-grand-parts.png",
-          "package": "character-assets",
-          "bytes": 309599,
-          "width": 888,
-          "height": 444,
-          "rgbaBytes": 1577088
+          "path": "/enemy-assets/zombie-grand-parts.png",
+          "package": "enemy-assets",
+          "bytes": 323519,
+          "width": 1086,
+          "height": 362,
+          "rgbaBytes": 1572528
         },
         {
-          "path": "/character-assets/zombie-iron-parts.png",
-          "package": "character-assets",
+          "path": "/enemy-assets/zombie-iron-parts.png",
+          "package": "enemy-assets",
           "bytes": 262797,
           "width": 1086,
           "height": 362,
@@ -6266,8 +6296,8 @@
           "bytes": 5085
         }
       ],
-      "imageBytes": 2752693,
-      "estimatedImageRgbaBytes": 16775664,
+      "imageBytes": 2766613,
+      "estimatedImageRgbaBytes": 16771104,
       "audioBytes": 556184
     }
   ]

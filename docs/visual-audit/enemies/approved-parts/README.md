@@ -4,7 +4,7 @@
 
 全部由内置 image_gen 生成。准确提示词为本目录 `*-prompt.txt`；三张运行 atlas 的母版、引用、尺寸、字节及 SHA256 见 [manifest.json](manifest.json)。最终 Boss 的早期 `grand-parts-01.png` 左缘裁切，修正留白的 `grand-parts-02.png` 均只作迭代记录；运行使用新的可动 `grand-rig-atlas-01.png`。修正请求曾连接失败一次，原请求重试后成功。没有新制作堡垒摧毁图。
 
-运行 atlas 存放于 `miniprogram/character-assets/zombie-{apple,iron,grand}-parts.png`。保留生成 alpha，对整张 atlas 统一缩小；Canvas 按标定区域绘制身体和腿部，王冠 Boss 另绘制以肩部为轴的盾臂。不是无损编码；没有程序补画、去背或修补角色像素。旧苹果图和旧 Boss 代码留作兼容，不作为制作母版。
+运行 atlas 存放于 `miniprogram/enemy-assets/`（苹果躯干、双臂与 textured，以及铁桶、王冠 Boss）；2026-11-12 角色分包接近 2MiB 后拆出独立 `enemy-assets` 分包。保留生成 alpha，对整张 atlas 统一缩小；Canvas 按标定区域绘制身体和腿部，王冠 Boss 另绘制以肩部为轴的盾臂。不是无损编码；没有程序补画、去背或修补角色像素。旧苹果图和旧 Boss 代码留作兼容，不作为制作母版。
 
 普通苹果怪使用苹果壳头盔直接表达身份，取消遮住头盔的重复水果徽章，保留血条。两类 Boss 有独立身体，水果、动物及其他词条均在头顶保留各自标识；移除覆盖在新身体上的旧几何桶帽、王冠和护甲。两腿沿已有距离步态运动，接敌按现有倒计时站稳；沿用现有前探、受击、预警、死亡和退场。没有改变攻击时点、伤害、碰撞、奖励、免疫或入场安排。
 
