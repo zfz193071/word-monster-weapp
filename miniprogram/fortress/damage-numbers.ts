@@ -4,6 +4,10 @@ export const DAMAGE_NUMBER_FONT = 'bold 18px sans-serif';
 type DamageEvent = Extract<CombatEvent, { type: 'monsterDamaged' }>;
 interface NumberEffect { event: DamageEvent; started: number; origin: Point; width: number }
 export interface DamageNumber { text: string; position: Point; color: string; opacity: number; scale: number }
+// A reserved strip of another on-screen unit's interface: its health bar, word
+// badge or Boss warning mark. `top`/`bottom` are distances above/below the
+// anchor (negative `top` means the strip sits below the anchor).
+export interface UiReservation { id: string; position: Point; halfWidth: number; top: number; bottom: number }
 const FLOAT_DISTANCE = 30, HEIGHT = 26, GAP = 4;
 // A hit number is useful only while it does not hide the unit that was hit.
 // This covers the ordinary body plus its learning badge and health bar; it is
@@ -14,10 +18,12 @@ const clamp = (value: number, min: number, max: number) => Math.max(min, Math.mi
 // resize), so later hits/expiry cannot make an existing number jump lanes.
 export class DamageNumbers {
   private effects: NumberEffect[] = [];
+  private reserved: readonly UiReservation[] = [];
   private now = 0;
   private arenaWidth = 360;
-  add(events: readonly CombatEvent[], now: number, arenaWidth = this.arenaWidth, measure?: (text: string) => number): void {
-    this.now = now; this.arenaWidth = arenaWidth; this.prune(now);
+  add(events: readonly CombatEvent[], now: number, arenaWidth = this.arenaWidth, measure?: (text: string) => number,
+    reserved?: readonly UiReservation[]): void {
+    this.now = now; this.arenaWidth = arenaWidth; if (reserved) this.reserved = reserved; this.prune(now);
     for (const event of events) {
       if (event.type !== 'monsterDamaged') continue;
       const text = `-${event.damage}`;
@@ -52,9 +58,12 @@ export class DamageNumbers {
         overlap += dx * dy;
       }
       const targetOverlap = this.targetOverlap(candidate, effect);
+      // Other units' bars, badges and warning marks stay readable too, ranked
+      // between the target's own interface and the spacing between numbers.
+      const uiOverlap = this.otherUiOverlap(candidate, effect);
       // Keep labels, bars and the character readable before optimizing the
       // spacing between numbers. Dense fights still preserve every hit.
-      const score = targetOverlap * 1000000 + overlap * 10000 + Math.hypot(candidate.x - anchor.x, candidate.y - anchor.y);
+      const score = targetOverlap * 1000000 + uiOverlap * 100000 + overlap * 10000 + Math.hypot(candidate.x - anchor.x, candidate.y - anchor.y);
       if (score < bestScore) { best = candidate; bestScore = score; }
       if (score === 0) break;
     }
@@ -68,11 +77,27 @@ export class DamageNumbers {
       - Math.abs(candidate.y - (target.y + (TARGET_BOTTOM - TARGET_TOP) / 2)));
     return dx * dy;
   }
+  // Own-target interface is already reserved by targetOverlap; skip it here so
+  // the ranking between the two pass terms stays independent.
+  private otherUiOverlap(candidate: Point, effect: NumberEffect): number {
+    const half = effect.width / 2;
+    let overlap = 0;
+    for (const reservation of this.reserved) {
+      if (reservation.id === effect.event.monsterId) continue;
+      const dx = Math.max(0, half + reservation.halfWidth + GAP - Math.abs(candidate.x - reservation.position.x));
+      const dy = Math.max(0, HEIGHT / 2 + (reservation.top + reservation.bottom) / 2 + GAP
+        - Math.abs(candidate.y - (reservation.position.y + (reservation.bottom - reservation.top) / 2)));
+      overlap += dx * dy;
+    }
+    return overlap;
+  }
   private prune(now: number) { this.effects = this.effects.filter(effect => now - effect.started < DAMAGE_NUMBER_DURATION_MS); }
   get active(): boolean { return this.effects.length > 0; }
   clear(): void { this.effects = []; }
   resize(ratio: number): void {
     this.arenaWidth *= ratio;
+    this.reserved = this.reserved.map(reservation =>
+      ({...reservation, position: {x: reservation.position.x * ratio, y: reservation.position.y}}));
     const pending = this.effects; this.effects = [];
     for (const effect of pending) {
       const resized = {...effect, event: {...effect.event, position: {...effect.event.position, x: effect.event.position.x * ratio}}};

@@ -16,6 +16,7 @@ import { drawBattlePet, BATTLE_PET_ART } from '../pets/battle-art';
 import { battleBackgroundColor, drawBattleBackground, courtyardAsset, COURTYARD_ASSETS, drawCourtyard } from './battle-background';
 import { grandBossWindingUp, bossChargePhase } from './battle-progression';
 import { DAMAGE_NUMBER_FONT, DamageNumbers } from './damage-numbers';
+import type { UiReservation } from './damage-numbers';
 import { baseAttackPose } from './base-attack-pose';
 import { CombatRunner } from './combat-runner';
 import { getWeaponParameters } from './combat';
@@ -301,6 +302,50 @@ export class CanvasScene {
     const key = `${hud.hp}:${hud.maxHp}:${hud.status}:${hud.frostEnergy}:${hud.frostTarget}`;
     if (key !== this.lastHud) { this.lastHud = key; this.options.onHud(hud); }
   }
+  // Visual-only reservations of on-screen interface: monster health bars, word
+  // badges and Boss warning marks plus damaged soldiers' bars. Mirrors the
+  // draw code; never a hitbox or a combat rule.
+  private uiReservations(state: CombatState): UiReservation[] {
+    const reservations: UiReservation[] = [];
+    const art = this.monsterArt;
+    for (const monster of state.monsters) {
+      if (monster.status === 'waiting' || monster.hp <= 0) continue;
+      const {x, y} = monster.position;
+      if (monster.boss && monster.bossKind === 'grand') {
+        reservations.push({id: monster.id, position: {x, y}, halfWidth: 48, top: -58, bottom: 68});
+        if (art && (art.fruitHats?.[monster.wordId] ?? art.fruitHat))
+          reservations.push({id: monster.id, position: {x, y: y - 78}, halfWidth: 18, top: 96, bottom: 60});
+        if (grandBossWindingUp(state.tick * 10 - (monster.spawnAtMs ?? 0))) {
+          const ringMargin = (30 + 1.5) * 2 + 2;
+          const ringWorldX = Math.max(ringMargin, Math.min(this.viewport.worldWidth - ringMargin, x));
+          reservations.push({id: monster.id, position: {x: ringWorldX, y: y + 44}, halfWidth: 60, top: 24, bottom: 64});
+        }
+        continue;
+      }
+      const scale = monster.boss || monster.enemyType === 'giant' ? 1.5 : 1;
+      if (monster.boss) {
+        reservations.push({id: monster.id, position: {x, y}, halfWidth: 33, top: -45, bottom: 51});
+        if (art && (art.fruitHats?.[monster.wordId] ?? art.fruitHat)) {
+          const badge = 16.5;
+          reservations.push({id: monster.id, position: {x, y: y - 39 * scale}, halfWidth: badge, top: 39 * scale + badge, bottom: 39 * scale - badge});
+        }
+        continue;
+      }
+      if (!art) continue;
+      const hatScale = art.monsterWidth / 64 * scale;
+      reservations.push({id: monster.id, position: {x, y}, halfWidth: 18 * hatScale, top: -41 * hatScale, bottom: 45 * hatScale});
+      const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')
+        && art.texturedBodies?.[monster.wordId]?.path === APPLE_ZOMBIE_PARTS.path;
+      if ((art.fruitHats?.[monster.wordId] ?? art.fruitHat) && !appleHelmet && !art.animalIds?.includes(monster.wordId)) {
+        reservations.push({id: monster.id, position: {x, y: y - 44 * hatScale}, halfWidth: 20 * hatScale, top: 64 * hatScale, bottom: 24 * hatScale});
+      }
+    }
+    for (const soldier of state.supportSoldiers ?? []) {
+      if (soldier.hp <= 0 || soldier.hp >= soldier.maxHp) continue;
+      reservations.push({id: `soldier-${soldier.id}`, position: {x: soldier.position.x, y: soldier.position.y}, halfWidth: 10, top: -15, bottom: 18});
+    }
+    return reservations;
+  }
   private schedule(): void {
     if (!this.ready || this.disposed || this.paused || this.frameId !== undefined
       || (this.runner.snapshot?.status !== 'fighting' && !this.retirement?.active && !this.damageNumbers.active && !this.coinEffects.length)) return;
@@ -330,7 +375,7 @@ export class CanvasScene {
         this.peakProjectiles = Math.max(this.peakProjectiles, result.state.projectiles.length);
         this.context.save(); this.context.font = DAMAGE_NUMBER_FONT;
         this.damageNumbers.add(result.events, this.effectTime, this.viewport.worldWidth,
-          text => this.context.measureText(text)?.width);
+          text => this.context.measureText(text)?.width, this.uiReservations(result.state));
         this.context.restore();
         this.draw(result.state); this.publishHud(result.state);
         if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {

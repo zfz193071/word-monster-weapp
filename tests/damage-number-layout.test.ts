@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { DamageNumbers } from '../miniprogram/fortress/damage-numbers';
+import type { UiReservation } from '../miniprogram/fortress/damage-numbers';
 import type { CombatEvent } from '../miniprogram/fortress/types';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 const context = createOpeningEncounter('number-layout', 'apple', 0).context;
@@ -80,4 +81,56 @@ test('极密集时搜索有界但不合并或丢弃真实命中', () => {
   numbers.add(Array.from({length:100},(_,i)=>hit(i,180,100)),0,360,measure);
   assert.equal(numbers.sample(0).length,100);
   numbers.clear();assert.equal(numbers.active,false);
+});
+
+// Reservation strips are inflated by the same GAP the placement search uses.
+function checkReservation(numbers: ReturnType<DamageNumbers['sample']>, reservations: readonly UiReservation[]) {
+  for (const number of numbers) {
+    const half = (measure(number.text) + 3) * 1.18 / 2;
+    for (const reservation of reservations) {
+      const spanX = reservation.halfWidth + 4;
+      const centerY = reservation.position.y + (reservation.bottom - reservation.top) / 2;
+      const spanY = (reservation.top + reservation.bottom) / 2 + 4;
+      const clear = Math.abs(number.position.x - reservation.position.x) >= half + spanX
+        || Math.abs(number.position.y - centerY) >= 13 + spanY;
+      assert.ok(clear, `Damage number ${number.text} hides unit UI at ${reservation.position.x},${reservation.position.y}`);
+    }
+  }
+}
+
+test('伤害数字避开其他单位的血条、词条与Boss预警，不影响命中数值', () => {
+  // Bar of a nearby monster plus a boss warning ring above the hit position.
+  const reservations: UiReservation[] = [
+    {id: 'enemy-1', position: {x: 260, y: 240}, halfWidth: 18, top: -41, bottom: 45},
+    {id: 'boss', position: {x: 150, y: 180}, halfWidth: 60, top: 24, bottom: 64},
+  ];
+  const events = [hit(1, 180, 260)];
+  const numbers = new DamageNumbers();
+  numbers.add(events, 0, 360, measure, reservations);
+  const sampled = numbers.sample(0, 360);
+  assert.deepEqual(sampled.map(number => number.text), ['-11']);
+  check(sampled, 360);
+  checkReservation(sampled, reservations);
+  // The reservation snapshot itself stays untouched by placement.
+  assert.deepEqual(JSON.stringify(reservations), JSON.stringify([
+    {id: 'enemy-1', position: {x: 260, y: 240}, halfWidth: 18, top: -41, bottom: 45},
+    {id: 'boss', position: {x: 150, y: 180}, halfWidth: 60, top: 24, bottom: 64},
+  ]));
+});
+
+test('受创小兵的血条与缩放后的预留重新避让，命中数量不变', () => {
+  const soldierBar: UiReservation = {id: 'soldier-1', position: {x: 180, y: 430}, halfWidth: 10, top: -15, bottom: 18};
+  const events = [hit(1, 180, 470)];
+  const numbers = new DamageNumbers();
+  numbers.add(events, 0, 360, measure, [soldierBar]);
+  checkReservation(numbers.sample(0, 360), [soldierBar]);
+  // Resize scales reservation anchors with the arena width and re-places.
+  numbers.resize(980 / 360);
+  const scaled: UiReservation = {...soldierBar, position: {x: soldierBar.position.x * 980 / 360, y: soldierBar.position.y}};
+  const events2 = [hit(2, 490, 470)];
+  numbers.add(events2, 0, 980, measure, [scaled]);
+  const sampled = numbers.sample(0, 980);
+  assert.equal(sampled.length, 2);
+  check(sampled, 980);
+  checkReservation(sampled, [scaled]);
 });
