@@ -61,7 +61,7 @@ test('召唤不治疗已有援军，空位重排不重叠，受伤与冷却跨�
   const third=summonSupportSoldier(two,'third')!;assert(summonSupportSoldier(third,'fourth'));
 });
 
-test('签到士兵每2秒使用当前武器伤害，替堡垒挡普通近战，战死删除且不返还库存', () => {
+test('签到士兵每2秒使用当前武器伤害，普通近战直接伤害堡垒且不返还库存', () => {
   const f=stock();const base=createOpeningEncounter('summon','apple',1,0,undefined,undefined,[],1,3);
   const runner=new CombatRunner(base);assert(runner.summonSoldier('signed',()=>f.store.consumeSoldier(f.store.soldierInventory().revision)));
   const state=runner.snapshot!;const target={...state.monsters[0],hp:10000,maxHp:10000,status:'alive' as const,spawnAtMs:0,position:{x:180,y:200}};
@@ -74,8 +74,7 @@ test('签到士兵每2秒使用当前武器伤害，替堡垒挡普通近战，�
   assert.equal(attack.state.supportSoldiers![0].shotCombatId, state.context.combatId);
   assert(Object.isFrozen(attack.state.supportSoldiers![0].shotTarget));
   const hurt=stepCombat({...attack.state,monsters:[{...target,status:'attackingBase',attackRemainingMs:0,attackDamage:20}]});
-  assert.equal(hurt.state.supportSoldiers![0].hp,10);assert.equal(hurt.state.base.hp,state.base.hp);
-  const dead=stepCombat({...hurt.state,monsters:hurt.state.monsters.map(m=>({...m,attackRemainingMs:0}))});
-  assert.equal(dead.state.supportSoldiers!.length,0);assert(dead.events.some(e=>e.type==='supportSoldierDefeated'&&e.soldierId==='signed'));
+  assert.equal(hurt.state.supportSoldiers![0].hp,30);assert.equal(hurt.state.base.hp,state.base.hp-20);
+  assert.equal(hurt.events.some(e=>e.type==='supportSoldierDamaged'),false);
   assert.equal(f.rebuild().soldierInventory().count,4);
 });

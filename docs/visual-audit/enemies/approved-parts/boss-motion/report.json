@@ -7724,8 +7724,12 @@
         "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
       },
       {
-        "path": "/character-assets/zombie-apple-parts.png",
-        "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d"
+        "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+        "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e"
+      },
+      {
+        "path": "/character-assets/zombie-apple-arms-rig-v1.png",
+        "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8"
       },
       {
         "path": "/character-assets/zombie-iron-parts.png",
@@ -7733,7 +7737,7 @@
       },
       {
         "path": "/character-assets/zombie-grand-parts.png",
-        "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e"
+        "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc"
       },
       {
         "path": "/assets/images/army/rifle.png",
@@ -7785,8 +7789,8 @@
       }
     ],
     "file": "phone-iron.mp4",
-    "bytes": 4625468,
-    "sha256": "0f688523af6bccd55e111fc17f5a2fb9ef48dfc79b8585c62fbc5fafc5bf4114"
+    "bytes": 5235341,
+    "sha256": "d6d6eaf6ea80855b00deefc28bc151b4b5a600f2a43da0583a55ceeff21eaba9"
   },
   {
     "device": "ipad",
@@ -16287,8 +16291,12 @@
         "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
       },
       {
-        "path": "/character-assets/zombie-apple-parts.png",
-        "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d"
+        "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+        "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e"
+      },
+      {
+        "path": "/character-assets/zombie-apple-arms-rig-v1.png",
+        "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8"
       },
       {
         "path": "/character-assets/zombie-iron-parts.png",
@@ -16296,7 +16304,7 @@
       },
       {
         "path": "/character-assets/zombie-grand-parts.png",
-        "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e"
+        "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc"
       },
       {
         "path": "/assets/images/army/rifle.png",
@@ -16348,8 +16356,8 @@
       }
     ],
     "file": "ipad-iron.mp4",
-    "bytes": 6632886,
-    "sha256": "870dc9281c112e47191f683af90c73e183d1eaada06f1e0e0c9587f819583f73"
+    "bytes": 7254867,
+    "sha256": "b878d5d5fe54bfed4062a9168e1653874f22d49d5820360040eb9b38f3bb9e9c"
   },
   {
     "device": "phone",
@@ -36305,8 +36313,12 @@
         "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
       },
       {
-        "path": "/character-assets/zombie-apple-parts.png",
-        "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d"
+        "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+        "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e"
+      },
+      {
+        "path": "/character-assets/zombie-apple-arms-rig-v1.png",
+        "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8"
       },
       {
         "path": "/character-assets/zombie-iron-parts.png",
@@ -36314,7 +36326,7 @@
       },
       {
         "path": "/character-assets/zombie-grand-parts.png",
-        "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e"
+        "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc"
       },
       {
         "path": "/assets/images/army/rifle.png",
@@ -36366,8 +36378,8 @@
       }
     ],
     "file": "phone-grand.mp4",
-    "bytes": 8618775,
-    "sha256": "fe880684a50d148ba5f72ef4232bf21b9d06536cf954430e24a627609a8ce237"
+    "bytes": 9870350,
+    "sha256": "f540214bac79918c731b2f6d01ec1abdb4dddd518096e66265aa657c6da3c2a6"
   },
   {
     "device": "ipad",
@@ -58215,8 +58227,12 @@
         "sha256": "44558aad177b56c5184d9d12d3b67cbed300f2182c61ea8a8f927e72c8b915db"
       },
       {
-        "path": "/character-assets/zombie-apple-parts.png",
-        "sha256": "2cb50c9e456e22ec894fbf086ba4f926b1926537e88d88466b29b774899bf56d"
+        "path": "/character-assets/zombie-apple-torso-rig-v1.png",
+        "sha256": "4593d847cf5a3ddd9e6b06ada79751650d9b60144d7374687bfdf4c58b83718e"
+      },
+      {
+        "path": "/character-assets/zombie-apple-arms-rig-v1.png",
+        "sha256": "7b9d168c03ec7a6909620e9f69f19b307c931df97f3e7ea39f1340cfe2ccd3d8"
       },
       {
         "path": "/character-assets/zombie-iron-parts.png",
@@ -58224,7 +58240,7 @@
       },
       {
         "path": "/character-assets/zombie-grand-parts.png",
-        "sha256": "12031dafaece15fc960b3bbae767587e62aeeda313be6354e22530060e4f801e"
+        "sha256": "e4c1a12ba549ca93c39896d92efeca3cfc656826102d5d080c69ebec318e47bc"
       },
       {
         "path": "/assets/images/army/rifle.png",
@@ -58276,7 +58292,7 @@
       }
     ],
     "file": "ipad-grand.mp4",
-    "bytes": 11508173,
-    "sha256": "e165380d7a2513714afdde48f436f50248ccc8b03948f4375e60875c71e6554b"
+    "bytes": 12782779,
+    "sha256": "83a397427c5d9826819fb810e78f67e6a3accee0a622b6cd9c033257b0e5df72"
   }
 ]

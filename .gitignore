@@ -5,3 +5,4 @@ coverage/
 artifacts/
 *.log
 *.tsbuildinfo
+__pycache__/

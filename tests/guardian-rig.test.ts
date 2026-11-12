@@ -26,10 +26,10 @@ function sourcePoint(draw: ReturnType<typeof recording>['draws'][number], x: num
   return {x:a*px+c*py+e,y:b*px+d*py+f};
 }
 
-test('五套关节主角在宽屏两侧瞄准时脚底固定、枪口与真实弹道一致，绘制不写战斗状态', () => {
+test('七套关节主角在宽屏两侧瞄准时脚底固定、枪口与真实弹道一致，绘制不写战斗状态', () => {
   // Independent measured muzzle/barrel coordinates in original atlases.
   const points = [[1,1634,103,1514,220],[2,1651,135,1521,243],[3,1690,108,1570,201],
-    [5,1663,135,1531,233],[6,1674,130,1538,235]];
+    [4,1660,105,1510,230],[5,1663,135,1531,233],[6,1674,130,1538,235],[7,1660,105,1510,230]];
   for (const [level,mx,my,rx,ry] of points) for (const targetX of [0,40,400,500,600,960,1000]) {
     const opening=createOpeningEncounter('rig-test','apple',0,0,undefined,undefined,[],1,level);
     const fired=stepCombat({...opening,arenaWidth:1000,player:{x:500,y:510},shotRemainingMs:0,
@@ -48,7 +48,7 @@ test('五套关节主角在宽屏两侧瞄准时脚底固定、枪口与真实�
     assert.ok(Math.abs((muzzle.y-rear.y)/length-fired.aimDirection!.y)<1e-8);
     assert.equal(JSON.stringify(fired),before);
   }
-  assert.equal(guardianRig(4),undefined); assert.equal(guardianRig(7),undefined);
+  assert.equal(guardianRig(0),undefined); assert.equal(guardianRig(8),undefined);
 });
 
 test('后坐按正式射击倒计时短促回弹，暂停采样冻结且不改变身体和枪管方向', () => {

@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import { updateSummons } from '../miniprogram/fortress/summoning';
 import { applyCombatSkills, stepCombat, summonSupportSoldier, reviveCompanion } from '../miniprogram/fortress/combat';
 import { createOpeningEncounter } from '../miniprogram/fortress/opening-encounter';
 import { applySkillReward, rollUpgradeCandidates } from '../miniprogram/fortress/skill-quality';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 import { SUMMON_SKILLS, isSummonSkill } from '../miniprogram/fortress/summon-skills';
-import { skillLevels } from '../miniprogram/fortress/quality-skills';
+import { qualityDescription, skillLevels } from '../miniprogram/fortress/quality-skills';
 const first={level:1,quality:'crude' as const};
 const initial=()=>createOpeningEncounter('summons','apple',1);
 test('first acquisition summons once, upgrades preserve HP ratio/cooldown and do not restart twenty second timer',()=>{
@@ -14,6 +15,11 @@ test('first acquisition summons once, upgrades preserve HP ratio/cooldown and do
  state={...state,supportSoldiers:state.supportSoldiers!.map(s=>({...s,hp:30,attackRemainingMs:333})),summonRemainingMs:{shieldLine:1234}};
  const next=applyCombatSkills(state,skillLevels({shieldLine:{...first,level:2}}),{shieldLine:{...first,level:2}});
  assert.equal(next.supportSoldiers!.length,1);assert.equal(next.supportSoldiers![0].hp,34);assert.equal(next.supportSoldiers![0].attackRemainingMs,333);assert.equal(next.summonRemainingMs!.shieldLine,1234);
+});
+test('summon copy matches the thirty-unit cap',()=>{
+ assert.match(qualityDescription('shieldLine',{shieldLine:first}),/全体最多30名/);
+ const wxml=readFileSync(new URL('../miniprogram/components/skill-choice/skill-choice.wxml',import.meta.url),'utf8');
+ assert.match(wxml,/最多3种召唤 · 全体30名/);
 });
 test('full squads neither replace nor bank spawns; twenty second checks refill one missing type',()=>{
  let state=initial();for(let i=0;i<30;i++)state=summonSupportSoldier(state,'inventory'+i)!;

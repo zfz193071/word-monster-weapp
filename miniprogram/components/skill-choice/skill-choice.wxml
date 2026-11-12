@@ -7,7 +7,7 @@
       <image wx:if="{{item.soldierImage}}" class="soldier-image" src="{{item.soldierImage}}" mode="aspectFit" aria-hidden="true" />
       <view wx:else class="skill-icon {{item.icon}}" aria-hidden="true"><view></view><view></view><view></view></view>
       <view class="card-detail">{{item.shortDescription}}</view>
-      <view wx:if="{{item.summon}}" class="combo-hint">最多3种召唤 · 全体3名
+      <view wx:if="{{item.summon}}" class="combo-hint">最多3种召唤 · 全体30名
 每20秒检查；满员，空位后自动补充</view>
       <view wx:if="{{item.comboHint}}" class="combo-hint">{{item.comboHint}}</view>
       <view wx:if="{{showGuide && !item.chosen && item.id === guideCardId}}" class="skill-guide {{disabled ? 'guide-paused' : ''}}" aria-label="再选择一个技能">👆</view>

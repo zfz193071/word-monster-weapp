@@ -8,6 +8,16 @@ import { SAVE_KEYS } from '../miniprogram/preview/save-transfer.ts';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const seedPath = new URL('../miniprogram/preview/save-seed.ts', import.meta.url);
 const lockPath = new URL('../artifacts/preview-save.lock', import.meta.url);
+const soldierOption = process.argv.find(arg => arg.startsWith('--soldiers='));
+const previewSoldiers = soldierOption === undefined ? undefined : Number(soldierOption.slice('--soldiers='.length));
+const flagOption = process.argv.find(arg => arg.startsWith('--flags='));
+const previewFlags = flagOption === undefined ? undefined : Number(flagOption.slice('--flags='.length));
+if (previewSoldiers !== undefined && (!Number.isSafeInteger(previewSoldiers) || previewSoldiers < 0)) {
+  throw new Error('--soldiers 必须是非负整数');
+}
+if (previewFlags !== undefined && (!Number.isSafeInteger(previewFlags) || previewFlags < 0)) {
+  throw new Error('--flags 必须是非负整数');
+}
 let mini, original, lock;
 try {
   await mkdir(new URL('../artifacts/', import.meta.url), { recursive: true });
@@ -25,14 +35,27 @@ try {
   if (!wallet || wallet.version !== 1) throw new Error('开发者工具中没有可迁移的钱包存档，已停止生成二维码');
   const transaction = snapshot.entries.at(-1).value;
   if (transaction) throw new Error('存在未完成的宠物升级，请先回首页完成保存再预览');
-  const seed = { id: randomUUID(), entries: snapshot.entries };
+  const entries = snapshot.entries.map(entry => ({...entry}));
+  if (previewSoldiers !== undefined || previewFlags !== undefined) {
+    const supplies = entries.find(entry => entry.key === 'word-monster:daily-checkin:v1');
+    const current = supplies?.value;
+    if (!supplies || !current || typeof current !== 'object' || (current).version !== 1) {
+      throw new Error('开发者工具中的士兵库存存档无效，已停止生成二维码');
+    }
+    supplies.value = {
+      ...current,
+      ...(previewSoldiers === undefined ? {} : {soldiers: previewSoldiers}),
+      ...(previewFlags === undefined ? {} : {flags: previewFlags}),
+    };
+  }
+  const seed = { id: randomUUID(), entries };
   const output = new URL(`../artifacts/preview-${seed.id}/`, import.meta.url);
   await mkdir(output, { recursive: true });
   await writeFile(new URL('save.json', output), JSON.stringify(seed, null, 2), { mode: 0o600 });
   await mini.disconnect(); mini = undefined;
   original = await readFile(seedPath, 'utf8');
   await writeFile(seedPath, `import type { PreviewSave } from './save-transfer';\nexport const previewSave: PreviewSave | null = ${JSON.stringify(seed)};\n`);
-  console.log(`存档：金币 ${wallet.balance}，武器 ${wallet.weaponLevel ?? 1} 级；手机首次打开将覆盖导入。`);
+  console.log(`存档：金币 ${wallet.balance}，武器 ${wallet.weaponLevel ?? 1} 级${previewSoldiers === undefined ? '' : `，士兵 ${previewSoldiers} 名`}${previewFlags === undefined ? '' : `，复活旗帜 ${previewFlags} 面`}；手机首次打开将覆盖导入。`);
   const qr = fileURLToPath(new URL('qrcode.png', output));
   const result = spawnSync(process.env.WECHAT_DEVTOOLS_CLI || '/Applications/wechatwebdevtools.app/Contents/MacOS/cli',
     ['preview', '--project', root, '--qr-format', 'image', '--qr-output', qr], { stdio: 'inherit', timeout: 180000 });
