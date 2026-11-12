@@ -3,7 +3,7 @@
   "reference": "docs/visual-audit/enemies/approved-parts/apple-parts-01.png",
   "referenceSha256": "ddf38f8e446cc04bbb0a333383dc01986f3d4b12bb54f7edf01b4d9d51537231",
   "authorization": "2026-11-11 用户：按此方向制作代表图",
-  "scope": "五类代表图审查，尚未批准正式部件或接入；玩法不变",
+  "scope": "五类代表图已获用户认可（2026-11-12），可作为正式母版继续制作部件与动作；尚未接入运行时，玩法不变",
   "assets": [
     {
       "kind": "runner",
@@ -19,7 +19,7 @@
         1234,
         1254
       ],
-      "status": "pending-user-review"
+      "status": "appearance-approved-production-checks-pending"
     },
     {
       "kind": "armored",
@@ -35,7 +35,7 @@
         1245,
         1254
       ],
-      "status": "pending-user-review"
+      "status": "appearance-approved-production-checks-pending"
     },
     {
       "kind": "flying",
@@ -51,7 +51,7 @@
         1225,
         1254
       ],
-      "status": "pending-user-review"
+      "status": "appearance-approved-production-checks-pending"
     },
     {
       "kind": "exploder",
@@ -67,7 +67,7 @@
         1235,
         1254
       ],
-      "status": "pending-user-review"
+      "status": "appearance-approved-production-checks-pending"
     },
     {
       "kind": "giant",
@@ -83,15 +83,23 @@
         1253,
         1254
       ],
-      "status": "pending-user-review"
+      "status": "appearance-approved-production-checks-pending"
     },
     {
       "kind": "lineup",
       "path": "docs/visual-audit/enemies/special-studies/apple-special-enemies-study-01.png",
       "sha256": "79aff9af0fff366ec3bbea8cb2452a14d6d274265f529d68352b303af53c82c5",
-      "size": [2172, 724],
-      "status": "pending-user-review",
+      "size": [
+        2172,
+        724
+      ],
+      "status": "review-only-reference",
       "note": "Built-in image_gen lineup generated from style-study-01 and the approved apple-zombie reference; review-only and not a runtime asset."
     }
-  ]
+  ],
+  "approval": {
+    "date": "2026-11-12",
+    "by": "user",
+    "note": "审样通过；造型认可不等于运行时、整场或设备验收。拆件需扩大飞行翼尖与巨型手部边距，词条身份不得统一改为苹果帽。"
+  }
 }
