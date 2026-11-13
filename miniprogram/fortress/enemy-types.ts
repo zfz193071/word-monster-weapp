@@ -2,6 +2,17 @@ import type { EnemyType } from './army';
 import { enemyType, ENEMY_TYPES } from './army';
 import type { RandomSource } from './types';
 
+/**
+ * 僵尸兵种属性倍率。
+ * 
+ * 当前实施范围 (#113)：
+ * - 仅苹果僵尸使用 runner 类型（速度 28，生命 0.8）
+ * - 所有其他僵尸（水果/动物/Boss）维持 normal 类型（速度 20，生命 1.0）
+ * - 新增僵尸类型默认使用 normal，需美术资源确认和显式配置才能调整
+ * 
+ * @see https://github.com/zfz193071/word-monster-weapp/issues/112
+ * @see https://github.com/zfz193071/word-monster-weapp/issues/113
+ */
 export const ENEMY_STATS = Object.freeze({
   normal: {hp:1,speed:1,attack:1}, runner: {hp:.8,speed:1.6,attack:1},
   armored: {hp:1.5,speed:.8,attack:1}, flying: {hp:1,speed:1.15,attack:1},

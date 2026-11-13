@@ -1,5 +1,23 @@
 import type { MonsterState, SupportSoldierState } from './types';
 
+/**
+ * 敌方兵种类型定义。
+ * 
+ * 兵种说明：
+ * - normal: 普通僵尸，维持标准速度和生命
+ * - runner: 奔跑型僵尸，速度 1.6 倍，生命 0.8 倍
+ * - armored: 重甲僵尸，生命 1.5 倍，速度 0.8 倍
+ * - flying: 飞行僵尸，速度 1.15 倍，空中单位
+ * - exploder: 自爆僵尸，生命 0.8 倍，伤害 2 倍
+ * - giant: 巨型僵尸，生命 3 倍，速度 0.6 倍，伤害 2 倍
+ * 
+ * 当前配置：
+ * - 仅苹果僵尸 (#112) 为奔跑型 (runner)，速度 28
+ * - 其他所有僵尸类型维持原样 (normal)，速度 20
+ * - 新增僵尸类型默认使用 normal，需显式配置才能启用其他兵种
+ * 
+ * @see https://github.com/zfz193071/word-monster-weapp/issues/113
+ */
 export const ENEMY_TYPES = ['normal', 'runner', 'armored', 'flying', 'exploder', 'giant'] as const;
 export type EnemyType = typeof ENEMY_TYPES[number];
 export const SOLDIER_TYPES = ['rifle', 'shield', 'flamethrower', 'rocket', 'jetpack', 'tank'] as const;
