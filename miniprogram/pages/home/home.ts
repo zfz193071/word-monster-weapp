@@ -28,7 +28,7 @@ function collectionCards(levelId: number, revision: number) {
 }
 
 Page({
-  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionCards(1, 0), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', showSettings: false, musicVolume: 70, sfxVolume: 80, sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionCards(1, 0), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -99,6 +99,25 @@ Page({
       this.setData({ difficulty, difficultyLabel: DIFFICULTIES[difficulty].label, difficultyError: '', showDifficulty: false });
     }
     catch { this.setData({ difficultyError: '难度未保存，请重试' }); }
+  },
+  openSettings() {
+    if (this.disposed || !this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showPet || this.data.showWeapon || this.data.showDifficulty || this.data.showCheckin || this.data.showHouse || this.data.showSettings) return;
+    this.setData({ showSettings: true, showLevels: false, showCredits: false });
+  },
+  closeSettings() { this.setData({ showSettings: false }); },
+  changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) {
+    const value = event.detail.value;
+    if (Number.isFinite(value)) {
+      const volume = Math.max(0, Math.min(100, value));
+      this.setData({ musicVolume: volume });
+      this.music?.setVolume(volume / 100);
+    }
+  },
+  changeSfxVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) {
+    const value = event.detail.value;
+    if (Number.isFinite(value)) {
+      this.setData({ sfxVolume: Math.max(0, Math.min(100, value)) });
+    }
   },
   refreshPet() {
     try { this.setData({ petView: petStore.view(), coinBalance: coinWallet.balance(), coinError: false, petError: '' }); }

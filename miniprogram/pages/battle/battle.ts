@@ -27,7 +27,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { pageVisible: true, entryLoading: true, entryProgress: 0, entryError: '', assetsReady: false, sceneMounted: false, entryEpoch: 0, musicVolume: 22, combatSpeed: 1, volumeOpen: false, fromHome: false, loadingCover: battleBackgroundCover(1), loadingColor: battleBackgroundColor(1), coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { pageVisible: true, entryLoading: true, entryProgress: 0, entryError: '', assetsReady: false, sceneMounted: false, entryEpoch: 0, musicVolume: 22, combatSpeed: 1, fromHome: false, loadingCover: battleBackgroundCover(1), loadingColor: battleBackgroundColor(1), coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   loadingMusic: undefined as ReturnType<typeof createLoopMusic> | undefined,
   loadEpoch: 0,
@@ -148,9 +148,6 @@ Page({
 
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) { const value = event.detail.value; if (Number.isFinite(value)) { this.setData({ musicVolume: Math.max(0, Math.min(100, value)) }); this.syncLoadingMusic(); } },
   cycleCombatSpeed() { const index = COMBAT_SPEEDS.indexOf(this.data.combatSpeed as typeof COMBAT_SPEEDS[number]); this.setData({ combatSpeed: COMBAT_SPEEDS[(index + 1) % COMBAT_SPEEDS.length] }); },
-  openVolume() { this.setData({ volumeOpen: true }); },
-  closeVolume() { this.setData({ volumeOpen: false }); },
-  noop() {},
   updateCoinBalance(event: WechatMiniprogram.CustomEvent<{ balance: number }>) { const balance = event.detail.balance; if (Number.isSafeInteger(balance) && balance >= 0) this.setData({ coinBalance: balance }); },
   becomingStronger: false,
   becomeStronger() {
@@ -159,7 +156,7 @@ Page({
     this.becomingStronger = true; strengthGuide.request();
     wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/home/home', fail: () => { this.becomingStronger = false; } }) });
   },
-  returnHome() { const scene = this.selectComponent('.fortress-preview'); if (scene?.settleBeforeExit && !scene.settleBeforeExit()) return; this.closeVolume(); this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
+  returnHome() { const scene = this.selectComponent('.fortress-preview'); if (scene?.settleBeforeExit && !scene.settleBeforeExit()) return; this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },
   selectPreviewMonster(event: WechatMiniprogram.BaseEvent) {
     const wordId = event.currentTarget.dataset.wordId;

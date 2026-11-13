@@ -9,6 +9,7 @@
   <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view></button>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
   <button class="difficulty-button" bindtap="openDifficulty" aria-label="游戏难度，当前{{difficultyLabel}}"><difficulty-icon class="difficulty-mark" kind="{{difficulty}}" compact="{{true}}" /><text>{{difficultyLabel}}</text></button>
+  <button class="settings-button" bindtap="openSettings" aria-label="游戏设置"><view class="settings-icon"><view class="gear"></view><view class="gear-small"></view></view></button>
   <view wx:if="{{showCheckin}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <view class="checkin-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="每日签到">
       <view class="checkin-heading">每日签到<button class="close-button" bindtap="closeCheckin" aria-label="关闭签到">×</button></view>
@@ -42,6 +43,21 @@
   </view>
   <view wx:if="{{showDifficulty}}" class="modal-backdrop" catchtouchmove="stopScroll">
     <difficulty-panel class="home-difficulty-panel" selected="{{difficulty}}" error="{{difficultyError}}" bindselect="selectDifficulty" bindclose="closeDifficulty" />
+  </view>
+  <view wx:if="{{showSettings}}" class="modal-backdrop" catchtouchmove="stopScroll">
+    <view class="settings-modal" role="dialog" aria-label="游戏设置">
+      <view class="settings-title">设置<button class="close-button" bindtap="closeSettings" aria-label="关闭">×</button></view>
+      <view class="settings-row">
+        <view class="settings-icon-cell"><view class="music-icon">♪</view></view>
+        <text class="settings-label">音乐</text>
+        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{musicVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeMusicVolume" bindchange="changeMusicVolume" aria-label="背景音乐音量" /><text class="settings-value">{{musicVolume}}%</text></view>
+      </view>
+      <view class="settings-row">
+        <view class="settings-icon-cell"><view class="sfx-icon">🔊</view></view>
+        <text class="settings-label">音效</text>
+        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{sfxVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeSfxVolume" bindchange="changeSfxVolume" aria-label="音效音量" /><text class="settings-value">{{sfxVolume}}%</text></view>
+      </view>
+    </view>
   </view>
   <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><text>正在准备关卡…</text></view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
