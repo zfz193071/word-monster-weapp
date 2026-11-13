@@ -64,9 +64,13 @@ function animalIdsOf(art: MonsterArt): ReadonlySet<string> {
   if (!ids) { ids = new Set(art.animalIds ?? []); animalIdSets.set(art, ids); }
   return ids;
 }
+const idSeedCache = new Map<string, number>();
 function idSeed(id: string): number {
+  const cached = idSeedCache.get(id);
+  if (cached !== undefined) return cached;
   let sum = 0;
   for (let index = 0; index < id.length; index++) sum += id.charCodeAt(index);
+  idSeedCache.set(id, sum);
   return sum;
 }
 // Shared by runtime loading and offline resource budgets.
@@ -133,6 +137,7 @@ export class CanvasScene {
   private monsterFlashes = new Map<string, number>();
   private baseFlashUntil = 0;
   private retirement: ReturnType<typeof createRetirement> | undefined;
+  private weaponCache?: number;
   constructor(private readonly canvas: Canvas, private readonly options: SceneOptions) {
     this.context = canvas.getContext('2d');
     if (!this.context) throw new Error('Canvas 2D 初始化失败');
@@ -191,7 +196,7 @@ export class CanvasScene {
     });
   }
   applyPet(pet: BattlePet): void { this.runner.applyPet(pet); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
-  applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
+  applySkills(skills: SkillLevels, collection?: SkillCollection): void { this.runner.applySkills(skills, collection); this.weaponCache = undefined; if (this.ready && this.runner.snapshot) this.draw(this.runner.snapshot); }
   releaseFrost(): boolean {
     if (!this.ready || this.disposed || this.paused || this.needsResume) return false;
     if (!this.runner.releaseFrost()) return false;
@@ -521,7 +526,7 @@ export class CanvasScene {
         else drawHouseFortress(c, state.houseLevel ?? 1, this.viewport.worldWidth);
       }
       if (art.fruitHat) {
-        const weaponInterval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
+        const weaponInterval = this.weaponCache ?? (this.weaponCache = getWeaponParameters(state.skills, state.skillCollection).intervalMs);
         const rig = guardianRigForPath(art.hero.path), body = this.images.get(GUARDIAN_BODY.path), arms = this.images.get(art.hero.path);
         const variant = heroVariantForPath(art.hero.path);
         if (rig && body && arms) {
