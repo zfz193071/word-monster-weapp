@@ -43,7 +43,7 @@ import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
 interface SkillQuizRequest { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit'; singleAttempt: true; offerId: string }
-interface InstanceState { entryFramePending?: boolean; quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean }
+interface InstanceState { entryFramePending?: boolean; quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean; petDropAwardsTimer?: ReturnType<typeof setTimeout>; }
 const instances = new WeakMap<object, InstanceState>();
 // Escaped setData bytes grow quadratically with the frozen backdrop's pixel
 // size. A capped width keeps the last frame cheap to encode and decode even
@@ -88,7 +88,9 @@ Component({
   },
   data: { frostEnergy: 0, frostPercent: 0, frostTarget: false, combos: comboProgress(ZERO_SKILLS), entryFrame: '', entryFrameEpoch: 0, loadingProgress: 50, skillQuiz: null as SkillQuizRequest | null, skillShowGuide: false, skillQuizIncorrect: false, skillPicksRemaining: 0, reviveOpen: false, reviveBusy: false, reviveError: '', flagStock: 0, flagRevision: 0, flagStockError: false, reviveTargets: [] as {kind:string; id:string; label:string; disabled:boolean}[], soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardCards: [] as RewardCard[], rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
     volumeFrame: '', bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageLoadingColor: '',
-    skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '' },
+    skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '',
+    petDropAwards: [] as { id: string; message: string; x: number; y: number; icon?: string; name?: string; symbol?: string; symbolColor?: string; amount?: number; shown: boolean; }[],
+  },
   lifetimes: {
     attached() { instances.set(this, { epoch: 0, visible: true, alive: true }); const balance = coinWallet.balance(); this.setData({ coinBalance: balance }); this.triggerEvent('coinbalancechange', { balance }); this.refreshSoldierStock(); },
     ready() { this.mount(); },
@@ -197,7 +199,23 @@ Component({
             this.setData({ reviveOpen:false, reviveTargets:[], reviveError:'', completed: false, canContinue: false, continueBusy: false, continueError: false, bossNotice: '', goldenLoot: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
               bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss && monster.bossKind !== 'grand').map(monster => monster.monsterId)) ?? [], store: petStore,
+              monsterPosition: id => instance.scene?.snapshot?.monsters.find(monster => monster.id === id)?.position,
               onChange: (message, error) => { if (instance.alive) { this.setData({ petReward: message, petDropError: error }); if (!error) this.syncBattlePet(); } },
+              onAward: award => {
+                if (!instance.alive) return;
+                const x = Math.max(10, Math.min(90, (award.position.x / 1000) * 100));
+                const y = Math.max(20, Math.min(80, (award.position.y / 600) * 100));
+                const newAward = { id: award.monsterId, message: award.message, x, y, icon: award.icon, name: award.name, symbol: award.symbol, symbolColor: award.symbolColor, amount: award.amount, shown: false };
+                this.setData({ petDropAwards: [...this.data.petDropAwards, newAward] }, () => {
+                  setTimeout(() => {
+                    const awards = this.data.petDropAwards;
+                    const updated = awards.map(a => a.id === newAward.id ? { ...a, shown: true } : a);
+                    this.setData({ petDropAwards: updated });
+                  }, 50);
+                  instance.petDropAwardsTimer = setTimeout(() => { this.hidePetDropAward(award.monsterId); }, 2500);
+                  instance.audio?.playCoin();
+                });
+              },
             });
             this.setData({ dropCoins: 0, dropError: false });
             instance.drops = createBattleDrops({ sessionId: initial.context.sessionId, levelId: request?.plan.levelId ?? 1, difficulty: request?.plan.difficulty, wallet: coinWallet,
@@ -347,6 +365,7 @@ Component({
       state.audio?.dispose(); state.audio = undefined;
       state.defeatAudio?.dispose(); state.defeatAudio = undefined;
       state.drops?.dispose(); state.petDrops?.dispose();
+      if (state.petDropAwardsTimer) clearTimeout(state.petDropAwardsTimer); state.petDropAwardsTimer = undefined;
       state.preparedStage = { plan, generation: current.generation + 1, waveIndex: 0, variant: 'fruit' };
       this.setData({ failed: false, ready: false, error: '', frozenFrame: '', waveRequest: { ...state.preparedStage, variant: 'fruit' } });
       this.applyPause();
@@ -412,6 +431,13 @@ Component({
       } catch { this.setData({ petReward: '宠物暂时无法读取，点击重试', petDropError: true }); }
     },
     retryPetDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) { this.setData({ petDropError: false, petReward: '' }); state.petDrops?.retry(); this.syncBattlePet(); } },
+    hidePetDropAward(monsterId: string) {
+      const awards = this.data.petDropAwards.filter(a => a.id !== monsterId);
+      this.setData({ petDropAwards: awards });
+    },
+    tapPetDropAward(monsterId: string) {
+      this.hidePetDropAward(monsterId);
+    },
     retryDrops() { const state = instances.get(this); if (state?.alive && state.visible && !this.properties.paused) state.drops?.retry(); },
     chooseUpgrade(event: WechatMiniprogram.CustomEvent<{ offerId: string; cardId: string }>) {
       const state = instances.get(this);
@@ -519,6 +545,7 @@ Component({
       state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.upgradeLevels = []; state.bossRewards = [];
       state.scene?.dispose(); state.scene = undefined; state.pending = undefined;
       state.audio?.dispose(); state.victoryAudio?.dispose(); state.defeatAudio?.dispose(); state.drops?.dispose(); state.petDrops?.dispose(); state.upgrades?.dispose(); state.experience?.dispose(); state.skills?.dispose();
+      if (state.petDropAwardsTimer) clearTimeout(state.petDropAwardsTimer); state.petDropAwardsTimer = undefined;
       this.setData({reviveOpen:false,reviveTargets:[],soldiersInBattle:0,skillInventory:[],upgradeOffer:null,skillQuiz:null,skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0,waveRequest:null,canContinue:false,continueBusy:false});
     },
     settleBeforeExit() { if (this.data.completed && !this.data.rewardSaved) this.claimVictoryReward(); return !this.data.completed || this.data.rewardSaved; },

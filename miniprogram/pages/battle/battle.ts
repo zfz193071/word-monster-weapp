@@ -119,7 +119,7 @@ Page({
 
   onReady() { this.controller?.start(); },
   onShow() { this.setData({ pageVisible: true }); this.syncLoadingMusic(); this.controller?.resume(); },
-  onHide() { this.setData({ pageVisible: false }); this.syncLoadingMusic(); if (this.data.volumeOpen) this.setData({ volumeOpen: false }); this.controller?.pause(); },
+  onHide() { this.setData({ pageVisible: false }); this.syncLoadingMusic(); this.controller?.pause(); },
 
   choose(event: WechatMiniprogram.BaseEvent) {
     const target = eventTarget(event);

@@ -88,6 +88,13 @@
 
 .pet-reward { position:absolute; top:12rpx; left:12%; right:12%; z-index:120; padding:12rpx; border-radius:18rpx; text-align:center; background:#fff1cce8; color:#486052; font-size:24rpx; pointer-events:none; }.pet-reward button { pointer-events:auto; font-size:24rpx; }
 
+.pet-drop-award { position: absolute; z-index: 125; transform: translate(-50%, -50%) scale(0); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; opacity: 0; pointer-events: auto; }
+.pet-drop-award.shown { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+.drop-icon { width: 80rpx; height: 80rpx; margin: 0 auto 8rpx; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.25); border: 3rpx solid #9b83c1; }
+.drop-icon image { width: 50rpx; height: 50rpx; }
+.drop-icon text { font-size: 48rpx; }
+.drop-message { background: rgba(255,240,180,0.95); color: #486052; padding: 8rpx 16rpx; border-radius: 12rpx; font-size: 24rpx; white-space: nowrap; box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.15); }
+
 .defeat-overlay { position:absolute; inset:0; z-index:110; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(28,44,58,.93); color:#f5f0df; }
 .crying-hero { position:relative; width:200rpx; height:190rpx; margin-bottom:50rpx; border-radius:44% 44% 48% 48%; background:#e7bb8b; box-shadow:0 14rpx 0 #162d3b55; animation:sad-rock 1600ms ease-in-out infinite; }
 .crying-helmet { position:absolute; top:-22rpx; left:-12rpx; width:224rpx; height:90rpx; border-radius:110rpx 110rpx 22rpx 22rpx; background:#91a56f; border-bottom:14rpx solid #bdcb93; }
