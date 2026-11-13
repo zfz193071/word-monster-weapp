@@ -12,6 +12,16 @@ const SETTLE_MS = 300;
 const KILL_THRESHOLD_EARLY = 5;
 const KILL_THRESHOLD_LATE = 30;
 export interface BattleAudioView { readonly speakingWord: string; readonly error: boolean; readonly music: BattleMusicView }
+export interface BattleAudioController {
+  readonly view: BattleAudioView;
+  readonly busy: boolean;
+  handle(events: readonly CombatEvent[]): void;
+  setActive(value: boolean): void;
+  setVolume(value: number): void;
+  retry(): void;
+  dispose(): void;
+  playCoin(): void;
+}
 export function createBattleAudio(options: {
   sessionId: string;
   onChange: (view: BattleAudioView) => void;
@@ -26,7 +36,7 @@ export function createBattleAudio(options: {
   enableKillCountReports?: boolean;
   enableZombieSfx?: boolean;
   battlefieldWidth?: number;
-}) {
+}): BattleAudioController {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
   let baseHit: HitChannel | undefined;
@@ -190,5 +200,5 @@ export function createBattleAudio(options: {
       try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
       try { coin?.stop(); } catch {} try { coin?.destroy(); } catch {} coin = undefined;
     } },
-  };
+  } as BattleAudioController;
 }

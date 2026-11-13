@@ -3,6 +3,7 @@ import type { BattlePet } from '../pets/battle';
 import { resizeCombatArena, releaseFrostBurst, reviveCompanion, summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
+import type { BattleAudioController } from '../services/battle-audio';
 
 // Up to 100ms of simulation per frame. Extra elapsed time is dropped, not queued.
 export const MAX_STEPS_PER_FRAME = 10;
@@ -21,7 +22,11 @@ export class CombatRunner {
   private remainderMs = 0;
   private paused = false;
   private speed = 1;
-  constructor(initial: CombatState) { this.current = initial; }
+  private audioController: BattleAudioController | null = null;
+  constructor(initial: CombatState, audioController?: BattleAudioController) { 
+    this.current = initial;
+    this.audioController = audioController ?? null;
+  }
   get snapshot(): CombatState | null { return this.current; }
 
   frame(nowMs: number, input: CombatInput = {}): CombatFrame {
@@ -44,6 +49,9 @@ export class CombatRunner {
       const next = stepCombat(this.current, input);
       this.current = next.state;
       events.push(...next.events);
+      if (this.audioController) {
+        this.audioController.handle(next.events);
+      }
       steps++;
     }
     if (this.current.status !== 'fighting') this.remainderMs = 0;
@@ -85,14 +93,21 @@ export class CombatRunner {
   }
   pause(): void {
     this.paused = true; this.previousTime = undefined; this.remainderMs = 0;
+    if (this.audioController) this.audioController.setActive(false);
   }
   resume(nowMs: number, generation: number): void {
     if (!this.current || !this.paused) return;
     if (!Number.isFinite(nowMs) || nowMs < 0) throw new RangeError('帧时间必须为非负有限数');
     this.current = rebindCombatGeneration(this.current, generation);
     this.previousTime = nowMs; this.remainderMs = 0; this.paused = false;
+    if (this.audioController) this.audioController.setActive(true);
   }
   dispose(): void {
+    if (this.audioController) this.audioController.dispose();
+    this.audioController = null;
     this.current = null; this.previousTime = undefined; this.remainderMs = 0; this.paused = true;
+  }
+  getAudioController(): BattleAudioController | null {
+    return this.audioController;
   }
 }

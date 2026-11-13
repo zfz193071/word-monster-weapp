@@ -24,6 +24,7 @@ import { createVictoryAudio } from '../../services/victory-audio';
 import { BATTLE_WORDS } from '../../fortress/fruit-catalog';
 import { getLevel } from '../../fortress/levels';
 import { createBattleAudio } from '../../services/battle-audio';
+import type { BattleAudioController } from '../../services/battle-audio';
 import type { ListeningResult } from '../../fortress/listening';
 import { openingArt, OPENING_EXPERIENCE, OPENING_WAVE_COUNT, MAX_HERO_LEVEL, ZERO_SKILLS } from '../../fortress/opening-encounter';
 import { createExperience } from '../../fortress/experience';
@@ -43,7 +44,7 @@ import type { RetirementView } from '../../fortress/retirement';
 import type { CombatState, SessionPlan, SkillId, SkillOfferState } from '../../fortress/types';
 
 interface SkillQuizRequest { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit'; singleAttempt: true; offerId: string }
-interface InstanceState { entryFramePending?: boolean; quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: ReturnType<typeof createBattleAudio>; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean; petDropAwardsTimer?: ReturnType<typeof setTimeout>; lastHudUpdate?: number; lastRefreshUpdate?: number; lastInputUnavailable?: boolean; }
+interface InstanceState { entryFramePending?: boolean; quizSequence?: number; entrySessionId?: string; activeRequest?: StageRequest; preparedStage?: StageRequest; stageCarry?: {collection:SkillCollection; pet?:BattlePet}; preparingStage?: boolean; cancelStageLoad?: () => void; bossRewards?: {id:string; quality:'elite'|'legendary'}[]; bossSeen?: Set<string>; collection?: SkillCollection; sessionId?: string; defeatAudio?: ReturnType<typeof createDefeatAudio>; pet?: BattlePet; petDrops?: ReturnType<typeof createPetDrops>; drops?: ReturnType<typeof createBattleDrops>; victoryAudio?: ReturnType<typeof createVictoryAudio>; audio?: BattleAudioController; upgradeLevels?: number[]; awaitingWaveEnd?: boolean; pending?: CombatState; waveIndex?: number; experience?: ReturnType<typeof createExperience>; upgrades?: ReturnType<typeof createUpgradeChoices>; levels?: SkillLevels; scene?: CanvasScene; skills?: SkillSession; epoch: number; visible: boolean; alive: boolean; petDropAwardsTimer?: ReturnType<typeof setTimeout>; lastHudUpdate?: number; lastRefreshUpdate?: number; lastInputUnavailable?: boolean; }
 const instances = new WeakMap<object, InstanceState>();
 // Escaped setData bytes grow quadratically with the frozen backdrop's pixel
 // size. A capped width keeps the last frame cheap to encode and decode even
@@ -249,7 +250,7 @@ Component({
                 onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
                 onDrained: () => { if (instance.alive) this.presentUpgrade(); },
                 totalMonstersInSession: totalMonsters,
-                enableKillCountReports: false,
+                enableKillCountReports: true,
                 enableZombieSfx: true,
               });
               instance.audio.setVolume(this.properties.musicVolume / 100);

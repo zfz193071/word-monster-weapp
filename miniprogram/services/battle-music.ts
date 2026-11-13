@@ -4,7 +4,7 @@
  */
 
 export type BattleMusicStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'error';
-export interface BattleMusicView { readonly status: BattleMusicStatus; readonly volume: number; readonly ducking: boolean }
+export interface BattleMusicView { readonly enabled: boolean; readonly status: BattleMusicStatus; readonly volume: number; readonly ducking: boolean }
 
 type MusicChannel = Pick<WechatMiniprogram.InnerAudioContext,
   'src' | 'autoplay' | 'loop' | 'volume' | 'obeyMuteSwitch' | 'play' | 'pause' | 'stop' | 'destroy' |
