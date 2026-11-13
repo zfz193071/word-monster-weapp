@@ -152,18 +152,18 @@ export class CanvasScene {
   // A full-resolution PNG can exceed the view layer's setData budget while a
   // crowded arena is on screen; modal backdrops only need enough detail to hide
   // the native canvas hand-off, so callers may cap the encoded width.
-  captureFrame(maxWidth = 0): string {
+  captureFrame(maxWidth = 0, format: 'image/png' | 'image/jpeg' = 'image/png', quality = 1): string {
     try {
-      if (maxWidth <= 0 || this.canvas.width <= maxWidth) return this.canvas.toDataURL('image/png', 1);
+      const targetWidth = maxWidth <= 0 ? this.canvas.width : Math.max(1, Math.round(maxWidth));
+      const targetHeight = Math.max(1, Math.round(this.canvas.height * targetWidth / this.canvas.width));
+      if (targetWidth >= this.canvas.width && format === 'image/png' && quality === 1) return this.canvas.toDataURL('image/png', 1);
       try {
         if (typeof wx === 'undefined' || typeof wx.createOffscreenCanvas !== 'function') throw new Error('offscreen unavailable');
-        const width = Math.max(1, Math.round(maxWidth));
-        const height = Math.max(1, Math.round(this.canvas.height * maxWidth / this.canvas.width));
-        const offscreen = wx.createOffscreenCanvas({ type: '2d', width, height });
+        const offscreen = wx.createOffscreenCanvas({ type: '2d', width: targetWidth, height: targetHeight });
         const context = offscreen.getContext('2d') as Context;
-        context.drawImage(this.canvas as unknown as never, 0, 0, width, height);
-        return (offscreen as unknown as { toDataURL: (type: string, quality: number) => string }).toDataURL('image/png', 1);
-      } catch { return this.canvas.toDataURL('image/png', 1); }
+        context.drawImage(this.canvas as unknown as never, 0, 0, targetWidth, targetHeight);
+        return (offscreen as unknown as { toDataURL: (type: string, quality?: number) => string }).toDataURL(format, quality);
+      } catch { return this.canvas.toDataURL(format, quality); }
     } catch { return ''; }
   }
   private cancelPresentation?: () => void;
