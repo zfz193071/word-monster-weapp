@@ -55,6 +55,20 @@ export interface SceneArt extends MonsterArt {
   readonly weapon: SpriteAsset;
   readonly bullet: SpriteAsset;
 }
+// Presentation-only lookups that run per monster per frame. Sets and the
+// character-code seed avoid allocating arrays on the hot draw path.
+const AIRBORNE_WORDS: ReadonlySet<string> = new Set(['bee', 'bird', 'fish']);
+const animalIdSets = new WeakMap<MonsterArt, ReadonlySet<string>>();
+function animalIdsOf(art: MonsterArt): ReadonlySet<string> {
+  let ids = animalIdSets.get(art);
+  if (!ids) { ids = new Set(art.animalIds ?? []); animalIdSets.set(art, ids); }
+  return ids;
+}
+function idSeed(id: string): number {
+  let sum = 0;
+  for (let index = 0; index < id.length; index++) sum += id.charCodeAt(index);
+  return sum;
+}
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
   const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.texturedArms ?? {}), ...Object.values(art.bossBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
@@ -351,7 +365,7 @@ export class CanvasScene {
       reservations.push({id: monster.id, position: {x, y}, halfWidth: 18 * hatScale, top: -41 * hatScale, bottom: 45 * hatScale});
       const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')
         && art.texturedBodies?.[monster.wordId]?.path === APPLE_ZOMBIE_PARTS.path;
-      if ((art.fruitHats?.[monster.wordId] ?? art.fruitHat) && !appleHelmet && !art.animalIds?.includes(monster.wordId)) {
+      if ((art.fruitHats?.[monster.wordId] ?? art.fruitHat) && !appleHelmet && !animalIdsOf(art).has(monster.wordId)) {
         reservations.push({id: monster.id, position: {x, y: y - 44 * hatScale}, halfWidth: 20 * hatScale, top: 64 * hatScale, bottom: 24 * hatScale});
       }
     }
@@ -507,11 +521,11 @@ export class CanvasScene {
         else drawHouseFortress(c, state.houseLevel ?? 1, this.viewport.worldWidth);
       }
       if (art.fruitHat) {
+        const weaponInterval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
         const rig = guardianRigForPath(art.hero.path), body = this.images.get(GUARDIAN_BODY.path), arms = this.images.get(art.hero.path);
         const variant = heroVariantForPath(art.hero.path);
         if (rig && body && arms) {
-          const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
-          const recoil = guardianRecoil(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
+          const recoil = guardianRecoil(state.shotRemainingMs, weaponInterval, state.nextProjectileSequence > 0);
           drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1}, recoil);
         }
         if (!rig && variant) {
@@ -521,8 +535,7 @@ export class CanvasScene {
           const frame = heroStandingFrame(state.player);
           this.sprite(art.hero, frame.x, frame.y, frame.width, frame.height);
         } else if (!rig) this.sprite(art.hero, state.player.x - 24, state.player.y - 35, 48, 60);
-        const interval = getWeaponParameters(state.skills, state.skillCollection).intervalMs;
-        const flash = guardianMuzzleFlash(state.shotRemainingMs, interval, state.nextProjectileSequence > 0);
+        const flash = guardianMuzzleFlash(state.shotRemainingMs, weaponInterval, state.nextProjectileSequence > 0);
         if (flash > 0) {
           const muzzle = variant && !rig ? heroStandingMuzzle(variant, state.player) : {x: state.player.x + 16.8, y: state.player.y - 34.4};
           c.save(); c.translate(muzzle.x, muzzle.y);
@@ -563,7 +576,7 @@ export class CanvasScene {
       if (monster.position.y + cullRadius < 0 || monster.position.y - cullRadius > FORTRESS_RULES.arena.height) continue;
       c.globalAlpha = 1;
       const attackPose = baseAttackPose(monster);
-      const motionSeed = [...monster.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      const motionSeed = idSeed(monster.id);
       c.save(); c.translate(0, attackPose.lunge * 9);
       if (monster.boss || monster.enemyType === 'giant') {
         c.translate(monster.position.x, monster.position.y); c.scale(monster.bossKind === 'grand' ? 2 : 1.5, monster.bossKind === 'grand' ? 2 : 1.5); c.translate(-monster.position.x, -monster.position.y);
@@ -577,7 +590,7 @@ export class CanvasScene {
       const monsterArt = this.monsterArt;
       const bossBody = monster.boss && monsterArt?.bossBodies?.[monster.bossKind === 'grand' ? 'grand' : 'iron'];
       if (monsterArt && (monster.status === 'entering' || monster.status === 'alive') && (monster.frozenUntilTick ?? -1) < state.tick
-        && !['bee', 'bird', 'fish'].includes(monster.wordId)) {
+        && !AIRBORNE_WORDS.has(monster.wordId)) {
         const step = ((state.tick + motionSeed) % 44) / 44;
         c.save(); c.globalAlpha = (1 - step) * .2; c.fillStyle = '#fff0c9';
         for (const side of [-1, 1]) {
@@ -604,7 +617,7 @@ export class CanvasScene {
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
           drawBossZombieParts(c, image, zombieGait(monster, motionSeed), monster.bossKind === 'grand' ? 'grand' : 'iron', bossPose(monster, state.tick));
           c.restore();
-        } else if (monsterArt.animalIds?.includes(monster.wordId)) {
+        } else if (animalIdsOf(monsterArt).has(monster.wordId)) {
           this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0, motionSeed);
         } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal') && monsterArt.texturedBodies?.[monster.wordId]) {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
@@ -639,7 +652,7 @@ export class CanvasScene {
             monster.position.y - monsterArt.monsterVisual.anchor.y * scale, monsterArt.monsterWidth, monsterArt.monsterVisual.sourceSize.height * scale);
         }
         c.imageSmoothingEnabled = true;
-        if (monsterArt.fruitHat && !monster.boss && !monsterArt.animalIds?.includes(monster.wordId)) {
+        if (monsterArt.fruitHat && !monster.boss && !animalIdsOf(monsterArt).has(monster.wordId)) {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
           const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')

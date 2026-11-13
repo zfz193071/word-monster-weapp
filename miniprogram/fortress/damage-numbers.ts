@@ -2,7 +2,7 @@ import type { CombatEvent, Point } from './types';
 export const DAMAGE_NUMBER_DURATION_MS = 800;
 export const DAMAGE_NUMBER_FONT = 'bold 18px sans-serif';
 type DamageEvent = Extract<CombatEvent, { type: 'monsterDamaged' }>;
-interface NumberEffect { event: DamageEvent; started: number; origin: Point; width: number }
+interface NumberEffect { event: DamageEvent; started: number; origin: Point; width: number; text: string; color: string }
 export interface DamageNumber { text: string; position: Point; color: string; opacity: number; scale: number }
 // A reserved strip of another on-screen unit's interface: its health bar, word
 // badge or Boss warning mark. `top`/`bottom` are distances above/below the
@@ -44,11 +44,16 @@ const toBox = (reservation: UiReservation): UiBox => ({
 // intentionally a visual reservation, not another hitbox or game rule.
 const TARGET_HALF_WIDTH = 26, TARGET_TOP = 72, TARGET_BOTTOM = 46;
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+// Labels repeat a small set of damage values, so measure each rendered string
+// once and reuse the geometry instead of calling measureText per hit and frame.
+const colorFor = (kind: DamageEvent['kind']): string =>
+  kind === 'flame' ? '#ffbc6b' : (kind === 'lightning' || kind === 'pet') ? '#d8bdff' : kind === 'soldier' ? '#b7f2d3' : '#fff8d6';
 // Each real hit keeps its own value. Placement happens once at admission (or
 // resize), so later hits/expiry cannot make an existing number jump lanes.
 export class DamageNumbers {
   private effects: NumberEffect[] = [];
   private reserved: readonly UiReservation[] = [];
+  private readonly widths = new Map<string, number>();
   private now = 0;
   private arenaWidth = 360;
   add(events: readonly CombatEvent[], now: number, arenaWidth = this.arenaWidth, measure?: (text: string) => number,
@@ -64,14 +69,21 @@ export class DamageNumbers {
     for (const event of events) {
       if (event.type !== 'monsterDamaged') continue;
       const text = `-${event.damage}`;
-      const measured = measure?.(text);
-      const width = ((measured !== undefined && Number.isFinite(measured) && measured > 0 ? measured : text.length * 12) + 3) * 1.18;
-      const effect: NumberEffect = {event, started: now, origin: event.position, width};
+      const width = this.widthOf(text, measure);
+      const effect: NumberEffect = {event, started: now, origin: event.position, width, text, color: colorFor(event.kind)};
       effect.origin = this.place(effect, now, occupied, index, ui);
       this.effects.push(effect);
       const placed = {x: effect.origin.x, y: this.position(effect, now).y, width};
       occupied.push(placed); insertOccupied(index, placed);
     }
+  }
+  private widthOf(text: string, measure?: (text: string) => number): number {
+    const cached = this.widths.get(text);
+    if (cached !== undefined) return cached;
+    const measured = measure?.(text);
+    const width = ((measured !== undefined && Number.isFinite(measured) && measured > 0 ? measured : text.length * 12) + 3) * 1.18;
+    this.widths.set(text, width);
+    return width;
   }
   private progress(effect: NumberEffect, now: number) { return clamp((now - effect.started) / DAMAGE_NUMBER_DURATION_MS, 0, 1); }
   private position(effect: NumberEffect, now: number): Point {
@@ -146,9 +158,14 @@ export class DamageNumbers {
     }
     return overlap;
   }
-  private prune(now: number) { this.effects = this.effects.filter(effect => now - effect.started < DAMAGE_NUMBER_DURATION_MS); }
+  private prune(now: number) {
+    // Compact in place so per-frame pruning does not allocate a new array.
+    let kept = 0;
+    for (const effect of this.effects) if (now - effect.started < DAMAGE_NUMBER_DURATION_MS) this.effects[kept++] = effect;
+    this.effects.length = kept;
+  }
   get active(): boolean { return this.effects.length > 0; }
-  clear(): void { this.effects = []; }
+  clear(): void { this.effects = []; this.widths.clear(); }
   resize(ratio: number): void {
     this.arenaWidth *= ratio;
     this.reserved = this.reserved.map(reservation =>
@@ -170,8 +187,8 @@ export class DamageNumbers {
     this.prune(now);
     if (arenaWidth !== this.arenaWidth) this.resize(arenaWidth / this.arenaWidth);
     return this.effects.map(effect => {
-      const {event} = effect, progress = this.progress(effect, now);
-      return {text: `-${event.damage}`, color: event.kind === 'flame' ? '#ffbc6b' : (event.kind === 'lightning' || event.kind === 'pet') ? '#d8bdff' : event.kind === 'soldier' ? '#b7f2d3' : '#fff8d6',
+      const progress = this.progress(effect, now);
+      return {text: effect.text, color: effect.color,
         position: this.position(effect, now), opacity: Math.min(1, (1 - progress) / .45),
         scale: 1 + .18 * Math.max(0, 1 - progress * 5)};
     });

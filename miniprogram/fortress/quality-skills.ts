@@ -7,7 +7,10 @@ import type { UpgradeOffer } from './upgrade-choice';
 export function skillLevels(skills: SkillCollection): SkillLevels {
   return Object.freeze({ doubleShot: 0, fireRate: 0, bulletWidth: 0, ...Object.fromEntries(Object.entries(skills).map(([id, skill]) => [id, skill.level])) });
 }
-export function qualityEffects(skills: SkillCollection) {
+// Skill collections are frozen and replaced on change, so a weak cache keeps
+// hot combat/draw paths from rebuilding the same effect object per projectile.
+const effectCache = new WeakMap<SkillCollection, ReturnType<typeof createQualityEffects>>();
+function createQualityEffects(skills: SkillCollection) {
   const level = (id: BattleSkillId) => skills[id]?.level ?? 0;
   const rank = (id: BattleSkillId) => qualityRank(skills[id]?.quality ?? 'crude');
   const q = (id: BattleSkillId) => SKILL_QUALITIES[rank(id)].multiplier;
@@ -29,6 +32,18 @@ export function qualityEffects(skills: SkillCollection) {
     firepowerBonus: level('firepower') ? Math.min(1.5, (.4 + .1 * level('firepower')) * q('firepower')) : 0,
     firepowerTicks: [500,500,500,600,800][rank('firepower')],
   });
+}
+export function qualityEffects(skills: SkillCollection): ReturnType<typeof createQualityEffects> {
+  // Only frozen collections have stable contents; mutable callers keep the
+  // original recompute-on-call semantics.
+  const cacheable = Object.isFrozen(skills);
+  if (cacheable) {
+    const cached = effectCache.get(skills);
+    if (cached) return cached;
+  }
+  const effect = createQualityEffects(skills);
+  if (cacheable) effectCache.set(skills, effect);
+  return effect;
 }
 const LABELS: Record<BattleSkillId, string> = { ...SUMMON_LABELS, doubleShot:'齐射',fireRate:'疾速',bulletWidth:'巨型弹丸',flame:'火花绽放',frost:'冰晶缓行',lightning:'跃动电弧',firepower:'火力激发',homing:'灵巧追踪' };
 const number = (value: number) => Math.round(value * 100) / 100;

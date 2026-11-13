@@ -66,14 +66,26 @@ function playerX(value: number, width = RULES.arena.width): number {
   finite(value, 'playerX');
   return Math.max(RULES.arena.playerMinX, Math.min(width - RULES.arena.playerMinX, value));
 }
+// Skill level objects are frozen per combat snapshot, so the validated weapon
+// parameters are safe to reuse instead of re-scanning the skill table each step.
+const weaponCache = new WeakMap<SkillLevels, WeaponParameters>();
 export function getWeaponParameters(levels: SkillLevels, collection?: SkillCollection): WeaponParameters {
   if (collection) return qualityEffects(collection);
+  // Mutable level objects may change between calls; only frozen snapshots are
+  // cached so externally supplied objects keep recomputing.
+  const cacheable = Object.isFrozen(levels);
+  if (cacheable) {
+    const cached = weaponCache.get(levels);
+    if (cached) return cached;
+  }
   validateSkillLevels(levels);
   const value = (id: 'doubleShot' | 'fireRate' | 'bulletWidth'): number => {
     const definition = FORTRESS_SKILLS.find(skill => skill.id === id)!;
     return definition.values[levels[id]];
   };
-  return Object.freeze({ count: value('doubleShot'), intervalMs: value('fireRate'), width: value('bulletWidth') });
+  const weapon = Object.freeze({ count: value('doubleShot'), intervalMs: value('fireRate'), width: value('bulletWidth') });
+  if (cacheable) weaponCache.set(levels, weapon);
+  return weapon;
 }
 function freezeState(state: CombatState): CombatState {
   return Object.freeze({ ...state,
@@ -83,7 +95,9 @@ function freezeState(state: CombatState): CombatState {
     ...(state.elementImpacts ? { elementImpacts: Object.freeze(state.elementImpacts.map(impact => Object.freeze({ ...impact, position: Object.freeze({ ...impact.position }), ...(impact.target ? { target: Object.freeze({ ...impact.target }) } : {}) }))) } : {}),
     ...(state.summonRemainingMs ? {summonRemainingMs:Object.freeze({...state.summonRemainingMs})} : {}),
     context: Object.freeze({ ...state.context }), player: Object.freeze({ ...state.player }),
-    base: Object.freeze({ ...state.base }), skills: Object.freeze({ ...state.skills }),
+    // Skill levels only change on upgrade; keeping the frozen reference makes
+    // the weapon-parameter cache hit across simulation steps.
+    base: Object.freeze({ ...state.base }), skills: Object.isFrozen(state.skills) ? state.skills : Object.freeze({ ...state.skills }),
     monsters: Object.freeze(state.monsters.map(monster => Object.isFrozen(monster) ? monster : Object.freeze({ ...monster,
       ...(monster.burn ? { burn: Object.freeze({ ...monster.burn }) } : {}),
       position: Object.freeze({ ...monster.position }), hitbox: Object.freeze({ ...monster.hitbox }),
@@ -134,6 +148,11 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false, f
   const muzzle = state.automatic ? { lateral: AUTO_MUZZLE_LATERAL, forward: AUTO_MUZZLE_FORWARD } : { lateral: 0, forward: 0 };
   const usedTargets = new Set<string>();
   const fireFan = charged && !!state.skills.flame && !!state.skills.doubleShot;
+  // Resolve per-collection effects and weapon damage once per volley instead of
+  // once per projectile.
+  const collection = state.skillCollection;
+  const quality = collection ? qualityEffects(collection) : undefined;
+  const baseDamage = weaponForLevel(state.weaponLevel ?? 1).damage;
   return Array.from({ length: weapon.count }, (_, index) => {
     const offset = (index - (weapon.count - 1) / 2) * RULES.projectile.spread;
     const direction = state.aimDirection ?? { x: 0, y: -1 };
@@ -145,10 +164,10 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false, f
       ?? homingTargets.sort((a, b) => Math.hypot(a.position.x - position.x, a.position.y - position.y) - Math.hypot(b.position.x - position.x, b.position.y - position.y))[0];
     if (target) usedTargets.add(target.id);
     return { id: `${state.context.sessionId}:${state.context.combatId}:bullet:${state.nextProjectileSequence + index}`,
-      ...(state.skillCollection ? { skillCollection: state.skillCollection, expiresAtTick: state.tick + 400, remainingPenetrations: qualityEffects(state.skillCollection).homingPenetrations, hitMonsterIds: [] } : {}),
+      ...(collection ? { skillCollection: collection, expiresAtTick: state.tick + 400, remainingPenetrations: quality!.homingPenetrations, hitMonsterIds: [] } : {}),
       ...(charged && (index === 0 || (fireFan && index < 3)) ? { elements: { flame: state.skills.flame ?? 0, frost: index === 0 ? state.skills.frost ?? 0 : 0, lightning: index === 0 ? state.skills.lightning ?? 0 : 0 },
         ...(fireFan ? { flameVolleyId: `${state.context.combatId}:volley:${state.nextProjectileSequence}` } : {}) } : {}),
-      position, previousPosition: position, ...(target ? { direction: directionTo(position, target.position), targetMonsterId: target.id } : state.aimDirection ? { direction: state.aimDirection } : {}), ...(state.skills.homing ? { homing: true } : {}), width: weapon.width, height: RULES.projectile.height, damage: state.skillCollection ? Math.ceil(weaponForLevel(state.weaponLevel ?? 1).damage * qualityEffects(state.skillCollection).projectileMultiplier * (firepowerActive ? 1 + qualityEffects(state.skillCollection).firepowerBonus : 1)) : firepowerActive ? Math.round(weaponForLevel(state.weaponLevel ?? 1).damage * 1.5) : weaponForLevel(state.weaponLevel ?? 1).damage };
+      position, previousPosition: position, ...(target ? { direction: directionTo(position, target.position), targetMonsterId: target.id } : state.aimDirection ? { direction: state.aimDirection } : {}), ...(state.skills.homing ? { homing: true } : {}), width: weapon.width, height: RULES.projectile.height, damage: quality ? Math.ceil(baseDamage * quality.projectileMultiplier * (firepowerActive ? 1 + quality.firepowerBonus : 1)) : firepowerActive ? Math.round(baseDamage * 1.5) : baseDamage };
   });
 }
 export function createCombat(options: CreateCombatOptions): CombatState {
