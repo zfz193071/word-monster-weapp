@@ -17,15 +17,22 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
   const hover = type === 'jetpack' ? Math.sin(tick * .13) * 1.5 - 4 : 0;
   const imageY = -size / 2 - 8 + hover + 1.5 * shotStrength;
   const [anchorX, anchorY] = SOLDIER_MUZZLES[type];
-  // Flash and trace share the same local muzzle, including artwork motion.
-  const muzzle = image ? {x: -size / 2 + anchorX * size / 128, y: imageY + anchorY * size / 128}
+  const turretAngle = soldier.turretAngle ?? angle;
+  const turretRecoil = type === 'tank' && !image ? 2.5 * shotStrength : 0;
+  const muzzle = image 
+    ? {x: -size / 2 + anchorX * size / 128, y: imageY + anchorY * size / 128}
     : type === 'tank' ? {x: 0, y: -36}
     : type === 'rocket' ? {x: 6, y: -41} : {x: 7, y: -30 + 2 * shotStrength};
   c.save(); c.translate(soldier.position.x, soldier.position.y);
   c.fillStyle = 'rgba(31,50,42,.25)'; c.beginPath(); c.ellipse(0, 9, 12, 4, 0, 0, Math.PI * 2); c.fill();
   c.save(); c.rotate(angle);
   if (image) {
-    c.drawImage(image, -size / 2, imageY, size, size);
+    if (type === 'tank') {
+      const bodyImage = image;
+      c.drawImage(bodyImage, -size / 2, imageY, size, size);
+    } else {
+      c.drawImage(image, -size / 2, imageY, size, size);
+    }
     if (type === 'jetpack' && soldier.hp > 0) {
       c.fillStyle = '#f6c775';
       for (const x of [-8, 8]) { c.beginPath(); c.moveTo(x - 2, 8 + hover); c.lineTo(x, 16 + hover + Math.sin(tick * .13) * 2); c.lineTo(x + 2, 8 + hover); c.closePath(); c.fill(); }
@@ -36,6 +43,12 @@ export function drawSoldier(c: Context, soldier: SupportSoldierState, tick: numb
     c.fillStyle='#728d54';c.fillRect(-14,-17,28,34);c.fillStyle='#a6b77d';c.fillRect(-10,-14,5,27);
     c.fillStyle='#557545';c.beginPath();c.ellipse(0,-2,12,14,0,0,Math.PI*2);c.fill();
     c.fillStyle='#bbcca1';c.fillRect(-4,-34,8,30);c.fillStyle='#344b3e';c.fillRect(-5,-36,10,6);
+    c.fillStyle='#d4c5a8'; c.beginPath(); c.arc(0, -10, 5, 0, Math.PI * 2); c.fill();
+    c.fillStyle='#5c4a3d'; c.beginPath(); c.arc(0, -10, 3, 0, Math.PI * 2); c.fill();
+    c.restore(); c.save(); c.rotate(turretAngle);
+    c.fillStyle='#4a6352'; c.fillRect(-6,-38+turretRecoil,12,28);
+    c.fillStyle='#344b3e'; c.fillRect(-3,-42+turretRecoil,6,8);
+    c.restore(); c.save(); c.rotate(angle);
   } else {
   c.fillStyle = '#243a35'; c.fillRect(-8, 4, 6, 8); c.fillRect(2, 4, 6, 8);
   c.fillStyle = '#315a50'; c.fillRect(-10, -8, 20, 15);

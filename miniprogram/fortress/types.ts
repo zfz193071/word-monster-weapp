@@ -171,6 +171,7 @@ export interface SupportSoldierState {
   readonly hp: number;
   readonly maxHp: number;
   readonly attackRemainingMs: number;
+  readonly turretAngle?: number;
 }
 export interface ProjectileState {
   readonly capability?: AttackCapability;
