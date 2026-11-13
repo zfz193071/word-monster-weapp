@@ -131,8 +131,14 @@ Component({
     openRevive() {
       const state = instances.get(this);
       if (!this.properties.opening || !state?.alive || !state.visible || !state.scene || this.properties.paused || !this.data.ready || this.data.error || this.data.upgradeOffer || this.data.waveRequest || this.data.completed || this.data.failed || this.data.reviveOpen || state.scene.snapshot?.status !== 'fighting') return;
-      this.refreshFlags(); this.refreshReviveTargets();
-      if (this.data.flagStockError || !this.data.flagStock || !this.data.reviveTargets.length) return;
+      this.refreshFlags();
+      const snapshot = state.scene.snapshot;
+      const targets = snapshot?.status === 'fighting' ? [
+        ...(snapshot.fallenSoldiers ?? []).map((soldier, index) => ({kind:'soldier', id:soldier.id, label:`士兵 ${index + 1}`, disabled:(snapshot.supportSoldiers?.length ?? 0) >= MAX_SUPPORT_SOLDIERS})),
+        ...(snapshot.pet?.hp === 0 ? [{kind:'pet', id:'thunder-fox', label:'宠物', disabled:false}] : []),
+      ] : [];
+      if (this.data.flagStockError || !this.data.flagStock || !targets.length) return;
+      this.refreshReviveTargets();
       this.setData({reviveOpen:true, reviveError:'', frozenFrame:state.scene.captureFrame(FROZEN_FRAME_WIDTH, 'image/jpeg', 0.7)}); this.applyPause();
     },
     closeRevive() {
