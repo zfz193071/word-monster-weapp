@@ -1,7 +1,8 @@
 import { createAudioAdapter } from './audio';
 import type { AudioOptions } from './audio';
-import { createLoopMusic } from './home-music';
-import type { HomeMusicChannel } from './home-music';
+import { createBattleMusic } from './battle-music';
+import type { BattleMusicView } from './battle-music';
+import { createZombieSfx } from './zombie-sfx';
 import { ALL_BATTLE_WORDS as BATTLE_WORDS, defeatAudioPath } from '../fortress/levels';
 import type { CombatEvent } from '../fortress/types';
 
@@ -10,26 +11,27 @@ type DefeatWord = { wordId: string; monsterId: string };
 const SETTLE_MS = 300;
 const KILL_THRESHOLD_EARLY = 5;
 const KILL_THRESHOLD_LATE = 30;
-export interface BattleAudioView { readonly speakingWord: string; readonly error: boolean }
+export interface BattleAudioView { readonly speakingWord: string; readonly error: boolean; readonly music: BattleMusicView }
 export function createBattleAudio(options: {
   sessionId: string;
   onChange: (view: BattleAudioView) => void;
   onDrained: () => void;
   now?: () => number;
   audio?: Pick<AudioOptions, 'createContext' | 'schedule' | 'timeoutMs'>;
-  createMusicContext?: () => HomeMusicChannel;
+  createMusicContext?: () => WechatMiniprogram.InnerAudioContext;
   createHitContext?: () => HitChannel;
   createBaseHitContext?: () => HitChannel;
   createCoinContext?: () => HitChannel;
   totalMonstersInSession?: number;
   enableKillCountReports?: boolean;
+  enableZombieSfx?: boolean;
+  battlefieldWidth?: number;
 }) {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
   let baseHit: HitChannel | undefined;
   let coin: HitChannel | undefined; let lastCoin = -Infinity;
   const heardAttacks = new Set<string>();
-  // A speaking word owns its channel until completion. Only the pending word is replaceable.
   let current: DefeatWord | undefined; let pending: DefeatWord | undefined;
   let remaining = 0; let dueAt = 0; let timerRevision = 0; let cancelSettle: (() => void) | undefined;
   const now = options.now ?? Date.now;
@@ -41,12 +43,28 @@ export function createBattleAudio(options: {
   const totalMonsters = options.totalMonstersInSession ?? 0;
   const killThreshold = totalMonsters >= 500 ? KILL_THRESHOLD_LATE : KILL_THRESHOLD_EARLY;
   const enableKillCountReports = options.enableKillCountReports ?? false;
+  const enableZombieSfx = options.enableZombieSfx ?? true;
   const busy = () => !!(current || pending);
-  const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
+  
+  const music = createBattleMusic({ 
+    src: '/assets/audio/battle-urgent.mp3', 
+    volume, 
+    createContext: options.createMusicContext,
+    onChange() {} 
+  });
+  
+  const zombieSfx = enableZombieSfx ? createZombieSfx({ 
+    volume: 0.25,
+    createContext: () => wx.createInnerAudioContext() 
+  }) : undefined;
+  
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
   voice.setPlaybackRate(.8);
   const view = (): BattleAudioView => ({
-    speakingWord: BATTLE_WORDS.find(word => word.id === (current ?? pending)?.wordId)?.text ?? '', error });
+    speakingWord: BATTLE_WORDS.find(word => word.id === (current ?? pending)?.wordId)?.text ?? '', 
+    error, 
+    music: music.view 
+  });
   const publish = () => { if (!disposed) options.onChange(view()); };
   const effectVolume = (level: number) => Math.min(1, volume / .22 * level);
   function mix() {
@@ -158,16 +176,16 @@ export function createBattleAudio(options: {
     },
     setActive(value: boolean) {
       if (disposed || value === active) return;
-      active = value; music.setActive(value);
+      active = value; music.setActive(value); zombieSfx?.setActive(value);
       if (!value) {
         if (cancelSettle) remaining = Math.max(0, dueAt - now());
         cancelTimer(); revision++; playing = false; voice.stop();
         try { hit?.stop(); baseHit?.stop(); coin?.stop(); } catch {}
       } else { settle(); speak(); }
     },
-    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
+    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); music.setVolume(value); zombieSfx?.setVolume(value); } },
     retry() { if (!disposed && active && error) { error = false; speak(); } },
-    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); cancelTimer(); current = pending = undefined; seen.clear(); killCounters.clear();
+    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); zombieSfx?.dispose(); cancelTimer(); current = pending = undefined; seen.clear(); killCounters.clear();
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
       try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
       try { coin?.stop(); } catch {} try { coin?.destroy(); } catch {} coin = undefined;

@@ -243,16 +243,17 @@ Component({
             instance.upgrades = createUpgradeChoices(); instance.collection = carry?.collection ?? Object.freeze({}); instance.levels = skillLevels(instance.collection); instance.waveIndex = 0; instance.pet = carry?.pet; instance.stageCarry = undefined;
             this.setData({ frostEnergy: 0, frostPercent: 0, frostTarget: false, combos: comboProgress(instance.levels!), skillInventory: inventory(instance.collection), rewardCoins: victoryCoinsForLevel(request?.plan.levelId ?? 1), rewardCards: [] as RewardCard[], rewardSaved: false, rewardError: false, victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, upgradeSummary: '' });
           }
-           if (this.properties.opening && !instance.audio) {
-             const totalMonsters = request?.plan.waves?.flatMap(wave => wave.spawnPlan).length ?? 0;
-             instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
-               onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
-               onDrained: () => { if (instance.alive) this.presentUpgrade(); },
-               totalMonstersInSession: totalMonsters,
-               enableKillCountReports: false,
-             });
-             instance.audio.setVolume(this.properties.musicVolume / 100);
-           }
+            if (this.properties.opening && !instance.audio) {
+              const totalMonsters = request?.plan.waves?.flatMap(wave => wave.spawnPlan).length ?? 0;
+              instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
+                onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
+                onDrained: () => { if (instance.alive) this.presentUpgrade(); },
+                totalMonstersInSession: totalMonsters,
+                enableKillCountReports: false,
+                enableZombieSfx: true,
+              });
+              instance.audio.setVolume(this.properties.musicVolume / 100);
+            }
           if (this.properties.preview && request?.variant !== 'fruit') instance.skills = createSkillSession(request?.plan ?? createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
           const sceneArt = this.properties.opening ? openingArt(initial.monsters[0].wordId, [...initial.monsters, ...(initial.incomingMonsters ?? [])].map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined;
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);
@@ -371,7 +372,7 @@ Component({
       const message = '战场首帧显示失败，请重试';
       this.triggerEvent('sceneerror', { message }); this.setData({ ready: false, error: message }); this.applyPause();
     },
-    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible || this.properties.volumeOpen; if (state.lastInputUnavailable === unavailable) { const paused = this.properties.managedLoading || !this.data.ready || !!this.data.error || unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); return; } state.lastInputUnavailable = unavailable; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); state.defeatAudio?.setActive(!unavailable); const paused = this.properties.managedLoading || !this.data.ready || !!this.data.error || unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); },
+    applyPause() { const state = instances.get(this); if (!state) return; const unavailable = this.properties.paused || !state.visible || this.properties.volumeOpen; if (state.lastInputUnavailable === unavailable) { const paused = this.properties.managedLoading || !this.data.ready || !!this.data.error || unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); return; } state.lastInputUnavailable = unavailable; this.setData({ inputUnavailable: unavailable }); state.victoryAudio?.setActive(!unavailable); state.defeatAudio?.setActive(!unavailable); const paused = this.properties.managedLoading || !this.data.ready || !!this.data.error || unavailable || this.data.reviveOpen || !!this.data.upgradeOffer || !!this.data.waveRequest || this.data.completed || this.data.failed; state.scene?.setPaused(paused); state.skills?.setPaused(paused); state.audio?.setActive(!paused && this.data.ready && !this.data.error && this.data.hud.status !== 'baseDestroyed'); state.drops?.setActive?.(!paused && this.data.ready && !this.data.error); state.petDrops?.setActive?.(!paused && this.data.ready && !this.data.error); },
     presentDefeat() {
       const state = instances.get(this);
       if (!this.properties.opening || !state?.alive || !state.scene || state.scene.snapshot?.status !== 'baseDestroyed' || this.data.failed) return;
