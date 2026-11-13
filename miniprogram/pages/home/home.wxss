@@ -84,20 +84,17 @@ button::after { border: 0; }
 .home-difficulty-panel { display:block; flex:0 1 680rpx; width:100%; min-width:0; max-width:680rpx; }
 
 .settings-button { position:absolute; left:26rpx; top: 400rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; height:76rpx; padding:0; display:flex; align-items:center; justify-content:center; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; }
-.settings-icon { position:relative; width:44rpx; height:44rpx; }
-.gear { position:absolute; width:44rpx; height:44rpx; border:4rpx solid #fff4c5; border-radius:50%; }
-.gear::before { content:''; position:absolute; width:100%; height:100%; border:4rpx solid #fff4c5; border-radius:50%; top:-6rpx; left:-6rpx; transform:rotate(45deg); }
-.gear-small { position:absolute; width:20rpx; height:20rpx; background:#fff4c5; border-radius:50%; top:50%; left:50%; transform:translate(-50%,-50%); }
 
 .settings-modal { position:relative; width:100%; max-width:600rpx; padding:36rpx 28rpx; box-sizing:border-box; border:6rpx solid #fff9e4; border-radius:38rpx; background:#fff8e7; box-shadow:0 16rpx 0 #243d3d33; }
 .settings-title { position:relative; font-size:34rpx; font-weight:bold; color:#456452; margin:0 0 32rpx 12rpx; text-align:center; }
 .settings-row { display:flex; align-items:center; gap:20rpx; padding:20rpx 0; border-bottom:2rpx solid #e8dec4; }
 .settings-row:last-child { border-bottom:0; }
-.settings-icon-cell { width:52rpx; height:52rpx; display:flex; align-items:center; justify-content:center; background:#e9dfc7; border-radius:16rpx; }
+.settings-icon-cell { width:52rpx; height:52rpx; display:flex; align-items:center; justify-content:center; background:#e9dfc7; border-radius:16rpx; flex-shrink:0; }
 .music-icon { font-size:32rpx; color:#638458; }
 .sfx-icon { font-size:28rpx; }
-.settings-label { flex:1; font-size:28rpx; font-weight:600; color:#5c6144; }
-.settings-slider { display:flex; align-items:center; gap:12rpx; min-width:200rpx; }
+.settings-label { flex:1; font-size:28rpx; font-weight:600; color:#5c6144; min-width:0; }
+.settings-slider { display:flex; align-items:center; gap:12rpx; width:240rpx; min-width:240rpx; flex-shrink:0; }
+.settings-slider slider { flex:1; width:168rpx; min-width:0; margin:0; }
 .settings-value { font-size:24rpx; font-weight:bold; color:#7a5422; min-width:48rpx; text-align:right; }
 
 .checkin-button { position:absolute; left:26rpx; top:65rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; height:76rpx; padding:0; display:flex; align-items:center; justify-content:center; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; }

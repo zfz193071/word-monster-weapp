@@ -267,6 +267,18 @@ test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪�
   assert.match(markup,/wx:if="{{!choiceComplete && sceneCoverReady}}"/);
 });
 
+test('设置弹框等待原生首页画布隐藏后显示', () => {
+  const h=homeHarness();h.page.onShow();h.page.openSettings();
+  assert.equal(h.page.data.showSettings,true);
+  assert.equal(h.page.data.sceneCoverReady,false);
+  const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
+  assert.match(markup,/class="settings-modal" hidden="{{!sceneCoverReady}}"/);
+  assert.match(markup,/covered="{{[^\"]*showSettings[^\"]*}}"/);
+  h.page.sceneCoverChanged({detail:{ready:true}});
+  assert.equal(h.page.data.sceneCoverReady,true);
+  h.page.closeSettings();assert.equal(h.page.data.showSettings,false);
+});
+
 
 for (const releasedBeforeShow of [false,true]) test(`普通战斗返回清理进度圆环，不依赖导航成功回调（先释放=${releasedBeforeShow}）`, async () => {
   const h=homeHarness();h.page.onShow();await h.page.openBattle();correct(h.page);

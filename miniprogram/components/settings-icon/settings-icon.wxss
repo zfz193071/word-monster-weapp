@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  width: 46rpx;
+  height: 46rpx;
+}
+
+.settings-icon {
+  position: relative;
+  width: 46rpx;
+  height: 46rpx;
+}
+
+.gear-tooth {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10rpx;
+  height: 46rpx;
+  margin-left: -5rpx;
+  border-radius: 3rpx;
+  background: #fff4c5;
+  transform-origin: 50% 50%;
+}
+
+.tooth-45 { transform: rotate(45deg); }
+.tooth-90 { transform: rotate(90deg); }
+.tooth-135 { transform: rotate(135deg); }
+
+.gear-ring {
+  position: absolute;
+  inset: 7rpx;
+  border-radius: 50%;
+  background: #fff4c5;
+}
+
+.gear-hole {
+  position: absolute;
+  width: 14rpx;
+  height: 14rpx;
+  background: #648a72;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

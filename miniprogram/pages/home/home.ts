@@ -102,7 +102,7 @@ Page({
   },
   openSettings() {
     if (this.disposed || !this.data.homeVisible || this.data.request || this.data.preparingLevel || this.data.showPet || this.data.showWeapon || this.data.showDifficulty || this.data.showCheckin || this.data.showHouse || this.data.showSettings) return;
-    this.setData({ showSettings: true, showLevels: false, showCredits: false });
+    this.setData({ showSettings: true, sceneCoverReady: (this.data.showLevels || this.data.showCredits) && this.data.sceneCoverReady, showLevels: false, showCredits: false });
   },
   closeSettings() { this.setData({ showSettings: false }); },
   changeMusicVolume(event: WechatMiniprogram.CustomEvent<{ value: number }>) {

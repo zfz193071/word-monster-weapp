@@ -7,6 +7,7 @@
     "home-scene": "/components/home-scene/home-scene",
     "weapon-panel": "/components/weapon-panel/weapon-panel",
     "difficulty-panel": "/components/difficulty-panel/difficulty-panel",
-    "difficulty-icon": "/components/difficulty-icon/difficulty-icon"
+    "difficulty-icon": "/components/difficulty-icon/difficulty-icon",
+    "settings-icon": "/components/settings-icon/settings-icon"
   }
 }

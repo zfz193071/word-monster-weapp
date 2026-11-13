@@ -1,0 +1,8 @@
+<view class="settings-icon">
+  <view class="gear-tooth tooth-0"></view>
+  <view class="gear-tooth tooth-45"></view>
+  <view class="gear-tooth tooth-90"></view>
+  <view class="gear-tooth tooth-135"></view>
+  <view class="gear-ring"></view>
+  <view class="gear-hole"></view>
+</view>

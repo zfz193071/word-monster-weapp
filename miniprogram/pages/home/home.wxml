@@ -9,8 +9,24 @@
   <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view></button>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
   <button class="difficulty-button" bindtap="openDifficulty" aria-label="游戏难度，当前{{difficultyLabel}}"><difficulty-icon class="difficulty-mark" kind="{{difficulty}}" compact="{{true}}" /><text>{{difficultyLabel}}</text></button>
-  <button class="settings-button" bindtap="openSettings" aria-label="游戏设置"><view class="settings-icon"><view class="gear"></view><view class="gear-small"></view></view></button>
-  <view wx:if="{{showCheckin}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <button class="settings-button" bindtap="openSettings" aria-label="游戏设置"><settings-icon class="settings-icon"></settings-icon></button>
+  <view wx:if="{{showSettings}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 200;">
+    <view class="settings-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="游戏设置">
+      <view class="settings-title">设置</view>
+      <button class="close-button" bindtap="closeSettings" aria-label="关闭">×</button>
+      <view class="settings-row">
+        <view class="settings-icon-cell"><view class="music-icon">♪</view></view>
+        <text class="settings-label">音乐</text>
+        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{musicVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeMusicVolume" bindchange="changeMusicVolume" aria-label="背景音乐音量" /><text class="settings-value">{{musicVolume}}%</text></view>
+      </view>
+      <view class="settings-row">
+        <view class="settings-icon-cell"><view class="sfx-icon">🔊</view></view>
+        <text class="settings-label">音效</text>
+        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{sfxVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeSfxVolume" bindchange="changeSfxVolume" aria-label="音效音量" /><text class="settings-value">{{sfxVolume}}%</text></view>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{showCheckin}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 190;">
     <view class="checkin-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="每日签到">
       <view class="checkin-heading">每日签到<button class="close-button" bindtap="closeCheckin" aria-label="关闭签到">×</button></view>
       <scroll-view scroll-y class="checkin-scroll">
@@ -42,35 +58,21 @@
       </scroll-view>
     </view>
   </view>
-  <view wx:if="{{showDifficulty}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{showDifficulty}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 180;">
     <difficulty-panel class="home-difficulty-panel" selected="{{difficulty}}" error="{{difficultyError}}" bindselect="selectDifficulty" bindclose="closeDifficulty" />
   </view>
-  <view wx:if="{{showSettings}}" class="modal-backdrop" catchtouchmove="stopScroll">
-    <view class="settings-modal" role="dialog" aria-label="游戏设置">
-      <view class="settings-title">设置<button class="close-button" bindtap="closeSettings" aria-label="关闭">×</button></view>
-      <view class="settings-row">
-        <view class="settings-icon-cell"><view class="music-icon">♪</view></view>
-        <text class="settings-label">音乐</text>
-        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{musicVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeMusicVolume" bindchange="changeMusicVolume" aria-label="背景音乐音量" /><text class="settings-value">{{musicVolume}}%</text></view>
-      </view>
-      <view class="settings-row">
-        <view class="settings-icon-cell"><view class="sfx-icon">🔊</view></view>
-        <text class="settings-label">音效</text>
-        <view class="settings-slider"><slider min="0" max="100" step="1" value="{{sfxVolume}}" block-size="16" activeColor="#e3cd7c" backgroundColor="#617568" bindchanging="changeSfxVolume" bindchange="changeSfxVolume" aria-label="音效音量" /><text class="settings-value">{{sfxVolume}}%</text></view>
-      </view>
-    </view>
-  </view>
+
   <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading"><text>正在准备关卡…</text></view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
-    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty || showCheckin || showHouse}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" house-level="{{houseLevel}}" bindhousetap="openHouse" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
+    <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty || showSettings || showCheckin || showHouse}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" house-level="{{houseLevel}}" bindhousetap="openHouse" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
   </view>
-  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty && !showCheckin && !showHouse}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
+  <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty && !showSettings && !showCheckin && !showHouse}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>
   <view class="start-dock">
     <button class="start-button" bindtap="openBattle" disabled="{{!!request || preparingLevel}}" aria-label="开始闯关"><view class="play-icon"></view></button>
     <view class="dock-dot"></view>
   </view>
-  <view wx:if="{{showHouse}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{showHouse}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 170;">
     <view class="house-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="房屋升级">
       <button class="close-button" bindtap="closeHouse" aria-label="关闭房屋升级">×</button>
       <view wx:if="{{houseError}}" class="house-error">{{houseError}}<button bindtap="refreshHouse">重试</button></view>
@@ -84,7 +86,7 @@
       </block>
     </view>
   </view>
-  <view wx:if="{{showPet}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{showPet}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 160;">
     <view class="pet-modal" role="dialog" aria-label="小雷狐伙伴">
       <button class="close-button" bindtap="closePet" aria-label="关闭">×</button>
       <view class="pet-heading"><text class="pet-title">小雷狐</text><view class="pet-wallet"><image src="/assets/images/checkin/coins.png" mode="aspectFit"/><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view></view>
@@ -119,7 +121,7 @@
     </view>
   </view>
   <weapon-panel class="home-weapon-panel" wx:if="{{showWeapon}}" paused="{{!homeVisible}}" bindclose="closeWeapon" bindequipmentchange="equipmentChanged" />
-  <view wx:if="{{request}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{request}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 150;">
     <view class="choice-modal" hidden="{{!sceneCoverReady}}" role="dialog" aria-label="听音选图片">
       <button class="close-button" bindtap="closeChallenge" disabled="{{opening}}" aria-label="关闭">×</button>
       <fortress-choice class="fruit-dialog-choice" wx:if="{{!choiceComplete && sceneCoverReady}}" request="{{request}}" bindstartcombat="choiceSucceeded" />
@@ -129,7 +131,7 @@
       </view>
     </view>
   </view>
-  <view wx:if="{{showLevels}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{showLevels}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 140;">
     <view class="levels-modal" role="dialog" aria-label="选择关卡">
       <view class="levels-title"><text wx:if="{{preparingLevel}}">正在准备关卡…</text><text wx:else>冒险地图</text></view><button class="close-button" bindtap="toggleLevels" aria-label="关闭">×</button>
       <view wx:if="{{entryError}}" class="level-load-error">{{entryError}}</view>
@@ -143,7 +145,7 @@
       </view></scroll-view>
     </view>
   </view>
-  <view wx:if="{{showCredits}}" class="modal-backdrop" catchtouchmove="stopScroll">
+  <view wx:if="{{showCredits}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 130;">
     <view class="collection-modal" role="dialog" aria-label="素材集合">
       <view class="collection-title">素材集合</view><button class="close-button" bindtap="toggleCredits" aria-label="关闭">×</button>
       <scroll-view scroll-x class="collection-tabs" show-scrollbar="{{false}}">
