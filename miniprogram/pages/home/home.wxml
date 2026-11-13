@@ -21,11 +21,12 @@
           <block wx:elif="{{checkinView}}">
             <view class="checkin-days">
               <view class="checkin-row">
-                <button wx:for="{{checkinView.cards}}" wx:key="day" id="checkin-day-{{item.day}}" class="checkin-card {{item.status}}" disabled="{{item.status !== 'available' || !homeVisible}}" data-date="{{item.date}}" bindtap="claimCheckin" aria-label="第{{item.day}}天 {{item.label}} {{item.amount ? '乘' + item.amount : ''}} {{item.status === 'claimed' ? '已领取' : item.status === 'available' ? '点击签到' : '未到期'}}">
+                <button wx:for="{{checkinView.cards}}" wx:key="day" id="checkin-day-{{item.day}}" class="checkin-card {{item.status}} {{item.day === 7 ? 'seventh-day' : ''}}" disabled="{{item.status !== 'available' || !homeVisible}}" data-date="{{item.date}}" bindtap="claimCheckin" aria-label="第{{item.day}}天 {{item.label}} {{item.amount ? '乘' + item.amount : ''}} {{item.status === 'claimed' ? '已领取' : item.status === 'available' ? '点击签到' : '未到期'}}">
                   <text class="checkin-day">第{{item.day}}天</text>
                   <image class="reward-icon" src="/assets/images/checkin/{{item.kind || 'mystery'}}.png" mode="aspectFit" aria-hidden="true" />
                   <text class="reward-amount">{{item.amount ? '×' + item.amount : '？'}}</text>
                   <text wx:if="{{item.status === 'claimed'}}" class="reward-check" aria-hidden="true">✓</text>
+                  <text wx:if="{{item.day === 7}}" class="seventh-day-badge">×3</text>
                 </button>
               </view>
             </view>

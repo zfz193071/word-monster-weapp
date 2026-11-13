@@ -119,6 +119,10 @@ button::after { border: 0; }
 
 .checkin-progress { height:12rpx; margin:18rpx 4rpx 0; border-radius:12rpx; background:#ded8be; overflow:hidden; }.checkin-progress view { height:100%; background:#8cbc5f; border-radius:12rpx; }.checkin-message { display:block; font-size:25rpx; color:#5c8b43; padding:24rpx 0; }.checkin-inventory { display:flex; flex-wrap:wrap; justify-content:center; gap:12rpx 20rpx; padding:18rpx 6rpx; border-radius:16rpx; background:#e9dfc7; font-size:23rpx; }.checkin-notice { padding:48rpx 10rpx; font-size:26rpx; }.checkin-error { color:#995c43; }.checkin-notice button { margin-top:18rpx; width:180rpx; background:#dce9c7; color:#5b7546; }
 .checkin-card.claimed[disabled] { background:#e8efd8; color:#527544; border-color:#a5be85; }.checkin-card.future[disabled] { background:#eee9dc; color:#7c826f; }.checkin-card.available[disabled] { background:#f2f9d6; color:#657153; }
+.checkin-card.seventh-day { border-color:#f4b41b; background:linear-gradient(#fff9e8,#fef0b8); box-shadow:0 5rpx 0 #d49b18; }
+.checkin-card.seventh-day.available { border-color:#f7c948; background:linear-gradient(#f2f9d6,#f9eea8); box-shadow:0 5rpx 0 #c9a32a; }
+.checkin-card.seventh-day .checkin-day { color:#b87a00; }
+.seventh-day-badge { position:absolute; bottom:-8rpx; left:50%; transform:translateX(-50%); padding:2rpx 8rpx; background:#f4b41b; color:#fff; font-size:18rpx; font-weight:800; border-radius:8rpx; box-shadow:0 2rpx 0 #c98e00; }
 
 .pending-victory-reward { position: fixed; top: 100rpx; left: 20%; width: 60%; z-index: 20; font-size: 22rpx; color: #634519; background: #ffe49a; }
 .pet-supplies { flex-wrap: wrap; }

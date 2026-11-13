@@ -3,6 +3,7 @@ import { petStore } from './pet-store';
 
 export const CHECKIN_KEY = 'word-monster:daily-checkin:v1';
 export const MAX_SOLDIER_INVENTORY = 100;
+export const SEVENTH_DAY_MULTIPLIER = 3;
 export const CHECKIN_REWARDS = {
   coins: { label: '金币', amount: 100, symbol: '●' },
   food: { label: '宠物粮', amount: 3, symbol: '◆' },
@@ -23,7 +24,6 @@ export function createDailyCheckin(options: {
 }) {
   const now = options.now ?? Date.now;
   const random = options.random ?? Math.random;
-  // Keep an unsaved roll stable across retries within this process.
   const rolls = new Map<string, Kind>();
   function read(): Save {
     const raw = options.storage.getStorageSync(CHECKIN_KEY);
@@ -38,23 +38,32 @@ export function createDailyCheckin(options: {
     return {...value, soldiers: Math.min(value.soldiers, MAX_SOLDIER_INVENTORY), entries: value.entries.map(e => ({...e}))};
   }
   function save(value: Save) { options.storage.setStorageSync(CHECKIN_KEY, value); }
-  function settle(value: Save): Save {
+  function settle(value: Save, day: number): Save {
     const pending = value.entries.find(e => e.status === 'pending');
     if (!pending) return value;
     const receipt = `checkin:${pending.date}`;
-    // External stores persist reward + receipt atomically. A crash between writes
-    // can resume this journal without double-crediting coins or pet food.
+    const multiplier = day === 7 ? SEVENTH_DAY_MULTIPLIER : 1;
     if (pending.kind === 'coins') options.coins.rewardCheckin(receipt);
     if (pending.kind === 'food') options.pets.rewardCheckin(receipt);
-    if (pending.kind === 'soldier' && value.soldiers < MAX_SOLDIER_INVENTORY) { value.soldiers++; value.soldierRevision = (value.soldierRevision ?? 0) + 1; }
-    if (pending.kind === 'flag') { value.flags++; value.flagRevision = (value.flagRevision ?? 0) + 1; }
+    if (pending.kind === 'soldier' && value.soldiers < MAX_SOLDIER_INVENTORY) {
+      const added = Math.min(multiplier, MAX_SOLDIER_INVENTORY - value.soldiers);
+      value.soldiers += added;
+      value.soldierRevision = (value.soldierRevision ?? 0) + 1;
+    }
+    if (pending.kind === 'flag') { value.flags += multiplier; value.flagRevision = (value.flagRevision ?? 0) + 1; }
     if (!Number.isSafeInteger(value.flagRevision ?? 0) || !Number.isSafeInteger(value.soldiers) || !Number.isSafeInteger(value.flags) || !Number.isSafeInteger(value.soldierRevision ?? 0)) throw new Error('奖励库存超出范围');
     pending.status = 'claimed'; save(value); return value;
   }
   function prepare(): Save {
-    const value = settle(read());
+    const value = read();
     const today = beijingDate(now());
     if (value.entries.some(e => e.date > today)) throw new Error('请检查设备日期后重试');
+    const pending = value.entries.find(e => e.status === 'pending');
+    if (pending && pending.date < today) {
+      const claimedCount = value.entries.filter(e => e.status === 'claimed' && e.date < today).length;
+      const day = claimedCount % 7 + 1;
+      settle(value, day);
+    }
     if (!value.entries.some(e => e.date === today)) {
       let kind = rolls.get(today);
       if (!kind) {
@@ -80,7 +89,10 @@ export function createDailyCheckin(options: {
       cards: Array.from({length: 7}, (_, i) => {
         const entry = i === day - 1 ? today : i < day - 1 ? cycleClaims[i] : undefined;
         const reward = entry ? CHECKIN_REWARDS[entry.kind] : undefined;
-        return {day: i + 1, kind: entry?.kind ?? '', label: reward?.label ?? '神秘奖励', amount: reward?.amount ?? 0,
+        const multiplier = (i + 1) === 7 ? SEVENTH_DAY_MULTIPLIER : 1;
+        const amount = reward ? reward.amount * multiplier : 0;
+        const label = (i + 1) === 7 ? `${CHECKIN_REWARDS[entry?.kind || 'coins'].label}×3` : (reward?.label ?? '神秘奖励');
+        return {day: i + 1, kind: entry?.kind ?? '', label, amount,
           symbol: reward?.symbol ?? '?', date: entry?.date ?? '',
           status: entry?.status === 'claimed' ? 'claimed' : i === day - 1 ? 'available' : 'future'};
       }),
@@ -121,12 +133,13 @@ export function createDailyCheckin(options: {
     claim(expectedDate: string) {
       const value = prepare();
       const today = beijingDate(now());
-      // Reject a card left open across midnight; refresh it before accepting a tap.
       if (expectedDate !== today) return {claimed: false, view: view(value)};
       const entry = value.entries.find(e => e.date === today)!;
       if (entry.status === 'claimed') return {claimed: false, view: view(value)};
+      const claimedCount = value.entries.filter(e => e.status === 'claimed').length;
+      const day = claimedCount + 1;
       entry.status = 'pending'; save(value);
-      return {claimed: true, view: view(settle(value))};
+      return {claimed: true, view: view(settle(value, day))};
     },
   };
 }
