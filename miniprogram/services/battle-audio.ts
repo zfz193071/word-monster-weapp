@@ -8,6 +8,8 @@ import type { CombatEvent } from '../fortress/types';
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext, 'src' | 'autoplay' | 'loop' | 'obeyMuteSwitch' | 'volume' | 'onError' | 'stop' | 'play' | 'destroy'>;
 type DefeatWord = { wordId: string; monsterId: string };
 const SETTLE_MS = 300;
+const KILL_THRESHOLD_EARLY = 5;
+const KILL_THRESHOLD_LATE = 30;
 export interface BattleAudioView { readonly speakingWord: string; readonly error: boolean }
 export function createBattleAudio(options: {
   sessionId: string;
@@ -19,6 +21,8 @@ export function createBattleAudio(options: {
   createHitContext?: () => HitChannel;
   createBaseHitContext?: () => HitChannel;
   createCoinContext?: () => HitChannel;
+  totalMonstersInSession?: number;
+  enableKillCountReports?: boolean;
 }) {
   let disposed = false; let active = false; let volume = .22; let revision = 0; let playing = false; let error = false;
   let hit: HitChannel | undefined; let lastHit = -Infinity;
@@ -33,6 +37,10 @@ export function createBattleAudio(options: {
     const timer = setTimeout(callback, delay); return () => clearTimeout(timer);
   });
   const seen = new Set<string>();
+  const killCounters = new Map<string, number>();
+  const totalMonsters = options.totalMonstersInSession ?? 0;
+  const killThreshold = totalMonsters >= 500 ? KILL_THRESHOLD_LATE : KILL_THRESHOLD_EARLY;
+  const enableKillCountReports = options.enableKillCountReports ?? false;
   const busy = () => !!(current || pending);
   const music = createLoopMusic({ src: '/assets/audio/battle-loop.mp3', volume, createContext: options.createMusicContext, onChange() {} });
   const voice = createAudioAdapter({ ...options.audio, sessionId: options.sessionId, emit() {} });
@@ -126,7 +134,16 @@ export function createBattleAudio(options: {
       for (const event of local) if (event.type === 'monsterDefeated') {
         const key = `${event.context.combatId}:${event.monsterId}`;
         if (!seen.has(key)) {
-          seen.add(key); pending = { wordId: event.wordId, monsterId: event.monsterId }; changed = true;
+          seen.add(key);
+          if (enableKillCountReports) {
+            const wordCount = killCounters.get(event.wordId) ?? 0;
+            killCounters.set(event.wordId, wordCount + 1);
+            if ((wordCount + 1) % killThreshold === 0) {
+              pending = { wordId: event.wordId, monsterId: event.monsterId }; changed = true;
+            }
+          } else {
+            pending = { wordId: event.wordId, monsterId: event.monsterId }; changed = true;
+          }
         }
       }
       if (changed) { remaining = SETTLE_MS; settle(); }
@@ -150,7 +167,7 @@ export function createBattleAudio(options: {
     },
     setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); } },
     retry() { if (!disposed && active && error) { error = false; speak(); } },
-    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); cancelTimer(); current = pending = undefined; seen.clear();
+    dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); cancelTimer(); current = pending = undefined; seen.clear(); killCounters.clear();
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;
       try { baseHit?.stop(); } catch {} try { baseHit?.destroy(); } catch {} baseHit = undefined; heardAttacks.clear();
       try { coin?.stop(); } catch {} try { coin?.destroy(); } catch {} coin = undefined;

@@ -243,13 +243,16 @@ Component({
             instance.upgrades = createUpgradeChoices(); instance.collection = carry?.collection ?? Object.freeze({}); instance.levels = skillLevels(instance.collection); instance.waveIndex = 0; instance.pet = carry?.pet; instance.stageCarry = undefined;
             this.setData({ frostEnergy: 0, frostPercent: 0, frostTarget: false, combos: comboProgress(instance.levels!), skillInventory: inventory(instance.collection), rewardCoins: victoryCoinsForLevel(request?.plan.levelId ?? 1), rewardCards: [] as RewardCard[], rewardSaved: false, rewardError: false, victoryFruits: getLevel(request?.plan.levelId).words.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), frozenFrame: '', experience: 0, level: 1, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, upgradeSummary: '' });
           }
-          if (this.properties.opening && !instance.audio) {
-            instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
-              onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
-              onDrained: () => { if (instance.alive) this.presentUpgrade(); },
-            });
-            instance.audio.setVolume(this.properties.musicVolume / 100);
-          }
+           if (this.properties.opening && !instance.audio) {
+             const totalMonsters = request?.plan.waves?.flatMap(wave => wave.spawnPlan).length ?? 0;
+             instance.audio = createBattleAudio({ sessionId: initial.context.sessionId,
+               onChange: view => { if (!instance.alive) return; this.setData({ speakingWord: view.speakingWord, voiceError: view.error }); },
+               onDrained: () => { if (instance.alive) this.presentUpgrade(); },
+               totalMonstersInSession: totalMonsters,
+               enableKillCountReports: false,
+             });
+             instance.audio.setVolume(this.properties.musicVolume / 100);
+           }
           if (this.properties.preview && request?.variant !== 'fruit') instance.skills = createSkillSession(request?.plan ?? createPreviewPlan(this.properties.previewWord, initial.context.sessionId), createSeededRandom(previewSequence));
           const sceneArt = this.properties.opening ? openingArt(initial.monsters[0].wordId, [...initial.monsters, ...(initial.incomingMonsters ?? [])].map(monster => monster.wordId), initial.weaponLevel) : this.properties.art as SceneArt | undefined;
           const visual = FORTRESS_MONSTERS.find(monster => monster.wordId === initial.monsters[0].wordId);

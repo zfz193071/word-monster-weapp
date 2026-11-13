@@ -14,10 +14,10 @@ class Channel {
 }
 const context={sessionId:'audio-run',combatId:'wave1',waveId:'wave1',generation:0};
 const defeat=(id:string,wordId='apple'):CombatEvent=>({type:'monsterDefeated',context,tick:1,monsterId:id,wordId});
-function setup(){
+function setup(totalMonsters=100){
   const voices:Channel[]=[];const music=new Channel();const hit=new Channel();const base=new Channel();const coin=new Channel();let drained=0;let time=0;
   const timers=new Map<number,{at:number;run:()=>void}>();let next=0;const callbacks:(()=>void)[]=[];
-  const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){drained++;},now:()=>time,
+  const controller=createBattleAudio({sessionId:context.sessionId,onChange(){},onDrained(){drained++;},now:()=>time,totalMonstersInSession:totalMonsters,
     audio:{createContext(){const c=new Channel();voices.push(c);return c;},schedule(run,delay){
       const id=++next;timers.set(id,{at:time+delay,run});callbacks.push(run);return()=>{timers.delete(id);};
     }},createMusicContext:()=>music,createHitContext:()=>hit,createBaseHitContext:()=>base,createCoinContext:()=>coin});
