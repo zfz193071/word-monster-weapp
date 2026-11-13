@@ -30,6 +30,14 @@ export const SUPPORT_SOLDIER_MAX_HP = 30;
 export const RANGED_ENEMY_RANGE = 220;
 export const RANGED_ENEMY_INTERVAL_MS = 1800;
 export const RANGED_ENEMY_SHOT_SPEED = 260;
+// Archer zombie: range 200px, 15% damage, 2s attack interval, 70% HP
+export const ARCHER_RANGE = 200;
+export const ARCHER_DAMAGE_RATIO = 0.15;
+export const ARCHER_INTERVAL_MS = 2000;
+// Stone zombie: range 300px, 25% damage, 3.5s attack interval, 60% HP
+export const STONE_RANGE = 300;
+export const STONE_DAMAGE_RATIO = 0.25;
+export const STONE_INTERVAL_MS = 3500;
 const QUALITY_PROJECTILE_LIMIT = (Math.ceil(4000 / 160) + 1) * 8; // Four-second lifetime, fastest cadence, largest volley.
 const MIN_INTERVAL = Math.min(...FORTRESS_SKILLS[1].values);
 const MAX_SHOTS = Math.max(...FORTRESS_SKILLS[0].values);
@@ -236,7 +244,9 @@ function initializeCombat(options: Omit<CreateCombatOptions, 'plan' | 'waveIndex
       ...(spawn.spawnAtMs !== undefined ? { spawnAtMs: spawn.spawnAtMs } : {}),
       hitbox: { x: hitbox.x * size, y: hitbox.y * size, width: hitbox.width * size, height: hitbox.height * size }, hp: Math.ceil(stats.hp * variant.hp), maxHp: Math.ceil(stats.hp * variant.hp), status: (spawn.spawnAtMs ?? 0) > 0 ? 'waiting' : 'entering',
       attackIntervalMs: interval, attackRemainingMs: interval, attackSequence: 0,
-      ...(spawn.enemyType === 'flying' ? {rangedRemainingMs: RANGED_ENEMY_INTERVAL_MS} : {}) }; }),
+      ...(spawn.enemyType === 'flying' ? {rangedRemainingMs: RANGED_ENEMY_INTERVAL_MS} : {}),
+      ...(spawn.enemyType === 'archer' ? {archerRemainingMs: ARCHER_INTERVAL_MS} : {}),
+      ...(spawn.enemyType === 'stone' ? {stoneRemainingMs: STONE_INTERVAL_MS} : {}) }; }),
     projectiles: [], supportSoldiers: options.supportSoldiers ?? [], shotRemainingMs: weapon.intervalMs, nextProjectileSequence: 0,
     defeatedMonsterIds: [], processedBaseAttackIds: [], enemyShots: [],
   };
@@ -496,7 +506,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   // Flying zombies fire a visible bolt at the nearest platform ally before
   // reaching the fortress. The fortress is only targeted when no living ally
   // is available; melee arrivals still damage the fortress directly below.
+  // Archer and stone zombies attack from the ground at soldiers/base within range.
   const shootingPet = pet && pet.hp > 0 ? pet : undefined;
+  // Process flying zombie ranged attacks
   for (let index = 0; index < monsters.length; index++) {
     const monster = monsters[index];
     if (monster.enemyType !== 'flying' || !targetable(monster) || monster.position.y < 0
@@ -527,8 +539,70 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     const travelMs = Math.max(COMBAT_STEP_MS, Math.round(distance / RANGED_ENEMY_SHOT_SPEED * 1000));
     enemyShots.push({ id: `${previous.context.combatId}:${monster.id}:shot:${tick}`, monsterId: monster.id,
       from: { ...from }, to: { ...chosen.point }, target: { kind: chosen.kind, ...(chosen.id ? { id: chosen.id } : {}) },
-      damage: monster.attackDamage ?? RULES.monster.attackDamage, travelMs, remainingMs: travelMs });
+      damage: monster.attackDamage ?? RULES.monster.attackDamage, travelMs, remainingMs: travelMs, shotType: 'arrow' });
     monsters[index] = { ...monster, rangedRemainingMs: RANGED_ENEMY_INTERVAL_MS };
+  }
+  // Process archer zombie ranged attacks
+  for (let index = 0; index < monsters.length; index++) {
+    const monster = monsters[index];
+    if (monster.enemyType !== 'archer' || !targetable(monster)
+      || monster.status === 'waiting' || monster.status === 'retiring') continue;
+    const frozen = !monster.boss && (monster.frozenUntilTick ?? -1) >= tick;
+    const remaining = Math.max(0, (monster.archerRemainingMs ?? ARCHER_INTERVAL_MS) - (frozen ? 0 : COMBAT_STEP_MS));
+    if (remaining > EPSILON) { monsters[index] = { ...monster, archerRemainingMs: remaining }; continue; }
+    const from = monster.position;
+    let chosen: { kind: 'soldier' | 'base'; id?: string; point: Point } | undefined;
+    let nearest = Infinity;
+    for (const soldier of supportSoldiers) {
+      if (soldier.hp <= 0) continue;
+      const distance = Math.hypot(soldier.position.x - from.x, soldier.position.y - from.y);
+      if (distance <= ARCHER_RANGE && distance < nearest) {
+        nearest = distance; chosen = { kind: 'soldier', id: soldier.id, point: soldier.position };
+      }
+    }
+    if (!chosen) {
+      const point = { x: from.x, y: RULES.arena.baseTop };
+      if (Math.hypot(point.x - from.x, point.y - from.y) <= ARCHER_RANGE) chosen = { kind: 'base', point };
+    }
+    if (!chosen) { monsters[index] = { ...monster, archerRemainingMs: 0 }; continue; }
+    const distance = Math.hypot(chosen.point.x - from.x, chosen.point.y - from.y);
+    const travelMs = Math.max(COMBAT_STEP_MS, Math.round(distance / RANGED_ENEMY_SHOT_SPEED * 1000));
+    const baseDamage = monster.attackDamage ?? RULES.monster.attackDamage;
+    enemyShots.push({ id: `${previous.context.combatId}:${monster.id}:archer:${tick}`, monsterId: monster.id,
+      from: { ...from }, to: { ...chosen.point }, target: { kind: chosen.kind, ...(chosen.id ? { id: chosen.id } : {}) },
+      damage: Math.ceil(baseDamage * ARCHER_DAMAGE_RATIO), travelMs, remainingMs: travelMs, shotType: 'arrow' });
+    monsters[index] = { ...monster, archerRemainingMs: ARCHER_INTERVAL_MS };
+  }
+  // Process stone zombie ranged attacks
+  for (let index = 0; index < monsters.length; index++) {
+    const monster = monsters[index];
+    if (monster.enemyType !== 'stone' || !targetable(monster)
+      || monster.status === 'waiting' || monster.status === 'retiring') continue;
+    const frozen = !monster.boss && (monster.frozenUntilTick ?? -1) >= tick;
+    const remaining = Math.max(0, (monster.stoneRemainingMs ?? STONE_INTERVAL_MS) - (frozen ? 0 : COMBAT_STEP_MS));
+    if (remaining > EPSILON) { monsters[index] = { ...monster, stoneRemainingMs: remaining }; continue; }
+    const from = monster.position;
+    let chosen: { kind: 'soldier' | 'base'; id?: string; point: Point } | undefined;
+    let nearest = Infinity;
+    for (const soldier of supportSoldiers) {
+      if (soldier.hp <= 0) continue;
+      const distance = Math.hypot(soldier.position.x - from.x, soldier.position.y - from.y);
+      if (distance <= STONE_RANGE && distance < nearest) {
+        nearest = distance; chosen = { kind: 'soldier', id: soldier.id, point: soldier.position };
+      }
+    }
+    if (!chosen) {
+      const point = { x: from.x, y: RULES.arena.baseTop };
+      if (Math.hypot(point.x - from.x, point.y - from.y) <= STONE_RANGE) chosen = { kind: 'base', point };
+    }
+    if (!chosen) { monsters[index] = { ...monster, stoneRemainingMs: 0 }; continue; }
+    const distance = Math.hypot(chosen.point.x - from.x, chosen.point.y - from.y);
+    const travelMs = Math.max(COMBAT_STEP_MS, Math.round(distance / RANGED_ENEMY_SHOT_SPEED * 1000));
+    const baseDamage = monster.attackDamage ?? RULES.monster.attackDamage;
+    enemyShots.push({ id: `${previous.context.combatId}:${monster.id}:stone:${tick}`, monsterId: monster.id,
+      from: { ...from }, to: { ...chosen.point }, target: { kind: chosen.kind, ...(chosen.id ? { id: chosen.id } : {}) },
+      damage: Math.ceil(baseDamage * STONE_DAMAGE_RATIO), travelMs, remainingMs: travelMs, shotType: 'stone' });
+    monsters[index] = { ...monster, stoneRemainingMs: STONE_INTERVAL_MS };
   }
   // Shot arrival is its own pass so a volley cannot double-hit the same ally
   // and a shot aimed at an already-fallen ally dissipates harmlessly.
@@ -543,11 +617,11 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       attacks.add(shot.id);
       const soldier = supportSoldiers[soldierIndex];
       const hp = Math.max(0, soldier.hp - receivedSoldierDamage(soldier, shot.damage));
-      events.push({type:'supportSoldierDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id,hp});
+      events.push({type:'supportSoldierDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id,hp,shotType:shot.shotType});
       if (hp > 0) supportSoldiers[soldierIndex] = {...soldier,hp,lastHitTick:tick,hitCombatId:previous.context.combatId};
       else {
         fallenSoldiers.push({...soldier,hp:0,lastHitTick:tick,hitCombatId:previous.context.combatId});
-        events.push({type:'supportSoldierDefeated',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id});
+        events.push({type:'supportSoldierDefeated',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,soldierId:soldier.id,shotType:shot.shotType});
         supportSoldiers.splice(soldierIndex, 1);
       }
     } else if (shot.target.kind === 'pet') {
@@ -564,7 +638,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
       if (baseHp <= 0) continue;
       attacks.add(shot.id);
       baseHp = Math.max(0, baseHp - shot.damage);
-      events.push({type:'baseDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,hp:baseHp});
+      events.push({type:'baseDamaged',context:previous.context,tick,attackId:shot.id,monsterId:shot.monsterId,hp:baseHp,shotType:shot.shotType});
     }
   }
   // Resolve shockwaves after damage: a boss killed on release cannot attack.

@@ -144,7 +144,11 @@ export interface MonsterState {
   readonly attackSequence: number;
   // Flying enemies keep a separate ranged cadence so melee arrival timers stay untouched.
   readonly rangedRemainingMs?: number;
+  // Archer and stone zombies use separate ranged timers with their own intervals.
+  readonly archerRemainingMs?: number;
+  readonly stoneRemainingMs?: number;
 }
+export type EnemyShotType = 'arrow' | 'stone';
 export interface EnemyShotState {
   readonly id: string;
   readonly monsterId: string;
@@ -154,6 +158,7 @@ export interface EnemyShotState {
   readonly damage: number;
   readonly travelMs: number;
   readonly remainingMs: number;
+  readonly shotType?: EnemyShotType;
 }
 export interface SupportSoldierState {
   readonly soldierType?: SoldierType;
@@ -242,9 +247,9 @@ export type CombatEvent =
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
   | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly soldier?: SoldierDamageContribution; readonly position: Point }
   | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
-  | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number }
-  | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string }
-  | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number }
+  | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number; readonly shotType?: EnemyShotType }
+  | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly shotType?: EnemyShotType }
+  | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number; readonly shotType?: EnemyShotType }
   | { readonly type: 'baseDestroyed'; readonly context: CombatContext; readonly tick: number };
 export interface SkillOffer {
   readonly offerId: string;
