@@ -8,9 +8,9 @@ import { FORTRESS_RULES as R } from '../miniprogram/fortress/rules';
 test('introduction waves and deterministic independent mixing preserve word and arrival identities',()=>{
  for(const [wave,type] of [[4,'runner'],[7,'armored'],[10,'flying'],[13,'exploder'],[16,'giant']] as const){
   assert.equal(drawEnemyType(wave,true,()=>.99),type);
-  const a=createOpeningEncounter('types','apple',1,wave-1),b=createOpeningEncounter('types','apple',1,wave-1);
+  const a=createOpeningEncounter('types','banana',1,wave-1),b=createOpeningEncounter('types','banana',1,wave-1);
   assert.deepEqual(a,b);assert.equal(a.monsters[0].enemyType,type);
-  assert(a.monsters.every(m=>m.wordId==='apple'));
+  assert(a.monsters.every(m=>m.wordId==='banana'));
  }
  assert.equal(armoredDamage('armored',5,true),3);assert.equal(armoredDamage('armored',5,false),5);
 });

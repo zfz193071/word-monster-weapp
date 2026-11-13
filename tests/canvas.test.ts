@@ -144,10 +144,10 @@ test('精细苹果怪等待图片解码，普通怪使用分腿图，Boss与特�
       const state = { ...initial, tick: 30, monsters: [monster] };
       (h.scene as unknown as { draw(state: typeof state): void }).draw(state);
       const parts = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === texture);
-      assert.equal(parts.length, kind === 'normal' ? 3 : 0);
+       assert.equal(parts.length, (kind === 'normal' || kind === 'runner') ? 3 : 0);
       const badge = h.images.find(image => image.src === art.fruitHat!.path)!;
       const badgeDraws = h.commands.filter(command => command.method === 'drawImage' && command.args[0] === badge);
-      assert.equal(badgeDraws.length, kind === 'normal' ? 0 : 1, '苹果壳身份不被重复徽章覆盖，Boss与特殊兵种仍保留词条');
+      assert.equal(badgeDraws.length, (kind === 'normal' || kind === 'runner') ? 0 : 1, '苹果壳身份不被重复徽章覆盖，Boss与特殊兵种仍保留词条');
       assert.ok(h.commands.some(command => command.method === 'fillRect' && command.args[1] === (kind === 'boss' ? 30 : 41)), '保留生命条');
       assert.equal(state.monsters[0].position.y, 240, '绘制不改碰撞位置');
     }

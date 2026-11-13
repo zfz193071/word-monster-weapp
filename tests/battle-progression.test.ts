@@ -20,7 +20,7 @@ test('两维难度边界、出生后数值固定及小数基地血量跨波保�
   const initial = createOpeningEncounter('fractional', 'apple', 0, 5);
   const attacking: CombatState = { ...initial, automatic: false, monsters: [{ ...initial.monsters[0], status: 'attackingBase', position: { x: 60, y: 480 }, attackRemainingMs: 0 }] };
   const hit = stepCombat(attacking).state;
-  assert.equal(hit.base.hp, 989); assert.equal(hit.monsters[0].maxHp, 100);
+  assert.equal(hit.base.hp, 989); assert.equal(hit.monsters[0].maxHp, 80);
   assert.equal(createOpeningEncounter('fractional', 'apple', 1, 6, undefined, hit.base.hp).base.hp, 989);
 });
 
@@ -52,7 +52,7 @@ test('Boss预警1秒/冲锋2秒、慢速叠加，后台暂停不消耗冲锋时�
   assert.equal(bossChargePhase(7990), 'normal'); assert.equal(bossChargePhase(8000), 'warning');
   assert.equal(bossChargePhase(8990), 'warning'); assert.equal(bossChargePhase(9000), 'charging');
   assert.equal(bossChargePhase(11000), 'normal'); assert.equal(bossChargePhase(16000), 'warning');
-  const initial = createOpeningEncounter('charge', 'apple', 0);
+  const initial = createOpeningEncounter('charge', 'banana', 0);
   const boss = { ...initial.monsters[0], boss: true, position: { x: 60, y: 100 }, status: 'alive' as const, spawnAtMs: 1000, slowUntilTick: 2000, slowRatio: .5 };
   const state: CombatState = { ...initial, tick: 999, automatic: false, monsters: [boss], projectiles: [] };
   const next = stepCombat(state).state;

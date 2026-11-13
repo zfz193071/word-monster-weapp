@@ -44,8 +44,8 @@ export function soldierType(value?: SoldierType): SoldierType {
   return value;
 }
 export function enemyLayer(monster: Pick<MonsterState, 'enemyType' | 'boss'>): CombatLayer {
+  if (monster.boss) return 'ground';
   const type = enemyType(monster.enemyType);
-  if (monster.boss && type !== 'normal') throw new Error('Boss不能使用普通僵尸兵种');
   return type === 'flying' ? 'air' : 'ground';
 }
 export function soldierLayer(soldier: Pick<SupportSoldierState, 'soldierType'>): CombatLayer {

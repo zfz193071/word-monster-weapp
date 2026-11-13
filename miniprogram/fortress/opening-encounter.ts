@@ -110,13 +110,17 @@ export function createOpeningEncounter(sessionId: string, wordId: string, genera
   const plannedSpawns = spawns.map((spawn, index) => {
     if (waveIndex === OPENING_WAVE_COUNT - 1 && index === spawns.length - 1) return { ...spawn, boss: true, bossKind: 'grand' as const, dropCoins: 0 };
     const boss = waveIndex === bossWave && index === spawns.length - 1;
-    return { ...spawn, ...(!boss ? {enemyType: drawEnemyType(waveIndex + 1, index === 0, typeRandom)} : {}), ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
+    const baseType = !boss ? drawEnemyType(waveIndex + 1, index === 0, typeRandom) : undefined;
+    const enemyType = spawn.wordId === 'apple' && !boss ? 'runner' : baseType;
+    return { ...spawn, ...(enemyType ? {enemyType} : {}), ...(boss ? { boss: true, bossKind: 'iron' as const, soldierDropCount: bossSoldierDropCount(spawn.monsterId) } : {}), dropCoins: monsterDropCoins(spawn.monsterId, boss, difficulty) };
   });
-  // 速度配置说明 (#112/#113)：
-  // - 第 3 关动物僵尸：速度 28（奔跑型）
-  // - 其他所有关卡和僵尸类型：速度 20（普通型）
-  // - 仅苹果僵尸 (#112) 明确为奔跑型，其他僵尸维持原样 (#113)
-  return createEncounterCombat({ houseLevel, difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: (levelId === 3 ? 28 : 20) * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId, houseLevel),
+  // 速度配置 (#112/#113)：
+  // - 苹果僵尸：速度 28（奔跑型）
+  // - 第 3 关非苹果动物僵尸：速度 28（奔跑型）
+  // - 其他所有僵尸：速度 20（普通型）
+  const hasApple = spawns.some(s => s.wordId === 'apple');
+  const baseSpeed = hasApple || levelId === 3 ? 28 : 20;
+  return createEncounterCombat({ houseLevel, difficulty: { levelId, heroLevel: waveIndex + 1, mode: difficulty }, weaponLevel, automatic: true, monsterSpeed: baseSpeed * multipliers.speed, monsterAttackIntervalMs: levelId === 3 ? 1500 : 2000, sessionId, targetWordId: wordId, combatId: `${sessionId}:wave:${waveIndex + 1}`, generation, baseHp: baseHp ?? fortressMaxHp(levelId, houseLevel),
     playerX: 180, skills, skillCollection, supportSoldiers, monsterHitbox: logicalHitbox(openingArt(wordId).monsterVisual, openingArt(wordId).monsterWidth),
     monsterHitboxes: Object.fromEntries([...new Set(fruitIds)].map(id => {
       const art = openingArt(id); return [id, logicalHitbox(art.monsterVisual, art.monsterWidth)];

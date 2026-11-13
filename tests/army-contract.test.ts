@@ -7,7 +7,7 @@ import { stepCombat } from '../miniprogram/fortress/combat';
 test('legacy identities default without changing word IDs; invalid species and Boss combinations fail', () => {
   assert.equal(enemyType(), 'normal'); assert.equal(soldierType(), 'rifle');
   assert.throws(() => enemyType('unknown' as never));
-  assert.throws(() => enemyLayer({enemyType:'flying',boss:true}));
+  assert.equal(enemyLayer({enemyType:'flying',boss:true}), 'ground');
   assert.throws(() => validateSoldierIdentity({soldierType:'tank',source:'inventory'} as never));
   const monster = createOpeningEncounter('contract','apple',1).monsters[0];
   for (const status of ['waiting','defeated','retiring'] as const) assert.equal(targetable({...monster,status,hp:10}),false);

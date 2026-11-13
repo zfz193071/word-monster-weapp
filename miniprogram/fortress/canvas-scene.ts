@@ -368,7 +368,7 @@ export class CanvasScene {
       if (!art) continue;
       const hatScale = art.monsterWidth / 64 * scale;
       reservations.push({id: monster.id, position: {x, y}, halfWidth: 18 * hatScale, top: -41 * hatScale, bottom: 45 * hatScale});
-      const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')
+      const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal' || monster.enemyType === 'runner')
         && art.texturedBodies?.[monster.wordId]?.path === APPLE_ZOMBIE_PARTS.path;
       if ((art.fruitHats?.[monster.wordId] ?? art.fruitHat) && !appleHelmet && !animalIdsOf(art).has(monster.wordId)) {
         reservations.push({id: monster.id, position: {x, y: y - 44 * hatScale}, halfWidth: 20 * hatScale, top: 64 * hatScale, bottom: 24 * hatScale});
@@ -624,7 +624,7 @@ export class CanvasScene {
           c.restore();
         } else if (animalIdsOf(monsterArt).has(monster.wordId)) {
           this.drawAnimal(monster.wordId, monster.position.x, monster.position.y, monster.hp > 0 && (monster.frozenUntilTick ?? -1) < state.tick && (monster.status === 'alive' || monster.status === 'entering') ? state.tick + motionSeed : 0, motionSeed);
-        } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal') && monsterArt.texturedBodies?.[monster.wordId]) {
+        } else if (!monster.boss && (!monster.enemyType || monster.enemyType === 'normal' || monster.enemyType === 'runner') && monsterArt.texturedBodies?.[monster.wordId]) {
           const image = this.images.get(monsterArt.texturedBodies[monster.wordId].path);
           if (!image) throw new Error('已预载图片丢失');
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(scale, scale);
@@ -660,7 +660,7 @@ export class CanvasScene {
         if (monsterArt.fruitHat && !monster.boss && !animalIdsOf(monsterArt).has(monster.wordId)) {
           const hatScale = monsterArt.monsterWidth / 64;
           c.save(); c.translate(monster.position.x, monster.position.y); c.scale(hatScale, hatScale);
-          const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal')
+          const appleHelmet = (!monster.enemyType || monster.enemyType === 'normal' || monster.enemyType === 'runner')
             && monsterArt.texturedBodies?.[monster.wordId]?.path === APPLE_ZOMBIE_PARTS.path;
           // The integrated apple helmet already identifies the word; don't obscure it.
           if (!appleHelmet) {

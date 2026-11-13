@@ -30,7 +30,7 @@ test('八关分类隔离、19波循环学词、复习无相邻重复，混合使
 });
 
 test('动物速度28、1.5秒攻击一次；水果速度20、2秒攻击一次',()=>{
- for(const [word,level,speed,interval] of [['dog',3,28,1500],['apple',1,20,2000]] as const){
+ for(const [word,level,speed,interval] of [['dog',3,28,1500],['apple',1,28,2000]] as const){
   const initial=createOpeningEncounter('traits',word,0,0,undefined,undefined,[],level);
   assert.equal(initial.monsterSpeed,speed);assert.ok(initial.monsters.every(m=>m.attackIntervalMs===interval));
   let state={...initial,automatic:false,monsters:[{...initial.monsters[0],position:{x:60,y:480},status:'attackingBase' as const}]};
