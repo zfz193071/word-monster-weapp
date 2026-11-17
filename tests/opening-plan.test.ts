@@ -9,13 +9,13 @@ import { createFruitOptions } from '../miniprogram/fortress/fruit-options';
 import { stepCombat } from '../miniprogram/fortress/combat';
 import type { BattleSkillId } from '../miniprogram/fortress/types';
 
-test('19波：前11词唯一，后8词不重复复习，边界不连续同词；新近播报词不会立即作为复习怪重复', () => {
+test('19波：先学完本关词，复习不连续同词；新近播报词不会立即作为复习怪重复', () => {
   for (let seed = 0; seed < 50; seed++) {
     const plan = createOpeningPlan(`plan-${seed}`, createSeededRandom(seed)); validateOpeningPlan(plan);
     assert.equal(plan.waves.length, 19);
     assert.deepEqual(plan.waves.map(w => w.spawnPlan.length), [8,13,18,23,28,33,38,43,48,53,58,63,68,73,78,83,88,93,98]);
     assert.equal(new Set(plan.waves.slice(0,11).map(w=>w.targetWordId)).size,11);
-    assert.equal(new Set(plan.waves.slice(11).map(w=>w.targetWordId)).size,8);
+    assert.ok(plan.waves.slice(11).every(w=>BATTLE_WORDS.some(word=>word.id===w.targetWordId)));
     for (const [index,wave] of plan.waves.entries()) {
       const count=OPENING_MONSTER_COUNTS[index];assert.equal(wave.spawnPlan.length,count);
       const batches = new Map<number, number>();

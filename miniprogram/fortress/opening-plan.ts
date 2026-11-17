@@ -21,11 +21,23 @@ export function createOpeningPlan(sessionId: string, random: RandomSource, level
     return out;
   };
   const words = getLevel(levelId).words.map(word => word.id);
-  const targets: string[] = [];
+  const firstPass = shuffle(words).slice(0, OPENING_WAVE_COUNT);
+  const targets = [...firstPass];
+  const appearanceCount = new Map(firstPass.map(id => [id, 1]));
   while (targets.length < OPENING_WAVE_COUNT) {
-    const cycle = shuffle(words);
-    if (cycle[0] === targets[targets.length - 1]) [cycle[0], cycle[1]] = [cycle[1], cycle[0]];
-    targets.push(...cycle.slice(0, OPENING_WAVE_COUNT - targets.length));
+    const previousId = targets[targets.length - 1];
+    const candidates = words.filter(id => id !== previousId);
+    const totalWeight = candidates.reduce((sum, id) => sum + 1 / (1 + (appearanceCount.get(id) ?? 0)), 0);
+    let selection = random();
+    if (!Number.isFinite(selection) || selection < 0 || selection >= 1) throw new Error('随机数无效');
+    selection *= totalWeight;
+    let target = candidates[candidates.length - 1];
+    for (const id of candidates) {
+      selection -= 1 / (1 + (appearanceCount.get(id) ?? 0));
+      if (selection < 0) { target = id; break; }
+    }
+    targets.push(target);
+    appearanceCount.set(target, (appearanceCount.get(target) ?? 0) + 1);
   }
   return Object.freeze({ kind: 'fruit-defense', levelId, weaponLevel, houseLevel, difficulty, mode: 'fortress', schemaVersion: 2, contentVersion: 2, sessionId,
     waves: Object.freeze(targets.map((targetWordId, index) => {
@@ -42,14 +54,12 @@ export function validateOpeningPlan(plan: SessionPlan): void {
   weaponForLevel(plan.weaponLevel ?? 1);
   if (plan.kind !== 'fruit-defense' || !plan.sessionId.trim() || plan.waves.length !== OPENING_WAVE_COUNT) throw new Error('新版计划无效');
   const words = getLevel(plan.levelId).words;
+  const firstPass = plan.waves.slice(0, Math.min(words.length, plan.waves.length));
+  if (new Set(firstPass.map(wave => wave.targetWordId)).size !== firstPass.length) throw new Error('首次学习词序不能重复');
   const previousIds = (plan.levelId ?? 1) > 1 ? getLevel(plan.levelId! - 1).words.map(word => word.id) : [];
   for (const [index, wave] of plan.waves.entries()) {
     if (wave.index !== index || wave.waveId !== `${plan.sessionId}:wave:${index + 1}` || !words.some(word => word.id === wave.targetWordId)
       || wave.spawnPlan.length !== openingMonsterCount(index, plan.levelId) || (index && wave.targetWordId === plan.waves[index - 1].targetWordId)) throw new Error('新版波次无效');
-  }
-  for (let start = 0; start < plan.waves.length; start += words.length) {
-    const cycle = plan.waves.slice(start, start + words.length);
-    if (new Set(cycle.map(wave => wave.targetWordId)).size !== cycle.length) throw new Error('词汇学习与复习顺序无效');
   }
   plan.waves.forEach(wave => wave.spawnPlan.forEach(enemyLayer));
   const ironWaves = plan.waves.filter(wave => wave.spawnPlan.some(spawn => spawn.boss && spawn.bossKind !== 'grand'));
