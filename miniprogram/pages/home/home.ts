@@ -317,17 +317,19 @@ Page({
   },
   async beginLevel(levelId: number) {
     if (this.disposed || this.data.request || this.data.preparingLevel || this.data.showWeapon || this.data.showPet || this.data.showDifficulty || this.data.showCheckin || this.data.showHouse) return;
+    const preparationId = ++this.navigationId;
+    const valid = () => !this.disposed && this.navigationId === preparationId;
     try {
       if (!coinWallet.canEnter(levelId)) return;
-      this.setData({ preparingLevel: true, entryProgress: 0, entryError: '' });
+      this.setData({ preparingLevel: true, sceneCoverReady: false, entryProgress: 0, entryError: '' });
       await (levelId === 1 ? loadFruitAssets() : Promise.all([loadLevelAssets(), ...(levelId === 3 ? [loadAnimalAssets()] : [])]));
-      if (this.disposed) return;
+      if (!valid()) return;
       this.setData({ entryProgress: 100 });
       const request = fortressEntryStore.start(Date.now(), levelId);
       this.stopCollectionAudio(); this.music?.setActive(false);
       this.setData({ sceneCoverReady: this.data.sceneCoverReady && (this.data.showLevels || this.data.showCredits), strengthTarget: '', request, showLevels: false, showCredits: false, entryError: '', choiceComplete: false, navigationError: false });
-    } catch { if (!this.disposed) this.setData({ entryError: '关卡暂时无法准备，请重试' }); }
-    finally { if (!this.disposed) this.setData({ preparingLevel: false }); }
+    } catch { if (valid()) this.setData({ entryError: '关卡暂时无法准备，请重试' }); }
+    finally { if (valid()) this.setData({ preparingLevel: false }); }
   },
   choiceSucceeded(event: WechatMiniprogram.CustomEvent<ListeningResult>) {
     if (this.disposed || this.data.choiceComplete || !fortressEntryStore.complete(event.detail)) return;

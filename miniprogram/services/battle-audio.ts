@@ -57,7 +57,7 @@ export function createBattleAudio(options: {
   const busy = () => !!(current || pending);
   
   const music = createBattleMusic({ 
-    src: '/assets/audio/battle-urgent.mp3', 
+    src: '/assets/audio/battle-loop.mp3',
     volume, 
     createContext: options.createMusicContext,
     onChange() {} 
@@ -79,6 +79,7 @@ export function createBattleAudio(options: {
   const effectVolume = (level: number) => Math.min(1, volume / .22 * level);
   function mix() {
     music.setVolume(busy() ? volume * .2 : volume);
+    zombieSfx?.setActive(active && !busy());
     if (hit) hit.volume = effectVolume(busy() ? .10 : .35);
     if (baseHit) baseHit.volume = effectVolume(busy() ? .12 : .4);
     if (coin) coin.volume = effectVolume(busy() ? .08 : .25);
@@ -186,14 +187,14 @@ export function createBattleAudio(options: {
     },
     setActive(value: boolean) {
       if (disposed || value === active) return;
-      active = value; music.setActive(value); zombieSfx?.setActive(value);
+      active = value; music.setActive(value); zombieSfx?.setActive(value && !busy());
       if (!value) {
         if (cancelSettle) remaining = Math.max(0, dueAt - now());
         cancelTimer(); revision++; playing = false; voice.stop();
         try { hit?.stop(); baseHit?.stop(); coin?.stop(); } catch {}
       } else { settle(); speak(); }
     },
-    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); music.setVolume(value); zombieSfx?.setVolume(value); } },
+    setVolume(value: number) { if (!disposed && Number.isFinite(value)) { volume = Math.max(0, Math.min(1, value)); mix(); zombieSfx?.setVolume(value); } },
     retry() { if (!disposed && active && error) { error = false; speak(); } },
     dispose() { if (!disposed) { disposed = true; revision++; voice.dispose(); music.dispose(); zombieSfx?.dispose(); cancelTimer(); current = pending = undefined; seen.clear(); killCounters.clear();
       try { hit?.stop(); } catch {} try { hit?.destroy(); } catch {} hit = undefined;

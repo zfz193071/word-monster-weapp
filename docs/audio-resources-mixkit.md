@@ -2,7 +2,7 @@
 
 ## 资源来源
 **网站**: https://mixkit.co  
-**许可**: Mixkit License - 免费商用，无需署名  
+**许可**: 音效与音乐许可不同；音效可用于电子游戏，Mixkit 免费音乐不可用于电子游戏。
 
 ---
 
@@ -11,12 +11,12 @@
 ### 战斗音乐
 | 文件 | 描述 | 下载链接 |
 |------|------|----------|
-| **battle-urgent.mp3** | 激昂战斗 BGM (推荐 Daredevil) | [下载](https://mixkit.co/free-stock-music/daredevil/) |
+| **battle-loop.mp3** | 项目原创战斗 BGM；加载页和战斗页共用 | 见 `scripts/create-battle-audio.py` |
 
 ### 僵尸音效
 | 文件 | 描述 | 下载链接 |
 |------|------|----------|
-| **zombie-growl.mp3** | 僵尸低吼声 | [下载](https://mixkit.co/free-sound-effects/zombie-monster-growl/) |
+| **zombie-growl.mp3** | 僵尸低吼声，Mixkit 素材 1973 | [来源](https://mixkit.co/free-sound-effects/horror/) |
 
 ---
 
@@ -41,11 +41,11 @@
 ## 文件位置
 ```
 miniprogram/assets/audio/
-├── battle-urgent.mp3    # 战斗 BGM
+├── battle-loop.mp3      # 战斗 BGM
 └── zombie-growl.mp3     # 僵尸低吼
 ```
 
 ---
 
 ## 许可证
-**Mixkit License**: 免费商用，无需署名，详见 https://mixkit.co/license/
+低吼采用 [Mixkit Sound Effects Free License](https://mixkit.co/license/modal/sfxFree/)；战斗音乐为本项目原创。旧版推荐的 Mixkit Daredevil 属于 [Stock Music Free License](https://mixkit.co/license/modal/musicFree/)，该许可不允许电子游戏使用。

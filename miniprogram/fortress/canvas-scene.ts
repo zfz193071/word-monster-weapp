@@ -64,15 +64,6 @@ function animalIdsOf(art: MonsterArt): ReadonlySet<string> {
   if (!ids) { ids = new Set(art.animalIds ?? []); animalIdSets.set(art, ids); }
   return ids;
 }
-const idSeedCache = new Map<string, number>();
-function idSeed(id: string): number {
-  const cached = idSeedCache.get(id);
-  if (cached !== undefined) return cached;
-  let sum = 0;
-  for (let index = 0; index < id.length; index++) sum += id.charCodeAt(index);
-  idSeedCache.set(id, sum);
-  return sum;
-}
 // Shared by runtime loading and offline resource budgets.
 export function sceneImageAssets(art: SceneArt, levelId = 1, houseLevel = 1): SpriteAsset[] {
   const assets = [art.monster, art.base, art.destroyedBase, art.hero, art.weapon, art.bullet, ...(art.fruitHat ? [art.fruitHat] : []), ...(art.walkParts ? Object.values(art.walkParts) : []), ...Object.values(art.outfitBodies ?? {}), ...Object.values(art.texturedBodies ?? {}), ...Object.values(art.texturedArms ?? {}), ...Object.values(art.bossBodies ?? {}), ...Object.values(art.fruitHats ?? {}), ...SOLDIER_SPRITES, BATTLE_PET_ART];
@@ -135,6 +126,7 @@ export class CanvasScene {
   private lastHp: number;
   private lastMonsterHp = new Map<string, number>();
   private monsterFlashes = new Map<string, number>();
+  private idSeedCache = new Map<string, number>();
   private baseFlashUntil = 0;
   private retirement: ReturnType<typeof createRetirement> | undefined;
   private weaponCache?: number;
@@ -451,7 +443,7 @@ export class CanvasScene {
   dispose(): void {
     if (this.disposed) return;
     this.cancelPresentation?.(); this.setPaused(true); this.disposed = true; this.loadVersion++;
-    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.backgroundCache = undefined; this.damageNumbers.clear(); this.coinEffects = []; this.runner.dispose(); this.frameGaps = [];
+    this.retirement?.dispose(); this.cancelPendingLoads(); this.images.clear(); this.backgroundCache = undefined; this.damageNumbers.clear(); this.coinEffects = []; this.idSeedCache.clear(); this.runner.dispose(); this.frameGaps = [];
   }
   private drawBackground(): void {
     const c = this.context; const v = this.viewport;
@@ -581,7 +573,12 @@ export class CanvasScene {
       if (monster.position.y + cullRadius < 0 || monster.position.y - cullRadius > FORTRESS_RULES.arena.height) continue;
       c.globalAlpha = 1;
       const attackPose = baseAttackPose(monster);
-      const motionSeed = idSeed(monster.id);
+      let motionSeed = this.idSeedCache.get(monster.id);
+      if (motionSeed === undefined) {
+        motionSeed = 0;
+        for (let index = 0; index < monster.id.length; index++) motionSeed += monster.id.charCodeAt(index);
+        this.idSeedCache.set(monster.id, motionSeed);
+      }
       c.save(); c.translate(0, attackPose.lunge * 9);
       if (monster.boss || monster.enemyType === 'giant') {
         c.translate(monster.position.x, monster.position.y); c.scale(monster.bossKind === 'grand' ? 2 : 1.5, monster.bossKind === 'grand' ? 2 : 1.5); c.translate(-monster.position.x, -monster.position.y);

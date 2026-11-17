@@ -73,6 +73,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   const source=readFileSync(new URL('../miniprogram/components/fortress-scene/fortress-scene.ts',import.meta.url),'utf8');
   runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
     exports:{},Component(value:any){definition=value;},wx:{getWindowInfo(){return{pixelRatio:1};}},
+    setTimeout(callback:()=>void,delay:number){const timer=setTimeout(callback,delay);timer.unref();return timer;},clearTimeout,
     require(name:string){
       if(name.endsWith('/stage-invasion'))return invasion;
       if(name.endsWith('/continuation'))return continuation;
@@ -99,7 +100,7 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
       if(name.endsWith('/content'))return content;
       if(name.endsWith('/canvas-scene'))return{CanvasScene:FakeScene};
       if(name.endsWith('/battle-audio'))return{createBattleAudio(options:any){
-        if(realAudio)return createBattleAudio({...options,now:()=>audioClock,audio:{
+        if(realAudio)return createBattleAudio({...options,enableZombieSfx:false,now:()=>audioClock,audio:{
           schedule(run:()=>void,delay:number){const id=++timerSequence;timers.set(id,{run,at:audioClock+delay});return()=>{timers.delete(id);};},
           createContext(){return{src:'',autoplay:false,loop:false,onEnded(fn:()=>void){voiceEnds.push(fn);},offEnded(){},onError(){},offError(){},onPause(){},offPause(){},onStop(){},offStop(){},play(){},stop(){},destroy(){}};},
         }});
@@ -136,6 +137,14 @@ for (const {level,repair,realAudio,exit,bossChain} of [...levels.LEVELS.map(leve
   assert.equal(host.data.volumeFrame,'frame');assert.equal(host.data.inputUnavailable,true);assert.equal(current!.paused,true,'音量窗口覆盖画布时冻结战斗');
   host.properties.volumeOpen=false;definition.properties.volumeOpen.observer.call(host,false);
   assert.equal(host.data.volumeFrame,'');assert.equal(host.data.inputUnavailable,false);assert.equal(current!.paused,false,'关闭音量窗口后恢复战斗');
+  if (level.id === 1 && !repair && !realAudio && !exit && !bossChain) {
+    const original = current!.snapshot.base.hp;
+    const report = (hp:number) => current!.options.onHud({hp,maxHp:current!.snapshot.base.maxHp,status:'fighting'});
+    report(original - 1);report(original - 2);
+    await new Promise(resolve => setTimeout(resolve, 120));
+    assert.equal(host.data.hud.hp, original - 2, '限频后的最后一笔血量变化必须补发');
+    report(original);await new Promise(resolve => setTimeout(resolve, 120));
+  }
   assert.equal(host.data.coinBalance,wallet.balance(),'进入战斗时读取持久金币余额');
   assert.match(readFileSync(new URL('../miniprogram/pages/battle/battle.wxml',import.meta.url),'utf8'),/class="toolbar-wallet"[^>]*aria-label="当前金币 \{\{coinBalance\}\}"/);
   const { openingMonsterCount } = await import('../miniprogram/fortress/opening-encounter');

@@ -263,8 +263,9 @@ test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪�
   h.page.closeChallenge();await h.page.openBattle();
   assert.equal(h.page.data.sceneCoverReady,false);
   const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
-  assert.match(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
-  assert.match(markup,/wx:if="{{!choiceComplete && sceneCoverReady}}"/);
+  assert.match(markup,/wx:if="{{request && sceneCoverReady}}" class="modal-backdrop"/);
+  assert.match(markup,/wx:if="{{!choiceComplete}}" request="{{request}}"/);
+  assert.doesNotMatch(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
 });
 
 test('设置弹框等待原生首页画布隐藏后显示', () => {
@@ -344,11 +345,16 @@ test('首页难度选择保存后自动关闭，开战携带难度，已有听�
   h.page.onShow();h.page.petAction({currentTarget:{dataset:{action:'upgrade',revision:h.page.data.petView.revision}}});assert.equal(h.page.data.petView.level,3);assert.equal(h.page.data.coinBalance,0);
  });
 
-test('水果首局等待下载，失败可重试且不会重复开局，卸载后迟到完成无效', async () => {
+test('水果首局下载时保留首页，听词卡片和背景就绪后再显示遮罩', async () => {
  const pending: {resolve:()=>void;reject:(e:Error)=>void}[]=[];
  const h=homeHarness(undefined, undefined, () => new Promise<void>((resolve,reject)=>pending.push({resolve,reject})));
  const first=h.page.openBattle();
  assert.equal(h.page.data.request,null); assert.equal(h.page.data.preparingLevel,true);
+ const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
+ assert.match(markup,/wx:if="\{\{preparingLevel && !showLevels\}\}" class="entry-loading"/);
+ assert.match(markup,/wx:if="\{\{request && sceneCoverReady\}\}" class="modal-backdrop"/);
+ assert.doesNotMatch(markup,/request \|\| \(preparingLevel && !showLevels\)/);
+ assert.doesNotMatch(markup,/class="start-button"[^>]*\sdisabled=/);
  await h.page.openBattle(); assert.equal(pending.length,1);
  pending[0].reject(Error('offline'));await first;
  assert.equal(h.page.data.request,null);assert.ok(h.page.data.entryError);

@@ -99,6 +99,10 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 
 共用 `scripts/music-synth.py`，仅依赖 Python 标准库与 ffmpeg；输出 22.05 kHz 单声道、64 kbps MP3，音符尾音和短混响按循环边界回绕。保留背景音乐音量及战斗词语播放时的自动压低行为。技术验证不代表主观试听通过，最终情绪与真机循环听感待试听确认。
 
+## 2026-11-16 战斗低吼与播放路径修复
+
+正式战斗音乐与加载页统一使用已有的原创 `battle-loop.mp3`。此前正式战斗误指向不存在的 `battle-urgent.mp3`。新增 `zombie-growl.mp3`，取自 Mixkit 的 [Zombie monster growl（素材 1973）](https://mixkit.co/free-sound-effects/horror/)，原始 WAV 转为 22.05 kHz 单声道 64 kbps MP3，并加入入场预载清单。[Mixkit 音效许可](https://mixkit.co/license/modal/sfxFree/)允许在电子游戏中使用；Mixkit 音乐许可不允许，因此未采用旧建议的 Daredevil 曲目。
+
 ## 2026-11-08 大图无损编码优化
 
 菠萝、猕猴桃、香蕉、梨、旧葡萄怪物共5张PNG重新选择压缩滤波与压缩级别，只替换IDAT数据，保留尺寸、透明通道及全部其他PNG块。逐张解码为RGBA并核对SHA-256完全一致；无视觉或颜色元数据变化。总计590343字节降为542521字节，减少47822字节（约46.7KiB）。同步资源清单文件大小与哈希；原件备份和验证报告位于 `/tmp/wm-resource-encoding/`。图片分包源码预算由1238.5降至1191.8KiB；本轮仅验证体积与像素一致性，不宣称加载时间按比例减少。

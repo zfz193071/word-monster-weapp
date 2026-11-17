@@ -31,7 +31,10 @@ function setup(totalMonsters=100){
 }
 test('最后击杀后等满300ms，同帧取最后一词；重复事件不重置，播报按0.8倍速',()=>{
  const h=setup();h.controller.setVolume(.6);h.controller.handle([defeat('a'),defeat('b','banana')]);
+ assert.equal(h.music.src,'/assets/audio/battle-loop.mp3');
  assert.equal(h.controller.busy,true);assert.equal(h.voices.length,0);assert.equal(h.music.volume,.12);
+ h.controller.setVolume(.5);assert.equal(h.music.volume,.1,'播词排队时调节音量仍须保持压低背景音乐');
+ h.controller.setVolume(.6);
  h.advance(150);h.controller.handle([defeat('b','banana'),{...defeat('foreign'),context:{...context,sessionId:'other'}}]);
  h.advance(149);assert.equal(h.voices.length,0);h.advance(1);assert.equal(h.voices.length,1);
  assert.equal(h.voices[0].src,'/assets/audio/zombie-banana.mp3');assert.equal(h.voices[0].playbackRate,.8);

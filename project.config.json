@@ -27,7 +27,8 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "compileHotReLoad": false
+    "compileHotReLoad": false,
+    "compileOnSave": true
   },
   "packOptions": {
     "ignore": [

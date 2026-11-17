@@ -9,7 +9,7 @@ interface LoadCallbacks {
 interface LoadOptions { readonly sceneDecodesImages?: boolean; readonly audioPaths?: readonly string[]; readonly imagePaths?: readonly string[] }
 
 const BATTLE_AUDIO = [
-  '/assets/audio/battle-loop.mp3', '/assets/audio/battle-hit.mp3', '/assets/audio/base-hit.mp3',
+  '/assets/audio/battle-loop.mp3', '/assets/audio/zombie-growl.mp3', '/assets/audio/battle-hit.mp3', '/assets/audio/base-hit.mp3',
   '/assets/audio/coin-collect.mp3', '/assets/audio/quiz-encouragement.mp3',
   '/assets/audio/quiz-praise-bilingual.mp3', '/assets/audio/victory-applause.mp3',
   '/assets/audio/victory-cheer.mp3', '/assets/audio/victory-praise.mp3', '/assets/audio/defeat-sad.mp3',

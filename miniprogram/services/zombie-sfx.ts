@@ -34,7 +34,7 @@ export function createZombieSfx(options: {
   function playGrowl() {
     if (!active || disposed) return;
     const now = Date.now();
-    if (now - lastPlayTime < GROWL_COOLDOWN) return;
+    if (now - lastPlayTime < GROWL_COOLDOWN) { scheduleNext(); return; }
     
     try {
       if (!channel) channel = createChannel();
@@ -43,15 +43,14 @@ export function createZombieSfx(options: {
       channel.play();
       lastPlayTime = now;
       
-      // 播放完后安排下一次随机触发
-      setTimeout(() => scheduleNext(), 1000);
     } catch {}
+    scheduleNext();
   }
   
   function scheduleNext() {
     if (!active || disposed) return;
     const randomDelay = GROWL_COOLDOWN + Math.random() * GROWL_RANDOM_MAX;
-    timer = setTimeout(() => playGrowl(), randomDelay) as unknown as number;
+    timer = setTimeout(() => { timer = undefined; playGrowl(); }, randomDelay) as unknown as number;
   }
   
   return {

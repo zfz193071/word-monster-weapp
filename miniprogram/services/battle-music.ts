@@ -98,7 +98,7 @@ export function createBattleMusic(options: {
         channel.loop = true; 
         channel.volume = targetVolume; 
         channel.obeyMuteSwitch = true;
-        channel.src = options.src ?? '/assets/audio/battle-urgent.mp3';
+        channel.src = options.src ?? '/assets/audio/battle-loop.mp3';
         if (current !== instance) return;
       }
       requested = true; 
