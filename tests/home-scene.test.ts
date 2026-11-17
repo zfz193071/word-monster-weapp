@@ -5,6 +5,8 @@ import { HomeRoomScene, homeHeroPose, homeRoomViewport, projectRoomPoint } from 
 test('房间使用三维坐标投影，角色扭动有界且随时间变化',()=>{
   const center=projectRoomPoint([0,0,0]);const high=projectRoomPoint([0,2,0]);
   assert.ok(high.y<center.y);assert.ok(projectRoomPoint([1,0,0]).x>center.x);assert.ok(projectRoomPoint([0,0,1]).x<center.x);
+  assert.ok(homeRoomViewport(375,400).scale>375/11.8,'手机首页房屋构图应明显放大');
+  assert.ok(homeRoomViewport(1024,580).scale>580/10.4,'宽屏首页房屋构图应明显放大');
   const first=homeHeroPose(0);assert.notDeepEqual(homeHeroPose(1),first);
   for(let i=0;i<1000;i++){const pose=homeHeroPose(i/10);assert.ok(pose.yaw>=.05&&pose.yaw<=.31);assert.ok(Math.abs(pose.lift)<=.018);}
 });
@@ -80,7 +82,7 @@ test('五级房屋结构不同，升级保持视角，房屋点击与角色点�
  assert.throws(()=>scene.setHouseLevel(6));scene.dispose();assert.equal(scene.hitHouse(240,400),false);
 });
 
-test('外景五级在手机和平板旋转一周后无裁切，绘制与命中共用尺寸变换',()=>{
+test('外景五级放大后允许院墙裁切，房屋仍可见可点击且旋转命中共用变换',()=>{
  let originX=0,originY=0;let points:number[][]=[];
  const context=new Proxy({}, {get(_target,key){
    if(key==='clearRect')return ()=>{points=[];};
@@ -97,11 +99,12 @@ test('外景五级在手机和平板旋转一周后无裁切，绘制与命中�
      for(let step=0;step<=24;step++){
        scene.setYaw(step*Math.PI/12);
        assert(points.length>0);
-       assert(points.every(([x,y])=>x>0&&x<width&&y>0&&y<height),`clipped level ${level} angle ${step}, ${width}x${height}`);
+       assert(points.some(([x,y])=>x>0&&x<width&&y>0&&y<height),`场景主体应有内容留在画布内 level ${level} angle ${step}, ${width}x${height}`);
      }
      scene.setYaw(0);
      const {scale,x,y}=homeRoomViewport(width,height), p=projectRoomPoint([0,3.2,-1.65]);
      assert(scene.hitHouse(x+p.x*scale,y+p.y*scale),'屋脊随尺寸变化仍能打开升级');
+     assert(scale>Math.min(width/9.5,height/8.5),'构图较上一版继续放大');
    }
  }
  scene.dispose();

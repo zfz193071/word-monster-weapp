@@ -149,7 +149,9 @@ function room(level=1):Face[]{
 // Fixed framing across levels and yaw prevents zoom jumps during orbit/upgrades.
 // Bounds include the roof, corner towers and projected ground shadow.
 export function homeRoomViewport(width:number,height:number){
-  return {scale:Math.min(width/11.8,height/10.4),x:width/2,y:height*.53};
+  // Frame the house more tightly; the outer courtyard may extend beyond the
+  // screen so the house reads larger on compact displays.
+  return {scale:Math.min(width/8.4,height/7.4),x:width/2,y:height*.53};
 }
 function hero(seconds:number,level=1):Face[]{
   const f:Face[]=[];const pose=homeHeroPose(seconds);
