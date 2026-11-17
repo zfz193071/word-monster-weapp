@@ -43,10 +43,10 @@ test('喂粮成长、三级形态、40级停喂不扣粮，孵化转换和穿脱
 test('损坏宠物存档拒绝覆盖；奖励控制器只接收本局已计划Boss，失败后可重试、退出后停止',()=>{
   const h=harness();h.saved={version:1};assert.throws(()=>h.store.rewardBoss('a','a:wave:1:zombie:1'));assert.deepEqual(h.saved,{version:1});h.saved=undefined;
   const initial=createOpeningEncounter('run','apple',0);const boss=initial.monsters[0].id;
-  const updates:unknown[]=[];const drops=createPetDrops({sessionId:'run',bossIds:[boss],store:h.store,onChange:(message,error)=>updates.push({message,error})});
-  const event={type:'monsterDefeated' as const,context:initial.context,tick:1,monsterId:boss,wordId:'apple'};
+  const updates:unknown[]=[];const awards:unknown[]=[];const drops=createPetDrops({sessionId:'run',bossIds:[boss],store:h.store,onChange:(message,error)=>updates.push({message,error}),onAward:award=>awards.push(award)});
+  const event={type:'monsterDefeated' as const,context:initial.context,tick:1,monsterId:boss,wordId:'apple',position:{x:123,y:234}};
   drops.handle([{...event,monsterId:initial.monsters[1].id},{...event,context:{...event.context,sessionId:'other'}}]);assert.equal(h.store.view().owned,false);
   h.fail=true;drops.handle([event,event]);assert.equal(h.store.view().owned,false);assert.deepEqual(updates.at(-1),{message:'宠物奖励未保存，点击重试',error:true});
-  h.fail=false;drops.retry();assert.equal(h.store.view().owned,true);assert.equal(h.store.view().receipts.length,1);drops.handle([event]);assert.equal(updates.length,2);
+  h.fail=false;drops.retry();assert.equal(h.store.view().owned,true);assert.equal(h.store.view().receipts.length,1);assert.deepEqual((awards[0] as {position:unknown}).position,event.position);drops.handle([event]);assert.equal(updates.length,2);
   drops.dispose();drops.handle([event]);drops.retry();assert.equal(updates.length,2);
 });

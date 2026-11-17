@@ -246,7 +246,7 @@ export type CombatEvent =
   | { readonly type: 'petDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly petId: 'thunder-fox' }
   | { readonly type: 'coinsDropped'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly amount: number; readonly position: Point }
   | { readonly type: 'monsterDamaged'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly hp: number; readonly damage: number; readonly kind: 'projectile' | 'flame' | 'lightning' | 'soldier' | 'pet'; readonly soldier?: SoldierDamageContribution; readonly position: Point }
-  | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string }
+  | { readonly type: 'monsterDefeated'; readonly context: CombatContext; readonly tick: number; readonly monsterId: string; readonly wordId: string; readonly position?: Point }
   | { readonly type: 'supportSoldierDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly hp: number; readonly shotType?: EnemyShotType }
   | { readonly type: 'supportSoldierDefeated'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly soldierId: string; readonly shotType?: EnemyShotType }
   | { readonly type: 'baseDamaged'; readonly context: CombatContext; readonly tick: number; readonly attackId: string; readonly monsterId: string; readonly hp: number; readonly shotType?: EnemyShotType }

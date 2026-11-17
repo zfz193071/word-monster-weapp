@@ -8,16 +8,16 @@ export function createPetDrops(options: {
   onChange(message: string, error: boolean): void;
   onAward?(award: PetDropAward): void;
 }) {
-  const pending = new Set<string>(); const seen = new Set<string>(); let disposed = false;
+  const pending = new Map<string, Point | undefined>(); const seen = new Set<string>(); let disposed = false;
   function retry() {
     if (disposed) return;
-    for (const id of pending) {
+    for (const [id, defeatedPosition] of pending) {
       let message: string;
       try { 
         const result = options.store.rewardBoss(options.sessionId, id);
         message = result;
         if (result && options.onAward) {
-          const position = options.monsterPosition?.(id) ?? { x: 50, y: 300 };
+          const position = defeatedPosition ?? options.monsterPosition?.(id) ?? { x: 50, y: 300 };
           const equipmentId = result.match(/获得 (.+)/)?.[1];
           let equipmentIdFromResult: string | undefined;
           if (equipmentId) {
@@ -44,7 +44,7 @@ export function createPetDrops(options: {
   return {
     handle(events: readonly CombatEvent[]) {
       if (disposed) return;
-      for (const e of events) if (e.type === 'monsterDefeated' && e.context.sessionId === options.sessionId && options.bossIds.includes(e.monsterId) && !seen.has(e.monsterId)) pending.add(e.monsterId);
+      for (const e of events) if (e.type === 'monsterDefeated' && e.context.sessionId === options.sessionId && options.bossIds.includes(e.monsterId) && !seen.has(e.monsterId)) pending.set(e.monsterId, e.position);
       if (pending.size) retry();
     }, retry,
     dispose() { disposed = true; pending.clear(); seen.clear(); },

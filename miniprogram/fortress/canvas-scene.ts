@@ -407,6 +407,11 @@ export class CanvasScene {
             text => this.context.measureText(text)?.width, this.uiReservations(result.state));
           this.context.restore();
         }
+        for (const event of result.events) if (event.type === 'monsterDefeated') {
+          this.lastMonsterHp.delete(event.monsterId);
+          this.monsterFlashes.delete(event.monsterId);
+          this.idSeedCache.delete(event.monsterId);
+        }
         this.draw(result.state); this.publishHud(result.state);
         if (result.state.status === 'cleared' && this.options.retirement && !this.retirement) {
           this.retirement = createRetirement(result.state, this.options.retirement);

@@ -24,10 +24,10 @@ test('四档大Boss独立金币，不受普通上限影响；失败退出/重建
 test('大Boss保存失败不演出、不假报到账，重试一次且兼容旧钱包',()=>{
  let saved:unknown={version:1,balance:17,rewardedSessions:['old']};let fail=true;let effects=0;let view={total:0,error:false};
  const wallet=createCoinWallet({getStorageSync:()=>structuredClone(saved),setStorageSync:(_k,v)=>{if(fail)throw Error('disk');saved=structuredClone(v);}});
- const id='run:wave:19:zombie:98';const event:CombatEvent={type:'monsterDefeated',context:{sessionId:'run',waveId:'run:wave:19',combatId:'run:wave:19',generation:1},tick:1,monsterId:id,wordId:'apple'};
- const controller=createBattleDrops({sessionId:'run',levelId:1,grandBosses:{[id]:{x:180,y:200}},wallet,onChange:v=>{view=v;},onAward:(_p,n)=>{effects+=n;}});
+ const id='run:wave:19:zombie:98';const event:CombatEvent={type:'monsterDefeated',context:{sessionId:'run',waveId:'run:wave:19',combatId:'run:wave:19',generation:1},tick:1,monsterId:id,wordId:'apple',position:{x:123,y:234}};
+ let awardPosition:unknown;const controller=createBattleDrops({sessionId:'run',levelId:1,grandBosses:{[id]:{x:180,y:200}},wallet,onChange:v=>{view=v;},onAward:(p,n)=>{awardPosition=p;effects+=n;}});
  controller.handle([event,event]);assert.equal(wallet.balance(),17);assert.equal(effects,0);assert.equal(view.error,true);
- fail=false;controller.retry();controller.retry();controller.handle([event]);assert.equal(wallet.balance(),37);assert.equal(effects,20);assert.deepEqual(view,{total:20,error:false});
+ fail=false;controller.retry();controller.retry();controller.handle([event]);assert.equal(wallet.balance(),37);assert.equal(effects,20);assert.deepEqual(awardPosition,event.position);assert.deepEqual(view,{total:20,error:false});
  controller.handle([{...event,context:{...event.context,sessionId:'other'}}]);assert.equal(wallet.balance(),37);
  controller.dispose();controller.retry();controller.handle([event]);assert.equal(effects,20);
  assert.equal(createCoinWallet({getStorageSync:()=>saved,setStorageSync(){throw Error('duplicate write');}}).rewardGrandBoss('run',1).added,0);

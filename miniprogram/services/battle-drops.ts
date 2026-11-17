@@ -37,7 +37,7 @@ export function createBattleDrops(options: {
       for (const source of events) {
         const position = 'monsterId' in source ? options.grandBosses?.[source.monsterId] : undefined;
         const grand = source.type === 'monsterDefeated' && !!position;
-        const event: CombatEvent = grand && source.type === 'monsterDefeated' ? {...source, type:'coinsDropped', position:options.monsterPosition?.(source.monsterId) ?? position!, amount:grandBossCoins(options.difficulty)} : source;
+        const event: CombatEvent = grand && source.type === 'monsterDefeated' ? {...source, type:'coinsDropped', position:source.position ?? options.monsterPosition?.(source.monsterId) ?? position!, amount:grandBossCoins(options.difficulty)} : source;
         if (event.type !== 'coinsDropped' || event.context.sessionId !== options.sessionId || seen.has(event.monsterId)) continue;
         seen.add(event.monsterId); pending.set(event.monsterId, {event, grand});
       }

@@ -397,7 +397,8 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     monsters[index] = { ...monster, hp, status: hp === 0 ? 'defeated' : monster.status };
     events.push({ type: 'monsterDamaged', context: previous.context, tick, monsterId: monster.id, hp, damage, kind, ...(attacker ? { soldier: Object.freeze({ id: attacker.id, type: soldierType(attacker.soldierType), source: attacker.source, effectiveDamage: monster.hp - hp }) } : {}), position: Object.freeze({ ...monster.position }) });
     if (hp === 0 && !defeated.has(monster.id)) {
-      defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId });
+      defeated.add(monster.id); events.push({ type: 'monsterDefeated', context: previous.context, tick, monsterId: monster.id, wordId: monster.wordId,
+        position: Object.freeze({ ...monster.position }) });
       if (monster.dropCoins) events.push({ type: 'coinsDropped', context: previous.context, tick, monsterId: monster.id, amount: monster.dropCoins, position: Object.freeze({ ...monster.position }) });
       if (monster.boss && monster.bossKind !== 'grand' && (monster.soldierDropCount ?? 0) > 0) {
         const count = Math.min(MAX_SUPPORT_SOLDIERS, supportSoldiers.length + (monster.soldierDropCount ?? 0));
@@ -716,7 +717,12 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     shotRemainingMs += weapon.intervalMs;
   }
   if (projectiles.length > (previous.skillCollection ? QUALITY_PROJECTILE_LIMIT : Math.max(MAX_PROJECTILES, (Math.ceil(Math.hypot(previous.arenaWidth ?? RULES.arena.width, RULES.arena.height + RULES.projectile.height) / RULES.projectile.speed * 1000 / MIN_INTERVAL) + 1) * MAX_SHOTS))) throw new RangeError('弹体数量超过已确认参数推导的上限');
-  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters, supportSoldiers: status === 'baseDestroyed' ? [] : supportSoldiers, ...(status === 'baseDestroyed' ? {summonRemainingMs:{},skillCollection:{},skills:{doubleShot:0,fireRate:0,bulletWidth:0}} : {}), fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
+  // A continuous 19-wave stage can admit well over one thousand enemies. Dead
+  // units are immutable history and must not remain in the 100 Hz simulation
+  // or per-frame Canvas list. Their IDs preserve committed defeat facts, while
+  // the defeat event carries the final position needed by reward feedback.
+  const activeMonsters = previous.invasion ? monsters.filter(monster => monster.hp > 0 && monster.status !== 'retiring') : monsters;
+  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters: activeMonsters, supportSoldiers: status === 'baseDestroyed' ? [] : supportSoldiers, ...(status === 'baseDestroyed' ? {summonRemainingMs:{},skillCollection:{},skills:{doubleShot:0,fireRate:0,bulletWidth:0}} : {}), fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     frostEnergy: Math.min(FROST_ENERGY_MAX, (previous.frostEnergy ?? 0) + events.filter(event => event.type === 'monsterDefeated').length),
     flameVolleyHits: Object.fromEntries([...flameHits].filter(([id]) => projectiles.some(p => p.flameVolleyId === id && !!p.elements?.flame)).map(([id, hits]) => [id, [...hits]])),
     ...(flameFanUntilTick !== undefined ? {flameFanUntilTick} : {}),

@@ -148,6 +148,7 @@ test('一颗弹体只命中一次；同一帧多弹击败后不重复发击败�
   const defeat = stepCombat({ ...start, monsters: [{ ...target, hp: 1 }],
     projectiles: [shot, { ...shot, id: 'another-shot' }] });
   assert.equal(defeat.events.filter(e => e.type === 'monsterDefeated').length, 1);
+  assert.deepEqual(defeat.events.find(e => e.type === 'monsterDefeated')?.position, target.position);
   assert.equal(defeat.state.defeatedMonsterIds.length, 1);
   assert.equal(stepCombat(defeat.state).events.length, 0);
 });

@@ -48,6 +48,20 @@ test('当前怪全死但待出场时不提前通关，最后一批全死后才�
  assert.equal(lost.status,'baseDestroyed');assert.equal(lost.incomingMonsters!.length,0);
 });
 
+test('整关战斗及时移除历史尸体，后期逻辑和绘制只遍历当前存活僵尸',()=>{
+ const initial=createStageInvasion(plan(8,'nightmare'),1);
+ const source=initial.monsters[0];
+ const defeated=Array.from({length:1000},(_,index)=>({...source,id:`history-${index}`,hp:0,status:'defeated' as const}));
+ const living=Array.from({length:18},(_,index)=>({...source,id:`living-${index}`,hp:100000,maxHp:100000,status:'alive' as const,
+  spawnAtMs:0,position:{x:48+(index%9)*30,y:100+Math.floor(index/9)*70}}));
+ const next=stepCombat({...initial,automatic:false,shotRemainingMs:1e9,monsterSpeed:0,tick:10000,
+  base:{hp:1000000,maxHp:1000000},incomingMonsters:[],monsters:[...defeated,...living],
+  defeatedMonsterIds:defeated.map(monster=>monster.id)}).state;
+ assert.equal(next.status,'fighting');
+ assert.deepEqual(next.monsters.map(monster=>monster.id),living.map(monster=>monster.id));
+ assert.equal(next.defeatedMonsterIds.length,defeated.length,'击败事实仍保留，只压缩高频模拟/绘制列表');
+});
+
 test('简单模式满员延迟、死亡后按空位补充，暂停不出怪，波次和Boss使用实际入场时间',()=>{
  let state=createStageInvasion(plan(1,'easy'),1);
  state={...state,automatic:false,shotRemainingMs:1e9,monsterSpeed:0};
@@ -58,8 +72,8 @@ test('简单模式满员延迟、死亡后按空位补充，暂停不出怪，�
  assert.equal(state.monsters.length,3);assert.equal(state.incomingMonsters,pending);assert.equal(state.invasion!.waveNumber,1);
  const runner=new CombatRunner(state);runner.pause();assert.equal(runner.frame(1e9).steps,0);assert.equal(runner.snapshot,state);runner.dispose();
  state={...state,monsters:state.monsters.map(m=>({...m,hp:0,status:'defeated' as const})),defeatedMonsterIds:state.monsters.map(m=>m.id)};
- state=stepCombat(state).state;assert.equal(state.monsters.length,4);assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
- state=stepCombat(state).state;assert.equal(state.monsters.length,4,'积压不能追赶式爆发');
+ state=stepCombat(state).state;assert.equal(state.monsters.length,1,'三个历史尸体移出高频列表，只保留新入场怪');assert.equal(state.monsters.at(-1)!.spawnAtMs,state.tick*COMBAT_STEP_MS);
+ state=stepCombat(state).state;assert.equal(state.monsters.length,1,'积压不能追赶式爆发');
  const grand=state.incomingMonsters!.find(m=>m.bossKind==='grand')!;
  const result=stepCombat({...state,tick:10000000,incomingMonsters:[grand]});
  assert.equal(result.state.monsters.at(-1)!.spawnAtMs,result.state.tick*COMBAT_STEP_MS);
