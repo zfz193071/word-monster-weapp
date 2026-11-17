@@ -263,7 +263,7 @@ test('战斗入口等待场景遮挡就绪，关闭重开不沿用上次就绪�
   h.page.closeChallenge();await h.page.openBattle();
   assert.equal(h.page.data.sceneCoverReady,false);
   const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
-  assert.match(markup,/wx:if="{{request && sceneCoverReady}}" class="modal-backdrop"/);
+  assert.match(markup,/wx:if="{{request && sceneCoverReady && \(!choiceComplete \|\| navigationError\)}}" class="modal-backdrop"/);
   assert.match(markup,/wx:if="{{!choiceComplete}}" request="{{request}}"/);
   assert.doesNotMatch(markup,/class="choice-modal" hidden="{{!sceneCoverReady}}"/);
 });
@@ -313,6 +313,11 @@ test('首页答对后立即导航，资源加载由战斗页负责', async () =>
   assert.equal(h.navigationCount, 1);
 });
 
+test('首页答对后立即隐藏听词卡片外框，仅导航失败时恢复重试框', () => {
+  const markup = readFileSync(new URL('../miniprogram/pages/home/home.wxml', import.meta.url), 'utf8');
+  assert.match(markup, /wx:if="\{\{request && sceneCoverReady && \(!choiceComplete \|\| navigationError\)\}\}" class="modal-backdrop"/);
+});
+
 test('关卡资源准备失败后退出0%等待并解除按钮锁，重试可以进入听词',async()=>{
  let attempts=0;
  const h=homeHarness(async()=>{if(++attempts===1)throw Error('关卡资源加载超时');});
@@ -352,7 +357,7 @@ test('水果首局下载时保留首页，听词卡片和背景就绪后再显�
  assert.equal(h.page.data.request,null); assert.equal(h.page.data.preparingLevel,true);
  const markup=readFileSync(new URL('../miniprogram/pages/home/home.wxml',import.meta.url),'utf8');
  assert.match(markup,/wx:if="\{\{preparingLevel && !showLevels\}\}" class="entry-loading"/);
- assert.match(markup,/wx:if="\{\{request && sceneCoverReady\}\}" class="modal-backdrop"/);
+ assert.match(markup,/wx:if="\{\{request && sceneCoverReady && \(!choiceComplete \|\| navigationError\)\}\}" class="modal-backdrop"/);
  assert.doesNotMatch(markup,/request \|\| \(preparingLevel && !showLevels\)/);
  assert.doesNotMatch(markup,/class="start-button"[^>]*\sdisabled=/);
  await h.page.openBattle(); assert.equal(pending.length,1);

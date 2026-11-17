@@ -121,7 +121,7 @@
     </view>
   </view>
   <weapon-panel class="home-weapon-panel" wx:if="{{showWeapon}}" paused="{{!homeVisible}}" bindclose="closeWeapon" bindequipmentchange="equipmentChanged" />
-  <view wx:if="{{request && sceneCoverReady}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 150;">
+  <view wx:if="{{request && sceneCoverReady && (!choiceComplete || navigationError)}}" class="modal-backdrop" catchtouchmove="stopScroll" style="z-index: 150;">
     <view class="choice-modal" role="dialog" aria-label="听音选图片">
       <button class="close-button" bindtap="closeChallenge" disabled="{{opening}}" aria-label="关闭">×</button>
       <fortress-choice class="fruit-dialog-choice" wx:if="{{!choiceComplete}}" request="{{request}}" bindstartcombat="choiceSucceeded" />
