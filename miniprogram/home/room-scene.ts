@@ -65,8 +65,20 @@ export function homePetIdlePose(seconds:number) {
   const blink=pulse(4.9,3.8,.28,.35);
   const ear=pulse(7.9,5.7,.72,1.1);
   const earCycle=Math.floor((seconds+1.1)/7.9);
+  // Lift, lick the raised paw three times, wipe the cheek twice, then settle.
+  const pawPhase=((seconds%29)+29)%29;
+  const pawTime=pawPhase>=19.6?pawPhase-19.6:pawPhase-7.2;
+  const smooth=(value:number)=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
+  const pawLift=pawTime<0||pawTime>4.8?0:pawTime<.8?smooth(pawTime/.8)
+    :pawTime<3.8?1:1-smooth(pawTime-3.8);
+  const beat=(start:number,duration:number)=>pawTime>=start&&pawTime<=start+duration
+    ?Math.sin((pawTime-start)/duration*Math.PI)**2:0;
+  const lick=beat(1,.5)+beat(1.6,.5)+beat(2.2,.5);
+  const wipe=beat(2.8,.45)+beat(3.35,.45);
+  const headDip=pawLift*(1-wipe*.35);
   return {
-    shiftX:weight*.04+attention*.012,
+    pawLift,lick,wipe,headDip,
+    shiftX:weight*.04+attention*.012-pawLift*.018,
     lean:weight*.012+attention*.018,
     scaleX:1-breath*.0025+attention*.004,
     scaleY:1+breath*.006-attention*.005,
@@ -465,17 +477,24 @@ export class HomeRoomScene {
     c.fillStyle='rgba(64,94,85,.22)';c.beginPath();c.ellipse(0,3,24,6,0,0,Math.PI*2);c.fill();c.restore();
     c.save();c.translate(x+pose.shiftX*scale,y);c.rotate(pose.lean);
     c.scale(unit*pose.scaleX,unit*pose.scaleY);
-    this.drawPetEarTwitch(image,pose.earLeft,pose.earRight);
-    this.drawPetBlink(pose.blink);
+    this.drawPetEarTwitch(image,pose.earLeft,pose.earRight,pose.pawLift,pose.headDip,pose.wipe);
+    c.save();c.translate(0,pose.headDip*30*132/576);
+    this.drawPetBlink(Math.max(pose.blink,pose.pawLift*.8));
+    if(pose.lick>0){
+      c.save();c.translate(-66,-80);c.scale(132/576,132/576);
+      c.fillStyle='#ec91a5';c.beginPath();
+      c.ellipse(201,173+pose.lick*6,4,2+pose.lick*7,-.25,0,Math.PI*2);c.fill();c.restore();
+    }
+    c.restore();
     c.translate(-8,-13);
     if(appearance.equipped.includes('collar')){c.fillStyle='#9b83c1';c.fillRect(-10,-14,20,4);c.fillStyle='#ffe291';c.beginPath();c.ellipse(0,-9,3,3,0,0,Math.PI*2);c.fill();}
     if(appearance.equipped.includes('hat')){c.fillStyle='#bfa478';c.fillRect(-18,-36,36,4);c.fillStyle='#dec294';c.fillRect(-10,-44,20,9);}
     if(appearance.equipped.includes('charm')){c.strokeStyle='#f4d271';c.lineWidth=3;c.beginPath();c.moveTo(10,-15);c.lineTo(8,-8);c.lineTo(13,-8);c.lineTo(9,-1);c.stroke();}
     c.restore();
   }
-  private drawPetEarTwitch(image:WechatMiniprogram.Image,left:number,right:number){
+  private drawPetEarTwitch(image:WechatMiniprogram.Image,left:number,right:number,pawLift=0,headDip=0,wipe=0){
     const c=this.context;
-    if(left+right<=0){c.drawImage(image,-66,-80,132,88);return;}
+    if(left+right+pawLift<=0){c.drawImage(image,-66,-80,132,88);return;}
     // Deform the existing ear pixels instead of overlaying a second ear.
     // Coordinates belong to home-blue-fox-front.png (576 × 384).
     // The displacement tapers to zero above the eyes; the face stays still.
@@ -484,10 +503,42 @@ export class HomeRoomScene {
       const weight=Math.pow(1-sy/rootY,2);
       for(const [sx,sw,amount,direction] of [[0,splitX,left,-1],[splitX,576-splitX,right,1]]){
         const offset=direction*amount*9*weight;
-        c.drawImage(image,sx,sy,sw,2,-66+(sx+offset)*ratio,-80+sy*ratio,sw*ratio,2*ratio);
+        c.drawImage(image,sx,sy,sw,2,-66+(sx+offset)*ratio,-80+(sy+headDip*30)*ratio,sw*ratio,2*ratio);
       }
     }
-    c.drawImage(image,0,rootY,576,384-rootY,-66,-80+rootY*ratio,132,(384-rootY)*ratio);
+    const legRoot=272;
+    if(pawLift<=0){
+      c.drawImage(image,0,rootY,576,384-rootY,-66,-80+rootY*ratio,132,(384-rootY)*ratio);
+      return;
+    }
+    // Lower the head toward the paw; taper through the ruff to a fixed shoulder.
+    for(let sy=rootY;sy<legRoot;sy+=2){
+      const offset=(y:number)=>headDip*30*Math.max(0,Math.min(1,(legRoot-y)/72));
+      c.drawImage(image,0,sy,576,2,-66,-80+(sy+offset(sy))*ratio,132,(2+offset(sy+2)-offset(sy))*ratio);
+    }
+    // Rotate the foreleg around its shoulder, preserving its length and toes.
+    // Render the surrounding pixels first, then the raised limb in front.
+    const end=352;
+    const edges=(sy:number)=>[sy<316?218:202,sy<310?264:254];
+    for(let sy=legRoot;sy<end;sy+=2){
+      const [l,r]=edges(sy);
+      c.drawImage(image,0,sy,l,2,-66,-80+sy*ratio,l*ratio,2*ratio);
+      c.drawImage(image,r,sy,576-r,2,-66+r*ratio,-80+sy*ratio,(576-r)*ratio,2*ratio);
+    }
+    c.drawImage(image,0,end,576,384-end,-66,-80+end*ratio,132,(384-end)*ratio);
+    c.save();c.translate(-66+242*ratio,-80+(272-wipe*16)*ratio);
+    c.rotate(pawLift*2.44+wipe*.28);
+    // Round the shoulder cut so a rotated rectangular crop never protrudes.
+    c.beginPath();c.moveTo(-24*ratio,18*ratio);
+    c.quadraticCurveTo(-24*ratio,0,-1*ratio,0);
+    c.quadraticCurveTo(22*ratio,0,22*ratio,18*ratio);
+    c.lineTo(22*ratio,80*ratio);c.lineTo(-40*ratio,80*ratio);
+    c.lineTo(-40*ratio,44*ratio);c.closePath();c.clip();
+    for(let sy=legRoot;sy<end;sy+=2){
+      const [l,r]=edges(sy);
+      c.drawImage(image,l,sy,r-l,2,(l-242)*ratio,(sy-272)*ratio,(r-l)*ratio,2*ratio);
+    }
+    c.restore();
   }
 
   private drawPetBlink(amount:number){

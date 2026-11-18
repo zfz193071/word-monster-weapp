@@ -177,3 +177,37 @@ test('蓝狐耳动不重复覆盖原图，眼皮锚定站姿原图眼睛',()=>{
  assert.ok(translations.some(([x,y])=>x===244&&y===135),'右眼使用当前原图坐标');
  scene.dispose();
 });
+
+test('蓝狐偶尔抬前爪，缓起缓落且多数时间保持站立',()=>{
+ let active=0;
+ for(let i=0;i<5800;i++){
+  const time=i/100,pose=homePetIdlePose(time);
+  assert.ok(pose.pawLift>=0&&pose.pawLift<=1);
+  if(pose.pawLift>0)active++;
+  assert.ok(Math.abs(homePetIdlePose(time+.001).pawLift-pose.pawLift)<.003,'抬放和循环边界连续');
+ }
+ assert.ok(active/5800<.34,'每次动作之间有足够安静站立时间');
+ assert.equal(homePetIdlePose(0).pawLift,0);
+ assert.equal(homePetIdlePose(8.2).pawLift,1);
+ assert.equal(homePetIdlePose(12.1).pawLift,0);
+ assert.equal(homePetIdlePose(20.6).pawLift,1);
+ assert.equal(homePetIdlePose(24.5).pawLift,0);
+});
+
+
+test('蓝狐梳理先舔爪再擦脸，低头配合且动作连续',()=>{
+ for(const time of [8.45,9.05,9.65]){
+  const pose=homePetIdlePose(time);
+  assert.equal(pose.pawLift,1);assert.ok(pose.lick>.99);assert.ok(pose.headDip>.9);assert.equal(pose.wipe,0);
+ }
+ for(const time of [10.225,10.775]){
+  const pose=homePetIdlePose(time);
+  assert.ok(pose.wipe>.99);assert.equal(pose.lick,0);assert.equal(pose.pawLift,1);
+ }
+ for(let t=0;t<58;t+=.01){
+  const a=homePetIdlePose(t),b=homePetIdlePose(t+.001);
+  for(const key of ['pawLift','headDip','lick','wipe'] as const){
+   assert.ok(a[key]>=0&&a[key]<=1);assert.ok(Math.abs(a[key]-b[key])<.008);
+  }
+ }
+});
