@@ -99,9 +99,13 @@ npm run check:content 检查配置；npm run check:assets 目前应仅报告 5 �
 
 共用 `scripts/music-synth.py`，仅依赖 Python 标准库与 ffmpeg；输出 22.05 kHz 单声道、64 kbps MP3，音符尾音和短混响按循环边界回绕。保留背景音乐音量及战斗词语播放时的自动压低行为。技术验证不代表主观试听通过，最终情绪与真机循环听感待试听确认。
 
-## 2026-11-16 战斗低吼与播放路径修复
+## 2026-11-16 战斗低吼与播放路径修复（历史记录）
 
 正式战斗音乐与加载页统一使用已有的原创 `battle-loop.mp3`。此前正式战斗误指向不存在的 `battle-urgent.mp3`。新增 `zombie-growl.mp3`，取自 Mixkit 的 [Zombie monster growl（素材 1973）](https://mixkit.co/free-sound-effects/horror/)，原始 WAV 转为 22.05 kHz 单声道 64 kbps MP3，并加入入场预载清单。[Mixkit 音效许可](https://mixkit.co/license/modal/sfxFree/)允许在电子游戏中使用；Mixkit 音乐许可不允许，因此未采用旧建议的 Daredevil 曲目。
+
+## 2026-11-18 战斗僵尸含混声
+
+用户听审确认上述怪物低吼不符合僵尸发声。正式战斗改为随机轮换三段原创、带破碎音节和说话节奏的卡通僵尸含混声；不使用、不仿制其他游戏的原始音频。素材由 `scripts/create-zombie-mumbles.py` 使用标准库共振峰合成生成，无外部采样；保留战斗读词时暂停、页面暂停时停止以及音量联动规则。自动检查只确认编码和播放路径，最终听感需在开发者工具或真机中人工试听。
 
 ## 2026-11-08 大图无损编码优化
 

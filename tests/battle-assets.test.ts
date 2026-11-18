@@ -29,7 +29,11 @@ test('战斗图片按真实完成数量更新进度，全部完成后才能跳�
 test('当前关卡音频路径包含战斗声、答对双语音及计划词条的听词/退场声', () => {
   const paths = battleAudioPaths(['apple', 'dog']);
   assert.ok(paths.includes('/assets/audio/battle-loop.mp3'));
-  assert.ok(paths.includes('/assets/audio/zombie-growl.mp3'));
+  assert.deepEqual(paths.filter(path => path.includes('/zombie-mumble-')), [
+    '/assets/audio/zombie-mumble-1.mp3',
+    '/assets/audio/zombie-mumble-2.mp3',
+    '/assets/audio/zombie-mumble-3.mp3',
+  ]);
   for (const path of paths) assert.ok(existsSync(new URL(`../miniprogram${path}`, import.meta.url)), `缺少战斗音频：${path}`);
   assert.ok(paths.includes('/assets/audio/quiz-praise-bilingual.mp3'));
   assert.ok(paths.includes('/assets/audio/learn-apple.mp3'));

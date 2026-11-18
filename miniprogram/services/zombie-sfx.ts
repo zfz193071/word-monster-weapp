@@ -1,7 +1,4 @@
-/**
- * 僵尸低吼音效
- * 功能：背景音乐播放时随机触发低吼声
- */
+/** 背景音乐播放时，随机播放带音节的卡通僵尸含混声。 */
 
 type HitChannel = Pick<WechatMiniprogram.InnerAudioContext,
   'src' | 'autoplay' | 'loop' | 'volume' | 'obeyMuteSwitch' | 'stop' | 'play' | 'destroy' |
@@ -10,6 +7,7 @@ type HitChannel = Pick<WechatMiniprogram.InnerAudioContext,
 export function createZombieSfx(options: {
   readonly volume?: number;
   readonly createContext?: () => HitChannel;
+  readonly random?: () => number;
 }) {
   let volume = Math.max(0, Math.min(1, options.volume ?? 0.25));
   let disposed = false;
@@ -18,28 +16,38 @@ export function createZombieSfx(options: {
   let timer: number | undefined;
   let lastPlayTime = 0;
   
-  const GROWL_COOLDOWN = 3000; // 至少 3 秒间隔
-  const GROWL_RANDOM_MAX = 8000; // 最多 8 秒随机间隔
+  const MUMBLE_PATHS = ['/assets/audio/zombie-mumble-1.mp3', '/assets/audio/zombie-mumble-2.mp3', '/assets/audio/zombie-mumble-3.mp3'] as const;
+  const MUMBLE_COOLDOWN = 4500;
+  const MUMBLE_RANDOM_MAX = 6500;
+  const random = options.random ?? Math.random;
+  let lastVariant = -1;
   
   function createChannel(): HitChannel {
     const ch = (options.createContext ?? (() => wx.createInnerAudioContext()))();
     ch.autoplay = false;
     ch.loop = false;
     ch.obeyMuteSwitch = true;
-    ch.src = '/assets/audio/zombie-growl.mp3';
     ch.onError(() => undefined);
     return ch;
   }
+
+  function nextPath(): string {
+    let index = Math.min(MUMBLE_PATHS.length - 1, Math.floor(random() * MUMBLE_PATHS.length));
+    if (index === lastVariant) index = (index + 1) % MUMBLE_PATHS.length;
+    lastVariant = index;
+    return MUMBLE_PATHS[index];
+  }
   
-  function playGrowl() {
+  function playMumble() {
     if (!active || disposed) return;
     const now = Date.now();
-    if (now - lastPlayTime < GROWL_COOLDOWN) { scheduleNext(); return; }
+    if (now - lastPlayTime < MUMBLE_COOLDOWN) { scheduleNext(); return; }
     
     try {
       if (!channel) channel = createChannel();
       channel.volume = volume;
       channel.stop();
+      channel.src = nextPath();
       channel.play();
       lastPlayTime = now;
       
@@ -49,8 +57,8 @@ export function createZombieSfx(options: {
   
   function scheduleNext() {
     if (!active || disposed) return;
-    const randomDelay = GROWL_COOLDOWN + Math.random() * GROWL_RANDOM_MAX;
-    timer = setTimeout(() => { timer = undefined; playGrowl(); }, randomDelay) as unknown as number;
+    const randomDelay = MUMBLE_COOLDOWN + random() * MUMBLE_RANDOM_MAX;
+    timer = setTimeout(() => { timer = undefined; playMumble(); }, randomDelay) as unknown as number;
   }
   
   return {
