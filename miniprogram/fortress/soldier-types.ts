@@ -31,6 +31,9 @@ export function unitStats(soldier: SupportSoldierState, weaponDamage: number) {
     if (!soldier.skill) throw new Error('技能援军缺少成长属性');
     return soldierStats(soldierType(soldier.soldierType),soldier.skill,weaponDamage,soldier.evolved);
   }
+  if (soldier.source === 'inventory' && soldierType(soldier.soldierType) !== 'rifle') {
+    return soldierStats(soldierType(soldier.soldierType), {level: 1, quality: 'crude'}, weaponDamage);
+  }
   // Legacy inventory/Boss rifles retain unlimited old range and base weapon damage.
   return {maxHp:30,damage:weaponDamage,interval:2000,range:Infinity,radius:0,arc:0,shots:1,reduction:0,evolved:false};
 }

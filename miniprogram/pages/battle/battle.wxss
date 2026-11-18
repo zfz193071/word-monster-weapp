@@ -52,3 +52,16 @@
 .entry-loading { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; overflow: hidden; background-image: radial-gradient(circle at 16% 18%, rgba(255,232,155,.18), transparent 30%), radial-gradient(circle at 84% 78%, rgba(109,204,179,.18), transparent 34%), repeating-linear-gradient(-35deg, rgba(255,255,255,.035) 0 2rpx, transparent 2rpx 18rpx); }
 .entry-indicator { position: relative; z-index: 1; width: min(680rpx, calc(100% - 48rpx)); box-sizing: border-box; text-align: center; color: #fff6d2; animation: entry-card-in 260ms cubic-bezier(.2,.8,.2,1) both; }
 @keyframes entry-card-in { from { opacity: 0; transform: translateY(18rpx) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.exit-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 40rpx; box-sizing: border-box; background: rgba(12, 27, 23, .72); animation: exit-fade-in 160ms ease-out both; }
+.exit-dialog { position: relative; width: 100%; max-width: 620rpx; box-sizing: border-box; padding: 52rpx 36rpx 34rpx; border: 4rpx solid #a88748; border-radius: 34rpx; background: linear-gradient(160deg, #fff8e5, #e8e9c9); color: #284638; text-align: center; box-shadow: 0 12rpx 0 #203b30, 0 24rpx 50rpx rgba(0,0,0,.36), inset 0 0 0 5rpx rgba(255,255,255,.55); animation: exit-card-in 220ms cubic-bezier(.2,.8,.25,1.15) both; }
+.exit-emblem { position: absolute; top: -42rpx; left: 50%; width: 82rpx; height: 82rpx; transform: translateX(-50%); border: 5rpx solid #f7dda0; border-radius: 26rpx 26rpx 32rpx 32rpx; background: linear-gradient(145deg, #607c57, #334b40); color: #ffdf8a; font-size: 50rpx; font-weight: 900; line-height: 76rpx; text-align: center; text-shadow: 0 3rpx #263d31; box-shadow: 0 5rpx 0 #8b6c39, 0 8rpx 18rpx rgba(0,0,0,.24); }
+.exit-title { display: block; color: #294638; font-size: 40rpx; font-weight: 900; letter-spacing: 3rpx; text-shadow: 0 2rpx #fff; }
+.exit-message { display: block; margin: 18rpx 0 34rpx; color: #63735b; font-size: 27rpx; line-height: 1.5; }
+.exit-actions { display: flex; gap: 18rpx; }
+.exit-actions button { flex: 1; min-width: 0; margin: 0; padding: 0 10rpx; border-radius: 40rpx; font-size: 26rpx; font-weight: 700; line-height: 82rpx; text-align: center; }
+.exit-cancel { background: linear-gradient(#6e8d62, #4e6e51); color: #fff6d8; box-shadow: 0 6rpx 0 #35543e; }
+.exit-confirm { background: linear-gradient(#f5d37f, #d9a747); color: #594421; box-shadow: 0 6rpx 0 #987138; }
+@keyframes exit-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes exit-card-in { from { opacity: 0; transform: translateY(16rpx) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+.exit-actions button::after { border: 0; }

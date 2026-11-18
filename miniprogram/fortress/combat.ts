@@ -2,7 +2,7 @@ import { updateSummons } from './summoning';
 import { unitStats, soldierTargets, receivedSoldierDamage } from './soldier-types';
 import { enemyStats, armoredDamage } from './enemy-types';
 import { enemyLayer, MAX_SUPPORT_SOLDIERS, soldierLayer, soldierType, targetable, validateSoldierIdentity } from './army';
-import type { AttackCapability } from './army';
+import type { AttackCapability, SoldierType } from './army';
 import { invasionBatchPositions, invasionBatchSize } from './spawn-pressure';
 import { qualityEffects, skillLevels } from './quality-skills';
 import type { SkillCollection } from './skill-quality';
@@ -758,12 +758,13 @@ export function rebindCombatGeneration(state: CombatState, generation: number): 
 
 
 // Build the complete next state before the caller commits the inventory debit.
-export function summonSupportSoldier(state: CombatState, id: string): CombatState | null {
+export function summonSupportSoldier(state: CombatState, id: string, type: SoldierType = 'rifle'): CombatState | null {
   const current = state.supportSoldiers ?? [];
   if (state.status !== 'fighting' || state.base.hp <= 0 || !id.trim() || current.length >= MAX_SUPPORT_SOLDIERS || current.some(soldier => soldier.id === id)) return null;
   const count = current.length + 1;
   const soldiers = current.map((soldier, slot) => ({...soldier, slot, position: {...supportPosition(state.player, slot, count, state.arenaWidth), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}}));
-  soldiers.push({id, slot: current.length, position: supportPosition(state.player, current.length, count, state.arenaWidth), hp: SUPPORT_SOLDIER_MAX_HP, maxHp: SUPPORT_SOLDIER_MAX_HP, attackRemainingMs: 2000});
+  const maxHp = type === 'tank' ? 90 : type === 'shield' ? 60 : type === 'jetpack' ? 25 : SUPPORT_SOLDIER_MAX_HP;
+  soldiers.push({id, slot: current.length, soldierType:type, source:'inventory', position: supportPosition(state.player, current.length, count, state.arenaWidth), hp: maxHp, maxHp, attackRemainingMs: 2000});
   return freezeState({...state, supportSoldiers: soldiers});
 }
 

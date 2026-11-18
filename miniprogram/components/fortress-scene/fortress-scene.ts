@@ -2,6 +2,8 @@ import { SUMMON_LABELS } from '../../fortress/summon-skills';
 import { MAX_SUPPORT_SOLDIERS } from '../../fortress/army';
 import { victoryRewards } from '../../services/victory-rewards';
 import type { RewardCard } from '../../services/victory-rewards';
+import { defeatRewardCards, defeatSoldierReward, DEFEAT_REWARD_COINS, DEFEAT_REWARD_MINIMUM_MS } from '../../services/defeat-rewards';
+import { COMBAT_STEP_MS } from '../../fortress/combat';
 import { createOpeningPlan } from '../../fortress/opening-plan';
 import { createStageInvasion } from '../../fortress/stage-invasion';
 import { dailyCheckin } from '../../services/daily-checkin';
@@ -71,6 +73,10 @@ Component({
       this.applyPause();
       if (!open) this.presentUpgrade();
     } },
+    exitConfirmOpen: { type: Boolean, value: false, observer(open: boolean) {
+      // Hide the native canvas behind page dialogs, retaining the paused battlefield.
+      this.setData({ exitFrame: open ? instances.get(this)?.scene?.captureFrame(FROZEN_FRAME_WIDTH, 'image/jpeg', 0.7) ?? '' : '' });
+    } },
     managedLoading: { type: Boolean, value: false, observer() { this.applyPause(); } },
     loadingCover: { type: String, value: '' },
     loadingColor: { type: String, value: '#112c36' },
@@ -89,8 +95,8 @@ Component({
     },
     initialState() { if (instances.get(this)?.scene) this.mount(true); },
   },
-  data: { frostEnergy: 0, frostPercent: 0, frostTarget: false, combos: comboProgress(ZERO_SKILLS), entryFrame: '', entryFrameEpoch: 0, loadingProgress: 50, skillQuiz: null as SkillQuizRequest | null, skillShowGuide: false, skillQuizIncorrect: false, skillPicksRemaining: 0, reviveOpen: false, reviveBusy: false, reviveError: '', flagStock: 0, flagRevision: 0, flagStockError: false, reviveTargets: [] as {kind:string; id:string; label:string; disabled:boolean}[], soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardCards: [] as RewardCard[], rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
-    volumeFrame: '', bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageLoadingColor: '',
+  data: { frostEnergy: 0, frostPercent: 0, frostTarget: false, combos: comboProgress(ZERO_SKILLS), entryFrame: '', entryFrameEpoch: 0, loadingProgress: 50, skillQuiz: null as SkillQuizRequest | null, skillShowGuide: false, skillQuizIncorrect: false, skillPicksRemaining: 0, reviveOpen: false, reviveBusy: false, reviveError: '', flagStock: 0, flagRevision: 0, flagStockError: false, reviveTargets: [] as {kind:string; id:string; label:string; disabled:boolean}[], soldierStock: 0, soldierRevision: 0, soldiersInBattle: 0, soldierStockError: false, soldierSummonError: '', soldierBusy: false, failed: false, failureRewardCards: [] as RewardCard[], failureRewardSaved: false, failureRewardError: false, failureRewardEligible: false, failureRewardNotice:'', petReward: '', petDropError: false, rewardCoins: victoryCoinsForLevel(1), rewardCards: [] as RewardCard[], rewardSaved: false, rewardError: false, coinBalance: 0, fireworks: [{ id: 0, x: 16, y: 24, delay: 0 }, { id: 1, x: 83, y: 19, delay: 450 }, { id: 2, x: 50, y: 10, delay: 900 }, { id: 3, x: 18, y: 62, delay: 1350 }, { id: 4, x: 82, y: 60, delay: 1800 }], fireworkRays: Array.from({ length: 12 }, (_, id) => ({ id, angle: id * 30, color: ['#ff8fa9', '#ffe488', '#87efcb', '#92cdff', '#d9a3ff'][id % 5] })), victoryFruits: BATTLE_WORDS.map((word, index) => ({ id: word.id, image: word.fruitImagePath, delay: 650 + index * 70 })), victoryParticles: Array.from({ length: 24 }, (_, index) => ({ id: index, left: (index * 37 + 11) % 100, delay: (index % 8) * 95, duration: 1500 + (index % 5) * 160, color: ['#ffe49a', '#77e4b1', '#ff997e'][index % 3] })), waveCount: OPENING_WAVE_COUNT, speakingWord: '', voiceError: false, waveNumber: 1, completed: false, waveRequest: null as { plan: SessionPlan; waveIndex: number; generation: number; variant: 'fruit' } | null, xpCurrent: 0, xpRequired: OPENING_EXPERIENCE.levelThresholds[0], xpPercent: 0, frozenFrame: '', experience: 0, level: 1, upgradeOffer: null as UpgradeOffer | null, upgradeSummary: '', inputUnavailable: false, ready: false, error: '', hud: { hp: 1000, maxHp: 1000, status: 'fighting' }, hpPercent: 100, retirement: null as RetirementView | null,
+    exitFrame: '', volumeFrame: '', bossNotice: '', goldenLoot: false, canContinue: false, continueBusy: false, continueProgress: 0, continueError: false, stageLoadingColor: '',
     skillInventory: [] as { id: string; quality: string; label: string; description: string }[], dropCoins: 0, dropError: false, skillOffer: null as SkillOfferState | null, skillCards: [] as ReturnType<typeof skillCards>, skillSummary: '',
     petDropAwards: [] as { id: string; message: string; x: number; y: number; icon?: string; name?: string; symbol?: string; symbolColor?: string; amount?: number; shown: boolean; }[],
   },
@@ -178,7 +184,8 @@ Component({
       const revision = Number(event.currentTarget.dataset.revision);
       this.setData({soldierBusy: true, soldierSummonError: ''});
       try {
-        state.scene.summonSoldier(`${state.sessionId}:summon:${revision}`, () => dailyCheckin.consumeSoldier(revision));
+        const type = dailyCheckin.soldierTypeForRevision(revision);
+        if (!type || !state.scene.summonSoldier(`${state.sessionId}:summon:${revision}`, () => dailyCheckin.consumeSoldier(revision, type), type)) this.setData({soldierSummonError: '暂时无法召唤，请检查士兵库存'});
       } catch { this.setData({soldierSummonError: '召唤未完成，库存未扣除，请重试'}); }
       finally { this.refreshSoldierStock(); this.refreshSoldierCount(); this.setData({soldierBusy: false}); }
     },
@@ -214,7 +221,7 @@ Component({
             instance.experience?.dispose(); instance.upgrades?.dispose();
             instance.drops?.dispose(); instance.petDrops?.dispose();
             instance.defeatAudio?.dispose(); instance.defeatAudio = undefined;
-            this.setData({ reviveOpen:false, reviveTargets:[], reviveError:'', completed: false, canContinue: false, continueBusy: false, continueError: false, bossNotice: '', goldenLoot: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, petReward: '', petDropError: false });
+            this.setData({ reviveOpen:false, reviveTargets:[], reviveError:'', completed: false, canContinue: false, continueBusy: false, continueError: false, bossNotice: '', goldenLoot: false, waveNumber: 1, waveRequest: null, speakingWord: '', voiceError: false, failed: false, failureRewardCards: [], failureRewardSaved:false, failureRewardError:false, failureRewardEligible:false, failureRewardNotice:'', petReward: '', petDropError: false });
             instance.petDrops = createPetDrops({ sessionId: initial.context.sessionId,
               bossIds: request?.plan.waves.flatMap(wave => wave.spawnPlan.filter(monster => monster.boss && monster.bossKind !== 'grand').map(monster => monster.monsterId)) ?? [], store: petStore,
               monsterPosition: id => instance.scene?.snapshot?.monsters.find(monster => monster.id === id)?.position,
@@ -408,9 +415,31 @@ Component({
       state.preparedStage = undefined; state.stageCarry = undefined; state.preparingStage = false;
       state.audio?.setActive(false); state.upgradeLevels = []; state.bossRewards = []; state.awaitingWaveEnd = false;
       state.upgrades?.dispose(); state.collection = Object.freeze({}); state.levels = ZERO_SKILLS; state.scene.applySkills(ZERO_SKILLS, state.collection);
-      this.setData({ reviveOpen:false, reviveTargets:[], failed: true, canContinue: false, continueBusy: false, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, frozenFrame: state.scene.captureFrame(FROZEN_FRAME_WIDTH, 'image/jpeg', 0.7) });
+      const elapsedMs = (state.scene.snapshot?.tick ?? 0) * COMBAT_STEP_MS;
+      this.setData({ reviveOpen:false, reviveTargets:[], failed: true, failureRewardCards:[], failureRewardSaved:false, failureRewardError:false, failureRewardEligible:elapsedMs >= DEFEAT_REWARD_MINIMUM_MS, canContinue: false, continueBusy: false, skillInventory: [], upgradeSummary: '', bossNotice: '', goldenLoot: false, upgradeOffer: null, skillQuiz:null, skillShowGuide:false, skillQuizIncorrect:false, skillPicksRemaining:0, frozenFrame: state.scene.captureFrame(FROZEN_FRAME_WIDTH, 'image/jpeg', 0.7) }, () => this.claimDefeatReward());
       state.defeatAudio = createDefeatAudio(); state.defeatAudio.setVolume?.(this.properties.musicVolume / 100); this.applyPause();
     },
+    claimDefeatReward() {
+      const state = instances.get(this), snapshot = state?.scene?.snapshot;
+      if (!this.data.failed || !state?.alive || !state.visible || !snapshot || snapshot.status !== 'baseDestroyed') return;
+      const request = state.activeRequest ?? this.properties.previewRequest as StageRequest;
+      if (snapshot.tick * COMBAT_STEP_MS < DEFEAT_REWARD_MINIMUM_MS) {
+        this.setData({failureRewardCards:[{id:'coins',name:'金币',amount:this.data.dropCoins,symbol:'●',icon:'/assets/images/checkin/coins.png'}],failureRewardSaved:true,failureRewardError:false,failureRewardNotice:''});
+        return;
+      }
+      const sessionId = request.plan.sessionId;
+      const reward = defeatSoldierReward(sessionId);
+      try {
+        const coin = coinWallet.rewardDefeat(sessionId, DEFEAT_REWARD_COINS);
+        const soldiers = dailyCheckin.rewardDefeatSoldiers(sessionId, reward.type, reward.amount);
+        const balance = coin.balance;
+        this.refreshSoldierStock();
+        this.setData({failureRewardCards:defeatRewardCards(reward.type,soldiers.added,this.data.dropCoins + DEFEAT_REWARD_COINS),failureRewardSaved:true,failureRewardError:false,
+          failureRewardNotice:soldiers.added < reward.amount ? `库存上限影响，本次额外存入 ${soldiers.added} 名士兵` : '',coinBalance:balance});
+        this.triggerEvent('coinbalancechange',{balance});
+      } catch { this.setData({failureRewardError:true,failureRewardSaved:false}); }
+    },
+    retryDefeatReward() { this.claimDefeatReward(); },
     restartBattle() {
       const state = instances.get(this);
       if (!this.properties.opening || !state?.alive || !state.visible || this.properties.paused || this.properties.volumeOpen || !this.data.failed) return;
@@ -426,7 +455,7 @@ Component({
       if (state.petDropAwardsTimer) clearTimeout(state.petDropAwardsTimer); state.petDropAwardsTimer = undefined;
       if (state.hudTimer) clearTimeout(state.hudTimer); state.hudTimer = undefined; state.pendingHud = undefined;
       state.preparedStage = { plan, generation: current.generation + 1, waveIndex: 0, variant: 'fruit' };
-      this.setData({ failed: false, ready: false, error: '', frozenFrame: '', waveRequest: { ...state.preparedStage, variant: 'fruit' } });
+      this.setData({ failed: false, failureRewardCards:[], failureRewardSaved:false, failureRewardError:false, failureRewardEligible:false, failureRewardNotice:'', ready: false, error: '', frozenFrame: '', waveRequest: { ...state.preparedStage, variant: 'fruit' } });
       this.applyPause();
     },
     becomeStronger() {

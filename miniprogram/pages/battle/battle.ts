@@ -27,7 +27,7 @@ function eventTarget(event: WechatMiniprogram.BaseEvent): { context: RoundEventC
 }
 
 Page({
-  data: { pageVisible: true, entryLoading: true, entryProgress: 0, entryError: '', assetsReady: false, sceneMounted: false, entryEpoch: 0, musicVolume: 22, combatSpeed: 1, fromHome: false, loadingCover: battleBackgroundCover(1), loadingColor: battleBackgroundColor(1), coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
+  data: { pageVisible: true, entryLoading: true, entryProgress: 0, entryError: '', assetsReady: false, sceneMounted: false, entryEpoch: 0, musicVolume: 22, combatSpeed: 1, fromHome: false, exitConfirmOpen: false, loadingCover: battleBackgroundCover(1), loadingColor: battleBackgroundColor(1), coinBalance: 0, view: null as BattleView | null, preview: false, previewPaused: true, previewWord: 'apple', previewWords: FORTRESS_WORDS,
     choicePreview: false, choiceStarted: false, choiceRequest: null as { plan: SessionPlan; waveIndex: number; generation: number } | null },
   loadingMusic: undefined as ReturnType<typeof createLoopMusic> | undefined,
   loadEpoch: 0,
@@ -155,6 +155,19 @@ Page({
     this.selectComponent('.fortress-preview')?.endRun?.();
     this.becomingStronger = true; strengthGuide.request();
     wx.navigateBack({ fail: () => wx.reLaunch({ url: '/pages/home/home', fail: () => { this.becomingStronger = false; } }) });
+  },
+  confirmExitBattle() {
+    if (!this.data.fromHome || this.data.exitConfirmOpen) return;
+    this.exitWasPaused = this.data.previewPaused;
+    this.setData({ exitConfirmOpen: true, previewPaused: true });
+  },
+  exitWasPaused: true,
+  stopExitDialogTap() {},
+  cancelExitBattle() { this.setData({ exitConfirmOpen: false, previewPaused: this.exitWasPaused }); },
+  confirmExitBattleNow() {
+    const scene = this.selectComponent('.fortress-preview');
+    if (scene?.settleBeforeExit && !scene.settleBeforeExit()) { this.cancelExitBattle(); return; }
+    this.setData({ exitConfirmOpen: false }); this.returnHome();
   },
   returnHome() { const scene = this.selectComponent('.fortress-preview'); if (scene?.settleBeforeExit && !scene.settleBeforeExit()) return; this.selectComponent('.fortress-preview')?.endRun?.(); wx.navigateBack({ fail: () => { wx.reLaunch({ url: '/pages/home/home' }); } }); },
   togglePreviewPause() { if (this.data.preview) this.setData({ previewPaused: !this.data.previewPaused }); },

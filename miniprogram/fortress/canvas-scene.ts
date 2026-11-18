@@ -7,6 +7,7 @@ import { drawQuadruped } from './quadruped-art';
 import type { FootPose } from './monster-gait';
 import { fortressInterior, INTERIOR_ASSETS, drawFortressInterior, INTERIOR_PET_OFFSET_Y } from '../houses/interior-art';
 import { soldierType } from './army';
+import type { SoldierType } from './army';
 import { SOLDIER_SPRITES, soldierSpritePath } from './soldier-sprites';
 import { drawSoldier, drawFallenSoldier } from './soldier-art';
 import { weaponAppearance } from '../weapons/appearance';
@@ -194,11 +195,11 @@ export class CanvasScene {
     if (!this.runner.releaseFrost()) return false;
     this.publishHud(this.runner.snapshot!); return true;
   }
-  summonSoldier(id: string, debit: () => boolean): boolean {
+  summonSoldier(id: string, debit: () => boolean, type: SoldierType = 'rifle'): boolean {
     if (!this.ready || this.disposed || this.paused || this.needsResume) return false;
     // The existing animation loop draws the committed state on its next frame.
     // Rendering failures must not be reported as a failed inventory transaction.
-    return this.runner.summonSoldier(id, debit);
+    return this.runner.summonSoldier(id, debit, type);
   }
   revive(kind: string, id: string, debit: () => boolean): boolean {
     if (!this.ready || this.disposed || !this.paused) return false;

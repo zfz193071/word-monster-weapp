@@ -4,15 +4,23 @@
   <view class="entry-indicator"><loading-progress wx:if="{{!entryError}}" progress="{{entryProgress}}" /><view wx:else><text>{{entryError}}</text><button bindtap="prepareEntry">重试</button><button bindtap="returnHome">返回首页</button></view></view>
 </view>
   <view wx:if="{{preview}}" class="preview-page {{fromHome ? 'opening-page' : ''}}">
-    <view wx:if="{{fromHome}}" class="battle-toolbar"><button bindtap="returnHome" aria-label="返回首页">‹</button><view class="battle-speed"><button class="speed-trigger" bindtap="cycleCombatSpeed" aria-label="游戏加速，当前{{combatSpeed}}倍">»</button><button class="speed-value-trigger" bindtap="cycleCombatSpeed" aria-label="游戏加速，当前{{combatSpeed}}倍">{{combatSpeed}}×</button></view><button class="pause-button" bindtap="togglePreviewPause" aria-label="{{previewPaused ? '继续' : '暂停'}}">{{previewPaused ? '▶' : 'Ⅱ'}}</button><view class="toolbar-wallet" aria-label="当前金币 {{coinBalance}}"><image class="wallet-icon" src="/assets/images/checkin/coins.png" mode="aspectFit" aria-hidden="true" />{{coinFormat.format(coinBalance)}}</view></view>
+    <view wx:if="{{fromHome}}" class="battle-toolbar"><button bindtap="confirmExitBattle" aria-label="退出战斗">‹</button><view class="battle-speed"><button class="speed-trigger" bindtap="cycleCombatSpeed" aria-label="游戏加速，当前{{combatSpeed}}倍">»</button><button class="speed-value-trigger" bindtap="cycleCombatSpeed" aria-label="游戏加速，当前{{combatSpeed}}倍">{{combatSpeed}}×</button></view><button class="pause-button" bindtap="togglePreviewPause" aria-label="{{previewPaused ? '继续' : '暂停'}}">{{previewPaused ? '▶' : 'Ⅱ'}}</button><view class="toolbar-wallet" aria-label="当前金币 {{coinBalance}}"><image class="wallet-icon" src="/assets/images/checkin/coins.png" mode="aspectFit" aria-hidden="true" />{{coinFormat.format(coinBalance)}}</view></view>
   <view wx:if="{{!fromHome}}" class="preview-kicker">开发预览 · {{choicePreview ? '听词选怪与一波战斗' : '水果角色已接入'}}</view>
   <view wx:if="{{!fromHome}}" class="preview-title">堡垒守卫</view>
   <view wx:if="{{!fromHome}}" class="preview-note">{{choicePreview ? '先听单词、选怪物，再左右移动打怪。' : '五种水果角色素材检查；'}}基地、主角与武器仍为开发占位。</view>
   <view wx:if="{{!choicePreview && !fromHome}}" class="preview-monsters"><button wx:for="{{previewWords}}" wx:key="id" data-word-id="{{item.id}}" bindtap="selectPreviewMonster" class="{{previewWord === item.id ? 'selected' : ''}}">{{item.meaningZh}}</button></view>
   <fortress-choice wx:if="{{choicePreview && !choiceStarted}}" class="fortress-choice-preview" request="{{choiceRequest}}" music-volume="{{musicVolume}}" paused="{{previewPaused || !pageVisible}}" bindstartcombat="startChoiceCombat" />
-   <fortress-scene wx:elif="{{!fromHome || sceneMounted}}" class="fortress-preview" data-load-epoch="{{entryEpoch}}" managed-loading="{{fromHome && entryLoading}}" bindloadprogress="entrySceneProgress" bindsceneready="entrySceneReady" bindsceneerror="entrySceneError" preview="{{!fromHome}}" opening="{{fromHome}}" loading-cover="{{fromHome ? loadingCover : ''}}" loading-color="{{fromHome ? loadingColor : '#112c36'}}" music-volume="{{musicVolume}}" combat-speed="{{combatSpeed}}" bindreturnhome="returnHome" bindstrengthenguide="becomeStronger" bindcoinbalancechange="updateCoinBalance" preview-word="{{previewWord}}" preview-request="{{choicePreview || fromHome ? choiceRequest : null}}" paused="{{previewPaused || !pageVisible}}" />
+   <fortress-scene wx:elif="{{!fromHome || sceneMounted}}" class="fortress-preview" exit-confirm-open="{{exitConfirmOpen}}" data-load-epoch="{{entryEpoch}}" managed-loading="{{fromHome && entryLoading}}" bindloadprogress="entrySceneProgress" bindsceneready="entrySceneReady" bindsceneerror="entrySceneError" preview="{{!fromHome}}" opening="{{fromHome}}" loading-cover="{{fromHome ? loadingCover : ''}}" loading-color="{{fromHome ? loadingColor : '#112c36'}}" music-volume="{{musicVolume}}" combat-speed="{{combatSpeed}}" bindreturnhome="returnHome" bindstrengthenguide="becomeStronger" bindcoinbalancechange="updateCoinBalance" preview-word="{{previewWord}}" preview-request="{{choicePreview || fromHome ? choiceRequest : null}}" paused="{{previewPaused || !pageVisible}}" />
   <view wx:if="{{!fromHome}}" class="preview-actions"><button class="pause-button" bindtap="togglePreviewPause">{{previewPaused ? '开始 / 继续预览' : '暂停'}}</button><button bindtap="restartPreview">重新预览</button></view>
 </view>
+    <view wx:if="{{exitConfirmOpen}}" class="exit-overlay" catchtap="cancelExitBattle">
+      <view class="exit-dialog" catchtap="stopExitDialogTap">
+        <view class="exit-emblem">!</view>
+        <view class="exit-title">暂离战场？</view>
+        <view class="exit-message">离开后，本场战斗将结束</view>
+        <view class="exit-actions"><button class="exit-cancel" bindtap="cancelExitBattle">继续战斗</button><button class="exit-confirm" bindtap="confirmExitBattleNow">确定离开</button></view>
+      </view>
+    </view>
 <view class="page battle" wx:if="{{view}}">
   <view class="phase">{{view.phaseLabel}}</view>
   <view class="phase-progress" wx:if="{{view.phaseProgress}}">{{view.phaseProgress}}</view>

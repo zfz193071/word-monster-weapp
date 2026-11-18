@@ -3,6 +3,7 @@ import type { BattlePet } from '../pets/battle';
 import { resizeCombatArena, releaseFrostBurst, reviveCompanion, summonSupportSoldier, attachCombatPet, applyCombatSkills, COMBAT_STEP_MS, rebindCombatGeneration, stepCombat } from './combat';
 import type { CombatInput } from './combat';
 import type { CombatEvent, CombatState, SkillLevels } from './types';
+import type { SoldierType } from './army';
 import type { BattleAudioController } from '../services/battle-audio';
 
 // Up to 100ms of simulation per frame. Extra elapsed time is dropped, not queued.
@@ -68,9 +69,9 @@ export class CombatRunner {
     if (!next) return false;
     this.current = next; return true;
   }
-  summonSoldier(id: string, debit: () => boolean): boolean {
+  summonSoldier(id: string, debit: () => boolean, type: SoldierType = 'rifle'): boolean {
     if (!this.current || this.paused) return false;
-    const next = summonSupportSoldier(this.current, id);
+    const next = summonSupportSoldier(this.current, id, type);
     if (!next || !debit()) return false;
     // Everything that can reject the spawn runs before the debit. No async gap
     // exists between persisting the debit and installing the prepared snapshot.
