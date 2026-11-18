@@ -1,4 +1,4 @@
-import { GUARDIAN_BODY, guardianMuzzleFlash, guardianRecoil, guardianRigForPath, drawGuardianRig } from './guardian-rig';
+import { GUARDIAN_BODY, guardianMuzzle, guardianMuzzleFlash, guardianRecoil, guardianRigForPath, drawGuardianRig } from './guardian-rig';
 import { drawHouseFortress } from '../houses/battle-art';
 import { APPLE_ZOMBIE_PARTS, drawAppleZombieParts, drawBossZombieParts, drawTexturedZombie } from './zombie-art';
 import { bossPose } from './boss-pose';
@@ -528,7 +528,7 @@ export class CanvasScene {
         const variant = heroVariantForPath(art.hero.path);
         if (rig && body && arms) {
           const recoil = guardianRecoil(state.shotRemainingMs, weaponInterval, state.nextProjectileSequence > 0);
-          drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1}, recoil);
+          drawGuardianRig(c, body, arms, rig, state.player, state.aimDirection ?? {x: 0, y: -1}, recoil, state.aimFacing);
         }
         if (!rig && variant) {
           // Levels 4 and 7 currently have complete approved figures rather
@@ -539,7 +539,7 @@ export class CanvasScene {
         } else if (!rig) this.sprite(art.hero, state.player.x - 24, state.player.y - 35, 48, 60);
         const flash = guardianMuzzleFlash(state.shotRemainingMs, weaponInterval, state.nextProjectileSequence > 0);
         if (flash > 0) {
-          const muzzle = variant && !rig ? heroStandingMuzzle(variant, state.player) : {x: state.player.x + 16.8, y: state.player.y - 34.4};
+          const muzzle = variant && !rig ? heroStandingMuzzle(variant, state.player) : guardianMuzzle(state.player, state.aimDirection ?? {x:0,y:-1}, state.aimFacing, guardianRecoil(state.shotRemainingMs, weaponInterval, state.nextProjectileSequence > 0));
           c.save(); c.translate(muzzle.x, muzzle.y);
           if (!variant || rig) c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
           c.globalAlpha = flash;
@@ -552,7 +552,7 @@ export class CanvasScene {
         const weaponLevel=state.weaponLevel ?? 1;
         if(weaponLevel>=4 && state.base.hp>0){
           const design=weaponAppearance(weaponLevel);
-          const sparkOrigin=variant && !rig ? heroStandingMuzzle(variant,state.player) : {x:state.player.x+16.8,y:state.player.y-34.4};
+          const sparkOrigin=variant && !rig ? heroStandingMuzzle(variant,state.player) : guardianMuzzle(state.player, state.aimDirection ?? {x:0,y:-1}, state.aimFacing);
           c.save(); c.translate(sparkOrigin.x,sparkOrigin.y);
           c.fillStyle=design.light;
           // Cosmetic energy sparks use simulation time, so pause freezes them too.
@@ -784,8 +784,8 @@ export class CanvasScene {
       c.save(); c.translate(state.player.x, state.player.y);
       c.rotate(Math.atan2(state.aimDirection?.x ?? 0, -(state.aimDirection?.y ?? -1)));
       c.globalAlpha = Math.min(.6, ((state.flameFanUntilTick ?? 0) - state.tick) / 25);
-      c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(16.8, -34.4);
-      c.arc(16.8, -34.4, 52, -Math.PI * .72, -Math.PI * .28); c.closePath(); c.fill(); c.restore();
+      c.fillStyle = ELEMENT_COLORS.flame; c.beginPath(); c.moveTo(8 * (state.aimFacing ?? 1), -30);
+      c.arc(8 * (state.aimFacing ?? 1), -30, 52, -Math.PI * .72, -Math.PI * .28); c.closePath(); c.fill(); c.restore();
     }
     for (const bullet of state.projectiles) {
       if (this.options.preview) { c.fillStyle = '#ffe68e'; c.fillRect(bullet.position.x - bullet.width / 2, bullet.position.y - bullet.height / 2, bullet.width, bullet.height); }

@@ -217,6 +217,7 @@ export interface CombatState {
   readonly monsterSpeed?: number;
   readonly automatic?: boolean;
   readonly aimDirection?: Point;
+  readonly aimFacing?: -1 | 1;
   readonly context: CombatContext;
   readonly tick: number; // high-frequency simulation step, never a generation/token
   readonly status: 'fighting' | 'cleared' | 'baseDestroyed';

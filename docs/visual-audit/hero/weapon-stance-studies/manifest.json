@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-18",
+  "status": "rear-body-integrated; aiming-arms-retained",
+  "source": "docs/visual-audit/hero/reference-studies/hero-study-02.png",
+  "sourceSha256": "25c8c79edbbf76116883982abd70bfe9b0b5ce6aa90a3a4fde902a25ce5e20be",
+  "image": "pose-study-01.png",
+  "sha256": "d7335d0e26f5357667c26afb94d5470e9db397018cc0f60350ba7ea79dadd282",
+  "generator": "built-in image_gen",
+  "scope": "Face toward battle, visible front three-quarter view; both hands and rifle in front of lower face; stock at shoulder.",
+  "limitations": "Generated edge glow remains and visible alpha bounds do not meet the project's 12% clear-margin target. Candidate is for pose review only; not a runtime asset. Requires production parts and weapon variants after pose review.",
+  "latestUserDirection": "保留当前侧面的双手抵肩持枪姿势；主角整体转向前方怪物，头、身体、手和枪朝同一战场方向。",
+  "currentCandidate": {
+    "image": "pose-rear-02.png",
+    "sha256": "1674e28fc4ab88f55c80ecae767f1546c595fe0b7383dca66eaec37dfae2fbfa",
+    "generator": "built-in image_gen",
+    "prompt": "prompt-rear-02.txt",
+    "references": [
+      "pose-study-01.png",
+      "../reference-studies/hero-study-02.png"
+    ],
+    "size": [
+      1199,
+      1312
+    ],
+    "boundsAlphaOver8": [
+      200,
+      181,
+      988,
+      1133
+    ],
+    "status": "rear-three-quarter-pose-study; not-integrated",
+    "limitations": "Whole figure, one weapon and one heading only. Does not supply articulated/directional animation or seven weapon variants. Alpha>8 bounds only; not a certification that all low-alpha edge pixels are clear."
+  },
+  "runtimeBody": {
+    "image": "guardian-rear-body.png",
+    "prompt": "prompt-guardian-rear-body.txt",
+    "runtimeAsset": "miniprogram/guardian-assets/guardian-body.png",
+    "runtimeSize": [480, 526],
+    "sourceSha256": "f213af0ef8e4d9d13a291a43a46488bfc691526fcd33de5cc9548cac907798ba",
+    "runtimeSha256": "3ac47187e9a482c1c603a044ed5969118477ed6cd1d4938e87260e7ced601242",
+    "scope": "Rear three-quarter full-body layer with planted feet. Existing seven-level articulated arm/rifle atlases remain above it and retain target aiming.",
+    "limitations": "The generated body includes the shoulder/backpack silhouette beneath the existing arm rig; the staged render was visually checked at phone battle size. WeChat simulator and device appearance are pending."
+  },
+  "integratedPreview": {
+    "image": "battle-integrated-preview.png",
+    "sha256": "03c325d2d94111e5c93ec00c9c3e679a5a2ee02fd8cbc0446c3a9819f9fa8e53",
+    "method": "Production CanvasScene with the rear body runtime asset and existing level-one articulated rifle; staged static fixture at phone size.",
+    "limitations": "Visual render only; simulator refresh succeeded, but no live gameplay or physical-device visual acceptance was recorded."
+  },
+  "preview": {
+    "image": "battle-pose-preview.png",
+    "baseline": "battle-before.png",
+    "size": [
+      780,
+      1240
+    ],
+    "logicalSize": [
+      390,
+      620
+    ],
+    "dpr": 2,
+    "method": "Production CanvasScene with whole-figure candidate substituted for guardian body and arm draws. Single fixed monster at x=300,y=380. Original scene and runtime assets unchanged.",
+    "limitations": "Static staged pose review, not actual gameplay, WeChat screenshot, aiming accuracy, or animation validation."
+  }
+}

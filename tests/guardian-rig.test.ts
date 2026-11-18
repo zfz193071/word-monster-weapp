@@ -21,7 +21,9 @@ function recording() {
   return {context,draws,stack};
 }
 function sourcePoint(draw: ReturnType<typeof recording>['draws'][number], x: number, y: number) {
-  const [,sx,sy,sw,sh,dx,dy,dw,dh] = draw.args;
+  const [image] = draw.args;
+  const [,sx,sy,sw,sh,dx,dy,dw,dh] = draw.args.length === 5
+    ? [image,0,0,image.width,image.height,...draw.args.slice(1)] : draw.args;
   const px=dx+(x-sx)/sw*dw,py=dy+(y-sy)/sh*dh,[a,b,c,d,e,f]=draw.matrix;
   return {x:a*px+c*py+e,y:b*px+d*py+f};
 }
@@ -35,9 +37,9 @@ test('七套关节主角在宽屏两侧瞄准时脚底固定、枪口与真实�
     const fired=stepCombat({...opening,arenaWidth:1000,player:{x:500,y:510},shotRemainingMs:0,
       monsters:[{...opening.monsters[0],status:'alive',spawnAtMs:0,position:{x:targetX,y:448}}]}).state;
     const before=JSON.stringify(fired),h=recording(),image={width:720,height:360} as WechatMiniprogram.Image;
-    drawGuardianRig(h.context,image,image,guardianRig(level)!,fired.player,fired.aimDirection!);
+    drawGuardianRig(h.context,image,image,guardianRig(level)!,fired.player,fired.aimDirection!,0,fired.aimFacing);
     assert.equal(h.draws.length,3); assert.equal(h.stack.length,0);
-    const foot=sourcePoint(h.draws[0],560/1774*720,850/887*360);
+    const foot=sourcePoint(h.draws[0],image.width / 2,image.height * 63 / 68);
     assert.ok(Math.abs(foot.x-500)<1e-8);assert.ok(Math.abs(foot.y-537)<1e-8);
     assert.ok(h.draws[0].matrix[1] === 0,'身体不随瞄准倾斜');assert.ok(h.draws[0].matrix[2] === 0);
     const muzzle=sourcePoint(h.draws[2],mx/1774*720,my/887*360),rear=sourcePoint(h.draws[2],rx/1774*720,ry/887*360);
@@ -65,8 +67,8 @@ test('后坐按正式射击倒计时短促回弹，暂停采样冻结且不改�
     const rest=recording(),kick=recording();
     drawGuardianRig(rest.context,image,image,rig,{x:180,y:510},direction,0);
     drawGuardianRig(kick.context,image,image,rig,{x:180,y:510},direction,2.4);
-    const restFoot=sourcePoint(rest.draws[0],560/1774*720,850/887*360);
-    const kickFoot=sourcePoint(kick.draws[0],560/1774*720,850/887*360);
+    const restFoot=sourcePoint(rest.draws[0],image.width / 2,image.height * 63 / 68);
+    const kickFoot=sourcePoint(kick.draws[0],image.width / 2,image.height * 63 / 68);
     assert.deepEqual(kickFoot,restFoot); assert.deepEqual(kick.draws[0].matrix,rest.draws[0].matrix);
     const restMuzzle=sourcePoint(rest.draws[2],rig.muzzle.x/1774*720,rig.muzzle.y/887*360);
     const kickMuzzle=sourcePoint(kick.draws[2],rig.muzzle.x/1774*720,rig.muzzle.y/887*360);
@@ -87,4 +89,31 @@ test('枪口火光只在真实首发后的50ms内显示，暂停采样不产生�
   assert.equal(guardianMuzzleFlash(450,500,true),0);
   assert.equal(guardianMuzzleFlash(470,500,true),guardianMuzzleFlash(470,500,true));
   assert.equal(guardianMuzzleFlash(Number.NaN,500,true),0);
+});
+
+ test('左右瞄准时身体和持枪手臂完整镜像，避免手臂横穿后背', () => {
+  const image={width:720,height:360} as WechatMiniprogram.Image;
+  for(let level=1;level<=7;level++) for(const x of [.2,.5,.9]) {
+    const right=recording(),left=recording(),rig=guardianRig(level)!;
+    drawGuardianRig(right.context,image,image,rig,{x:0,y:0},{x,y:-Math.sqrt(1-x*x)});
+    drawGuardianRig(left.context,image,image,rig,{x:0,y:0},{x:-x,y:-Math.sqrt(1-x*x)});
+    for(const p of [rig.muzzle,rig.elbow,rig.barrelRear]) {
+      const r=sourcePoint(right.draws[2],p.x/1774*720,p.y/887*360);
+      const l=sourcePoint(left.draws[2],p.x/1774*720,p.y/887*360);
+      assert.ok(Math.abs(r.x+l.x)<1e-8,'手臂随脸部朝向完整镜像');
+      assert.ok(Math.abs(r.y-l.y)<1e-8);
+    }
+  }
+});
+
+test('近中线目标按目标所在侧决定脸部朝向，不受枪口侧偏影响而反复翻面', () => {
+  const opening=createOpeningEncounter('facing','apple',0);
+  for(const offset of [-1,0,1]) {
+    const state=stepCombat({...opening,shotRemainingMs:0,monsters:[{...opening.monsters[0],
+      status:'alive',spawnAtMs:0,position:{x:opening.player.x+offset,y:250}}]}).state;
+    assert.equal(state.aimFacing,offset<0?-1:1);
+    assert.equal(stepCombat(state).state.aimFacing,state.aimFacing);
+    const shot=state.projectiles[0],d=state.aimDirection!,target=state.monsters[0].position;
+    assert.ok(Math.abs((target.x-shot.position.x)*d.y-(target.y-shot.position.y)*d.x)<1e-8);
+  }
 });

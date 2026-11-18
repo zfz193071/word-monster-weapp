@@ -10,7 +10,7 @@
   "missingLevels": [],
   "files": [
     {
-      "source": "docs/visual-audit/hero/parts-study/guardian-parts-01.png",
+      "source": "docs/visual-audit/hero/weapon-stance-studies/guardian-rear-body.png",
       "art": {
         "path": "/guardian-assets/guardian-body.png",
         "source": "docs/visual-audit/hero/parts-study/rig-manifest.json",
@@ -19,17 +19,17 @@
       },
       "target": "miniprogram/guardian-assets/guardian-body.png",
       "sourceSize": [
-        1774,
-        887
+        1199,
+        1312
       ],
       "runtimeSize": [
-        720,
-        360
+        480,
+        526
       ],
-      "bytes": 147942,
-      "rgbaBytes": 1036800,
-      "sourceSha256": "a720e694ebdad4186c35e2bbcd5090597f71fa72d71621bd943a0de1713abe6c",
-      "sha256": "d47a4154c7a7982c207767ad63caeed311d9e42e726ac2f8bd5c4660d77882ca"
+      "bytes": 162039,
+      "rgbaBytes": 1009920,
+      "sourceSha256": "f213af0ef8e4d9d13a291a43a46488bfc691526fcd33de5cc9548cac907798ba",
+      "sha256": "3ac47187e9a482c1c603a044ed5969118477ed6cd1d4938e87260e7ced601242"
     },
     {
       "level": 1,

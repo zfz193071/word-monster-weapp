@@ -43,8 +43,9 @@ test('固定主角的子弹从七级持枪图的枪口发出，偏移随瞄准�
   const fired = stepCombat({ ...opening, shotRemainingMs: 0, monsters: [target] }).state;
   const bullet = fired.projectiles[0]; const direction = bullet.direction!;
   const side = { x: -direction.y, y: direction.x };
-  assert.ok(Math.abs(bullet.position.x - (fired.player.x + side.x * 16.8 + direction.x * 34.4)) < 1e-9);
-  assert.ok(Math.abs(bullet.position.y - (fired.player.y + side.y * 16.8 + direction.y * 34.4)) < 1e-9);
+  assert.ok(Math.abs(bullet.position.x - (fired.player.x + side.x * 8 * fired.aimFacing! + direction.x * 30)) < 1e-9);
+  assert.ok(Math.abs(bullet.position.y - (fired.player.y + side.y * 8 * fired.aimFacing! + direction.y * 30)) < 1e-9);
+  assert.equal(fired.aimFacing, -1);
   assert.ok(bullet.position.x < fired.player.x, '向左瞄准时枪口同步转向左侧');
   assert.ok(bullet.position.y < fired.player.y, '枪口位于角色上方');
   const targetDelta = { x: fired.monsters[0].position.x - bullet.position.x, y: fired.monsters[0].position.y - bullet.position.y };
@@ -53,8 +54,8 @@ test('固定主角的子弹从七级持枪图的枪口发出，偏移随瞄准�
   const changedAim = stepCombat({ ...opening, shotRemainingMs: 0, monsters: [{ ...target, position: { x: 280, y: 250 } }] }).state;
   const angled = changedAim.projectiles[0]; const angledDirection = angled.direction!;
   const angledSide = { x: -angledDirection.y, y: angledDirection.x };
-  assert.ok(Math.abs(angled.position.x - (changedAim.player.x + angledSide.x * 16.8 + angledDirection.x * 34.4)) < 1e-9);
-  assert.ok(Math.abs(angled.position.y - (changedAim.player.y + angledSide.y * 16.8 + angledDirection.y * 34.4)) < 1e-9);
+  assert.ok(Math.abs(angled.position.x - (changedAim.player.x + angledSide.x * 8 + angledDirection.x * 30)) < 1e-9);
+  assert.ok(Math.abs(angled.position.y - (changedAim.player.y + angledSide.y * 8 + angledDirection.y * 30)) < 1e-9);
 });
 
 test('火力激发按5秒/20秒节奏提高整数伤害，追踪弹分配不同目标并在击败后重锁', () => {

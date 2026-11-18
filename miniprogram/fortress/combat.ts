@@ -22,8 +22,8 @@ import { assertNoFortressIssues, validateSessionPlan } from './validation';
 export const COMBAT_STEP_MS = 10;
 export const FROST_ENERGY_MAX = 30;
 const EPSILON = 1e-8;
-const AUTO_MUZZLE_LATERAL = 16.8;
-const AUTO_MUZZLE_FORWARD = 34.4;
+const AUTO_MUZZLE_LATERAL = 8;
+const AUTO_MUZZLE_FORWARD = 30;
 export const SUPPORT_SOLDIER_MAX_HP = 30;
 // First ranged-enemy version: flying zombies fire at platform allies before
 // reaching the fortress. Values are frozen in the requirements doc.
@@ -141,18 +141,18 @@ export function resizeCombatArena(state: CombatState, width: number): CombatStat
   const monsters = state.monsters.map(monster => ({...monster, position: entryPoint(monster.position)}));
   const target = state.automatic ? findAutomaticTarget(monsters, width) : undefined;
   return freezeState({...state, arenaWidth: width, player, monsters,
+    ...(target ? {aimFacing: target.position.x < player.x ? -1 : 1} : {}),
     ...(state.incomingMonsters ? {incomingMonsters: Object.freeze(state.incomingMonsters.map(monster => Object.freeze({...monster, position: Object.freeze(entryPoint(monster.position))})))} : {}),
     supportSoldiers: (state.supportSoldiers ?? []).map(soldier => ({...soldier, position: {...supportPosition(player, soldier.slot, state.supportSoldiers!.length, width), ...(soldier.source === 'skill' ? {y:RULES.arena.baseTop} : {})}, ...(soldier.shotTarget ? {shotTarget: point(soldier.shotTarget)} : {})})),
     fallenSoldiers: (state.fallenSoldiers ?? []).map(soldier => ({...soldier, position: point(soldier.position)})),
     projectiles: state.projectiles.map(projectile => ({...projectile, position: point(projectile.position), previousPosition: point(projectile.previousPosition), ...(projectile.direction ? {direction: direction(projectile.direction)} : {})})),
     ...(state.enemyShots ? {enemyShots: state.enemyShots.map(shot => ({...shot, from: point(shot.from), to: point(shot.to)}))} : {}),
-    ...(state.aimDirection ? {aimDirection: target ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL) : direction(state.aimDirection)} : {}),
+    ...(state.aimDirection ? {aimDirection: target ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL * (target.position.x < player.x ? -1 : 1)) : direction(state.aimDirection)} : {}),
     ...(state.elementImpacts ? {elementImpacts: state.elementImpacts.map(impact => ({...impact, position: point(impact.position), ...(impact.target ? {target: point(impact.target)} : {})}))} : {}),
   });
 }
 function volley(state: CombatState, weapon: WeaponParameters, charged = false, firepowerActive = false): readonly ProjectileState[] {
-  // Matches the muzzle in hero-back-weapon-{1..7}.svg when the 160x200 sprite
-  // is drawn at 48x60 with its center on player: x=+16.8, y=-34.4.
+  // Matches the compact guardian rig muzzle relative to the player.
   const muzzle = state.automatic ? { lateral: AUTO_MUZZLE_LATERAL, forward: AUTO_MUZZLE_FORWARD } : { lateral: 0, forward: 0 };
   const usedTargets = new Set<string>();
   const fireFan = charged && !!state.skills.flame && !!state.skills.doubleShot;
@@ -164,7 +164,7 @@ function volley(state: CombatState, weapon: WeaponParameters, charged = false, f
   return Array.from({ length: weapon.count }, (_, index) => {
     const offset = (index - (weapon.count - 1) / 2) * RULES.projectile.spread;
     const direction = state.aimDirection ?? { x: 0, y: -1 };
-    const side = offset + muzzle.lateral;
+    const side = offset + muzzle.lateral * (state.aimFacing ?? 1);
     const position = { x: state.player.x - direction.y * side + direction.x * muzzle.forward,
       y: state.player.y + direction.x * side + direction.y * muzzle.forward };
     const homingTargets = state.skills.homing ? state.monsters.filter(monster => targetable(monster) && monster.position.y >= 0 && monster.position.y <= RULES.arena.baseTop) : [];
@@ -696,8 +696,9 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
     && projectile.position.x + projectile.width / 2 >= 0
     && projectile.position.x - projectile.width / 2 <= (previous.arenaWidth ?? RULES.arena.width)) : [];
   const target = previous.automatic ? findAutomaticTarget(monsters, previous.arenaWidth) : undefined;
+  const aimFacing = target ? (target.position.x < player.x ? -1 as const : 1 as const) : previous.aimFacing;
   const aimDirection = target ? (previous.automatic
-    ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL)
+    ? directionToMuzzle(player, target.position, AUTO_MUZZLE_LATERAL * (target.position.x < player.x ? -1 : 1))
     : directionTo(player, target.position)) : previous.aimDirection;
   const weapon = getWeaponParameters(previous.skills, previous.skillCollection);
   let shotRemainingMs = previous.shotRemainingMs - COMBAT_STEP_MS;
@@ -710,7 +711,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   const firepowerActive = !!previous.skills.firepower && tick < (firepowerUntilTick ?? 0);
   if (status === 'fighting' && shotRemainingMs <= EPSILON && (!previous.automatic || target)) {
     const charged = tick >= elementReadyTick && !!(previous.skills.flame || previous.skills.frost || previous.skills.lightning);
-    projectiles = [...projectiles, ...volley({ ...previous, player, monsters, ...(aimDirection ? { aimDirection } : {}) }, weapon, charged, firepowerActive)];
+    projectiles = [...projectiles, ...volley({ ...previous, player, monsters, ...(aimDirection ? { aimDirection, aimFacing } : {}) }, weapon, charged, firepowerActive)];
     if (charged) elementReadyTick = tick + 500;
     if (charged && previous.skills.flame && previous.skills.doubleShot) flameFanUntilTick = tick + 25;
     nextProjectileSequence += weapon.count;
@@ -722,7 +723,7 @@ export function stepCombat(previous: CombatState, input: CombatInput = {}): Comb
   // or per-frame Canvas list. Their IDs preserve committed defeat facts, while
   // the defeat event carries the final position needed by reward feedback.
   const activeMonsters = previous.invasion ? monsters.filter(monster => monster.hp > 0 && monster.status !== 'retiring') : monsters;
-  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters: activeMonsters, supportSoldiers: status === 'baseDestroyed' ? [] : supportSoldiers, ...(status === 'baseDestroyed' ? {summonRemainingMs:{},skillCollection:{},skills:{doubleShot:0,fireRate:0,bulletWidth:0}} : {}), fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
+  const state = freezeState({ ...previous, ...(invasion ? {invasion} : {}), ...(aimDirection ? { aimDirection, aimFacing } : {}), tick, ...(firepowerUntilTick !== undefined ? { firepowerUntilTick } : {}), ...(firepowerReadyTick !== undefined ? { firepowerReadyTick } : {}), status, player, ...(previous.incomingMonsters ? {incomingMonsters: status === 'baseDestroyed' ? Object.freeze([]) : incomingMonsters} : {}), base: { ...previous.base, hp: baseHp }, monsters: activeMonsters, supportSoldiers: status === 'baseDestroyed' ? [] : supportSoldiers, ...(status === 'baseDestroyed' ? {summonRemainingMs:{},skillCollection:{},skills:{doubleShot:0,fireRate:0,bulletWidth:0}} : {}), fallenSoldiers: status === 'baseDestroyed' ? [] : fallenSoldiers, ...(pet ? { pet } : {}),
     frostEnergy: Math.min(FROST_ENERGY_MAX, (previous.frostEnergy ?? 0) + events.filter(event => event.type === 'monsterDefeated').length),
     flameVolleyHits: Object.fromEntries([...flameHits].filter(([id]) => projectiles.some(p => p.flameVolleyId === id && !!p.elements?.flame)).map(([id, hits]) => [id, [...hits]])),
     ...(flameFanUntilTick !== undefined ? {flameFanUntilTick} : {}),

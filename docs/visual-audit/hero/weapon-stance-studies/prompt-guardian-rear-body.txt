@@ -1,0 +1,7 @@
+Use case: precise-object-edit
+Asset type: transparent game character body layer for articulated combat rig
+Primary request: create a clean isolated rear three-quarter body base for the same approved guardian character, facing the battle above and slightly to the right. Use the approved hero-study-02 as the identity and material reference; use pose-rear-02 only for the rear-facing direction and stance.
+Subject: same steel-blue helmet, brown hair, red scarf, tan leather armor, belt, trousers, and boots. Stable planted feet, torso naturally turned toward the enemy. Arms and rifle are absent so separately animated arms and weapon can be drawn over the body.
+Style/medium: match the polished handcrafted 3D clay-like game character art in the references.
+Composition/framing: full body, centered, portrait, clear silhouette, generous transparent margin, feet visible.
+Constraints: transparent background; preserve the character identity and outfit; no gun, no hands, no glow, no shadow, no extra objects, no text, no watermark. Intended to sit beneath the existing seven weapon-level arm-and-rifle atlases.
