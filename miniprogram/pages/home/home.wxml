@@ -1,12 +1,13 @@
 <wxs module="coinFormat" src="../../utils/coin-format.wxs" />
 <view wx:if="{{imagesReady}}" class="home {{!homeVisible ? 'sky-paused' : ''}}">
+  <view class="home-lawn" aria-hidden="true"></view>
   <view class="cloud cloud-one"></view><view class="cloud cloud-two"></view>
   <view wx:for="{{upperClouds}}" wx:key="id" class="upper-cloud" style="{{item.style}}" aria-hidden="true"><view class="cloud" style="{{item.scale}}"></view></view>
   <button class="info-button" bindtap="toggleCredits" aria-label="素材集合">i</button>
   <button class="music-button {{!musicEnabled || musicStatus === 'error' ? 'muted' : ''}}" bindtap="toggleMusic" aria-label="{{musicStatus === 'error' ? '重试场景音乐' : musicEnabled ? '关闭场景音乐' : '开启场景音乐'}}"><view class="music-note">♪</view><view wx:if="{{!musicEnabled || musicStatus === 'error'}}" class="mute-slash"></view></button>
   <view class="coin-balance" aria-label="{{coinError ? '金币余额暂时无法读取' : '金币余额' + coinBalance}}"><image class="coin-symbol" src="/assets/images/checkin/coins.png" mode="aspectFit" aria-hidden="true" /><text>{{coinError ? '—' : coinFormat.format(coinBalance)}}</text></view>
   <button wx:if="{{victoryRewardError}}" class="pending-victory-reward" bindtap="retryVictoryRewards">通关奖励待恢复，点击重试</button>
-  <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view></button>
+  <button class="checkin-button" bindtap="openCheckin" aria-label="每日签到"><view class="calendar-icon"><view></view><text>✓</text></view><text wx:if="{{checkinPending}}" class="checkin-alert" aria-label="未签到">!</text></button>
   <button class="levels-button" bindtap="toggleLevels" aria-label="选择关卡"><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view><view class="map-tile"></view></button>
   <button class="difficulty-button" bindtap="openDifficulty" aria-label="游戏难度，当前{{difficultyLabel}}"><difficulty-icon class="difficulty-mark" kind="{{difficulty}}" compact="{{true}}" /><text>{{difficultyLabel}}</text></button>
   <button class="settings-button" bindtap="openSettings" aria-label="游戏设置"><settings-icon class="settings-icon"></settings-icon></button>
@@ -65,6 +66,7 @@
   <view wx:if="{{preparingLevel && !showLevels}}" class="entry-loading" role="status">听力卡片正在加载…</view>
   <view wx:if="{{entryError}}" class="entry-error" bindtap="openBattle">{{entryError}}</view>
   <view class="island" aria-hidden="true">
+    <view class="island-ground-shadow"></view>
     <home-scene bindcoverchange="sceneCoverChanged" class="home-room" paused="{{!homeVisible}}" covered="{{!!request || showCredits || showLevels || showWeapon || showPet || showDifficulty || showSettings || showCheckin || showHouse}}" weapon-level="{{weaponLevel}}" guide="{{strengthTarget}}" house-level="{{houseLevel}}" bindhousetap="openHouse" bindherotap="openWeapon" pet="{{petView && petView.owned ? petView : null}}" bindpettap="openPet" />
   </view>
   <view wx:if="{{strengthTarget && !request && !showLevels && !showCredits && !showWeapon && !showPet && !showDifficulty && !showSettings && !showCheckin && !showHouse}}" class="strength-hint">{{strengthTarget === 'weapon' ? '点击主角，升级武器' : '点击小雷狐，喂养成长'}}</view>

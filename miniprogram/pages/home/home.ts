@@ -28,7 +28,7 @@ function collectionCards(levelId: number, revision: number) {
 }
 
 Page({
-  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', showSettings: false, musicVolume: 70, sfxVolume: 80, sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionCards(1, 0), collectionLoading: false, collectionError: false, collectionScroll: 0,
+  data: { showHouse: false, houseLevel: 1, houseView: null as (ReturnType<typeof houseForLevel> & {balance:number}) | null, houseError: '', houseMessage: '', imagesReady: false, imagesLoading: false, imagesError: false, victoryRewardError: false, showCheckin: false, checkinPending: true, checkinView: null as CheckinView | null, checkinBusy: false, checkinError: '', checkinMessage: '', showDifficulty: false, difficulty: 'normal' as DifficultyId, difficultyLabel: '普通', difficultyError: '', showSettings: false, musicVolume: 70, sfxVolume: 80, sceneCoverReady: false, strengthTarget: '' as StrengthTarget, showPet: false, petCelebrating: false, petDetails: false, petView: null as PetView|null, petError: '', petMessage: '', showWeapon:false, weaponLevel:1, collectionPlaying: '', collectionAudioError: '', entryProgress: 0, preparingLevel: false, showLevels: false, progressError: false, entryError: '', levels: LEVELS.map(level => ({ id: level.id, title: level.title, cover: level.cover, locked: level.id > 1, completed: false })), coinBalance: 0, coinError: false, homeVisible: false, musicEnabled: true, musicStatus: 'idle' as HomeMusicStatus, opening: false, showCredits: false, collectionTabs: LEVELS.map(level => ({ id: level.id, title: level.title })), collectionLevel: 1, collectionItems: collectionCards(1, 0), collectionLoading: false, collectionError: false, collectionScroll: 0,
     upperClouds: [] as { id: number; style: string; scale: string }[],
     request: null as FruitRequest | null, choiceComplete: false, navigationError: false },
   music: undefined as ReturnType<typeof createHomeMusic> | undefined,
@@ -53,7 +53,7 @@ Page({
     this.setData({checkinBusy: true, checkinError: '', checkinMessage: ''});
     try {
       const checkinView = dailyCheckin.open();
-      this.setData({checkinView});
+      this.setData({checkinView, checkinPending: !checkinView.claimed});
       this.refreshPet();
       try { this.setData({coinBalance: coinWallet.balance(), coinError: false}); }
       catch { this.setData({coinError: true}); }
@@ -74,7 +74,7 @@ Page({
     this.setData({checkinBusy: true, checkinError: '', checkinMessage: ''});
     try {
       const result = dailyCheckin.claim(date);
-      this.setData({checkinView: result.view, checkinMessage: result.claimed ? '签到成功，奖励已到账' : result.view.claimed ? '今天已经领取啦' : '新的一天，请点击今日奖励'});
+      this.setData({checkinView: result.view, checkinPending: !result.view.claimed, checkinMessage: result.claimed ? '签到成功，奖励已到账' : result.view.claimed ? '今天已经领取啦' : '新的一天，请点击今日奖励'});
       this.refreshPet();
       try { this.setData({coinBalance: coinWallet.balance(), coinError: false}); }
       catch { this.setData({coinError: true}); }
@@ -273,6 +273,8 @@ Page({
   retryVictoryRewards() { this.recoverVictoryRewards(); this.refreshPet(); this.refreshLevels(); if (this.data.showCheckin) this.refreshCheckin(); try { this.setData({coinBalance: coinWallet.balance()}); } catch {} },
   onShow() {
     this.recoverVictoryRewards();
+    try { this.setData({checkinPending: !dailyCheckin.open().claimed}); }
+    catch { this.setData({checkinPending: true}); }
     this.refreshDifficulty();
     this.refreshPet();
     this.refreshHouse();

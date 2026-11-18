@@ -12,11 +12,13 @@ button::after { border: 0; }
 .sky-paused .upper-cloud { animation-play-state: paused; }
 @keyframes cloud-drift { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 .info-button { position: absolute; top: 232rpx; transform: translateY(-50%); right: 28rpx; width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; font: italic 600 36rpx/60rpx Georgia,serif; z-index: 2; }
-.island { position: absolute; width: 750rpx; height: 800rpx; left: 50%; top: 40%; transform: translate(-50%,-50%); }
-.home-room { width: 100%; height: 100%; }
+.island { position: absolute; width: 750rpx; height: 800rpx; left: 50%; top: 47%; transform: translate(-50%,-50%); z-index: 0; }
+.home-lawn { position: absolute; top: calc(47% + 100rpx); bottom: 0; left: 0; right: 0; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, #cbd5a8 0%, #c1d0a3 42%, #b6c79c 100%); }
+.island-ground-shadow { position: absolute; z-index: 0; left: 12%; right: 12%; bottom: 94rpx; height: 72rpx; border-radius: 50%; background: radial-gradient(ellipse, rgba(54, 65, 44, .2) 0%, rgba(54, 65, 44, .1) 45%, rgba(54, 65, 44, 0) 76%); filter: blur(12rpx); }
+.home-room { position: relative; z-index: 1; width: 100%; height: 100%; }
 .music-button { position: absolute; top: 148rpx; transform: translateY(-50%); right: 28rpx; width: 64rpx; min-width: 0; max-width: 64rpx; height: 64rpx; padding: 0; border: 2rpx solid #ffffffa0; border-radius: 50%; background: #ffffff55; color: #55786e; line-height: 60rpx; z-index: 2; }
 .music-note { font-size: 38rpx; }.mute-slash { position: absolute; top: 29rpx; left: 10rpx; width: 42rpx; height: 3rpx; border-radius: 3rpx; background: #55786e; transform: rotate(-45deg); }
-.start-dock { position: absolute; bottom: max(100rpx,12vh); width: 100%; text-align: center; }
+.start-dock { position: absolute; bottom: max(100rpx,12vh); width: 100%; text-align: center; z-index: 2; }
 .start-button { display: flex; align-items: center; justify-content: center; width: 264rpx; height: 116rpx; border: 6rpx solid #fff9d9; border-radius: 40rpx; background: linear-gradient(#b1d866,#83b749); box-shadow: 0 10rpx 0 #58783d,0 19rpx 0 #ffffff60, inset 0 5rpx 0 #d8ed9e; }
 .start-button[disabled] { background: #a8c78b; }
 .play-icon { width: 0; height: 0; margin-left: 12rpx; border-top: 26rpx solid transparent; border-bottom: 26rpx solid transparent; border-left: 40rpx solid #fffce6; filter: drop-shadow(0 3rpx 0 #668b44); }
@@ -97,8 +99,9 @@ button::after { border: 0; }
 .settings-slider slider { flex:1; width:168rpx; min-width:0; margin:0; }
 .settings-value { font-size:24rpx; font-weight:bold; color:#7a5422; min-width:48rpx; text-align:right; }
 
-.checkin-button { position:absolute; left:26rpx; top:65rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; height:76rpx; padding:0; display:flex; align-items:center; justify-content:center; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; }
+.checkin-button { position:absolute; left:26rpx; top:65rpx; transform:translateY(-50%); z-index:2; width:76rpx; min-width:0; max-width:76rpx; height:76rpx; padding:0; display:flex; align-items:center; justify-content:center; overflow:visible; border:3rpx solid #fff9df; border-radius:24rpx; background:#648a72; box-shadow:0 5rpx 0 #3f675c; }
 .calendar-icon { width:42rpx; height:42rpx; border-radius:8rpx; background:#fff4c5; color:#638458; line-height:33rpx; font-size:32rpx; font-weight:700; overflow:hidden; }.calendar-icon view { height:9rpx; background:#eacb70; }
+.checkin-alert { position:absolute; top:-10rpx; right:-10rpx; box-sizing:border-box; width:38rpx; height:38rpx; border:3rpx solid #fff9df; border-radius:50%; background:#e64d43; color:#fff; font-size:26rpx; font-weight:800; line-height:1; text-align:center; box-shadow:0 2rpx 4rpx #34473855; }
 .checkin-modal { width:100%; max-width:700rpx; border:5rpx solid #fff9e4; border-radius:30rpx; background:#fff3dd; overflow:hidden; box-shadow:0 12rpx 0 #243d3d33; }
 .checkin-heading { position:relative; padding:24rpx 80rpx; background:linear-gradient(#a8d45d,#78ac48); border-bottom:4rpx solid #5c8c3c; text-align:center; color:#fffce5; font-size:40rpx; font-weight:800; text-shadow:0 3rpx #57783d; }.checkin-heading .close-button { color:#fffce5; top:18rpx; }
 .checkin-scroll { max-height:70vh; }.checkin-body { padding:28rpx 20rpx 30rpx; text-align:center; color:#5c6144; }.checkin-subtitle { display:block; font-size:29rpx; font-weight:700; }.checkin-rule { display:block; font-size:22rpx; line-height:1.6; margin-top:12rpx; color:#7b8065; }
