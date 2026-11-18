@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-18",
+  "renderer": "HomeRoomScene",
+  "device": {
+    "width": 390,
+    "height": 620,
+    "dpr": 2
+  },
+  "samples": [
+    {
+      "time": 0,
+      "label": "依偎脚边"
+    },
+    {
+      "time": 3.59,
+      "label": "眨眼"
+    },
+    {
+      "time": 4.96,
+      "label": "左耳轻动"
+    },
+    {
+      "time": 6.4,
+      "label": "轻微呼吸"
+    },
+    {
+      "time": 9.2,
+      "label": "自然站立"
+    },
+    {
+      "time": 12.86,
+      "label": "右耳轻动"
+    }
+  ]
+}

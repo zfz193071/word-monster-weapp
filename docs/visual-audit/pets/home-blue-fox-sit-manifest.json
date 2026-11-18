@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-18",
+  "generator": "built-in image_gen",
+  "reference": "miniprogram/character-assets/home-blue-fox-front.png",
+  "source": {
+    "path": "docs/visual-audit/pets/home-blue-fox-sit-source.png",
+    "sha256": "028ad4f7caab0672283fc4dfde08cc5833b8f1ba9ecbf69e157c8aa8ef9fc4eb",
+    "size": "1536x1024"
+  },
+  "runtime": {
+    "path": "miniprogram/character-assets/home-blue-fox-sit.png",
+    "sha256": "4773eeff7136b7ccdbfc648213b2166e049e144f1fd18b11ba542d23804d6eb8",
+    "size": "576x384",
+    "processing": "Whole image uniformly resampled with alpha preserved; no crop or pixel retouching."
+  },
+  "qa": "Alpha-composited on #f2eadc and #243641; no broad external halo observed. Dynamic simulator and real-device review remain pending."
+}

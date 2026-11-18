@@ -61,9 +61,12 @@ for (const [device, width, height] of [['phone', 390, 620], ['ipad', 1024, 580]]
         bosses: ['normal', 'iron', 'grand'], petLevel: 1 });
     } finally { scene.dispose(); }
     const homeCanvas = createCanvas(width * dpr, height * dpr);
+    homeCanvas.createImage = canvas.createImage;
     const home = new HomeRoomScene(homeCanvas, width, height, dpr);
     try {
       home.setWeaponLevel(weaponLevel); home.setHouseLevel(houseLevel); home.setPet({ level: 1, equipped: [] });
+      await home.loadCharacterImages();
+      home.resize(width, height, dpr);
       await save(homeCanvas, { name: `${device}-home-w${weaponLevel}-h${houseLevel}`, width, height, weaponLevel, houseLevel, petLevel: 1 });
     } finally { home.dispose(); }
   }

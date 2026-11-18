@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { HomeRoomScene, homeHeroPose, homeRoomViewport, projectRoomPoint } from '../miniprogram/home/room-scene';
+import { HomeRoomScene, homeHeroPose, homePetIdlePose, homeRoomViewport, projectRoomPoint } from '../miniprogram/home/room-scene';
 
 test('房间使用三维坐标投影，角色扭动有界且随时间变化',()=>{
   const center=projectRoomPoint([0,0,0]);const high=projectRoomPoint([0,2,0]);
@@ -63,6 +63,50 @@ test('小雷狐成长和装扮参与原房间深度绘制，宠物点击与主�
  scene.dispose();
 });
 
+test('首页蓝狐依偎主角脚边，只保留自然呼吸、眨眼和耳动',()=>{
+ const samples=Array.from({length:60*17},(_,index)=>homePetIdlePose(index/60));
+ assert.ok(samples.every(pose=>Math.abs(pose.shiftX)<.055),'重心转移不应变成横向跳动');
+ assert.ok(samples.every(pose=>Math.abs(pose.lean)<.031),'身体倾斜保持克制');
+ assert.ok(samples.every(pose=>pose.scaleX>.99&&pose.scaleX<1.01));
+ assert.ok(samples.every(pose=>pose.scaleY>.988&&pose.scaleY<1.01));
+ for(let index=1;index<samples.length;index++){
+  assert.ok(Math.abs(samples[index].shiftX-samples[index-1].shiftX)<.002,'相邻帧重心连续');
+  assert.ok(Math.abs(samples[index].lean-samples[index-1].lean)<.002,'相邻帧倾斜连续');
+ }
+ assert.notDeepEqual(homePetIdlePose(1),homePetIdlePose(2),'不再按旧的一秒固定摆钟节奏重复');
+ assert.ok(samples.every(pose=>!('sit' in pose)),'首页蓝狐不再进入坐下或站起状态');
+ assert.ok(homePetIdlePose(3.59).blink>.99,'眨眼为短促的独立动作');
+ assert.ok(homePetIdlePose(4.96).earLeft>.99&&homePetIdlePose(4.96).earRight<.31,'耳朵错峰轻动');
+ assert.ok(homePetIdlePose(12.86).earRight>.99&&homePetIdlePose(12.86).earLeft<.31,'下一周期换另一只耳朵');
+});
+
+test('首页角色使用正面站立位图并保持原比例与武器等级',async()=>{
+ const loaded:any[]=[];const draws:any[][]=[];
+ const context=new Proxy({}, {get(_target,key){
+   if(key==='drawImage')return (...args:any[])=>draws.push(args);
+   return ()=>{};
+ },set(){return true;}});
+ const canvas:any={getContext:()=>context,createImage(){const image:any={width:576,height:384};loaded.push(image);return image;}};
+ const scene=new HomeRoomScene(canvas,390,500,2);scene.setWeaponLevel(7);scene.setPet({level:7,equipped:['collar','hat','charm']});
+ const ready=scene.loadCharacterImages();
+ for(const image of loaded){image.onload();}
+ await ready;
+ (scene as any).elapsed=12.86;(scene as any).draw();
+ assert.equal(loaded.length,9,'只预载正面主角、蓝狐站姿与七级武器');
+ assert.ok(loaded.some(image=>image.src==='/character-assets/home-hero-front-base-v2.png'));
+ assert.ok(loaded.some(image=>image.src==='/character-assets/home-blue-fox-front.png'));
+ assert.ok(!loaded.some(image=>image.src==='/character-assets/home-blue-fox-sit.png'),'坐姿素材不再参与首页运行时');
+ assert.ok(loaded.some(image=>image.src==='/assets/weapons/weapon-7.png'));
+ assert.ok(draws.some(args=>args.length===5&&Math.abs(args[3]/args[4]-1.5)<1e-9),'主角保持3:2原图比例');
+ assert.ok(draws.some(args=>args.length===5&&args[0]?.src==='/character-assets/home-blue-fox-front.png'),'蓝狐使用正面四足站姿');
+ assert.ok(!draws.some(args=>args[0]?.src==='/character-assets/home-blue-fox-sit.png'),'蓝狐不会切换坐姿');
+ assert.ok(draws.some(args=>args.length===5&&args[0]?.src==='/assets/weapons/weapon-7.png'),'主角叠加当前等级武器');
+ const petDraw=draws.findIndex(args=>args[0]?.src==='/character-assets/home-blue-fox-front.png');
+ const heroDraw=draws.findIndex(args=>args[0]?.src==='/character-assets/home-hero-front-base-v2.png');
+ assert.ok(heroDraw>=0&&petDraw>heroDraw,'蓝狐位于前景并在主角之后绘制');
+ scene.dispose();
+});
+
 test('五级房屋结构不同，升级保持视角，房屋点击与角色点击分开',()=>{
  let draws=0,paths=0;
  const context=new Proxy({}, {get(_target,key){return key==='clearRect'?()=>{draws++;paths=0;}:key==='beginPath'?()=>paths++:()=>{};},set(){return true;}});
@@ -107,5 +151,29 @@ test('外景五级放大后允许院墙裁切，房屋仍可见可点击且旋�
      assert(scale>Math.min(width/9.5,height/8.5),'构图较上一版继续放大');
    }
  }
+ scene.dispose();
+});
+
+test('蓝狐耳动不重复覆盖原图，眼皮锚定站姿原图眼睛',()=>{
+ const draws:any[][]=[];const translations:number[][]=[];
+ const context=new Proxy({}, {get(_target,key){
+  if(key==='drawImage')return (...args:any[])=>draws.push(args);
+  if(key==='translate')return (...args:number[])=>translations.push(args);
+  return ()=>{};
+ },set(){return true;}});
+ const scene=new HomeRoomScene({getContext:()=>context} as any,390,500,2);
+ const image={width:576,height:384};
+ (scene as any).images.set('/character-assets/home-blue-fox-front.png',image);
+ (scene as any).elapsed=4.96;draws.length=0;
+ (scene as any).drawPetSprite(0,0,42,{level:7,equipped:[]});
+ const coverage=new Uint8Array(576*384);
+ for(const args of draws.filter(args=>args[0]===image)){
+  const [sx,sy,sw,sh]=args.length===5?[0,0,576,384]:args.slice(1,5);
+  for(let y=sy;y<sy+sh;y++)for(let x=sx;x<sx+sw;x++)coverage[y*576+x]++;
+ }
+ assert.ok(coverage.every(count=>count===1),'耳动帧的每个源像素只绘制一次，不能叠在完整原耳上');
+ translations.length=0;(scene as any).drawPetBlink(1);
+ assert.ok(translations.some(([x,y])=>x===184&&y===121),'左眼使用当前原图坐标');
+ assert.ok(translations.some(([x,y])=>x===244&&y===135),'右眼使用当前原图坐标');
  scene.dispose();
 });

@@ -16,12 +16,13 @@ test('首页弹窗保留已绘制画布，暂停/恢复不重建，旋转与后�
   hitHouse(){return false;}
   setGuide(){}
   setPet(){} hitPet(){return false;}
+  async loadCharacterImages(){}
   setYaw(value:number){this.angle=value;}setActive(value:boolean){this.active=value;}dispose(){this.disposed=true;}capture(){return 'frame';}
  }
  const source=readFileSync(new URL('../miniprogram/components/home-scene/home-scene.ts',import.meta.url),'utf8');
  runInNewContext(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{
   exports:{},setTimeout(fn:()=>void){timeouts.set(++timeoutId,fn);return timeoutId;},clearTimeout(id:number){timeouts.delete(id);},Component(value:any){definition=value;},wx:{getWindowInfo:()=>({pixelRatio:2}),nextTick:(fn:Function)=>fn()},
-  require:(path:string)=>path.endsWith('room-orbit')?{RoomOrbit}:{HomeRoomScene:Scene},
+  require:(path:string)=>path.endsWith('room-orbit')?{RoomOrbit}:path.endsWith('battlefield-assets')?{loadHomeCharacterAssets:async()=>{}}:{HomeRoomScene:Scene},
  });
  const host:any={triggerEvent(name:string,detail?:{ready:boolean}){if(name==='coverchange'){coverEvents.push(detail!.ready);return;}assert.equal(name,'herotap');taps++;},properties:{paused:false,covered:false},data:{},setData(patch:any,done?:()=>void){Object.assign(this.data,patch);done?.();},createSelectorQuery:()=>({select:()=>({fields:(_fields:any,fn:Function)=>({exec:()=>fn({node:{},width:360,height:400})})})})};
  for(const [key,method] of Object.entries(definition.methods))host[key]=(method as Function).bind(host);

@@ -1,0 +1,10 @@
+Use case: precise-object-edit
+Asset type: production game sprite cutout
+Primary request: Change ONLY the supplied blue fox's body pose from standing to sitting. The same fox sits upright on its haunches while keeping both front paws on the ground.
+Scene/backdrop: no scene; alpha-zero transparent canvas.
+Subject: exact supplied fox, one character, natural seated pose, front three-quarter view, tail resting beside it.
+Style/medium: exact same compact proportions, soft 3D fur, face, colors, markings, exposure, and neutral lighting as the supplied sprite.
+Composition/framing: centered isolated full body, 12% empty margin around the silhouette.
+Transparency requirement: HARD CLEAN CUTOUT. Every pixel outside the fur silhouette must have alpha 0. Do not paint or retain any ambient light outside the fur. No soft outer effect of any kind.
+Constraints: retain the exact forehead lightning, exact side lightning, one tail, same eyes, same expression, same blue/white balance, same fur material. No accessory.
+Avoid: background of any color, dark backdrop, blue backdrop, gradient, vignette, ambient bloom, rim glow, halo, haze, aura, floor light, floor shadow, cast shadow, extra limb, extra tail, text, watermark, border.

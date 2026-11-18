@@ -75,6 +75,11 @@ const loadEnemies = cachedPackage('enemy-assets', () => require.async('../enemy-
 export const loadAnimalAssets = cachedPackage('animal-assets', () => require.async('../animal-assets/ready'));
 export const loadFruitAssets = cachedPackage('fruit-assets', () => require.async('../fruit-assets/ready'));
 
+/** Home uses front-facing derivatives from the approved hero and blue-fox masters. */
+export function loadHomeCharacterAssets(): Promise<void> {
+  return loadCharacters();
+}
+
 export function loadBattlefieldAssets(levelId: number, houseLevel = 1, art?: SceneArt, preloadPet = false): Promise<void> {
   const required: Promise<void>[] = [];
   if (levelId === 1) required.push(loadCourtyard());

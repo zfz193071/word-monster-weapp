@@ -1,5 +1,6 @@
 import type { StrengthTarget } from '../../services/strength-guide';
 import type { PetAppearance } from '../../pets/catalog';
+import { loadHomeCharacterAssets } from '../../services/battlefield-assets';
 import { RoomOrbit } from '../../home/room-orbit';
 import { HomeRoomScene } from '../../home/room-scene';
 interface State { coverTimer?: ReturnType<typeof setTimeout>; orbit: RoomOrbit; width: number; left: number; top: number; tap?: { id:number; x:number; y:number; moved:boolean }; scene?: HomeRoomScene; visible: boolean; alive: boolean; epoch: number; covered: boolean; captureId: number }
@@ -38,6 +39,12 @@ Component({
           state.scene.setPet(this.properties.pet as PetAppearance|null);
           this.updateGuide();
           this.setData({error:false});this.synchronize();
+          const scene=state.scene;
+          loadHomeCharacterAssets().then(()=>scene.loadCharacterImages()).then(()=>{
+            if(state.alive&&epoch===state.epoch&&state.scene===scene)this.setData({error:false});
+          },()=>{
+            if(state.alive&&epoch===state.epoch&&state.scene===scene)this.setData({error:true});
+          });
         }catch{this.setData({error:true});if(this.properties.covered)this.finishCover(++state.captureId);}
       }).exec();
     },

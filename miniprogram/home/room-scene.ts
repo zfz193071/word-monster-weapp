@@ -7,10 +7,15 @@ import { weaponForLevel } from '../weapons/catalog';
 import { normalizeRoomYaw } from './room-orbit';
 type Point3 = readonly [number, number, number];
 interface Face { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly wall?: 'x'|'z'; readonly layer?: number; readonly points: readonly Point3[]; readonly color: string; readonly normal: Point3; readonly opacity?: number }
-interface ProjectedFace { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
+interface ProjectedFace { readonly house?: boolean; readonly actor?: boolean; readonly pet?: boolean; readonly sprite?: 'hero'|'pet'; readonly hitOnly?: boolean; readonly layer: number; readonly points: readonly (readonly [number, number])[]; readonly color: string; readonly depth: number; readonly opacity: number }
 type Context = WechatMiniprogram.CanvasRenderingContext.CanvasRenderingContext2D;
 const VIEW: Point3 = [.6124, .5, .6124];
 const LIGHT: Point3 = [-.35, .85, .4];
+const HOME_HERO_ART = '/character-assets/home-hero-front-base-v2.png';
+const HOME_PET_ART = '/character-assets/home-blue-fox-front.png';
+const HOME_WEAPON_ART = Object.freeze(Array.from({length:7},(_,index)=>`/assets/weapons/weapon-${index+1}.png`));
+const HOME_HERO_POINT:Point3=[-.5,0,1.1];
+const HOME_PET_POINT:Point3=[.85,0,1.45];
 const dot = (a: Point3,b: Point3) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 const normalize = (a: Point3): Point3 => { const d=Math.hypot(...a); return [a[0]/d,a[1]/d,a[2]/d]; };
 function rotateRoomPoint(p: Point3, yaw: number): Point3 {
@@ -43,6 +48,32 @@ export function roomShadowPolygon(yaw:number):readonly (readonly [number,number]
 export function homeHeroPose(seconds: number) {
   return { yaw: .18 + Math.sin(seconds * 1.25) * .13,
     lean: Math.sin(seconds * 1.25) * .035, lift: Math.sin(seconds * 2.5) * .018 };
+}
+export function homePetIdlePose(seconds:number) {
+  // Keep all motion rooted at the paws. Two slow, non-matching rhythms avoid the
+  // mechanical pendulum motion of the old constant rocking loop.
+  const breath=Math.sin(seconds*1.7);
+  const weight=(Math.sin(seconds*.72)+Math.sin(seconds*.31+1.1)*.35)/1.35;
+  const cycle=((seconds%8.4)+8.4)%8.4;
+  const attention=cycle>=5.4&&cycle<=7.2
+    ? Math.sin((cycle-5.4)/1.8*Math.PI)**2 : 0;
+  const pulse=(period:number,start:number,duration:number,offset=0)=>{
+    const phase=(((seconds+offset)%period)+period)%period;
+    return phase>=start&&phase<=start+duration
+      ? Math.sin((phase-start)/duration*Math.PI)**2 : 0;
+  };
+  const blink=pulse(4.9,3.8,.28,.35);
+  const ear=pulse(7.9,5.7,.72,1.1);
+  const earCycle=Math.floor((seconds+1.1)/7.9);
+  return {
+    shiftX:weight*.04+attention*.012,
+    lean:weight*.012+attention*.018,
+    scaleX:1-breath*.0025+attention*.004,
+    scaleY:1+breath*.006-attention*.005,
+    blink,
+    earLeft:ear*(earCycle%2===0?1:.3),
+    earRight:ear*(earCycle%2===0?.3:1),
+  };
 }
 function shade(hex: string, normal: Point3): string {
   const amount = .84 + .16 * Math.max(0,dot(normal,normalize(LIGHT)));
@@ -204,7 +235,7 @@ function hero(seconds:number,level=1):Face[]{
   const sin=Math.sin(pose.yaw),cos=Math.cos(pose.yaw);
   const transform=(p:Point3):Point3=>{
     const x=p[0]+p[1]*pose.lean;
-    return [x*cos+p[2]*sin-.5,p[1]+pose.lift,-x*sin+p[2]*cos+1.1];
+    return [x*cos+p[2]*sin+HOME_HERO_POINT[0],p[1]+pose.lift,-x*sin+p[2]*cos+HOME_HERO_POINT[2]];
   };
   return f.map(face=>({...face,actor:true,points:face.points.map(transform),normal:normalize([face.normal[0]*cos+face.normal[2]*sin,face.normal[1],-face.normal[0]*sin+face.normal[2]*cos])}));
 }
@@ -212,10 +243,9 @@ function hero(seconds:number,level=1):Face[]{
 function fox(seconds:number, appearance:PetAppearance):Face[]{
   const f:Face[]=[]; const adult=appearance.level>=7, teen=appearance.level>=4;
   const scale=adult?1:teen?.85:.68; const blue='#85bdcf', cream='#fff0ce';
-  const rhythm=Math.sin(seconds*4);
-  const sway=Math.sin(seconds*6)*.20;
-  ellipsoid(f,.4,.45,-.36+sway,.22,.22,.64,blue);
-  ellipsoid(f,.4,.48,-.84+sway,.19,.18,.28,cream);
+  const pose=homePetIdlePose(seconds);
+  ellipsoid(f,.4,.45,-.36,.22,.22,.64,blue);
+  ellipsoid(f,.4,.48,-.84,.19,.18,.28,cream);
   for(const x of [-.22,.22])for(const z of [-.18,.22])ellipsoid(f,x,.13,z,.13,.16,.16,'#587e9d');
   ellipsoid(f,0,.48,0,.36,.41,.43,blue);
   ellipsoid(f,0,.54,.32,.24,.25,.14,cream);
@@ -236,12 +266,14 @@ function fox(seconds:number, appearance:PetAppearance):Face[]{
   if(appearance.equipped.includes('collar')){box(f,0,.67,.32,.55,.09,.15,'#9b83c1');ellipsoid(f,0,.61,.43,.065,.065,.035,'#ffe291');}
   if(appearance.equipped.includes('hat')){box(f,0,1.27,.07,.85,.08,.63,'#bfa478');box(f,0,1.41,.03,.42,.24,.4,'#dec294');}
   if(appearance.equipped.includes('charm')){box(f,.32,.53,.3,.05,.24,.04,'#f4d271');box(f,.37,.42,.34,.12,.09,.06,'#ffe291');box(f,.33,.35,.34,.06,.14,.06,'#ffe291');}
-  // Rock the whole companion around its feet; clothing and hit geometry follow.
-  const angle=rhythm*.12,cos=Math.cos(angle),sin=Math.sin(angle);
+  // The invisible picking geometry follows the same planted idle pose as the sprite.
+  const angle=pose.lean,cos=Math.cos(angle),sin=Math.sin(angle);
   return f.map(face=>({...face,pet:true,
     normal:[face.normal[0]*cos-face.normal[1]*sin,face.normal[0]*sin+face.normal[1]*cos,face.normal[2]] as Point3,
-    points:face.points.map(p=>[(p[0]*cos-p[1]*sin)*scale+.85+rhythm*.10,
-      (p[0]*sin+p[1]*cos)*scale+Math.abs(rhythm)*.06,p[2]*scale+1.45] as Point3)}));
+    points:face.points.map(p=>{
+      return [((p[0]*pose.scaleX)*cos-(p[1]*pose.scaleY)*sin)*scale+HOME_PET_POINT[0]+pose.shiftX,
+        ((p[0]*pose.scaleX)*sin+(p[1]*pose.scaleY)*cos)*scale,p[2]*scale+HOME_PET_POINT[2]] as Point3;
+    })}));
 }
 function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
   const view=rotateRoomPoint(VIEW,-yaw);
@@ -252,6 +284,12 @@ function projectFaces(faces:readonly Face[],yaw:number):ProjectedFace[]{
       color:shade(face.color,face.normal),opacity:face.opacity??1 };
   });
 }
+function actorBillboard(target:'hero'|'pet',point:Point3,width:number,height:number,yaw:number,layer:number):ProjectedFace {
+  const projected=projectRoomPoint(point,yaw),half=width/2;
+  return {sprite:target,actor:target==='hero',pet:target==='pet',layer,depth:projected.depth,color:'#000000',opacity:1,
+    points:[[projected.x-half,projected.y-height],[projected.x+half,projected.y-height],
+      [projected.x+half,projected.y],[projected.x-half,projected.y]]};
+}
 export class HomeRoomScene {
   private readonly context:Context;
   private weaponLevel=1;
@@ -261,6 +299,8 @@ export class HomeRoomScene {
   private houseLevel=1;
   private roomFaces=room();
   private staticFaces:ProjectedFace[];
+  private readonly images=new Map<string,WechatMiniprogram.Image>();
+  private imageLoad:Promise<void>|undefined;
   private yaw:number;
   private shadow:readonly (readonly [number,number])[];
   private frame:number|undefined;
@@ -279,6 +319,17 @@ export class HomeRoomScene {
   setWeaponLevel(level:number){
     weaponForLevel(level);this.weaponLevel=level;if(!this.active&&!this.disposed)this.draw();
   }
+  loadCharacterImages():Promise<void>{
+    if(this.imageLoad)return this.imageLoad;
+    const paths=[HOME_HERO_ART,HOME_PET_ART,...HOME_WEAPON_ART];
+    this.imageLoad=Promise.all(paths.map(path=>new Promise<void>((resolve,reject)=>{
+      const image=this.canvas.createImage();
+      image.onload=()=>{if(!this.disposed){this.images.set(path,image);this.draw();}resolve();};
+      image.onerror=()=>reject(new Error(`首页角色素材加载失败: ${path}`));
+      image.src=path;
+    }))).then(()=>{}).catch(error=>{this.imageLoad=undefined;throw error;});
+    return this.imageLoad;
+  }
   setHouseLevel(level:number){
     houseForLevel(level);if(level===this.houseLevel||this.disposed)return;
     this.houseLevel=level;this.roomFaces=room(level);this.staticFaces=projectFaces(this.roomFaces,this.yaw);
@@ -296,6 +347,7 @@ export class HomeRoomScene {
     // Walk the rendered faces front-to-back: opaque house/walls block hidden targets.
     for(let i=this.drawnFaces.length-1;i>=0;i--){
       const face=this.drawnFaces[i];let inside=false;
+      if(face.sprite)continue;
       for(let a=0,b=face.points.length-1;a<face.points.length;b=a++){
         const [ax,ay]=face.points[a], [bx,by]=face.points[b];
         if((ay>py)!==(by>py)&&px<(bx-ax)*(py-ay)/(by-ay)+ax)inside=!inside;
@@ -352,15 +404,33 @@ export class HomeRoomScene {
         if(i===0)c.moveTo(px,py);else c.lineTo(px,py);
       });c.closePath();c.fill();
     }
-    const faces=[...this.staticFaces,...projectFaces(hero(this.elapsed,this.weaponLevel),this.yaw),...projectFaces(this.pet?fox(this.elapsed,this.pet):[],this.yaw)].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
+    const heroPose=homeHeroPose(this.elapsed);
+    // The back wall occludes actors while the user orbits behind the cutaway room.
+    const actorsVisible=rotateRoomPoint(VIEW,-this.yaw)[2]>0;
+    const actorFaces:ProjectedFace[]=actorsVisible?[
+      ...projectFaces(hero(this.elapsed,this.weaponLevel),this.yaw).map(face=>({...face,hitOnly:true})),
+      ...projectFaces(this.pet?fox(this.elapsed,this.pet):[],this.yaw).map(face=>({...face,hitOnly:true})),
+      actorBillboard('hero',[HOME_HERO_POINT[0],heroPose.lift,HOME_HERO_POINT[2]],2.15,2.3,this.yaw,3),
+      ...(this.pet?[actorBillboard('pet',HOME_PET_POINT,2,1.9,this.yaw,3)]:[]),
+    ]:[];
+    const faces=[...this.staticFaces,...actorFaces].sort((a,b)=>a.layer-b.layer||a.depth-b.depth);
     this.drawnFaces=faces;
     for(const face of faces){
+      if(face.hitOnly)continue;
+      if(face.sprite){
+        c.globalAlpha=1;c.globalCompositeOperation='source-over';
+        const bottomX=(face.points[2][0]+face.points[3][0])*scale/2;
+        const bottomY=(face.points[2][1]+face.points[3][1])*scale/2;
+        if(face.sprite==='hero')this.drawHeroSprite(bottomX,bottomY,scale,heroPose);
+        else if(this.pet)this.drawPetSprite(bottomX,bottomY,scale,this.pet);
+        continue;
+      }
       c.globalAlpha=face.opacity;c.fillStyle=face.color;c.strokeStyle=face.color;c.lineWidth=.45;
       c.beginPath();face.points.forEach(([x,y],i)=>{if(i===0)c.moveTo(x*scale,y*scale);else c.lineTo(x*scale,y*scale);});c.closePath();c.fill();c.stroke();
     }
     c.globalAlpha=1;
     if(this.guide){
-      const point=projectRoomPoint(this.guide==='pet'?[.85,1.1,1.6]:[-.5,1.9,1.1],this.yaw);
+      const point=projectRoomPoint(this.guide==='pet'?[HOME_PET_POINT[0],1.1,HOME_PET_POINT[2]+.15]:[HOME_HERO_POINT[0],1.9,HOME_HERO_POINT[2]],this.yaw);
       c.save();c.translate(point.x*scale,point.y*scale-42+Math.sin(this.elapsed*5)*5);
       c.fillStyle='#ffe1ad';c.strokeStyle='#806447';c.lineWidth=2;c.lineJoin='round';
       c.beginPath();c.moveTo(-9,-12);c.lineTo(9,-12);c.lineTo(9,-3);
@@ -368,6 +438,78 @@ export class HomeRoomScene {
       c.quadraticCurveTo(6,18,2,13);c.lineTo(2,29);c.quadraticCurveTo(-1,37,-6,30);
       c.lineTo(-6,9);c.lineTo(-11,14);c.lineTo(-18,8);c.quadraticCurveTo(-23,0,-15,1);
       c.lineTo(-10,5);c.closePath();c.fill();c.stroke();c.fillStyle='#7c9f87';c.fillRect(-11,-16,22,7);c.restore();
+    }
+    c.restore();
+  }
+  private drawHeroSprite(x:number,y:number,scale:number,pose:ReturnType<typeof homeHeroPose>){
+    const image=this.images.get(HOME_HERO_ART);if(!image)return;
+    const c=this.context,width=scale*4.15,height=width*2/3;
+    c.save();c.translate(x+pose.lean*scale*.25,y-pose.lift*scale);c.rotate(pose.lean*.12);
+    // The home view deliberately uses the approved front-facing, feet-planted pose.
+    c.drawImage(image,-width/2,-height*.94,width,height);
+    const weapon=this.images.get(HOME_WEAPON_ART[this.weaponLevel-1]);
+    if(weapon){
+      const weaponWidth=scale*1.55;
+      c.save();c.translate(scale*.55,-scale*1.42);c.rotate(-.82);
+      c.drawImage(weapon,-weaponWidth*.46,-weaponWidth*.25,weaponWidth,weaponWidth/2);c.restore();
+    }
+    c.restore();
+  }
+  private drawPetSprite(x:number,y:number,scale:number,appearance:PetAppearance){
+    const image=this.images.get(HOME_PET_ART);if(!image)return;
+    const c=this.context,adult=appearance.level>=7,teen=appearance.level>=4;
+    const growth=adult?1:teen?.87:.73,unit=scale/42*growth;
+    const pose=homePetIdlePose(this.elapsed);
+    // Contact shadow stays still while the body breathes and shifts its weight.
+    c.save();c.translate(x,y);c.scale(unit,unit);
+    c.fillStyle='rgba(64,94,85,.22)';c.beginPath();c.ellipse(0,3,24,6,0,0,Math.PI*2);c.fill();c.restore();
+    c.save();c.translate(x+pose.shiftX*scale,y);c.rotate(pose.lean);
+    c.scale(unit*pose.scaleX,unit*pose.scaleY);
+    this.drawPetEarTwitch(image,pose.earLeft,pose.earRight);
+    this.drawPetBlink(pose.blink);
+    c.translate(-8,-13);
+    if(appearance.equipped.includes('collar')){c.fillStyle='#9b83c1';c.fillRect(-10,-14,20,4);c.fillStyle='#ffe291';c.beginPath();c.ellipse(0,-9,3,3,0,0,Math.PI*2);c.fill();}
+    if(appearance.equipped.includes('hat')){c.fillStyle='#bfa478';c.fillRect(-18,-36,36,4);c.fillStyle='#dec294';c.fillRect(-10,-44,20,9);}
+    if(appearance.equipped.includes('charm')){c.strokeStyle='#f4d271';c.lineWidth=3;c.beginPath();c.moveTo(10,-15);c.lineTo(8,-8);c.lineTo(13,-8);c.lineTo(9,-1);c.stroke();}
+    c.restore();
+  }
+  private drawPetEarTwitch(image:WechatMiniprogram.Image,left:number,right:number){
+    const c=this.context;
+    if(left+right<=0){c.drawImage(image,-66,-80,132,88);return;}
+    // Deform the existing ear pixels instead of overlaying a second ear.
+    // Coordinates belong to home-blue-fox-front.png (576 × 384).
+    // The displacement tapers to zero above the eyes; the face stays still.
+    const ratio=132/576,rootY=108,splitX=258;
+    for(let sy=0;sy<rootY;sy+=2){
+      const weight=Math.pow(1-sy/rootY,2);
+      for(const [sx,sw,amount,direction] of [[0,splitX,left,-1],[splitX,576-splitX,right,1]]){
+        const offset=direction*amount*9*weight;
+        c.drawImage(image,sx,sy,sw,2,-66+(sx+offset)*ratio,-80+sy*ratio,sw*ratio,2*ratio);
+      }
+    }
+    c.drawImage(image,0,rootY,576,384-rootY,-66,-80+rootY*ratio,132,(384-rootY)*ratio);
+  }
+
+  private drawPetBlink(amount:number){
+    if(amount<=0)return;
+    const c=this.context;
+    // Share the sprite's source-space transform so growth and breathing cannot
+    // move the eyelids away from the eyes. The two eyes differ in perspective.
+    c.save();c.translate(-66,-80);c.scale(132/576,88/384);
+    c.globalAlpha=1;c.strokeStyle='#253e62';c.lineWidth=2.5;
+    for(const [x,y,rx,ry,rotation,color] of [
+      [184,121,13,10,-.4,'#378ed0'],
+      [244,135,20,14,.25,'#298bd3'],
+    ] as const){
+      c.save();c.translate(x,y);c.rotate(rotation);
+      // Reveal the lid downwards rather than fading a blue disc over the eye.
+      c.beginPath();c.rect(-rx-2,-ry-2,(rx+2)*2,(ry+2)*2*amount);c.clip();
+      c.fillStyle=color;c.beginPath();c.ellipse(0,0,rx,ry,0,0,Math.PI*2);c.fill();
+      if(amount>.8){
+        c.globalAlpha=(amount-.8)/.2;
+        c.beginPath();c.moveTo(-rx*.8,0);c.quadraticCurveTo(0,ry*.55,rx*.8,0);c.stroke();
+      }
+      c.restore();
     }
     c.restore();
   }
