@@ -1,0 +1,100 @@
+{
+  "source": "Production HomeRoomScene and drawHouseFortress renderers; fixed phone-sized DPR2 fixture. Not WeChat simulator or device capture.",
+  "entries": [
+    {
+      "level": 1,
+      "palette": {
+        "base": "#805c40",
+        "shadow": "#6f4d36",
+        "highlight": "#c39b6e",
+        "trim": "#bd8253",
+        "reinforcement": "#ad8157",
+        "accent": "#e1bc69"
+      },
+      "homeSize": [
+        390,
+        500
+      ],
+      "battleSize": [
+        390,
+        560
+      ]
+    },
+    {
+      "level": 2,
+      "palette": {
+        "base": "#805c40",
+        "shadow": "#6f4d36",
+        "highlight": "#c39b6e",
+        "trim": "#bd8253",
+        "reinforcement": "#ad8157",
+        "accent": "#e1bc69"
+      },
+      "homeSize": [
+        390,
+        500
+      ],
+      "battleSize": [
+        390,
+        560
+      ]
+    },
+    {
+      "level": 3,
+      "palette": {
+        "base": "#9ab1ad",
+        "shadow": "#718c8c",
+        "highlight": "#c5d1c6",
+        "trim": "#d0d7c6",
+        "reinforcement": "#b0c2bb",
+        "accent": "#a4b7af"
+      },
+      "homeSize": [
+        390,
+        500
+      ],
+      "battleSize": [
+        390,
+        560
+      ]
+    },
+    {
+      "level": 4,
+      "palette": {
+        "base": "#96aaa7",
+        "shadow": "#718c8c",
+        "highlight": "#b4c6bf",
+        "trim": "#ced5c8",
+        "reinforcement": "#9caaa5",
+        "accent": "#a4b7af"
+      },
+      "homeSize": [
+        390,
+        500
+      ],
+      "battleSize": [
+        390,
+        560
+      ]
+    },
+    {
+      "level": 5,
+      "palette": {
+        "base": "#617e87",
+        "shadow": "#435d60",
+        "highlight": "#78949b",
+        "trim": "#d4b15f",
+        "reinforcement": "#597582",
+        "accent": "#d0ad61"
+      },
+      "homeSize": [
+        390,
+        500
+      ],
+      "battleSize": [
+        390,
+        560
+      ]
+    }
+  ]
+}

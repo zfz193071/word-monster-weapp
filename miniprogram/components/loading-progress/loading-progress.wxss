@@ -1,6 +1,6 @@
 :host { display: block; width: 100%; }
-.loading-chase { box-sizing: border-box; width: 600rpx; max-width: 100%; margin: 0 auto; padding: 24rpx 24rpx 22rpx; border-radius: 28rpx; background: linear-gradient(145deg, rgba(55,102,89,.96), rgba(24,61,58,.96)); color: #f9f1cf; box-shadow: inset 0 1rpx 0 rgba(255,255,255,.12); }
-.chase-scene { position: relative; height: 210rpx; overflow: hidden; border-radius: 18rpx; background: radial-gradient(ellipse at 50% 100%, rgba(239,197,102,.20), transparent 58%), linear-gradient(180deg, rgba(9,37,40,.64), rgba(17,57,51,.12)); }
+.loading-chase { box-sizing: border-box; width: 600rpx; max-width: 100%; margin: 0 auto; padding: 24rpx 24rpx 22rpx; border-radius: 28rpx; background: linear-gradient(145deg, rgba(55,102,89,.96), rgba(24,61,58,.96)); color: #f9f1cf; box-shadow: inset 0 1rpx 0 rgba(255,255,255,.12), 0 24rpx 72rpx rgba(0,0,0,.28); }
+.chase-scene { position: relative; height: 210rpx; overflow: hidden; border-radius: 18rpx; }
 .runner { position: absolute; bottom: 12rpx; width: 174rpx; height: 194rpx; transform-origin: center bottom; animation: run .42s cubic-bezier(.36,0,.64,1) infinite alternate; }
 .runner image { position: absolute; inset: 0; width: 100%; height: 100%; animation: stride .36s steps(1, end) infinite; }
 .runner .step-second { animation-delay: -.18s; }

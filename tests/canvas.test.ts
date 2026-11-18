@@ -17,7 +17,11 @@ function fakeCanvas() {
   const commands: { method: string; args: unknown[] }[] = [];
   const images: { width: number; height: number; onload: () => void; onerror: () => void; src: string }[] = [];
   const context = new Proxy({}, { get: (_target, key) => (...args: unknown[]) => { commands.push({ method: String(key), args }); },
-    set: (_target, key, value) => { if (key === 'globalCompositeOperation') commands.push({ method: 'setGlobalCompositeOperation', args: [value] }); return true; } });
+    set: (_target, key, value) => {
+      if (key === 'globalCompositeOperation') commands.push({ method: 'setGlobalCompositeOperation', args: [value] });
+      if (key === 'globalAlpha') commands.push({ method: 'setGlobalAlpha', args: [value] });
+      return true;
+    } });
   const canvas = { width: 0, height: 0, getContext: () => context,
     requestAnimationFrame: (callback: (time: number) => void) => { callbacks.set(++id, callback); return id; },
     cancelAnimationFrame: (key: number) => { callbacks.delete(key); },
@@ -500,8 +504,8 @@ test('入场必须等待完整画面跨过呈现帧，取消入场不能继续�
   assert.equal(await cancelled, false);
 });
 
-// Use production plans/art and PNG dimensions; readiness alone cannot prove actors drew.
-test('八关入场呈现前已绘制主角、宠物和首只怪物，暂停期间也不依赖开战补画', async () => {
+// Use production plans/art and PNG dimensions; readiness alone cannot prove the calm entry frame is complete.
+test('八关入场呈现前已绘制主角和宠物，首怪留到交接后渐入', async () => {
   const { readFileSync } = await import('node:fs');
   const { createOpeningPlan } = await import('../miniprogram/fortress/opening-plan');
   const { createStageInvasion } = await import('../miniprogram/fortress/stage-invasion');
@@ -533,8 +537,9 @@ test('八关入场呈现前已绘制主角、宠物和首只怪物，暂停期�
     assert.ok(h.commands.some(command => command.method === 'translate' && command.args[0] === pet.x && command.args[1] === pet.y), `关卡${levelId}: 未绘制宠物`);
     assert.ok(!h.commands.some(command => command.method === 'fillText' && command.args[0] === '100/100'), '无敌宠物不再显示血条数值');
     const monster = initial.monsters[0];
-    assert.ok(h.commands.some(command => command.method === 'translate' && command.args[0] === monster.position.x && command.args[1] === monster.position.y), `关卡${levelId}: 未绘制怪物`);
-    assert.ok(monster.position.y + monster.hitbox.y >= 0, '首只怪物不应在画面之外');
+    const monsterDraw = h.commands.findIndex(command => command.method === 'translate' && command.args[0] === monster.position.x && command.args[1] === monster.position.y);
+    assert.ok(monsterDraw >= 0, `关卡${levelId}: 未准备怪物绘制`);
+    assert.ok(h.commands.slice(0, monsterDraw).some(command => command.method === 'setGlobalAlpha' && command.args[0] === 0), `关卡${levelId}: 首怪没有从透明状态渐入`);
     assert.deepEqual(h.errors, []);
     h.scene.dispose();
   }

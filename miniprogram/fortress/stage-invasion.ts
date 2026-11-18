@@ -25,7 +25,7 @@ export function createStageInvasion(plan: SessionPlan, generation: number, colle
       offset += Math.round(intervals[0] + (intervals[1] - intervals[0]) * (monsters.length - 1) / Math.max(1, total - 2));
     }
   }
-  // The first enemy is visible in the ready frame; later arrivals retain offscreen entry.
+  // Keep the ready frame calm: the first enemy fades in after the loading cover leaves.
   const first = waves[0];
   return Object.freeze({...first, context:Object.freeze({...first.context, combatId:`${plan.sessionId}:stage`}),
     monsters:Object.freeze(monsters.filter(monster => monster.spawnAtMs === 0).map(monster => Object.freeze({...monster, position:{...invasionBatchPositions([monster.id], monster.position.y)[0], y:32}}))),

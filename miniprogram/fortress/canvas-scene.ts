@@ -576,7 +576,10 @@ export class CanvasScene {
       const cullScale = monster.bossKind === 'grand' ? 2 : monster.boss || monster.enemyType === 'giant' ? 1.5 : 1;
       const cullRadius = 150 * cullScale;
       if (monster.position.y + cullRadius < 0 || monster.position.y - cullRadius > FORTRESS_RULES.arena.height) continue;
-      c.globalAlpha = 1;
+      // New arrivals materialize over one second. The first ready frame stays
+      // monster-free while the scene itself is already decoded and paint-safe.
+      const entranceElapsed = state.tick * 10 - (monster.spawnAtMs ?? 0);
+      c.globalAlpha = Math.max(0, Math.min(1, entranceElapsed / 1000));
       const attackPose = baseAttackPose(monster);
       let motionSeed = this.idSeedCache.get(monster.id);
       if (motionSeed === undefined) {

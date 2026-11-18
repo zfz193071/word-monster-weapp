@@ -139,3 +139,11 @@ Canvas回归覆盖手机/宽屏的左40、中线、右40逻辑位置，按实际
 用户补充确认“视觉放大后，堡垒无需显示全部”。因此撤销保守的 `11.2/10`，改用 `9.5/8.5` 让房屋主体进一步放大，允许外围院墙/投影延伸出画布；保留房屋主体点按升级与旋转。专项测试改为验证有场景主体留在画布内、屋脊可点击且缩放高于上一版，不再要求外围几何全部完整。更新后类型检查及专项7项回归通过；微信编译与模拟器视觉核验仍待完成。
 
 用户要求“还要放大一些”后，继续将视口系数调整为 `8.4/7.4`。手机/平板、五级外观与整周旋转专项仍通过；屋脊点击升级可用。微信编译和实际模拟器/设备视觉检查仍未确认。
+
+## 2026-11-17 首页/战斗堡垒配色（#116）
+
+按 #116 仅对齐同等级首页外围堡垒与战斗防线的材质色，不改房屋等级、等级映射、构图、属性或战斗规则。依照既有确认映射：1–2级木材（2级额外加固梁）、3级石砌、4级城垛塔楼、5级金属护板与金色包边。新增 `miniprogram/houses/fortress-palette.ts` 作为共享色板；首页 `room-scene.ts` 的外围墙、垛口和角塔，以及战斗 `battle-art.ts` 的墙体、梁、砖块、塔楼和护板均从该色板取色。不同等级的结构和材料区分保留。
+
+证据见 `docs/visual-audit/fortress-palette/review.html` 与 `contact-sheet.png`：按手机390×500 / 390×560、DPR2使用正式 `HomeRoomScene` 和 `drawHouseFortress` 绘制器离屏生成五级并排图；属于绘制器固定样片，不是微信模拟器或真机截图。项目打开命令成功，`project.config.json` 开启 `compileOnSave`；CLI 未提供独立 compile 子命令，未取得编译完成日志，因此微信编译及实际场景验收仍待确认。
+
+`npm run typecheck`、8项 `tests/fortress-palette.test.ts` 与 `tests/home-scene.test.ts` 定向回归、`git diff --check` 通过。完整 `npm test` 共562项，551项通过、11项失败；失败在 `boss-pose`、`element-quality`、`element-skills`、`fortress-scene-flow`、`grand-boss`、`opening-encounter`、`quality-combat`、`weapon-damage`，与本单色板改动无关；详情见 `docs/verification/工单116实现与验证.md`。#116 的色彩实现已完成，剩余模拟器/真机视觉确认与用户审看，不勾选整单完成。

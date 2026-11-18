@@ -40,11 +40,12 @@ import { createOpeningPlan } from '../miniprogram/fortress/opening-plan';
 import { createStageInvasion } from '../miniprogram/fortress/stage-invasion';
 import { createSeededRandom } from '../miniprogram/fortress/plans';
 
-test('八关四难度加载结束的初始战斗画面已有完整可见僵尸', () => {
+test('八关四难度加载结束后首怪以入场状态渐入战斗', () => {
   for (let level = 1; level <= 8; level++) for (const difficulty of ['easy', 'normal', 'hard', 'nightmare'] as const) {
     const state = createStageInvasion(createOpeningPlan('entry', createSeededRandom(41), level, 1, difficulty), 1);
     const first = state.monsters[0];
-    assert.ok(first.position.y + first.hitbox.y >= 0, `关卡${level}/${difficulty}: 首只僵尸仍在屏幕外 y=${first.position.y}`);
+    assert.equal(first.status, 'entering');
+    assert.equal(first.spawnAtMs, 0);
   }
 });
 
@@ -81,6 +82,7 @@ test('战斗页初始即有进度，慢加载至50%仍保持遮罩，解码与�
   assert.equal(host.data.entryProgress, 0);
   host.onLoad({mode: 'fortress', entry: 'entry'});
   assert.deepEqual([...jobs[0].art].sort(), ['apple', 'banana', 'pear']);
+  assert.deepEqual([...jobs[0].options.audioPaths].sort(), ['apple', 'banana', 'pear']);
   jobs[0].callbacks.onProgress(38);
   assert.equal(host.data.entryProgress, 19);
   assert.equal(host.data.assetsReady, false);
@@ -147,6 +149,19 @@ test('加载遮罩始终使用不透明关卡背景，Canvas 挂载后也不能�
   assert.match(battle, /class="entry-loading" style="background-color: \{\{loadingColor\}\}"/);
   assert.doesNotMatch(battle, /sceneMounted\s*&&\s*!entryError\s*\?\s*'transparent'/);
   assert.match(styles, /\.entry-loading[^}]*background-image:/);
+});
+
+test('加载动画恢复原有追逐形象，只保留一个面板背景', () => {
+  const markup = readFileSync(new URL('../miniprogram/components/loading-progress/loading-progress.wxml', import.meta.url), 'utf8');
+  const componentStyles = readFileSync(new URL('../miniprogram/components/loading-progress/loading-progress.wxss', import.meta.url), 'utf8');
+  const pageStyles = readFileSync(new URL('../miniprogram/pages/battle/battle.wxss', import.meta.url), 'utf8');
+  assert.match(markup, /\/assets\/images\/loading-chase\/hero\.png/);
+  assert.match(markup, /\/assets\/images\/loading-chase\/fox\.png/);
+  assert.match(markup, /\/assets\/images\/loading-chase\/zombie\.png/);
+  assert.doesNotMatch(markup, /\/(?:character|enemy)-assets\//);
+  assert.match(componentStyles, /\.loading-chase[^}]*background:/);
+  assert.doesNotMatch(componentStyles, /\.chase-scene[^}]*background:/);
+  assert.doesNotMatch(pageStyles, /\.entry-indicator[^}]*background:/);
 });
 
 test('战斗预载时播放背景音乐，后台暂停、重试恢复、交接和退出释放', () => {
