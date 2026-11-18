@@ -1,0 +1,26 @@
+{
+  "purpose": "Two-word listening samples; not wired into the game",
+  "generatedAt": "2026-11-18",
+  "provider": "Microsoft Edge online neural text-to-speech",
+  "voice": "en-US-AvaNeural",
+  "voiceTier": "Neural (not Dragon HD)",
+  "textMode": "standalone lowercase English word",
+  "processing": "trim silence; loudness normalize to -18 LUFS / -2 dBTP; 44.1 kHz mono MP3 at 96 kbps",
+  "reviewStatus": "pending human listening",
+  "files": [
+    {
+      "word": "banana",
+      "path": "banana-en-US-AvaNeural.mp3",
+      "durationSeconds": 0.757551,
+      "bytes": 9448,
+      "sha256": "4f39f2e6bfffcdb9d429eba5d51d3066e609e583d03eafe20fe0596dd1d4a1d2"
+    },
+    {
+      "word": "sheep",
+      "path": "sheep-en-US-AvaNeural.mp3",
+      "durationSeconds": 0.653061,
+      "bytes": 8194,
+      "sha256": "f37e626ab069f1d9a70cabc2b94285eb93041f8acf244f81041f7d0a258a47b3"
+    }
+  ]
+}
