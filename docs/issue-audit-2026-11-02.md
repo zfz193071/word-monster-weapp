@@ -147,3 +147,15 @@ Canvas回归覆盖手机/宽屏的左40、中线、右40逻辑位置，按实际
 证据见 `docs/visual-audit/fortress-palette/review.html` 与 `contact-sheet.png`：按手机390×500 / 390×560、DPR2使用正式 `HomeRoomScene` 和 `drawHouseFortress` 绘制器离屏生成五级并排图；属于绘制器固定样片，不是微信模拟器或真机截图。项目打开命令成功，`project.config.json` 开启 `compileOnSave`；CLI 未提供独立 compile 子命令，未取得编译完成日志，因此微信编译及实际场景验收仍待确认。
 
 `npm run typecheck`、8项 `tests/fortress-palette.test.ts` 与 `tests/home-scene.test.ts` 定向回归、`git diff --check` 通过。完整 `npm test` 共562项，551项通过、11项失败；失败在 `boss-pose`、`element-quality`、`element-skills`、`fortress-scene-flow`、`grand-boss`、`opening-encounter`、`quality-combat`、`weapon-damage`，与本单色板改动无关；详情见 `docs/verification/工单116实现与验证.md`。#116 的色彩实现已完成，剩余模拟器/真机视觉确认与用户审看，不勾选整单完成。
+
+## 2026-11-18 战斗怪物密集时卡顿
+
+按用户当前反馈，仅优化战斗伤害数字排版。使用正式 `CanvasScene.draw`、`stepCombat` 和 `DamageNumbers.add/sample` 构造10/60/123怪的本地压力夹具：123怪时原飘字排版中位约29.8ms，画面绘制约12.7ms，两次逻辑步进约0.49ms。此为桌面离屏/Node测量，非微信真机FPS；高压飘字输入每帧41次命中，刻意覆盖持续密集伤害。
+
+定位到每个飘字的117个候选位置反复扫描全部UI预留区、重复计算边缘重合候选，并频繁构造空间索引字符串。改为按行索引血条/词条/预警区域、数字坐标索引、去重候选，以及依据非负评分下界提前结束必败候选。仍保留每次真实命中，不合并、不丢弃数字，不修改怪物数量、战斗规则、角色和资源。
+
+新增 `tests/damage-number-layout.test.ts` 的123怪/12帧回归：492个数字输出SHA-256与原版完全一致，几何比较从18,500,850次降至4,059,506次（减少78.1%），以5,000,000次为确定性预算。已将该测试运行在原版源码副本，预算断言确实失败；新版通过。另做180帧新旧实现差分，覆盖240/360/1000宽度、超长数字、缩放、到期及不同UI尺寸，输出全部一致。类型检查及Canvas/飘字定向回归通过。
+
+微信新版 `wechatide -c Codex simulator_refresh --project <本仓库>` 返回成功，刷新后console的error检索无匹配；旧 `cli agent tool` 入口因 `agent.skills is empty in app.json` 不可用，已改用新版入口。刷新成功不等于完整编译日志或真机帧率验收，密集战斗真机流畅度仍待实测。
+
+最终全量测试569项：557通过、12失败。通过 `git archive HEAD` 创建修改前的独立副本，复跑涉及失败项的9个测试文件（58项），同名12项均复现；除此前记录的11项战斗逻辑失败外，还包括首页布局边界测试。未扩大本次性能修复范围。微信运行时查询确认刷新后位于 `pages/home/home`，未将首页加载或离屏测量记作密集战斗设备验收。

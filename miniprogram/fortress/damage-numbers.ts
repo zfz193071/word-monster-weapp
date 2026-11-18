@@ -14,21 +14,32 @@ const FLOAT_DISTANCE = 30, HEIGHT = 26, GAP = 4;
 const CELL_X = 128, CELL_Y = HEIGHT + GAP;
 interface Occupied { x: number; y: number; width: number }
 interface UiBox { id: string; x: number; y: number; halfWidth: number; halfHeight: number }
-interface OccupiedIndex { cells: Map<string, Occupied[]>; wide: boolean }
-const cellKey = (x: number, y: number) => `${Math.floor(x / CELL_X)},${Math.floor(y / CELL_Y)}`;
+interface OccupiedIndex { cells: Map<number, Map<number, Occupied[]>>; wide: boolean }
 function indexOccupied(occupied: readonly Occupied[]): OccupiedIndex {
-  const cells = new Map<string, Occupied[]>(); let wide = false;
-  for (const item of occupied) {
-    if (item.width > CELL_X) wide = true;
-    const key = cellKey(item.x, item.y);
-    const bucket = cells.get(key); if (bucket) bucket.push(item); else cells.set(key, [item]);
-  }
-  return { cells, wide };
+  const index: OccupiedIndex = { cells: new Map(), wide: false };
+  for (const item of occupied) insertOccupied(index, item);
+  return index;
 }
 function insertOccupied(index: OccupiedIndex, item: Occupied): void {
   if (item.width > CELL_X) index.wide = true;
-  const key = cellKey(item.x, item.y);
-  const bucket = index.cells.get(key); if (bucket) bucket.push(item); else index.cells.set(key, [item]);
+  const x = Math.floor(item.x / CELL_X), y = Math.floor(item.y / CELL_Y);
+  let column = index.cells.get(x);
+  if (!column) { column = new Map(); index.cells.set(x, column); }
+  const bucket = column.get(y);
+  if (bucket) bucket.push(item); else column.set(y, [item]);
+}
+// Put each UI box into every row a label centre could overlap. Querying one
+// row preserves source order and never counts a reservation twice.
+function indexUi(ui: readonly UiBox[]): Map<number, UiBox[]> {
+  const rows = new Map<number, UiBox[]>();
+  for (const box of ui) {
+    const reach = box.halfHeight + HEIGHT / 2;
+    for (let row = Math.floor((box.y - reach) / CELL_Y); row <= Math.floor((box.y + reach) / CELL_Y); row++) {
+      const bucket = rows.get(row);
+      if (bucket) bucket.push(box); else rows.set(row, [box]);
+    }
+  }
+  return rows;
 }
 // Precompute reservation geometry once per frame instead of per candidate.
 const toBox = (reservation: UiReservation): UiBox => ({
@@ -65,7 +76,7 @@ export class DamageNumbers {
     // so the candidate search does not re-run progress math per comparison.
     const occupied = this.effects.map(effect => ({x: effect.origin.x, y: this.position(effect, now).y, width: effect.width}));
     const index = indexOccupied(occupied);
-    const ui = this.reserved.map(reservation => toBox(reservation));
+    const ui = indexUi(this.reserved.map(reservation => toBox(reservation)));
     for (const event of events) {
       if (event.type !== 'monsterDamaged') continue;
       const text = `-${event.damage}`;
@@ -90,7 +101,7 @@ export class DamageNumbers {
     return {x: effect.origin.x, y: effect.origin.y - FLOAT_DISTANCE * this.progress(effect, now)};
   }
   private place(effect: NumberEffect, now: number,
-    occupied: readonly Occupied[], index: OccupiedIndex, ui: readonly UiBox[]): Point {
+    occupied: readonly Occupied[], index: OccupiedIndex, ui: ReadonlyMap<number, readonly UiBox[]>): Point {
     const progress = this.progress(effect, now), remaining = FLOAT_DISTANCE * (1 - progress);
     const half = effect.width / 2;
     const anchor = {x: clamp(effect.event.position.x, half + 2, this.arenaWidth - half - 2),
@@ -101,21 +112,36 @@ export class DamageNumbers {
     let best = anchor, bestScore = Infinity;
     // Bounded local search. Prefer nearby clear positions, but never suppress or
     // merge actual hits when density exceeds the available screen space.
-    for (let row = 0; row < 13; row++) for (const column of [0, -1, 1, -2, 2, -3, 3, -4, 4]) {
+    // Clamping near arena edges can map several offsets to the same point.
+    // Keep the first occurrence to preserve tie-breaking without rescoring it.
+    const xs = [...new Set([0, -1, 1, -2, 2, -3, 3, -4, 4].map(column =>
+      clamp(anchor.x + column * (effect.width + GAP), half + 2, this.arenaWidth - half - 2)))];
+    const ys = new Set<number>();
+    for (let row = 0; row < 13; row++) {
       const offsetY = row === 0 ? 0 : Math.ceil(row / 2) * (HEIGHT + GAP) * (row % 2 ? -1 : 1);
-      const candidate = {x: clamp(anchor.x + column * (effect.width + GAP), half + 2, this.arenaWidth - half - 2),
-        y: clamp(anchor.y + offsetY, HEIGHT / 2 + remaining + 2, 480 - HEIGHT / 2 - 2)};
+      ys.add(clamp(anchor.y + offsetY, HEIGHT / 2 + remaining + 2, 480 - HEIGHT / 2 - 2));
+    }
+    for (const y of ys) candidates: for (const x of xs) {
+      const candidate = {x, y};
+      // Every remaining score term is non-negative. Reject candidates whose
+      // lower bound already loses before scanning all live damage labels.
+      const targetOverlap = this.targetOverlap(candidate, effect);
+      if (targetOverlap * 1000000 >= bestScore) continue;
+      const uiOverlap = this.otherUiOverlap(candidate, effect, ui);
+      const reservedScore = targetOverlap * 1000000 + uiOverlap * 100000;
+      if (reservedScore >= bestScore) continue;
       let overlap = 0;
       if (useIndex) {
         const gx = Math.floor(candidate.x / CELL_X), gy = Math.floor(candidate.y / CELL_Y);
         // ±2 columns covers the label half-width plus GAP even for full cells.
         for (let dx = -2; dx <= 2; dx++) for (let dy = -1; dy <= 1; dy++) {
-          const bucket = index.cells.get(`${gx + dx},${gy + dy}`);
+          const bucket = index.cells.get(gx + dx)?.get(gy + dy);
           if (!bucket) continue;
           for (const other of bucket) {
             const ox = Math.max(0, (effect.width + other.width) / 2 + GAP - Math.abs(candidate.x - other.x));
             const oy = Math.max(0, HEIGHT + GAP - Math.abs(candidate.y - other.y));
             overlap += ox * oy;
+            if (reservedScore + overlap * 10000 >= bestScore) continue candidates;
           }
         }
       } else {
@@ -123,12 +149,11 @@ export class DamageNumbers {
           const dx = Math.max(0, (effect.width + other.width) / 2 + GAP - Math.abs(candidate.x - other.x));
           const dy = Math.max(0, HEIGHT + GAP - Math.abs(candidate.y - other.y));
           overlap += dx * dy;
+          if (reservedScore + overlap * 10000 >= bestScore) continue candidates;
         }
       }
-      const targetOverlap = this.targetOverlap(candidate, effect);
       // Other units' bars, badges and warning marks stay readable too, ranked
       // between the target's own interface and the spacing between numbers.
-      const uiOverlap = this.otherUiOverlap(candidate, effect, ui);
       // Keep labels, bars and the character readable before optimizing the
       // spacing between numbers. Dense fights still preserve every hit.
       const score = targetOverlap * 1000000 + uiOverlap * 100000 + overlap * 10000 + Math.hypot(candidate.x - anchor.x, candidate.y - anchor.y);
@@ -147,10 +172,10 @@ export class DamageNumbers {
   }
   // Own-target interface is already reserved by targetOverlap; skip it here so
   // the ranking between the two pass terms stays independent.
-  private otherUiOverlap(candidate: Point, effect: NumberEffect, ui: readonly UiBox[]): number {
+  private otherUiOverlap(candidate: Point, effect: NumberEffect, ui: ReadonlyMap<number, readonly UiBox[]>): number {
     const half = effect.width / 2;
     let overlap = 0;
-    for (const reservation of ui) {
+    for (const reservation of ui.get(Math.floor(candidate.y / CELL_Y)) ?? []) {
       if (reservation.id === effect.event.monsterId) continue;
       const dx = Math.max(0, half + reservation.halfWidth - Math.abs(candidate.x - reservation.x));
       const dy = Math.max(0, HEIGHT / 2 + reservation.halfHeight - Math.abs(candidate.y - reservation.y));
@@ -171,7 +196,7 @@ export class DamageNumbers {
     this.reserved = this.reserved.map(reservation =>
       ({...reservation, position: {x: reservation.position.x * ratio, y: reservation.position.y}}));
     const pending = this.effects; this.effects = [];
-    const ui = this.reserved.map(reservation => toBox(reservation));
+    const ui = indexUi(this.reserved.map(reservation => toBox(reservation)));
     const occupied: Occupied[] = [];
     const index = indexOccupied(occupied);
     for (const effect of pending) {

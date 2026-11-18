@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import { DamageNumbers } from '../miniprogram/fortress/damage-numbers';
 import type { UiReservation } from '../miniprogram/fortress/damage-numbers';
@@ -133,4 +134,31 @@ test('受创小兵的血条与缩放后的预留重新避让，命中数量不�
   assert.equal(sampled.length, 2);
   check(sampled, 980);
   checkReservation(sampled, [scaled]);
+});
+
+// Recorded from the pre-optimization renderer: keep every number and exact
+// trajectory while bounding geometry work independently of machine speed.
+test('123怪持续命中的排版保持原输出，几何比较不退回全量扫描', () => {
+  const numbers = new DamageNumbers();
+  const monsters = Array.from({length: 123}, (_, i) => ({id: `m${i}`,
+    position: {x: 30 + i % 10 * 32, y: 100 + Math.floor(i / 10) * 22}}));
+  const reserved = monsters.map(monster => ({...monster, halfWidth: 26, top: 60, bottom: -30}));
+  const samples: ReturnType<DamageNumbers['sample']>[] = [];
+  const original = Math.abs;
+  let comparisons = 0;
+  Math.abs = value => { comparisons++; return original(value); };
+  try {
+    for (let frame = 0; frame < 12; frame++) {
+      const events: CombatEvent[] = monsters.filter((_, i) => i % 3 === frame % 3).map(monster => ({
+        type: 'monsterDamaged', context, tick: frame, monsterId: monster.id,
+        hp: 100000, position: monster.position, damage: 4, kind: 'flame',
+      }));
+      numbers.add(events, frame * 17, 360, undefined, reserved);
+      samples.push(numbers.sample(frame * 17));
+    }
+  } finally { Math.abs = original; }
+  assert.equal(samples.at(-1)!.length, 492);
+  assert.equal(createHash('sha256').update(JSON.stringify(samples)).digest('hex'),
+    'd1d3bfce64b5d51409e78ad9a5300d9192b122043514a3f20f33e1d05074ddb6');
+  assert.ok(comparisons < 5000000, `geometry comparisons: ${comparisons}; baseline: 18500850`);
 });
